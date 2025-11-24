@@ -9,7 +9,7 @@ import type { WithContext, Thing } from "schema-dts";
 interface Props {
     title: string;
     description?: string;
-    schema?: WithContext<Thing>;
+    schema?: WithContext<Thing> | WithContext<Thing>[];
     noindex?: boolean;
 }
 
@@ -38,6 +38,21 @@ const { title, description, schema, noindex = false } = Astro.props;
             schema={schema}
             noindex={noindex}
         />
+
+        <!-- Google Analytics 4 (Partytown) -->
+        <!-- Reemplaza G-XXXXXXXXXX con tu ID de medición -->
+        <script
+            type="text/partytown"
+            src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+        ></script>
+        <script type="text/partytown">
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", "G-XXXXXXXXXX");
+        </script>
     </head>
     <body
         class="bg-slate-900 text-slate-50 font-sans antialiased selection:bg-amber-600 selection:text-white"

@@ -45,8 +45,10 @@ const iconMap = {
 const IconComponent =
     iconMap[data.icon as keyof typeof iconMap] || iconMap.default;
 
+import type { WithContext, Service, FAQPage, Thing } from "schema-dts";
+
 // Schema SEO específico para Servicios
-const serviceSchema = {
+const serviceSchema: WithContext<Service> = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: data.title,
@@ -61,13 +63,32 @@ const serviceSchema = {
     },
 };
 
+// Combinar schemas
+let schemas: WithContext<Thing>[] = [serviceSchema];
+
+if (data.faq && data.faq.length > 0) {
+    const faqSchema: WithContext<FAQPage> = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: data.faq.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+            },
+        })),
+    };
+    schemas.push(faqSchema);
+}
+
 // SEO: Usar campos personalizados si existen, sino generar automáticamente
 const pageTitle =
     data.seoTitle || `${data.title} en Zaragoza | Presupuesto Gratis`;
 const pageDescription = data.seoDesc || data.shortDesc;
 ---
 
-<Layout title={pageTitle} description={pageDescription} schema={serviceSchema}>
+<Layout title={pageTitle} description={pageDescription} schema={schemas}>
     <!-- HERO SERVICE con Imagen de Fondo -->
     <!-- HERO SERVICE con Formulario a la derecha -->
     <!-- HERO SERVICE -->

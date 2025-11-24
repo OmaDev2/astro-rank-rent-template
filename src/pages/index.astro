@@ -8,7 +8,7 @@ import WhatsAppButton from "../components/WhatsAppButton.astro";
 import FinalCTA from "../components/FinalCTA.astro";
 import LocationsSection from "../components/LocationsSection.astro";
 import HeroContactForm from "../components/HeroContactForm.astro";
-import { getWhatsAppUrl } from "../config/business";
+import { getWhatsAppUrl, businessConfig } from "../config/business";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import {
 	ArrowRight,
@@ -39,6 +39,7 @@ const schema: WithContext<Locksmith> = {
 	image: "https://herrerozaragoza.com/logo.png", // Placeholder
 	description:
 		"Herreros profesionales en Zaragoza. Fabricación e instalación de rejas, puertas, estructuras metálicas y cerramientos.",
+	telephone: businessConfig.contact.phone,
 	address: {
 		"@type": "PostalAddress",
 		addressLocality: "Zaragoza",

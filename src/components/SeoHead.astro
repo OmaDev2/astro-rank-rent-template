@@ -7,7 +7,7 @@ interface Props {
   title: string;
   description: string;
   image?: string;
-  schema?: WithContext<Thing>;
+  schema?: WithContext<Thing> | WithContext<Thing>[];
   noindex?: boolean;
 }
 
