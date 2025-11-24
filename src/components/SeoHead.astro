@@ -1,0 +1,47 @@
+---
+import { SEO } from "astro-seo";
+import type { WithContext, Thing } from "schema-dts";
+import { businessConfig } from "../config/business";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  schema?: WithContext<Thing>;
+  noindex?: boolean;
+}
+
+const { title, description, image, schema, noindex = false } = Astro.props;
+
+// Generate canonical URL
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<SEO
+  title={title}
+  description={description}
+  canonical={canonicalURL}
+  openGraph={{
+    basic: {
+      title,
+      type: "website",
+      image: image || businessConfig.seo.ogImage,
+      url: canonicalURL,
+    },
+    optional: {
+      locale: "es_ES",
+      siteName: businessConfig.name,
+    },
+  }}
+  twitter={{
+    card: "summary_large_image",
+  }}
+  noindex={noindex}
+  nofollow={noindex}
+/>
+
+{
+  schema && (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  )
+}

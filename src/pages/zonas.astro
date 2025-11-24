@@ -1,0 +1,220 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+import FinalCTA from "../components/FinalCTA.astro";
+import { getCollection } from "astro:content";
+import { MapPin, ArrowRight, Home, Building2, Factory } from "lucide-react";
+
+const locations = await getCollection("locations");
+
+// Agrupar por tipo
+const residenciales = locations.filter(
+    (loc) => loc.data.type === "residencial",
+);
+const industriales = locations.filter((loc) => loc.data.type === "industrial");
+const centros = locations.filter((loc) => loc.data.type === "centro");
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Zonas de Servicio - Herrero Zaragoza",
+    description:
+        "Servicio de herrería profesional en Zaragoza y alrededores. Consulta todas las zonas donde trabajamos.",
+};
+---
+
+<Layout
+    title="Zonas de Servicio | Herrero Zaragoza"
+    description="Servicio de herrería en Zaragoza y provincia. Consulta todas las localidades donde ofrecemos nuestros servicios profesionales."
+    schema={schema}
+>
+    <!-- Hero -->
+    <section class="relative py-20 bg-slate-900 overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center opacity-20"
+        >
+        </div>
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950"
+        >
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <MapPin className="w-8 h-8 text-amber-600" />
+                    <span
+                        class="text-amber-500 font-bold uppercase tracking-widest text-sm"
+                        >Cobertura Total</span
+                    >
+                </div>
+                <h1
+                    class="text-5xl lg:text-6xl font-heading font-bold text-white mb-6"
+                >
+                    Zonas de Servicio
+                </h1>
+                <p class="text-xl text-slate-300 leading-relaxed">
+                    Ofrecemos servicios de herrería profesional en Zaragoza
+                    capital y toda la provincia. Consulta si llegamos a tu zona.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Zonas Grid -->
+    <section class="py-20 bg-slate-950">
+        <div class="container mx-auto px-4">
+            <!-- Zonas Residenciales -->
+            {
+                residenciales.length > 0 && (
+                    <div class="mb-16">
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="p-3 bg-amber-600/20 rounded-lg">
+                                <Home className="w-6 h-6 text-amber-600" />
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-heading font-bold text-white">
+                                    Zonas Residenciales
+                                </h2>
+                                <p class="text-slate-400 text-sm">
+                                    Servicios para viviendas y comunidades
+                                </p>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {residenciales.map((location) => (
+                                <a
+                                    href={`/zona/${location.slug}/`}
+                                    class="group p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-all hover:shadow-xl hover:shadow-amber-900/10"
+                                >
+                                    <div class="flex items-start justify-between mb-4">
+                                        <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">
+                                            {location.data.name}
+                                        </h3>
+                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        {location.data.zipCodes.map((zip) => (
+                                            <span class="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded">
+                                                CP {zip}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            <!-- Zonas Industriales -->
+            {
+                industriales.length > 0 && (
+                    <div class="mb-16">
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="p-3 bg-amber-600/20 rounded-lg">
+                                <Factory className="w-6 h-6 text-amber-600" />
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-heading font-bold text-white">
+                                    Polígonos Industriales
+                                </h2>
+                                <p class="text-slate-400 text-sm">
+                                    Servicios para empresas y naves
+                                </p>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {industriales.map((location) => (
+                                <a
+                                    href={`/zona/${location.slug}/`}
+                                    class="group p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-all hover:shadow-xl hover:shadow-amber-900/10"
+                                >
+                                    <div class="flex items-start justify-between mb-4">
+                                        <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">
+                                            {location.data.name}
+                                        </h3>
+                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        {location.data.zipCodes.map((zip) => (
+                                            <span class="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded">
+                                                CP {zip}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            <!-- Centros Urbanos -->
+            {
+                centros.length > 0 && (
+                    <div>
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="p-3 bg-amber-600/20 rounded-lg">
+                                <Building2 className="w-6 h-6 text-amber-600" />
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-heading font-bold text-white">
+                                    Centros Urbanos
+                                </h2>
+                                <p class="text-slate-400 text-sm">
+                                    Servicios en zonas céntricas
+                                </p>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {centros.map((location) => (
+                                <a
+                                    href={`/zona/${location.slug}/`}
+                                    class="group p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-all hover:shadow-xl hover:shadow-amber-900/10"
+                                >
+                                    <div class="flex items-start justify-between mb-4">
+                                        <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">
+                                            {location.data.name}
+                                        </h3>
+                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        {location.data.zipCodes.map((zip) => (
+                                            <span class="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded">
+                                                CP {zip}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            <!-- Callout -->
+            <div
+                class="mt-16 p-8 bg-gradient-to-r from-amber-600/20 to-amber-700/20 border border-amber-600/30 rounded-xl text-center"
+            >
+                <h3 class="text-2xl font-bold text-white mb-3">
+                    ¿No encuentras tu zona?
+                </h3>
+                <p class="text-slate-300 mb-6">
+                    Aunque no esté listada, es probable que lleguemos. Consulta
+                    sin compromiso.
+                </p>
+                <a
+                    href="/contacto/"
+                    class="inline-flex items-center justify-center px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded transition-colors"
+                >
+                    Contactar Ahora
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <FinalCTA />
+    <Footer />
+</Layout>

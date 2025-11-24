@@ -1,0 +1,285 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+import { Shield } from "lucide-react";
+---
+
+<Layout
+    title="Política de Privacidad | Herrero Zaragoza"
+    description="Política de privacidad y protección de datos del sitio web Herrero Zaragoza"
+    noindex={true}
+>
+    <section class="py-20 bg-slate-950">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <div class="flex items-center justify-center gap-3 mb-6">
+                        <Shield className="w-8 h-8 text-amber-600" />
+                        <h1 class="text-4xl font-heading font-bold text-white">
+                            Política de Privacidad
+                        </h1>
+                    </div>
+                    <p class="text-slate-400">
+                        Última actualización: {
+                            new Date().toLocaleDateString("es-ES", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })
+                        }
+                    </p>
+                </div>
+
+                <!-- Content -->
+                <div class="prose prose-invert prose-slate max-w-none">
+                    <div
+                        class="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-6"
+                    >
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                1. Responsable del Tratamiento
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed mb-3">
+                                En cumplimiento del Reglamento (UE) 2016/679 del
+                                Parlamento Europeo y del Consejo (RGPD) y la Ley
+                                Orgánica 3/2018, de Protección de Datos
+                                Personales y garantía de los derechos digitales
+                                (LOPDGDD), se informa:
+                            </p>
+                            <ul class="list-none space-y-2 text-slate-300">
+                                <li>
+                                    <strong class="text-white"
+                                        >Responsable:</strong
+                                    > Olga Millán
+                                </li>
+                                <li>
+                                    <strong class="text-white">NIF:</strong> 43.675.068-T
+                                </li>
+                                <li>
+                                    <strong class="text-white"
+                                        >Domicilio:</strong
+                                    > Calle Pasteur, 19, 08490 Tordera, Barcelona
+                                </li>
+                                <li>
+                                    <strong class="text-white">Email:</strong> omadev2@gmail.com
+                                </li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                2. Datos que Recopilamos
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed mb-3">
+                                A través de los formularios de contacto del
+                                sitio web, podemos recopilar los siguientes
+                                datos personales:
+                            </p>
+                            <ul
+                                class="list-disc list-inside space-y-2 text-slate-300 ml-4"
+                            >
+                                <li>Nombre y apellidos</li>
+                                <li>Teléfono de contacto</li>
+                                <li>Dirección de correo electrónico</li>
+                                <li>Mensaje o consulta realizada</li>
+                            </ul>
+                            <p class="text-slate-300 leading-relaxed mt-4">
+                                <strong class="text-amber-500"
+                                    >Importante:</strong
+                                > Los datos proporcionados serán compartidos con
+                                profesionales del sector de herrería para que puedan
+                                contactar con el usuario y ofrecer sus servicios.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                3. Finalidad del Tratamiento
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed mb-3">
+                                Los datos personales serán tratados con las
+                                siguientes finalidades:
+                            </p>
+                            <ul
+                                class="list-disc list-inside space-y-2 text-slate-300 ml-4"
+                            >
+                                <li>
+                                    Gestionar las solicitudes de contacto
+                                    recibidas a través del sitio web
+                                </li>
+                                <li>
+                                    Facilitar el contacto entre usuarios y
+                                    profesionales de herrería
+                                </li>
+                                <li>
+                                    Responder a consultas y proporcionar
+                                    información solicitada
+                                </li>
+                                <li>
+                                    Enviar comunicaciones relacionadas con el
+                                    servicio solicitado
+                                </li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                4. Base Legal del Tratamiento
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed">
+                                La base legal para el tratamiento de sus datos
+                                es el <strong class="text-white"
+                                    >consentimiento del interesado</strong
+                                > (art. 6.1.a RGPD), otorgado mediante el envío del
+                                formulario de contacto.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                5. Destinatarios de los Datos
+                            </h2>
+                            <div
+                                class="bg-amber-900/20 border border-amber-600/30 rounded-lg p-6"
+                            >
+                                <p class="text-slate-200 leading-relaxed">
+                                    <strong class="text-amber-500"
+                                        >Sus datos serán compartidos con:</strong
+                                    >
+                                </p>
+                                <ul
+                                    class="list-disc list-inside space-y-2 text-slate-200 ml-4 mt-3"
+                                >
+                                    <li>
+                                        Profesionales del sector de herrería en
+                                        Zaragoza que puedan prestar el servicio
+                                        solicitado
+                                    </li>
+                                    <li>
+                                        Proveedores de servicios tecnológicos
+                                        necesarios para el funcionamiento del
+                                        sitio web (hosting, email, etc.)
+                                    </li>
+                                </ul>
+                                <p class="text-slate-200 leading-relaxed mt-3">
+                                    No se realizarán transferencias
+                                    internacionales de datos fuera del Espacio
+                                    Económico Europeo.
+                                </p>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                6. Conservación de los Datos
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed">
+                                Los datos personales se conservarán durante el
+                                tiempo necesario para cumplir con la finalidad
+                                para la que fueron recabados y, posteriormente,
+                                durante los plazos legalmente establecidos para
+                                atender posibles responsabilidades.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                7. Derechos del Usuario
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed mb-3">
+                                Puede ejercer los siguientes derechos en
+                                cualquier momento:
+                            </p>
+                            <ul
+                                class="list-disc list-inside space-y-2 text-slate-300 ml-4"
+                            >
+                                <li>
+                                    <strong class="text-white">Acceso:</strong> Conocer
+                                    qué datos personales estamos tratando
+                                </li>
+                                <li>
+                                    <strong class="text-white"
+                                        >Rectificación:</strong
+                                    > Modificar datos inexactos o incompletos
+                                </li>
+                                <li>
+                                    <strong class="text-white"
+                                        >Supresión:</strong
+                                    > Solicitar la eliminación de sus datos
+                                </li>
+                                <li>
+                                    <strong class="text-white"
+                                        >Oposición:</strong
+                                    > Oponerse al tratamiento de sus datos
+                                </li>
+                                <li>
+                                    <strong class="text-white"
+                                        >Limitación:</strong
+                                    > Solicitar la limitación del tratamiento
+                                </li>
+                                <li>
+                                    <strong class="text-white"
+                                        >Portabilidad:</strong
+                                    > Recibir sus datos en formato estructurado
+                                </li>
+                            </ul>
+                            <p class="text-slate-300 leading-relaxed mt-4">
+                                Para ejercer estos derechos, puede enviar un
+                                email a: <strong class="text-amber-500"
+                                    >omadev2@gmail.com</strong
+                                >
+                            </p>
+                            <p class="text-slate-300 leading-relaxed mt-3">
+                                También tiene derecho a presentar una
+                                reclamación ante la Agencia Española de
+                                Protección de Datos (www.aepd.es).
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                8. Seguridad de los Datos
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed">
+                                Hemos adoptado medidas técnicas y organizativas
+                                apropiadas para proteger sus datos personales
+                                contra el acceso no autorizado, la pérdida,
+                                destrucción o alteración accidental.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                9. Modificaciones
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed">
+                                Nos reservamos el derecho a modificar esta
+                                política de privacidad para adaptarla a cambios
+                                legislativos o en nuestras prácticas de
+                                tratamiento de datos. Se recomienda revisar
+                                periódicamente esta página.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-2xl font-bold text-white mb-4">
+                                10. Contacto
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed">
+                                Para cualquier consulta sobre esta política de
+                                privacidad o el tratamiento de sus datos
+                                personales:
+                            </p>
+                            <p class="text-amber-500 font-semibold mt-2">
+                                Email: omadev2@gmail.com
+                            </p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</Layout>

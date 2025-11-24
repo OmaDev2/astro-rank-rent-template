@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content";
+import { MapPin, ArrowRight } from "lucide-react";
+
+const locations = await getCollection("locations");
+const staticZones = [
+    "Zaragoza Capital",
+    "La Puebla de Alfindén",
+    "Polígono Malpica / Plaza",
+];
+---
+
+<section id="zonas" class="py-20 bg-slate-900 border-t border-slate-800">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-heading font-bold text-white mb-4">
+                Zonas de Servicio
+            </h2>
+            <div class="w-24 h-1 bg-amber-600 mx-auto mb-6"></div>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Nos desplazamos por toda la provincia de Zaragoza. Llegamos
+                donde nos necesites con nuestro taller móvil.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {
+                locations.map((loc) => (
+                    <a
+                        href={`/zona/${loc.slug}`}
+                        class="group flex items-center p-4 bg-slate-800 rounded-lg border border-slate-700 hover:border-amber-600 transition-all hover:shadow-lg hover:shadow-amber-900/20"
+                    >
+                        <div class="p-3 bg-slate-900 rounded-full text-amber-600 mr-4 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                            <MapPin className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white group-hover:text-amber-500 transition-colors">
+                                {loc.data.name}
+                            </h3>
+                            <span class="text-xs text-slate-500 uppercase tracking-wider">
+                                Ver Servicios
+                            </span>
+                        </div>
+                        <ArrowRight className="w-5 h-5 text-slate-600 ml-auto group-hover:text-amber-500 transition-colors" />
+                    </a>
+                ))
+            }
+
+            {/* Static Zones Display */}
+            {
+                staticZones.map((zone) => (
+                    <div class="group flex items-center p-4 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-all">
+                        <div class="p-3 bg-slate-900/50 rounded-full text-slate-500 mr-4">
+                            <MapPin className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-300">
+                                {zone}
+                            </h3>
+                            <span class="text-xs text-slate-600 uppercase tracking-wider">
+                                Servicio Disponible
+                            </span>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="mt-12 text-center">
+            <p class="text-slate-500 text-sm">
+                ¿No ves tu localidad? <a
+                    href="#contacto"
+                    class="text-amber-600 hover:underline">Contáctanos</a
+                >, seguramente llegamos.
+            </p>
+        </div>
+    </div>
+</section>

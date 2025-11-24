@@ -1,0 +1,54 @@
+---
+import SeoHead from "../components/SeoHead.astro";
+import Navbar from "../components/Navbar.astro"; // <--- AÑADIDO: Importamos el menú
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import "../styles/global.css";
+import type { WithContext, Thing } from "schema-dts";
+
+interface Props {
+    title: string;
+    description?: string;
+    schema?: WithContext<Thing>;
+    noindex?: boolean;
+}
+
+const { title, description, schema, noindex = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&family=Inter:wght@400;600&family=Oswald:wght@400;700&family=Roboto:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+
+        <SeoHead
+            title={title}
+            description={description ||
+                "Herreros en Zaragoza. Expertos en forja, rejas, puertas y estructuras metálicas."}
+            schema={schema}
+            noindex={noindex}
+        />
+    </head>
+    <body
+        class="bg-slate-900 text-slate-50 font-sans antialiased selection:bg-amber-600 selection:text-white"
+    >
+        <Navbar />
+
+        <main>
+            <slot />
+        </main>
+
+        <WhatsAppButton />
+        <CookieBanner />
+    </body>
+</html>

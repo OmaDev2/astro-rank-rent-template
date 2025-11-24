@@ -1,0 +1,389 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+import FinalCTA from "../components/FinalCTA.astro";
+import { businessConfig } from "../config/business";
+import {
+    Award,
+    Users,
+    Shield,
+    Wrench,
+    CheckCircle,
+    Clock,
+    Target,
+    Heart,
+} from "lucide-react";
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "Sobre Nosotros - Herrero Zaragoza",
+    description:
+        "Conoce la historia y valores de Herrero Zaragoza. Más de 15 años ofreciendo servicios de herrería profesional en Zaragoza.",
+};
+---
+
+<Layout
+    title="Sobre Nosotros | Herrero Zaragoza"
+    description="Herreros profesionales en Zaragoza desde 2010. Conoce nuestra historia, valores y compromiso con la calidad."
+    schema={schema}
+>
+    <!-- Hero -->
+    <section class="relative py-20 bg-slate-900 overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"
+        >
+        </div>
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950"
+        >
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1
+                    class="text-5xl lg:text-6xl font-heading font-bold text-white mb-6"
+                >
+                    Sobre <span class="text-amber-500">Nosotros</span>
+                </h1>
+                <p class="text-xl text-slate-300 leading-relaxed">
+                    Herreros profesionales en Zaragoza comprometidos con la
+                    calidad, la seguridad y la satisfacción del cliente.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestra Historia -->
+    <section class="py-20 bg-slate-950">
+        <div class="container mx-auto px-4">
+            <div
+                class="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
+            >
+                <!-- Imagen -->
+                <div class="relative">
+                    <div
+                        class="aspect-[4/3] rounded-2xl overflow-hidden border border-slate-800"
+                    >
+                        <img
+                            src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop"
+                            alt="Taller de herrería Zaragoza"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <!-- Badge -->
+                    <div
+                        class="absolute -bottom-6 -right-6 bg-amber-600 text-white p-6 rounded-xl shadow-2xl"
+                    >
+                        <div class="text-center">
+                            <div class="text-4xl font-heading font-bold">
+                                +15
+                            </div>
+                            <div class="text-sm uppercase tracking-wider">
+                                Años
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="h-1 w-12 bg-amber-600"></div>
+                        <span
+                            class="text-amber-500 font-bold uppercase tracking-wider text-sm"
+                            >Nuestra Historia</span
+                        >
+                    </div>
+                    <h2 class="text-4xl font-heading font-bold text-white mb-6">
+                        Herrería Profesional desde 2010
+                    </h2>
+
+                    <p class="text-slate-300 mb-6 leading-relaxed">
+                        Desde nuestros inicios en <strong>2010</strong>, nos
+                        hemos dedicado a ofrecer servicios de herrería de la más
+                        alta calidad en Zaragoza y provincia. Lo que comenzó
+                        como un pequeño taller familiar ha crecido hasta
+                        convertirse en una referencia en el sector.
+                    </p>
+
+                    <p class="text-slate-300 mb-8 leading-relaxed">
+                        Nuestro compromiso es simple pero firme: <strong
+                            >ofrecer trabajos de herrería que combinen
+                            seguridad, durabilidad y diseño</strong
+                        >. Cada proyecto, grande o pequeño, recibe la misma
+                        atención al detalle y profesionalidad.
+                    </p>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-amber-500 mb-1">
+                                500+
+                            </div>
+                            <div class="text-xs text-slate-400 uppercase">
+                                Proyectos
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-amber-500 mb-1">
+                                100%
+                            </div>
+                            <div class="text-xs text-slate-400 uppercase">
+                                Satisfacción
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-amber-500 mb-1">
+                                15+
+                            </div>
+                            <div class="text-xs text-slate-400 uppercase">
+                                Años
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestros Valores -->
+    <section class="py-20 bg-slate-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-heading font-bold text-white mb-4">
+                    Nuestros Valores
+                </h2>
+                <div class="w-24 h-1 bg-amber-600 mx-auto mb-4"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Los principios que guían nuestro trabajo cada día
+                </p>
+            </div>
+
+            <div
+                class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
+            >
+                <!-- Valor 1 -->
+                <div
+                    class="p-6 bg-slate-950 border border-slate-800 rounded-xl hover:border-amber-600/50 transition-all group"
+                >
+                    <div
+                        class="w-14 h-14 bg-amber-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                    >
+                        <Shield className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Calidad</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Utilizamos solo materiales certificados y técnicas
+                        profesionales para garantizar trabajos duraderos.
+                    </p>
+                </div>
+
+                <!-- Valor 2 -->
+                <div
+                    class="p-6 bg-slate-950 border border-slate-800 rounded-xl hover:border-amber-600/50 transition-all group"
+                >
+                    <div
+                        class="w-14 h-14 bg-amber-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                    >
+                        <Heart className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">
+                        Compromiso
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Nos comprometemos con cada cliente para superar sus
+                        expectativas en cada proyecto.
+                    </p>
+                </div>
+
+                <!-- Valor 3 -->
+                <div
+                    class="p-6 bg-slate-950 border border-slate-800 rounded-xl hover:border-amber-600/50 transition-all group"
+                >
+                    <div
+                        class="w-14 h-14 bg-amber-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                    >
+                        <Clock className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">
+                        Puntualidad
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Respetamos los plazos acordados y respondemos con
+                        rapidez a las urgencias.
+                    </p>
+                </div>
+
+                <!-- Valor 4 -->
+                <div
+                    class="p-6 bg-slate-950 border border-slate-800 rounded-xl hover:border-amber-600/50 transition-all group"
+                >
+                    <div
+                        class="w-14 h-14 bg-amber-600/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
+                    >
+                        <Target className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">
+                        Transparencia
+                    </h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Presupuestos claros sin sorpresas. Lo que presupuestamos
+                        es lo que pagas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Por Qué Elegirnos -->
+    <section class="py-20 bg-slate-950">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-heading font-bold text-white mb-4">
+                        ¿Por Qué Elegirnos?
+                    </h2>
+                    <div class="w-24 h-1 bg-amber-600 mx-auto"></div>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Razón 1 -->
+                    <div
+                        class="flex items-start gap-4 p-6 bg-slate-900 border border-slate-800 rounded-lg"
+                    >
+                        <div class="shrink-0">
+                            <CheckCircle
+                                className="w-6 h-6 text-amber-600 mt-1"
+                            />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">
+                                Taller Propio en Zaragoza
+                            </h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Fabricamos todo en nuestras instalaciones, sin
+                                intermediarios. Esto nos permite controlar la
+                                calidad y ajustar los precios al máximo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Razón 2 -->
+                    <div
+                        class="flex items-start gap-4 p-6 bg-slate-900 border border-slate-800 rounded-lg"
+                    >
+                        <div class="shrink-0">
+                            <CheckCircle
+                                className="w-6 h-6 text-amber-600 mt-1"
+                            />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">
+                                Experiencia Demostrable
+                            </h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Más de 15 años trabajando en Zaragoza nos han
+                                permitido perfeccionar nuestras técnicas y
+                                conocer a fondo las necesidades de la zona.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Razón 3 -->
+                    <div
+                        class="flex items-start gap-4 p-6 bg-slate-900 border border-slate-800 rounded-lg"
+                    >
+                        <div class="shrink-0">
+                            <CheckCircle
+                                className="w-6 h-6 text-amber-600 mt-1"
+                            />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">
+                                Garantía por Escrito
+                            </h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Todos nuestros trabajos incluyen garantía
+                                documentada. Trabajamos con materiales
+                                certificados y ofrecemos factura reglamentaria.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Razón 4 -->
+                    <div
+                        class="flex items-start gap-4 p-6 bg-slate-900 border border-slate-800 rounded-lg"
+                    >
+                        <div class="shrink-0">
+                            <CheckCircle
+                                className="w-6 h-6 text-amber-600 mt-1"
+                            />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">
+                                Atención Personalizada
+                            </h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Cada cliente es único. Nos tomamos el tiempo
+                                necesario para entender tus necesidades y
+                                ofrecerte la mejor solución.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestro Equipo -->
+    <section class="py-20 bg-slate-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-heading font-bold text-white mb-4">
+                    Nuestro Equipo
+                </h2>
+                <div class="w-24 h-1 bg-amber-600 mx-auto mb-4"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Profesionales cualificados con pasión por su trabajo
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div
+                    class="p-8 bg-slate-950 border border-slate-800 rounded-xl"
+                >
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="w-16 h-16 bg-amber-600/20 rounded-full flex items-center justify-center"
+                        >
+                            <Users className="w-8 h-8 text-amber-600" />
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">
+                                Equipo Profesional
+                            </h3>
+                            <p class="text-slate-400">
+                                Herreros certificados y experimentados
+                            </p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed mb-4">
+                        Nuestro equipo está formado por herreros profesionales
+                        con años de experiencia en el sector. Cada miembro ha
+                        sido cuidadosamente seleccionado por su habilidad
+                        técnica y compromiso con la excelencia.
+                    </p>
+                    <p class="text-slate-300 leading-relaxed">
+                        Nos mantenemos actualizados con las últimas técnicas y
+                        normativas del sector para ofrecer siempre el mejor
+                        servicio a nuestros clientes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <FinalCTA />
+    <Footer />
+</Layout>

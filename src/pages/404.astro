@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+import { getPhoneUrl } from "../config/business";
+import { Home, Phone, ArrowLeft } from "lucide-react";
+---
+
+<Layout
+    title="Página No Encontrada | Herrero Zaragoza"
+    description="La página que buscas no existe"
+    noindex={true}
+>
+    <section
+        class="min-h-screen flex items-center justify-center bg-slate-950 py-20"
+    >
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto text-center">
+                <!-- Error Number -->
+                <div class="mb-8">
+                    <h1
+                        class="text-[150px] lg:text-[200px] font-heading font-bold text-amber-600 leading-none opacity-20"
+                    >
+                        404
+                    </h1>
+                </div>
+
+                <!-- Error Message -->
+                <div class="mb-12">
+                    <h2
+                        class="text-4xl lg:text-5xl font-heading font-bold text-white mb-4"
+                    >
+                        Página No Encontrada
+                    </h2>
+                    <p class="text-xl text-slate-400 leading-relaxed">
+                        Lo sentimos, la página que buscas no existe o ha sido
+                        movida.
+                    </p>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div
+                    class="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+                >
+                    <a
+                        href="/"
+                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-all shadow-lg hover:shadow-amber-900/40 transform hover:-translate-y-0.5"
+                    >
+                        <Home className="w-5 h-5 mr-2" />
+                        Volver al Inicio
+                    </a>
+                    <a
+                        href={getPhoneUrl()}
+                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-amber-600 hover:bg-amber-600 rounded-lg transition-all transform hover:-translate-y-0.5"
+                    >
+                        <Phone className="w-5 h-5 mr-2" />
+                        Llamar al Herrero
+                    </a>
+                </div>
+
+                <!-- Quick Links -->
+                <div
+                    class="bg-slate-900 border border-slate-800 rounded-xl p-8"
+                >
+                    <h3 class="text-xl font-bold text-white mb-6">
+                        ¿Buscabas alguno de estos servicios?
+                    </h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <a
+                            href="/rejas/"
+                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
+                        >
+                            <ArrowLeft
+                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
+                            />
+                            <span
+                                class="text-slate-300 group-hover:text-white transition-colors"
+                            >
+                                Rejas de Seguridad
+                            </span>
+                        </a>
+                        <a
+                            href="/cerramientos/"
+                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
+                        >
+                            <ArrowLeft
+                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
+                            />
+                            <span
+                                class="text-slate-300 group-hover:text-white transition-colors"
+                            >
+                                Cerramientos
+                            </span>
+                        </a>
+                        <a
+                            href="/puertas-metalicas/"
+                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
+                        >
+                            <ArrowLeft
+                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
+                            />
+                            <span
+                                class="text-slate-300 group-hover:text-white transition-colors"
+                            >
+                                Puertas Metálicas
+                            </span>
+                        </a>
+                        <a
+                            href="/contacto/"
+                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
+                        >
+                            <ArrowLeft
+                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
+                            />
+                            <span
+                                class="text-slate-300 group-hover:text-white transition-colors"
+                            >
+                                Contacto
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</Layout>

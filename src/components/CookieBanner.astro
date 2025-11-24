@@ -1,0 +1,239 @@
+---
+// Cookie Consent Banner Component
+---
+
+<div
+    id="cookie-banner"
+    class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-700 shadow-2xl z-50 transform translate-y-full transition-transform duration-500"
+>
+    <div class="container mx-auto px-4 py-6">
+        <div
+            class="flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+            <div class="flex-1">
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    🍪 Utilizamos cookies propias y de terceros para mejorar
+                    nuestros servicios y mostrarle publicidad relacionada con
+                    sus preferencias. Si continúa navegando, consideramos que
+                    acepta su uso. Puede obtener más información en nuestra{" "}
+                    <a
+                        href="/cookies"
+                        class="text-amber-500 hover:text-amber-400 underline"
+                        >Política de Cookies</a
+                    >.
+                </p>
+            </div>
+            <div class="flex gap-3 shrink-0">
+                <button
+                    id="cookie-settings"
+                    class="px-4 py-2 text-sm font-medium text-slate-300 border border-slate-600 rounded hover:bg-slate-800 transition-colors"
+                >
+                    Configurar
+                </button>
+                <button
+                    id="cookie-reject"
+                    class="px-4 py-2 text-sm font-medium text-slate-300 border border-slate-600 rounded hover:bg-slate-800 transition-colors"
+                >
+                    Rechazar
+                </button>
+                <button
+                    id="cookie-accept"
+                    class="px-6 py-2 text-sm font-bold bg-amber-600 hover:bg-amber-700 text-white rounded transition-colors"
+                >
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div
+    id="cookie-modal"
+    class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] hidden items-center justify-center p-4"
+>
+    <div
+        class="bg-slate-900 border border-slate-700 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+    >
+        <div class="p-6">
+            <h3 class="text-2xl font-bold text-white mb-4">
+                Configuración de Cookies
+            </h3>
+            <p class="text-slate-300 text-sm mb-6">
+                Utilizamos cookies para mejorar su experiencia de navegación.
+                Puede elegir qué tipos de cookies desea aceptar.
+            </p>
+
+            <div class="space-y-4">
+                <!-- Cookies Técnicas -->
+                <div
+                    class="p-4 bg-slate-950 border border-slate-800 rounded-lg"
+                >
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-white">
+                            Cookies Técnicas (Necesarias)
+                        </h4>
+                        <input
+                            type="checkbox"
+                            checked
+                            disabled
+                            class="w-5 h-5 rounded border-slate-700 bg-slate-700 text-amber-600 opacity-50 cursor-not-allowed"
+                        />
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Esenciales para el funcionamiento del sitio web. No se
+                        pueden desactivar.
+                    </p>
+                </div>
+
+                <!-- Cookies Analíticas -->
+                <div
+                    class="p-4 bg-slate-950 border border-slate-800 rounded-lg"
+                >
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-white">Cookies Analíticas</h4>
+                        <input
+                            type="checkbox"
+                            id="analytics-cookies"
+                            class="w-5 h-5 rounded border-slate-700 bg-slate-800 text-amber-600 focus:ring-amber-600"
+                        />
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Nos ayudan a entender cómo los visitantes interactúan
+                        con el sitio web (Google Analytics).
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button
+                    id="cookie-modal-close"
+                    class="flex-1 px-4 py-3 text-sm font-medium text-slate-300 border border-slate-600 rounded hover:bg-slate-800 transition-colors"
+                >
+                    Cancelar
+                </button>
+                <button
+                    id="cookie-save"
+                    class="flex-1 px-4 py-3 text-sm font-bold bg-amber-600 hover:bg-amber-700 text-white rounded transition-colors"
+                >
+                    Guardar Preferencias
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Cookie consent logic
+    const COOKIE_NAME = "cookie_consent";
+    const COOKIE_EXPIRY_DAYS = 365;
+
+    function setCookie(name: string, value: string, days: number) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`;
+    }
+
+    function getCookie(name: string): string | null {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === " ") c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0)
+                return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function showBanner() {
+        const banner = document.getElementById("cookie-banner");
+        if (banner) {
+            setTimeout(() => {
+                banner.classList.remove("translate-y-full");
+            }, 500);
+        }
+    }
+
+    function hideBanner() {
+        const banner = document.getElementById("cookie-banner");
+        if (banner) {
+            banner.classList.add("translate-y-full");
+        }
+    }
+
+    function acceptCookies(analytics: boolean = true) {
+        const consent = {
+            necessary: true,
+            analytics: analytics,
+            timestamp: new Date().toISOString(),
+        };
+        setCookie(COOKIE_NAME, JSON.stringify(consent), COOKIE_EXPIRY_DAYS);
+        hideBanner();
+
+        // Aquí puedes inicializar Google Analytics si analytics es true
+        if (analytics) {
+            // window.gtag('consent', 'update', { analytics_storage: 'granted' });
+        }
+    }
+
+    // Check if consent already given
+    document.addEventListener("DOMContentLoaded", () => {
+        const consent = getCookie(COOKIE_NAME);
+        if (!consent) {
+            showBanner();
+        }
+
+        // Accept button
+        document
+            .getElementById("cookie-accept")
+            ?.addEventListener("click", () => {
+                acceptCookies(true);
+            });
+
+        // Reject button
+        document
+            .getElementById("cookie-reject")
+            ?.addEventListener("click", () => {
+                acceptCookies(false);
+            });
+
+        // Settings button
+        document
+            .getElementById("cookie-settings")
+            ?.addEventListener("click", () => {
+                const modal = document.getElementById("cookie-modal");
+                if (modal) {
+                    modal.classList.remove("hidden");
+                    modal.classList.add("flex");
+                }
+            });
+
+        // Close modal
+        document
+            .getElementById("cookie-modal-close")
+            ?.addEventListener("click", () => {
+                const modal = document.getElementById("cookie-modal");
+                if (modal) {
+                    modal.classList.add("hidden");
+                    modal.classList.remove("flex");
+                }
+            });
+
+        // Save preferences
+        document
+            .getElementById("cookie-save")
+            ?.addEventListener("click", () => {
+                const analyticsCheckbox = document.getElementById(
+                    "analytics-cookies",
+                ) as HTMLInputElement;
+                acceptCookies(analyticsCheckbox?.checked || false);
+
+                const modal = document.getElementById("cookie-modal");
+                if (modal) {
+                    modal.classList.add("hidden");
+                    modal.classList.remove("flex");
+                }
+            });
+    });
+</script>

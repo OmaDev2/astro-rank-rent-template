@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+
+// Recuperamos las localidades, excluyendo "zaragoza" si se te olvidó borrar el archivo
+const locations = await getCollection("locations", ({ slug }) => {
+    return slug !== "zaragoza" && slug !== "zaragoza-capital";
+});
+
+const sortedLocations = locations.sort((a, b) =>
+    a.data.name.localeCompare(b.data.name),
+);
+---
+
+<div class="service-areas">
+    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-sm">
+        Zonas de Servicio
+    </h4>
+
+    <ul class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-slate-400">
+        {/* 1. LA JOYA DE LA CORONA: Link manual a la Home */}
+        <li>
+            <a
+                href="/"
+                class="text-slate-200 font-bold hover:text-amber-500 transition-colors flex items-center gap-1 group"
+                title="Herreros en Zaragoza Capital"
+            >
+                <span
+                    class="w-1.5 h-1.5 bg-amber-600 rounded-full group-hover:bg-amber-400 transition-colors"
+                ></span>
+                Zaragoza Capital
+            </a>
+        </li>
+
+        {/* 2. El resto de pueblos automáticos */}
+        {
+            sortedLocations.map((loc) => (
+                <li>
+                    <a
+                        href={`/zona/${loc.slug}/`}
+                        class="hover:text-amber-500 transition-colors flex items-center gap-1 group"
+                    >
+                        <span class="w-1.5 h-1.5 bg-amber-600 rounded-full group-hover:bg-amber-400 transition-colors" />
+                        {loc.data.name}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</div>

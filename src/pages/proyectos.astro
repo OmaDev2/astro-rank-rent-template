@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+import { getCollection } from 'astro:content';
+import { MapPin } from 'lucide-react';
+
+// Recuperamos todos los proyectos de la colección
+const projects = await getCollection('projects');
+
+// Schema SEO para la página de Galería
+const gallerySchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Galería de Trabajos - Herrero Zaragoza",
+  "description": "Portafolio de trabajos realizados en Zaragoza: rejas, puertas, cerramientos y estructuras metálicas.",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": projects.map((project, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": project.data.title
+    }))
+  }
+};
+---
+
+<Layout title="Nuestros Trabajos | Herrero Zaragoza" description="Galería de proyectos de herrería realizados en Zaragoza y provincia." schema={gallerySchema}>
+  
+  <!-- HERO PROYECTOS -->
+  <section class="relative py-20 bg-slate-900 border-b border-slate-800">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-5xl md:text-7xl font-heading font-bold text-white mb-6">
+            NUESTROS <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-600">PROYECTOS</span>
+        </h1>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+            Una imagen vale más que mil palabras. Descubre la calidad de nuestros acabados en rejas, puertas y cerramientos por toda la provincia.
+        </p>
+    </div>
+  </section>
+
+  <!-- GALERÍA GRID -->
+  <section class="py-20 bg-slate-950">
+    <div class="container mx-auto px-4">
+        
+        {projects.length > 0 ? (
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map(project => (
+                    <div class="group relative rounded-lg overflow-hidden bg-slate-900 border border-slate-800 hover:border-amber-600/50 transition-all hover:shadow-2xl hover:shadow-amber-900/20 aspect-[4/3]">
+                        
+                        {/* Como aún puede que no tengas fotos reales, usamos un div de placeholder o la imagen si existe */}
+                        <div class="absolute inset-0 bg-slate-800 flex items-center justify-center text-slate-600 group-hover:scale-105 transition-transform duration-700">
+                             {/* Aquí iría: <Image src={project.data.image} alt={project.data.title} class="w-full h-full object-cover" /> */}
+                             <span class="text-sm uppercase tracking-widest font-bold">Foto del Proyecto</span>
+                        </div>
+
+                        <!-- Overlay con Información -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity"></div>
+                        
+                        <div class="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <span class="inline-flex items-center gap-1 text-amber-500 text-xs font-bold uppercase tracking-wider mb-2 bg-slate-950/50 px-2 py-1 rounded backdrop-blur-sm">
+                                <MapPin className="w-3 h-3" /> {project.data.locationTag}
+                            </span>
+                            <h3 class="text-2xl font-heading font-bold text-white leading-tight">
+                                {project.data.title}
+                            </h3>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        ) : (
+            // ESTADO VACÍO (Por si aún no has creado los MDX)
+            <div class="text-center py-20 border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/50">
+                <p class="text-slate-500 text-lg mb-4">Estamos actualizando nuestra galería de proyectos.</p>
+                <a href="/contacto" class="text-amber-600 font-bold hover:underline">Solicitar fotos de trabajos recientes</a>
+            </div>
+        )}
+
+    </div>
+  </section>
+
+  <FinalCTA />
+  <Footer />
+</Layout>
+```
+
+### 💡 Recordatorio Importante
+
+Para que esta página se vea "llena", recuerda que necesitas tener archivos creados en la carpeta `src/content/projects/`.
+
+Si todavía te sale vacía, crea rápidamente un archivo de prueba en `src/content/projects/ejemplo1.mdx`:
+
+```markdown
+---
+title: Rejas Chalet Montecanal
+image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80"
+locationTag: Montecanal
