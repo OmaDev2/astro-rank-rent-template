@@ -1,0 +1,44 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { CheckCircle, ArrowRight } from "lucide-react";
+---
+
+<Layout title="¡Mensaje Enviado! | Herrero Zaragoza" noindex={true}>
+    <section
+        class="min-h-[80vh] flex items-center justify-center bg-slate-900 px-4"
+    >
+        <div class="max-w-md w-full text-center">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 rounded-full mb-8"
+            >
+                <CheckCircle className="w-10 h-10 text-green-500" />
+            </div>
+
+            <h1 class="text-4xl font-heading font-bold text-white mb-4">
+                ¡Mensaje Recibido!
+            </h1>
+
+            <p class="text-slate-300 text-lg mb-8 leading-relaxed">
+                Gracias por contactar con nosotros. Hemos recibido tu solicitud
+                correctamente. Nos pondremos en contacto contigo en menos de 24
+                horas.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                    href="/"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded transition-colors"
+                >
+                    Volver al Inicio
+                </a>
+                <a
+                    href="/servicios"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded transition-colors"
+                >
+                    Ver Servicios
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                </a>
+            </div>
+        </div>
+    </section>
+</Layout>

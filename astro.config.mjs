@@ -39,11 +39,11 @@ export default defineConfig({
   // ==========================================================
   // 💡 Configuración del servidor para acceso remoto
   // ==========================================================
-  server: {
-    // Establece 'host' a true para que el servidor escuche en 0.0.0.0
-    // Esto permite que otros dispositivos en tu red local (móvil, tablet)
-    // puedan acceder a tu Mac a través de su dirección IP.
-    host: true,
-  }
+  //server: {
+  // Establece 'host' a true para que el servidor escuche en 0.0.0.0
+  // Esto permite que otros dispositivos en tu red local (móvil, tablet)
+  // puedan acceder a tu Mac a través de su dirección IP.
+  //host: true,
+  //}
   // ==========================================================
 });
