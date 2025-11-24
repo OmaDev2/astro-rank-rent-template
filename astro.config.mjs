@@ -7,6 +7,8 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
 
+import netlify from '@astrojs/netlify';
+
 // NOTA: He eliminado la importación de 'node' porque causaba el error en Netlify
 
 // https://astro.build/config
@@ -37,8 +39,9 @@ export default defineConfig({
   ],
 
   // ✅ MODO ESTÁTICO: Esto generará archivos .html que Netlify entiende perfectamente
-  output: 'static',
-
   // HE BORRADO EL "adapter: node(...)". 
   // Al quitarlo, Astro usará el modo estático por defecto y Netlify funcionará.
+  output: 'static',
+
+  adapter: netlify()
 });
