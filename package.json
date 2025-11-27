@@ -1,7 +1,19 @@
 {
-  "name": "herrero-zaragoza",
+  "name": "astro-rank-rent-template",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "Professional Astro template for Rank & Rent local business websites with Keystatic CMS",
+  "author": "OmaDev",
+  "license": "MIT",
+  "keywords": [
+    "astro",
+    "template",
+    "rank-and-rent",
+    "keystatic",
+    "cms",
+    "local-business",
+    "seo"
+  ],
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
