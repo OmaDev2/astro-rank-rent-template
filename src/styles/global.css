@@ -5,27 +5,15 @@
 @layer base {
   :root {
     /* --- PALETA INDUSTRIAL (Tu configuración actual) --- */
+    /* Las variables se inyectan dinámicamente desde Layout.astro según el tema elegido */
 
-    /* PRIMARIO: Color principal de la marca (Botones, Iconos, Enlaces importantes) */
-    /* Original: Amber 600 (#d97706) */
-    --color-primary: 220 38 38;
-
-    /* SECUNDARIO: Color oscuro/profundo (Fondos oscuros, Navbar, Footer) */
-    /* Original: Slate 800 (#1e293b) */
-    --color-secondary: 24 24 27;
-
-    /* ACENTO: Color para destacar detalles, bordes o estados "hover" */
-    /* Original: Yellow 500 (#eab308) */
-    --color-accent: 239 68 68;
-
-    /* FONDO: Color de fondo general de la página */
-    /* Original: Slate 50 (#f8fafc) */
+    /* 
+    --color-primary: 217 119 6;
+    --color-secondary: 30 41 59;
+    --color-accent: 234 179 8;
     --color-bg-body: 248 250 252;
-
-    /* TEXTO: Colores para tipografía */
-    /* Original: Slate 900 (#0f172a) - Títulos */
     --color-text-heading: 15 23 42;
-    /* Original: Zinc 400 (#a1a1aa) adaptado a Slate 700 para mejor lectura - Párrafos */
-    --color-text-body: 51 65 85;
+    --color-text-body: 51 65 85; 
+    */
   }
 }

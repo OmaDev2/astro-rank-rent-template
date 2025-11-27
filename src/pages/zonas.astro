@@ -8,12 +8,12 @@ import type { WithContext, CollectionPage } from "schema-dts";
 
 const locations = await getCollection("locations");
 
-// Fetch Global Settings
+// Fetch Global Settings (Dinámico)
 const settings = await getEntry("settings", "global");
 const { siteName, city, niche } = settings?.data || {
-    siteName: "Herrero Zaragoza",
-    city: "Zaragoza",
-    niche: "Herrería",
+    siteName: "Nombre Negocio",
+    city: "Ciudad",
+    niche: "Servicio Profesional",
 };
 
 // Agrupar por tipo
@@ -27,32 +27,31 @@ const schema: WithContext<CollectionPage> = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `Zonas de Servicio - ${siteName}`,
-    description: `Servicio de ${niche.toLowerCase()} profesional en ${city} y alrededores. Consulta todas las zonas donde trabajamos.`,
+    description: `Servicio de ${niche} en ${city} y alrededores. Consulta cobertura.`,
 };
 ---
 
 <Layout
     title={`Zonas de Servicio | ${siteName}`}
-    description={`Servicio de ${niche.toLowerCase()} en ${city} y provincia. Consulta todas las localidades donde ofrecemos nuestros servicios profesionales.`}
+    description={`Cobertura de ${niche} en ${city} y provincia.`}
     schema={schema}
 >
-    <!-- Hero -->
-    <section class="relative py-20 bg-slate-900 overflow-hidden">
+    <section class="relative py-20 bg-secondary overflow-hidden">
         <div
-            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center opacity-20"
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center opacity-10"
         >
         </div>
         <div
-            class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950"
+            class="absolute inset-0 bg-gradient-to-b from-secondary via-secondary/90 to-secondary"
         >
         </div>
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-3xl mx-auto text-center">
                 <div class="flex items-center justify-center gap-2 mb-6">
-                    <MapPin className="w-8 h-8 text-amber-600" />
+                    <MapPin className="w-8 h-8 text-primary" />
                     <span
-                        class="text-amber-500 font-bold uppercase tracking-widest text-sm"
+                        class="text-primary font-bold uppercase tracking-widest text-sm"
                         >Cobertura Total</span
                     >
                 </div>
@@ -62,32 +61,28 @@ const schema: WithContext<CollectionPage> = {
                     Zonas de Servicio
                 </h1>
                 <p class="text-xl text-slate-300 leading-relaxed">
-                    Ofrecemos servicios de {niche.toLowerCase()} profesional en {
-                        city
-                    }
-                    capital y toda la provincia. Consulta si llegamos a tu zona.
+                    Ofrecemos servicios de {niche} profesional en {city} capital
+                    y toda la provincia. Consulta si llegamos a tu zona.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Zonas Grid -->
-    <section class="py-20 bg-slate-950">
+    <section class="py-20 bg-secondary border-t border-white/5">
         <div class="container mx-auto px-4">
-            <!-- Zonas Residenciales -->
             {
                 residenciales.length > 0 && (
                     <div class="mb-16">
                         <div class="flex items-center gap-3 mb-8">
-                            <div class="p-3 bg-amber-600/20 rounded-lg">
-                                <Home className="w-6 h-6 text-amber-600" />
+                            <div class="p-3 bg-primary/20 rounded-lg">
+                                <Home className="w-6 h-6 text-primary" />
                             </div>
                             <div>
                                 <h2 class="text-3xl font-heading font-bold text-white">
                                     Zonas Residenciales
                                 </h2>
                                 <p class="text-slate-400 text-sm">
-                                    Servicios para viviendas y comunidades
+                                    Viviendas y comunidades
                                 </p>
                             </div>
                         </div>
@@ -95,17 +90,17 @@ const schema: WithContext<CollectionPage> = {
                             {residenciales.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-all hover:shadow-xl hover:shadow-amber-900/10"
+                                    class="group p-6 bg-slate-900/50 border border-white/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
                                 >
                                     <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">
+                                        <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
                                             {location.data.name}
                                         </h3>
-                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded">
+                                            <span class="text-xs px-2 py-1 bg-white/5 text-slate-400 rounded">
                                                 CP {zip}
                                             </span>
                                         ))}
@@ -117,20 +112,19 @@ const schema: WithContext<CollectionPage> = {
                 )
             }
 
-            <!-- Zonas Industriales -->
             {
                 industriales.length > 0 && (
                     <div class="mb-16">
                         <div class="flex items-center gap-3 mb-8">
-                            <div class="p-3 bg-amber-600/20 rounded-lg">
-                                <Factory className="w-6 h-6 text-amber-600" />
+                            <div class="p-3 bg-primary/20 rounded-lg">
+                                <Factory className="w-6 h-6 text-primary" />
                             </div>
                             <div>
                                 <h2 class="text-3xl font-heading font-bold text-white">
                                     Polígonos Industriales
                                 </h2>
                                 <p class="text-slate-400 text-sm">
-                                    Servicios para empresas y naves
+                                    Empresas y naves
                                 </p>
                             </div>
                         </div>
@@ -138,17 +132,17 @@ const schema: WithContext<CollectionPage> = {
                             {industriales.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-all hover:shadow-xl hover:shadow-amber-900/10"
+                                    class="group p-6 bg-slate-900/50 border border-white/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
                                 >
                                     <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">
+                                        <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
                                             {location.data.name}
                                         </h3>
-                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded">
+                                            <span class="text-xs px-2 py-1 bg-white/5 text-slate-400 rounded">
                                                 CP {zip}
                                             </span>
                                         ))}
@@ -160,20 +154,19 @@ const schema: WithContext<CollectionPage> = {
                 )
             }
 
-            <!-- Centros Urbanos -->
             {
                 centros.length > 0 && (
                     <div>
                         <div class="flex items-center gap-3 mb-8">
-                            <div class="p-3 bg-amber-600/20 rounded-lg">
-                                <Building2 className="w-6 h-6 text-amber-600" />
+                            <div class="p-3 bg-primary/20 rounded-lg">
+                                <Building2 className="w-6 h-6 text-primary" />
                             </div>
                             <div>
                                 <h2 class="text-3xl font-heading font-bold text-white">
                                     Centros Urbanos
                                 </h2>
                                 <p class="text-slate-400 text-sm">
-                                    Servicios en zonas céntricas
+                                    Zonas céntricas
                                 </p>
                             </div>
                         </div>
@@ -181,17 +174,17 @@ const schema: WithContext<CollectionPage> = {
                             {centros.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-all hover:shadow-xl hover:shadow-amber-900/10"
+                                    class="group p-6 bg-slate-900/50 border border-white/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
                                 >
                                     <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">
+                                        <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
                                             {location.data.name}
                                         </h3>
-                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-slate-800 text-slate-400 rounded">
+                                            <span class="text-xs px-2 py-1 bg-white/5 text-slate-400 rounded">
                                                 CP {zip}
                                             </span>
                                         ))}
@@ -203,9 +196,8 @@ const schema: WithContext<CollectionPage> = {
                 )
             }
 
-            <!-- Callout -->
             <div
-                class="mt-16 p-8 bg-gradient-to-r from-amber-600/20 to-amber-700/20 border border-amber-600/30 rounded-xl text-center"
+                class="mt-16 p-8 bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 rounded-xl text-center"
             >
                 <h3 class="text-2xl font-bold text-white mb-3">
                     ¿No encuentras tu zona?
@@ -216,7 +208,7 @@ const schema: WithContext<CollectionPage> = {
                 </p>
                 <a
                     href="/contacto/"
-                    class="inline-flex items-center justify-center px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded transition-colors"
+                    class="inline-flex items-center justify-center px-8 py-4 bg-primary hover:bg-accent text-white font-bold rounded transition-colors shadow-lg hover:shadow-primary/20"
                 >
                     Contactar Ahora
                     <ArrowRight className="w-5 h-5 ml-2" />

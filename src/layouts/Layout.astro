@@ -36,23 +36,17 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
 ---
 
 <!doctype html>
-<html lang="es" class="scroll-smooth">
+<html
+    lang="es"
+    class="scroll-smooth"
+    style={{
+        "--color-primary": colors.primary,
+        "--color-secondary": colors.secondary,
+        "--color-accent": colors.accent,
+        "--theme-gradient": gradient,
+    }}
+>
     <head>
-        <style
-            define:vars={{
-                "color-primary": colors.primary,
-                "color-secondary": colors.secondary,
-                "color-accent": colors.accent,
-                "theme-gradient": gradient,
-            }}
-        >
-            :root {
-                --color-primary: var(--color-primary);
-                --color-secondary: var(--color-secondary);
-                --color-accent: var(--color-accent);
-                --theme-gradient: var(--theme-gradient);
-            }
-        </style>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

@@ -36,6 +36,7 @@ const projects = defineCollection({
 const settings = defineCollection({
     type: 'data',
     schema: z.object({
+        theme: z.enum(['industrial', 'corporate', 'nature', 'urgent']).default('industrial'),
         siteName: z.string(),
         niche: z.string(),
         city: z.string(),
