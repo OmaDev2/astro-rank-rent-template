@@ -1,12 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
-import { getPhoneUrl } from "../config/business";
 import { Home, Phone, ArrowLeft } from "lucide-react";
+import { getEntry } from "astro:content";
+
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, phone } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    phone: "600 000 000",
+};
 ---
 
 <Layout
-    title="Página No Encontrada | Herrero Zaragoza"
+    title={`Página No Encontrada | ${siteName}`}
     description="La página que buscas no existe"
     noindex={true}
 >
@@ -49,7 +56,7 @@ import { Home, Phone, ArrowLeft } from "lucide-react";
                         Volver al Inicio
                     </a>
                     <a
-                        href={getPhoneUrl()}
+                        href={`tel:${phone}`}
                         class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-amber-600 hover:bg-amber-600 rounded-lg transition-all transform hover:-translate-y-0.5"
                     >
                         <Phone className="w-5 h-5 mr-2" />

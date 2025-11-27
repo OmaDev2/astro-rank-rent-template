@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import FinalCTA from "../components/FinalCTA.astro";
-import { businessConfig } from "../config/business";
+import { getEntry } from "astro:content";
 import {
     Award,
     Users,
@@ -13,19 +13,27 @@ import {
     Target,
     Heart,
 } from "lucide-react";
+import type { WithContext, AboutPage } from "schema-dts";
 
-const schema = {
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, city, niche } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    city: "Zaragoza",
+    niche: "Herrería",
+};
+
+const schema: WithContext<AboutPage> = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    name: "Sobre Nosotros - Herrero Zaragoza",
-    description:
-        "Conoce la historia y valores de Herrero Zaragoza. Más de 15 años ofreciendo servicios de herrería profesional en Zaragoza.",
+    name: `Sobre Nosotros - ${siteName}`,
+    description: `Conoce la historia y valores de ${siteName}. Más de 15 años ofreciendo servicios de ${niche} profesional en ${city}.`,
 };
 ---
 
 <Layout
-    title="Sobre Nosotros | Herrero Zaragoza"
-    description="Herreros profesionales en Zaragoza desde 2010. Conoce nuestra historia, valores y compromiso con la calidad."
+    title={`Sobre Nosotros | ${siteName}`}
+    description={`${niche} profesionales en ${city} desde 2010. Conoce nuestra historia, valores y compromiso con la calidad.`}
     schema={schema}
 >
     <!-- Hero -->
@@ -47,8 +55,8 @@ const schema = {
                     Sobre <span class="text-amber-500">Nosotros</span>
                 </h1>
                 <p class="text-xl text-slate-300 leading-relaxed">
-                    Herreros profesionales en Zaragoza comprometidos con la
-                    calidad, la seguridad y la satisfacción del cliente.
+                    {niche} profesionales en {city} comprometidos con la calidad,
+                    la seguridad y la satisfacción del cliente.
                 </p>
             </div>
         </div>
@@ -67,7 +75,7 @@ const schema = {
                     >
                         <img
                             src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop"
-                            alt="Taller de herrería Zaragoza"
+                            alt={`Taller de ${niche} ${city}`}
                             class="w-full h-full object-cover"
                         />
                     </div>
@@ -96,15 +104,16 @@ const schema = {
                         >
                     </div>
                     <h2 class="text-4xl font-heading font-bold text-white mb-6">
-                        Herrería Profesional desde 2010
+                        {niche} Profesional desde 2010
                     </h2>
 
                     <p class="text-slate-300 mb-6 leading-relaxed">
                         Desde nuestros inicios en <strong>2010</strong>, nos
-                        hemos dedicado a ofrecer servicios de herrería de la más
-                        alta calidad en Zaragoza y provincia. Lo que comenzó
-                        como un pequeño taller familiar ha crecido hasta
-                        convertirse en una referencia en el sector.
+                        hemos dedicado a ofrecer servicios de {
+                            niche.toLowerCase()
+                        } de la más alta calidad en {city} y provincia. Lo que comenzó
+                        como un pequeño taller familiar ha crecido hasta convertirse
+                        en una referencia en el sector.
                     </p>
 
                     <p class="text-slate-300 mb-8 leading-relaxed">

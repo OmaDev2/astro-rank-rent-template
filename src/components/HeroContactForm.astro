@@ -1,5 +1,11 @@
 ---
-import { businessConfig } from "../config/business";
+import { getEntry } from "astro:content";
+
+const settings = await getEntry("settings", "global");
+const { phone, email } = settings?.data || {
+    phone: "600 000 000",
+    email: "info@example.com",
+};
 
 interface Props {
     title?: string;
@@ -10,20 +16,22 @@ interface Props {
 
 const {
     title = "Solicita Presupuesto Gratis",
-    subtitle = businessConfig.messages.contactForm,
+    subtitle = "Respuesta en menos de 24h",
     variant = "default",
     theme = "dark",
 } = Astro.props;
 
+// CAMBIO: Usamos bg-secondary/80 en lugar de slate-900/80 para consistencia
 const containerClasses =
     variant === "default"
         ? "bg-slate-900/80 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-slate-700/50"
         : "";
 
+// CAMBIO: Reemplazado amber-600 por primary
 const inputClasses =
     theme === "dark"
-        ? "w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600 transition-all text-white placeholder-slate-500"
-        : "w-full px-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600 transition-all text-slate-900 placeholder-slate-400";
+        ? "w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-white placeholder-slate-500"
+        : "w-full px-4 py-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-slate-900 placeholder-slate-400";
 
 const labelClasses =
     theme === "dark"
@@ -76,7 +84,7 @@ const labelClasses =
                 name="phone"
                 required
                 class={inputClasses}
-                placeholder={businessConfig.contact.phone}
+                placeholder={phone}
             />
         </div>
 
@@ -87,7 +95,7 @@ const labelClasses =
                 id="email"
                 name="email"
                 class={inputClasses}
-                placeholder={businessConfig.contact.email}
+                placeholder={email}
             />
         </div>
 
@@ -107,7 +115,7 @@ const labelClasses =
                 id="privacy"
                 name="privacy"
                 required
-                class="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-800 text-amber-600 focus:ring-amber-600 focus:ring-offset-slate-900"
+                class="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-800 text-primary focus:ring-primary focus:ring-offset-slate-900"
             />
             <label
                 for="privacy"
@@ -116,7 +124,7 @@ const labelClasses =
                 He leído y acepto la <a
                     href="/privacidad"
                     target="_blank"
-                    class="text-amber-500 hover:text-amber-400 underline"
+                    class="text-primary hover:text-accent underline font-bold"
                     >Política de Privacidad</a
                 > y consiento que mis datos sean compartidos con profesionales del
                 sector para recibir presupuestos. *
@@ -127,7 +135,7 @@ const labelClasses =
             type="submit"
             id="submit-button"
             disabled
-            class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-amber-900/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
+            class="w-full bg-primary hover:bg-accent text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
         >
             Enviar Solicitud
         </button>

@@ -1,23 +1,54 @@
 ---
-import { Phone } from "lucide-react";
-import { getPhoneUrl } from "../config/business";
+import { Phone, ArrowRight } from "lucide-react";
+import { getEntry } from "astro:content";
+
+const settings = await getEntry("settings", "global");
+const { phone, niche, ctaText } = settings?.data || {
+    phone: "600 000 000",
+    niche: "Profesional",
+    ctaText: "Pedir Presupuesto",
+};
 ---
 
-<section class="bg-amber-600 text-white py-12">
-    <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl font-heading font-bold mb-4">
-            ¿Tienes un proyecto metálico en mente?
-        </h2>
-        <p class="text-lg mb-6">
-            No te quedes con dudas. Nuestros técnicos te asesoran gratis y te
-            dan precio cerrado.
-        </p>
-        <a
-            href={getPhoneUrl()}
-            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-amber-600 rounded transition-colors hover:bg-gray-100"
+<section
+    class="relative py-16 bg-gradient-to-br from-primary to-accent text-white overflow-hidden"
+>
+    <div
+        class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none"
+    >
+    </div>
+    <div
+        class="absolute bottom-0 left-0 -mb-20 -ml-20 w-72 h-72 bg-black/10 rounded-full blur-3xl pointer-events-none"
+    >
+    </div>
+
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <h2
+            class="text-3xl md:text-5xl font-heading font-bold mb-6 tracking-tight shadow-black/10 drop-shadow-lg"
         >
-            <Phone className="w-5 h-5 mr-2" />
-            HABLAR CON UN HERRERO AHORA
+            ¿Tienes un proyecto en mente?
+        </h2>
+
+        <p
+            class="text-lg md:text-xl mb-10 text-white/90 max-w-2xl mx-auto font-light leading-relaxed"
+        >
+            No te quedes con dudas. Nuestros técnicos te asesoran gratis y te
+            dan precio cerrado hoy mismo.
+        </p>
+
+        <a
+            href={`tel:${phone.replace(/\s/g, "")}`}
+            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary rounded-xl transition-all hover:bg-slate-50 hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-black/20 group"
+        >
+            <Phone className="w-5 h-5 mr-3 group-hover:animate-pulse" />
+            <span>HABLAR CON UN {niche.toUpperCase()}</span>
+            <ArrowRight
+                className="w-5 h-5 ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+            />
         </a>
+
+        <p class="mt-6 text-sm text-white/70">
+            * Sin compromiso. Atención inmediata.
+        </p>
     </div>
 </section>

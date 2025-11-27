@@ -1,7 +1,10 @@
 ---
 import { SEO } from "astro-seo";
 import type { WithContext, Thing } from "schema-dts";
-import { businessConfig } from "../config/business";
+import { getEntry } from "astro:content";
+
+const settings = await getEntry("settings", "global");
+const { siteName } = settings?.data || { siteName: "Herrero Zaragoza" };
 
 interface Props {
   title: string;
@@ -25,12 +28,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
     basic: {
       title,
       type: "website",
-      image: image || businessConfig.seo.ogImage,
+      image: image || "/images/services/logo.png", // Fallback to local logo
       url: canonicalURL,
     },
     optional: {
       locale: "es_ES",
-      siteName: businessConfig.name,
+      siteName: siteName,
     },
   }}
   twitter={{

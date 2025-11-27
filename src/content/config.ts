@@ -26,10 +26,54 @@ const services = defineCollection({
 });
 
 const projects = defineCollection({
-    schema: ({ image }) => z.object({
+    schema: z.object({
         title: z.string(),
-        image: image(),
+        image: z.string(),
         locationTag: z.string(),
+    }),
+});
+
+const settings = defineCollection({
+    type: 'data',
+    schema: z.object({
+        siteName: z.string(),
+        niche: z.string(),
+        city: z.string(),
+        phone: z.string(),
+        whatsapp: z.string().optional(),
+        email: z.string().optional(),
+        address: z.string().optional(),
+        nif: z.string().optional(),
+        ctaText: z.string().optional(),
+        facebook: z.string().optional(),
+        instagram: z.string().optional(),
+    }),
+});
+
+const pages = defineCollection({
+    schema: z.object({
+        // Hero Section
+        hero: z.object({
+            heading: z.string().optional(),
+            subheading: z.string().optional(),
+            backgroundImage: z.string().optional(),
+        }).optional(),
+
+        // Features Section
+        features: z.array(z.object({
+            title: z.string(),
+            description: z.string(),
+            icon: z.string().optional(),
+        })).optional(),
+
+        // SEO Content
+        seoContentTitle: z.string().optional(),
+
+        // FAQ
+        faq: z.array(z.object({
+            question: z.string(),
+            answer: z.string(),
+        })).optional(),
     }),
 });
 
@@ -37,4 +81,6 @@ export const collections = {
     locations,
     services,
     projects,
+    settings,
+    pages,
 };

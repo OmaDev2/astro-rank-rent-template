@@ -1,10 +1,26 @@
 ---
 import SeoHead from "../components/SeoHead.astro";
-import Navbar from "../components/Navbar.astro"; // <--- AÑADIDO: Importamos el menú
+import Navbar from "../components/Navbar.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
+import { getEntry } from "astro:content";
+import { themes } from "../config/themes";
+
+// 1. Recuperar Configuración Global
+const settings = await getEntry("settings", "global");
+const { siteName, niche, city, theme } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    niche: "Herrería",
+    city: "Zaragoza",
+    theme: "industrial",
+};
+
+// 2. Lógica del Tema
+const activeTheme = themes[theme as keyof typeof themes] || themes.industrial;
+const colors = activeTheme.colors;
+const gradient = activeTheme.gradient;
 
 interface Props {
     title: string;
@@ -14,19 +30,33 @@ interface Props {
 }
 
 const { title, description, schema, noindex = false } = Astro.props;
+
+// 3. Generar SEO por defecto dinámico
+const defaultDescription = `${niche} en ${city}. Expertos profesionales, servicio rápido y presupuesto sin compromiso en ${siteName}.`;
 ---
 
 <!doctype html>
 <html lang="es" class="scroll-smooth">
     <head>
+        <style
+            define:vars={{
+                "color-primary": colors.primary,
+                "color-secondary": colors.secondary,
+                "color-accent": colors.accent,
+                "theme-gradient": gradient,
+            }}
+        >
+            :root {
+                --color-primary: var(--color-primary);
+                --color-secondary: var(--color-secondary);
+                --color-accent: var(--color-accent);
+                --theme-gradient: var(--theme-gradient);
+            }
+        </style>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
-        <meta
-            name="google-site-verification"
-            content="6tncEx4ZKj3YoFh51-JGRx8a4BMo8mrkij-e_X7ztdM"
-        />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,29 +67,14 @@ const { title, description, schema, noindex = false } = Astro.props;
 
         <SeoHead
             title={title}
-            description={description ||
-                "Herreros en Zaragoza. Expertos en forja, rejas, puertas y estructuras metálicas."}
+            description={description || defaultDescription}
             schema={schema}
             noindex={noindex}
         />
-
-        <!-- Google Analytics 4 (Partytown) -->
-        <!-- Reemplaza G-XXXXXXXXXX con tu ID de medición -->
-        <script
-            type="text/partytown"
-            src="https://www.googletagmanager.com/gtag/js?id=G-JMYZCTQ6NP"
-        ></script>
-        <script type="text/partytown">
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag("js", new Date());
-            gtag("config", "G-JMYZCTQ6NP");
-        </script>
     </head>
+
     <body
-        class="bg-slate-900 text-slate-50 font-sans antialiased selection:bg-amber-600 selection:text-white"
+        class="bg-body text-text font-sans antialiased selection:bg-primary selection:text-white"
     >
         <Navbar />
 

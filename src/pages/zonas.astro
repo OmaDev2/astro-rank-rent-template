@@ -2,10 +2,19 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import FinalCTA from "../components/FinalCTA.astro";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { MapPin, ArrowRight, Home, Building2, Factory } from "lucide-react";
+import type { WithContext, CollectionPage } from "schema-dts";
 
 const locations = await getCollection("locations");
+
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, city, niche } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    city: "Zaragoza",
+    niche: "Herrería",
+};
 
 // Agrupar por tipo
 const residenciales = locations.filter(
@@ -14,18 +23,17 @@ const residenciales = locations.filter(
 const industriales = locations.filter((loc) => loc.data.type === "industrial");
 const centros = locations.filter((loc) => loc.data.type === "centro");
 
-const schema = {
+const schema: WithContext<CollectionPage> = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Zonas de Servicio - Herrero Zaragoza",
-    description:
-        "Servicio de herrería profesional en Zaragoza y alrededores. Consulta todas las zonas donde trabajamos.",
+    name: `Zonas de Servicio - ${siteName}`,
+    description: `Servicio de ${niche.toLowerCase()} profesional en ${city} y alrededores. Consulta todas las zonas donde trabajamos.`,
 };
 ---
 
 <Layout
-    title="Zonas de Servicio | Herrero Zaragoza"
-    description="Servicio de herrería en Zaragoza y provincia. Consulta todas las localidades donde ofrecemos nuestros servicios profesionales."
+    title={`Zonas de Servicio | ${siteName}`}
+    description={`Servicio de ${niche.toLowerCase()} en ${city} y provincia. Consulta todas las localidades donde ofrecemos nuestros servicios profesionales.`}
     schema={schema}
 >
     <!-- Hero -->
@@ -54,7 +62,9 @@ const schema = {
                     Zonas de Servicio
                 </h1>
                 <p class="text-xl text-slate-300 leading-relaxed">
-                    Ofrecemos servicios de herrería profesional en Zaragoza
+                    Ofrecemos servicios de {niche.toLowerCase()} profesional en {
+                        city
+                    }
                     capital y toda la provincia. Consulta si llegamos a tu zona.
                 </p>
             </div>

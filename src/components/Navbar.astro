@@ -1,10 +1,18 @@
 ---
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
-import { getCollection } from "astro:content";
-import { businessConfig, getPhoneUrl } from "../config/business";
+import { getCollection, getEntry } from "astro:content";
 
+// 1. Recuperamos los datos del CMS
 const services = await getCollection("services");
 const locations = await getCollection("locations");
+const settings = await getEntry("settings", "global");
+
+// 2. Extraemos las variables para usar en el HTML
+const { siteName, phone, ctaText } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    phone: "600 000 000",
+    ctaText: "Llamar Ahora",
+};
 ---
 
 <header
@@ -13,42 +21,45 @@ const locations = await getCollection("locations");
 >
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-20">
-            <a href="/" class="flex items-center">
+            <a href="/" class="flex items-center gap-2">
                 <img
                     src="/images/services/logo.png"
-                    alt="Herrero Zaragoza Logo"
-                    class="h-24 w-auto"
+                    alt={`${siteName} Logo`}
+                    class="h-12 w-auto"
                 />
                 <span
                     class="text-2xl font-heading font-bold text-white uppercase tracking-tighter"
                 >
-                    HERRERO<span class="text-amber-600">ZARAGOZA</span>
+                    {
+                        /* Renderizamos el nombre. Truco: Si quieres colorear la segunda palabra, necesitaríamos lógica extra, 
+                        por ahora lo dejamos todo en blanco o primary para simplificar el template */
+                    }
+                    <span class="text-white">{siteName}</span>
                 </span>
             </a>
 
             <nav class="hidden md:flex items-center gap-8">
                 <a
                     href="/"
-                    class="text-sm font-medium text-white hover:text-amber-500 transition-colors uppercase tracking-wide"
+                    class="text-sm font-medium text-white hover:text-primary transition-colors uppercase tracking-wide"
                     >Inicio</a
                 >
 
-                <!-- Dropdown Servicios -->
                 <div class="relative group">
                     <button
-                        class="text-sm font-medium text-white hover:text-amber-500 transition-colors uppercase tracking-wide flex items-center gap-1"
+                        class="text-sm font-medium text-white hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1"
                     >
                         Servicios
                         <ChevronDown className="w-3 h-3" />
                     </button>
                     <div
-                        class="absolute top-full left-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
+                        class="absolute top-full left-0 mt-2 w-56 bg-secondary border border-slate-700/50 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
                     >
                         {
                             services.map((service) => (
                                 <a
                                     href={`/${service.slug}/`}
-                                    class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 hover:text-amber-500 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                                    class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 hover:text-primary transition-colors first:rounded-t-lg last:rounded-b-lg"
                                 >
                                     {service.data.title}
                                 </a>
@@ -59,19 +70,19 @@ const locations = await getCollection("locations");
 
                 <div class="relative group">
                     <button
-                        class="flex items-center text-sm font-medium text-white hover:text-amber-500 transition-colors uppercase tracking-wide gap-1"
+                        class="flex items-center text-sm font-medium text-white hover:text-primary transition-colors uppercase tracking-wide gap-1"
                     >
                         Zonas
                         <ChevronDown className="w-3 h-3" />
                     </button>
                     <div
-                        class="absolute top-full left-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
+                        class="absolute top-full left-0 mt-2 w-56 bg-secondary border border-slate-700/50 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
                     >
                         {
                             locations.slice(0, 5).map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 hover:text-amber-500 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                                    class="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 hover:text-primary transition-colors first:rounded-t-lg last:rounded-b-lg"
                                 >
                                     {location.data.name}
                                 </a>
@@ -79,7 +90,7 @@ const locations = await getCollection("locations");
                         }
                         <a
                             href="/zonas/"
-                            class="block px-4 py-3 text-sm text-amber-500 font-bold hover:bg-slate-800 transition-colors border-t border-slate-800"
+                            class="block px-4 py-3 text-sm text-primary font-bold hover:bg-slate-800 transition-colors border-t border-slate-700/50"
                         >
                             Ver todas las zonas →
                         </a>
@@ -88,24 +99,24 @@ const locations = await getCollection("locations");
 
                 <a
                     href="/contacto/"
-                    class="text-sm font-medium text-white hover:text-amber-500 transition-colors uppercase tracking-wide"
+                    class="text-sm font-medium text-white hover:text-primary transition-colors uppercase tracking-wide"
                     >Contacto</a
                 >
             </nav>
 
             <div class="hidden md:block">
                 <a
-                    href={getPhoneUrl()}
-                    class="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-amber-600/20"
+                    href={`tel:${phone}`}
+                    class="flex items-center gap-2 bg-primary hover:bg-accent text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-primary/20"
                 >
                     <Phone className="w-4 h-4" />
-                    <span>{businessConfig.contact.phone}</span>
+                    <span>{phone}</span>
                 </a>
             </div>
 
             <button
                 id="menu-toggle"
-                class="md:hidden text-white hover:text-amber-500 transition-colors"
+                class="md:hidden text-white hover:text-primary transition-colors"
                 aria-label="Abrir menú"
             >
                 <Menu className="w-8 h-8" />
@@ -115,11 +126,11 @@ const locations = await getCollection("locations");
 
     <div
         id="mobile-menu"
-        class="fixed inset-0 bg-slate-950 z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 md:hidden"
+        class="fixed inset-0 bg-heading z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 md:hidden"
     >
         <button
             id="menu-close"
-            class="absolute top-6 right-6 text-white hover:text-amber-500"
+            class="absolute top-6 right-6 text-white hover:text-primary"
             aria-label="Cerrar menú"
         >
             <X className="w-8 h-8" />
@@ -127,19 +138,18 @@ const locations = await getCollection("locations");
 
         <a
             href="/"
-            class="text-2xl font-heading font-bold text-white hover:text-amber-500 mobile-link"
+            class="text-2xl font-heading font-bold text-white hover:text-primary mobile-link"
             >INICIO</a
         >
 
-        <!-- Servicios en móvil -->
         <div class="text-center">
-            <p class="text-lg font-bold text-amber-500 mb-2">SERVICIOS</p>
+            <p class="text-lg font-bold text-primary mb-2">SERVICIOS</p>
             <div class="flex flex-col gap-2">
                 {
                     services.map((service) => (
                         <a
                             href={`/${service.slug}/`}
-                            class="text-base text-slate-300 hover:text-amber-500 mobile-link"
+                            class="text-base text-slate-300 hover:text-primary mobile-link"
                         >
                             {service.data.title}
                         </a>
@@ -148,45 +158,18 @@ const locations = await getCollection("locations");
             </div>
         </div>
 
-        <!-- Zonas en móvil -->
-        <div class="text-center">
-            <p class="text-lg font-bold text-amber-500 mb-2">ZONAS</p>
-            <div class="flex flex-col gap-2">
-                {/* Zaragoza Capital - Link a Home */}
-                <a
-                    href="/"
-                    class="text-base text-white font-bold hover:text-amber-500 mobile-link"
-                    title="Herreros en Zaragoza Capital"
-                >
-                    Zaragoza Capital
-                </a>
-
-                {/* Resto de localidades */}
-                {
-                    locations.map((location) => (
-                        <a
-                            href={`/zona/${location.slug}/`}
-                            class="text-base text-slate-300 hover:text-amber-500 mobile-link"
-                        >
-                            {location.data.name}
-                        </a>
-                    ))
-                }
-            </div>
-        </div>
-
         <a
             href="/contacto/"
-            class="text-2xl font-heading font-bold text-white hover:text-amber-500 mobile-link"
+            class="text-2xl font-heading font-bold text-white hover:text-primary mobile-link"
             >CONTACTO</a
         >
 
         <a
-            href={getPhoneUrl()}
-            class="mt-4 flex items-center gap-2 bg-amber-600 text-white px-8 py-4 rounded text-xl font-bold"
+            href={`tel:${phone}`}
+            class="mt-4 flex items-center gap-2 bg-primary text-white px-8 py-4 rounded text-xl font-bold"
         >
             <Phone className="w-6 h-6" />
-            LLAMAR AHORA
+            {ctaText || "LLAMAR AHORA"}
         </a>
     </div>
 </header>
@@ -194,11 +177,11 @@ const locations = await getCollection("locations");
 <script>
     // Lógica del Scroll (Glassmorphism)
     const navbar = document.getElementById("navbar");
-
     window.addEventListener("scroll", () => {
         if (window.scrollY > 50) {
+            // Usamos bg-heading/95 para fondo oscuro sólido al hacer scroll
             navbar?.classList.add(
-                "bg-slate-900/95",
+                "bg-heading/95",
                 "backdrop-blur-sm",
                 "border-slate-800",
                 "shadow-xl",
@@ -206,7 +189,7 @@ const locations = await getCollection("locations");
             navbar?.classList.remove("border-transparent");
         } else {
             navbar?.classList.remove(
-                "bg-slate-900/95",
+                "bg-heading/95",
                 "backdrop-blur-sm",
                 "border-slate-800",
                 "shadow-xl",
@@ -223,13 +206,12 @@ const locations = await getCollection("locations");
 
     function toggleMenu() {
         mobileMenu?.classList.toggle("translate-x-full");
-        document.body.classList.toggle("overflow-hidden"); // Evita scroll cuando el menú está abierto
+        document.body.classList.toggle("overflow-hidden");
     }
 
     menuToggle?.addEventListener("click", toggleMenu);
     menuClose?.addEventListener("click", toggleMenu);
 
-    // Cerrar menú al hacer click en un enlace
     mobileLinks.forEach((link) => {
         link.addEventListener("click", toggleMenu);
     });

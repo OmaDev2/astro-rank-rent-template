@@ -17,7 +17,7 @@ export default defineConfig({
   site: 'https://herrerozaragoza.com',
 
   // 🔗 Trailing slash: siempre con barra al final (bueno para SEO)
-  trailingSlash: 'always',
+  trailingSlash: 'ignore',
 
   integrations: [
     react(),
@@ -38,10 +38,9 @@ export default defineConfig({
     })
   ],
 
-  // ✅ MODO ESTÁTICO: Esto generará archivos .html que Netlify entiende perfectamente
-  // HE BORRADO EL "adapter: node(...)". 
-  // Al quitarlo, Astro usará el modo estático por defecto y Netlify funcionará.
-  output: 'static',
+  // ✅ MODO SERVER: SSR completo necesario para Keystatic CMS
+  // Keystatic requiere server-side rendering para funcionar correctamente
+  output: 'server',
 
   adapter: netlify()
 });

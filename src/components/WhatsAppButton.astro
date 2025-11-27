@@ -1,7 +1,8 @@
 ---
-import { getWhatsAppUrl } from "../config/business";
+import { getEntry } from "astro:content";
 
-const whatsappUrl = getWhatsAppUrl();
+const settings = await getEntry("settings", "global");
+const whatsappUrl = `https://wa.me/${settings?.data?.whatsapp || settings?.data?.phone || "34600000000"}?text=Hola,%20necesito%20información`;
 ---
 
 <!-- Botón flotante de WhatsApp -->

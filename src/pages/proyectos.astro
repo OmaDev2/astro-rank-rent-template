@@ -2,18 +2,27 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import FinalCTA from '../components/FinalCTA.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { MapPin } from 'lucide-react';
+import type { WithContext, CollectionPage } from 'schema-dts';
 
 // Recuperamos todos los proyectos de la colección
 const projects = await getCollection('projects');
 
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, city, niche } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    city: "Zaragoza",
+    niche: "Herrería",
+};
+
 // Schema SEO para la página de Galería
-const gallerySchema = {
+const gallerySchema: WithContext<CollectionPage> = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Galería de Trabajos - Herrero Zaragoza",
-  "description": "Portafolio de trabajos realizados en Zaragoza: rejas, puertas, cerramientos y estructuras metálicas.",
+  "name": `Galería de Trabajos - ${siteName}`,
+  "description": `Portafolio de trabajos realizados en ${city}: rejas, puertas, cerramientos y estructuras metálicas.`,
   "mainEntity": {
     "@type": "ItemList",
     "itemListElement": projects.map((project, index) => ({
@@ -25,7 +34,7 @@ const gallerySchema = {
 };
 ---
 
-<Layout title="Nuestros Trabajos | Herrero Zaragoza" description="Galería de proyectos de herrería realizados en Zaragoza y provincia." schema={gallerySchema}>
+<Layout title={`Nuestros Trabajos | ${siteName}`} description={`Galería de proyectos de ${niche.toLowerCase()} realizados en ${city} y provincia.`} schema={gallerySchema}>
   
   <!-- HERO PROYECTOS -->
   <section class="relative py-20 bg-slate-900 border-b border-slate-800">

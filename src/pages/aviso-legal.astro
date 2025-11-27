@@ -2,11 +2,23 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import { Scale } from "lucide-react";
+import { getEntry } from "astro:content";
+
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, city, niche, email, address, nif } = settings?.data || {
+    siteName: "Nombre Negocio",
+    city: "Ciudad",
+    niche: "Servicio",
+    email: "email@ejemplo.com",
+    address: "Dirección Ejemplo",
+    nif: "00000000X",
+};
 ---
 
 <Layout
-    title="Aviso Legal | Herrero Zaragoza"
-    description="Aviso legal del sitio web Herrero Zaragoza"
+    title={`Aviso Legal | ${siteName}`}
+    description={`Aviso legal del sitio web ${siteName}`}
     noindex={true}
 >
     <section class="py-20 bg-slate-950">
@@ -51,23 +63,27 @@ import { Scale } from "lucide-react";
                             <ul class="list-none space-y-2 mt-4 text-slate-300">
                                 <li>
                                     <strong class="text-white">Titular:</strong>
-                                    Olga Millán
+                                    {siteName}
                                 </li>
                                 <li>
-                                    <strong class="text-white">NIF:</strong> 43.675.068-T
+                                    <strong class="text-white">NIF/CIF:</strong>
+                                    {nif || "Pendiente de asignar"}
                                 </li>
                                 <li>
                                     <strong class="text-white"
                                         >Domicilio:</strong
-                                    > Calle Pasteur, 19, 08490 Tordera, Barcelona
+                                    >
+                                    {address || "Dirección no disponible"}
                                 </li>
                                 <li>
-                                    <strong class="text-white">Email:</strong> omadev2@gmail.com
+                                    <strong class="text-white">Email:</strong>
+                                    {email || "info@ejemplo.com"}
                                 </li>
                                 <li>
                                     <strong class="text-white"
                                         >Sitio web:</strong
-                                    > herrerozaragoza.com
+                                    >
+                                    {Astro.site?.host || "www.ejemplo.com"}
                                 </li>
                             </ul>
                         </section>
@@ -80,8 +96,11 @@ import { Scale } from "lucide-react";
                                 Este sitio web tiene como único objetivo <strong
                                     class="text-amber-500"
                                     >facilitar el contacto entre usuarios
-                                    interesados en servicios de herrería y
-                                    profesionales del sector en Zaragoza</strong
+                                    interesados en servicios de {
+                                        niche.toLowerCase()
+                                    } y profesionales del sector en {
+                                        city
+                                    }</strong
                                 >.
                             </p>
                             <div
@@ -94,8 +113,8 @@ import { Scale } from "lucide-react";
                                 </h3>
                                 <p class="text-slate-200 leading-relaxed">
                                     <strong
-                                        >Olga Millán NO presta servicios de
-                                        herrería</strong
+                                        >{siteName} NO presta servicios de
+                                        {niche.toLowerCase()}</strong
                                     >. Este sitio web actúa únicamente como <strong
                                         >intermediario o plataforma de contacto</strong
                                     > entre usuarios y profesionales independientes
@@ -175,10 +194,9 @@ import { Scale } from "lucide-react";
                             <p class="text-slate-300 leading-relaxed">
                                 Todos los contenidos de este sitio web (textos,
                                 imágenes, diseño, logotipos, código fuente,
-                                etc.) son propiedad de Olga Millán o de terceros
-                                que han autorizado su uso, y están protegidos
-                                por las leyes de propiedad intelectual e
-                                industrial.
+                                etc.) son propiedad de {siteName} o de terceros que
+                                han autorizado su uso, y están protegidos por las
+                                leyes de propiedad intelectual e industrial.
                             </p>
                             <p class="text-slate-300 leading-relaxed mt-3">
                                 Queda prohibida la reproducción, distribución,
@@ -249,9 +267,9 @@ import { Scale } from "lucide-react";
                                 Las presentes condiciones se rigen por la
                                 legislación española. Para la resolución de
                                 cualquier controversia, las partes se someten a
-                                los Juzgados y Tribunales de Barcelona,
-                                renunciando expresamente a cualquier otro fuero
-                                que pudiera corresponderles.
+                                los Juzgados y Tribunales de {city}, renunciando
+                                expresamente a cualquier otro fuero que pudiera
+                                corresponderles.
                             </p>
                         </section>
 
@@ -264,7 +282,7 @@ import { Scale } from "lucide-react";
                                 aviso legal, puede contactar en:
                             </p>
                             <p class="text-amber-500 font-semibold mt-2">
-                                Email: omadev2@gmail.com
+                                Email: {email}
                             </p>
                         </section>
                     </div>

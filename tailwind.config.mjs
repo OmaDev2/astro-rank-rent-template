@@ -4,21 +4,16 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				// Industrial Palette
-				slate: {
-					50: '#f8fafc',
-					800: '#1e293b',
-					900: '#0f172a',
-				},
-				amber: {
-					600: '#d97706', // Rust/Fire
-				},
-				yellow: {
-					500: '#eab308', // Metallic Gold
-				},
-				zinc: {
-					400: '#a1a1aa', // Steel
-				},
+				// SISTEMA SEMÁNTICO (Flexible)
+				// Usamos esta sintaxis rara para permitir opacidades (ej: bg-primary/50)
+				primary: 'rgb(var(--color-primary) / <alpha-value>)',
+				secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+				accent: 'rgb(var(--color-accent) / <alpha-value>)',
+
+				// Fondos y Textos
+				body: 'rgb(var(--color-bg-body) / <alpha-value>)',
+				heading: 'rgb(var(--color-text-heading) / <alpha-value>)',
+				text: 'rgb(var(--color-text-body) / <alpha-value>)',
 			},
 			fontFamily: {
 				sans: ['Inter', 'Roboto', 'sans-serif'],

@@ -1,9 +1,18 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 
-// Recuperamos las localidades, excluyendo "zaragoza" si se te olvidó borrar el archivo
+// 1. Recuperamos configuración global
+const settings = await getEntry("settings", "global");
+const { city, niche } = settings?.data || {
+    city: "Zaragoza",
+    niche: "Herreros",
+};
+
+// Recuperamos las localidades, excluyendo la capital si coincide con el slug
 const locations = await getCollection("locations", ({ slug }) => {
-    return slug !== "zaragoza" && slug !== "zaragoza-capital";
+    return (
+        slug !== city.toLowerCase() && slug !== `${city.toLowerCase()}-capital`
+    );
 });
 
 const sortedLocations = locations.sort((a, b) =>
@@ -22,12 +31,12 @@ const sortedLocations = locations.sort((a, b) =>
             <a
                 href="/"
                 class="text-slate-200 font-bold hover:text-amber-500 transition-colors flex items-center gap-1 group"
-                title="Herreros en Zaragoza Capital"
+                title={`${niche} en ${city}`}
             >
                 <span
                     class="w-1.5 h-1.5 bg-amber-600 rounded-full group-hover:bg-amber-400 transition-colors"
                 ></span>
-                Zaragoza Capital
+                {city} Capital
             </a>
         </li>
 

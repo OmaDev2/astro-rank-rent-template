@@ -1,26 +1,24 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+export const prerender = true;
 import Footer from "../../components/Footer.astro";
 import FinalCTA from "../../components/FinalCTA.astro";
 import ServiceAreas from "../../components/ServiceAreas.astro";
 import HeroContactForm from "../../components/HeroContactForm.astro";
-import { getCollection } from "astro:content";
-import {
-    businessConfig,
-    getPhoneUrl,
-    getWhatsAppUrl,
-} from "../../config/business";
+import { getCollection, getEntry } from "astro:content";
 import {
     Phone,
     CheckCircle,
     MapPin,
     Shield,
-    Wrench,
-    Hammer,
     Clock,
     HelpCircle,
+    ArrowRight,
+    Star,
 } from "lucide-react";
+import type { WithContext, Locksmith } from "schema-dts";
 
+// 1. Generar rutas estáticas
 export async function getStaticPaths() {
     const locations = await getCollection("locations");
     return locations.map((entry) => ({
@@ -33,33 +31,52 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 const data = entry.data;
 
-const isIndustrial = data.type === "industrial";
+// 2. Fetch de Datos Globales y Servicios
+const settings = await getEntry("settings", "global");
+const { siteName, phone, whatsapp, niche, city } = settings?.data || {
+    siteName: "Nombre Negocio",
+    phone: "600 000 000",
+    whatsapp: "600 000 000",
+    niche: "Servicio Profesional",
+    city: "Provincia",
+};
 
+// Traemos los servicios para mostrarlos dinámicamente en la zona
+const allServices = await getCollection("services", ({ data }) => {
+    return data.featured === true; // Opcional: mostrar solo destacados o todos
+});
+
+// Lógica de Imagen Hero (Puedes personalizar esto más si quieres)
+const isIndustrial = data.type === "industrial";
 const heroImage = isIndustrial
     ? "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=1997&auto=format&fit=crop"
     : "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop";
 
 const heroSubtitle = isIndustrial
-    ? "Mantenimiento industrial, reparación de puertas de nave y estructuras metálicas."
-    : "Expertos en rejas de diseño, cerramientos de porches y seguridad para el hogar.";
+    ? `Servicios de ${niche.toLowerCase()} para empresas y naves industriales.`
+    : `Soluciones de ${niche.toLowerCase()} para particulares y comunidades.`;
 
-const localSchema = {
+// Schema SEO Local
+const localSchema: WithContext<Locksmith> = {
     "@context": "https://schema.org",
-    "@type": "Locksmith",
-    name: `${businessConfig.name} - Servicio en ${data.name}`,
+    "@type": "Locksmith", // Podrías cambiar esto a 'ProfessionalService' si quieres ser más genérico
+    name: `${niche} en ${data.name} | ${siteName}`,
     description: data.seoDesc,
+    telephone: phone,
     areaServed: {
         "@type": "Place",
         name: data.name,
-        postalCode: data.zipCodes[0],
+        address: {
+            "@type": "PostalAddress",
+            postalCode: data.zipCodes[0],
+        },
     },
 };
 ---
 
 <Layout title={data.seoTitle} description={data.seoDesc} schema={localSchema}>
-    <!-- HERO con Formulario -->
     <section
-        class="relative min-h-[80vh] flex items-center bg-slate-900 overflow-hidden py-24 lg:py-32"
+        class="relative min-h-[80vh] flex items-center bg-secondary overflow-hidden py-24 lg:py-32"
     >
         <div
             class="absolute inset-0 bg-cover bg-center opacity-40"
@@ -67,40 +84,43 @@ const localSchema = {
         >
         </div>
         <div
-            class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-transparent"
+            class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/90 to-transparent"
         >
         </div>
+
         <div class="container mx-auto px-6 lg:px-8 relative z-10">
             <div
                 class="grid lg:grid-cols-[1fr,auto] gap-8 lg:gap-12 items-center max-w-7xl mx-auto"
             >
                 <div class="max-w-2xl">
                     <span
-                        class="inline-flex items-center gap-2 py-1 px-3 rounded bg-amber-600/20 text-amber-500 text-sm font-bold uppercase tracking-wider mb-6 border border-amber-600/30"
+                        class="inline-flex items-center gap-2 py-1 px-3 rounded bg-primary/20 text-primary text-sm font-bold uppercase tracking-wider mb-6 border border-primary/30"
                     >
-                        <MapPin className="w-4 h-4" /> Servicio disponible en {
-                            data.name
-                        }
+                        <MapPin className="w-4 h-4" /> Servicio en {data.name}
                     </span>
+
                     <h1
                         class="text-5xl lg:text-7xl font-heading font-bold text-white mb-6 leading-none"
                     >
-                        HERREROS EN <br />
+                        {niche.toUpperCase()} EN <br />
                         <span
-                            class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-600 uppercase"
-                            >{data.name}</span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent uppercase"
                         >
+                            {data.name}
+                        </span>
                     </h1>
+
                     <p
-                        class="text-xl text-slate-300 mb-8 font-light border-l-4 border-amber-600 pl-4 max-w-xl"
+                        class="text-xl text-slate-300 mb-8 font-light border-l-4 border-primary pl-4 max-w-xl"
                     >
-                        {heroSubtitle} Llegamos a la zona de {data.name} y alrededores
-                        en menos de 30 minutos.
+                        {heroSubtitle} Llegamos a {data.name} y alrededores rápidamente.
+                        Presupuesto sin compromiso.
                     </p>
+
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a
                             href="#formulario"
-                            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-amber-600 hover:bg-amber-700 text-white rounded transition-all shadow-lg hover:shadow-amber-900/40"
+                            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg hover:shadow-primary/40"
                         >
                             <Phone className="w-5 h-5 mr-2" />
                             Pedir Presupuesto
@@ -108,186 +128,114 @@ const localSchema = {
                     </div>
                 </div>
 
-                <!-- Columna Derecha: Formulario -->
                 <div
                     id="formulario"
                     class="w-full lg:w-[420px] mt-8 lg:mt-0 lg:mr-8"
                 >
                     <HeroContactForm
-                        title={`Herreros en ${data.name}`}
-                        subtitle="Presupuesto gratis en 24h"
+                        title={`¿Buscas ${niche} en ${data.name}?`}
+                        subtitle="Te respondemos hoy mismo"
                     />
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CONTENIDO PRINCIPAL + SIDEBAR -->
-    <section class="py-20 bg-slate-950">
+    <section class="py-20 bg-heading">
         <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
-            <!-- Columna Izquierda -->
             <div class="lg:col-span-2">
-                <!-- Aquí va el texto que escribes en el archivo MDX -->
                 <div
-                    class="prose prose-invert prose-lg prose-amber max-w-none mb-16"
+                    class="prose prose-invert prose-lg prose-p:text-slate-300 prose-headings:text-white prose-strong:text-primary max-w-none mb-16"
                 >
                     <Content />
                 </div>
 
-                <!-- === SECCIÓN NUEVA 1: Servicios Grid Específicos === -->
-                <!-- Esto rellena espacio visual y mejora la relevancia local -->
                 <h3 class="text-3xl font-heading font-bold text-white mb-8">
-                    Servicios Destacados en {data.name}
+                    Servicios de {niche} en {data.name}
                 </h3>
+
                 <div class="grid md:grid-cols-2 gap-6 mb-16">
-                    <div
-                        class="p-6 bg-slate-900 border border-slate-800 rounded hover:border-amber-600/30 transition-colors group"
-                    >
-                        <Shield
-                            className="w-10 h-10 text-amber-600 mb-4 group-hover:scale-110 transition-transform"
-                        />
-                        <h4 class="text-xl font-bold text-white mb-2">
-                            Seguridad para Hogar
-                        </h4>
-                        <p class="text-slate-400 text-sm">
-                            Instalación de rejas y puertas anti-okupa en
-                            viviendas unifamiliares y bajos en {data.name}.
-                        </p>
-                    </div>
-                    <div
-                        class="p-6 bg-slate-900 border border-slate-800 rounded hover:border-amber-600/30 transition-colors group"
-                    >
-                        <Hammer
-                            className="w-10 h-10 text-amber-600 mb-4 group-hover:scale-110 transition-transform"
-                        />
-                        <h4 class="text-xl font-bold text-white mb-2">
-                            Reparaciones Urgentes
-                        </h4>
-                        <p class="text-slate-400 text-sm">
-                            Soldadura in-situ y arreglo de puertas de garaje
-                            atascadas. Respuesta rápida en código postal {
-                                data.zipCodes[0]
-                            }.
-                        </p>
-                    </div>
-                    <div
-                        class="p-6 bg-slate-900 border border-slate-800 rounded hover:border-amber-600/30 transition-colors group"
-                    >
-                        <Wrench
-                            className="w-10 h-10 text-amber-600 mb-4 group-hover:scale-110 transition-transform"
-                        />
-                        <h4 class="text-xl font-bold text-white mb-2">
-                            Cerramientos
-                        </h4>
-                        <p class="text-slate-400 text-sm">
-                            Aprovecha tu terraza o porche. Estructuras metálicas
-                            a medida con acabados premium.
-                        </p>
-                    </div>
-                    <div
-                        class="p-6 bg-slate-900 border border-slate-800 rounded hover:border-amber-600/30 transition-colors group"
-                    >
-                        <Clock
-                            className="w-10 h-10 text-amber-600 mb-4 group-hover:scale-110 transition-transform"
-                        />
-                        <h4 class="text-xl font-bold text-white mb-2">
-                            Mantenimiento Comunidades
-                        </h4>
-                        <p class="text-slate-400 text-sm">
-                            Igualas mensuales para mantenimiento de puertas y
-                            cerrajería en comunidades de {data.name}.
-                        </p>
-                    </div>
+                    {
+                        allServices.slice(0, 4).map((service) => (
+                            <a
+                                href={`/${service.slug}`}
+                                class="group p-6 bg-slate-900/50 border border-slate-800 rounded hover:border-primary/50 transition-colors block"
+                            >
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                                        {service.data.title}
+                                    </h4>
+                                    <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                </div>
+                                <p class="text-slate-400 text-sm line-clamp-2">
+                                    {service.data.shortDesc} en la zona de{" "}
+                                    {data.name} (CP {data.zipCodes[0]}).
+                                </p>
+                            </a>
+                        ))
+                    }
                 </div>
 
-                <!-- === SECCIÓN NUEVA 2: FAQ Local (Preguntas Frecuentes) === -->
-                <!-- Esto es increíble para aparecer en las búsquedas de voz de Google -->
                 <div
                     class="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-lg"
                 >
                     <div
                         class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4"
                     >
-                        <HelpCircle className="w-8 h-8 text-amber-600" />
+                        <HelpCircle className="w-8 h-8 text-primary" />
                         <h3 class="text-2xl font-heading font-bold text-white">
-                            Preguntas Frecuentes sobre Herrería en {data.name}
+                            Preguntas sobre servicio en {data.name}
                         </h3>
                     </div>
 
                     <div class="space-y-4">
                         <details
-                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-amber-600/50"
+                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-primary/50"
                         >
                             <summary
                                 class="font-bold text-white flex justify-between items-center list-none"
                             >
                                 ¿Cobráis desplazamiento hasta {data.name}?
                                 <span
-                                    class="text-amber-600 group-open:rotate-180 transition-transform"
+                                    class="text-primary group-open:rotate-180 transition-transform"
                                     >▼</span
                                 >
                             </summary>
                             <p
                                 class="text-slate-400 mt-3 text-sm leading-relaxed"
                             >
-                                No. Al estar dentro de nuestra zona de servicio
-                                principal, el desplazamiento a {data.name} está <strong
-                                    >totalmente incluido</strong
-                                > en el presupuesto. Solo cobramos por el trabajo
-                                realizado.
+                                Dependiendo del servicio. Al estar {data.name} dentro
+                                de nuestra área habitual, solemos incluir el desplazamiento
+                                en el presupuesto final. Llámanos para confirmar.
                             </p>
                         </details>
 
                         <details
-                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-amber-600/50"
+                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-primary/50"
                         >
                             <summary
                                 class="font-bold text-white flex justify-between items-center list-none"
                             >
-                                ¿Cuánto tardáis en llegar en caso de urgencia?
+                                ¿Atendéis urgencias en código postal {
+                                    data.zipCodes[0]
+                                }?
                                 <span
-                                    class="text-amber-600 group-open:rotate-180 transition-transform"
+                                    class="text-primary group-open:rotate-180 transition-transform"
                                     >▼</span
                                 >
                             </summary>
                             <p
                                 class="text-slate-400 mt-3 text-sm leading-relaxed"
                             >
-                                Para reparaciones urgentes (puertas atascadas,
-                                cerraduras forzadas), nuestro tiempo medio de
-                                llegada a {data.name} es de <strong
-                                    >30 a 45 minutos</strong
-                                >, dependiendo del tráfico.
-                            </p>
-                        </details>
-
-                        <details
-                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-amber-600/50"
-                        >
-                            <summary
-                                class="font-bold text-white flex justify-between items-center list-none"
-                            >
-                                ¿Realizáis trabajos para comunidades de vecinos
-                                en {data.name}?
-                                <span
-                                    class="text-amber-600 group-open:rotate-180 transition-transform"
-                                    >▼</span
-                                >
-                            </summary>
-                            <p
-                                class="text-slate-400 mt-3 text-sm leading-relaxed"
-                            >
-                                Sí, trabajamos con administradores de fincas y
-                                presidentes de comunidad en {data.name} para el mantenimiento
-                                de puertas de portal, garajes y vallas perimetrales.
-                                Emitimos factura reglamentaria con garantía.
+                                Sí, tenemos unidades móviles que cubren el
+                                código postal {data.zipCodes[0]} de {data.name}.
+                                El tiempo de respuesta medio es rápido.
                             </p>
                         </details>
                     </div>
                 </div>
             </div>
 
-            <!-- Columna Derecha (Sidebar) - Se mantiene igual -->
             <div class="space-y-8">
                 <div
                     class="p-8 bg-slate-900 rounded-lg border border-slate-800 sticky top-24 shadow-2xl"
@@ -295,59 +243,56 @@ const localSchema = {
                     <h3
                         class="text-2xl font-heading font-bold text-white mb-6 border-b border-slate-800 pb-4"
                     >
-                        ¿Por qué elegirnos en {data.name}?
+                        ¿Por qué elegirnos?
                     </h3>
                     <ul class="space-y-4 mb-8">
                         <li class="flex items-start gap-3">
                             <CheckCircle
-                                className="w-6 h-6 text-amber-600 shrink-0"
+                                className="w-6 h-6 text-primary shrink-0"
                             />
                             <span class="text-slate-300 text-sm"
-                                >Presupuesto cerrado sin sorpresas.</span
+                                >Presupuesto cerrado.</span
                             >
                         </li>
                         <li class="flex items-start gap-3">
                             <CheckCircle
-                                className="w-6 h-6 text-amber-600 shrink-0"
+                                className="w-6 h-6 text-primary shrink-0"
                             />
                             <span class="text-slate-300 text-sm"
-                                >Taller propio (sin intermediarios).</span
+                                >Profesionales de {city}.</span
                             >
                         </li>
                         <li class="flex items-start gap-3">
                             <CheckCircle
-                                className="w-6 h-6 text-amber-600 shrink-0"
+                                className="w-6 h-6 text-primary shrink-0"
                             />
-                            <span class="text-slate-300 text-sm">Garantía.</span
+                            <span class="text-slate-300 text-sm"
+                                >Garantía en factura.</span
                             >
                         </li>
                         <li class="flex items-start gap-3">
                             <CheckCircle
-                                className="w-6 h-6 text-amber-600 shrink-0"
+                                className="w-6 h-6 text-primary shrink-0"
                             />
                             <span class="text-slate-300 text-sm"
-                                >Atención prioritaria en CP {
-                                    data.zipCodes[0]
-                                }.</span
+                                >Cobertura total en {data.name}.</span
                             >
                         </li>
                     </ul>
 
                     <a
-                        href={getPhoneUrl()}
-                        class="flex flex-col items-center justify-center w-full py-4 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded font-bold transition-all group"
+                        href={`tel:${phone.replace(/\s/g, "")}`}
+                        class="flex flex-col items-center justify-center w-full py-4 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded font-bold transition-all group hover:border-primary/50"
                     >
                         <span
-                            class="text-xs text-slate-400 uppercase tracking-widest mb-1 group-hover:text-amber-500"
-                            >Llamar al Técnico</span
+                            class="text-xs text-slate-400 uppercase tracking-widest mb-1 group-hover:text-primary"
+                            >Llamar Ahora</span
                         >
-                        <span class="text-2xl font-heading"
-                            >{businessConfig.contact.phone}</span
-                        >
+                        <span class="text-2xl font-heading">{phone}</span>
                     </a>
 
                     <a
-                        href={getWhatsAppUrl(undefined, data.name)}
+                        href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone.replace(/\s/g, "")}?text=Hola,%20necesito%20servicio%20en%20${data.name}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         class="flex flex-col items-center justify-center w-full py-4 bg-green-600 hover:bg-green-700 text-white border border-green-700 rounded font-bold transition-all group mt-4"
@@ -357,7 +302,7 @@ const localSchema = {
                             >WhatsApp</span
                         >
                         <span class="text-lg font-heading"
-                            >Consultar para {data.name}</span
+                            >Consultar Disponibilidad</span
                         >
                     </a>
                 </div>
@@ -367,7 +312,7 @@ const localSchema = {
 
     <FinalCTA />
 
-    <section class="py-12 bg-slate-900 border-t border-slate-800">
+    <section class="py-12 bg-secondary border-t border-slate-800">
         <div class="container mx-auto px-4">
             <ServiceAreas />
         </div>
@@ -379,15 +324,15 @@ const localSchema = {
 <style>
     @keyframes formPulse {
         0% {
-            box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7);
+            box-shadow: 0 0 0 0 rgba(var(--color-primary), 0.7);
             transform: scale(1);
         }
         50% {
-            box-shadow: 0 0 0 20px rgba(251, 191, 36, 0);
+            box-shadow: 0 0 0 20px rgba(var(--color-primary), 0);
             transform: scale(1.02);
         }
         100% {
-            box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+            box-shadow: 0 0 0 0 rgba(var(--color-primary), 0);
             transform: scale(1);
         }
     }
@@ -398,7 +343,6 @@ const localSchema = {
 </style>
 
 <script>
-    // Smooth scroll y animación del formulario
     document.addEventListener("DOMContentLoaded", () => {
         const formLink = document.querySelector('a[href="#formulario"]');
         const formElement = document.getElementById("formulario");
@@ -406,18 +350,12 @@ const localSchema = {
         if (formLink && formElement) {
             formLink.addEventListener("click", (e) => {
                 e.preventDefault();
-
-                // Scroll suave
                 formElement.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                 });
-
-                // Añadir animación después de un pequeño delay
                 setTimeout(() => {
                     formElement.classList.add("form-highlight");
-
-                    // Remover la clase después de la animación
                     setTimeout(() => {
                         formElement.classList.remove("form-highlight");
                     }, 2000);

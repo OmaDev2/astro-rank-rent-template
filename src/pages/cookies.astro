@@ -2,11 +2,20 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import { Cookie } from "lucide-react";
+import { getEntry } from "astro:content";
+
+// Fetch Global Settings
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, email } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    email: "info@ejemplo.com",
+};
 ---
 
 <Layout
-    title="Política de Cookies | Herrero Zaragoza"
-    description="Información sobre el uso de cookies en el sitio web Herrero Zaragoza"
+    title={`Política de Cookies | ${siteName}`}
+    description={`Información sobre el uso de cookies en el sitio web ${siteName}`}
     noindex={true}
 >
     <section class="py-20 bg-slate-950">
@@ -245,7 +254,7 @@ import { Cookie } from "lucide-react";
                                 contactar en:
                             </p>
                             <p class="text-amber-500 font-semibold mt-2">
-                                Email: omadev2@gmail.com
+                                Email: {email}
                             </p>
                         </section>
                     </div>

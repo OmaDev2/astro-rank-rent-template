@@ -1,32 +1,36 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import {
-    getPhoneUrl,
-    getWhatsAppUrl,
-    getEmailUrl,
-    formatPhone,
-    businessConfig,
-} from "../config/business.ts";
+import { getEntry } from "astro:content";
 import Footer from "../components/Footer.astro";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import type { WithContext, ContactPage } from "schema-dts";
 
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName, phone, email, address, city, niche } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+    phone: "600 000 000",
+    email: "info@example.com",
+    address: "Calle Ejemplo, 123",
+    city: "Zaragoza",
+    niche: "Herrería",
+};
+
 const schema: WithContext<ContactPage> = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contacto Herrero Zaragoza",
-    description:
-        "Contacte con Herrero Zaragoza para solicitar presupuesto de rejas, puertas o estructuras metálicas.",
+    name: `Contacto ${siteName}`,
+    description: `Contacte con ${siteName} para solicitar presupuesto de ${niche}.`,
     mainEntity: {
         "@type": "Locksmith",
-        name: "Herrero Zaragoza",
-        telephone: "+34600000000",
-        email: "info@herrerozaragoza.com",
+        name: siteName,
+        telephone: phone,
+        email: email,
     },
 };
 ---
 
-<Layout title="Contacto y Presupuesto | Herrero Zaragoza" schema={schema}>
+<Layout title={`Contacto y Presupuesto | ${siteName}`} schema={schema}>
     <section class="py-20 bg-slate-900">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -60,13 +64,9 @@ const schema: WithContext<ContactPage> = {
                                         Teléfono / WhatsApp
                                     </h4>
                                     <a
-                                        href={getPhoneUrl()}
+                                        href={`tel:${phone}`}
                                         class="text-slate-300 hover:text-amber-500 transition-colors text-lg"
-                                        >{
-                                            formatPhone(
-                                                businessConfig.contact.phoneRaw,
-                                            )
-                                        }</a
+                                        >{phone}</a
                                     >
                                     <p class="text-xs text-slate-500 mt-1">
                                         Atención telefónica de 8:00 a 20:00
@@ -82,9 +82,9 @@ const schema: WithContext<ContactPage> = {
                                 <div>
                                     <h4 class="font-bold text-white">Email</h4>
                                     <a
-                                        href={getEmailUrl()}
+                                        href={`mailto:${email}`}
                                         class="text-slate-300 hover:text-amber-500 transition-colors"
-                                        >{businessConfig.contact.email}</a
+                                        >{email}</a
                                     >
                                 </div>
                             </li>
@@ -97,7 +97,7 @@ const schema: WithContext<ContactPage> = {
                                 <div>
                                     <h4 class="font-bold text-white">Taller</h4>
                                     <p class="text-slate-300">
-                                        {businessConfig.contact.address.city}
+                                        {address}, {city}
                                     </p>
                                 </div>
                             </li>

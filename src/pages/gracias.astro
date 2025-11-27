@@ -1,9 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { CheckCircle, ArrowRight } from "lucide-react";
+import { getEntry } from "astro:content";
+
+// Fetch Global Settings
+const settings = await getEntry("settings", "global");
+const { siteName } = settings?.data || {
+    siteName: "Herrero Zaragoza",
+};
 ---
 
-<Layout title="¡Mensaje Enviado! | Herrero Zaragoza" noindex={true}>
+<Layout title={`¡Mensaje Enviado! | ${siteName}`} noindex={true}>
     <section
         class="min-h-[80vh] flex items-center justify-center bg-slate-900 px-4"
     >
