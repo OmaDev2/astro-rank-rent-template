@@ -21,13 +21,12 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
     description={`Aviso legal del sitio web ${siteName}`}
     noindex={true}
 >
-    <section class="py-20 bg-slate-950">
+    <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
-                <!-- Header -->
                 <div class="text-center mb-12">
                     <div class="flex items-center justify-center gap-3 mb-6">
-                        <Scale className="w-8 h-8 text-amber-600" />
+                        <Scale className="w-8 h-8 text-primary" />
                         <h1 class="text-4xl font-heading font-bold text-white">
                             Aviso Legal
                         </h1>
@@ -43,10 +42,9 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                     </p>
                 </div>
 
-                <!-- Content -->
                 <div class="prose prose-invert prose-slate max-w-none">
                     <div
-                        class="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-6"
+                        class="bg-slate-900/50 border border-white/10 rounded-xl p-8 space-y-6"
                     >
                         <section>
                             <h2 class="text-2xl font-bold text-white mb-4">
@@ -94,30 +92,30 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                             </h2>
                             <p class="text-slate-300 leading-relaxed mb-4">
                                 Este sitio web tiene como único objetivo <strong
-                                    class="text-amber-500"
+                                    class="text-primary"
                                     >facilitar el contacto entre usuarios
                                     interesados en servicios de {
                                         niche.toLowerCase()
-                                    } y profesionales del sector en {
-                                        city
-                                    }</strong
+                                    }
+                                    y profesionales del sector en {city}</strong
                                 >.
                             </p>
+
                             <div
-                                class="bg-amber-900/20 border border-amber-600/30 rounded-lg p-6 my-6"
+                                class="bg-primary/10 border border-primary/30 rounded-lg p-6 my-6"
                             >
-                                <h3
-                                    class="text-xl font-bold text-amber-500 mb-3"
-                                >
+                                <h3 class="text-xl font-bold text-primary mb-3">
                                     ⚠️ IMPORTANTE - Descargo de Responsabilidad
                                 </h3>
                                 <p class="text-slate-200 leading-relaxed">
                                     <strong
-                                        >{siteName} NO presta servicios de
-                                        {niche.toLowerCase()}</strong
+                                        >{siteName} NO presta servicios de {
+                                            niche.toLowerCase()
+                                        }</strong
                                     >. Este sitio web actúa únicamente como <strong
                                         >intermediario o plataforma de contacto</strong
-                                    > entre usuarios y profesionales independientes
+                                    >
+                                    entre usuarios y profesionales independientes
                                     del sector.
                                 </p>
                                 <p class="text-slate-200 leading-relaxed mt-3">
@@ -281,7 +279,7 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                                 Para cualquier consulta relacionada con este
                                 aviso legal, puede contactar en:
                             </p>
-                            <p class="text-amber-500 font-semibold mt-2">
+                            <p class="text-primary font-semibold mt-2">
                                 Email: {email}
                             </p>
                         </section>

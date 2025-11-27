@@ -12,7 +12,7 @@ const { siteName } = settings?.data || {
 
 <Layout title={`¡Mensaje Enviado! | ${siteName}`} noindex={true}>
     <section
-        class="min-h-[80vh] flex items-center justify-center bg-slate-900 px-4"
+        class="min-h-[80vh] flex items-center justify-center bg-secondary px-4"
     >
         <div class="max-w-md w-full text-center">
             <div
@@ -26,21 +26,22 @@ const { siteName } = settings?.data || {
             </h1>
 
             <p class="text-slate-300 text-lg mb-8 leading-relaxed">
-                Gracias por contactar con nosotros. Hemos recibido tu solicitud
-                correctamente. Nos pondremos en contacto contigo en menos de 24
-                horas.
+                [cite_start]Gracias por contactar con nosotros[cite: 579]. Hemos
+                recibido tu solicitud correctamente. Nos pondremos en contacto
+                contigo en menos de 24 [cite_start]horas[cite: 580].
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                     href="/"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded transition-colors"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded transition-colors border border-transparent hover:border-primary/50"
                 >
                     Volver al Inicio
                 </a>
+
                 <a
                     href="/servicios"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded transition-colors"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-accent text-white font-bold rounded transition-colors shadow-lg hover:shadow-primary/20"
                 >
                     Ver Servicios
                     <ArrowRight className="w-4 h-4 ml-2" />

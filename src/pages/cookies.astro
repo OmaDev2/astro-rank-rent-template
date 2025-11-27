@@ -5,7 +5,6 @@ import { Cookie } from "lucide-react";
 import { getEntry } from "astro:content";
 
 // Fetch Global Settings
-// Fetch Global Settings
 const settings = await getEntry("settings", "global");
 const { siteName, email } = settings?.data || {
     siteName: "Herrero Zaragoza",
@@ -18,13 +17,12 @@ const { siteName, email } = settings?.data || {
     description={`Información sobre el uso de cookies en el sitio web ${siteName}`}
     noindex={true}
 >
-    <section class="py-20 bg-slate-950">
+    <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
-                <!-- Header -->
                 <div class="text-center mb-12">
                     <div class="flex items-center justify-center gap-3 mb-6">
-                        <Cookie className="w-8 h-8 text-amber-600" />
+                        <Cookie className="w-8 h-8 text-primary" />
                         <h1 class="text-4xl font-heading font-bold text-white">
                             Política de Cookies
                         </h1>
@@ -40,10 +38,9 @@ const { siteName, email } = settings?.data || {
                     </p>
                 </div>
 
-                <!-- Content -->
                 <div class="prose prose-invert prose-slate max-w-none">
                     <div
-                        class="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-6"
+                        class="bg-slate-900/50 border border-white/10 rounded-xl p-8 space-y-6"
                     >
                         <section>
                             <h2 class="text-2xl font-bold text-white mb-4">
@@ -68,7 +65,6 @@ const { siteName, email } = settings?.data || {
                             </p>
 
                             <div class="space-y-4">
-                                <!-- Cookies Técnicas -->
                                 <div
                                     class="bg-slate-950 border border-slate-700 rounded-lg p-6"
                                 >
@@ -91,12 +87,13 @@ const { siteName, email } = settings?.data || {
                                     <p class="text-sm text-slate-400">
                                         <strong>Duración:</strong> Sesión
                                     </p>
-                                    <p class="text-sm text-amber-500 mt-2">
+                                    <p
+                                        class="text-sm text-primary mt-2 font-bold"
+                                    >
                                         ✓ No requieren consentimiento
                                     </p>
                                 </div>
 
-                                <!-- Cookies Analíticas -->
                                 <div
                                     class="bg-slate-950 border border-slate-700 rounded-lg p-6"
                                 >
@@ -124,7 +121,9 @@ const { siteName, email } = settings?.data || {
                                     <p class="text-sm text-slate-400">
                                         <strong>Duración:</strong> Hasta 2 años
                                     </p>
-                                    <p class="text-sm text-amber-500 mt-2">
+                                    <p
+                                        class="text-sm text-accent mt-2 font-bold"
+                                    >
                                         ⚠️ Requieren consentimiento
                                     </p>
                                 </div>
@@ -170,7 +169,7 @@ const { siteName, email } = settings?.data || {
                                     href="https://www.aboutcookies.org"
                                     target="_blank"
                                     rel="noopener"
-                                    class="text-amber-500 hover:text-amber-400"
+                                    class="text-primary hover:text-accent underline decoration-primary/30"
                                     >www.aboutcookies.org</a
                                 >
                             </p>
@@ -200,10 +199,10 @@ const { siteName, email } = settings?.data || {
                             </ul>
 
                             <div
-                                class="bg-amber-900/20 border border-amber-600/30 rounded-lg p-6 mt-6"
+                                class="bg-primary/10 border border-primary/30 rounded-lg p-6 mt-6"
                             >
                                 <p class="text-slate-200 leading-relaxed">
-                                    <strong class="text-amber-500"
+                                    <strong class="text-primary"
                                         >Importante:</strong
                                     > Si bloquea o elimina las cookies, es posible
                                     que algunas funcionalidades del sitio web no
@@ -245,7 +244,7 @@ const { siteName, email } = settings?.data || {
                                 Para más información sobre el tratamiento de sus
                                 datos personales, consulte nuestra <a
                                     href="/privacidad"
-                                    class="text-amber-500 hover:text-amber-400"
+                                    class="text-primary hover:text-accent underline decoration-primary/30"
                                     >Política de Privacidad</a
                                 >.
                             </p>
@@ -253,7 +252,7 @@ const { siteName, email } = settings?.data || {
                                 Para cualquier consulta sobre cookies, puede
                                 contactar en:
                             </p>
-                            <p class="text-amber-500 font-semibold mt-2">
+                            <p class="text-primary font-semibold mt-2">
                                 Email: {email}
                             </p>
                         </section>

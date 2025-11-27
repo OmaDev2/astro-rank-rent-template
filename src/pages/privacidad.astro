@@ -21,13 +21,12 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
     description={`Política de privacidad y protección de datos del sitio web ${siteName}`}
     noindex={true}
 >
-    <section class="py-20 bg-slate-950">
+    <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
-                <!-- Header -->
                 <div class="text-center mb-12">
                     <div class="flex items-center justify-center gap-3 mb-6">
-                        <Shield className="w-8 h-8 text-amber-600" />
+                        <Shield className="w-8 h-8 text-primary" />
                         <h1 class="text-4xl font-heading font-bold text-white">
                             Política de Privacidad
                         </h1>
@@ -43,10 +42,9 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                     </p>
                 </div>
 
-                <!-- Content -->
                 <div class="prose prose-invert prose-slate max-w-none">
                     <div
-                        class="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-6"
+                        class="bg-slate-900/50 border border-white/10 rounded-xl p-8 space-y-6"
                     >
                         <section>
                             <h2 class="text-2xl font-bold text-white mb-4">
@@ -101,12 +99,12 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                                 <li>Mensaje o consulta realizada</li>
                             </ul>
                             <p class="text-slate-300 leading-relaxed mt-4">
-                                <strong class="text-amber-500"
-                                    >Importante:</strong
+                                <strong class="text-primary">Importante:</strong
                                 > Los datos proporcionados serán compartidos con
                                 profesionales del sector de {
                                     niche.toLowerCase()
-                                } para que puedan contactar con el usuario y ofrecer
+                                }
+                                para que puedan contactar con el usuario y ofrecer
                                 sus servicios.
                             </p>
                         </section>
@@ -149,7 +147,8 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                                 La base legal para el tratamiento de sus datos
                                 es el <strong class="text-white"
                                     >consentimiento del interesado</strong
-                                > (art. 6.1.a RGPD), otorgado mediante el envío del
+                                >
+                                (art. 6.1.a RGPD), otorgado mediante el envío del
                                 formulario de contacto.
                             </p>
                         </section>
@@ -159,10 +158,10 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                                 5. Destinatarios de los Datos
                             </h2>
                             <div
-                                class="bg-amber-900/20 border border-amber-600/30 rounded-lg p-6"
+                                class="bg-primary/10 border border-primary/30 rounded-lg p-6"
                             >
                                 <p class="text-slate-200 leading-relaxed">
-                                    <strong class="text-amber-500"
+                                    <strong class="text-primary"
                                         >Sus datos serán compartidos con:</strong
                                     >
                                 </p>
@@ -172,8 +171,8 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                                     <li>
                                         Profesionales del sector de {
                                             niche.toLowerCase()
-                                        } en
-                                        {city} que puedan prestar el servicio solicitado
+                                        } en {city}
+                                        que puedan prestar el servicio solicitado
                                     </li>
                                     <li>
                                         Proveedores de servicios tecnológicos
@@ -245,7 +244,7 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                             </ul>
                             <p class="text-slate-300 leading-relaxed mt-4">
                                 Para ejercer estos derechos, puede enviar un
-                                email a: <strong class="text-amber-500"
+                                email a: <strong class="text-primary"
                                     >{email}</strong
                                 >
                             </p>
@@ -290,7 +289,7 @@ const { siteName, city, niche, email, address, nif } = settings?.data || {
                                 privacidad o el tratamiento de sus datos
                                 personales:
                             </p>
-                            <p class="text-amber-500 font-semibold mt-2">
+                            <p class="text-primary font-semibold mt-2">
                                 Email: {email}
                             </p>
                         </section>

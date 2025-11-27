@@ -1,15 +1,20 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
-import { Home, Phone, ArrowLeft } from "lucide-react";
-import { getEntry } from "astro:content";
+import { Home, Phone, ArrowRight } from "lucide-react";
+import { getEntry, getCollection } from "astro:content";
 
 // Fetch Global Settings
 const settings = await getEntry("settings", "global");
-const { siteName, phone } = settings?.data || {
-    siteName: "Herrero Zaragoza",
+const { siteName, phone, niche } = settings?.data || {
+    siteName: "Nombre Negocio",
     phone: "600 000 000",
+    niche: "Servicio",
 };
+
+// Recuperamos servicios reales para sugerir (evita enlaces rotos)
+const services = await getCollection("services");
+const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
 ---
 
 <Layout
@@ -18,114 +23,85 @@ const { siteName, phone } = settings?.data || {
     noindex={true}
 >
     <section
-        class="min-h-screen flex items-center justify-center bg-slate-950 py-20"
+        class="min-h-screen flex items-center justify-center bg-secondary py-20"
     >
         <div class="container mx-auto px-4">
             <div class="max-w-2xl mx-auto text-center">
-                <!-- Error Number -->
                 <div class="mb-8">
                     <h1
-                        class="text-[150px] lg:text-[200px] font-heading font-bold text-amber-600 leading-none opacity-20"
+                        class="text-[150px] lg:text-[200px] font-heading font-bold text-primary leading-none opacity-20 select-none"
                     >
                         404
                     </h1>
                 </div>
 
-                <!-- Error Message -->
-                <div class="mb-12">
+                <div class="mb-12 -mt-20 relative z-10">
                     <h2
                         class="text-4xl lg:text-5xl font-heading font-bold text-white mb-4"
                     >
                         Página No Encontrada
                     </h2>
-                    <p class="text-xl text-slate-400 leading-relaxed">
-                        Lo sentimos, la página que buscas no existe o ha sido
-                        movida.
+                    <p
+                        class="text-xl text-slate-400 leading-relaxed max-w-lg mx-auto"
+                    >
+                        Lo sentimos, la página que buscas no existe, ha sido
+                        movida o la dirección es incorrecta.
                     </p>
                 </div>
 
-                <!-- CTA Buttons -->
                 <div
-                    class="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+                    class="flex flex-col sm:flex-row gap-4 justify-center mb-16 relative z-10"
                 >
                     <a
                         href="/"
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-all shadow-lg hover:shadow-amber-900/40 transform hover:-translate-y-0.5"
+                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded-lg transition-all shadow-lg hover:shadow-primary/40 transform hover:-translate-y-0.5"
                     >
                         <Home className="w-5 h-5 mr-2" />
                         Volver al Inicio
                     </a>
+
                     <a
-                        href={`tel:${phone}`}
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-amber-600 hover:bg-amber-600 rounded-lg transition-all transform hover:-translate-y-0.5"
+                        href={`tel:${phone.replace(/\s/g, "")}`}
+                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-primary hover:bg-primary rounded-lg transition-all transform hover:-translate-y-0.5"
                     >
                         <Phone className="w-5 h-5 mr-2" />
-                        Llamar al Herrero
+                        Llamar Ahora
                     </a>
                 </div>
 
-                <!-- Quick Links -->
-                <div
-                    class="bg-slate-900 border border-slate-800 rounded-xl p-8"
-                >
-                    <h3 class="text-xl font-bold text-white mb-6">
-                        ¿Buscabas alguno de estos servicios?
-                    </h3>
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <a
-                            href="/rejas/"
-                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
-                        >
-                            <ArrowLeft
-                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
-                            />
-                            <span
-                                class="text-slate-300 group-hover:text-white transition-colors"
-                            >
-                                Rejas de Seguridad
-                            </span>
-                        </a>
-                        <a
-                            href="/cerramientos/"
-                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
-                        >
-                            <ArrowLeft
-                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
-                            />
-                            <span
-                                class="text-slate-300 group-hover:text-white transition-colors"
-                            >
-                                Cerramientos
-                            </span>
-                        </a>
-                        <a
-                            href="/puertas-metalicas/"
-                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
-                        >
-                            <ArrowLeft
-                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
-                            />
-                            <span
-                                class="text-slate-300 group-hover:text-white transition-colors"
-                            >
-                                Puertas Metálicas
-                            </span>
-                        </a>
-                        <a
-                            href="/contacto/"
-                            class="flex items-center gap-3 p-4 bg-slate-950 border border-slate-800 rounded-lg hover:border-amber-600/50 transition-colors group"
-                        >
-                            <ArrowLeft
-                                className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform"
-                            />
-                            <span
-                                class="text-slate-300 group-hover:text-white transition-colors"
-                            >
-                                Contacto
-                            </span>
-                        </a>
-                    </div>
-                </div>
+                {
+                    suggestedServices.length > 0 && (
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
+                            <h3 class="text-xl font-bold text-white mb-6">
+                                ¿Buscabas alguno de nuestros servicios de{" "}
+                                {niche}?
+                            </h3>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                {suggestedServices.map((service) => (
+                                    <a
+                                        href={`/${service.slug}`}
+                                        class="flex items-center justify-between p-4 bg-slate-900/50 border border-white/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
+                                    >
+                                        <span class="text-slate-300 group-hover:text-white transition-colors font-medium">
+                                            {service.data.title}
+                                        </span>
+                                        <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                                    </a>
+                                ))}
+
+                                <a
+                                    href="/contacto/"
+                                    class="flex items-center justify-between p-4 bg-slate-900/50 border border-white/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
+                                >
+                                    <span class="text-slate-300 group-hover:text-white transition-colors font-medium">
+                                        Contactar con Soporte
+                                    </span>
+                                    <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                                </a>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         </div>
     </section>
