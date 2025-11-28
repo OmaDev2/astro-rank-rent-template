@@ -357,6 +357,54 @@ export default config({
                         itemLabel: (props) => props.fields.question.value || 'Pregunta',
                     }
                 ),
+
+                // --- NUEVO: PAGE BUILDER PARA HOMEPAGE ---
+                blocks: fields.blocks({
+                    hero: {
+                        label: 'Hero Principal',
+                        schema: fields.empty()
+                    },
+                    services: {
+                        label: 'Grilla de Servicios',
+                        schema: fields.empty()
+                    },
+                    about: {
+                        label: 'Sección Sobre Nosotros',
+                        schema: fields.empty()
+                    },
+                    features: {
+                        label: 'Características (Iconos)',
+                        schema: fields.empty()
+                    },
+                    contact: {
+                        label: 'Sección Contacto/Presupuesto',
+                        schema: fields.empty()
+                    },
+                    testimonials: {
+                        label: 'Carrusel de Testimonios',
+                        schema: fields.empty()
+                    },
+                    content: {
+                        label: 'Contenido SEO (Texto)',
+                        schema: fields.empty()
+                    },
+                    faq: {
+                        label: 'Preguntas Frecuentes',
+                        schema: fields.empty()
+                    },
+                    locations: {
+                        label: 'Listado de Zonas',
+                        schema: fields.empty()
+                    },
+                    cta: {
+                        label: 'CTA Final',
+                        schema: fields.empty()
+                    },
+                }, {
+                    label: 'Constructor de Página (Orden de Secciones)',
+                    description: 'Define qué secciones mostrar y en qué orden aparecerán en la página de inicio'
+                }),
+                // ------------------------------------------
             }
         })
     },

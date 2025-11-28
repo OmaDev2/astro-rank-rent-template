@@ -1,0 +1,74 @@
+---
+import { Phone } from "lucide-react";
+const { hero, config } = Astro.props;
+const heroBgImage =
+    hero?.backgroundImage || "/images/home/hero-placeholder.jpg";
+---
+
+<section
+    class="relative h-[85vh] min-h-[600px] flex items-center bg-secondary overflow-hidden"
+>
+    <div class="absolute inset-0 w-full h-full">
+        <img
+            src={heroBgImage}
+            alt={`${config.niche} en ${config.city}`}
+            class="w-full h-full object-cover opacity-40"
+        />
+    </div>
+    <div
+        class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent"
+    >
+    </div>
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-3xl">
+            <h1
+                class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-tight"
+            >
+                {
+                    hero?.heading ? (
+                        <>
+                            {hero.heading} <br />
+                            {hero.headingHighlight && (
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                                    {hero.headingHighlight}
+                                </span>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            {config.niche.toUpperCase()} <br />
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                                EN {config.city.toUpperCase()}
+                            </span>
+                        </>
+                    )
+                }
+            </h1>
+            <p
+                class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-2xl"
+            >
+                {
+                    hero?.subheading ||
+                        `Expertos en ${config.niche} en ${config.city}. Servicio rápido, profesional y garantizado.`
+                }
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a
+                    href="#presupuesto"
+                    class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
+                >
+                    <Phone className="w-5 h-5 mr-2" />
+                    {config.ctaText || "Pedir Presupuesto"}
+                </a>
+                <a
+                    href={`https://wa.me/${config.whatsapp || config.phone.replace(/\s/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border border-heading/20 rounded hover:bg-surface transition-colors"
+                >
+                    WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

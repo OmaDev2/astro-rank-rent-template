@@ -1,0 +1,74 @@
+---
+import { ArrowRight } from "lucide-react";
+const { servicesSection, featuredServices, city } = Astro.props;
+---
+
+<section id="servicios" class="py-20 bg-secondary border-b border-heading/10">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-12 bg-primary"></div>
+                <span
+                    class="text-primary font-bold uppercase tracking-widest text-sm"
+                    >Nuestros Servicios</span
+                >
+                <div class="h-px w-12 bg-primary"></div>
+            </div>
+            <h2
+                class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
+            >
+                {
+                    servicesSection?.title ? (
+                        <>
+                            {servicesSection.title}
+                            {servicesSection.titleHighlight && (
+                                <>
+                                    <br />
+                                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                                        {servicesSection.titleHighlight}
+                                    </span>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        `¿Qué necesitas en ${city}?`
+                    )
+                }
+            </h2>
+            <p class="text-body max-w-2xl mx-auto text-lg">
+                {
+                    servicesSection?.subtitle ||
+                        "Soluciones profesionales adaptadas a tus necesidades."
+                }
+            </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+                featuredServices.map((service: any) => (
+                    <a
+                        href={`/${service.slug}/`}
+                        class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
+                    >
+                        <div
+                            class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                            style={`background-image: url('${service.data.heroImage || `/images/services/${service.slug}-1.png`}')`}
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
+                        <div class="relative h-full flex flex-col justify-end p-8">
+                            <h3 class="text-2xl font-heading font-bold text-heading mb-3">
+                                {service.data.title}
+                            </h3>
+                            <p class="text-body mb-6 line-clamp-2 text-sm">
+                                {service.data.shortDesc}
+                            </p>
+                            <div class="inline-flex items-center text-primary font-bold group-hover:text-accent">
+                                Leer más{" "}
+                                <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                            </div>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+    </div>
+</section>

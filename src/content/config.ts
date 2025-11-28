@@ -196,6 +196,22 @@ const pages = defineCollection({
             question: z.string(),
             answer: z.string(),
         })).optional(),
+
+        // --- PAGE BUILDER: Define el orden de las secciones ---
+        blocks: z.array(
+            z.discriminatedUnion('discriminant', [
+                z.object({ discriminant: z.literal('hero') }),
+                z.object({ discriminant: z.literal('services') }),
+                z.object({ discriminant: z.literal('about') }),
+                z.object({ discriminant: z.literal('features') }),
+                z.object({ discriminant: z.literal('contact') }),
+                z.object({ discriminant: z.literal('testimonials') }),
+                z.object({ discriminant: z.literal('content') }),
+                z.object({ discriminant: z.literal('faq') }),
+                z.object({ discriminant: z.literal('locations') }),
+                z.object({ discriminant: z.literal('cta') }),
+            ])
+        ).optional(), // Opcional para no romper la homepage existente
     }),
 });
 

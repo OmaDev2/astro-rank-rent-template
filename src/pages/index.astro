@@ -2,53 +2,45 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection, getEntry } from "astro:content";
-import { Image } from "astro:assets";
-// Nota: Eliminamos la importación estática de heroImage porque ahora vendrá de la DB o usaremos un fallback
+import type { WithContext, LocalBusiness } from "schema-dts";
+
+// Imports de Componentes Generales
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import FinalCTA from "../components/FinalCTA.astro";
 import LocationsSection from "../components/LocationsSection.astro";
-import HeroContactForm from "../components/HeroContactForm.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import Testimonials from "../components/Testimonials.astro";
-import * as LucideIcons from "lucide-react"; // Importamos todo para poder elegir iconos dinámicamente
-import { ArrowRight, Phone, MapPin, CheckCircle, Star } from "lucide-react";
-import type { WithContext, Thing } from "schema-dts";
+
+// Imports de Bloques Específicos de Home
+import HomeHero from "../components/blocks/home/HomeHero.astro";
+import HomeServices from "../components/blocks/home/HomeServices.astro";
+import HomeAbout from "../components/blocks/home/HomeAbout.astro";
+import HomeFeatures from "../components/blocks/home/HomeFeatures.astro";
+import HomeContact from "../components/blocks/home/HomeContact.astro";
 
 // 1. Fetch Data
-const featuredServices = await getCollection("services", ({ data }) => {
-	return data.featured === true;
-});
-
+const featuredServices = await getCollection(
+	"services",
+	({ data }) => data.featured === true,
+);
 const testimonials = await getCollection("testimonials");
-
-// 2. Fetch Homepage Data (Keystatic)
 const home = await getEntry("pages", "home");
 const homeData = home?.data || {};
 
-// Extraemos los datos del Singleton "Homepage"
-const {
-	hero, // Objeto con heading, subheading, backgroundImage
-	features, // Array de beneficios
-	seoContentTitle,
-	faq, // Array de preguntas frecuentes
-	servicesSection, // Nueva sección de servicios
-	aboutSection, // Nueva sección sobre nosotros
-} = homeData;
-
-// Renderizamos el contenido SEO (Main Body)
+// Render contenido SEO
 const { Content: SeoContentRendered } = home
 	? await home.render()
 	: { Content: () => null };
 
-// 3. Fetch Global Settings
+// 2. Global Settings
 const business = await getEntry("business", "global");
 const config = business?.data || {
 	siteName: "Nombre Negocio",
 	phone: "000 000 000",
 	city: "Ciudad",
 	niche: "Servicio",
-	whatsapp: "000000000",
-	businessType: "LocalBusiness" as const,
+	whatsapp: "",
+	businessType: "LocalBusiness",
 	logo: "",
 	siteUrl: "",
 	address: "",
@@ -57,448 +49,114 @@ const config = business?.data || {
 	ctaText: "Pedir Presupuesto",
 };
 
-// Helpers para iconos dinámicos
-const getIcon = (name: string) => {
-	const Icon = (LucideIcons as any)[name] || LucideIcons.CheckCircle;
-	return Icon;
-};
+// 3. Page Builder Logic
+const defaultBlocks = [
+	{ discriminant: "hero" },
+	{ discriminant: "services" },
+	{ discriminant: "about" },
+	{ discriminant: "features" },
+	{ discriminant: "contact" },
+	{ discriminant: "testimonials" },
+	{ discriminant: "content" },
+	{ discriminant: "faq" },
+	{ discriminant: "locations" },
+	{ discriminant: "cta" },
+];
 
-const businessType = config.businessType || "LocalBusiness";
-const schema: WithContext<Thing> = {
+const finalBlocks =
+	homeData.blocks && homeData.blocks.length > 0
+		? homeData.blocks
+		: defaultBlocks;
+
+// 4. Schema SEO
+const schema: WithContext<LocalBusiness> = {
 	"@context": "https://schema.org",
-	"@type": businessType as any,
+	"@type": (config.businessType as any) || "LocalBusiness",
 	name: config.siteName,
-	image: config.logo || `${config.siteUrl || ""}/images/home/logo.png`,
+	image: config.logo || `${config.siteUrl}/images/home/logo.png`,
 	description: `${config.niche} en ${config.city}. Servicio profesional.`,
 	telephone: config.phone,
-	...(config.email && { email: config.email }),
-	...(config.siteUrl && { url: config.siteUrl }),
 	address: {
 		"@type": "PostalAddress",
-		streetAddress: config.address || "",
 		addressLocality: config.city,
-		addressRegion: config.city,
 		addressCountry: "ES",
 	},
-	...(config.coordinates?.lat &&
-		config.coordinates?.lng && {
-			geo: {
-				"@type": "GeoCoordinates",
-				latitude: config.coordinates.lat,
-				longitude: config.coordinates.lng,
-			},
-		}),
-	...(config.schedule && { openingHours: config.schedule }),
 	priceRange: "$$",
 };
-
-// Fallback de imagen si no han subido ninguna
-const heroBgImage =
-	hero?.backgroundImage || "/images/home/hero-placeholder.jpg"; // Asegúrate de tener una imagen por defecto ahí
 ---
 
 <Layout
-	title={`${hero?.heading || config.niche + " en " + config.city} | ${config.siteName}`}
+	title={`${homeData.hero?.heading || config.niche + " en " + config.city} | ${config.siteName}`}
 	schema={schema}
 >
-	<section
-		class="relative h-[85vh] min-h-[600px] flex items-center bg-secondary overflow-hidden"
-	>
-		<div class="absolute inset-0 w-full h-full">
-			{
-				/* Si es una imagen local importada se usa Image, si es string (URL) se usa img normal. 
-                Keystatic suele guardar strings (rutas). */
-			}
-			<img
-				src={heroBgImage}
-				alt={`${config.niche} en ${config.city}`}
-				class="w-full h-full object-cover opacity-40"
-			/>
-		</div>
-		<div
-			class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent"
-		>
-		</div>
-
-		<div class="container mx-auto px-4 relative z-10">
-			<div class="max-w-3xl">
-				<h1
-					class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-tight"
-				>
-					{/* Renderizamos el título o un fallback inteligente */}
-					{
-						hero?.heading ? (
-							<>
-								{hero.heading} <br />
-								{hero.headingHighlight && (
-									<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-										{hero.headingHighlight}
-									</span>
-								)}
-							</>
-						) : (
-							<>
-								{config.niche.toUpperCase()} <br />
-								<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-									EN {config.city.toUpperCase()}
-								</span>
-							</>
-						)
-					}
-				</h1>
-				<p
-					class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-2xl"
-				>
-					{
-						hero?.subheading ||
-							`Expertos en ${config.niche} en ${config.city}. Servicio rápido, profesional y garantizado.`
-					}
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4">
-					<a
-						href="#presupuesto"
-						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
-					>
-						<Phone className="w-5 h-5 mr-2" />
-						{config.ctaText || "Pedir Presupuesto"}
-					</a>
-					<a
-						href={`https://wa.me/${config.whatsapp || config.phone.replace(/\s/g, "")}`}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border border-heading/20 rounded hover:bg-surface transition-colors"
-					>
-						{/* Icono WhatsApp SVG */}
-						<svg
-							class="w-5 h-5 mr-2"
-							fill="currentColor"
-							viewBox="0 0 24 24"
-							><path
-								d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-							></path></svg
-						>
-						WhatsApp
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section
-		id="servicios"
-		class="py-20 bg-secondary border-b border-heading/10"
-	>
-		<div class="container mx-auto px-4">
-			<div class="text-center mb-16">
-				<div class="flex items-center justify-center gap-4 mb-4">
-					<div class="h-px w-12 bg-primary"></div>
-					<span
-						class="text-primary font-bold uppercase tracking-widest text-sm"
-						>Nuestros Servicios</span
-					>
-					<div class="h-px w-12 bg-primary"></div>
-				</div>
-				<h2
-					class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
-				>
-					{
-						servicesSection?.title ? (
-							<>
-								{servicesSection.title}
-								{servicesSection.titleHighlight && (
-									<>
-										<br />
-										<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-											{servicesSection.titleHighlight}
-										</span>
-									</>
-								)}
-							</>
-						) : (
-							`¿Qué necesitas en ${config.city}?`
-						)
-					}
-				</h2>
-				<p class="text-body max-w-2xl mx-auto text-lg">
-					{
-						servicesSection?.subtitle ||
-							"Soluciones profesionales adaptadas a tus necesidades."
-					}
-				</p>
-			</div>
-
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-				{
-					featuredServices.map((service) => (
-						<a
-							href={`/${service.slug}/`}
-							class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
-						>
-							<div
-								class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-								style={`background-image: url('${service.data.heroImage || `/images/services/${service.slug}-1.png`}')`}
-							/>
-							<div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
-							<div class="relative h-full flex flex-col justify-end p-8">
-								<h3 class="text-2xl font-heading font-bold text-heading mb-3">
-									{service.data.title}
-								</h3>
-								<p class="text-body mb-6 line-clamp-2 text-sm">
-									{service.data.shortDesc}
-								</p>
-								<div class="inline-flex items-center text-primary font-bold group-hover:text-accent">
-									Leer más{" "}
-									<ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-								</div>
-							</div>
-						</a>
-					))
-				}
-			</div>
-		</div>
-	</section>
-
-	{/* About Section */}
 	{
-		aboutSection && (
-			<section class="py-20 bg-secondary border-b border-heading/10">
-				<div class="container mx-auto px-4">
-					<div class="grid lg:grid-cols-2 gap-12 items-center">
-						{/* Left Column: Image */}
-						<div class="relative">
-							<div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-								<img
-									src={
-										aboutSection.image ||
-										"/images/home/about-placeholder.jpg"
-									}
-									alt={aboutSection.title}
-									class="w-full h-full object-cover"
-								/>
-								{/* Overlay Gradient */}
-								<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-							</div>
+		finalBlocks.map((block: any) => {
+			switch (block.discriminant) {
+				case "hero":
+					return <HomeHero hero={homeData.hero} config={config} />;
 
-							{/* Badge */}
-							{aboutSection.yearsExperience && (
-								<div class="absolute -bottom-6 -right-6 bg-primary text-white p-4 rounded-xl shadow-xl border-4 border-secondary z-10 flex flex-col items-center justify-center w-28 h-28 lg:w-32 lg:h-32">
-									<span class="text-3xl lg:text-4xl font-bold block">
-										{aboutSection.yearsExperience.replace(
-											/\D/g,
-											"",
-										)}
-										+
-									</span>
-									<span class="text-xs uppercase tracking-wider font-bold text-center">
-										AÑOS
-									</span>
+				case "services":
+					return (
+						<HomeServices
+							servicesSection={homeData.servicesSection}
+							featuredServices={featuredServices}
+							city={config.city}
+						/>
+					);
+
+				case "about":
+					return <HomeAbout aboutSection={homeData.aboutSection} />;
+
+				case "features":
+					return (
+						<HomeFeatures
+							features={homeData.features}
+							city={config.city}
+						/>
+					);
+
+				case "contact":
+					return <HomeContact config={config} />;
+
+				case "testimonials":
+					return <Testimonials testimonials={testimonials} />;
+
+				case "content":
+					return homeData.seoContentTitle ? (
+						<section class="py-20 bg-secondary">
+							<div class="container mx-auto px-4 max-w-4xl">
+								<h2 class="text-3xl font-heading font-bold text-heading mb-8">
+									{homeData.seoContentTitle}
+								</h2>
+								<div class="prose prose-invert prose-lg text-body">
+									<SeoContentRendered />
 								</div>
-							)}
-						</div>
+							</div>
+						</section>
+					) : null;
 
-						{/* Right Column: Content */}
-						<div>
-							<h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-8">
-								{aboutSection.title}
+				case "faq":
+					return homeData.faq && homeData.faq.length > 0 ? (
+						<div class="container mx-auto px-4 max-w-4xl py-20">
+							<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
+								Preguntas Frecuentes
 							</h2>
-
-							<div class="prose prose-invert prose-lg text-body mb-8">
-								{aboutSection.description &&
-									aboutSection.description
-										.split("\n")
-										.map(
-											(paragraph: string) =>
-												paragraph.trim() && (
-													<p
-														class="mb-4"
-														set:html={paragraph.replace(
-															/\*\*(.*?)\*\*/g,
-															'<strong class="text-white">$1</strong>',
-														)}
-													/>
-												),
-										)}
-							</div>
-
-							{/* Features List */}
-							{aboutSection.features && (
-								<div class="space-y-6 mb-10">
-									{aboutSection.features.map(
-										(feature: any) => (
-											<div class="flex items-start gap-4">
-												<div class="mt-1 flex-shrink-0">
-													<CheckCircle className="w-6 h-6 text-primary" />
-												</div>
-												<div>
-													<h3 class="text-xl font-bold text-heading mb-1">
-														{feature.title}
-													</h3>
-													<p class="text-body text-sm">
-														{feature.description}
-													</p>
-												</div>
-											</div>
-										),
-									)}
-								</div>
-							)}
-
-							{/* Button */}
-							{aboutSection.buttonText && (
-								<a
-									href={
-										aboutSection.buttonLink || "/nosotros"
-									}
-									class="inline-flex items-center px-8 py-4 border border-primary text-primary font-bold rounded hover:bg-primary hover:text-white transition-all group"
-								>
-									{aboutSection.buttonText}
-									<ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
-								</a>
-							)}
+							<FaqAccordion items={homeData.faq} />
 						</div>
-					</div>
-				</div>
-			</section>
-		)
+					) : null;
+
+				case "locations":
+					return <LocationsSection />;
+
+				case "cta":
+					return <FinalCTA />;
+
+				default:
+					return null;
+			}
+		})
 	}
 
-	{
-		features && features.length > 0 && (
-			<section class="py-20 bg-secondary border-y border-heading/10">
-				<div class="container mx-auto px-4">
-					<div class="text-center mb-16">
-						<h2 class="text-4xl font-heading font-bold text-heading mb-4">
-							¿Por qué elegirnos en {config.city}?
-						</h2>
-						<div class="w-24 h-1 bg-primary mx-auto mb-4" />
-					</div>
-
-					<div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-						{features.map((feature: any) => {
-							const IconComponent = getIcon(
-								feature.icon || "CheckCircle",
-							);
-							return (
-								<div class="group relative p-8 bg-surface/50 rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
-									<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-									<div class="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-										<IconComponent className="w-8 h-8 text-white" />
-									</div>
-									<h3 class="text-2xl font-heading font-bold text-heading mb-4">
-										{feature.title}
-									</h3>
-									<p class="text-body leading-relaxed">
-										{feature.description}
-									</p>
-								</div>
-							);
-						})}
-					</div>
-				</div>
-			</section>
-		)
-	}
-
-	<section
-		id="presupuesto"
-		class="py-20 bg-secondary relative overflow-hidden"
-	>
-		<div
-			class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"
-		>
-		</div>
-
-		<div class="container mx-auto px-4 relative z-10">
-			<div
-				class="max-w-4xl mx-auto bg-surface rounded-2xl border border-heading/10 shadow-2xl overflow-hidden flex flex-col md:flex-row"
-			>
-				<div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
-					<h2
-						class="text-3xl font-heading font-bold text-heading mb-4"
-					>
-						¿Necesitas un Presupuesto?
-					</h2>
-					<p class="text-body mb-8">
-						Cuéntanos tu proyecto. Te respondemos con una valoración
-						gratuita y sin compromiso.
-					</p>
-					<div class="space-y-4">
-						<div class="flex items-center text-body">
-							<div
-								class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-4"
-							>
-								<Phone className="w-5 h-5" />
-							</div>
-							<div>
-								<div class="text-xs text-body/70 uppercase">
-									Llámanos ahora
-								</div>
-								<div class="font-bold text-heading">
-									{config.phone}
-								</div>
-							</div>
-						</div>
-						<div class="flex items-center text-body">
-							<div
-								class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-4"
-							>
-								<MapPin className="w-5 h-5" />
-							</div>
-							<div>
-								<div class="text-xs text-body/70 uppercase">
-									Trabajamos en
-								</div>
-								<div class="font-bold text-heading">
-									{config.city} y alrededores
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div
-					class="p-8 md:p-12 md:w-1/2 bg-surface/50 border-l border-heading/10"
-				>
-					<HeroContactForm
-						title="Solicitar Valoración"
-						subtitle="Rellena el formulario y te contactamos."
-					/>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<Testimonials testimonials={testimonials} />
-
-	{
-		seoContentTitle && (
-			<section class="py-20 bg-secondary">
-				<div class="container mx-auto px-4 max-w-4xl">
-					<h2 class="text-3xl font-heading font-bold text-heading mb-8">
-						{seoContentTitle}
-					</h2>
-					<div class="prose prose-invert prose-lg text-body">
-						<SeoContentRendered />
-					</div>
-				</div>
-			</section>
-		)
-	}
-
-	{
-		faq && faq.length > 0 && (
-			<div class="container mx-auto px-4 max-w-4xl py-20">
-				<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
-					Preguntas Frecuentes
-				</h2>
-				<FaqAccordion items={faq} />
-			</div>
-		)
-	}
-
-	<LocationsSection />
-
-	<FinalCTA />
 	<WhatsAppButton />
 	<Footer />
 </Layout>
