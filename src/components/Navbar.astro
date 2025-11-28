@@ -1,15 +1,24 @@
 ---
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 
-// 1. Recuperamos los datos del CMS
+// 1. Recuperamos datos del CMS
+const settings = await getSettings();
+const { siteName, phone, ctaText, logo } = settings;
+
+// 2. Recuperamos Configuración del Menú
+const navConfig = await getEntry("navigation", "main");
+const menuItems = navConfig?.data?.menuItems || [
+    { label: "Inicio", url: "/", type: "link" },
+    { label: "Servicios", type: "services_dropdown" },
+    { label: "Zonas", type: "locations_dropdown" },
+    { label: "Contacto", url: "/contacto/", type: "link" },
+];
+
+// 3. Recuperamos listas para los desplegables
 const services = await getCollection("services");
 const locations = await getCollection("locations");
-const settings = await getSettings();
-
-// 2. Extraemos las variables para usar en el HTML
-const { siteName, phone, ctaText, logo } = settings;
 ---
 
 <header
@@ -18,190 +27,226 @@ const { siteName, phone, ctaText, logo } = settings;
 >
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-20">
-            <a href="/" class="flex items-center gap-2">
+            <a href="/" class="flex items-center gap-2 shrink-0">
                 {
                     logo ? (
                         <img
                             src={logo}
                             alt={`${siteName} Logo`}
-                            class="h-12 w-auto"
+                            class="h-12 w-auto object-contain"
                         />
                     ) : (
                         <span class="text-2xl font-heading font-bold text-primary">
-                            {siteName.charAt(0)}
+                            {siteName}
                         </span>
                     )
                 }
+            </a>
 
-                <nav class="hidden md:flex items-center gap-8">
-                    <a
-                        href="/"
-                        class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide"
-                        >Inicio</a
-                    >
+            <nav
+                class="hidden md:flex items-center justify-center flex-1 gap-8 px-8"
+            >
+                {
+                    menuItems.map((item) => {
+                        // CASO 1: ENLACE SIMPLE
+                        if (item.type === "link") {
+                            return (
+                                <a
+                                    href={item.url}
+                                    class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide whitespace-nowrap"
+                                >
+                                    {item.label}
+                                </a>
+                            );
+                        }
 
-                    <div class="relative group">
-                        <button
-                            class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1"
-                        >
-                            Servicios
-                            <ChevronDown className="w-3 h-3" />
-                        </button>
-                        <div
-                            class="absolute top-full left-0 mt-2 w-56 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
-                        >
-                            {
-                                services.map((service) => (
-                                    <a
-                                        href={`/${service.slug}/`}
-                                        class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors first:rounded-t-lg last:rounded-b-lg"
-                                    >
-                                        {service.data.title}
-                                    </a>
-                                ))
-                            }
-                        </div>
-                    </div>
+                        // CASO 2: DESPLEGABLE SERVICIOS
+                        if (item.type === "services_dropdown") {
+                            return (
+                                <div class="relative group">
+                                    <button class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1 py-4">
+                                        {item.label}
+                                        <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                                    </button>
+                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 text-left">
+                                        {services.map((service) => (
+                                            <a
+                                                href={`/${service.slug}/`}
+                                                class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors border-b border-heading/5 last:border-0"
+                                            >
+                                                {service.data.title}
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        }
 
-                    <div class="relative group">
-                        <button
-                            class="flex items-center text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide gap-1"
-                        >
-                            Zonas
-                            <ChevronDown className="w-3 h-3" />
-                        </button>
-                        <div
-                            class="absolute top-full left-0 mt-2 w-56 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
-                        >
-                            {
-                                locations.slice(0, 5).map((location) => (
-                                    <a
-                                        href={`/zona/${location.slug}/`}
-                                        class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors first:rounded-t-lg last:rounded-b-lg"
-                                    >
-                                        {location.data.name}
-                                    </a>
-                                ))
-                            }
-                            <a
-                                href="/zonas/"
-                                class="block px-4 py-3 text-sm text-primary font-bold hover:bg-primary/10 transition-colors border-t border-heading/10"
-                            >
-                                Ver todas las zonas →
-                            </a>
-                        </div>
-                    </div>
+                        // CASO 3: DESPLEGABLE ZONAS
+                        if (item.type === "locations_dropdown") {
+                            return (
+                                <div class="relative group">
+                                    <button class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1 py-4">
+                                        {item.label}
+                                        <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                                    </button>
+                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 text-left">
+                                        {locations
+                                            .slice(0, 6)
+                                            .map((location) => (
+                                                <a
+                                                    href={`/zona/${location.slug}/`}
+                                                    class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors border-b border-heading/5"
+                                                >
+                                                    {location.data.name}
+                                                </a>
+                                            ))}
+                                        <a
+                                            href="/zonas/"
+                                            class="block px-4 py-3 text-sm text-primary font-bold hover:bg-primary/10 transition-colors bg-surface/30"
+                                        >
+                                            Ver todas las zonas →
+                                        </a>
+                                    </div>
+                                </div>
+                            );
+                        }
+                    })
+                }
+            </nav>
 
-                    <a
-                        href="/contacto/"
-                        class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide"
-                        >Contacto</a
-                    >
-                </nav>
-
-                <div class="hidden md:block">
-                    <a
-                        href={`tel:${phone.replace(/\s/g, "")}`}
-                        class="flex items-center gap-2 bg-primary hover:bg-accent text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-primary/20"
-                    >
-                        <Phone className="w-4 h-4" />
-                        <span>{phone}</span>
-                    </a>
-                </div>
+            <div class="flex items-center gap-4 shrink-0">
+                <a
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    class="hidden md:flex items-center gap-2 bg-primary hover:bg-accent text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 whitespace-nowrap"
+                >
+                    <Phone className="w-4 h-4" />
+                    <span>{phone}</span>
+                </a>
 
                 <button
                     id="menu-toggle"
-                    class="md:hidden text-heading hover:text-primary transition-colors"
+                    class="md:hidden text-heading hover:text-primary transition-colors p-2"
                     aria-label="Abrir menú"
                 >
                     <Menu className="w-8 h-8" />
                 </button>
-            </a>
+            </div>
         </div>
 
         <div
             id="mobile-menu"
-            class="fixed inset-0 bg-secondary z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center gap-8 md:hidden"
+            class="fixed inset-0 bg-secondary/98 backdrop-blur-xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col"
         >
-            <button
-                id="menu-close"
-                class="absolute top-6 right-6 text-heading hover:text-primary"
-                aria-label="Cerrar menú"
-            >
-                <X className="w-8 h-8" />
-            </button>
-
-            <a
-                href="/"
-                class="text-2xl font-heading font-bold text-heading hover:text-primary mobile-link"
-                >INICIO</a
-            >
-
-            <div class="text-center">
-                <p class="text-lg font-bold text-primary mb-2">SERVICIOS</p>
-                <div class="flex flex-col gap-2">
-                    {
-                        services.map((service) => (
-                            <a
-                                href={`/${service.slug}/`}
-                                class="text-base text-body hover:text-primary mobile-link"
-                            >
-                                {service.data.title}
-                            </a>
-                        ))
-                    }
-                </div>
+            <div class="flex justify-end p-6">
+                <button
+                    id="menu-close"
+                    class="text-heading hover:text-primary p-2"
+                    aria-label="Cerrar menú"
+                >
+                    <X className="w-8 h-8" />
+                </button>
             </div>
 
-            <a
-                href="/contacto/"
-                class="text-2xl font-heading font-bold text-heading hover:text-primary mobile-link"
-                >CONTACTO</a
+            <div
+                class="flex-1 flex flex-col justify-center items-center gap-6 p-8 overflow-y-auto"
             >
+                {
+                    menuItems.map((item) => {
+                        if (item.type === "link") {
+                            return (
+                                <a
+                                    href={item.url}
+                                    class="text-2xl font-heading font-bold text-heading hover:text-primary mobile-link"
+                                >
+                                    {item.label}
+                                </a>
+                            );
+                        }
 
-            <a
-                href={`tel:${phone.replace(/\s/g, "")}`}
-                class="mt-4 flex items-center gap-2 bg-primary text-white px-8 py-4 rounded text-xl font-bold"
-            >
-                <Phone className="w-6 h-6" />
-                {ctaText || "LLAMAR AHORA"}
-            </a>
+                        if (item.type === "services_dropdown") {
+                            return (
+                                <div class="w-full text-center space-y-3">
+                                    <p class="text-primary font-bold text-sm tracking-widest uppercase border-b border-heading/10 pb-2 mb-2 w-full max-w-xs mx-auto">
+                                        {item.label}
+                                    </p>
+                                    {services.map((service) => (
+                                        <a
+                                            href={`/${service.slug}/`}
+                                            class="block text-xl text-body hover:text-primary mobile-link"
+                                        >
+                                            {service.data.title}
+                                        </a>
+                                    ))}
+                                </div>
+                            );
+                        }
+
+                        if (item.type === "locations_dropdown") {
+                            return (
+                                <a
+                                    href="/zonas/"
+                                    class="text-2xl font-heading font-bold text-heading hover:text-primary mobile-link"
+                                >
+                                    {item.label}
+                                </a>
+                            );
+                        }
+                    })
+                }
+
+                <a
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    class="mt-8 flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full text-xl font-bold shadow-xl active:scale-95 transition-transform"
+                >
+                    <Phone className="w-6 h-6" />
+                    {ctaText || "LLAMAR AHORA"}
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Lógica del Scroll (Glassmorphism)
         const navbar = document.getElementById("navbar");
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 50) {
-                // Usamos bg-secondary/95 para fondo sólido al hacer scroll
+
+        const updateNavbar = () => {
+            if (window.scrollY > 20) {
                 navbar?.classList.add(
-                    "bg-secondary/95",
-                    "backdrop-blur-sm",
+                    "bg-secondary/90",
+                    "backdrop-blur-md",
                     "border-heading/10",
-                    "shadow-xl",
+                    "shadow-lg",
+                    "h-16",
                 );
                 navbar?.classList.remove("border-transparent");
             } else {
                 navbar?.classList.remove(
-                    "bg-secondary/95",
-                    "backdrop-blur-sm",
+                    "bg-secondary/90",
+                    "backdrop-blur-md",
                     "border-heading/10",
-                    "shadow-xl",
+                    "shadow-lg",
+                    "h-16",
                 );
                 navbar?.classList.add("border-transparent");
             }
-        });
+        };
 
-        // Lógica del Menú Móvil
+        window.addEventListener("scroll", updateNavbar);
+
         const menuToggle = document.getElementById("menu-toggle");
         const menuClose = document.getElementById("menu-close");
         const mobileMenu = document.getElementById("mobile-menu");
         const mobileLinks = document.querySelectorAll(".mobile-link");
 
         function toggleMenu() {
-            mobileMenu?.classList.toggle("translate-x-full");
-            document.body.classList.toggle("overflow-hidden");
+            if (mobileMenu) {
+                mobileMenu.classList.toggle("translate-x-full");
+                document.body.style.overflow = mobileMenu.classList.contains(
+                    "translate-x-full",
+                )
+                    ? "auto"
+                    : "hidden";
+            }
         }
 
         menuToggle?.addEventListener("click", toggleMenu);

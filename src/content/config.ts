@@ -189,6 +189,20 @@ const testimonials = defineCollection({
     }),
 });
 
+const navigation = defineCollection({
+    type: 'data',
+    schema: z.object({
+        menuItems: z.array(
+            z.object({
+                label: z.string(),
+                url: z.string().optional(),
+                type: z.enum(['link', 'services_dropdown', 'locations_dropdown']).default('link'),
+            })
+        ),
+    }),
+});
+
+
 
 export const collections = {
     locations,
@@ -201,4 +215,5 @@ export const collections = {
     schema,
     pages,
     testimonials,
+    navigation,
 };

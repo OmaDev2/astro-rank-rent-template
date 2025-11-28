@@ -1,0 +1,44 @@
+{
+    "title": "Solicita Presupuesto Gratis",
+    "subtitle": "Respuesta rápida en tu zona",
+    "submitText": "Enviar Solicitud",
+    "successUrl": "/gracias",
+    "formFields": [
+        {
+            "label": "Nombre",
+            "name": "name",
+            "type": "text",
+            "placeholder": "Tu nombre completo",
+            "required": true,
+            "width": "half",
+            "selectOptions": []
+        },
+        {
+            "label": "Teléfono",
+            "name": "phone",
+            "type": "tel",
+            "placeholder": "600 000 000",
+            "required": true,
+            "width": "half",
+            "selectOptions": []
+        },
+        {
+            "label": "Email",
+            "name": "email",
+            "type": "email",
+            "placeholder": "tu@email.com",
+            "required": false,
+            "width": "full",
+            "selectOptions": []
+        },
+        {
+            "label": "Mensaje",
+            "name": "message",
+            "type": "textarea",
+            "placeholder": "Cuéntanos qué necesitas...",
+            "required": true,
+            "width": "full",
+            "selectOptions": []
+        }
+    ]
+}

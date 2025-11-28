@@ -1,11 +1,43 @@
 ---
 import { getEntry } from "astro:content";
 
+// 1. Recuperar Configuración
+const formConfig = await getEntry("form", "main");
 const business = await getEntry("business", "global");
-const { phone, email } = business?.data || {
-    phone: "600 000 000",
-    email: "info@example.com",
-};
+
+// Datos por defecto (Fallback si no hay config o está cargando)
+const {
+    title = "Solicita Presupuesto Gratis",
+    subtitle = "Respuesta en menos de 24h",
+    submitText = "Enviar Solicitud",
+    successUrl = "/gracias",
+    formFields = [
+        {
+            label: "Nombre",
+            name: "name",
+            type: "text",
+            required: true,
+            width: "full",
+            placeholder: "Tu Nombre",
+        },
+        {
+            label: "Teléfono",
+            name: "phone",
+            type: "tel",
+            required: true,
+            width: "full",
+            placeholder: "600 000 000",
+        },
+        {
+            label: "Mensaje",
+            name: "message",
+            type: "textarea",
+            required: true,
+            width: "full",
+            placeholder: "¿Qué necesitas?",
+        },
+    ],
+} = formConfig?.data || {};
 
 interface Props {
     title?: string;
@@ -14,20 +46,23 @@ interface Props {
     theme?: "dark" | "light";
 }
 
+// Props que vienen del Layout (pueden sobreescribir la config global si se pasan)
 const {
-    title = "Solicita Presupuesto Gratis",
-    subtitle = "Respuesta en menos de 24h",
+    title: propTitle,
+    subtitle: propSubtitle,
     variant = "default",
     theme = "dark",
 } = Astro.props;
 
-// CAMBIO: Usamos bg-secondary/80 en lugar de slate-900/80 para consistencia
+const finalTitle = propTitle || title;
+const finalSubtitle = propSubtitle || subtitle;
+
+// Estilos
 const containerClasses =
     variant === "default"
         ? "bg-secondary/80 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-heading/10"
         : "";
 
-// CAMBIO: Reemplazado amber-600 por primary
 const inputClasses =
     theme === "dark"
         ? "w-full px-4 py-3 bg-surface/50 border border-heading/20 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-heading placeholder-body/50"
@@ -40,76 +75,93 @@ const labelClasses =
 ---
 
 <div class={containerClasses}>
-    {
-        title && (
-            <div class="mb-6">
-                <h3
-                    class={`text-2xl font-heading font-bold mb-2 ${theme === "dark" ? "text-heading" : "text-slate-900"}`}
-                >
-                    {title}
-                </h3>
-                <p
-                    class={`text-sm ${theme === "dark" ? "text-body" : "text-slate-500"}`}
-                >
-                    {subtitle}
-                </p>
-            </div>
-        )
-    }
+    <div class="mb-6">
+        <h3
+            class={`text-2xl font-heading font-bold mb-2 ${theme === "dark" ? "text-heading" : "text-slate-900"}`}
+        >
+            {finalTitle}
+        </h3>
+        <p
+            class={`text-sm ${theme === "dark" ? "text-body" : "text-slate-500"}`}
+        >
+            {finalSubtitle}
+        </p>
+    </div>
 
     <form
-        class="space-y-4"
+        class="grid grid-cols-12 gap-4"
         method="POST"
         data-netlify="true"
         name="contact"
-        action="/gracias"
+        action={successUrl}
     >
-        <div>
-            <label for="name" class={labelClasses}> Nombre * </label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                class={inputClasses}
-                placeholder="Tu nombre"
-            />
-        </div>
+        {/* Generación Dinámica de Campos */}
+        {
+            formFields.map((field) => {
+                // Cálculo de ancho (col-span-12 = 100%, col-span-6 = 50%)
+                const colSpan =
+                    field.width === "half"
+                        ? "col-span-12 md:col-span-6"
+                        : "col-span-12";
 
-        <div>
-            <label for="phone" class={labelClasses}> Teléfono * </label>
-            <input
-                type="tel"
-                id="phone"
-                name="phone"
-                required
-                class={inputClasses}
-                placeholder={phone}
-            />
-        </div>
+                return (
+                    <div class={colSpan}>
+                        <label for={field.name} class={labelClasses}>
+                            {field.label} {field.required && "*"}
+                        </label>
 
-        <div>
-            <label for="email" class={labelClasses}> Email </label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                class={inputClasses}
-                placeholder={email}
-            />
-        </div>
+                        {field.type === "textarea" ? (
+                            <textarea
+                                id={field.name}
+                                name={field.name}
+                                rows="3"
+                                required={field.required}
+                                class={`${inputClasses} resize-none`}
+                                placeholder={field.placeholder}
+                            />
+                        ) : field.type === "select" ? (
+                            <div class="relative">
+                                <select
+                                    id={field.name}
+                                    name={field.name}
+                                    required={field.required}
+                                    class={`${inputClasses} appearance-none cursor-pointer`}
+                                >
+                                    <option value="" disabled selected>
+                                        {field.placeholder ||
+                                            "Selecciona una opción"}
+                                    </option>
+                                    {field.selectOptions?.map((option) => (
+                                        <option value={option}>{option}</option>
+                                    ))}
+                                </select>
+                                {/* Icono de flecha para el select */}
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-body">
+                                    <svg
+                                        class="h-4 w-4 fill-current"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        ) : (
+                            <input
+                                type={field.type}
+                                id={field.name}
+                                name={field.name}
+                                required={field.required}
+                                class={inputClasses}
+                                placeholder={field.placeholder}
+                            />
+                        )}
+                    </div>
+                );
+            })
+        }
 
-        <div>
-            <label for="message" class={labelClasses}> Mensaje </label>
-            <textarea
-                id="message"
-                name="message"
-                rows="3"
-                class={`${inputClasses} resize-none`}
-                placeholder="Cuéntanos qué necesitas..."></textarea>
-        </div>
-
-        <div class="flex items-start gap-3">
+        <div class="col-span-12 flex items-start gap-3 mt-2">
             <input
                 type="checkbox"
                 id="privacy"
@@ -126,30 +178,32 @@ const labelClasses =
                     target="_blank"
                     class="text-primary hover:text-accent underline font-bold"
                     >Política de Privacidad</a
-                > y consiento que mis datos sean compartidos con profesionales del
-                sector para recibir presupuestos. *
+                >.
             </label>
         </div>
 
-        <button
-            type="submit"
-            id="submit-button"
-            disabled
-            class="w-full bg-primary hover:bg-accent text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
-        >
-            Enviar Solicitud
-        </button>
+        <div class="col-span-12">
+            <button
+                type="submit"
+                id="submit-button"
+                disabled
+                class="w-full bg-primary hover:bg-accent text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
+            >
+                {submitText}
+            </button>
+        </div>
 
-        <p
-            class={`text-xs text-center ${theme === "dark" ? "text-body/70" : "text-slate-600"}`}
-        >
-            No enviamos spam. Tus datos están seguros.
-        </p>
+        <div class="col-span-12">
+            <p
+                class={`text-xs text-center ${theme === "dark" ? "text-body/70" : "text-slate-600"}`}
+            >
+                No enviamos spam. Tus datos están seguros.
+            </p>
+        </div>
     </form>
 </div>
 
 <script>
-    // Enable/disable submit button based on privacy checkbox
     document.addEventListener("DOMContentLoaded", () => {
         const privacyCheckbox = document.getElementById(
             "privacy",

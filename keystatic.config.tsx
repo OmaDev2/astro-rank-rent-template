@@ -17,7 +17,7 @@ export default config({
         navigation: {
             '📝 Contenido': ['services', 'locations', 'projects', 'testimonials', 'homepage'],
             '---': [],
-            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema'],
+            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'form'],
         },
     },
 
@@ -243,6 +243,91 @@ export default config({
                     description: 'Frase que representa tu negocio',
                     multiline: true,
                 }),
+            },
+        }),
+
+        // ... dentro de singletons: { ... }
+
+        // 6. NAVEGACIÓN (MENÚ)
+        navigation: singleton({
+            label: 'Navegación (Menú)',
+            path: 'src/content/navigation/main',
+            format: 'json',
+            schema: {
+                menuItems: fields.array(
+                    fields.object({
+                        label: fields.text({ label: 'Texto del Enlace' }),
+                        url: fields.text({ label: 'URL (ej: /contacto o #servicios)' }),
+                        type: fields.select({
+                            label: 'Tipo de Enlace',
+                            options: [
+                                { label: 'Enlace Simple', value: 'link' },
+                                { label: 'Desplegable de Servicios (Automático)', value: 'services_dropdown' },
+                                { label: 'Desplegable de Zonas (Automático)', value: 'locations_dropdown' },
+                            ],
+                            defaultValue: 'link',
+                        }),
+                    }),
+                    {
+                        label: 'Elementos del Menú Principal',
+                        itemLabel: (props) => props.fields.label.value || 'Enlace',
+                    }
+                ),
+            },
+        }),
+
+
+        // 7. CONFIGURACIÓN DEL FORMULARIO
+        // 7. CONFIGURACIÓN DEL FORMULARIO
+        form: singleton({
+            label: 'Formulario de Contacto',
+            path: 'src/content/form/main',
+            format: 'json', // Guardamos como JSON para manejar arrays complejos
+            schema: {
+                title: fields.text({ label: 'Título del Formulario', defaultValue: 'Solicita Presupuesto Gratis' }),
+                subtitle: fields.text({ label: 'Subtítulo', defaultValue: 'Respuesta en menos de 24h' }),
+                submitText: fields.text({ label: 'Texto del Botón', defaultValue: 'Enviar Solicitud' }),
+                successUrl: fields.text({ label: 'URL de "Gracias"', defaultValue: '/gracias' }),
+
+                formFields: fields.array(
+                    fields.object({
+                        label: fields.text({ label: 'Etiqueta (Label)', validation: { length: { min: 1 } } }),
+                        name: fields.text({ label: 'Nombre interno (name)', description: 'Sin espacios (ej: tipo_servicio)', validation: { length: { min: 1 } } }),
+                        type: fields.select({
+                            label: 'Tipo de Campo',
+                            options: [
+                                { label: 'Texto Corto', value: 'text' },
+                                { label: 'Email', value: 'email' },
+                                { label: 'Teléfono', value: 'tel' },
+                                { label: 'Área de Texto (Mensaje)', value: 'textarea' },
+                                { label: 'Desplegable (Select)', value: 'select' },
+                            ],
+                            defaultValue: 'text',
+                        }),
+                        placeholder: fields.text({ label: 'Placeholder (Texto de ayuda)' }),
+                        required: fields.checkbox({ label: 'Obligatorio', defaultValue: true }),
+                        width: fields.select({
+                            label: 'Ancho del Campo',
+                            options: [
+                                { label: '100% (Ancho Completo)', value: 'full' },
+                                { label: '50% (Mitad)', value: 'half' },
+                            ],
+                            defaultValue: 'full',
+                        }),
+                        // Opciones solo para desplegables
+                        selectOptions: fields.array(
+                            fields.text({ label: 'Opción' }),
+                            {
+                                label: 'Opciones del Desplegable (Solo si elegiste "Select")',
+                                itemLabel: (props) => props.value
+                            }
+                        )
+                    }),
+                    {
+                        label: 'Campos del Formulario',
+                        itemLabel: (props) => `${props.fields.label.value} (${props.fields.type.value})`,
+                    }
+                ),
             },
         }),
 
