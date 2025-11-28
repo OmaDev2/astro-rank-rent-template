@@ -243,7 +243,8 @@ export default config({
             schema: {
                 // --- HERO SECTION ---
                 hero: fields.object({
-                    heading: fields.text({ label: 'Hero: Título Principal' }),
+                    heading: fields.text({ label: 'Hero: Título Principal (Parte Blanca)' }),
+                    headingHighlight: fields.text({ label: 'Hero: Título Destacado (Parte Color)' }),
                     subheading: fields.text({ label: 'Hero: Subtítulo', multiline: true }),
                     backgroundImage: fields.image({
                         label: 'Imagen de Fondo',
@@ -252,6 +253,37 @@ export default config({
                         validation: { isRequired: false }
                     }),
                 }, { label: 'Hero Section' }),
+
+                // --- SECCIÓN SERVICIOS ---
+                servicesSection: fields.object({
+                    title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
+                    titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
+                    subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
+                }, { label: 'Sección Servicios' }),
+
+                // --- SECCIÓN SOBRE NOSOTROS (NUEVA) ---
+                aboutSection: fields.object({
+                    title: fields.text({ label: 'Título Principal' }),
+                    image: fields.image({
+                        label: 'Imagen Principal',
+                        directory: 'public/images/home',
+                        publicPath: '/images/home',
+                    }),
+                    yearsExperience: fields.text({ label: 'Años de Experiencia (Badge)' }),
+                    description: fields.text({
+                        label: 'Descripción (Markdown soportado)',
+                        multiline: true,
+                    }),
+                    features: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Título Característica' }),
+                            description: fields.text({ label: 'Descripción Característica' }),
+                        }),
+                        { label: 'Lista de Características' }
+                    ),
+                    buttonText: fields.text({ label: 'Texto Botón' }),
+                    buttonLink: fields.text({ label: 'Enlace Botón' }),
+                }, { label: 'Sección Sobre Nosotros' }),
 
                 // --- POR QUÉ ELEGIRNOS ---
                 features: fields.array(
@@ -267,8 +299,8 @@ export default config({
                 ),
 
                 // --- SEO CONTENT ---
-                seoContentTitle: fields.text({ label: 'Título SEO (Sobre Nosotros)' }),
-                content: fields.mdx({ label: 'Contenido SEO / Sobre Nosotros' }),
+                seoContentTitle: fields.text({ label: 'Título Sección SEO (Texto Final)' }),
+                content: fields.mdx({ label: 'Contenido SEO (Texto Final)' }),
 
                 // --- FAQ ---
                 faq: fields.array(

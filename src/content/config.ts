@@ -128,8 +128,30 @@ const pages = defineCollection({
         // Hero Section
         hero: z.object({
             heading: z.string().optional(),
+            headingHighlight: z.string().optional(),
             subheading: z.string().optional(),
             backgroundImage: z.string().optional(),
+        }).optional(),
+
+        // Services Section
+        servicesSection: z.object({
+            title: z.string().optional(),
+            titleHighlight: z.string().optional(),
+            subtitle: z.string().optional(),
+        }).optional(),
+
+        // About Section
+        aboutSection: z.object({
+            title: z.string().optional(),
+            image: z.string().optional(),
+            yearsExperience: z.string().optional(),
+            description: z.string().optional(),
+            features: z.array(z.object({
+                title: z.string(),
+                description: z.string(),
+            })).optional(),
+            buttonText: z.string().optional(),
+            buttonLink: z.string().optional(),
         }).optional(),
 
         // Features Section

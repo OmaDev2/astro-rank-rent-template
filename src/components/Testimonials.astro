@@ -1,0 +1,58 @@
+---
+import { Star } from "lucide-react";
+
+interface Props {
+    testimonials: any[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+{
+    testimonials && testimonials.length > 0 && (
+        <section class="py-20 bg-surface relative overflow-hidden border-t border-heading/5">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-heading font-bold text-heading mb-4">
+                        Lo que dicen nuestros clientes
+                    </h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-4" />
+                    <p class="text-body text-lg max-w-2xl mx-auto">
+                        La satisfacción de nuestros clientes es nuestra mejor
+                        garantía.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    {testimonials.map((testimonial) => (
+                        <div class="bg-secondary p-8 rounded-2xl border border-heading/10 shadow-lg relative hover:-translate-y-1 transition-transform duration-300">
+                            <div class="flex items-center mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-xl mr-4 shadow-md">
+                                    {testimonial.data.initials ||
+                                        testimonial.data.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <div class="font-bold text-heading">
+                                        {testimonial.data.name}
+                                    </div>
+                                    <div class="flex text-yellow-400 text-xs mt-1">
+                                        {Array.from({ length: 5 }).map(
+                                            (_, i) => (
+                                                <Star
+                                                    className={`w-4 h-4 ${i < testimonial.data.rating ? "fill-current" : "text-gray-600"}`}
+                                                />
+                                            ),
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-body italic relative z-10 leading-relaxed">
+                                "{testimonial.data.text}"
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}

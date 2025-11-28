@@ -6,7 +6,7 @@ const business = await getEntry("business", "global");
 const { phone, niche, ctaText } = business?.data || {
     phone: "600 000 000",
     niche: "Profesional",
-    ctaText: "Pedir Presupuesto",
+    ctaText: "PEDIR PRESUPUESTO",
 };
 ---
 
@@ -41,7 +41,7 @@ const { phone, niche, ctaText } = business?.data || {
             class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary rounded-xl transition-all hover:bg-slate-50 hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-black/20 group"
         >
             <Phone className="w-5 h-5 mr-3 group-hover:animate-pulse" />
-            <span>HABLAR CON UN {niche.toUpperCase()}</span>
+            <span>{ctaText}</span>
             <ArrowRight
                 className="w-5 h-5 ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
             />

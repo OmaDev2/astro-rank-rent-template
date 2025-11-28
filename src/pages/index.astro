@@ -9,6 +9,7 @@ import FinalCTA from "../components/FinalCTA.astro";
 import LocationsSection from "../components/LocationsSection.astro";
 import HeroContactForm from "../components/HeroContactForm.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
+import Testimonials from "../components/Testimonials.astro";
 import * as LucideIcons from "lucide-react"; // Importamos todo para poder elegir iconos dinámicamente
 import { ArrowRight, Phone, MapPin, CheckCircle, Star } from "lucide-react";
 import type { WithContext, Thing } from "schema-dts";
@@ -17,6 +18,8 @@ import type { WithContext, Thing } from "schema-dts";
 const featuredServices = await getCollection("services", ({ data }) => {
 	return data.featured === true;
 });
+
+const testimonials = await getCollection("testimonials");
 
 // 2. Fetch Homepage Data (Keystatic)
 const home = await getEntry("pages", "home");
@@ -28,6 +31,8 @@ const {
 	features, // Array de beneficios
 	seoContentTitle,
 	faq, // Array de preguntas frecuentes
+	servicesSection, // Nueva sección de servicios
+	aboutSection, // Nueva sección sobre nosotros
 } = homeData;
 
 // Renderizamos el contenido SEO (Main Body)
@@ -49,7 +54,7 @@ const config = business?.data || {
 	address: "",
 	coordinates: { lat: "", lng: "" },
 	email: "",
-	schedule: "",
+	ctaText: "Pedir Presupuesto",
 };
 
 // Helpers para iconos dinámicos
@@ -123,7 +128,14 @@ const heroBgImage =
 					{/* Renderizamos el título o un fallback inteligente */}
 					{
 						hero?.heading ? (
-							hero.heading
+							<>
+								{hero.heading} <br />
+								{hero.headingHighlight && (
+									<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+										{hero.headingHighlight}
+									</span>
+								)}
+							</>
 						) : (
 							<>
 								{config.niche.toUpperCase()} <br />
@@ -148,7 +160,7 @@ const heroBgImage =
 						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
 					>
 						<Phone className="w-5 h-5 mr-2" />
-						Pedir Presupuesto
+						{config.ctaText || "Pedir Presupuesto"}
 					</a>
 					<a
 						href={`https://wa.me/${config.whatsapp || config.phone.replace(/\s/g, "")}`}
@@ -189,10 +201,29 @@ const heroBgImage =
 				<h2
 					class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
 				>
-					¿Qué necesitas en {config.city}?
+					{
+						servicesSection?.title ? (
+							<>
+								{servicesSection.title}
+								{servicesSection.titleHighlight && (
+									<>
+										<br />
+										<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+											{servicesSection.titleHighlight}
+										</span>
+									</>
+								)}
+							</>
+						) : (
+							`¿Qué necesitas en ${config.city}?`
+						)
+					}
 				</h2>
 				<p class="text-body max-w-2xl mx-auto text-lg">
-					Soluciones profesionales adaptadas a tus necesidades.
+					{
+						servicesSection?.subtitle ||
+							"Soluciones profesionales adaptadas a tus necesidades."
+					}
 				</p>
 			</div>
 
@@ -205,7 +236,7 @@ const heroBgImage =
 						>
 							<div
 								class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-								style={`background-image: url('/images/services/${service.slug}-1.png')`}
+								style={`background-image: url('${service.data.heroImage || `/images/services/${service.slug}-1.png`}')`}
 							/>
 							<div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
 							<div class="relative h-full flex flex-col justify-end p-8">
@@ -226,6 +257,110 @@ const heroBgImage =
 			</div>
 		</div>
 	</section>
+
+	{/* About Section */}
+	{
+		aboutSection && (
+			<section class="py-20 bg-secondary border-b border-heading/10">
+				<div class="container mx-auto px-4">
+					<div class="grid lg:grid-cols-2 gap-12 items-center">
+						{/* Left Column: Image */}
+						<div class="relative">
+							<div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+								<img
+									src={
+										aboutSection.image ||
+										"/images/home/about-placeholder.jpg"
+									}
+									alt={aboutSection.title}
+									class="w-full h-full object-cover"
+								/>
+								{/* Overlay Gradient */}
+								<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+							</div>
+
+							{/* Badge */}
+							{aboutSection.yearsExperience && (
+								<div class="absolute -bottom-6 -right-6 bg-primary text-white p-4 rounded-xl shadow-xl border-4 border-secondary z-10 flex flex-col items-center justify-center w-28 h-28 lg:w-32 lg:h-32">
+									<span class="text-3xl lg:text-4xl font-bold block">
+										{aboutSection.yearsExperience.replace(
+											/\D/g,
+											"",
+										)}
+										+
+									</span>
+									<span class="text-xs uppercase tracking-wider font-bold text-center">
+										AÑOS
+									</span>
+								</div>
+							)}
+						</div>
+
+						{/* Right Column: Content */}
+						<div>
+							<h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-8">
+								{aboutSection.title}
+							</h2>
+
+							<div class="prose prose-invert prose-lg text-body mb-8">
+								{aboutSection.description &&
+									aboutSection.description
+										.split("\n")
+										.map(
+											(paragraph: string) =>
+												paragraph.trim() && (
+													<p
+														class="mb-4"
+														set:html={paragraph.replace(
+															/\*\*(.*?)\*\*/g,
+															'<strong class="text-white">$1</strong>',
+														)}
+													/>
+												),
+										)}
+							</div>
+
+							{/* Features List */}
+							{aboutSection.features && (
+								<div class="space-y-6 mb-10">
+									{aboutSection.features.map(
+										(feature: any) => (
+											<div class="flex items-start gap-4">
+												<div class="mt-1 flex-shrink-0">
+													<CheckCircle className="w-6 h-6 text-primary" />
+												</div>
+												<div>
+													<h3 class="text-xl font-bold text-heading mb-1">
+														{feature.title}
+													</h3>
+													<p class="text-body text-sm">
+														{feature.description}
+													</p>
+												</div>
+											</div>
+										),
+									)}
+								</div>
+							)}
+
+							{/* Button */}
+							{aboutSection.buttonText && (
+								<a
+									href={
+										aboutSection.buttonLink || "/nosotros"
+									}
+									class="inline-flex items-center px-8 py-4 border border-primary text-primary font-bold rounded hover:bg-primary hover:text-white transition-all group"
+								>
+									{aboutSection.buttonText}
+									<ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+								</a>
+							)}
+						</div>
+					</div>
+				</div>
+			</section>
+		)
+	}
 
 	{
 		features && features.length > 0 && (
@@ -332,6 +467,8 @@ const heroBgImage =
 			</div>
 		</div>
 	</section>
+
+	<Testimonials testimonials={testimonials} />
 
 	{
 		seoContentTitle && (

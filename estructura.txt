@@ -8,43 +8,39 @@
 ├── check_exports.mjs
 ├── dist
 │   ├── _astro
-│   │   ├── _slug_.BmV3Dh8d.css
+│   │   ├── _slug_.BbonZmTT.css
 │   │   ├── client.BWtGz07G.js
 │   │   ├── index.C7xe7hQc.js
-│   │   ├── keystatic-astro-page.5KjMa39i.css
-│   │   └── keystatic-page.DpZcSzdq.js
-│   ├── cerramientos-de-terrazas
-│   │   └── index.html
-│   ├── estructuras-metalicas-zaragoza
-│   │   └── index.html
-│   ├── ewewew
-│   │   └── index.html
+│   │   ├── keystatic-astro-page.DdJKSAPy.css
+│   │   └── keystatic-page.DF8LtReS.js
 │   ├── favicon.svg
 │   ├── images
+│   │   ├── content
 │   │   ├── home
+│   │   ├── locations
 │   │   └── services
 │   ├── llms.txt
-│   ├── proyectos-metalicos-medida-zaragoza
-│   │   └── index.html
 │   ├── puertas-metalicas-zaragoza
 │   │   └── index.html
-│   ├── rejas-ventanas-zaragoza
-│   │   └── index.html
-│   ├── reparaciones-metalicas-zaragoza
+│   ├── reparacion-de-fugas-y-averias
 │   │   └── index.html
 │   ├── robots.txt
 │   ├── sitemap-0.xml
 │   ├── sitemap-index.xml
 │   ├── zona
 │   │   ├── cuartedehuerva
+│   │   ├── dos-hermanas
 │   │   └── utebo
 │   └── ~partytown
 │       ├── partytown-atomics.js
 │       ├── partytown-media.js
 │       ├── partytown-sw.js
 │       └── partytown.js
+├── docs
+│   ├── GOOGLE_SEARCH_CONSOLE.md
+│   └── SETTINGS_STRUCTURE.md
 ├── estructura.txt
-├── keystatic.config.ts
+├── keystatic.config.tsx
 ├── netlify.toml
 ├── node_modules
 │   ├── @0no-co
@@ -6459,7 +6455,9 @@
 ├── public
 │   ├── favicon.svg
 │   ├── images
+│   │   ├── content
 │   │   ├── home
+│   │   ├── locations
 │   │   └── services
 │   ├── llms.txt
 │   └── robots.txt
@@ -6476,21 +6474,34 @@
 │   │   ├── KeystaticAdmin.tsx
 │   │   ├── LocationsSection.astro
 │   │   ├── Navbar.astro
+│   │   ├── SearchConsoleVerification.astro
 │   │   ├── SeoHead.astro
 │   │   ├── ServiceAreas.astro
-│   │   └── WhatsAppButton.astro
+│   │   ├── Testimonials.astro
+│   │   ├── WhatsAppButton.astro
+│   │   ├── examples
+│   │   └── mdx
 │   ├── config
 │   │   ├── README.md
 │   │   └── themes.ts
 │   ├── content
+│   │   ├── analytics
+│   │   ├── business
 │   │   ├── config.ts
+│   │   ├── design
 │   │   ├── locations
 │   │   ├── pages
 │   │   ├── projects
+│   │   ├── schema
 │   │   ├── services
-│   │   └── settings
+│   │   ├── social
+│   │   └── testimonials
 │   ├── layouts
-│   │   └── Layout.astro
+│   │   ├── Layout.astro
+│   │   ├── LocationLayout.astro
+│   │   └── ServiceLayout.astro
+│   ├── lib
+│   │   └── settings.ts
 │   ├── pages
 │   │   ├── 404.astro
 │   │   ├── [slug].astro
@@ -6500,7 +6511,6 @@
 │   │   ├── cookies.astro
 │   │   ├── gracias.astro
 │   │   ├── index.astro
-│   │   ├── keystatic
 │   │   ├── nosotros.astro
 │   │   ├── privacidad.astro
 │   │   ├── proyectos.astro
@@ -6512,4 +6522,4 @@
 ├── tsconfig.json
 └── update_slugs.mjs
 
-1861 directories, 4652 files
+1869 directories, 4654 files
