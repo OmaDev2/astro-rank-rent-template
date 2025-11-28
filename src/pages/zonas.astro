@@ -56,11 +56,11 @@ const schema: WithContext<CollectionPage> = {
                     >
                 </div>
                 <h1
-                    class="text-5xl lg:text-6xl font-heading font-bold text-white mb-6"
+                    class="text-5xl lg:text-6xl font-heading font-bold text-heading mb-6"
                 >
                     Zonas de Servicio
                 </h1>
-                <p class="text-xl text-slate-300 leading-relaxed">
+                <p class="text-xl text-body leading-relaxed">
                     Ofrecemos servicios de {niche} profesional en {city} capital
                     y toda la provincia. Consulta si llegamos a tu zona.
                 </p>
@@ -68,7 +68,7 @@ const schema: WithContext<CollectionPage> = {
         </div>
     </section>
 
-    <section class="py-20 bg-secondary border-t border-white/5">
+    <section class="py-20 bg-secondary border-t border-heading/5">
         <div class="container mx-auto px-4">
             {
                 residenciales.length > 0 && (
@@ -78,10 +78,10 @@ const schema: WithContext<CollectionPage> = {
                                 <Home className="w-6 h-6 text-primary" />
                             </div>
                             <div>
-                                <h2 class="text-3xl font-heading font-bold text-white">
+                                <h2 class="text-3xl font-heading font-bold text-heading">
                                     Zonas Residenciales
                                 </h2>
-                                <p class="text-slate-400 text-sm">
+                                <p class="text-body/70 text-sm">
                                     Viviendas y comunidades
                                 </p>
                             </div>
@@ -90,17 +90,17 @@ const schema: WithContext<CollectionPage> = {
                             {residenciales.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-slate-900/50 border border-white/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
                                 >
                                     <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
                                             {location.data.name}
                                         </h3>
-                                        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-white/5 text-slate-400 rounded">
+                                            <span class="text-xs px-2 py-1 bg-heading/5 text-body/70 rounded">
                                                 CP {zip}
                                             </span>
                                         ))}
@@ -120,10 +120,10 @@ const schema: WithContext<CollectionPage> = {
                                 <Factory className="w-6 h-6 text-primary" />
                             </div>
                             <div>
-                                <h2 class="text-3xl font-heading font-bold text-white">
+                                <h2 class="text-3xl font-heading font-bold text-heading">
                                     Polígonos Industriales
                                 </h2>
-                                <p class="text-slate-400 text-sm">
+                                <p class="text-body/70 text-sm">
                                     Empresas y naves
                                 </p>
                             </div>
@@ -132,17 +132,17 @@ const schema: WithContext<CollectionPage> = {
                             {industriales.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-slate-900/50 border border-white/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
                                 >
                                     <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
                                             {location.data.name}
                                         </h3>
-                                        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-white/5 text-slate-400 rounded">
+                                            <span class="text-xs px-2 py-1 bg-heading/5 text-body/70 rounded">
                                                 CP {zip}
                                             </span>
                                         ))}
@@ -162,10 +162,10 @@ const schema: WithContext<CollectionPage> = {
                                 <Building2 className="w-6 h-6 text-primary" />
                             </div>
                             <div>
-                                <h2 class="text-3xl font-heading font-bold text-white">
+                                <h2 class="text-3xl font-heading font-bold text-heading">
                                     Centros Urbanos
                                 </h2>
-                                <p class="text-slate-400 text-sm">
+                                <p class="text-body/70 text-sm">
                                     Zonas céntricas
                                 </p>
                             </div>
@@ -174,17 +174,17 @@ const schema: WithContext<CollectionPage> = {
                             {centros.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-slate-900/50 border border-white/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
                                 >
                                     <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
                                             {location.data.name}
                                         </h3>
-                                        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                     </div>
                                     <div class="flex flex-wrap gap-2">
                                         {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-white/5 text-slate-400 rounded">
+                                            <span class="text-xs px-2 py-1 bg-heading/5 text-body/70 rounded">
                                                 CP {zip}
                                             </span>
                                         ))}
@@ -199,10 +199,10 @@ const schema: WithContext<CollectionPage> = {
             <div
                 class="mt-16 p-8 bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 rounded-xl text-center"
             >
-                <h3 class="text-2xl font-bold text-white mb-3">
+                <h3 class="text-2xl font-bold text-heading mb-3">
                     ¿No encuentras tu zona?
                 </h3>
-                <p class="text-slate-300 mb-6">
+                <p class="text-body mb-6">
                     Aunque no esté listada, es probable que lleguemos. Consulta
                     sin compromiso.
                 </p>

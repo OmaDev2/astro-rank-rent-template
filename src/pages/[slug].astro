@@ -35,16 +35,23 @@ const data = entry.data;
 // Fetch para Sidebar
 const allServices = await getCollection("services");
 const allLocations = await getCollection("locations");
+const testimonials = await getCollection(
+    "testimonials",
+    ({ data }) => data.featured === true,
+);
 
 // Fetch Global Settings
 const settings = await getEntry("settings", "global");
-const { siteName, city, niche, phone } = settings?.data || {
-    siteName: "Nombre Negocio",
-    city: "Ciudad",
-    niche: "Servicio",
-    phone: "000 000 000",
-};
-
+const { siteName, city, niche, phone, address, coordinates, siteUrl } =
+    settings?.data || {
+        siteName: "Nombre Negocio",
+        city: "Ciudad",
+        niche: "Servicio",
+        phone: "000 000 000",
+        address: "",
+        coordinates: { lat: "", lng: "" },
+        siteUrl: "",
+    };
 // Mapa de Iconos (para convertir el string del CMS al componente real)
 const iconMap = {
     Shield: Shield,
@@ -59,14 +66,24 @@ const IconComponent =
     iconMap[data.icon as keyof typeof iconMap] || iconMap.default;
 
 // Schema SEO específico para Servicios
+
 const serviceSchema: WithContext<Service> = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: data.title,
     provider: {
-        "@type": "LocalBusiness", // Cambiado a LocalBusiness para ser más genérico
+        "@type": "LocalBusiness",
         name: siteName,
         telephone: phone,
+        ...(address && {
+            address: {
+                "@type": "PostalAddress",
+                streetAddress: address,
+                addressLocality: city,
+                addressCountry: "ES",
+            },
+        }),
+        ...(siteUrl && { url: siteUrl }),
     },
     description: data.shortDesc,
     areaServed: {
@@ -110,7 +127,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
         >
         </div>
         <div
-            class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/70 to-slate-950/60"
+            class="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/70 to-secondary/60"
         >
         </div>
 
@@ -118,25 +135,25 @@ const pageDescription = data.seoDesc || data.shortDesc;
             <div class="max-w-3xl">
                 <div class="flex items-center gap-4 mb-6">
                     <div
-                        class="bg-white/10 backdrop-blur px-4 py-2 rounded-full flex items-center gap-2 border border-white/20"
+                        class="bg-surface/10 backdrop-blur px-4 py-2 rounded-full flex items-center gap-2 border border-heading/20"
                     >
                         <span class="text-primary">★★★★★</span>
-                        <span class="text-white text-sm font-bold"
+                        <span class="text-heading text-sm font-bold"
                             >Google Reviews</span
                         >
                     </div>
                     <div
-                        class="bg-white/10 backdrop-blur px-4 py-2 rounded-full flex items-center gap-2 border border-white/20"
+                        class="bg-surface/10 backdrop-blur px-4 py-2 rounded-full flex items-center gap-2 border border-heading/20"
                     >
                         <Shield className="w-4 h-4 text-primary" />
-                        <span class="text-white text-sm font-bold"
+                        <span class="text-heading text-sm font-bold"
                             >Garantía 100%</span
                         >
                     </div>
                 </div>
 
                 <h1
-                    class="text-5xl lg:text-7xl font-heading font-bold text-white mb-6 leading-tight"
+                    class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-tight"
                 >
                     {data.title}
                     <br />
@@ -144,7 +161,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
                 </h1>
 
                 <p
-                    class="text-xl text-slate-300 mb-8 font-light border-l-4 border-primary pl-4 max-w-xl"
+                    class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-xl"
                 >
                     {data.shortDesc}
                 </p>
@@ -152,7 +169,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a
                         href={`tel:${phone.replace(/\s/g, "")}`}
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-amber-700 text-white rounded transition-all shadow-lg hover:shadow-primary/40"
+                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg hover:shadow-primary/40"
                     >
                         <Phone className="w-5 h-5 mr-2" />
                         Llamar Ahora
@@ -162,7 +179,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
         </div>
     </section>
 
-    <section class="py-20 bg-slate-950">
+    <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
             <div class="lg:col-span-2 space-y-12">
                 <div
@@ -174,28 +191,30 @@ const pageDescription = data.seoDesc || data.shortDesc;
                         <Phone className="w-8 h-8 text-white" />
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-white mb-2">
+                        <h3 class="text-xl font-bold text-heading mb-2">
                             ¿Necesitas un servicio urgente?
                         </h3>
-                        <p class="text-slate-300 mb-4">
+                        <p class="text-body mb-4">
                             Si tienes una urgencia, llámanos ahora mismo.
                             Atendemos 24h.
                         </p>
                         <a
                             href={`tel:${phone.replace(/\s/g, "")}`}
-                            class="text-green-400 font-bold text-2xl hover:text-green-300 transition-colors"
+                            class="text-green-600 font-bold text-2xl hover:text-green-500 transition-colors"
                         >
                             {phone}
                         </a>
                     </div>
                 </div>
 
-                <div class="prose prose-invert prose-lg prose-amber max-w-none">
+                <div
+                    class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-heading prose-li:text-body max-w-none"
+                >
                     <Content />
                 </div>
 
                 <div
-                    class="relative aspect-[16/9] rounded-2xl overflow-hidden group shadow-2xl border border-slate-800"
+                    class="relative aspect-[16/9] rounded-2xl overflow-hidden group shadow-2xl border border-heading/10"
                 >
                     <img
                         src={`/images/services/${entry.slug}-2.png`}
@@ -204,13 +223,13 @@ const pageDescription = data.seoDesc || data.shortDesc;
                         onerror="this.style.display='none'"
                     />
                     <div
-                        class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"
+                        class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-transparent to-transparent"
                     >
                         <div class="absolute bottom-0 left-0 right-0 p-8">
-                            <p class="text-white font-bold text-2xl mb-2">
+                            <p class="text-heading font-bold text-2xl mb-2">
                                 Trabajos Realizados en {city}
                             </p>
-                            <p class="text-slate-300">
+                            <p class="text-body">
                                 Fabricación e instalación profesional con
                                 garantía
                             </p>
@@ -270,11 +289,11 @@ const pageDescription = data.seoDesc || data.shortDesc;
                 </div>
 
                 <div
-                    class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden"
+                    class="bg-surface rounded-xl border border-heading/10 overflow-hidden"
                 >
-                    <div class="bg-slate-800 p-4 border-b border-slate-700">
+                    <div class="bg-surface/50 p-4 border-b border-heading/10">
                         <h4
-                            class="font-bold text-white uppercase text-sm tracking-wider"
+                            class="font-bold text-heading uppercase text-sm tracking-wider"
                         >
                             Nuestros Servicios
                         </h4>
@@ -289,7 +308,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
                                             class={`block p-3 rounded transition-colors flex justify-between group ${
                                                 entry.slug === service.slug
                                                     ? "bg-primary text-white"
-                                                    : "hover:bg-slate-800 text-slate-400 hover:text-primary"
+                                                    : "hover:bg-surface/50 text-body hover:text-primary"
                                             }`}
                                         >
                                             {service.data.title}
@@ -305,11 +324,11 @@ const pageDescription = data.seoDesc || data.shortDesc;
                 </div>
 
                 <div
-                    class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden"
+                    class="bg-surface rounded-xl border border-heading/10 overflow-hidden"
                 >
-                    <div class="bg-slate-800 p-4 border-b border-slate-700">
+                    <div class="bg-surface/50 p-4 border-b border-heading/10">
                         <h4
-                            class="font-bold text-white uppercase text-sm tracking-wider"
+                            class="font-bold text-heading uppercase text-sm tracking-wider"
                         >
                             Zonas de Servicio
                         </h4>
@@ -319,7 +338,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
                             <li>
                                 <a
                                     href="/"
-                                    class="block p-3 rounded hover:bg-slate-800 text-slate-400 hover:text-primary transition-colors text-sm"
+                                    class="block p-3 rounded hover:bg-surface/50 text-body hover:text-primary transition-colors text-sm"
                                 >
                                     • {city} Capital
                                 </a>
@@ -329,7 +348,7 @@ const pageDescription = data.seoDesc || data.shortDesc;
                                     <li>
                                         <a
                                             href={`/zona/${location.slug}`}
-                                            class="block p-3 rounded hover:bg-slate-800 text-slate-400 hover:text-primary transition-colors text-sm"
+                                            class="block p-3 rounded hover:bg-surface/50 text-body hover:text-primary transition-colors text-sm"
                                         >
                                             • {location.data.name}
                                         </a>
@@ -344,28 +363,44 @@ const pageDescription = data.seoDesc || data.shortDesc;
     </section>
 
     <section
-        class="w-full h-[400px] bg-slate-900 border-y border-slate-800 relative z-10"
+        class="w-full h-[400px] bg-secondary border-y border-heading/10 relative z-10"
     >
-        <iframe
-            src="https://maps.google.com/maps?q=Zaragoza&t=&z=13&ie=UTF8&iwloc=&output=embed"
-            width="100%"
-            height="100%"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            class="opacity-80 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0"
-        ></iframe>
+        {
+            settings?.data?.coordinates?.lat &&
+            settings?.data?.coordinates?.lng ? (
+                <iframe
+                    src={`https://maps.google.com/maps?q=${settings.data.coordinates.lat},${settings.data.coordinates.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="opacity-80 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0"
+                />
+            ) : (
+                <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(city)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="opacity-80 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0"
+                />
+            )
+        }
     </section>
 
-    <section class="py-20 bg-slate-900">
+    <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-heading font-bold text-white mb-4">
+                <h2 class="text-3xl font-heading font-bold text-heading mb-4">
                     {siteName} ofrece servicios de:
                 </h2>
                 <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-slate-400 max-w-2xl mx-auto">
+                <p class="text-body max-w-2xl mx-auto">
                     Soluciones profesionales en {niche.toLowerCase()} para todas
                     tus necesidades en {city} y provincia.
                 </p>
@@ -376,12 +411,12 @@ const pageDescription = data.seoDesc || data.shortDesc;
                     allServices.map((service) => (
                         <a
                             href={`/${service.slug}`}
-                            class="group bg-slate-800/50 p-4 rounded-lg shadow-sm hover:shadow-md border border-slate-700 hover:border-primary/50 transition-all flex items-center gap-4"
+                            class="group bg-surface/50 p-4 rounded-lg shadow-sm hover:shadow-md border border-heading/10 hover:border-primary/50 transition-all flex items-center gap-4"
                         >
-                            <div class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors shrink-0">
-                                <CheckCircle className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
+                            <div class="w-10 h-10 bg-surface rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors shrink-0">
+                                <CheckCircle className="w-5 h-5 text-body group-hover:text-primary transition-colors" />
                             </div>
-                            <h3 class="font-bold text-white group-hover:text-primary transition-colors">
+                            <h3 class="font-bold text-heading group-hover:text-primary transition-colors">
                                 {service.data.title}
                             </h3>
                         </a>
@@ -391,92 +426,44 @@ const pageDescription = data.seoDesc || data.shortDesc;
         </div>
     </section>
 
-    <section class="py-20 bg-slate-900 border-t border-slate-800">
+    <section class="py-20 bg-secondary border-t border-heading/10">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-heading font-bold text-white mb-4">
+                <h2 class="text-3xl font-heading font-bold text-heading mb-4">
                     Lo que dicen nuestros clientes
                 </h2>
                 <div class="w-24 h-1 bg-primary mx-auto"></div>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div
-                    class="bg-slate-800/50 p-8 rounded-xl border border-slate-700"
-                >
-                    <div class="flex text-primary mb-4">
-                        <span class="text-lg">★★★★★</span>
-                    </div>
-                    <p class="text-slate-300 mb-6 italic">
-                        "Excelente trabajo. Rápidos, limpios y muy
-                        profesionales. El acabado es perfecto."
-                    </p>
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-slate-400 font-bold mr-3"
-                        >
-                            JP
-                        </div>
-                        <div>
-                            <div class="text-white font-bold">Javier Pérez</div>
-                            <div class="text-xs text-slate-500">
-                                Cliente Verificado
+                {
+                    testimonials.slice(0, 3).map((testimonial) => (
+                        <div class="bg-surface/50 p-8 rounded-xl border border-heading/10">
+                            <div class="flex text-primary mb-4">
+                                <span class="text-lg">
+                                    {"★".repeat(testimonial.data.rating)}
+                                    {"☆".repeat(5 - testimonial.data.rating)}
+                                </span>
+                            </div>
+                            <p class="text-body mb-6 italic">
+                                "{testimonial.data.text}"
+                            </p>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-surface rounded-full flex items-center justify-center text-body font-bold mr-3">
+                                    {testimonial.data.initials}
+                                </div>
+                                <div>
+                                    <div class="text-heading font-bold">
+                                        {testimonial.data.name}
+                                    </div>
+                                    <div class="text-xs text-body/70">
+                                        Cliente Verificado
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div
-                    class="bg-slate-800/50 p-8 rounded-xl border border-slate-700"
-                >
-                    <div class="flex text-primary mb-4">
-                        <span class="text-lg">★★★★★</span>
-                    </div>
-                    <p class="text-slate-300 mb-6 italic">
-                        "Muy contentos con el resultado. Entendieron
-                        perfectamente lo que necesitábamos."
-                    </p>
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-slate-400 font-bold mr-3"
-                        >
-                            MG
-                        </div>
-                        <div>
-                            <div class="text-white font-bold">Marta García</div>
-                            <div class="text-xs text-slate-500">
-                                Cliente Verificado
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class="bg-slate-800/50 p-8 rounded-xl border border-slate-700"
-                >
-                    <div class="flex text-primary mb-4">
-                        <span class="text-lg">★★★★★</span>
-                    </div>
-                    <p class="text-slate-300 mb-6 italic">
-                        "Servicio de urgencia impecable. Vinieron muy rápido y
-                        solucionaron el problema."
-                    </p>
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-slate-400 font-bold mr-3"
-                        >
-                            RL
-                        </div>
-                        <div>
-                            <div class="text-white font-bold">
-                                Roberto López
-                            </div>
-                            <div class="text-xs text-slate-500">
-                                Cliente Verificado
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    ))
+                }
             </div>
         </div>
     </section>

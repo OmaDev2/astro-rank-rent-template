@@ -22,7 +22,7 @@ const schema: WithContext<ContactPage> = {
     name: `Contacto ${siteName}`,
     description: `Contacte con ${siteName} para solicitar presupuesto de ${niche}.`,
     mainEntity: {
-        "@type": "Locksmith",
+        "@type": "LocalBusiness", // Mejor que Locksmith genérico
         name: siteName,
         telephone: phone,
         email: email,
@@ -31,72 +31,75 @@ const schema: WithContext<ContactPage> = {
 ---
 
 <Layout title={`Contacto y Presupuesto | ${siteName}`} schema={schema}>
-    <section class="py-20 bg-slate-900">
+    <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h1 class="text-5xl font-heading font-bold text-white mb-4">
+                <h1 class="text-5xl font-heading font-bold text-heading mb-4">
                     Contactar
                 </h1>
-                <p class="text-slate-400 max-w-2xl mx-auto">
+                <p class="text-body max-w-2xl mx-auto">
                     Solicite presupuesto sin compromiso. Respondemos en menos de
                     24 horas. Para urgencias, llámenos directamente.
                 </p>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-                <!-- Contact Info -->
                 <div class="space-y-8">
                     <div
-                        class="p-8 bg-slate-800 rounded-lg border border-slate-700"
+                        class="p-8 bg-surface/50 rounded-lg border border-heading/10 backdrop-blur-sm"
                     >
-                        <h3 class="text-2xl font-bold text-white mb-6">
+                        <h3 class="text-2xl font-bold text-heading mb-6">
                             Información Directa
                         </h3>
                         <ul class="space-y-6">
                             <li class="flex items-start gap-4">
                                 <div
-                                    class="p-3 bg-slate-900 rounded text-amber-600"
+                                    class="p-3 bg-primary/20 rounded text-primary"
                                 >
                                     <Phone className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white">
+                                    <h4 class="font-bold text-heading">
                                         Teléfono / WhatsApp
                                     </h4>
                                     <a
-                                        href={`tel:${phone}`}
-                                        class="text-slate-300 hover:text-amber-500 transition-colors text-lg"
+                                        href={`tel:${phone.replace(/\s/g, "")}`}
+                                        class="text-body hover:text-primary transition-colors text-lg"
                                         >{phone}</a
                                     >
-                                    <p class="text-xs text-slate-500 mt-1">
+                                    <p class="text-xs text-body/70 mt-1">
                                         Atención telefónica de 8:00 a 20:00
                                     </p>
                                 </div>
                             </li>
                             <li class="flex items-start gap-4">
                                 <div
-                                    class="p-3 bg-slate-900 rounded text-amber-600"
+                                    class="p-3 bg-primary/20 rounded text-primary"
                                 >
                                     <Mail className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white">Email</h4>
+                                    <h4 class="font-bold text-heading">
+                                        Email
+                                    </h4>
                                     <a
                                         href={`mailto:${email}`}
-                                        class="text-slate-300 hover:text-amber-500 transition-colors"
+                                        class="text-body hover:text-primary transition-colors"
                                         >{email}</a
                                     >
                                 </div>
                             </li>
                             <li class="flex items-start gap-4">
                                 <div
-                                    class="p-3 bg-slate-900 rounded text-amber-600"
+                                    class="p-3 bg-primary/20 rounded text-primary"
                                 >
                                     <MapPin className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white">Taller</h4>
-                                    <p class="text-slate-300">
+                                    <h4 class="font-bold text-heading">
+                                        Taller
+                                    </h4>
+                                    <p class="text-body">
                                         {address}, {city}
                                     </p>
                                 </div>
@@ -104,12 +107,11 @@ const schema: WithContext<ContactPage> = {
                         </ul>
                     </div>
 
-                    <!-- Map Placeholder -->
                     <div
-                        class="aspect-video bg-slate-800 rounded-lg border border-slate-700 overflow-hidden relative group"
+                        class="aspect-video bg-surface rounded-lg border border-heading/20 overflow-hidden relative group"
                     >
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47660.85243869811!2d-0.9366050478796859!3d41.65167664875693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd5914dd5e618e91%3A0x49df13f1158489a8!2sZaragoza!5e0!3m2!1ses!2ses!4v1700000000000!5m2!1ses!2ses"
+                            src="https://maps.google.com/maps?q=Zaragoza&t=&z=13&ie=UTF8&iwloc=&output=embed"
                             width="100%"
                             height="100%"
                             style="border:0;"
@@ -121,11 +123,10 @@ const schema: WithContext<ContactPage> = {
                     </div>
                 </div>
 
-                <!-- Form -->
                 <div
-                    class="p-8 bg-slate-800 rounded-lg border border-slate-700 h-fit"
+                    class="p-8 bg-surface/50 rounded-lg border border-heading/10 h-fit backdrop-blur-sm"
                 >
-                    <h3 class="text-2xl font-bold text-white mb-6">
+                    <h3 class="text-2xl font-bold text-heading mb-6">
                         Envíenos un Mensaje
                     </h3>
                     <form class="space-y-6">
@@ -133,14 +134,14 @@ const schema: WithContext<ContactPage> = {
                             <div>
                                 <label
                                     for="name"
-                                    class="block text-sm font-medium text-slate-400 mb-2"
+                                    class="block text-sm font-medium text-body mb-2"
                                     >Nombre</label
                                 >
                                 <input
                                     type="text"
                                     id="name"
                                     name="name"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-600 transition-colors"
+                                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
                                     placeholder="Su nombre"
                                     required
                                 />
@@ -148,15 +149,15 @@ const schema: WithContext<ContactPage> = {
                             <div>
                                 <label
                                     for="phone"
-                                    class="block text-sm font-medium text-slate-400 mb-2"
+                                    class="block text-sm font-medium text-body mb-2"
                                     >Teléfono</label
                                 >
                                 <input
                                     type="tel"
                                     id="phone"
                                     name="phone"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-600 transition-colors"
-                                    placeholder="600 000 000"
+                                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
+                                    placeholder={phone}
                                     required
                                 />
                             </div>
@@ -165,41 +166,38 @@ const schema: WithContext<ContactPage> = {
                         <div>
                             <label
                                 for="email"
-                                class="block text-sm font-medium text-slate-400 mb-2"
+                                class="block text-sm font-medium text-body mb-2"
                                 >Email</label
                             >
                             <input
                                 type="email"
                                 id="email"
                                 name="email"
-                                class="w-full bg-slate-900 border border-slate-700 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-600 transition-colors"
-                                placeholder="email@ejemplo.com"
+                                class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
+                                placeholder={email}
                             />
                         </div>
 
                         <div>
                             <label
                                 for="service"
-                                class="block text-sm font-medium text-slate-400 mb-2"
+                                class="block text-sm font-medium text-body mb-2"
                                 >Tipo de Servicio</label
                             >
                             <select
                                 id="service"
                                 name="service"
-                                class="w-full bg-slate-900 border border-slate-700 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-600 transition-colors"
+                                class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                             >
                                 <option value=""
                                     >Seleccione una opción...</option
                                 >
-                                <option value="rejas">Rejas y Seguridad</option>
-                                <option value="puertas"
-                                    >Puertas Metálicas</option
+                                <option value="urgencia">Urgencia 24h</option>
+                                <option value="presupuesto"
+                                    >Solicitar Presupuesto</option
                                 >
-                                <option value="estructuras"
-                                    >Estructuras Industriales</option
-                                >
-                                <option value="cerramientos"
-                                    >Cerramientos</option
+                                <option value="informacion"
+                                    >Información General</option
                                 >
                                 <option value="otro">Otro</option>
                             </select>
@@ -208,14 +206,14 @@ const schema: WithContext<ContactPage> = {
                         <div>
                             <label
                                 for="message"
-                                class="block text-sm font-medium text-slate-400 mb-2"
+                                class="block text-sm font-medium text-body mb-2"
                                 >Mensaje</label
                             >
                             <textarea
                                 id="message"
                                 name="message"
                                 rows="4"
-                                class="w-full bg-slate-900 border border-slate-700 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-600 transition-colors"
+                                class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50 resize-none"
                                 placeholder="Describa brevemente lo que necesita..."
                                 required></textarea>
                         </div>
@@ -226,20 +224,19 @@ const schema: WithContext<ContactPage> = {
                                 id="privacy-contact"
                                 name="privacy"
                                 required
-                                class="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-800 text-amber-600 focus:ring-amber-600 focus:ring-offset-slate-900"
+                                class="mt-1 w-4 h-4 rounded border-heading/20 bg-surface text-primary focus:ring-primary focus:ring-offset-secondary"
                             />
                             <label
                                 for="privacy-contact"
-                                class="text-xs text-slate-400"
+                                class="text-xs text-body/70"
                             >
                                 He leído y acepto la <a
                                     href="/privacidad"
                                     target="_blank"
-                                    class="text-amber-500 hover:text-amber-400 underline"
+                                    class="text-primary hover:text-accent underline font-bold"
                                     >Política de Privacidad</a
-                                > y consiento que mis datos sean compartidos con
-                                profesionales del sector para recibir presupuestos.
-                                *
+                                > y consiento que mis datos sean tratados para gestionar
+                                la solicitud. *
                             </label>
                         </div>
 
@@ -247,12 +244,12 @@ const schema: WithContext<ContactPage> = {
                             type="submit"
                             id="submit-button-contact"
                             disabled
-                            class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 rounded transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-primary/25"
                         >
                             <Send className="w-5 h-5" />
                             Enviar Solicitud
                         </button>
-                        <p class="text-xs text-slate-500 text-center">
+                        <p class="text-xs text-body/70 text-center">
                             No enviamos spam. Tus datos están seguros.
                         </p>
                     </form>

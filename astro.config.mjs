@@ -14,7 +14,7 @@ import netlify from '@astrojs/netlify';
 // https://astro.build/config
 export default defineConfig({
   // 🌐 Dominio final del sitio
-  site: 'https://herrerozaragoza.com',
+  site: process.env.PUBLIC_SITE_URL || 'https://localhost:4321',
 
   // 🔗 Trailing slash: siempre con barra al final (bueno para SEO)
   trailingSlash: 'ignore',

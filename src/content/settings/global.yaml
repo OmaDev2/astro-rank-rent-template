@@ -1,9 +1,15 @@
-theme: nature
-siteName: FONTANERO MADRD
+siteName: 'FONTANERO MADRID '
 niche: 'Fontaneria '
-city: MADRIDS
+siteUrl: ' https://fontaneromadrid.com'
+businessType: HomeAndConstructionBusiness
+city: MADRID
+address: Gran Via 33
+coordinates:
+  lat: '40.41672790'
+  lng: '-3.70329050'
 phone: '622787879'
-whatsapp: '622787879'
+whatsapp: '600202020'
 email: olga.millan@gmail.com
-address: 'NO LO SE '
-ctaText: 'PEDIR LLAMAMADA '
+schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
+theme: corporate
+ctaText: 'LLAMA AHORA '

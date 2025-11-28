@@ -2,18 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* --- PALETA INDUSTRIAL (Tu configuración actual) --- */
-    /* Las variables se inyectan dinámicamente desde Layout.astro según el tema elegido */
-
-    /* 
-    --color-primary: 217 119 6;
-    --color-secondary: 30 41 59;
-    --color-accent: 234 179 8;
-    --color-bg-body: 248 250 252;
-    --color-text-heading: 15 23 42;
-    --color-text-body: 51 65 85; 
-    */
-  }
-}
+@layer base {}

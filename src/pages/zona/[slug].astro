@@ -100,7 +100,7 @@ const localSchema: WithContext<Locksmith> = {
                     </span>
 
                     <h1
-                        class="text-5xl lg:text-7xl font-heading font-bold text-white mb-6 leading-none"
+                        class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-none"
                     >
                         {niche.toUpperCase()} EN <br />
                         <span
@@ -111,7 +111,7 @@ const localSchema: WithContext<Locksmith> = {
                     </h1>
 
                     <p
-                        class="text-xl text-slate-300 mb-8 font-light border-l-4 border-primary pl-4 max-w-xl"
+                        class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-xl"
                     >
                         {heroSubtitle} Llegamos a {data.name} y alrededores rápidamente.
                         Presupuesto sin compromiso.
@@ -145,12 +145,12 @@ const localSchema: WithContext<Locksmith> = {
         <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
             <div class="lg:col-span-2">
                 <div
-                    class="prose prose-invert prose-lg prose-p:text-slate-300 prose-headings:text-white prose-strong:text-primary max-w-none mb-16"
+                    class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary max-w-none mb-16"
                 >
                     <Content />
                 </div>
 
-                <h3 class="text-3xl font-heading font-bold text-white mb-8">
+                <h3 class="text-3xl font-heading font-bold text-heading mb-8">
                     Servicios de {niche} en {data.name}
                 </h3>
 
@@ -159,15 +159,15 @@ const localSchema: WithContext<Locksmith> = {
                         allServices.slice(0, 4).map((service) => (
                             <a
                                 href={`/${service.slug}`}
-                                class="group p-6 bg-slate-900/50 border border-slate-800 rounded hover:border-primary/50 transition-colors block"
+                                class="group p-6 bg-surface/50 border border-heading/10 rounded hover:border-primary/50 transition-colors block"
                             >
                                 <div class="flex items-center justify-between mb-4">
-                                    <h4 class="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                                    <h4 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
                                         {service.data.title}
                                     </h4>
-                                    <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                    <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                                 </div>
-                                <p class="text-slate-400 text-sm line-clamp-2">
+                                <p class="text-body text-sm line-clamp-2">
                                     {service.data.shortDesc} en la zona de{" "}
                                     {data.name} (CP {data.zipCodes[0]}).
                                 </p>
@@ -177,23 +177,25 @@ const localSchema: WithContext<Locksmith> = {
                 </div>
 
                 <div
-                    class="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-lg"
+                    class="bg-surface border border-heading/10 rounded-xl p-8 shadow-lg"
                 >
                     <div
-                        class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4"
+                        class="flex items-center gap-3 mb-6 border-b border-heading/10 pb-4"
                     >
                         <HelpCircle className="w-8 h-8 text-primary" />
-                        <h3 class="text-2xl font-heading font-bold text-white">
+                        <h3
+                            class="text-2xl font-heading font-bold text-heading"
+                        >
                             Preguntas sobre servicio en {data.name}
                         </h3>
                     </div>
 
                     <div class="space-y-4">
                         <details
-                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-primary/50"
+                            class="group bg-surface/50 p-4 rounded border border-heading/10 cursor-pointer transition-all open:border-primary/50"
                         >
                             <summary
-                                class="font-bold text-white flex justify-between items-center list-none"
+                                class="font-bold text-heading flex justify-between items-center list-none"
                             >
                                 ¿Cobráis desplazamiento hasta {data.name}?
                                 <span
@@ -201,9 +203,7 @@ const localSchema: WithContext<Locksmith> = {
                                     >▼</span
                                 >
                             </summary>
-                            <p
-                                class="text-slate-400 mt-3 text-sm leading-relaxed"
-                            >
+                            <p class="text-body mt-3 text-sm leading-relaxed">
                                 Dependiendo del servicio. Al estar {data.name} dentro
                                 de nuestra área habitual, solemos incluir el desplazamiento
                                 en el presupuesto final. Llámanos para confirmar.
@@ -211,10 +211,10 @@ const localSchema: WithContext<Locksmith> = {
                         </details>
 
                         <details
-                            class="group bg-slate-950 p-4 rounded border border-slate-800 cursor-pointer transition-all open:border-primary/50"
+                            class="group bg-surface/50 p-4 rounded border border-heading/10 cursor-pointer transition-all open:border-primary/50"
                         >
                             <summary
-                                class="font-bold text-white flex justify-between items-center list-none"
+                                class="font-bold text-heading flex justify-between items-center list-none"
                             >
                                 ¿Atendéis urgencias en código postal {
                                     data.zipCodes[0]
@@ -224,9 +224,7 @@ const localSchema: WithContext<Locksmith> = {
                                     >▼</span
                                 >
                             </summary>
-                            <p
-                                class="text-slate-400 mt-3 text-sm leading-relaxed"
-                            >
+                            <p class="text-body mt-3 text-sm leading-relaxed">
                                 Sí, tenemos unidades móviles que cubren el
                                 código postal {data.zipCodes[0]} de {data.name}.
                                 El tiempo de respuesta medio es rápido.
@@ -238,10 +236,10 @@ const localSchema: WithContext<Locksmith> = {
 
             <div class="space-y-8">
                 <div
-                    class="p-8 bg-slate-900 rounded-lg border border-slate-800 sticky top-24 shadow-2xl"
+                    class="p-8 bg-surface rounded-lg border border-heading/10 sticky top-24 shadow-2xl"
                 >
                     <h3
-                        class="text-2xl font-heading font-bold text-white mb-6 border-b border-slate-800 pb-4"
+                        class="text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4"
                     >
                         ¿Por qué elegirnos?
                     </h3>
@@ -250,7 +248,7 @@ const localSchema: WithContext<Locksmith> = {
                             <CheckCircle
                                 className="w-6 h-6 text-primary shrink-0"
                             />
-                            <span class="text-slate-300 text-sm"
+                            <span class="text-body text-sm"
                                 >Presupuesto cerrado.</span
                             >
                         </li>
@@ -258,7 +256,7 @@ const localSchema: WithContext<Locksmith> = {
                             <CheckCircle
                                 className="w-6 h-6 text-primary shrink-0"
                             />
-                            <span class="text-slate-300 text-sm"
+                            <span class="text-body text-sm"
                                 >Profesionales de {city}.</span
                             >
                         </li>
@@ -266,7 +264,7 @@ const localSchema: WithContext<Locksmith> = {
                             <CheckCircle
                                 className="w-6 h-6 text-primary shrink-0"
                             />
-                            <span class="text-slate-300 text-sm"
+                            <span class="text-body text-sm"
                                 >Garantía en factura.</span
                             >
                         </li>
@@ -274,7 +272,7 @@ const localSchema: WithContext<Locksmith> = {
                             <CheckCircle
                                 className="w-6 h-6 text-primary shrink-0"
                             />
-                            <span class="text-slate-300 text-sm"
+                            <span class="text-body text-sm"
                                 >Cobertura total en {data.name}.</span
                             >
                         </li>
@@ -282,10 +280,10 @@ const localSchema: WithContext<Locksmith> = {
 
                     <a
                         href={`tel:${phone.replace(/\s/g, "")}`}
-                        class="flex flex-col items-center justify-center w-full py-4 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded font-bold transition-all group hover:border-primary/50"
+                        class="flex flex-col items-center justify-center w-full py-4 bg-surface/50 hover:bg-surface text-heading border border-heading/20 rounded font-bold transition-all group hover:border-primary/50"
                     >
                         <span
-                            class="text-xs text-slate-400 uppercase tracking-widest mb-1 group-hover:text-primary"
+                            class="text-xs text-body/70 uppercase tracking-widest mb-1 group-hover:text-primary"
                             >Llamar Ahora</span
                         >
                         <span class="text-2xl font-heading">{phone}</span>
@@ -312,7 +310,7 @@ const localSchema: WithContext<Locksmith> = {
 
     <FinalCTA />
 
-    <section class="py-12 bg-secondary border-t border-slate-800">
+    <section class="py-12 bg-secondary border-t border-heading/10">
         <div class="container mx-auto px-4">
             <ServiceAreas />
         </div>
@@ -348,8 +346,8 @@ const localSchema: WithContext<Locksmith> = {
         const formElement = document.getElementById("formulario");
 
         if (formLink && formElement) {
-            formLink.addEventListener("click", (e) => {
-                e.preventDefault();
+            formLink.addEventListener("click", (event) => {
+                event.preventDefault();
                 formElement.scrollIntoView({
                     behavior: "smooth",
                     block: "center",

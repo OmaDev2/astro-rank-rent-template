@@ -11,7 +11,7 @@ import HeroContactForm from "../components/HeroContactForm.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import * as LucideIcons from "lucide-react"; // Importamos todo para poder elegir iconos dinámicamente
 import { ArrowRight, Phone, MapPin, CheckCircle, Star } from "lucide-react";
-import type { WithContext, Locksmith } from "schema-dts";
+import type { WithContext, Thing } from "schema-dts";
 
 // 1. Fetch Data
 const featuredServices = await getCollection("services", ({ data }) => {
@@ -43,6 +43,13 @@ const config = settings?.data || {
 	city: "Ciudad",
 	niche: "Servicio",
 	whatsapp: "000000000",
+	businessType: "LocalBusiness" as const,
+	logo: "",
+	siteUrl: "",
+	address: "",
+	coordinates: { lat: "", lng: "" },
+	email: "",
+	schedule: "",
 };
 
 // Helpers para iconos dinámicos
@@ -51,20 +58,32 @@ const getIcon = (name: string) => {
 	return Icon;
 };
 
-// 4. Schema SEO
-const schema: WithContext<Locksmith> = {
+const businessType = config.businessType || "LocalBusiness";
+const schema: WithContext<Thing> = {
 	"@context": "https://schema.org",
-	"@type": "Locksmith",
+	"@type": businessType as any,
 	name: config.siteName,
-	image: "https://tudominio.com/logo.png",
+	image: config.logo || `${config.siteUrl || ""}/images/home/logo.png`,
 	description: `${config.niche} en ${config.city}. Servicio profesional.`,
 	telephone: config.phone,
+	...(config.email && { email: config.email }),
+	...(config.siteUrl && { url: config.siteUrl }),
 	address: {
 		"@type": "PostalAddress",
+		streetAddress: config.address || "",
 		addressLocality: config.city,
 		addressRegion: config.city,
 		addressCountry: "ES",
 	},
+	...(config.coordinates?.lat &&
+		config.coordinates?.lng && {
+			geo: {
+				"@type": "GeoCoordinates",
+				latitude: config.coordinates.lat,
+				longitude: config.coordinates.lng,
+			},
+		}),
+	...(config.schedule && { openingHours: config.schedule }),
 	priceRange: "$$",
 };
 
@@ -92,14 +111,14 @@ const heroBgImage =
 			/>
 		</div>
 		<div
-			class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"
+			class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent"
 		>
 		</div>
 
 		<div class="container mx-auto px-4 relative z-10">
 			<div class="max-w-3xl">
 				<h1
-					class="text-5xl lg:text-7xl font-heading font-bold text-white mb-6 leading-tight"
+					class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-tight"
 				>
 					{/* Renderizamos el título o un fallback inteligente */}
 					{
@@ -116,7 +135,7 @@ const heroBgImage =
 					}
 				</h1>
 				<p
-					class="text-xl text-slate-300 mb-8 font-light border-l-4 border-primary pl-4 max-w-2xl"
+					class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-2xl"
 				>
 					{
 						hero?.subheading ||
@@ -126,7 +145,7 @@ const heroBgImage =
 				<div class="flex flex-col sm:flex-row gap-4">
 					<a
 						href="#presupuesto"
-						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-amber-700 text-white rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
+						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
 					>
 						<Phone className="w-5 h-5 mr-2" />
 						Pedir Presupuesto
@@ -135,7 +154,7 @@ const heroBgImage =
 						href={`https://wa.me/${config.whatsapp || config.phone.replace(/\s/g, "")}`}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border border-slate-600 rounded hover:bg-slate-800 transition-colors"
+						class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border border-heading/20 rounded hover:bg-surface transition-colors"
 					>
 						{/* Icono WhatsApp SVG */}
 						<svg
@@ -155,7 +174,7 @@ const heroBgImage =
 
 	<section
 		id="servicios"
-		class="py-20 bg-secondary border-b border-slate-800"
+		class="py-20 bg-secondary border-b border-heading/10"
 	>
 		<div class="container mx-auto px-4">
 			<div class="text-center mb-16">
@@ -168,11 +187,11 @@ const heroBgImage =
 					<div class="h-px w-12 bg-primary"></div>
 				</div>
 				<h2
-					class="text-4xl lg:text-5xl font-heading font-bold text-white mb-6"
+					class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
 				>
 					¿Qué necesitas en {config.city}?
 				</h2>
-				<p class="text-slate-400 max-w-2xl mx-auto text-lg">
+				<p class="text-body max-w-2xl mx-auto text-lg">
 					Soluciones profesionales adaptadas a tus necesidades.
 				</p>
 			</div>
@@ -182,18 +201,18 @@ const heroBgImage =
 					featuredServices.map((service) => (
 						<a
 							href={`/${service.slug}/`}
-							class="group relative overflow-hidden rounded-lg border border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
+							class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
 						>
 							<div
 								class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
 								style={`background-image: url('/images/services/${service.slug}-1.png')`}
 							/>
-							<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent" />
+							<div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
 							<div class="relative h-full flex flex-col justify-end p-8">
-								<h3 class="text-2xl font-heading font-bold text-white mb-3">
+								<h3 class="text-2xl font-heading font-bold text-heading mb-3">
 									{service.data.title}
 								</h3>
-								<p class="text-slate-300 mb-6 line-clamp-2 text-sm">
+								<p class="text-body mb-6 line-clamp-2 text-sm">
 									{service.data.shortDesc}
 								</p>
 								<div class="inline-flex items-center text-primary font-bold group-hover:text-accent">
@@ -210,10 +229,10 @@ const heroBgImage =
 
 	{
 		features && features.length > 0 && (
-			<section class="py-20 bg-secondary border-y border-slate-800">
+			<section class="py-20 bg-secondary border-y border-heading/10">
 				<div class="container mx-auto px-4">
 					<div class="text-center mb-16">
-						<h2 class="text-4xl font-heading font-bold text-white mb-4">
+						<h2 class="text-4xl font-heading font-bold text-heading mb-4">
 							¿Por qué elegirnos en {config.city}?
 						</h2>
 						<div class="w-24 h-1 bg-primary mx-auto mb-4" />
@@ -225,15 +244,15 @@ const heroBgImage =
 								feature.icon || "CheckCircle",
 							);
 							return (
-								<div class="group relative p-8 bg-slate-800/50 rounded-xl border border-slate-700 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
+								<div class="group relative p-8 bg-surface/50 rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
 									<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-									<div class="w-16 h-16 bg-gradient-to-br from-primary to-amber-700 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+									<div class="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
 										<IconComponent className="w-8 h-8 text-white" />
 									</div>
-									<h3 class="text-2xl font-heading font-bold text-white mb-4">
+									<h3 class="text-2xl font-heading font-bold text-heading mb-4">
 										{feature.title}
 									</h3>
-									<p class="text-slate-400 leading-relaxed">
+									<p class="text-body leading-relaxed">
 										{feature.description}
 									</p>
 								</div>
@@ -247,7 +266,7 @@ const heroBgImage =
 
 	<section
 		id="presupuesto"
-		class="py-20 bg-slate-950 relative overflow-hidden"
+		class="py-20 bg-secondary relative overflow-hidden"
 	>
 		<div
 			class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"
@@ -256,43 +275,45 @@ const heroBgImage =
 
 		<div class="container mx-auto px-4 relative z-10">
 			<div
-				class="max-w-4xl mx-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col md:flex-row"
+				class="max-w-4xl mx-auto bg-surface rounded-2xl border border-heading/10 shadow-2xl overflow-hidden flex flex-col md:flex-row"
 			>
 				<div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
-					<h2 class="text-3xl font-heading font-bold text-white mb-4">
+					<h2
+						class="text-3xl font-heading font-bold text-heading mb-4"
+					>
 						¿Necesitas un Presupuesto?
 					</h2>
-					<p class="text-slate-400 mb-8">
+					<p class="text-body mb-8">
 						Cuéntanos tu proyecto. Te respondemos con una valoración
 						gratuita y sin compromiso.
 					</p>
 					<div class="space-y-4">
-						<div class="flex items-center text-slate-300">
+						<div class="flex items-center text-body">
 							<div
 								class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-4"
 							>
 								<Phone className="w-5 h-5" />
 							</div>
 							<div>
-								<div class="text-xs text-slate-500 uppercase">
+								<div class="text-xs text-body/70 uppercase">
 									Llámanos ahora
 								</div>
-								<div class="font-bold text-white">
+								<div class="font-bold text-heading">
 									{config.phone}
 								</div>
 							</div>
 						</div>
-						<div class="flex items-center text-slate-300">
+						<div class="flex items-center text-body">
 							<div
 								class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-4"
 							>
 								<MapPin className="w-5 h-5" />
 							</div>
 							<div>
-								<div class="text-xs text-slate-500 uppercase">
+								<div class="text-xs text-body/70 uppercase">
 									Trabajamos en
 								</div>
-								<div class="font-bold text-white">
+								<div class="font-bold text-heading">
 									{config.city} y alrededores
 								</div>
 							</div>
@@ -301,7 +322,7 @@ const heroBgImage =
 				</div>
 
 				<div
-					class="p-8 md:p-12 md:w-1/2 bg-slate-800/50 border-l border-slate-700/50"
+					class="p-8 md:p-12 md:w-1/2 bg-surface/50 border-l border-heading/10"
 				>
 					<HeroContactForm
 						title="Solicitar Valoración"
@@ -316,10 +337,10 @@ const heroBgImage =
 		seoContentTitle && (
 			<section class="py-20 bg-secondary">
 				<div class="container mx-auto px-4 max-w-4xl">
-					<h2 class="text-3xl font-heading font-bold text-white mb-8">
+					<h2 class="text-3xl font-heading font-bold text-heading mb-8">
 						{seoContentTitle}
 					</h2>
-					<div class="prose prose-invert prose-lg text-slate-300">
+					<div class="prose prose-invert prose-lg text-body">
 						<SeoContentRendered />
 					</div>
 				</div>
@@ -330,7 +351,7 @@ const heroBgImage =
 	{
 		faq && faq.length > 0 && (
 			<div class="container mx-auto px-4 max-w-4xl py-20">
-				<h2 class="text-3xl font-heading font-bold text-white mb-8 text-center">
+				<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
 					Preguntas Frecuentes
 				</h2>
 				<FaqAccordion items={faq} />

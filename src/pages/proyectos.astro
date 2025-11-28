@@ -27,10 +27,10 @@ const gallerySchema: WithContext<CollectionPage> = {
     description={`Galería de proyectos de ${niche} en ${city}.`}
     schema={gallerySchema}
 >
-    <section class="relative py-20 bg-secondary border-b border-white/5">
+    <section class="relative py-20 bg-secondary border-b border-heading/5">
         <div class="container mx-auto px-4 text-center">
             <h1
-                class="text-5xl md:text-7xl font-heading font-bold text-white mb-6"
+                class="text-5xl md:text-7xl font-heading font-bold text-heading mb-6"
             >
                 NUESTROS <span
                     class="text-transparent bg-clip-text"
@@ -38,21 +38,21 @@ const gallerySchema: WithContext<CollectionPage> = {
                     >PROYECTOS</span
                 >
             </h1>
-            <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p class="text-xl text-body max-w-2xl mx-auto">
                 Una imagen vale más que mil palabras. Descubre la calidad de
                 nuestros acabados en {city} y provincia.
             </p>
         </div>
     </section>
 
-    <section class="py-20 bg-body">
+    <section class="py-20 bg-surface/30">
         <div class="container mx-auto px-4">
             {
                 projects.length > 0 ? (
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {projects.map((project) => (
-                            <div class="group relative rounded-lg overflow-hidden bg-white shadow-lg border border-slate-200 hover:border-primary/50 transition-all hover:shadow-2xl hover:shadow-primary/10 aspect-[4/3]">
-                                <div class="absolute inset-0 bg-slate-200 flex items-center justify-center text-slate-400 group-hover:scale-105 transition-transform duration-700">
+                            <div class="group relative rounded-lg overflow-hidden bg-surface shadow-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-2xl hover:shadow-primary/10 aspect-[4/3]">
+                                <div class="absolute inset-0 bg-surface/50 flex items-center justify-center text-body group-hover:scale-105 transition-transform duration-700">
                                     {/* NOTA: Si usas imágenes reales, descomenta esto:
                                 <img src={project.data.image} alt={project.data.title} class="w-full h-full object-cover" /> 
                              */}
@@ -77,8 +77,8 @@ const gallerySchema: WithContext<CollectionPage> = {
                     </div>
                 ) : (
                     // ESTADO VACÍO
-                    <div class="text-center py-20 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50">
-                        <p class="text-slate-500 text-lg mb-4">
+                    <div class="text-center py-20 border-2 border-dashed border-heading/20 rounded-xl bg-surface/30">
+                        <p class="text-body text-lg mb-4">
                             Estamos actualizando nuestra galería de proyectos de{" "}
                             {niche}.
                         </p>

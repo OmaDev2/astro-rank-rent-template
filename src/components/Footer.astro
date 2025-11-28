@@ -15,14 +15,14 @@ const { siteName, phone, email, address, city, niche } = settings?.data || {
 };
 ---
 
-<footer class="bg-secondary border-t border-white/10 pt-16 pb-8">
+<footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
     <div class="container mx-auto px-4">
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             <div>
-                <h3 class="text-2xl font-heading font-bold text-white mb-4">
+                <h3 class="text-2xl font-heading font-bold text-heading mb-4">
                     {siteName}
                 </h3>
-                <p class="text-slate-400 text-sm leading-relaxed">
+                <p class="text-body text-sm leading-relaxed">
                     Expertos en {niche} en {city} y provincia. Calidad profesional
                     y servicio rápido garantizado.
                 </p>
@@ -30,16 +30,16 @@ const { siteName, phone, email, address, city, niche } = settings?.data || {
 
             <div>
                 <h4
-                    class="text-white font-bold mb-4 uppercase tracking-wider text-sm"
+                    class="text-heading font-bold mb-4 uppercase tracking-wider text-sm"
                 >
                     Contacto
                 </h4>
-                <ul class="space-y-3 text-slate-400 text-sm">
+                <ul class="space-y-3 text-body text-sm">
                     <li class="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-primary" />
                         <a
-                            href={`tel:${phone}`}
-                            class="hover:text-white transition-colors"
+                            href={`tel:${phone.replace(/\s/g, "")}`}
+                            class="hover:text-heading transition-colors"
                         >
                             {phone}
                         </a>
@@ -48,7 +48,7 @@ const { siteName, phone, email, address, city, niche } = settings?.data || {
                         <Mail className="w-4 h-4 text-primary" />
                         <a
                             href={`mailto:${email}`}
-                            class="hover:text-white transition-colors"
+                            class="hover:text-heading transition-colors"
                         >
                             {email}
                         </a>
@@ -70,19 +70,19 @@ const { siteName, phone, email, address, city, niche } = settings?.data || {
         </div>
 
         <div
-            class="border-t border-slate-900 pt-8 text-center text-slate-600 text-xs"
+            class="border-t border-heading/10 pt-8 text-center text-body/70 text-xs"
         >
             <div class="flex flex-wrap justify-center gap-4 mb-4">
                 <a
                     href="/aviso-legal/"
                     class="hover:text-primary transition-colors">Aviso Legal</a
                 >
-                <span class="text-slate-800">|</span>
+                <span class="text-body/30">|</span>
                 <a
                     href="/privacidad/"
                     class="hover:text-primary transition-colors">Privacidad</a
                 >
-                <span class="text-slate-800">|</span>
+                <span class="text-body/30">|</span>
                 <a href="/cookies/" class="hover:text-primary transition-colors"
                     >Cookies</a
                 >
@@ -91,7 +91,7 @@ const { siteName, phone, email, address, city, niche } = settings?.data || {
                 &copy; {new Date().getFullYear()}
                 {siteName}. Todos los derechos reservados.
             </p>
-            <p class="text-slate-700 mt-2 text-[10px]">
+            <p class="text-body/50 mt-2 text-[10px]">
                 Este sitio web actúa como intermediario de servicios de {niche}.
             </p>
         </div>

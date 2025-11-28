@@ -11,30 +11,106 @@ export default config({
             label: '⚙️ Configuración del Negocio',
             path: 'src/content/settings/global',
             schema: {
+                // ========== IDENTIDAD ==========
+                siteName: fields.text({ label: 'Nombre del Negocio' }),
+                niche: fields.text({ label: 'Nicho (ej: Fontanería, Herrería)' }),
+
+                logo: fields.image({
+                    label: 'Logo del Negocio',
+                    description: 'Recomendado: PNG transparente, mínimo 200x200px',
+                    directory: 'src/assets/images',
+                    publicPath: '@assets/images',
+                }),
+
+                siteUrl: fields.text({
+                    label: 'URL del Sitio',
+                    description: 'Con https:// (ej: https://midominio.com)',
+                }),
+
+                businessType: fields.select({
+                    label: 'Tipo de Negocio (Schema.org)',
+                    description: 'Ayuda a Google a entender tu negocio',
+                    options: [
+                        { label: 'Cerrajería', value: 'Locksmith' },
+                        { label: 'Fontanería', value: 'Plumber' },
+                        { label: 'Electricista', value: 'Electrician' },
+                        { label: 'Herrería / Metalurgia', value: 'LocalBusiness' },
+                        { label: 'Limpieza', value: 'LocalBusiness' },
+                        { label: 'Reformas / Construcción', value: 'HomeAndConstructionBusiness' },
+                        { label: 'Abogados / Legal', value: 'LegalService' },
+                        { label: 'Clínica / Salud', value: 'MedicalBusiness' },
+                        { label: 'Estética / Belleza', value: 'HealthAndBeautyBusiness' },
+                        { label: 'Otro (Genérico)', value: 'LocalBusiness' },
+                    ],
+                    defaultValue: 'LocalBusiness',
+                }),
+
+                // ========== UBICACIÓN ==========
+                city: fields.text({ label: 'Ciudad Principal' }),
+                address: fields.text({ label: 'Dirección Completa' }),
+
+                coordinates: fields.object({
+                    lat: fields.text({ label: 'Latitud', description: 'Ej: 41.6488' }),
+                    lng: fields.text({ label: 'Longitud', description: 'Ej: -0.8891' }),
+                }, {
+                    label: 'Coordenadas GPS',
+                    description: 'Para Google Maps. Búscalas en Google Maps > clic derecho > coordenadas'
+                }),
+
+                // ========== CONTACTO ==========
+                phone: fields.text({ label: 'Teléfono' }),
+                whatsapp: fields.text({ label: 'WhatsApp (ej: 34600000000)' }),
+                email: fields.text({ label: 'Email' }),
+                schedule: fields.text({
+                    label: 'Horario de Atención',
+                    description: 'Ej: Lun-Vie 9:00-20:00, Sáb 10:00-14:00'
+                }),
+
+                // ========== LEGAL ==========
+                nif: fields.text({ label: 'NIF / CIF' }),
+
+                // ========== TEMA VISUAL ==========
                 theme: fields.select({
                     label: '🎨 Tema de Color',
-                    description: 'Elige la paleta de colores para toda la web.',
+                    description: 'Paleta de colores para toda la web',
                     options: [
                         { label: 'Industrial (Naranja)', value: 'industrial' },
                         { label: 'Corporativo (Azul)', value: 'corporate' },
                         { label: 'Naturaleza (Verde)', value: 'nature' },
-                        { label: 'Urgencia (Rojo)', value: 'urgent' }
+                        { label: 'Urgencia (Rojo)', value: 'urgent' },
+                        { label: 'Legal (Navy/Oro)', value: 'legal' },
+                        { label: 'Salud (Turquesa)', value: 'health' },
+                        { label: 'Lujo (Negro/Oro)', value: 'luxury' },
+                        { label: 'Estética (Rosa)', value: 'beauty' },
+                        { label: 'Tech (Violeta)', value: 'tech' },
+                        { label: 'Clean (Claro/Minimal)', value: 'clean_light' },
                     ],
                     defaultValue: 'industrial',
                 }),
-                siteName: fields.text({ label: 'Nombre del Negocio' }),
-                niche: fields.text({ label: 'Nicho (ej: Herrería)' }),
-                city: fields.text({ label: 'Ciudad Principal' }),
-                phone: fields.text({ label: 'Teléfono' }),
-                whatsapp: fields.text({ label: 'WhatsApp (ej: 34600000000)' }),
-                email: fields.text({ label: 'Email' }),
-                address: fields.text({ label: 'Dirección' }),
-                nif: fields.text({ label: 'NIF / CIF' }),
-                ctaText: fields.text({ label: 'Texto Botón CTA' }),
+
+                // ========== CTA / CONVERSIÓN ==========
+                ctaText: fields.text({
+                    label: 'Texto Botón CTA',
+                    description: 'Ej: Pedir Presupuesto, Llamar Ahora'
+                }),
+
+                // ========== REDES SOCIALES ==========
                 facebook: fields.text({ label: 'Facebook URL' }),
                 instagram: fields.text({ label: 'Instagram URL' }),
+
+                // ========== ANALYTICS ==========
+                googleAnalyticsId: fields.text({
+                    label: 'Google Analytics 4 ID',
+                    description: 'Ej: G-XXXXXXXXXX'
+                }),
+                gtmId: fields.text({
+                    label: 'Google Tag Manager ID',
+                    description: 'Ej: GTM-XXXXXXX'
+                }),
             },
         }),
+
+
         homepage: singleton({
             label: '🏠 Página de Inicio',
             path: 'src/content/pages/home',
@@ -188,5 +264,36 @@ export default config({
                 content: fields.mdx({ label: 'Detalles' }),
             },
         }),
+
+
+        // 4. TESTIMONIOS
+        testimonials: collection({
+            label: '⭐ Testimonios',
+            slugField: 'name',
+            path: 'src/content/testimonials/*',
+            schema: {
+                name: fields.slug({
+                    name: { label: 'Nombre del Cliente' },
+                }),
+                initials: fields.text({
+                    label: 'Iniciales',
+                    description: 'Ej: JP para Juan Pérez',
+                }),
+                rating: fields.integer({
+                    label: 'Estrellas (1-5)',
+                    defaultValue: 5,
+                    validation: { min: 1, max: 5 },
+                }),
+                text: fields.text({
+                    label: 'Testimonio',
+                    multiline: true,
+                }),
+                featured: fields.checkbox({
+                    label: 'Mostrar en páginas de servicios',
+                    defaultValue: true,
+                }),
+            },
+        }),
+
     },
 });

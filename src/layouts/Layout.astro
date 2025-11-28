@@ -10,12 +10,15 @@ import { themes } from "../config/themes";
 
 // 1. Recuperar Configuración Global
 const settings = await getEntry("settings", "global");
-const { siteName, niche, city, theme } = settings?.data || {
-    siteName: "Herrero Zaragoza",
-    niche: "Herrería",
-    city: "Zaragoza",
-    theme: "industrial",
-};
+const { siteName, niche, city, theme, googleAnalyticsId, gtmId } =
+    settings?.data || {
+        siteName: "Herrero Zaragoza",
+        niche: "Herrería",
+        city: "Zaragoza",
+        theme: "industrial",
+        googleAnalyticsId: "",
+        gtmId: "",
+    };
 
 // 2. Lógica del Tema
 const activeTheme = themes[theme as keyof typeof themes] || themes.industrial;
@@ -42,7 +45,10 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
     style={{
         "--color-primary": colors.primary,
         "--color-secondary": colors.secondary,
+        "--color-surface": colors.surface,
         "--color-accent": colors.accent,
+        "--color-text-heading": colors.textMain,
+        "--color-text-body": colors.textMuted,
         "--theme-gradient": gradient,
     }}
 >
@@ -65,11 +71,57 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
             schema={schema}
             noindex={noindex}
         />
+
+        {/* Google Tag Manager */}
+        {
+            gtmId && (
+                <script type="text/partytown">
+                    {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','${gtmId}');`}
+                </script>
+            )
+        }
+
+        {/* Google Analytics 4 */}
+        {
+            googleAnalyticsId && (
+                <script
+                    type="text/partytown"
+                    src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+                />
+            )
+        }
+        {
+            googleAnalyticsId && (
+                <script type="text/partytown">
+                    {`window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${googleAnalyticsId}');`}
+                </script>
+            )
+        }
     </head>
 
     <body
-        class="bg-body text-text font-sans antialiased selection:bg-primary selection:text-white"
+        class="bg-secondary text-text font-sans antialiased selection:bg-primary selection:text-white"
     >
+        {/* GTM noscript fallback */}
+        {
+            gtmId && (
+                <noscript>
+                    <iframe
+                        src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+                        height="0"
+                        width="0"
+                        style="display:none;visibility:hidden"
+                    />
+                </noscript>
+            )
+        }
         <Navbar />
 
         <main>

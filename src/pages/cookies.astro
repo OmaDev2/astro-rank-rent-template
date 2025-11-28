@@ -23,11 +23,13 @@ const { siteName, email } = settings?.data || {
                 <div class="text-center mb-12">
                     <div class="flex items-center justify-center gap-3 mb-6">
                         <Cookie className="w-8 h-8 text-primary" />
-                        <h1 class="text-4xl font-heading font-bold text-white">
+                        <h1
+                            class="text-4xl font-heading font-bold text-heading"
+                        >
                             Política de Cookies
                         </h1>
                     </div>
-                    <p class="text-slate-400">
+                    <p class="text-body/70">
                         Última actualización: {
                             new Date().toLocaleDateString("es-ES", {
                                 year: "numeric",
@@ -38,15 +40,17 @@ const { siteName, email } = settings?.data || {
                     </p>
                 </div>
 
-                <div class="prose prose-invert prose-slate max-w-none">
+                <div
+                    class="prose prose-invert prose-headings:text-heading prose-p:text-body prose-strong:text-heading prose-li:text-body max-w-none"
+                >
                     <div
-                        class="bg-slate-900/50 border border-white/10 rounded-xl p-8 space-y-6"
+                        class="bg-surface/50 border border-heading/10 rounded-xl p-8 space-y-6"
                     >
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 1. ¿Qué son las Cookies?
                             </h2>
-                            <p class="text-slate-300 leading-relaxed">
+                            <p class="text-body leading-relaxed">
                                 Las cookies son pequeños archivos de texto que
                                 se almacenan en su dispositivo (ordenador,
                                 tablet o móvil) cuando visita un sitio web.
@@ -56,36 +60,38 @@ const { siteName, email } = settings?.data || {
                         </section>
 
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 2. Cookies que Utilizamos
                             </h2>
-                            <p class="text-slate-300 leading-relaxed mb-4">
+                            <p class="text-body leading-relaxed mb-4">
                                 Este sitio web utiliza las siguientes categorías
                                 de cookies:
                             </p>
 
                             <div class="space-y-4">
                                 <div
-                                    class="bg-slate-950 border border-slate-700 rounded-lg p-6"
+                                    class="bg-surface border border-heading/20 rounded-lg p-6"
                                 >
                                     <h3
-                                        class="text-xl font-bold text-white mb-3"
+                                        class="text-xl font-bold text-heading mb-3"
                                     >
                                         Cookies Técnicas (Necesarias)
                                     </h3>
-                                    <p
-                                        class="text-slate-300 leading-relaxed mb-2"
-                                    >
+                                    <p class="text-body leading-relaxed mb-2">
                                         Son esenciales para el funcionamiento
                                         del sitio web. Sin ellas, algunos
                                         servicios no pueden ser proporcionados.
                                     </p>
-                                    <p class="text-sm text-slate-400 mt-2">
-                                        <strong>Finalidad:</strong> Mantener la sesión
-                                        del usuario, recordar preferencias básicas.
+                                    <p class="text-sm text-body/70 mt-2">
+                                        <strong class="text-heading"
+                                            >Finalidad:</strong
+                                        > Mantener la sesión del usuario, recordar
+                                        preferencias básicas.
                                     </p>
-                                    <p class="text-sm text-slate-400">
-                                        <strong>Duración:</strong> Sesión
+                                    <p class="text-sm text-body/70">
+                                        <strong class="text-heading"
+                                            >Duración:</strong
+                                        > Sesión
                                     </p>
                                     <p
                                         class="text-sm text-primary mt-2 font-bold"
@@ -95,31 +101,33 @@ const { siteName, email } = settings?.data || {
                                 </div>
 
                                 <div
-                                    class="bg-slate-950 border border-slate-700 rounded-lg p-6"
+                                    class="bg-surface border border-heading/20 rounded-lg p-6"
                                 >
                                     <h3
-                                        class="text-xl font-bold text-white mb-3"
+                                        class="text-xl font-bold text-heading mb-3"
                                     >
                                         Cookies Analíticas
                                     </h3>
-                                    <p
-                                        class="text-slate-300 leading-relaxed mb-2"
-                                    >
+                                    <p class="text-body leading-relaxed mb-2">
                                         Nos permiten analizar el uso del sitio
                                         web y mejorar la experiencia del
                                         usuario.
                                     </p>
-                                    <p class="text-sm text-slate-400 mt-2">
-                                        <strong>Proveedor:</strong> Google Analytics
-                                        (si aplica)
+                                    <p class="text-sm text-body/70 mt-2">
+                                        <strong class="text-heading"
+                                            >Proveedor:</strong
+                                        > Google Analytics (si aplica)
                                     </p>
-                                    <p class="text-sm text-slate-400">
-                                        <strong>Finalidad:</strong> Estadísticas
-                                        de visitas, páginas más visitadas, tiempo
-                                        de navegación.
+                                    <p class="text-sm text-body/70">
+                                        <strong class="text-heading"
+                                            >Finalidad:</strong
+                                        > Estadísticas de visitas, páginas más visitadas,
+                                        tiempo de navegación.
                                     </p>
-                                    <p class="text-sm text-slate-400">
-                                        <strong>Duración:</strong> Hasta 2 años
+                                    <p class="text-sm text-body/70">
+                                        <strong class="text-heading"
+                                            >Duración:</strong
+                                        > Hasta 2 años
                                     </p>
                                     <p
                                         class="text-sm text-accent mt-2 font-bold"
@@ -131,39 +139,39 @@ const { siteName, email } = settings?.data || {
                         </section>
 
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 3. Cookies de Terceros
                             </h2>
-                            <p class="text-slate-300 leading-relaxed mb-3">
+                            <p class="text-body leading-relaxed mb-3">
                                 Este sitio web puede utilizar servicios de
                                 terceros que establecen sus propias cookies:
                             </p>
                             <ul
-                                class="list-disc list-inside space-y-2 text-slate-300 ml-4"
+                                class="list-disc list-inside space-y-2 text-body ml-4"
                             >
                                 <li>
-                                    <strong class="text-white"
+                                    <strong class="text-heading"
                                         >Google Analytics:</strong
                                     > Para análisis de tráfico y comportamiento de
                                     usuarios
                                 </li>
                                 <li>
-                                    <strong class="text-white"
+                                    <strong class="text-heading"
                                         >Google Maps:</strong
                                     > Para mostrar mapas interactivos
                                 </li>
                             </ul>
-                            <p class="text-slate-300 leading-relaxed mt-4">
+                            <p class="text-body leading-relaxed mt-4">
                                 Estas cookies están sujetas a las políticas de
                                 privacidad de cada proveedor.
                             </p>
                         </section>
 
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 4. Gestión de Cookies
                             </h2>
-                            <p class="text-slate-300 leading-relaxed mb-4">
+                            <p class="text-body leading-relaxed mb-4">
                                 Puede gestionar y/o eliminar las cookies según
                                 sus preferencias. Para más información, visite <a
                                     href="https://www.aboutcookies.org"
@@ -174,26 +182,28 @@ const { siteName, email } = settings?.data || {
                                 >
                             </p>
 
-                            <h3 class="text-lg font-bold text-white mb-3">
+                            <h3 class="text-lg font-bold text-heading mb-3">
                                 Configuración del Navegador:
                             </h3>
                             <ul
-                                class="list-disc list-inside space-y-2 text-slate-300 ml-4"
+                                class="list-disc list-inside space-y-2 text-body ml-4"
                             >
                                 <li>
-                                    <strong class="text-white">Chrome:</strong> Configuración
-                                    > Privacidad y seguridad > Cookies
+                                    <strong class="text-heading">Chrome:</strong
+                                    > Configuración > Privacidad y seguridad > Cookies
                                 </li>
                                 <li>
-                                    <strong class="text-white">Firefox:</strong>
+                                    <strong class="text-heading"
+                                        >Firefox:</strong
+                                    >
                                     Opciones > Privacidad y seguridad > Cookies
                                 </li>
                                 <li>
-                                    <strong class="text-white">Safari:</strong> Preferencias
-                                    > Privacidad > Cookies
+                                    <strong class="text-heading">Safari:</strong
+                                    > Preferencias > Privacidad > Cookies
                                 </li>
                                 <li>
-                                    <strong class="text-white">Edge:</strong> Configuración
+                                    <strong class="text-heading">Edge:</strong> Configuración
                                     > Privacidad > Cookies
                                 </li>
                             </ul>
@@ -201,7 +211,7 @@ const { siteName, email } = settings?.data || {
                             <div
                                 class="bg-primary/10 border border-primary/30 rounded-lg p-6 mt-6"
                             >
-                                <p class="text-slate-200 leading-relaxed">
+                                <p class="text-body leading-relaxed">
                                     <strong class="text-primary"
                                         >Importante:</strong
                                     > Si bloquea o elimina las cookies, es posible
@@ -212,10 +222,10 @@ const { siteName, email } = settings?.data || {
                         </section>
 
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 5. Consentimiento
                             </h2>
-                            <p class="text-slate-300 leading-relaxed">
+                            <p class="text-body leading-relaxed">
                                 Al navegar y continuar en este sitio web, usted
                                 acepta el uso de cookies según lo descrito en
                                 esta política. Puede retirar su consentimiento
@@ -225,10 +235,10 @@ const { siteName, email } = settings?.data || {
                         </section>
 
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 6. Actualizaciones
                             </h2>
-                            <p class="text-slate-300 leading-relaxed">
+                            <p class="text-body leading-relaxed">
                                 Esta política de cookies puede ser actualizada
                                 periódicamente. Se recomienda revisarla
                                 regularmente para estar informado sobre cómo
@@ -237,10 +247,10 @@ const { siteName, email } = settings?.data || {
                         </section>
 
                         <section>
-                            <h2 class="text-2xl font-bold text-white mb-4">
+                            <h2 class="text-2xl font-bold text-heading mb-4">
                                 7. Más Información
                             </h2>
-                            <p class="text-slate-300 leading-relaxed">
+                            <p class="text-body leading-relaxed">
                                 Para más información sobre el tratamiento de sus
                                 datos personales, consulte nuestra <a
                                     href="/privacidad"
@@ -248,7 +258,7 @@ const { siteName, email } = settings?.data || {
                                     >Política de Privacidad</a
                                 >.
                             </p>
-                            <p class="text-slate-300 leading-relaxed mt-3">
+                            <p class="text-body leading-relaxed mt-3">
                                 Para cualquier consulta sobre cookies, puede
                                 contactar en:
                             </p>

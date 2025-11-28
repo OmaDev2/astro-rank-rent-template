@@ -1,58 +1,52 @@
 ---
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 
-// 1. Recuperamos configuración global
-const settings = await getEntry("settings", "global");
-const { city, niche } = settings?.data || {
-    city: "Zaragoza",
-    niche: "Herreros",
-};
+const locations = await getCollection("locations");
 
-// Recuperamos las localidades, excluyendo la capital si coincide con el slug
-const locations = await getCollection("locations", ({ slug }) => {
-    return (
-        slug !== city.toLowerCase() && slug !== `${city.toLowerCase()}-capital`
-    );
-});
-
+// Ordenar alfabéticamente
 const sortedLocations = locations.sort((a, b) =>
     a.data.name.localeCompare(b.data.name),
 );
+
+// Agrupar por categorías para mostrarlo ordenado (Opcional, si prefieres lista plana elimina esto)
+const categories = {
+    residencial: sortedLocations.filter((l) => l.data.type === "residencial"),
+    industrial: sortedLocations.filter((l) => l.data.type === "industrial"),
+    centro: sortedLocations.filter((l) => l.data.type === "centro"),
+};
 ---
 
-<div class="service-areas">
-    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-sm">
+<div class="space-y-6">
+    {/* Título de la sección en el Footer */}
+    <h4 class="text-heading font-bold uppercase tracking-wider text-sm mb-4">
         Zonas de Servicio
     </h4>
 
-    <ul class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-slate-400">
-        {/* 1. LA JOYA DE LA CORONA: Link manual a la Home */}
-        <li>
-            <a
-                href="/"
-                class="text-slate-200 font-bold hover:text-amber-500 transition-colors flex items-center gap-1 group"
-                title={`${niche} en ${city}`}
-            >
-                <span
-                    class="w-1.5 h-1.5 bg-amber-600 rounded-full group-hover:bg-amber-400 transition-colors"
-                ></span>
-                {city} Capital
-            </a>
-        </li>
-
-        {/* 2. El resto de pueblos automáticos */}
+    {/* Si hay muchas zonas, usamos un Grid denso */}
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
         {
-            sortedLocations.map((loc) => (
-                <li>
-                    <a
-                        href={`/zona/${loc.slug}/`}
-                        class="hover:text-amber-500 transition-colors flex items-center gap-1 group"
-                    >
-                        <span class="w-1.5 h-1.5 bg-amber-600 rounded-full group-hover:bg-amber-400 transition-colors" />
-                        {loc.data.name}
-                    </a>
-                </li>
+            sortedLocations.map((location) => (
+                <a
+                    href={`/zona/${location.slug}/`}
+                    class="group flex items-center gap-1 text-sm text-body hover:text-heading transition-colors"
+                >
+                    {/* Bullet point que cambia de color con el tema */}
+                    <span class="w-1.5 h-1.5 rounded-full bg-body/50 group-hover:bg-primary transition-colors" />
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">
+                        {location.data.name}
+                    </span>
+                </a>
             ))
         }
-    </ul>
+    </div>
+
+    {/* Enlace "Ver todas" dinámico */}
+    <div class="pt-4 border-t border-heading/10">
+        <a
+            href="/zonas"
+            class="inline-flex items-center text-sm font-bold text-primary hover:text-accent transition-colors"
+        >
+            Ver cobertura completa en el mapa →
+        </a>
+    </div>
 </div>

@@ -37,12 +37,12 @@ const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
 
                 <div class="mb-12 -mt-20 relative z-10">
                     <h2
-                        class="text-4xl lg:text-5xl font-heading font-bold text-white mb-4"
+                        class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-4"
                     >
                         Página No Encontrada
                     </h2>
                     <p
-                        class="text-xl text-slate-400 leading-relaxed max-w-lg mx-auto"
+                        class="text-xl text-body leading-relaxed max-w-lg mx-auto"
                     >
                         Lo sentimos, la página que buscas no existe, ha sido
                         movida o la dirección es incorrecta.
@@ -62,7 +62,7 @@ const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
 
                     <a
                         href={`tel:${phone.replace(/\s/g, "")}`}
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-primary hover:bg-primary rounded-lg transition-all transform hover:-translate-y-0.5"
+                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border-2 border-primary hover:bg-primary hover:text-white rounded-lg transition-all transform hover:-translate-y-0.5"
                     >
                         <Phone className="w-5 h-5 mr-2" />
                         Llamar Ahora
@@ -71,8 +71,8 @@ const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
 
                 {
                     suggestedServices.length > 0 && (
-                        <div class="bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur-sm">
-                            <h3 class="text-xl font-bold text-white mb-6">
+                        <div class="bg-surface/50 border border-heading/10 rounded-xl p-8 backdrop-blur-sm">
+                            <h3 class="text-xl font-bold text-heading mb-6">
                                 ¿Buscabas alguno de nuestros servicios de{" "}
                                 {niche}?
                             </h3>
@@ -80,9 +80,9 @@ const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
                                 {suggestedServices.map((service) => (
                                     <a
                                         href={`/${service.slug}`}
-                                        class="flex items-center justify-between p-4 bg-slate-900/50 border border-white/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
+                                        class="flex items-center justify-between p-4 bg-surface border border-heading/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
                                     >
-                                        <span class="text-slate-300 group-hover:text-white transition-colors font-medium">
+                                        <span class="text-body group-hover:text-primary transition-colors font-medium">
                                             {service.data.title}
                                         </span>
                                         <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
@@ -91,9 +91,9 @@ const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
 
                                 <a
                                     href="/contacto/"
-                                    class="flex items-center justify-between p-4 bg-slate-900/50 border border-white/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
+                                    class="flex items-center justify-between p-4 bg-surface border border-heading/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
                                 >
-                                    <span class="text-slate-300 group-hover:text-white transition-colors font-medium">
+                                    <span class="text-body group-hover:text-primary transition-colors font-medium">
                                         Contactar con Soporte
                                     </span>
                                     <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />

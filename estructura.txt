@@ -8,20 +8,36 @@
 ├── check_exports.mjs
 ├── dist
 │   ├── _astro
-│   │   ├── _slug_.CIlQBmIQ.css
+│   │   ├── _slug_.BmV3Dh8d.css
 │   │   ├── client.BWtGz07G.js
-│   │   ├── hero-home.COrg9BeG.png
 │   │   ├── index.C7xe7hQc.js
-│   │   ├── keystatic-astro-page.DjIWAlEL.css
-│   │   ├── keystatic-page.B1iX31Lw.js
-│   │   └── placeholder.C2G7wU7m.svg
+│   │   ├── keystatic-astro-page.5KjMa39i.css
+│   │   └── keystatic-page.DpZcSzdq.js
+│   ├── cerramientos-de-terrazas
+│   │   └── index.html
+│   ├── estructuras-metalicas-zaragoza
+│   │   └── index.html
+│   ├── ewewew
+│   │   └── index.html
 │   ├── favicon.svg
 │   ├── images
+│   │   ├── home
 │   │   └── services
 │   ├── llms.txt
+│   ├── proyectos-metalicos-medida-zaragoza
+│   │   └── index.html
+│   ├── puertas-metalicas-zaragoza
+│   │   └── index.html
+│   ├── rejas-ventanas-zaragoza
+│   │   └── index.html
+│   ├── reparaciones-metalicas-zaragoza
+│   │   └── index.html
 │   ├── robots.txt
 │   ├── sitemap-0.xml
 │   ├── sitemap-index.xml
+│   ├── zona
+│   │   ├── cuartedehuerva
+│   │   └── utebo
 │   └── ~partytown
 │       ├── partytown-atomics.js
 │       ├── partytown-media.js
@@ -6443,6 +6459,7 @@
 ├── public
 │   ├── favicon.svg
 │   ├── images
+│   │   ├── home
 │   │   └── services
 │   ├── llms.txt
 │   └── robots.txt
@@ -6464,12 +6481,14 @@
 │   │   └── WhatsAppButton.astro
 │   ├── config
 │   │   ├── README.md
-│   │   └── business.ts
+│   │   └── themes.ts
 │   ├── content
 │   │   ├── config.ts
 │   │   ├── locations
+│   │   ├── pages
 │   │   ├── projects
-│   │   └── services
+│   │   ├── services
+│   │   └── settings
 │   ├── layouts
 │   │   └── Layout.astro
 │   ├── pages
@@ -6493,4 +6512,4 @@
 ├── tsconfig.json
 └── update_slugs.mjs
 
-1847 directories, 4647 files
+1861 directories, 4652 files

@@ -36,18 +36,55 @@ const projects = defineCollection({
 const settings = defineCollection({
     type: 'data',
     schema: z.object({
-        theme: z.enum(['industrial', 'corporate', 'nature', 'urgent']).default('industrial'),
+        // Identidad
         siteName: z.string(),
         niche: z.string(),
+        logo: z.string().optional(),
+        siteUrl: z.string().optional(),
+        businessType: z.enum([
+            'Locksmith',
+            'Plumber',
+            'Electrician',
+            'LocalBusiness',
+            'HomeAndConstructionBusiness',
+            'LegalService',
+            'MedicalBusiness',
+            'HealthAndBeautyBusiness'
+        ]).default('LocalBusiness'),
+
+        // Ubicación
         city: z.string(),
+        address: z.string().optional(),
+        coordinates: z.object({
+            lat: z.string(),
+            lng: z.string(),
+        }).optional(),
+
+        // Contacto
         phone: z.string(),
         whatsapp: z.string().optional(),
         email: z.string().optional(),
-        address: z.string().optional(),
+        schedule: z.string().optional(),
+
+        // Legal
         nif: z.string().optional(),
+
+        // Tema
+        theme: z.enum([
+            'industrial', 'corporate', 'nature', 'urgent',
+            'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light'
+        ]).default('industrial'),
+
+        // CTA
         ctaText: z.string().optional(),
+
+        // Redes
         facebook: z.string().optional(),
         instagram: z.string().optional(),
+
+        // Analytics
+        googleAnalyticsId: z.string().optional(),
+        gtmId: z.string().optional(),
     }),
 });
 
@@ -78,10 +115,23 @@ const pages = defineCollection({
     }),
 });
 
+
+const testimonials = defineCollection({
+    schema: z.object({
+        name: z.string(),
+        initials: z.string(),
+        rating: z.number().min(1).max(5).default(5),
+        text: z.string(),
+        featured: z.boolean().default(true),
+    }),
+});
+
+
 export const collections = {
     locations,
     services,
     projects,
     settings,
     pages,
+    testimonials,
 };

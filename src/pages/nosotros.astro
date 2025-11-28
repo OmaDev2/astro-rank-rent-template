@@ -49,11 +49,11 @@ const schema: WithContext<AboutPage> = {
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-3xl mx-auto text-center">
                 <h1
-                    class="text-5xl lg:text-6xl font-heading font-bold text-white mb-6"
+                    class="text-5xl lg:text-6xl font-heading font-bold text-heading mb-6"
                 >
                     Sobre <span class="text-primary">Nosotros</span>
                 </h1>
-                <p class="text-xl text-slate-300 leading-relaxed">
+                <p class="text-xl text-body leading-relaxed">
                     {niche} profesionales en {city} comprometidos con la calidad,
                     la seguridad y la satisfacción del cliente.
                 </p>
@@ -61,14 +61,14 @@ const schema: WithContext<AboutPage> = {
         </div>
     </section>
 
-    <section class="py-20 bg-body">
+    <section class="py-20 bg-surface/30">
         <div class="container mx-auto px-4">
             <div
                 class="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
             >
                 <div class="relative">
                     <div
-                        class="aspect-[4/3] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl"
+                        class="aspect-[4/3] rounded-2xl overflow-hidden border border-heading/10 shadow-2xl"
                     >
                         <img
                             src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop"
@@ -104,7 +104,7 @@ const schema: WithContext<AboutPage> = {
                         {niche} Profesional desde 2010
                     </h2>
 
-                    <p class="text-slate-600 mb-6 leading-relaxed text-lg">
+                    <p class="text-body mb-6 leading-relaxed text-lg">
                         Desde nuestros inicios, nos hemos dedicado a ofrecer
                         servicios de {niche.toLowerCase()} de la más alta calidad
                         en {city} y provincia. Lo que comenzó como un pequeño taller
@@ -112,7 +112,7 @@ const schema: WithContext<AboutPage> = {
                         el sector.
                     </p>
 
-                    <p class="text-slate-600 mb-8 leading-relaxed">
+                    <p class="text-body mb-8 leading-relaxed">
                         Nuestro compromiso es simple pero firme: <strong
                             class="text-heading"
                             >ofrecer trabajos que combinen seguridad,
@@ -126,7 +126,7 @@ const schema: WithContext<AboutPage> = {
                             <div class="text-3xl font-bold text-primary mb-1">
                                 500+
                             </div>
-                            <div class="text-xs text-slate-500 uppercase">
+                            <div class="text-xs text-body/70 uppercase">
                                 Proyectos
                             </div>
                         </div>
@@ -134,7 +134,7 @@ const schema: WithContext<AboutPage> = {
                             <div class="text-3xl font-bold text-primary mb-1">
                                 100%
                             </div>
-                            <div class="text-xs text-slate-500 uppercase">
+                            <div class="text-xs text-body/70 uppercase">
                                 Satisfacción
                             </div>
                         </div>
@@ -142,7 +142,7 @@ const schema: WithContext<AboutPage> = {
                             <div class="text-3xl font-bold text-primary mb-1">
                                 15+
                             </div>
-                            <div class="text-xs text-slate-500 uppercase">
+                            <div class="text-xs text-body/70 uppercase">
                                 Años
                             </div>
                         </div>
@@ -155,11 +155,11 @@ const schema: WithContext<AboutPage> = {
     <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-heading font-bold text-white mb-4">
+                <h2 class="text-4xl font-heading font-bold text-heading mb-4">
                     Nuestros Valores
                 </h2>
                 <div class="w-24 h-1 bg-primary mx-auto mb-4"></div>
-                <p class="text-slate-400 max-w-2xl mx-auto">
+                <p class="text-body max-w-2xl mx-auto">
                     Los principios que guían nuestro trabajo cada día
                 </p>
             </div>
@@ -191,14 +191,14 @@ const schema: WithContext<AboutPage> = {
                             desc: "Presupuestos claros sin sorpresas.",
                         },
                     ].map((item) => (
-                        <div class="p-6 bg-slate-900/50 border border-white/10 rounded-xl hover:border-primary/50 transition-all group">
+                        <div class="p-6 bg-surface/50 border border-heading/10 rounded-xl hover:border-primary/50 transition-all group">
                             <div class="w-14 h-14 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                 <item.icon className="w-7 h-7 text-primary" />
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-3">
+                            <h3 class="text-xl font-bold text-heading mb-3">
                                 {item.title}
                             </h3>
-                            <p class="text-slate-400 text-sm leading-relaxed">
+                            <p class="text-body text-sm leading-relaxed">
                                 {item.desc}
                             </p>
                         </div>
@@ -208,7 +208,7 @@ const schema: WithContext<AboutPage> = {
         </div>
     </section>
 
-    <section class="py-20 bg-body">
+    <section class="py-20 bg-surface/30">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-16">
@@ -240,7 +240,7 @@ const schema: WithContext<AboutPage> = {
                                 desc: "Nos tomamos el tiempo necesario para entender tus necesidades.",
                             },
                         ].map((item) => (
-                            <div class="flex items-start gap-4 p-6 bg-white border border-slate-200 shadow-sm rounded-lg hover:border-primary/50 transition-colors">
+                            <div class="flex items-start gap-4 p-6 bg-surface border border-heading/10 shadow-sm rounded-lg hover:border-primary/50 transition-colors">
                                 <div class="shrink-0">
                                     <CheckCircle className="w-6 h-6 text-primary mt-1" />
                                 </div>
@@ -248,7 +248,7 @@ const schema: WithContext<AboutPage> = {
                                     <h3 class="text-xl font-bold text-heading mb-2">
                                         {item.title}
                                     </h3>
-                                    <p class="text-slate-600 leading-relaxed">
+                                    <p class="text-body leading-relaxed">
                                         {item.desc}
                                     </p>
                                 </div>
@@ -260,7 +260,7 @@ const schema: WithContext<AboutPage> = {
         </div>
     </section>
 
-    <section class="py-20 bg-secondary border-t border-white/5">
+    <section class="py-20 bg-secondary border-t border-heading/5">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
                 <div
@@ -268,10 +268,10 @@ const schema: WithContext<AboutPage> = {
                 >
                     <Users className="w-10 h-10 text-primary" />
                 </div>
-                <h2 class="text-4xl font-heading font-bold text-white mb-6">
+                <h2 class="text-4xl font-heading font-bold text-heading mb-6">
                     Equipo Profesional
                 </h2>
-                <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                <p class="text-body text-lg leading-relaxed mb-8">
                     Nuestro equipo está formado por técnicos certificados y con
                     años de experiencia en el sector del {niche.toLowerCase()}.
                     Nos mantenemos actualizados con las últimas técnicas y
