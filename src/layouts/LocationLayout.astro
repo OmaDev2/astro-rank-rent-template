@@ -5,15 +5,15 @@ import FinalCTA from "../components/FinalCTA.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import { CheckCircle, ArrowRight, Home, ChevronRight } from "lucide-react";
+import { getCollection } from "astro:content";
+import { getSettings } from "../lib/settings";
 
 // Imports de Bloques
 import HeroBlock from "../components/blocks/HeroBlock.astro";
 import FeaturesBlock from "../components/blocks/FeaturesBlock.astro";
 import MapBlock from "../components/blocks/MapBlock.astro";
 
-// --- 1. DEFINICIÓN DE TIPOS (Para corregir los errores) ---
-
-// Tipo para un Servicio
+// --- 1. DEFINICIÓN DE TIPOS ---
 interface Service {
     slug: string;
     data: {
@@ -22,7 +22,6 @@ interface Service {
     };
 }
 
-// Tipo para una Ubicación/Zona
 interface Location {
     slug: string;
     data: {
@@ -30,74 +29,70 @@ interface Location {
     };
 }
 
-// Tipo para los Bloques del Page Builder
 interface Block {
     discriminant: "hero" | "features" | "map" | "content" | "cta";
 }
 
-// Props del Layout
 interface Props {
     locationName: string;
     locationType: "residencial" | "industrial" | "centro";
-    zipCodes: string[];
+    zipCodes?: string[];
     heroImage?: string;
     coordinates?: { lat?: string; lng?: string };
     faq?: Array<{ question: string; answer: string }>;
     content: any;
-    siteName: string;
-    phone: string;
+    siteName?: string;
+    phone?: string;
     whatsapp?: string;
-    niche: string;
-    city: string;
-
-    // Aquí aplicamos los tipos que definimos arriba
-    services: Service[]; // <--- Corrige el error de 'service'
-    allLocations: Location[]; // <--- Corrige el error de 'loc' y 'location'
-    blocks?: Block[]; // <--- Corrige el error de 'block'
-
-    currentSlug: string;
+    niche?: string;
+    city?: string;
+    services?: Service[];
+    allLocations?: Location[];
+    blocks?: Block[];
+    currentSlug?: string;
     pageTitle: string;
     pageDescription: string;
     schema: any;
     mdxComponents?: any;
 }
 
-const {
-    locationName,
-    locationType,
-    zipCodes,
-    heroImage,
-    coordinates,
-    faq,
-    content: Content,
-    siteName,
-    phone,
-    whatsapp,
-    niche,
-    city,
-    services,
-    allLocations,
-    currentSlug,
-    pageTitle,
-    pageDescription,
-    schema,
-    mdxComponents = {},
-    blocks,
-} = Astro.props;
+// 1. RECUPERAR PROPS
+let props = Astro.props;
 
-// Orden por defecto si no se configura en Keystatic (Retrocompatibilidad)
+// 2. LÓGICA DE SEGURIDAD (AUTOFETCH)
+// Si faltan datos globales (porque la página padre no los pasó), los recuperamos aquí.
+const settings = await getSettings();
+const servicesData = props.services || (await getCollection("services"));
+const locationsData = props.allLocations || (await getCollection("locations"));
+
+// Consolidamos los datos finales
+const siteName = props.siteName || settings.siteName;
+const phone = props.phone || settings.phone;
+const whatsapp = props.whatsapp || settings.whatsapp;
+const niche = props.niche || settings.niche;
+const city = props.city || settings.city;
+const services = servicesData;
+const allLocations = locationsData;
+const currentSlug = props.currentSlug || "";
+
+// 3. GESTIÓN DE BLOQUES
 const defaultBlocks: Block[] = [
     { discriminant: "hero" },
     { discriminant: "features" },
-    { discriminant: "content" }, // Contenido + Sidebar
+    { discriminant: "content" },
     { discriminant: "cta" },
     { discriminant: "map" },
 ];
 
-const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
+const finalBlocks =
+    props.blocks && props.blocks.length > 0 ? props.blocks : defaultBlocks;
 ---
 
-<Layout title={pageTitle} description={pageDescription} schema={schema}>
+<Layout
+    title={props.pageTitle}
+    description={props.pageDescription}
+    schema={props.schema}
+>
     <section class="bg-surface/50 border-b border-heading/10 py-3">
         <div class="container mx-auto px-4">
             <nav class="flex items-center gap-2 text-sm text-body">
@@ -112,7 +107,9 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                     >Zonas</a
                 >
                 <ChevronRight className="w-4 h-4 text-body/50" />
-                <span class="text-heading font-medium">{locationName}</span>
+                <span class="text-heading font-medium"
+                    >{props.locationName}</span
+                >
             </nav>
         </div>
     </section>
@@ -121,13 +118,34 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
         finalBlocks.map((block) => {
             switch (block.discriminant) {
                 case "hero":
-                    return <HeroBlock {...Astro.props} />;
+                    return (
+                        <HeroBlock
+                            locationName={props.locationName}
+                            locationType={props.locationType}
+                            zipCodes={props.zipCodes}
+                            heroImage={props.heroImage}
+                            phone={phone}
+                            siteName={siteName}
+                            niche={niche}
+                        />
+                    );
 
                 case "features":
-                    return <FeaturesBlock {...Astro.props} />;
+                    return (
+                        <FeaturesBlock
+                            locationName={props.locationName}
+                            city={city}
+                        />
+                    );
 
                 case "map":
-                    return <MapBlock {...Astro.props} />;
+                    return (
+                        <MapBlock
+                            coordinates={props.coordinates}
+                            locationName={props.locationName}
+                            zipCodes={props.zipCodes}
+                        />
+                    );
 
                 case "cta":
                     return <FinalCTA />;
@@ -136,20 +154,22 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                     return (
                         <section class="py-20 bg-secondary">
                             <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
-                                {/* COLUMNA IZQUIERDA: CONTENIDO + SERVICIOS + FAQ */}
+                                {/* CONTENIDO PRINCIPAL */}
                                 <div class="lg:col-span-2 space-y-12">
                                     <div class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary prose-li:text-body max-w-none">
-                                        <Content components={mdxComponents} />
+                                        <props.content
+                                            components={props.mdxComponents}
+                                        />
                                     </div>
 
-                                    {/* Lista de Servicios en la Zona */}
+                                    {/* SERVICIOS EN LA ZONA */}
                                     <div>
                                         <h2 class="text-3xl font-heading font-bold text-heading mb-8">
                                             Servicios de {niche} en{" "}
-                                            {locationName}
+                                            {props.locationName}
                                         </h2>
                                         <div class="grid md:grid-cols-2 gap-6">
-                                            {services.map((service) => (
+                                            {services?.map((service) => (
                                                 <a
                                                     href={`/${service.slug}`}
                                                     class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all block"
@@ -163,7 +183,7 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                                                     <p class="text-body text-sm line-clamp-2">
                                                         {service.data.shortDesc}{" "}
                                                         Disponible en{" "}
-                                                        {locationName}.
+                                                        {props.locationName}.
                                                     </p>
                                                 </a>
                                             ))}
@@ -171,15 +191,15 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                                     </div>
 
                                     {/* FAQ */}
-                                    {faq && faq.length > 0 && (
+                                    {props.faq && props.faq.length > 0 && (
                                         <FaqAccordion
-                                            title={`Preguntas Frecuentes en ${locationName}`}
-                                            items={faq}
+                                            title={`Preguntas Frecuentes en ${props.locationName}`}
+                                            items={props.faq}
                                         />
                                     )}
                                 </div>
 
-                                {/* SIDEBAR (Fijo en el bloque de contenido) */}
+                                {/* SIDEBAR */}
                                 <div class="space-y-8">
                                     <div class="p-8 bg-surface rounded-lg border border-heading/10 sticky top-24 shadow-2xl">
                                         <h3 class="text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4">
@@ -195,12 +215,13 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                                             <li class="flex items-start gap-3">
                                                 <CheckCircle className="w-6 h-6 text-primary shrink-0 mt-1" />
                                                 <span class="text-body text-sm">
-                                                    Atención en {locationName}
+                                                    Atención en{" "}
+                                                    {props.locationName}
                                                 </span>
                                             </li>
                                         </ul>
                                         <a
-                                            href={`tel:${phone.replace(/\s/g, "")}`}
+                                            href={`tel:${phone?.replace(/\s/g, "")}`}
                                             class="flex flex-col items-center justify-center w-full py-4 bg-surface/50 hover:bg-surface text-heading border border-heading/20 rounded font-bold transition-all group hover:border-primary/50 mb-4"
                                         >
                                             <span class="text-xs text-body/70 uppercase tracking-widest mb-1 group-hover:text-primary">
@@ -211,7 +232,7 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                                             </span>
                                         </a>
                                         <a
-                                            href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone.replace(/\s/g, "")}`}
+                                            href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone?.replace(/\s/g, "")}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             class="flex flex-col items-center justify-center w-full py-4 bg-green-600 hover:bg-green-700 text-white border border-green-700 rounded font-bold transition-all group"
@@ -225,7 +246,7 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                                         </a>
                                     </div>
 
-                                    {/* Otras Zonas */}
+                                    {/* OTRAS ZONAS (Protegido con ?) */}
                                     <div class="bg-surface rounded-lg border border-heading/10 overflow-hidden">
                                         <div class="bg-surface/50 p-4 border-b border-heading/10">
                                             <h4 class="font-bold text-heading uppercase text-sm tracking-wider">
@@ -235,7 +256,7 @@ const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
                                         <div class="p-2">
                                             <ul class="space-y-1">
                                                 {allLocations
-                                                    .filter(
+                                                    ?.filter(
                                                         (loc) =>
                                                             loc.slug !==
                                                             currentSlug,

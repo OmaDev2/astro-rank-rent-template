@@ -60,7 +60,7 @@ const localSchema: WithContext<LocalBusiness> = {
         address: {
             "@type": "PostalAddress",
             addressLocality: data.name,
-            postalCode: data.zipCodes[0],
+            postalCode: data.zipCodes ? data.zipCodes[0] : "",
             addressCountry: "ES",
         },
     },
@@ -94,4 +94,5 @@ const pageDescription =
     pageDescription={pageDescription}
     schema={localSchema}
     mdxComponents={mdxComponents}
+    blocks={data.blocks}
 />

@@ -44,6 +44,17 @@ const services = defineCollection({
             question: z.string(),
             answer: z.string(),
         })).optional(),
+
+        // --- PAGE BUILDER: Define el orden de las secciones ---
+        blocks: z.array(
+            z.discriminatedUnion('discriminant', [
+                z.object({ discriminant: z.literal('hero') }),
+                z.object({ discriminant: z.literal('features') }),
+                z.object({ discriminant: z.literal('content') }),
+                z.object({ discriminant: z.literal('faq') }),
+                z.object({ discriminant: z.literal('cta') }),
+            ])
+        ).optional(), // Opcional para no romper servicios antiguos sin este campo
     }),
 });
 

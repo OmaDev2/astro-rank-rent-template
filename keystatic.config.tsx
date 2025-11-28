@@ -410,8 +410,37 @@ export default config({
                     }
                 ),
 
+                // --- NUEVO: PAGE BUILDER PARA SERVICIOS ---
+                blocks: fields.blocks({
+                    hero: {
+                        label: 'Hero (Portada)',
+                        schema: fields.empty()
+                    },
+                    features: {
+                        label: 'Características (Por qué elegirnos)',
+                        schema: fields.empty()
+                    },
+                    content: {
+                        label: 'Contenido Principal + Sidebar',
+                        schema: fields.empty()
+                    },
+                    faq: {
+                        label: 'Preguntas Frecuentes',
+                        schema: fields.empty()
+                    },
+                    cta: {
+                        label: 'Llamada a la Acción (CTA Final)',
+                        schema: fields.empty()
+                    },
+                }, {
+                    label: 'Constructor de Página (Orden de Secciones)',
+                    description: 'Define qué secciones mostrar y en qué orden aparecerán en la página del servicio'
+                }),
+                // ------------------------------------------
+
                 content: fields.mdx({
-                    label: 'Contenido Completo',
+                    label: 'Contenido (Texto SEO)',
+                    description: 'Contenido principal que se mostrará cuando agregues el bloque "Contenido Principal + Sidebar"',
                     options: {
                         image: {
                             directory: 'public/images/services',
