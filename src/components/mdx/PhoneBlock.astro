@@ -1,0 +1,14 @@
+---
+import { getSettings } from "@/lib/settings";
+
+const settings = await getSettings();
+const phone = settings.phone;
+const phoneLink = `tel:${phone.replace(/\s/g, "")}`;
+---
+
+<a
+    href={phoneLink}
+    class="font-bold text-primary hover:underline whitespace-nowrap"
+>
+    {phone}
+</a>

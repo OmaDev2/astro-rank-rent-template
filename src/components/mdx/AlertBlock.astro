@@ -1,0 +1,67 @@
+---
+import { Info, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+
+interface Props {
+    title: string;
+    type: "info" | "warning" | "success" | "error";
+    content?: string;
+}
+
+const { title, type = "info", content } = Astro.props;
+
+const styles = {
+    info: {
+        container:
+            "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-100",
+        icon: "text-blue-600 dark:text-blue-400",
+        title: "!text-blue-900 dark:!text-blue-100",
+        IconComponent: Info,
+    },
+    warning: {
+        container:
+            "bg-yellow-50 border-yellow-200 text-yellow-900 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-100",
+        icon: "text-yellow-600 dark:text-yellow-400",
+        title: "!text-yellow-900 dark:!text-yellow-100",
+        IconComponent: AlertTriangle,
+    },
+    success: {
+        container:
+            "bg-green-50 border-green-200 text-green-900 dark:bg-green-900/20 dark:border-green-800 dark:text-green-100",
+        icon: "text-green-600 dark:text-green-400",
+        title: "!text-green-900 dark:!text-green-100",
+        IconComponent: CheckCircle,
+    },
+    error: {
+        container:
+            "bg-red-50 border-red-200 text-red-900 dark:bg-red-900/20 dark:border-red-800 dark:text-red-100",
+        icon: "text-red-600 dark:text-red-400",
+        title: "!text-red-900 dark:!text-red-100",
+        IconComponent: XCircle,
+    },
+};
+
+const style = styles[type] || styles.info;
+const Icon = style.IconComponent;
+---
+
+<div class={`p-6 rounded-lg border my-8 flex gap-4 ${style.container}`}>
+    <div class="shrink-0 mt-1">
+        <Icon className={`w-6 h-6 ${style.icon}`} />
+    </div>
+    <div>
+        {
+            title && (
+                <h4 class={`font-bold text-lg mb-2 ${style.title}`}>{title}</h4>
+            )
+        }
+        <div class="text-sm leading-relaxed">
+            {
+                content ? (
+                    <div class="whitespace-pre-wrap">{content}</div>
+                ) : (
+                    <slot />
+                )
+            }
+        </div>
+    </div>
+</div>

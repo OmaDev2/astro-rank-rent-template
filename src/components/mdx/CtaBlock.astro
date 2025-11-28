@@ -1,0 +1,56 @@
+---
+interface Props {
+    url: string;
+    type: "primary" | "secondary" | "whatsapp";
+    text?: string;
+    alignment?: "left" | "center" | "right";
+    size?: "small" | "medium" | "large";
+    isFullWidth?: boolean;
+}
+
+const {
+    url,
+    type = "primary",
+    text,
+    alignment = "center",
+    size = "large",
+    isFullWidth = false,
+} = Astro.props;
+
+const styles = {
+    primary:
+        "bg-primary text-white hover:bg-accent shadow-lg hover:shadow-primary/40",
+    secondary:
+        "bg-surface text-heading border-2 border-heading/20 hover:border-primary hover:text-primary",
+    whatsapp:
+        "bg-[#25D366] text-white hover:bg-[#128C7E] shadow-lg hover:shadow-green-500/40",
+};
+
+const alignClasses = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+};
+
+const sizeClasses = {
+    small: "px-4 py-2 text-sm",
+    medium: "px-6 py-3 text-base",
+    large: "px-8 py-4 text-lg",
+};
+
+const baseClass =
+    "inline-flex items-center justify-center font-bold rounded transition-all my-6 no-underline";
+const typeClass = styles[type] || styles.primary;
+const alignClass = alignClasses[alignment] || alignClasses.center;
+const sizeClass = sizeClasses[size] || sizeClasses.large;
+const widthClass = isFullWidth ? "w-full" : "";
+---
+
+<div class={`flex w-full ${alignClass}`}>
+    <a
+        href={url}
+        class={`${baseClass} ${typeClass} ${sizeClass} ${widthClass}`}
+    >
+        {text ? text : <slot />}
+    </a>
+</div>

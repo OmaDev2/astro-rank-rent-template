@@ -1,24 +1,19 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-export const prerender = true;
-import Footer from "../../components/Footer.astro";
-import FinalCTA from "../../components/FinalCTA.astro";
-import ServiceAreas from "../../components/ServiceAreas.astro";
-import HeroContactForm from "../../components/HeroContactForm.astro";
-import { getCollection, getEntry } from "astro:content";
-import {
-    Phone,
-    CheckCircle,
-    MapPin,
-    Shield,
-    Clock,
-    HelpCircle,
-    ArrowRight,
-    Star,
-} from "lucide-react";
-import type { WithContext, Locksmith } from "schema-dts";
+import LocationLayout from "../../layouts/LocationLayout.astro";
+import { getCollection } from "astro:content";
+import { getSettings } from "@/lib/settings";
+import type { WithContext, LocalBusiness } from "schema-dts";
 
-// 1. Generar rutas estáticas
+// Importar componentes MDX
+import CtaBlock from "../../components/mdx/CtaBlock.astro";
+import AlertBlock from "../../components/mdx/AlertBlock.astro";
+import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
+import BusinessNameBlock from "../../components/mdx/BusinessNameBlock.astro";
+import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
+
+export const prerender = true;
+
+// 1. Generar rutas estáticas para cada zona
 export async function getStaticPaths() {
     const locations = await getCollection("locations");
     return locations.map((entry) => ({
@@ -27,338 +22,76 @@ export async function getStaticPaths() {
     }));
 }
 
+// 2. Obtener los datos de la zona actual
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const data = entry.data;
 
-// 2. Fetch de Datos Globales y Servicios
-const business = await getEntry("business", "global");
-const { siteName, phone, whatsapp, niche, city } = business?.data || {
-    siteName: "Nombre Negocio",
-    phone: "600 000 000",
-    whatsapp: "600 000 000",
-    niche: "Servicio Profesional",
-    city: "Provincia",
+// Componentes disponibles en MDX
+const mdxComponents = {
+    CtaBlock,
+    AlertBlock,
+    PhoneBlock,
+    BusinessNameBlock,
+    CustomImageBlock,
 };
 
-// Traemos los servicios para mostrarlos dinámicamente en la zona
+// 3. Obtener configuración global
+const settings = await getSettings();
+
+// 4. Obtener servicios destacados
 const allServices = await getCollection("services", ({ data }) => {
-    return data.featured === true; // Opcional: mostrar solo destacados o todos
+    return data.featured === true;
 });
 
-// Lógica de Imagen Hero (Puedes personalizar esto más si quieres)
-const isIndustrial = data.type === "industrial";
-const heroImage = isIndustrial
-    ? "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=1997&auto=format&fit=crop"
-    : "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop";
+// 5. Obtener todas las zonas para el sidebar
+const allLocations = await getCollection("locations");
 
-const heroSubtitle = isIndustrial
-    ? `Servicios de ${niche.toLowerCase()} para empresas y naves industriales.`
-    : `Soluciones de ${niche.toLowerCase()} para particulares y comunidades.`;
-
-// Schema SEO Local
-const localSchema: WithContext<Locksmith> = {
+// 6. Schema SEO Local
+const localSchema: WithContext<LocalBusiness> = {
     "@context": "https://schema.org",
-    "@type": "Locksmith", // Podrías cambiar esto a 'ProfessionalService' si quieres ser más genérico
-    name: `${niche} en ${data.name} | ${siteName}`,
+    "@type": "LocalBusiness",
+    name: `${settings.niche} en ${data.name} | ${settings.siteName}`,
     description: data.seoDesc,
-    telephone: phone,
+    telephone: settings.phone,
     areaServed: {
         "@type": "Place",
         name: data.name,
         address: {
             "@type": "PostalAddress",
+            addressLocality: data.name,
             postalCode: data.zipCodes[0],
+            addressCountry: "ES",
         },
     },
 };
+
+// 7. SEO: Título y descripción
+const pageTitle =
+    data.seoTitle || `${settings.niche} en ${data.name} | ${settings.siteName}`;
+const pageDescription =
+    data.seoDesc ||
+    `Servicio profesional de ${settings.niche.toLowerCase()} en ${data.name}. Presupuesto gratis.`;
 ---
 
-<Layout title={data.seoTitle} description={data.seoDesc} schema={localSchema}>
-    <section
-        class="relative min-h-[80vh] flex items-center bg-secondary overflow-hidden py-24 lg:py-32"
-    >
-        <div
-            class="absolute inset-0 bg-cover bg-center opacity-40"
-            style={`background-image: url('${heroImage}')`}
-        >
-        </div>
-        <div
-            class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/90 to-transparent"
-        >
-        </div>
-
-        <div class="container mx-auto px-6 lg:px-8 relative z-10">
-            <div
-                class="grid lg:grid-cols-[1fr,auto] gap-8 lg:gap-12 items-center max-w-7xl mx-auto"
-            >
-                <div class="max-w-2xl">
-                    <span
-                        class="inline-flex items-center gap-2 py-1 px-3 rounded bg-primary/20 text-primary text-sm font-bold uppercase tracking-wider mb-6 border border-primary/30"
-                    >
-                        <MapPin className="w-4 h-4" /> Servicio en {data.name}
-                    </span>
-
-                    <h1
-                        class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-none"
-                    >
-                        {niche.toUpperCase()} EN <br />
-                        <span
-                            class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent uppercase"
-                        >
-                            {data.name}
-                        </span>
-                    </h1>
-
-                    <p
-                        class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-xl"
-                    >
-                        {heroSubtitle} Llegamos a {data.name} y alrededores rápidamente.
-                        Presupuesto sin compromiso.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a
-                            href="#formulario"
-                            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg hover:shadow-primary/40"
-                        >
-                            <Phone className="w-5 h-5 mr-2" />
-                            Pedir Presupuesto
-                        </a>
-                    </div>
-                </div>
-
-                <div
-                    id="formulario"
-                    class="w-full lg:w-[420px] mt-8 lg:mt-0 lg:mr-8"
-                >
-                    <HeroContactForm
-                        title={`¿Buscas ${niche} en ${data.name}?`}
-                        subtitle="Te respondemos hoy mismo"
-                    />
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 bg-secondary">
-        <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
-            <div class="lg:col-span-2">
-                <div
-                    class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary max-w-none mb-16"
-                >
-                    <Content />
-                </div>
-
-                <h3 class="text-3xl font-heading font-bold text-heading mb-8">
-                    Servicios de {niche} en {data.name}
-                </h3>
-
-                <div class="grid md:grid-cols-2 gap-6 mb-16">
-                    {
-                        allServices.slice(0, 4).map((service) => (
-                            <a
-                                href={`/${service.slug}`}
-                                class="group p-6 bg-surface/50 border border-heading/10 rounded hover:border-primary/50 transition-colors block"
-                            >
-                                <div class="flex items-center justify-between mb-4">
-                                    <h4 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
-                                        {service.data.title}
-                                    </h4>
-                                    <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                                </div>
-                                <p class="text-body text-sm line-clamp-2">
-                                    {service.data.shortDesc} en la zona de{" "}
-                                    {data.name} (CP {data.zipCodes[0]}).
-                                </p>
-                            </a>
-                        ))
-                    }
-                </div>
-
-                <div
-                    class="bg-surface border border-heading/10 rounded-xl p-8 shadow-lg"
-                >
-                    <div
-                        class="flex items-center gap-3 mb-6 border-b border-heading/10 pb-4"
-                    >
-                        <HelpCircle className="w-8 h-8 text-primary" />
-                        <h3
-                            class="text-2xl font-heading font-bold text-heading"
-                        >
-                            Preguntas sobre servicio en {data.name}
-                        </h3>
-                    </div>
-
-                    <div class="space-y-4">
-                        <details
-                            class="group bg-surface/50 p-4 rounded border border-heading/10 cursor-pointer transition-all open:border-primary/50"
-                        >
-                            <summary
-                                class="font-bold text-heading flex justify-between items-center list-none"
-                            >
-                                ¿Cobráis desplazamiento hasta {data.name}?
-                                <span
-                                    class="text-primary group-open:rotate-180 transition-transform"
-                                    >▼</span
-                                >
-                            </summary>
-                            <p class="text-body mt-3 text-sm leading-relaxed">
-                                Dependiendo del servicio. Al estar {data.name} dentro
-                                de nuestra área habitual, solemos incluir el desplazamiento
-                                en el presupuesto final. Llámanos para confirmar.
-                            </p>
-                        </details>
-
-                        <details
-                            class="group bg-surface/50 p-4 rounded border border-heading/10 cursor-pointer transition-all open:border-primary/50"
-                        >
-                            <summary
-                                class="font-bold text-heading flex justify-between items-center list-none"
-                            >
-                                ¿Atendéis urgencias en código postal {
-                                    data.zipCodes[0]
-                                }?
-                                <span
-                                    class="text-primary group-open:rotate-180 transition-transform"
-                                    >▼</span
-                                >
-                            </summary>
-                            <p class="text-body mt-3 text-sm leading-relaxed">
-                                Sí, tenemos unidades móviles que cubren el
-                                código postal {data.zipCodes[0]} de {data.name}.
-                                El tiempo de respuesta medio es rápido.
-                            </p>
-                        </details>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-8">
-                <div
-                    class="p-8 bg-surface rounded-lg border border-heading/10 sticky top-24 shadow-2xl"
-                >
-                    <h3
-                        class="text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4"
-                    >
-                        ¿Por qué elegirnos?
-                    </h3>
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0"
-                            />
-                            <span class="text-body text-sm"
-                                >Presupuesto cerrado.</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0"
-                            />
-                            <span class="text-body text-sm"
-                                >Profesionales de {city}.</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0"
-                            />
-                            <span class="text-body text-sm"
-                                >Garantía en factura.</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0"
-                            />
-                            <span class="text-body text-sm"
-                                >Cobertura total en {data.name}.</span
-                            >
-                        </li>
-                    </ul>
-
-                    <a
-                        href={`tel:${phone.replace(/\s/g, "")}`}
-                        class="flex flex-col items-center justify-center w-full py-4 bg-surface/50 hover:bg-surface text-heading border border-heading/20 rounded font-bold transition-all group hover:border-primary/50"
-                    >
-                        <span
-                            class="text-xs text-body/70 uppercase tracking-widest mb-1 group-hover:text-primary"
-                            >Llamar Ahora</span
-                        >
-                        <span class="text-2xl font-heading">{phone}</span>
-                    </a>
-
-                    <a
-                        href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone.replace(/\s/g, "")}?text=Hola,%20necesito%20servicio%20en%20${data.name}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex flex-col items-center justify-center w-full py-4 bg-green-600 hover:bg-green-700 text-white border border-green-700 rounded font-bold transition-all group mt-4"
-                    >
-                        <span
-                            class="text-xs text-green-100 uppercase tracking-widest mb-1"
-                            >WhatsApp</span
-                        >
-                        <span class="text-lg font-heading"
-                            >Consultar Disponibilidad</span
-                        >
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <FinalCTA />
-
-    <section class="py-12 bg-secondary border-t border-heading/10">
-        <div class="container mx-auto px-4">
-            <ServiceAreas />
-        </div>
-    </section>
-
-    <Footer />
-</Layout>
-
-<style>
-    @keyframes formPulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(var(--color-primary), 0.7);
-            transform: scale(1);
-        }
-        50% {
-            box-shadow: 0 0 0 20px rgba(var(--color-primary), 0);
-            transform: scale(1.02);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(var(--color-primary), 0);
-            transform: scale(1);
-        }
-    }
-
-    .form-highlight {
-        animation: formPulse 1s ease-out 2;
-    }
-</style>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const formLink = document.querySelector('a[href="#formulario"]');
-        const formElement = document.getElementById("formulario");
-
-        if (formLink && formElement) {
-            formLink.addEventListener("click", (event) => {
-                event.preventDefault();
-                formElement.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                });
-                setTimeout(() => {
-                    formElement.classList.add("form-highlight");
-                    setTimeout(() => {
-                        formElement.classList.remove("form-highlight");
-                    }, 2000);
-                }, 500);
-            });
-        }
-    });
-</script>
+<LocationLayout
+    locationName={data.name}
+    locationType={data.type}
+    zipCodes={data.zipCodes}
+    heroImage={data.heroImage}
+    coordinates={data.coordinates}
+    faq={data.faq}
+    content={Content}
+    siteName={settings.siteName}
+    phone={settings.phone}
+    whatsapp={settings.whatsapp}
+    niche={settings.niche}
+    city={settings.city}
+    services={allServices}
+    allLocations={allLocations}
+    currentSlug={entry.slug}
+    pageTitle={pageTitle}
+    pageDescription={pageDescription}
+    schema={localSchema}
+    mdxComponents={mdxComponents}
+/>

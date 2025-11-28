@@ -1,0 +1,67 @@
+---
+interface Props {
+    image: string;
+    alt: string;
+    caption?: string;
+    objectFit?: "cover" | "contain" | "fill";
+    borderRadius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
+    shadow?: "none" | "sm" | "md" | "lg" | "xl";
+}
+
+const {
+    image,
+    alt,
+    caption,
+    objectFit = "cover",
+    borderRadius = "xl",
+    shadow = "lg",
+} = Astro.props;
+
+const objectFitClasses = {
+    cover: "object-cover",
+    contain: "object-contain",
+    fill: "object-fill",
+};
+
+const borderRadiusClasses = {
+    none: "rounded-none",
+    sm: "rounded-sm",
+    md: "rounded-md",
+    lg: "rounded-lg",
+    xl: "rounded-xl",
+    full: "rounded-full",
+};
+
+const shadowClasses = {
+    none: "shadow-none",
+    sm: "shadow-sm",
+    md: "shadow-md",
+    lg: "shadow-lg",
+    xl: "shadow-xl",
+};
+
+const fitClass = objectFitClasses[objectFit] || objectFitClasses.cover;
+const roundedClass =
+    borderRadiusClasses[borderRadius] || borderRadiusClasses.xl;
+const shadowClass = shadowClasses[shadow] || shadowClasses.lg;
+---
+
+<figure class="my-8 group">
+    <div
+        class={`overflow-hidden border border-heading/10 bg-surface ${roundedClass} ${shadowClass}`}
+    >
+        <img
+            src={image}
+            alt={alt}
+            class={`w-full h-auto group-hover:scale-105 transition-transform duration-700 ${fitClass}`}
+            loading="lazy"
+        />
+    </div>
+    {
+        caption && (
+            <figcaption class="text-center text-sm text-body/70 mt-3 italic">
+                {caption}
+            </figcaption>
+        )
+    }
+</figure>

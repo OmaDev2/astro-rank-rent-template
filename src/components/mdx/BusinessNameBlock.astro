@@ -1,0 +1,9 @@
+---
+import { getSettings } from "@/lib/settings";
+
+const settings = await getSettings();
+---
+
+<span class="font-bold text-heading">
+    {settings.siteName}
+</span>

@@ -3,14 +3,13 @@ niche: 'Fontaneria '
 logo: '@assets/images/logo.png'
 siteUrl: ' https://fontaneromadrid.com'
 businessType: HomeAndConstructionBusiness
-city: MADRID
+city: 'SEVILLA '
 address: Gran Via 33
 coordinates:
-  lat: '40.41672790'
-  lng: '-3.70329050'
-phone: '622787879'
-whatsapp: '600202020'
-email: olga.millan@gmail.com
+  lat: '37.38952788266018'
+  lng: '-5.9804673959351495'
+phone: '252525'
+whatsapp: '252525'
+email: FINTANEROSEVILLA@gmail.com
 schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
-nif: ''
 ctaText: 'LLAMA AHORA '

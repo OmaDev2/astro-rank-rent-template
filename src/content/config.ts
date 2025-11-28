@@ -6,13 +6,23 @@ const locations = defineCollection({
         type: z.enum(['residencial', 'industrial', 'centro']),
         seoTitle: z.string(),
         seoDesc: z.string(),
+        heroImage: z.string().optional(),
+        coordinates: z.object({
+            lat: z.string().optional(),
+            lng: z.string().optional(),
+        }).optional(),
         zipCodes: z.array(z.string()),
+        faq: z.array(z.object({
+            question: z.string(),
+            answer: z.string(),
+        })).optional(),
     }),
 });
 
 const services = defineCollection({
     schema: z.object({
         title: z.string(),
+        heroImage: z.string().optional(),
         seoTitle: z.string().optional(),
         seoDesc: z.string().optional(),
         icon: z.string(),
@@ -142,6 +152,7 @@ const pages = defineCollection({
 
 
 const testimonials = defineCollection({
+    type: 'data',
     schema: z.object({
         name: z.string(),
         initials: z.string(),
