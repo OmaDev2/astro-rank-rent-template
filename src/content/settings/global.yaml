@@ -1,5 +1,6 @@
-siteName: 'FONTANERO MADRID '
+siteName: FONTANERO sevilla
 niche: 'Fontaneria '
+logo: '@assets/images/logo.png'
 siteUrl: ' https://fontaneromadrid.com'
 businessType: HomeAndConstructionBusiness
 city: MADRID
@@ -11,5 +12,5 @@ phone: '622787879'
 whatsapp: '600202020'
 email: olga.millan@gmail.com
 schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
-theme: corporate
+theme: urgent
 ctaText: 'LLAMA AHORA '

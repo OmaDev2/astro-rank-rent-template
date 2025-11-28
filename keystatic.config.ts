@@ -5,10 +5,25 @@ export default config({
         kind: 'local',
     },
 
+    // --- INTERFAZ DE USUARIO ---
+    ui: {
+        // Marca personalizada
+        brand: {
+            name: 'Rank & Rent Template',
+        },
+
+        // Navegación organizada
+        navigation: {
+            '📝 Contenido': ['services', 'locations', 'projects', 'testimonials'],
+            '---': [],
+            '⚙️ Configuración': ['settings', 'homepage'],
+        },
+    },
+
     // --- SINGLETONS (Configuración Global) ---
     singletons: {
         settings: singleton({
-            label: '⚙️ Configuración del Negocio',
+            label: 'Configuración del Negocio',
             path: 'src/content/settings/global',
             schema: {
                 // ========== IDENTIDAD ==========
@@ -115,6 +130,7 @@ export default config({
             label: '🏠 Página de Inicio',
             path: 'src/content/pages/home',
             format: { contentField: 'content' },
+            entryLayout: 'content',
             schema: {
                 // --- HERO SECTION ---
                 hero: fields.object({
@@ -168,6 +184,7 @@ export default config({
             slugField: 'title', // <--- CAMBIO IMPORTANTE: El slug depende del título
             path: 'src/content/services/*',
             format: { contentField: 'content' },
+            entryLayout: 'content',
             schema: {
                 // FUSIÓN: Este campo maneja el Título (H1) Y el Slug al mismo tiempo
                 title: fields.slug({
@@ -218,6 +235,7 @@ export default config({
             slugField: 'name', // Usamos 'name' como el campo principal aquí
             path: 'src/content/locations/*',
             format: { contentField: 'content' },
+            entryLayout: 'content',
             schema: {
                 // Fusión para Zonas
                 name: fields.slug({
@@ -249,6 +267,7 @@ export default config({
             slugField: 'title', // Usamos 'title' aquí
             path: 'src/content/projects/*',
             format: { contentField: 'content' },
+            entryLayout: 'content',
             schema: {
                 // Fusión para Proyectos
                 title: fields.slug({
