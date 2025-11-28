@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { optional } from 'astro:schema';
 
 const locations = defineCollection({
     schema: z.object({
@@ -83,7 +84,11 @@ const design = defineCollection({
         theme: z.enum([
             'industrial', 'corporate', 'nature', 'urgent',
             'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light'
-        ]).default('industrial'),
+        ]).optional().default('industrial'),
+
+        fontPair: z.enum([
+            'modern', 'robust', 'elegant', 'friendly', 'tech'
+        ]).optional().default('modern'),
     }),
 });
 

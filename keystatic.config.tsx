@@ -111,6 +111,18 @@ export default config({
                     ],
                     defaultValue: 'industrial',
                 }),
+                fontPair: fields.select({
+                    label: 'Tipografía (Fuentes)',
+                    description: 'Pareja de fuentes para Títulos y Texto',
+                    options: [
+                        { label: 'Moderno (Oswald / Inter)', value: 'modern' },
+                        { label: 'Robusto (Barlow / Roboto)', value: 'robust' },
+                        { label: 'Elegante (Playfair / Lato)', value: 'elegant' },
+                        { label: 'Amigable (Nunito / Open Sans)', value: 'friendly' },
+                        { label: 'Tech (Chakra Petch / Exo 2)', value: 'tech' },
+                    ],
+                    defaultValue: 'modern',
+                }),
             },
         }),
 

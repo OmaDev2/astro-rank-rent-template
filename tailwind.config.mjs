@@ -18,8 +18,8 @@ export default {
 				body: 'rgb(var(--color-text-body) / <alpha-value>)', // Alias for text-body to match user request
 			},
 			fontFamily: {
-				sans: ['Inter', 'Roboto', 'sans-serif'],
-				heading: ['Oswald', 'Barlow Condensed', 'sans-serif'],
+				sans: ['var(--font-body)', 'sans-serif'],
+				heading: ['var(--font-heading)', 'sans-serif'],
 			},
 		},
 	},

@@ -30,6 +30,7 @@ export async function getSettings() {
 
         // Design
         theme: design?.data?.theme || 'industrial',
+        fontPair: design?.data?.fontPair || 'modern',
 
         // Social
         facebook: social?.data?.facebook || '',

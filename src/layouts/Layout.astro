@@ -6,30 +6,25 @@ import CookieBanner from "../components/CookieBanner.astro";
 import SearchConsoleVerification from "../components/SearchConsoleVerification.astro";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
-import { getEntry } from "astro:content";
+
+// 1. Imports de configuración
+import { getSettings } from "../lib/settings";
 import { themes } from "../config/themes";
+import { fontPairs } from "../config/fonts"; // Importante: Debes haber creado este archivo
 
-// 1. Recuperar Configuración Global
-const business = await getEntry("business", "global");
-const design = await getEntry("design", "global");
-const analytics = await getEntry("analytics", "global");
+// 2. Recuperar TODA la configuración unificada
+const settings = await getSettings();
 
-const { siteName, niche, city } = business?.data || {
-    siteName: "Herrero Zaragoza",
-    niche: "Herrería",
-    city: "Zaragoza",
-};
-
-const { theme } = design?.data || { theme: "industrial" };
-const { googleAnalyticsId, gtmId } = analytics?.data || {
-    googleAnalyticsId: "",
-    gtmId: "",
-};
-
-// 2. Lógica del Tema
-const activeTheme = themes[theme as keyof typeof themes] || themes.industrial;
+// 3. Lógica del Tema (Colores)
+const activeTheme =
+    themes[settings.theme as keyof typeof themes] || themes.industrial;
 const colors = activeTheme.colors;
 const gradient = activeTheme.gradient;
+
+// 4. Lógica de Fuentes (Tipografía)
+// Si settings.fontPair no existe (porque no has actualizado settings.ts), usa 'modern' por defecto
+const activeFont =
+    fontPairs[settings.fontPair as keyof typeof fontPairs] || fontPairs.modern;
 
 interface Props {
     title: string;
@@ -40,8 +35,8 @@ interface Props {
 
 const { title, description, schema, noindex = false } = Astro.props;
 
-// 3. Generar SEO por defecto dinámico
-const defaultDescription = `${niche} en ${city}. Expertos profesionales, servicio rápido y presupuesto sin compromiso en ${siteName}.`;
+// Generar descripción por defecto si no viene en props
+const defaultDescription = `${settings.niche} en ${settings.city}. Expertos profesionales, servicio rápido y presupuesto sin compromiso en ${settings.siteName}.`;
 ---
 
 <!doctype html>
@@ -49,6 +44,7 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
     lang="es"
     class="scroll-smooth"
     style={{
+        // --- VARIABLES DE COLOR ---
         "--color-primary": colors.primary,
         "--color-secondary": colors.secondary,
         "--color-surface": colors.surface,
@@ -56,6 +52,10 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
         "--color-text-heading": colors.textMain,
         "--color-text-body": colors.textMuted,
         "--theme-gradient": gradient,
+
+        // --- VARIABLES DE FUENTE (NUEVO) ---
+        "--font-heading": activeFont.fontHeading,
+        "--font-body": activeFont.fontBody,
     }}
 >
     <head>
@@ -64,12 +64,10 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
 
+        {/* --- CARGA DINÁMICA DE FUENTES DE GOOGLE --- */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&family=Inter:wght@400;600&family=Oswald:wght@400;700&family=Roboto:wght@400;500&display=swap"
-            rel="stylesheet"
-        />
+        <link href={activeFont.googleFontsUrl} rel="stylesheet" />
 
         <SeoHead
             title={title}
@@ -82,34 +80,32 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
 
         {/* Google Tag Manager */}
         {
-            gtmId && (
+            settings.gtmId && (
                 <script type="text/partytown">
                     {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','${gtmId}');`}
+        })(window,document,'script','dataLayer','${settings.gtmId}');`}
                 </script>
             )
         }
 
         {/* Google Analytics 4 */}
         {
-            googleAnalyticsId && (
-                <script
-                    type="text/partytown"
-                    src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
-                />
-            )
-        }
-        {
-            googleAnalyticsId && (
-                <script type="text/partytown">
-                    {`window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${googleAnalyticsId}');`}
-                </script>
+            settings.googleAnalyticsId && (
+                <>
+                    <script
+                        type="text/partytown"
+                        src={`https://www.googletagmanager.com/gtag/js?id=${settings.googleAnalyticsId}`}
+                    />
+                    <script type="text/partytown">
+                        {`window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                        gtag('config', '${settings.googleAnalyticsId}');`}
+                    </script>
+                </>
             )
         }
     </head>
@@ -119,10 +115,10 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
     >
         {/* GTM noscript fallback */}
         {
-            gtmId && (
+            settings.gtmId && (
                 <noscript>
                     <iframe
-                        src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+                        src={`https://www.googletagmanager.com/ns.html?id=${settings.gtmId}`}
                         height="0"
                         width="0"
                         style="display:none;visibility:hidden"
