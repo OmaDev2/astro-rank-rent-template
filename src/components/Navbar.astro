@@ -1,19 +1,15 @@
 ---
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { getSettings } from "@/lib/settings";
 
 // 1. Recuperamos los datos del CMS
 const services = await getCollection("services");
 const locations = await getCollection("locations");
-const settings = await getEntry("settings", "global");
+const settings = await getSettings();
 
 // 2. Extraemos las variables para usar en el HTML
-const { siteName, phone, ctaText, logo } = settings?.data || {
-    siteName: "Herrero Zaragoza",
-    phone: "600 000 000",
-    ctaText: "Llamar Ahora",
-    logo: "",
-};
+const { siteName, phone, ctaText, logo } = settings;
 ---
 
 <header

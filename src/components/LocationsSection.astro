@@ -3,8 +3,8 @@ import { getCollection, getEntry } from "astro:content";
 import { MapPin, ArrowRight } from "lucide-react";
 
 const locations = await getCollection("locations");
-const settings = await getEntry("settings", "global");
-const { city } = settings?.data || { city: "Zaragoza" };
+const business = await getEntry("business", "global");
+const { city } = business?.data || { city: "Zaragoza" };
 
 // Zonas destacadas por defecto si no hay locations
 const staticZones = [

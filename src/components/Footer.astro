@@ -4,8 +4,8 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { getEntry } from "astro:content";
 
 // 1. Datos Globales
-const settings = await getEntry("settings", "global");
-const { siteName, phone, email, address, city, niche } = settings?.data || {
+const business = await getEntry("business", "global");
+const { siteName, phone, email, address, city, niche } = business?.data || {
     siteName: "Herrero Zaragoza",
     phone: "600 000 000",
     email: "info@example.com",

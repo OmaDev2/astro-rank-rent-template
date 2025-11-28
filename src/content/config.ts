@@ -33,10 +33,10 @@ const projects = defineCollection({
     }),
 });
 
-const settings = defineCollection({
+// Business Information
+const business = defineCollection({
     type: 'data',
     schema: z.object({
-        // Identidad
         siteName: z.string(),
         niche: z.string(),
         logo: z.string().optional(),
@@ -51,40 +51,65 @@ const settings = defineCollection({
             'MedicalBusiness',
             'HealthAndBeautyBusiness'
         ]).default('LocalBusiness'),
-
-        // Ubicación
         city: z.string(),
         address: z.string().optional(),
         coordinates: z.object({
             lat: z.string(),
             lng: z.string(),
         }).optional(),
-
-        // Contacto
         phone: z.string(),
         whatsapp: z.string().optional(),
         email: z.string().optional(),
         schedule: z.string().optional(),
-
-        // Legal
         nif: z.string().optional(),
+        ctaText: z.string().optional(),
+    }),
+});
 
-        // Tema
+// Design & Theme
+const design = defineCollection({
+    type: 'data',
+    schema: z.object({
         theme: z.enum([
             'industrial', 'corporate', 'nature', 'urgent',
             'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light'
         ]).default('industrial'),
+    }),
+});
 
-        // CTA
-        ctaText: z.string().optional(),
-
-        // Redes
+// Social Media
+const social = defineCollection({
+    type: 'data',
+    schema: z.object({
         facebook: z.string().optional(),
         instagram: z.string().optional(),
+    }),
+});
 
-        // Analytics
+// Analytics
+const analytics = defineCollection({
+    type: 'data',
+    schema: z.object({
         googleAnalyticsId: z.string().optional(),
         gtmId: z.string().optional(),
+        searchConsoleVerification: z.string().optional(),
+    }),
+});
+
+// Schema.org Structured Data
+const schema = defineCollection({
+    type: 'data',
+    schema: z.object({
+        priceRange: z.string().optional(),
+        openingHours: z.array(z.object({
+            dayOfWeek: z.array(z.string()),
+            opens: z.string(),
+            closes: z.string(),
+        })).optional(),
+        areaServed: z.array(z.string()).optional(),
+        paymentAccepted: z.array(z.string()).optional(),
+        foundingDate: z.string().optional(),
+        slogan: z.string().optional(),
     }),
 });
 
@@ -131,7 +156,11 @@ export const collections = {
     locations,
     services,
     projects,
-    settings,
+    business,
+    design,
+    social,
+    analytics,
+    schema,
     pages,
     testimonials,
 };

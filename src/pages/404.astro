@@ -5,8 +5,8 @@ import { Home, Phone, ArrowRight } from "lucide-react";
 import { getEntry, getCollection } from "astro:content";
 
 // Fetch Global Settings
-const settings = await getEntry("settings", "global");
-const { siteName, phone, niche } = settings?.data || {
+const business = await getEntry("business", "global");
+const { siteName, phone, niche } = business?.data || {
     siteName: "Nombre Negocio",
     phone: "600 000 000",
     niche: "Servicio",

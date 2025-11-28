@@ -2,8 +2,8 @@
 import { Phone, ArrowRight } from "lucide-react";
 import { getEntry } from "astro:content";
 
-const settings = await getEntry("settings", "global");
-const { phone, niche, ctaText } = settings?.data || {
+const business = await getEntry("business", "global");
+const { phone, niche, ctaText } = business?.data || {
     phone: "600 000 000",
     niche: "Profesional",
     ctaText: "Pedir Presupuesto",

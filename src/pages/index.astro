@@ -36,8 +36,8 @@ const { Content: SeoContentRendered } = home
 	: { Content: () => null };
 
 // 3. Fetch Global Settings
-const settings = await getEntry("settings", "global");
-const config = settings?.data || {
+const business = await getEntry("business", "global");
+const config = business?.data || {
 	siteName: "Nombre Negocio",
 	phone: "000 000 000",
 	city: "Ciudad",

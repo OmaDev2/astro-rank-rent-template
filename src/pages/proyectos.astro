@@ -7,8 +7,8 @@ import { MapPin } from "lucide-react";
 import type { WithContext, CollectionPage } from "schema-dts";
 
 const projects = await getCollection("projects");
-const settings = await getEntry("settings", "global");
-const { siteName, city, niche } = settings?.data || {
+const business = await getEntry("business", "global");
+const { siteName, city, niche } = business?.data || {
     siteName: "Nombre Negocio",
     city: "Ciudad",
     niche: "Servicio",

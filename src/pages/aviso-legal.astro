@@ -5,8 +5,8 @@ import { Scale } from "lucide-react";
 import { getEntry } from "astro:content";
 
 // Fetch Global Settings
-const settings = await getEntry("settings", "global");
-const { siteName, city, niche, email, address, nif } = settings?.data || {
+const business = await getEntry("business", "global");
+const { siteName, city, niche, email, address, nif } = business?.data || {
     siteName: "Nombre Negocio",
     city: "Ciudad",
     niche: "Servicio",

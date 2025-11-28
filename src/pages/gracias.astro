@@ -4,8 +4,8 @@ import { CheckCircle, ArrowRight } from "lucide-react";
 import { getEntry } from "astro:content";
 
 // Fetch Global Settings
-const settings = await getEntry("settings", "global");
-const { siteName } = settings?.data || {
+const business = await getEntry("business", "global");
+const { siteName } = business?.data || {
     siteName: "Herrero Zaragoza",
 };
 ---

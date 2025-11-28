@@ -32,8 +32,8 @@ const { Content } = await entry.render();
 const data = entry.data;
 
 // 2. Fetch de Datos Globales y Servicios
-const settings = await getEntry("settings", "global");
-const { siteName, phone, whatsapp, niche, city } = settings?.data || {
+const business = await getEntry("business", "global");
+const { siteName, phone, whatsapp, niche, city } = business?.data || {
     siteName: "Nombre Negocio",
     phone: "600 000 000",
     whatsapp: "600 000 000",

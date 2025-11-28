@@ -1,8 +1,8 @@
 ---
 import { getEntry } from "astro:content";
 
-const settings = await getEntry("settings", "global");
-const { phone, email } = settings?.data || {
+const business = await getEntry("business", "global");
+const { phone, email } = business?.data || {
     phone: "600 000 000",
     email: "info@example.com",
 };

@@ -41,9 +41,9 @@ const testimonials = await getCollection(
 );
 
 // Fetch Global Settings
-const settings = await getEntry("settings", "global");
+const business = await getEntry("business", "global");
 const { siteName, city, niche, phone, address, coordinates, siteUrl } =
-    settings?.data || {
+    business?.data || {
         siteName: "Nombre Negocio",
         city: "Ciudad",
         niche: "Servicio",
@@ -366,10 +366,10 @@ const pageDescription = data.seoDesc || data.shortDesc;
         class="w-full h-[400px] bg-secondary border-y border-heading/10 relative z-10"
     >
         {
-            settings?.data?.coordinates?.lat &&
-            settings?.data?.coordinates?.lng ? (
+            business?.data?.coordinates?.lat &&
+            business?.data?.coordinates?.lng ? (
                 <iframe
-                    src={`https://maps.google.com/maps?q=${settings.data.coordinates.lat},${settings.data.coordinates.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    src={`https://maps.google.com/maps?q=${business.data.coordinates.lat},${business.data.coordinates.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                     width="100%"
                     height="100%"
                     style="border:0;"

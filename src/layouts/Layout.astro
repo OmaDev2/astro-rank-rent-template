@@ -3,22 +3,28 @@ import SeoHead from "../components/SeoHead.astro";
 import Navbar from "../components/Navbar.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import CookieBanner from "../components/CookieBanner.astro";
+import SearchConsoleVerification from "../components/SearchConsoleVerification.astro";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
 import { getEntry } from "astro:content";
 import { themes } from "../config/themes";
 
 // 1. Recuperar Configuración Global
-const settings = await getEntry("settings", "global");
-const { siteName, niche, city, theme, googleAnalyticsId, gtmId } =
-    settings?.data || {
-        siteName: "Herrero Zaragoza",
-        niche: "Herrería",
-        city: "Zaragoza",
-        theme: "industrial",
-        googleAnalyticsId: "",
-        gtmId: "",
-    };
+const business = await getEntry("business", "global");
+const design = await getEntry("design", "global");
+const analytics = await getEntry("analytics", "global");
+
+const { siteName, niche, city } = business?.data || {
+    siteName: "Herrero Zaragoza",
+    niche: "Herrería",
+    city: "Zaragoza",
+};
+
+const { theme } = design?.data || { theme: "industrial" };
+const { googleAnalyticsId, gtmId } = analytics?.data || {
+    googleAnalyticsId: "",
+    gtmId: "",
+};
 
 // 2. Lógica del Tema
 const activeTheme = themes[theme as keyof typeof themes] || themes.industrial;
@@ -71,6 +77,8 @@ const defaultDescription = `${niche} en ${city}. Expertos profesionales, servici
             schema={schema}
             noindex={noindex}
         />
+
+        <SearchConsoleVerification />
 
         {/* Google Tag Manager */}
         {

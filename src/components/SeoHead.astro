@@ -3,8 +3,8 @@ import { SEO } from "astro-seo";
 import type { WithContext, Thing } from "schema-dts";
 import { getEntry } from "astro:content";
 
-const settings = await getEntry("settings", "global");
-const { siteName } = settings?.data || { siteName: "Herrero Zaragoza" };
+const business = await getEntry("business", "global");
+const { siteName } = business?.data || { siteName: "Herrero Zaragoza" };
 
 interface Props {
   title: string;

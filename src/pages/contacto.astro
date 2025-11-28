@@ -6,9 +6,9 @@ import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import type { WithContext, ContactPage } from "schema-dts";
 
 // Fetch Global Settings
-const settings = await getEntry("settings", "global");
+const business = await getEntry("business", "global");
 const { siteName, phone, email, address, city, niche, schedule, coordinates } =
-    settings?.data || {
+    business?.data || {
         siteName: "Herrero Zaragoza",
         phone: "600 000 000",
         email: "info@example.com",

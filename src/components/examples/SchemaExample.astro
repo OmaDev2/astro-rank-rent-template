@@ -1,0 +1,83 @@
+---
+/**
+ * Ejemplo de cómo usar los datos de Schema.org en tus componentes
+ * Este archivo muestra cómo generar datos estructurados completos
+ */
+import { getSettings } from "@/lib/settings";
+import type { WithContext, LocalBusiness } from "schema-dts";
+
+const settings = await getSettings();
+
+// Construir el schema de LocalBusiness con todos los datos
+const businessSchema: WithContext<LocalBusiness> = {
+    "@context": "https://schema.org",
+    "@type": settings.businessType as any,
+    name: settings.siteName,
+    description: settings.slogan || `${settings.niche} en ${settings.city}`,
+
+    // Ubicación
+    address: settings.address
+        ? {
+              "@type": "PostalAddress",
+              streetAddress: settings.address,
+              addressLocality: settings.city,
+              addressCountry: "ES",
+          }
+        : undefined,
+
+    // Coordenadas
+    geo:
+        settings.coordinates?.lat && settings.coordinates?.lng
+            ? {
+                  "@type": "GeoCoordinates",
+                  latitude: settings.coordinates.lat,
+                  longitude: settings.coordinates.lng,
+              }
+            : undefined,
+
+    // Contacto
+    telephone: settings.phone,
+    email: settings.email,
+
+    // Horarios (Schema.org format)
+    openingHoursSpecification: settings.openingHours?.map((schedule: any) => ({
+        "@type": "OpeningHoursSpecification" as const,
+        dayOfWeek: schedule.dayOfWeek,
+        opens: schedule.opens,
+        closes: schedule.closes,
+    })),
+
+    // Áreas de servicio
+    areaServed: settings.areaServed?.map((area: string) => ({
+        "@type": "City" as const,
+        name: area,
+    })),
+
+    // Métodos de pago
+    paymentAccepted: settings.paymentAccepted?.join(", "),
+
+    // Rango de precios
+    priceRange: settings.priceRange,
+
+    // Año de fundación
+    foundingDate: settings.foundingDate,
+
+    // Redes sociales
+    sameAs: [settings.facebook, settings.instagram].filter(Boolean),
+};
+---
+
+<!-- Insertar en el <head> -->
+<script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
+
+<!-- 
+EJEMPLO DE USO EN TUS PÁGINAS:
+
+1. En Layout.astro o cualquier página:
+   import SchemaExample from '@/components/SchemaExample.astro';
+   
+2. En el <head>:
+   <SchemaExample />
+
+3. Los datos se generan automáticamente desde Keystatic!
+-->

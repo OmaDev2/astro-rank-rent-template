@@ -1,0 +1,19 @@
+---
+/**
+ * Google Search Console Verification Meta Tag
+ * Añade automáticamente el meta tag de verificación si está configurado
+ */
+import { getEntry } from "astro:content";
+
+const analytics = await getEntry("analytics", "global");
+const searchConsoleVerification = analytics?.data?.searchConsoleVerification;
+---
+
+{
+    searchConsoleVerification && (
+        <meta
+            name="google-site-verification"
+            content={searchConsoleVerification}
+        />
+    )
+}
