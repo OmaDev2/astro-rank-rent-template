@@ -17,6 +17,17 @@ const locations = defineCollection({
             question: z.string(),
             answer: z.string(),
         })).optional(),
+
+        // --- PAGE BUILDER: Define el orden de las secciones ---
+        blocks: z.array(
+            z.discriminatedUnion('discriminant', [
+                z.object({ discriminant: z.literal('hero') }),
+                z.object({ discriminant: z.literal('features') }),
+                z.object({ discriminant: z.literal('map') }),
+                z.object({ discriminant: z.literal('content') }),
+                z.object({ discriminant: z.literal('cta') }),
+            ])
+        ).optional(), // Opcional para no romper zonas antiguas sin este campo
     }),
 });
 
@@ -189,6 +200,19 @@ const testimonials = defineCollection({
     }),
 });
 
+const form = defineCollection({
+    type: 'data', // <--- ESTO ES LA CLAVE. Sin esto, Astro busca Markdown y falla.
+    schema: z.object({
+        // ... (el esquema que te pasé antes)
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+        submitText: z.string().optional(),
+        successUrl: z.string().optional(),
+        formFields: z.array(z.any()).optional(), // Usamos any por ahora para simplificar si da problemas
+    }),
+});
+
+
 const navigation = defineCollection({
     type: 'data',
     schema: z.object({
@@ -216,4 +240,7 @@ export const collections = {
     pages,
     testimonials,
     navigation,
+    form,
+
+
 };

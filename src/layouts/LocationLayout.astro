@@ -3,45 +3,59 @@ import Layout from "./Layout.astro";
 import Footer from "../components/Footer.astro";
 import FinalCTA from "../components/FinalCTA.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
-import HeroContactForm from "../components/HeroContactForm.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
-import {
-    Phone,
-    CheckCircle,
-    MapPin,
-    Shield,
-    Clock,
-    Award,
-    Users,
-    ArrowRight,
-    Home,
-    ChevronRight,
-} from "lucide-react";
+import { CheckCircle, ArrowRight, Home, ChevronRight } from "lucide-react";
 
-// Props que recibe este layout
+// Imports de Bloques
+import HeroBlock from "../components/blocks/HeroBlock.astro";
+import FeaturesBlock from "../components/blocks/FeaturesBlock.astro";
+import MapBlock from "../components/blocks/MapBlock.astro";
+
+// --- 1. DEFINICIÓN DE TIPOS (Para corregir los errores) ---
+
+// Tipo para un Servicio
+interface Service {
+    slug: string;
+    data: {
+        title: string;
+        shortDesc?: string;
+    };
+}
+
+// Tipo para una Ubicación/Zona
+interface Location {
+    slug: string;
+    data: {
+        name: string;
+    };
+}
+
+// Tipo para los Bloques del Page Builder
+interface Block {
+    discriminant: "hero" | "features" | "map" | "content" | "cta";
+}
+
+// Props del Layout
 interface Props {
-    // Datos de la zona
     locationName: string;
     locationType: "residencial" | "industrial" | "centro";
     zipCodes: string[];
     heroImage?: string;
     coordinates?: { lat?: string; lng?: string };
     faq?: Array<{ question: string; answer: string }>;
-    content: any; // El componente Content renderizado
-
-    // Datos globales del negocio
+    content: any;
     siteName: string;
     phone: string;
     whatsapp?: string;
     niche: string;
     city: string;
 
-    // Servicios y zonas
-    services: any[];
-    allLocations: any[];
-    currentSlug: string;
+    // Aquí aplicamos los tipos que definimos arriba
+    services: Service[]; // <--- Corrige el error de 'service'
+    allLocations: Location[]; // <--- Corrige el error de 'loc' y 'location'
+    blocks?: Block[]; // <--- Corrige el error de 'block'
 
-    // SEO
+    currentSlug: string;
     pageTitle: string;
     pageDescription: string;
     schema: any;
@@ -68,27 +82,22 @@ const {
     pageDescription,
     schema,
     mdxComponents = {},
+    blocks,
 } = Astro.props;
 
-// Imagen Hero: usa la del CMS o fallback a Unsplash
-const isIndustrial = locationType === "industrial";
-const defaultHeroImage = isIndustrial
-    ? "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=1997&auto=format&fit=crop"
-    : "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop";
+// Orden por defecto si no se configura en Keystatic (Retrocompatibilidad)
+const defaultBlocks: Block[] = [
+    { discriminant: "hero" },
+    { discriminant: "features" },
+    { discriminant: "content" }, // Contenido + Sidebar
+    { discriminant: "cta" },
+    { discriminant: "map" },
+];
 
-const finalHeroImage = heroImage || defaultHeroImage;
-
-const heroSubtitle = isIndustrial
-    ? `Servicios de ${niche.toLowerCase()} para empresas y naves industriales.`
-    : `Soluciones de ${niche.toLowerCase()} para particulares y comunidades.`;
-
-// Coordenadas para el mapa
-const mapLat = coordinates?.lat || "";
-const mapLng = coordinates?.lng || "";
+const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
 ---
 
 <Layout title={pageTitle} description={pageDescription} schema={schema}>
-    <!-- Breadcrumbs -->
     <section class="bg-surface/50 border-b border-heading/10 py-3">
         <div class="container mx-auto px-4">
             <nav class="flex items-center gap-2 text-sm text-body">
@@ -96,448 +105,170 @@ const mapLng = coordinates?.lng || "";
                     href="/"
                     class="hover:text-primary transition-colors flex items-center gap-1"
                 >
-                    <Home className="w-4 h-4" />
-                    Inicio
+                    <Home className="w-4 h-4" /> Inicio
                 </a>
                 <ChevronRight className="w-4 h-4 text-body/50" />
-                <a href="/zonas/" class="hover:text-primary transition-colors">
-                    Zonas de Servicio
-                </a>
+                <a href="/zonas/" class="hover:text-primary transition-colors"
+                    >Zonas</a
+                >
                 <ChevronRight className="w-4 h-4 text-body/50" />
                 <span class="text-heading font-medium">{locationName}</span>
             </nav>
         </div>
     </section>
 
-    <!-- Hero Section -->
-    <section
-        class="relative min-h-[85vh] flex items-center bg-secondary overflow-hidden"
-    >
-        <div
-            class="absolute inset-0 bg-cover bg-center"
-            style={`background-image: url('${finalHeroImage}')`}
-        >
-        </div>
-        <div
-            class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/85 to-secondary/60"
-        >
-        </div>
+    {
+        finalBlocks.map((block) => {
+            switch (block.discriminant) {
+                case "hero":
+                    return <HeroBlock {...Astro.props} />;
 
-        <div class="container mx-auto px-4 lg:px-8 relative z-10 py-20">
-            <div
-                class="grid lg:grid-cols-[1fr,auto] gap-8 lg:gap-12 items-center max-w-7xl mx-auto"
-            >
-                <div class="max-w-2xl">
-                    <!-- Badges de Confianza -->
-                    <div class="flex flex-wrap items-center gap-3 mb-6">
-                        <span
-                            class="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-primary/20 text-primary text-sm font-bold uppercase tracking-wider border border-primary/30"
-                        >
-                            <MapPin className="w-4 h-4" /> Servicio en {
-                                locationName
-                            }
-                        </span>
-                        <span
-                            class="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-surface/80 backdrop-blur text-heading text-xs font-bold border border-heading/20"
-                        >
-                            <Shield className="w-4 h-4 text-primary" /> +15 Años
-                            Experiencia
-                        </span>
-                    </div>
+                case "features":
+                    return <FeaturesBlock {...Astro.props} />;
 
-                    <h1
-                        class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-none"
-                    >
-                        {niche.toUpperCase()} EN <br />
-                        <span
-                            class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent uppercase"
-                        >
-                            {locationName}
-                        </span>
-                    </h1>
+                case "map":
+                    return <MapBlock {...Astro.props} />;
 
-                    <p
-                        class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-xl leading-relaxed"
-                    >
-                        {heroSubtitle} Cobertura completa en {locationName}
-                        {zipCodes.length > 0 && ` (CP ${zipCodes.join(", ")})`}.
-                        Presupuesto sin compromiso.
-                    </p>
+                case "cta":
+                    return <FinalCTA />;
 
-                    <!-- Stats Rápidos -->
-                    <div class="grid grid-cols-3 gap-4 mb-8 max-w-lg">
-                        <div
-                            class="text-center p-4 bg-surface/50 backdrop-blur rounded-lg border border-heading/10"
-                        >
-                            <Clock
-                                className="w-6 h-6 text-primary mx-auto mb-2"
-                            />
-                            <div class="text-2xl font-bold text-heading">
-                                24h
-                            </div>
-                            <div class="text-xs text-body">Respuesta</div>
-                        </div>
-                        <div
-                            class="text-center p-4 bg-surface/50 backdrop-blur rounded-lg border border-heading/10"
-                        >
-                            <Award
-                                className="w-6 h-6 text-primary mx-auto mb-2"
-                            />
-                            <div class="text-2xl font-bold text-heading">
-                                100%
-                            </div>
-                            <div class="text-xs text-body">Garantía</div>
-                        </div>
-                        <div
-                            class="text-center p-4 bg-surface/50 backdrop-blur rounded-lg border border-heading/10"
-                        >
-                            <Users
-                                className="w-6 h-6 text-primary mx-auto mb-2"
-                            />
-                            <div class="text-2xl font-bold text-heading">
-                                500+
-                            </div>
-                            <div class="text-xs text-body">Clientes</div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a
-                            href={`tel:${phone.replace(/\s/g, "")}`}
-                            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg hover:shadow-primary/40"
-                        >
-                            <Phone className="w-5 h-5 mr-2" />
-                            Llamar Ahora
-                        </a>
-                        <a
-                            href="#formulario"
-                            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-surface hover:bg-surface/80 text-heading rounded transition-all border-2 border-heading/20 hover:border-primary"
-                        >
-                            Pedir Presupuesto
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Formulario Hero (Desktop) -->
-                <div
-                    id="formulario"
-                    class="w-full lg:w-[420px] mt-8 lg:mt-0 lg:mr-8"
-                >
-                    <HeroContactForm
-                        title={`¿Buscas ${niche} en ${locationName}?`}
-                        subtitle="Te respondemos hoy mismo"
-                    />
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Por Qué Elegirnos -->
-    <section class="py-20 bg-secondary border-t border-heading/10">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-heading font-bold text-heading mb-4">
-                    ¿Por Qué Somos Tu Mejor Opción en {locationName}?
-                </h2>
-                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-body max-w-2xl mx-auto">
-                    Conocemos perfectamente la zona de {locationName} y sus necesidades
-                    específicas.
-                </p>
-            </div>
-
-            <div
-                class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto"
-            >
-                <div
-                    class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
-                >
-                    <div
-                        class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
-                    >
-                        <MapPin className="w-7 h-7 text-primary" />
-                    </div>
-                    <h3 class="text-xl font-bold text-heading mb-3">
-                        Cobertura Local
-                    </h3>
-                    <p class="text-body text-sm">
-                        Llegamos rápido a {locationName}. Conocemos todas las
-                        calles y códigos postales de la zona.
-                    </p>
-                </div>
-
-                <div
-                    class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
-                >
-                    <div
-                        class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
-                    >
-                        <Clock className="w-7 h-7 text-primary" />
-                    </div>
-                    <h3 class="text-xl font-bold text-heading mb-3">
-                        Respuesta Rápida
-                    </h3>
-                    <p class="text-body text-sm">
-                        Atendemos urgencias en menos de 4 horas. Servicio
-                        prioritario para {locationName}.
-                    </p>
-                </div>
-
-                <div
-                    class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
-                >
-                    <div
-                        class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
-                    >
-                        <Shield className="w-7 h-7 text-primary" />
-                    </div>
-                    <h3 class="text-xl font-bold text-heading mb-3">
-                        Garantía Total
-                    </h3>
-                    <p class="text-body text-sm">
-                        Todos nuestros trabajos en {locationName} incluyen garantía
-                        por escrito.
-                    </p>
-                </div>
-
-                <div
-                    class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
-                >
-                    <div
-                        class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
-                    >
-                        <Award className="w-7 h-7 text-primary" />
-                    </div>
-                    <h3 class="text-xl font-bold text-heading mb-3">
-                        Profesionales
-                    </h3>
-                    <p class="text-body text-sm">
-                        Equipo certificado con más de 15 años de experiencia en {
-                            city
-                        } y provincia.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contenido Principal + Sidebar -->
-    <section class="py-20 bg-secondary">
-        <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
-            <div class="lg:col-span-2 space-y-12">
-                <!-- Contenido MDX -->
-                <div
-                    class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary prose-li:text-body max-w-none"
-                >
-                    <Content components={mdxComponents} />
-                </div>
-
-                <!-- Servicios en la Zona -->
-                <div>
-                    <h2
-                        class="text-3xl font-heading font-bold text-heading mb-8"
-                    >
-                        Servicios de {niche} en {locationName}
-                    </h2>
-
-                    <div class="grid md:grid-cols-2 gap-6">
-                        {
-                            services.map((service) => (
-                                <a
-                                    href={`/${service.slug}`}
-                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all block"
-                                >
-                                    <div class="flex items-center justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
-                                            {service.data.title}
-                                        </h3>
-                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                case "content":
+                    return (
+                        <section class="py-20 bg-secondary">
+                            <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
+                                {/* COLUMNA IZQUIERDA: CONTENIDO + SERVICIOS + FAQ */}
+                                <div class="lg:col-span-2 space-y-12">
+                                    <div class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary prose-li:text-body max-w-none">
+                                        <Content components={mdxComponents} />
                                     </div>
-                                    <p class="text-body text-sm line-clamp-2">
-                                        {service.data.shortDesc} Servicio
-                                        disponible en {locationName}.
-                                    </p>
-                                </a>
-                            ))
-                        }
-                    </div>
-                </div>
 
-                <!-- FAQ de la Zona -->
-                {
-                    faq && faq.length > 0 && (
-                        <FaqAccordion
-                            title={`Preguntas Frecuentes sobre ${niche} en ${locationName}`}
-                            items={faq}
-                        />
-                    )
-                }
-            </div>
+                                    {/* Lista de Servicios en la Zona */}
+                                    <div>
+                                        <h2 class="text-3xl font-heading font-bold text-heading mb-8">
+                                            Servicios de {niche} en{" "}
+                                            {locationName}
+                                        </h2>
+                                        <div class="grid md:grid-cols-2 gap-6">
+                                            {services.map((service) => (
+                                                <a
+                                                    href={`/${service.slug}`}
+                                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all block"
+                                                >
+                                                    <div class="flex items-center justify-between mb-4">
+                                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
+                                                            {service.data.title}
+                                                        </h3>
+                                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                                    </div>
+                                                    <p class="text-body text-sm line-clamp-2">
+                                                        {service.data.shortDesc}{" "}
+                                                        Disponible en{" "}
+                                                        {locationName}.
+                                                    </p>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-8">
-                <div
-                    class="p-8 bg-surface rounded-lg border border-heading/10 sticky top-24 shadow-2xl"
-                >
-                    <h3
-                        class="text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4"
-                    >
-                        Contacto Directo
-                    </h3>
+                                    {/* FAQ */}
+                                    {faq && faq.length > 0 && (
+                                        <FaqAccordion
+                                            title={`Preguntas Frecuentes en ${locationName}`}
+                                            items={faq}
+                                        />
+                                    )}
+                                </div>
 
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0 mt-1"
-                            />
-                            <span class="text-body text-sm"
-                                >Presupuesto cerrado sin sorpresas</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0 mt-1"
-                            />
-                            <span class="text-body text-sm"
-                                >Profesionales de {city}</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0 mt-1"
-                            />
-                            <span class="text-body text-sm"
-                                >Garantía por escrito</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <CheckCircle
-                                className="w-6 h-6 text-primary shrink-0 mt-1"
-                            />
-                            <span class="text-body text-sm"
-                                >Cobertura total en {locationName}</span
-                            >
-                        </li>
-                    </ul>
-
-                    <a
-                        href={`tel:${phone.replace(/\s/g, "")}`}
-                        class="flex flex-col items-center justify-center w-full py-4 bg-surface/50 hover:bg-surface text-heading border border-heading/20 rounded font-bold transition-all group hover:border-primary/50 mb-4"
-                    >
-                        <span
-                            class="text-xs text-body/70 uppercase tracking-widest mb-1 group-hover:text-primary"
-                        >
-                            Llamar Ahora
-                        </span>
-                        <span class="text-2xl font-heading">{phone}</span>
-                    </a>
-
-                    <a
-                        href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone.replace(/\s/g, "")}?text=Hola,%20necesito%20servicio%20en%20${locationName}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex flex-col items-center justify-center w-full py-4 bg-green-600 hover:bg-green-700 text-white border border-green-700 rounded font-bold transition-all group"
-                    >
-                        <span
-                            class="text-xs text-green-100 uppercase tracking-widest mb-1"
-                            >WhatsApp</span
-                        >
-                        <span class="text-lg font-heading"
-                            >Consultar Disponibilidad</span
-                        >
-                    </a>
-                </div>
-
-                <!-- Otras Zonas -->
-                <div
-                    class="bg-surface rounded-lg border border-heading/10 overflow-hidden"
-                >
-                    <div class="bg-surface/50 p-4 border-b border-heading/10">
-                        <h4
-                            class="font-bold text-heading uppercase text-sm tracking-wider"
-                        >
-                            Otras Zonas
-                        </h4>
-                    </div>
-                    <div class="p-2">
-                        <ul class="space-y-1">
-                            {
-                                allLocations
-                                    .filter((loc) => loc.slug !== currentSlug)
-                                    .slice(0, 6)
-                                    .map((location) => (
-                                        <li>
-                                            <a
-                                                href={`/zona/${location.slug}`}
-                                                class="block p-3 rounded hover:bg-surface/50 text-body hover:text-primary transition-colors text-sm flex justify-between items-center group"
-                                            >
-                                                <span>
-                                                    • {location.data.name}
+                                {/* SIDEBAR (Fijo en el bloque de contenido) */}
+                                <div class="space-y-8">
+                                    <div class="p-8 bg-surface rounded-lg border border-heading/10 sticky top-24 shadow-2xl">
+                                        <h3 class="text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4">
+                                            Contacto Directo
+                                        </h3>
+                                        <ul class="space-y-4 mb-8">
+                                            <li class="flex items-start gap-3">
+                                                <CheckCircle className="w-6 h-6 text-primary shrink-0 mt-1" />
+                                                <span class="text-body text-sm">
+                                                    Presupuesto sin compromiso
                                                 </span>
-                                                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            </a>
-                                        </li>
-                                    ))
-                            }
-                            <li>
-                                <a
-                                    href="/zonas/"
-                                    class="block p-3 rounded text-primary font-bold hover:bg-primary/10 transition-colors text-sm border-t border-heading/10"
-                                >
-                                    Ver todas las zonas →
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <CheckCircle className="w-6 h-6 text-primary shrink-0 mt-1" />
+                                                <span class="text-body text-sm">
+                                                    Atención en {locationName}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <a
+                                            href={`tel:${phone.replace(/\s/g, "")}`}
+                                            class="flex flex-col items-center justify-center w-full py-4 bg-surface/50 hover:bg-surface text-heading border border-heading/20 rounded font-bold transition-all group hover:border-primary/50 mb-4"
+                                        >
+                                            <span class="text-xs text-body/70 uppercase tracking-widest mb-1 group-hover:text-primary">
+                                                Llamar Ahora
+                                            </span>
+                                            <span class="text-2xl font-heading">
+                                                {phone}
+                                            </span>
+                                        </a>
+                                        <a
+                                            href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone.replace(/\s/g, "")}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="flex flex-col items-center justify-center w-full py-4 bg-green-600 hover:bg-green-700 text-white border border-green-700 rounded font-bold transition-all group"
+                                        >
+                                            <span class="text-xs text-green-100 uppercase tracking-widest mb-1">
+                                                WhatsApp
+                                            </span>
+                                            <span class="text-lg font-heading">
+                                                Consultar Disponibilidad
+                                            </span>
+                                        </a>
+                                    </div>
 
-    <FinalCTA />
-
-    <!-- Mapa de la Zona -->
-    <section
-        class="w-full h-[450px] bg-secondary border-t border-heading/10 relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
-    >
-        {
-            mapLat && mapLng ? (
-                <iframe
-                    src={`https://maps.google.com/maps?q=${mapLat},${mapLng}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                    width="100%"
-                    height="100%"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    class="opacity-90 hover:opacity-100 transition-opacity"
-                />
-            ) : (
-                <iframe
-                    src={`https://maps.google.com/maps?q=${encodeURIComponent(locationName)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                    width="100%"
-                    height="100%"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    class="opacity-90 hover:opacity-100 transition-opacity"
-                />
-            )
-        }
-
-        <div
-            class="absolute bottom-6 left-6 bg-surface/95 backdrop-blur p-4 rounded-lg shadow-xl border border-heading/10 max-w-sm pointer-events-none"
-        >
-            <h3 class="font-bold text-heading mb-2 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-primary" />
-                Zona de Servicio: {locationName}
-            </h3>
-            <p class="text-body text-sm">
-                Códigos Postales: {zipCodes.join(", ")}
-            </p>
-        </div>
-    </section>
+                                    {/* Otras Zonas */}
+                                    <div class="bg-surface rounded-lg border border-heading/10 overflow-hidden">
+                                        <div class="bg-surface/50 p-4 border-b border-heading/10">
+                                            <h4 class="font-bold text-heading uppercase text-sm tracking-wider">
+                                                Otras Zonas
+                                            </h4>
+                                        </div>
+                                        <div class="p-2">
+                                            <ul class="space-y-1">
+                                                {allLocations
+                                                    .filter(
+                                                        (loc) =>
+                                                            loc.slug !==
+                                                            currentSlug,
+                                                    )
+                                                    .slice(0, 6)
+                                                    .map((location) => (
+                                                        <li>
+                                                            <a
+                                                                href={`/zona/${location.slug}`}
+                                                                class="block p-3 rounded hover:bg-surface/50 text-body hover:text-primary transition-colors text-sm flex justify-between items-center group"
+                                                            >
+                                                                <span>
+                                                                    •{" "}
+                                                                    {
+                                                                        location
+                                                                            .data
+                                                                            .name
+                                                                    }
+                                                                </span>
+                                                                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                            </a>
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    );
+            }
+        })
+    }
 
     <WhatsAppButton />
     <Footer />
@@ -558,7 +289,6 @@ const mapLng = coordinates?.lng || "";
             transform: scale(1);
         }
     }
-
     .form-highlight {
         animation: formPulse 1s ease-out 2;
     }
@@ -568,7 +298,6 @@ const mapLng = coordinates?.lng || "";
     document.addEventListener("DOMContentLoaded", () => {
         const formLink = document.querySelector('a[href="#formulario"]');
         const formElement = document.getElementById("formulario");
-
         if (formLink && formElement) {
             formLink.addEventListener("click", (event) => {
                 event.preventDefault();
@@ -578,9 +307,10 @@ const mapLng = coordinates?.lng || "";
                 });
                 setTimeout(() => {
                     formElement.classList.add("form-highlight");
-                    setTimeout(() => {
-                        formElement.classList.remove("form-highlight");
-                    }, 2000);
+                    setTimeout(
+                        () => formElement.classList.remove("form-highlight"),
+                        2000,
+                    );
                 }, 500);
             });
         }

@@ -1,0 +1,87 @@
+---
+import { MapPin, Clock, Shield, Award } from "lucide-react";
+const { locationName, city } = Astro.props;
+---
+
+<section class="py-20 bg-secondary border-t border-heading/10">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-heading font-bold text-heading mb-4">
+                ¿Por Qué Somos Tu Mejor Opción en {locationName}?
+            </h2>
+            <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="text-body max-w-2xl mx-auto">
+                Conocemos perfectamente la zona de {locationName} y sus necesidades
+                específicas.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div
+                class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
+            >
+                <div
+                    class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
+                >
+                    <MapPin className="w-7 h-7 text-primary" />
+                </div>
+                <h3 class="text-xl font-bold text-heading mb-3">
+                    Cobertura Local
+                </h3>
+                <p class="text-body text-sm">
+                    Llegamos rápido a {locationName}. Conocemos todas las calles
+                    y códigos postales.
+                </p>
+            </div>
+            <div
+                class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
+            >
+                <div
+                    class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
+                >
+                    <Clock className="w-7 h-7 text-primary" />
+                </div>
+                <h3 class="text-xl font-bold text-heading mb-3">
+                    Respuesta Rápida
+                </h3>
+                <p class="text-body text-sm">
+                    Atendemos urgencias en menos de 4 horas. Servicio
+                    prioritario.
+                </p>
+            </div>
+            <div
+                class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
+            >
+                <div
+                    class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
+                >
+                    <Shield className="w-7 h-7 text-primary" />
+                </div>
+                <h3 class="text-xl font-bold text-heading mb-3">
+                    Garantía Total
+                </h3>
+                <p class="text-body text-sm">
+                    Todos nuestros trabajos en {locationName} incluyen garantía por
+                    escrito.
+                </p>
+            </div>
+            <div
+                class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group"
+            >
+                <div
+                    class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors"
+                >
+                    <Award className="w-7 h-7 text-primary" />
+                </div>
+                <h3 class="text-xl font-bold text-heading mb-3">
+                    Profesionales
+                </h3>
+                <p class="text-body text-sm">
+                    Equipo certificado con más de 15 años de experiencia en {
+                        city
+                    }.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

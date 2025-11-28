@@ -17,7 +17,7 @@ export default config({
         navigation: {
             '📝 Contenido': ['services', 'locations', 'projects', 'testimonials', 'homepage'],
             '---': [],
-            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'form'],
+            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation'],
         },
     },
 
@@ -277,59 +277,6 @@ export default config({
         }),
 
 
-        // 7. CONFIGURACIÓN DEL FORMULARIO
-        // 7. CONFIGURACIÓN DEL FORMULARIO
-        form: singleton({
-            label: 'Formulario de Contacto',
-            path: 'src/content/form/main',
-            format: 'json', // Guardamos como JSON para manejar arrays complejos
-            schema: {
-                title: fields.text({ label: 'Título del Formulario', defaultValue: 'Solicita Presupuesto Gratis' }),
-                subtitle: fields.text({ label: 'Subtítulo', defaultValue: 'Respuesta en menos de 24h' }),
-                submitText: fields.text({ label: 'Texto del Botón', defaultValue: 'Enviar Solicitud' }),
-                successUrl: fields.text({ label: 'URL de "Gracias"', defaultValue: '/gracias' }),
-
-                formFields: fields.array(
-                    fields.object({
-                        label: fields.text({ label: 'Etiqueta (Label)', validation: { length: { min: 1 } } }),
-                        name: fields.text({ label: 'Nombre interno (name)', description: 'Sin espacios (ej: tipo_servicio)', validation: { length: { min: 1 } } }),
-                        type: fields.select({
-                            label: 'Tipo de Campo',
-                            options: [
-                                { label: 'Texto Corto', value: 'text' },
-                                { label: 'Email', value: 'email' },
-                                { label: 'Teléfono', value: 'tel' },
-                                { label: 'Área de Texto (Mensaje)', value: 'textarea' },
-                                { label: 'Desplegable (Select)', value: 'select' },
-                            ],
-                            defaultValue: 'text',
-                        }),
-                        placeholder: fields.text({ label: 'Placeholder (Texto de ayuda)' }),
-                        required: fields.checkbox({ label: 'Obligatorio', defaultValue: true }),
-                        width: fields.select({
-                            label: 'Ancho del Campo',
-                            options: [
-                                { label: '100% (Ancho Completo)', value: 'full' },
-                                { label: '50% (Mitad)', value: 'half' },
-                            ],
-                            defaultValue: 'full',
-                        }),
-                        // Opciones solo para desplegables
-                        selectOptions: fields.array(
-                            fields.text({ label: 'Opción' }),
-                            {
-                                label: 'Opciones del Desplegable (Solo si elegiste "Select")',
-                                itemLabel: (props) => props.value
-                            }
-                        )
-                    }),
-                    {
-                        label: 'Campos del Formulario',
-                        itemLabel: (props) => `${props.fields.label.value} (${props.fields.type.value})`,
-                    }
-                ),
-            },
-        }),
 
 
         homepage: singleton({
@@ -662,8 +609,37 @@ export default config({
                     }
                 ),
 
+                // --- NUEVO: PAGE BUILDER ---
+                blocks: fields.blocks({
+                    hero: {
+                        label: 'Hero (Portada)',
+                        schema: fields.empty()
+                    }, // Usa los datos globales de la zona
+                    features: {
+                        label: 'Características (Por qué elegirnos)',
+                        schema: fields.empty()
+                    },
+                    map: {
+                        label: 'Mapa de Ubicación',
+                        schema: fields.empty()
+                    },
+                    content: {
+                        label: 'Contenido Principal + Sidebar',
+                        schema: fields.empty()
+                    }, // Renderiza el MDX
+                    cta: {
+                        label: 'Llamada a la Acción (CTA Final)',
+                        schema: fields.empty()
+                    },
+                }, {
+                    label: 'Constructor de Página (Orden de Secciones)',
+                    description: 'Define qué secciones mostrar y en qué orden aparecerán en la página'
+                }),
+                // ---------------------------
+
                 content: fields.mdx({
-                    label: 'Contenido',
+                    label: 'Contenido (Texto SEO)',
+                    description: 'Contenido principal que se mostrará cuando agregues el bloque "Contenido Principal + Sidebar"',
                     components: {
                         CtaBlock: {
                             label: 'Botón de Llamada a la Acción (CTA)',
