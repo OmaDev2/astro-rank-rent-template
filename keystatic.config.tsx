@@ -17,7 +17,7 @@ export default config({
         navigation: {
             '📝 Contenido': ['services', 'locations', 'projects', 'testimonials', 'homepage'],
             '---': [],
-            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation'],
+            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'footer'],
         },
     },
 
@@ -276,6 +276,36 @@ export default config({
             },
         }),
 
+        // 7. PIE DE PÁGINA (FOOTER)
+        footer: singleton({
+            label: 'Pie de Página (Footer)',
+            path: 'src/content/footer/main',
+            format: 'json',
+            schema: {
+                description: fields.text({
+                    label: 'Texto de Descripción',
+                    description: 'Pequeño texto bajo el logo. Si lo dejas vacío, se genera uno automático.',
+                    multiline: true,
+                }),
+
+                footerLinks: fields.array(
+                    fields.object({
+                        label: fields.text({ label: 'Texto del Enlace' }),
+                        url: fields.text({ label: 'URL' }),
+                    }),
+                    {
+                        label: 'Enlaces Legales (Fondo)',
+                        itemLabel: (props) => props.fields.label.value || 'Enlace',
+                    }
+                ),
+
+                disclaimer: fields.text({
+                    label: 'Texto Legal / Disclaimer',
+                    description: 'Texto pequeño al final (ej: "Este sitio actúa como intermediario...")',
+                    multiline: true,
+                }),
+            },
+        }),
 
 
 

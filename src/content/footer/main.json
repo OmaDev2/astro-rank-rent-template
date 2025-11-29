@@ -1,0 +1,18 @@
+{
+    "description": "",
+    "footerLinks": [
+        {
+            "label": "Aviso Legal",
+            "url": "/aviso-legal/"
+        },
+        {
+            "label": "Privacidad",
+            "url": "/privacidad/"
+        },
+        {
+            "label": "Cookies",
+            "url": "/cookies/"
+        }
+    ],
+    "disclaimer": "Este sitio web actúa como intermediario de servicios profesionales."
+}

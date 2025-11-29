@@ -253,6 +253,19 @@ const navigation = defineCollection({
     }),
 });
 
+const footer = defineCollection({
+    type: 'data',
+    schema: z.object({
+        description: z.string().optional(),
+        footerLinks: z.array(
+            z.object({
+                label: z.string(),
+                url: z.string(),
+            })
+        ).optional(),
+        disclaimer: z.string().optional(),
+    }),
+});
 
 
 export const collections = {
@@ -268,6 +281,6 @@ export const collections = {
     testimonials,
     navigation,
     form,
-
+    footer,
 
 };

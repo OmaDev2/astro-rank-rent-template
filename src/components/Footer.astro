@@ -1,33 +1,78 @@
 ---
 import ServiceAreas from "./ServiceAreas.astro";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
 import { getEntry } from "astro:content";
+import { getSettings } from "@/lib/settings";
 
-// 1. Datos Globales
-const business = await getEntry("business", "global");
-const { siteName, phone, email, address, city, niche } = business?.data || {
-    siteName: "Herrero Zaragoza",
-    phone: "600 000 000",
-    email: "info@example.com",
-    address: "Calle Ejemplo, 123",
-    city: "Zaragoza",
-    niche: "Herrería",
-};
+// 1. Recuperar configuración unificada
+const settings = await getSettings();
+const { siteName, phone, email, address, city, niche, facebook, instagram } =
+    settings;
+
+// 2. Recuperar configuración específica del Footer
+const footerConfig = await getEntry("footer", "main");
+const footerData = footerConfig?.data || {};
+
+// Valores por defecto si no se configuran en Keystatic
+const description =
+    footerData.description ||
+    `Expertos en ${niche} en ${city} y provincia. Calidad profesional y servicio rápido garantizado.`;
+const disclaimer =
+    footerData.disclaimer ||
+    `Este sitio web actúa como intermediario de servicios de ${niche}.`;
+const footerLinks = footerData.footerLinks || [
+    { label: "Aviso Legal", url: "/aviso-legal/" },
+    { label: "Privacidad", url: "/privacidad/" },
+    { label: "Cookies", url: "/cookies/" },
+];
 ---
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
     <div class="container mx-auto px-4">
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            {/* COLUMNA 1: INFO NEGOCIO */}
             <div>
                 <h3 class="text-2xl font-heading font-bold text-heading mb-4">
                     {siteName}
                 </h3>
-                <p class="text-body text-sm leading-relaxed">
-                    Expertos en {niche} en {city} y provincia. Calidad profesional
-                    y servicio rápido garantizado.
+                <p class="text-body text-sm leading-relaxed mb-6">
+                    {description}
                 </p>
+
+                {
+                    /* Redes Sociales (Se muestran solo si hay URL configurada en settings) */
+                }
+                {
+                    (facebook || instagram) && (
+                        <div class="flex gap-4">
+                            {facebook && (
+                                <a
+                                    href={facebook}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-body hover:text-primary transition-colors"
+                                    aria-label="Facebook"
+                                >
+                                    <Facebook className="w-5 h-5" />
+                                </a>
+                            )}
+                            {instagram && (
+                                <a
+                                    href={instagram}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-body hover:text-primary transition-colors"
+                                    aria-label="Instagram"
+                                >
+                                    <Instagram className="w-5 h-5" />
+                                </a>
+                            )}
+                        </div>
+                    )
+                }
             </div>
 
+            {/* COLUMNA 2: CONTACTO */}
             <div>
                 <h4
                     class="text-heading font-bold mb-4 uppercase tracking-wider text-sm"
@@ -64,36 +109,45 @@ const { siteName, phone, email, address, city, niche } = business?.data || {
                 </ul>
             </div>
 
+            {/* COLUMNA 3 y 4: ÁREAS DE SERVICIO (Componente externo) */}
             <div class="lg:col-span-2">
                 <ServiceAreas />
             </div>
         </div>
 
+        {/* BARRA INFERIOR (LINKS LEGALES) */}
         <div
             class="border-t border-heading/10 pt-8 text-center text-body/70 text-xs"
         >
             <div class="flex flex-wrap justify-center gap-4 mb-4">
-                <a
-                    href="/aviso-legal/"
-                    class="hover:text-primary transition-colors">Aviso Legal</a
-                >
-                <span class="text-body/30">|</span>
-                <a
-                    href="/privacidad/"
-                    class="hover:text-primary transition-colors">Privacidad</a
-                >
-                <span class="text-body/30">|</span>
-                <a href="/cookies/" class="hover:text-primary transition-colors"
-                    >Cookies</a
-                >
+                {
+                    footerLinks.map((link, index) => (
+                        <>
+                            <a
+                                href={link.url}
+                                class="hover:text-primary transition-colors"
+                            >
+                                {link.label}
+                            </a>
+                            {/* Separador entre enlaces, pero no después del último */}
+                            {index < footerLinks.length - 1 && (
+                                <span class="text-body/30">|</span>
+                            )}
+                        </>
+                    ))
+                }
             </div>
+
             <p>
                 &copy; {new Date().getFullYear()}
                 {siteName}. Todos los derechos reservados.
             </p>
-            <p class="text-body/50 mt-2 text-[10px]">
-                Este sitio web actúa como intermediario de servicios de {niche}.
-            </p>
+
+            {
+                disclaimer && (
+                    <p class="text-body/50 mt-2 text-[10px]">{disclaimer}</p>
+                )
+            }
         </div>
     </div>
 </footer>
