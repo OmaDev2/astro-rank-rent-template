@@ -1,0 +1,13 @@
+{
+  "siteName": "Fontanero Urgente Sevilla Pro",
+  "niche": "Fontanero Urgente",
+  "city": "Sevilla",
+  "phone": "600 000 000",
+  "email": "contacto@ejemplo.com",
+  "businessType": "LocalBusiness",
+  "ctaText": "Pedir Presupuesto",
+  "coordinates": {
+    "lat": "40.416",
+    "lng": "-3.703"
+  }
+}

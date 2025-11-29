@@ -42,5 +42,11 @@ export default defineConfig({
   // Keystatic requiere server-side rendering para funcionar correctamente
   output: 'server',
 
-  adapter: netlify()
+  adapter: netlify(),
+
+  vite: {
+    ssr: {
+      noExternal: ['@keystatic/core', '@keystatic/astro'],
+    }
+  }
 });
