@@ -78,32 +78,66 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
 
     // 4. Clustering con Gemini
     const prompt = `
-        Actúa como experto SEO. Objetivo: Arquitectura web para "${cleanNiche}" en "${cleanCity}".
+        Actúa como experto SEO profesional. Objetivo: Crear arquitectura web para "${cleanNiche}" en "${cleanCity}".
         
         INPUT (Keywords + Volumen Local):
         ${JSON.stringify(uniqueKeywords.map(k => `${k.keyword} (${k.volume})`))}
         
         TAREA:
-        1. Agrupa en CLUSTERS temáticos para servicios.
-        2. Selecciona la "Focal Keyword" (Mayor volumen/intención).
-        3. Define 5 zonas locales.
+        1. Agrupa estas keywords en CLUSTERS temáticos para crear páginas de servicio
+        2. Para cada cluster, selecciona la "Focal Keyword" (mayor volumen + intención comercial)
+        3. Genera 5 VARIACIONES DIFERENTES de meta tags para cada cluster
+        4. Define 5 zonas/barrios locales de ${cleanCity}
         
-        DEVUELVE JSON:
+        REGLAS SEO ESTRICTAS para meta tags:
+        - H1: Máximo 60 caracteres, incluir focal keyword de forma natural
+        - SEO Title: Máximo 60 caracteres, NO repetir focal keyword exacta, usar sinónimos o variaciones
+        - Meta Description: Máximo 160 caracteres, persuasiva, incluir call-to-action
+        - Usar keywords secundarias del cluster en títulos
+        - Incluir modificadores: "Best", "Top", "Guide", "2024", "Precio", "Cerca de ti", etc.
+        - Cada variación debe ser ÚNICA y ofrecer un ángulo diferente
+        
+        DEVUELVE JSON (IMPORTANTE: Respetar esta estructura exacta):
         {
-            "market_analysis": "Análisis breve",
+            "market_analysis": "Análisis breve del mercado local (2-3 líneas)",
             "clusters": [
                 {
-                    "name": "Nombre Cluster",
-                    "main_keyword": "keyword principal",
+                    "name": "Nombre del Cluster/Servicio",
+                    "main_keyword": "focal keyword",
                     "volume": 100,
-                    "h1": "H1 Optimizado",
-                    "seo_title": "Meta Title",
-                    "seo_description": "Meta Desc",
+                    "meta_suggestions": [
+                        {
+                            "h1": "H1 Optimizado Variación 1",
+                            "seo_title": "Meta Title Variación 1 (sin repetir focal keyword)",
+                            "seo_description": "Meta Description Variación 1 con CTA"
+                        },
+                        {
+                            "h1": "H1 Optimizado Variación 2",
+                            "seo_title": "Meta Title Variación 2 (ángulo diferente)",
+                            "seo_description": "Meta Description Variación 2 con CTA"
+                        },
+                        {
+                            "h1": "H1 Optimizado Variación 3",
+                            "seo_title": "Meta Title Variación 3 (enfoque precio/calidad)",
+                            "seo_description": "Meta Description Variación 3 con CTA"
+                        },
+                        {
+                            "h1": "H1 Optimizado Variación 4",
+                            "seo_title": "Meta Title Variación 4 (enfoque local)",
+                            "seo_description": "Meta Description Variación 4 con CTA"
+                        },
+                        {
+                            "h1": "H1 Optimizado Variación 5",
+                            "seo_title": "Meta Title Variación 5 (enfoque urgencia/2024)",
+                            "seo_description": "Meta Description Variación 5 con CTA"
+                        }
+                    ],
+                    "selected_suggestion": 0,
                     "keywords": [{"keyword": "kw", "volume": 10}]
                 }
             ],
-            "locations": ["Zona 1", "Zona 2"],
-            "home_structure": { "h1": "...", "h2s": ["..."] }
+            "locations": ["Zona 1", "Zona 2", "Zona 3", "Zona 4", "Zona 5"],
+            "home_structure": { "h1": "H1 para homepage", "h2s": ["H2 sección 1", "H2 sección 2"] }
         }
     `;
 

@@ -326,14 +326,50 @@ export default function GeneratorApp() {
                             <div className="p-6 grid lg:grid-cols-2 gap-8">
                                 {/* Left: Meta Data */}
                                 <div className="space-y-4">
+                                    {/* Suggestion Selector */}
+                                    {cluster.meta_suggestions && cluster.meta_suggestions.length > 0 && (
+                                        <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                                            <label className="text-xs font-bold text-indigo-700 uppercase block mb-2">
+                                                Meta Tag Variation
+                                            </label>
+                                            <select
+                                                className="w-full bg-white border border-indigo-300 rounded px-3 py-2 text-sm font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                value={cluster.selected_suggestion || 0}
+                                                onChange={(e) => {
+                                                    const newClusters = [...researchData.clusters];
+                                                    newClusters[i].selected_suggestion = parseInt(e.target.value);
+                                                    setResearchData({ ...researchData, clusters: newClusters });
+                                                }}
+                                            >
+                                                {cluster.meta_suggestions.map((_, idx) => (
+                                                    <option key={idx} value={idx}>
+                                                        Suggestion {idx + 1} of {cluster.meta_suggestions.length}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <p className="text-xs text-indigo-600 mt-2">
+                                                💡 Choose the variation that best fits your strategy
+                                            </p>
+                                        </div>
+                                    )}
+
                                     <div>
                                         <label className="text-xs font-bold text-slate-500 uppercase">H1 Header</label>
                                         <input
                                             className="w-full border-b-2 border-slate-200 focus:border-indigo-600 outline-none py-1 text-lg font-bold text-slate-800"
-                                            value={cluster.h1}
+                                            value={
+                                                cluster.meta_suggestions && cluster.meta_suggestions.length > 0
+                                                    ? cluster.meta_suggestions[cluster.selected_suggestion || 0].h1
+                                                    : cluster.h1 || ''
+                                            }
                                             onChange={(e) => {
                                                 const newClusters = [...researchData.clusters];
-                                                newClusters[i].h1 = e.target.value;
+                                                const selectedIdx = newClusters[i].selected_suggestion || 0;
+                                                if (newClusters[i].meta_suggestions && newClusters[i].meta_suggestions[selectedIdx]) {
+                                                    newClusters[i].meta_suggestions[selectedIdx].h1 = e.target.value;
+                                                } else {
+                                                    newClusters[i].h1 = e.target.value;
+                                                }
                                                 setResearchData({ ...researchData, clusters: newClusters });
                                             }}
                                         />
@@ -342,35 +378,161 @@ export default function GeneratorApp() {
                                         <label className="text-xs font-bold text-slate-400 uppercase">SEO Title</label>
                                         <input
                                             className="w-full bg-transparent border-none outline-none text-sm text-blue-600 font-medium truncate"
-                                            value={cluster.seo_title}
+                                            value={
+                                                cluster.meta_suggestions && cluster.meta_suggestions.length > 0
+                                                    ? cluster.meta_suggestions[cluster.selected_suggestion || 0].seo_title
+                                                    : cluster.seo_title || ''
+                                            }
                                             onChange={(e) => {
                                                 const newClusters = [...researchData.clusters];
-                                                newClusters[i].seo_title = e.target.value;
+                                                const selectedIdx = newClusters[i].selected_suggestion || 0;
+                                                if (newClusters[i].meta_suggestions && newClusters[i].meta_suggestions[selectedIdx]) {
+                                                    newClusters[i].meta_suggestions[selectedIdx].seo_title = e.target.value;
+                                                } else {
+                                                    newClusters[i].seo_title = e.target.value;
+                                                }
                                                 setResearchData({ ...researchData, clusters: newClusters });
                                             }}
                                         />
                                         <label className="text-xs font-bold text-slate-400 uppercase mt-2 block">Meta Description</label>
                                         <textarea
                                             className="w-full bg-transparent border-none outline-none text-xs text-slate-600 resize-none h-12"
-                                            value={cluster.seo_description}
+                                            value={
+                                                cluster.meta_suggestions && cluster.meta_suggestions.length > 0
+                                                    ? cluster.meta_suggestions[cluster.selected_suggestion || 0].seo_description
+                                                    : cluster.seo_description || ''
+                                            }
                                             onChange={(e) => {
                                                 const newClusters = [...researchData.clusters];
-                                                newClusters[i].seo_description = e.target.value;
+                                                const selectedIdx = newClusters[i].selected_suggestion || 0;
+                                                if (newClusters[i].meta_suggestions && newClusters[i].meta_suggestions[selectedIdx]) {
+                                                    newClusters[i].meta_suggestions[selectedIdx].seo_description = e.target.value;
+                                                } else {
+                                                    newClusters[i].seo_description = e.target.value;
+                                                }
                                                 setResearchData({ ...researchData, clusters: newClusters });
                                             }}
                                         />
                                     </div>
                                 </div>
 
-                                {/* Right: Keywords */}
+                                {/* Right: Keywords Management */}
                                 <div>
-                                    <div className="bg-slate-100 text-slate-600 px-3 py-1 text-xs font-bold uppercase mb-2">Keywords en este Cluster</div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {cluster.keywords?.map((k, idx) => (
-                                            <span key={idx} className="bg-white border border-slate-200 px-2 py-1 rounded text-xs text-slate-600 flex items-center gap-1 shadow-sm">
-                                                {k.keyword} <span className="text-green-600 font-mono text-[10px]">{k.volume}</span>
-                                            </span>
-                                        ))}
+                                    <div className="bg-slate-100 text-slate-600 px-3 py-2 text-xs font-bold uppercase mb-2 flex justify-between items-center">
+                                        <span>Keywords ({cluster.keywords?.length || 0})</span>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    const keyword = prompt('Enter keyword to add:');
+                                                    if (keyword && keyword.trim()) {
+                                                        const newClusters = [...researchData.clusters];
+                                                        if (!newClusters[i].keywords) newClusters[i].keywords = [];
+                                                        newClusters[i].keywords.push({
+                                                            keyword: keyword.trim(),
+                                                            volume: 0,
+                                                            source: 'manual'
+                                                        });
+                                                        setResearchData({ ...researchData, clusters: newClusters });
+                                                    }
+                                                }}
+                                                className="bg-green-600 hover:bg-green-500 text-white px-2 py-1 rounded text-xs font-bold"
+                                            >
+                                                + Add
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    const selectedKws = cluster.keywords?.filter((k, idx) =>
+                                                        document.getElementById(`kw-${i}-${idx}`)?.checked
+                                                    );
+                                                    if (selectedKws && selectedKws.length > 0) {
+                                                        if (confirm(`Delete ${selectedKws.length} selected keyword(s)?`)) {
+                                                            const newClusters = [...researchData.clusters];
+                                                            newClusters[i].keywords = cluster.keywords.filter((k, idx) =>
+                                                                !document.getElementById(`kw-${i}-${idx}`)?.checked
+                                                            );
+                                                            setResearchData({ ...researchData, clusters: newClusters });
+                                                        }
+                                                    } else {
+                                                        alert('No keywords selected');
+                                                    }
+                                                }}
+                                                className="bg-red-600 hover:bg-red-500 text-white px-2 py-1 rounded text-xs font-bold"
+                                            >
+                                                🗑 Delete
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Keyword Table */}
+                                    <div className="bg-white border border-slate-200 rounded overflow-hidden max-h-64 overflow-y-auto">
+                                        <table className="w-full text-xs">
+                                            <thead className="bg-slate-50 sticky top-0">
+                                                <tr className="border-b border-slate-200">
+                                                    <th className="px-2 py-2 text-left w-8">
+                                                        <input
+                                                            type="checkbox"
+                                                            onChange={(e) => {
+                                                                cluster.keywords?.forEach((k, idx) => {
+                                                                    const checkbox = document.getElementById(`kw-${i}-${idx}`);
+                                                                    if (checkbox) checkbox.checked = e.target.checked;
+                                                                });
+                                                            }}
+                                                            className="cursor-pointer"
+                                                        />
+                                                    </th>
+                                                    <th className="px-2 py-2 text-left font-bold text-slate-600">Keyword</th>
+                                                    <th className="px-2 py-2 text-right font-bold text-slate-600">Vol</th>
+                                                    <th className="px-2 py-2 text-center font-bold text-slate-600">Move</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {cluster.keywords?.map((k, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+                                                        <td className="px-2 py-2">
+                                                            <input
+                                                                type="checkbox"
+                                                                id={`kw-${i}-${idx}`}
+                                                                className="cursor-pointer"
+                                                            />
+                                                        </td>
+                                                        <td className="px-2 py-2 text-slate-700">{k.keyword}</td>
+                                                        <td className="px-2 py-2 text-right text-green-600 font-mono">{k.volume}</td>
+                                                        <td className="px-2 py-2 text-center">
+                                                            <select
+                                                                className="text-xs border border-slate-300 rounded px-1 py-0.5"
+                                                                onChange={(e) => {
+                                                                    const targetClusterIdx = parseInt(e.target.value);
+                                                                    if (targetClusterIdx !== i) {
+                                                                        if (confirm(`Move "${k.keyword}" to cluster "${researchData.clusters[targetClusterIdx].name}"?`)) {
+                                                                            const newClusters = [...researchData.clusters];
+                                                                            // Remove from current cluster
+                                                                            newClusters[i].keywords = newClusters[i].keywords.filter((_, kidx) => kidx !== idx);
+                                                                            // Add to target cluster
+                                                                            if (!newClusters[targetClusterIdx].keywords) {
+                                                                                newClusters[targetClusterIdx].keywords = [];
+                                                                            }
+                                                                            newClusters[targetClusterIdx].keywords.push(k);
+                                                                            setResearchData({ ...researchData, clusters: newClusters });
+                                                                        }
+                                                                    }
+                                                                    e.target.value = i; // Reset selector
+                                                                }}
+                                                                value={i}
+                                                            >
+                                                                <option value={i}>--</option>
+                                                                {researchData.clusters.map((c, cidx) => (
+                                                                    cidx !== i && (
+                                                                        <option key={cidx} value={cidx}>
+                                                                            → {c.name}
+                                                                        </option>
+                                                                    )
+                                                                ))}
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

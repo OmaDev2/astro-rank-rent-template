@@ -1,120 +1,271 @@
 {
-  "market_analysis": "El mercado de parquetistas en Barcelona presenta una demanda constante, impulsada por la renovación de viviendas y la preferencia por suelos de madera. La estrategia SEO debe segmentar los servicios (instalación, acuchillado, reparación) y la geografía local (distritos de Barcelona) para captar búsquedas de alta intención y competitivas. La optimización de palabras clave long-tail y la presencia local son cruciales.",
+  "market_analysis": "El mercado de parquetistas en Barcelona presenta una demanda constante, impulsada por la renovación de viviendas y locales comerciales, así como la predilección por suelos de madera. La competencia es moderada, con oportunidades para destacar mediante servicios especializados, rapidez y precios competitivos, especialmente en la capital y sus distritos de mayor poder adquisitivo.",
   "clusters": [
     {
-      "name": "Instalación de Parquet y Tarima",
-      "main_keyword": "Instalación Parquet Barcelona",
-      "volume": 200,
-      "h1": "Instalación de Parquet y Tarima Flotante en Barcelona",
-      "seo_title": "Instalación de Parquet y Tarima Flotante en Barcelona | [Nombre Empresa]",
-      "seo_description": "Expertos en instalación de parquet, tarima flotante y suelos de madera en Barcelona. Servicios profesionales con garantía y los mejores materiales. ¡Pide tu presupuesto!",
+      "name": "Servicios de Parquet en Barcelona",
+      "main_keyword": "Parquetista Barcelona",
+      "volume": 720,
+      "meta_suggestions": [
+        {
+          "h1": "Parquetista en Barcelona: Expertos en Suelos de Madera",
+          "seo_title": "Tu Parquetero de Confianza en Barcelona 2024",
+          "seo_description": "¿Buscas un parquetista profesional en Barcelona? Ofrecemos servicios completos de instalación, reparación y mantenimiento. ¡Pide tu presupuesto sin compromiso!"
+        },
+        {
+          "h1": "Servicios Profesionales de Parquet en Barcelona",
+          "seo_title": "Empresa de Parquet y Suelos de Madera en Barcelona",
+          "seo_description": "Somos tu empresa líder en parquet para Barcelona y alrededores. Instalación, acuchillado, y restauración de todo tipo de suelos. ¡Contáctanos hoy!"
+        },
+        {
+          "h1": "Tu Parquetista de Confianza en Toda Barcelona",
+          "seo_title": "Especialistas en Suelos de Parquet Barcelona | Calidad",
+          "seo_description": "Garantizamos calidad superior en cada proyecto. Parquetistas cualificados para tu hogar o negocio. Consigue el mejor acabado. ¡Solicita una cita!"
+        },
+        {
+          "h1": "Parquetistas Cerca de Ti en Barcelona Capital",
+          "seo_title": "Instaladores de Parquet en Barcelona y Alrededores",
+          "seo_description": "¿Necesitas instaladores de parquet en Barcelona? Contamos con los mejores profesionales para un resultado impecable. ¡Presupuesto gratuito y sin compromiso!"
+        },
+        {
+          "h1": "Soluciones Integrales de Parquet en Barcelona",
+          "seo_title": "Los Mejores Parquetistas en Barcelona para 2024",
+          "seo_description": "Descubre por qué somos los parquetistas mejor valorados en Barcelona. Servicio rápido, eficiente y con garantía. ¡Renueva tu suelo ahora!"
+        }
+      ],
+      "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "Instalación Parquet Barcelona",
-          "volume": 200
+          "keyword": "parquetista Barcelona",
+          "volume": 720
         },
         {
-          "keyword": "Colocación Parquet Barcelona",
-          "volume": 150
+          "keyword": "empresa parquet Barcelona",
+          "volume": 190
         },
         {
-          "keyword": "Instalar Parquet Barcelona",
-          "volume": 180
+          "keyword": "instaladores parquet Barcelona",
+          "volume": 160
         },
         {
-          "keyword": "Parquet laminado Barcelona",
-          "volume": 100
-        },
-        {
-          "keyword": "Tarima flotante Barcelona",
-          "volume": 90
-        },
-        {
-          "keyword": "Suelo de madera Barcelona",
-          "volume": 70
-        },
-        {
-          "keyword": "Precio instalar parquet Barcelona",
-          "volume": 50
+          "keyword": "profesional parquet Barcelona",
+          "volume": 80
         }
       ]
     },
     {
-      "name": "Acuchillado y Restauración de Parquet",
-      "main_keyword": "Acuchillar Parquet Barcelona",
-      "volume": 180,
-      "h1": "Acuchillar y Restaurar Parquet en Barcelona | Recupera tu Suelo",
-      "seo_title": "Acuchillado y Restauración de Parquet en Barcelona | [Nombre Empresa]",
-      "seo_description": "Servicio profesional de acuchillado y pulido de parquet en Barcelona. Restauramos tu suelo de madera para devolverle su brillo y belleza original. Presupuesto sin compromiso.",
-      "keywords": [
+      "name": "Instalación de Parquet",
+      "main_keyword": "Instalación de Parquet Barcelona",
+      "volume": 590,
+      "meta_suggestions": [
         {
-          "keyword": "Acuchillar Parquet Barcelona",
-          "volume": 180
+          "h1": "Instalación de Parquet en Barcelona: Tu Suelo Perfecto",
+          "seo_title": "Colocación de Parquet en Barcelona | Expertos 2024",
+          "seo_description": "Expertos en instalación de parquet en Barcelona. Ofrecemos colocación de parquet flotante, laminado y tarima con garantía. ¡Pide tu presupuesto sin coste!"
         },
         {
-          "keyword": "Pulir Parquet Barcelona",
+          "h1": "Colocamos Parquet Flotante y Laminado en Barcelona",
+          "seo_title": "Instalar Tarima Flotante en Barcelona | Rápido y Barato",
+          "seo_description": "¿Quieres instalar parquet flotante o tarima en Barcelona? Servicio rápido y eficiente con los mejores materiales. ¡Consulta nuestras ofertas ahora!"
+        },
+        {
+          "h1": "Expertos en Colocación de Suelos de Parquet Barcelona",
+          "seo_title": "Instaladores de Parquet en Barcelona | Mejor Precio",
+          "seo_description": "Precios competitivos para la instalación de parquet en Barcelona. Te asesoramos en la elección del mejor suelo para tu hogar. ¡Pide un presupuesto personalizado!"
+        },
+        {
+          "h1": "Tu Servicio de Instalación de Parquet Cerca de Ti",
+          "seo_title": "Instalar Parquet en Barcelona Ciudad y Periferia",
+          "seo_description": "Somos tus instaladores de confianza en Barcelona. Colocamos todo tipo de suelos de madera con la máxima profesionalidad. ¡Llámanos y te ayudamos!"
+        },
+        {
+          "h1": "La Mejor Instalación de Parquet en Barcelona Hoy",
+          "seo_title": "Empresa para Colocar Parquet en Barcelona | 2024",
+          "seo_description": "La solución más rápida para instalar tu parquet en Barcelona. Consigue un suelo elegante y duradero este 2024. ¡Contáctanos para una visita sin compromiso!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "instalación parquet Barcelona",
+          "volume": 590
+        },
+        {
+          "keyword": "colocar parquet Barcelona",
+          "volume": 150
+        },
+        {
+          "keyword": "parquet flotante Barcelona",
           "volume": 120
         },
         {
-          "keyword": "Restauración Parquet Barcelona",
-          "volume": 70
+          "keyword": "tarima flotante Barcelona",
+          "volume": 250
+        }
+      ]
+    },
+    {
+      "name": "Acuchillado y Pulido de Parquet",
+      "main_keyword": "Pulir Parquet Barcelona",
+      "volume": 320,
+      "meta_suggestions": [
+        {
+          "h1": "Pulir Parquet en Barcelona: Devuelve el Brillo a Tu Suelo",
+          "seo_title": "Acuchillado de Parquet en Barcelona | Restauración",
+          "seo_description": "¿Tu parquet necesita un lavado de cara? Pulimos y acuchillamos tu suelo en Barcelona, dejándolo como nuevo. ¡Solicita tu presupuesto gratuito hoy!"
         },
         {
-          "keyword": "Lijar Parquet Barcelona",
-          "volume": 60
+          "h1": "Acuchillado Profesional de Parquet en Barcelona",
+          "seo_title": "Empresa para Pulir Parquet en Barcelona | Calidad Top",
+          "seo_description": "Somos expertos en acuchillado y barnizado de parquet en Barcelona. Restauramos todo tipo de suelos de madera con acabados duraderos. ¡Pide tu cita online!"
         },
         {
-          "keyword": "Precio acuchillar parquet Barcelona",
-          "volume": 40
+          "h1": "Precio Competitivo para Pulir y Acuchillar Parquet",
+          "seo_title": "Pulir Parquet Barcelona | Oferta Acuchillado 2024",
+          "seo_description": "Descubre el mejor precio para pulir y acuchillar tu parquet en Barcelona. Transforma tu suelo con nuestra oferta especial 2024. ¡Llama y consulta!"
+        },
+        {
+          "h1": "Pulido y Restauración de Parquet en Barcelona Capital",
+          "seo_title": "Acuchillado y Barnizado de Parquet Cerca de Ti en BCN",
+          "seo_description": "Servicio de pulido y restauración de parquet en Barcelona y alrededores. Devolvemos la vida a tu suelo de madera. ¡Contáctanos para una evaluación gratuita!"
+        },
+        {
+          "h1": "El Mejor Servicio para Pulir Tu Parquet en Barcelona",
+          "seo_title": "Pulido de Suelos de Madera en Barcelona | Garantía",
+          "seo_description": "Renueva tu suelo este 2024 con nuestros servicios de pulido de parquet en Barcelona. Resultados impecables y duraderos garantizados. ¡Haz tu reserva ahora!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "pulir parquet Barcelona",
+          "volume": 320
+        },
+        {
+          "keyword": "acuchillar parquet Barcelona",
+          "volume": 280
+        },
+        {
+          "keyword": "barnizar parquet Barcelona",
+          "volume": 80
+        },
+        {
+          "keyword": "restaurar parquet Barcelona",
+          "volume": 180
         }
       ]
     },
     {
       "name": "Reparación y Mantenimiento de Parquet",
-      "main_keyword": "Reparación Parquet Barcelona",
-      "volume": 100,
-      "h1": "Reparación y Mantenimiento de Parquet en Barcelona",
-      "seo_title": "Reparación y Mantenimiento de Parquet en Barcelona | [Nombre Empresa]",
-      "seo_description": "Especialistas en reparación de parquet dañado y mantenimiento de suelos de madera en Barcelona. Soluciones rápidas y efectivas para todo tipo de problemas. ¡Contáctanos!",
+      "main_keyword": "Reparación de Parquet Barcelona",
+      "volume": 210,
+      "meta_suggestions": [
+        {
+          "h1": "Reparación de Parquet en Barcelona: Soluciones Rápidas",
+          "seo_title": "Servicio de Reparación de Parquet en Barcelona 2024",
+          "seo_description": "¿Tu parquet está dañado? Ofrecemos reparación profesional de parquet en Barcelona. Restauramos rayones, golpes y tablas sueltas. ¡Presupuesto sin compromiso!"
+        },
+        {
+          "h1": "Mantenimiento y Reparación de Parquet en Barcelona",
+          "seo_title": "Expertos en Arreglar Parquet en Barcelona | Confianza",
+          "seo_description": "Confía en nuestros expertos para el mantenimiento y reparación de tu parquet en Barcelona. Alarga la vida de tus suelos con nosotros. ¡Contáctanos hoy mismo!"
+        },
+        {
+          "h1": "Precio de Reparación de Parquet en Barcelona al Instante",
+          "seo_title": "Reparar Parquet Barcelona | Oferta Especial 2024",
+          "seo_description": "Obtén un precio justo para la reparación de tu parquet en Barcelona. Calidad y eficiencia garantizadas en cada arreglo. ¡Pide tu presupuesto online!"
+        },
+        {
+          "h1": "Reparamos Tu Parquet en Barcelona Cerca de Ti",
+          "seo_title": "Arreglo de Parquet a Domicilio en Barcelona y Provincias",
+          "seo_description": "¿Buscas quién repare tu parquet en Barcelona? Ofrecemos servicio a domicilio para todo tipo de daños. ¡Llámanos para una evaluación gratuita!"
+        },
+        {
+          "h1": "Soluciones Urgentes para Reparar Parquet en Barcelona",
+          "seo_title": "Reparación Rápida de Parquet en Barcelona Este 2024",
+          "seo_description": "Tu parquet necesita reparación urgente en Barcelona? Actuamos con rapidez y eficacia para dejar tu suelo perfecto. ¡Agenda tu servicio ya!"
+        }
+      ],
+      "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "Reparación Parquet Barcelona",
+          "keyword": "reparación parquet Barcelona",
+          "volume": 210
+        },
+        {
+          "keyword": "mantenimiento parquet Barcelona",
+          "volume": 90
+        }
+      ]
+    },
+    {
+      "name": "Precios y Presupuestos de Parquet",
+      "main_keyword": "Precio Parquet Barcelona",
+      "volume": 400,
+      "meta_suggestions": [
+        {
+          "h1": "Precio de Parquet en Barcelona: Guía Completa 2024",
+          "seo_title": "Presupuesto Parquet Barcelona | Coste Instalación",
+          "seo_description": "¿Cuánto cuesta poner parquet en Barcelona? Consulta nuestra guía de precios para instalación, pulido y reparación. ¡Pide tu presupuesto sin compromiso hoy!"
+        },
+        {
+          "h1": "Presupuesto de Parquet en Barcelona | ¡A Medida!",
+          "seo_title": "Coste de Parquet en Barcelona | Tarima y Flotante",
+          "seo_description": "Consigue un presupuesto personalizado para tu proyecto de parquet en Barcelona. Adaptamos el coste a tus necesidades y materiales. ¡Contáctanos ahora!"
+        },
+        {
+          "h1": "Los Mejores Precios de Parquet en Barcelona",
+          "seo_title": "Precios Parquet Barcelona | Ofertas y Descuentos",
+          "seo_description": "Descubre ofertas exclusivas en parquet en Barcelona. Instalación y servicios con la mejor relación calidad-precio. ¡No te pierdas nuestras promociones 2024!"
+        },
+        {
+          "h1": "Precio M2 Parquet en Barcelona Cerca de Ti",
+          "seo_title": "Coste por M2 de Parquet en Barcelona Ciudad",
+          "seo_description": "¿Buscas el precio por metro cuadrado de parquet en Barcelona? Transparencia y claridad en todos nuestros costes. ¡Pide tu estimación gratuita!"
+        },
+        {
+          "h1": "Calcula el Precio de tu Parquet en Barcelona al Instante",
+          "seo_title": "Precios de Parquet en Barcelona | Últimas Actualizaciones",
+          "seo_description": "Consulta los precios actualizados de parquet en Barcelona para 2024. Obtén una estimación rápida para tu proyecto. ¡Rellena el formulario y te llamamos!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "precio parquet Barcelona",
+          "volume": 400
+        },
+        {
+          "keyword": "presupuesto parquet Barcelona",
+          "volume": 150
+        },
+        {
+          "keyword": "coste instalación parquet Barcelona",
           "volume": 100
-        },
-        {
-          "keyword": "Arreglar Parquet Barcelona",
-          "volume": 80
-        },
-        {
-          "keyword": "Mantenimiento Parquet Barcelona",
-          "volume": 80
-        },
-        {
-          "keyword": "Parquetista Reparaciones Barcelona",
-          "volume": 50
         }
       ]
     }
   ],
   "locations": [
-    "Eixample Barcelona",
-    "Gràcia Barcelona",
-    "Sarrià-Sant Gervasi Barcelona",
-    "Sant Martí Barcelona",
-    "Les Corts Barcelona"
+    "Eixample",
+    "Gràcia",
+    "Sarrià-Sant Gervasi",
+    "Sant Martí",
+    "Les Corts"
   ],
   "home_structure": {
-    "h1": "Parquetista en Barcelona | Instalación, Acuchillado y Reparación de Parquet",
+    "h1": "Parquetista en Barcelona: Expertos en Instalación y Restauración",
     "h2s": [
-      "Nuestros Servicios de Parquet en Barcelona: Calidad y Experiencia",
-      "Tu Parquetista de Confianza en Barcelona y sus Distritos",
-      "Solicita tu Presupuesto Gratuito para Parquet en Barcelona"
+      "Servicios Profesionales de Parquet en Barcelona",
+      "Instalación de Parquet y Tarima Flotante",
+      "Acuchillado, Pulido y Barnizado de Parquet",
+      "Reparación y Mantenimiento de Suelos de Madera",
+      "Pide tu Presupuesto de Parquet en Barcelona"
     ]
   },
   "raw_data": {
     "top_keywords": [],
     "competitor_keywords": {}
   },
-  "niche": "Parquetista",
+  "niche": "parquetista",
   "city": "Barcelona,Catalonia,Spain"
 }
