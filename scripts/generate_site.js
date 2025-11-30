@@ -85,10 +85,10 @@ async function main() {
         Estructura requerida (JSON):
         {
             "hero": {
-                "heading": "${plan.home_h1}",
+                "heading": "${plan.home_structure?.h1 || `${plan.niche} en ${plan.city}`}",
                 "subheading": "Subtítulo persuasivo de 15-20 palabras"
             },
-            "seoContentTitle": "${plan.home_h2s[0]}",
+            "seoContentTitle": "${plan.home_structure?.h2s?.[0] || `¿Por qué elegir nuestros servicios de ${plan.niche}?`}",
             "seoContent": "Texto SEO de 500-600 palabras en formato Markdown. Usa H2 y H3. Ataca la keyword principal '${plan.niche} en ${plan.city}'.",
             "features": [
                 { "title": "Característica 1", "description": "Breve descripción" },
@@ -172,26 +172,38 @@ ${homeData.seoContent}
     await fs.mkdir('src/content/business', { recursive: true });
     await fs.writeFile('src/content/business/global.json', JSON.stringify(businessConfig, null, 2));
 
-    // 3. GENERAR SERVICIOS (MDX)
-    console.log(`\n🛠️  Generando ${plan.services.length} Servicios...`);
+    // 3. GENERAR SERVICIOS (MDX) - Usando clusters
+    const services = plan.clusters || [];
+    console.log(`\n🛠️  Generando ${services.length} Servicios...`);
 
-    for (const service of plan.services) {
-        console.log(`   > ${service}...`);
-        const slug = service.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    for (const cluster of services) {
+        const serviceName = cluster.name;
+        console.log(`   > ${serviceName}...`);
+        const slug = serviceName.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        // Obtener la sugerencia seleccionada o la primera por defecto
+        const selectedIdx = cluster.selected_suggestion || 0;
+        const metaTags = cluster.meta_suggestions?.[selectedIdx] || {
+            h1: cluster.h1 || serviceName,
+            seo_title: cluster.seo_title || serviceName,
+            seo_description: cluster.seo_description || `Servicios de ${serviceName}`
+        };
 
         const prompt = `
             Genera datos JSON para página de servicio.
-            - Servicio: "${service}"
+            - Servicio: "${serviceName}"
             - Ciudad: "${plan.city}"
             - Nicho: "${plan.niche}"
+            - Focal Keyword: "${cluster.main_keyword}"
+            - Keywords relacionadas: ${JSON.stringify(cluster.keywords?.slice(0, 5).map(k => k.keyword))}
             
             JSON Structure:
             {
-                "title": "H1 Title",
-                "shortDesc": "Short SEO description",
-                "seoTitle": "Meta Title",
-                "seoDesc": "Meta Description",
-                "content": "Markdown text (400 words)"
+                "title": "${metaTags.h1}",
+                "shortDesc": "Short SEO description (100 chars)",
+                "seoTitle": "${metaTags.seo_title}",
+                "seoDesc": "${metaTags.seo_description}",
+                "content": "Markdown text (400 words). Incluye las keywords relacionadas de forma natural."
             }
         `;
 
@@ -216,7 +228,7 @@ ${data.content}`;
             await fs.writeFile(filePath, mdx);
             console.log(`      ✅ Creado: ${slug}.mdx`);
         } else {
-            console.warn(`      ⚠️  SALTADO: No se pudo generar ${service}`);
+            console.warn(`      ⚠️  SALTADO: No se pudo generar ${serviceName}`);
         }
     }
 

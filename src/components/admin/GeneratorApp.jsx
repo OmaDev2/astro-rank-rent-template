@@ -7,9 +7,10 @@ export default function GeneratorApp() {
     const [formData, setFormData] = useState({
         niche: '',
         city: '',
-        locationCode: null,  // NUEVO: código de ubicación de DataForSEO
-        searchEngine: 'google.com',
-        searchLocation: 'United States',
+        locationCode: null,  // Código numérico para SERP endpoints
+        locationName: null,  // Nombre completo para Labs endpoints
+        searchEngine: 'google.es',
+        searchLocation: 'Spain',
         seedKeyword: ''
     });
     const [researchData, setResearchData] = useState(null);
@@ -87,7 +88,8 @@ export default function GeneratorApp() {
                     niche: formData.niche,
                     city: formData.city,
                     competitors: selectedDomainsArray,
-                    locationCode: formData.locationCode  // NUEVO: enviar código de ubicación
+                    locationCode: formData.locationCode,
+                    locationName: formData.locationName  // NUEVO: nombre para Labs endpoints
                 })
             });
 
@@ -180,7 +182,8 @@ export default function GeneratorApp() {
                                         setFormData(prev => ({
                                             ...prev,
                                             city: name,
-                                            locationCode: code
+                                            locationCode: code,
+                                            locationName: name
                                         }));
                                     }}
                                     defaultValue={formData.city}
@@ -481,56 +484,101 @@ export default function GeneratorApp() {
                                                         />
                                                     </th>
                                                     <th className="px-2 py-2 text-left font-bold text-slate-600">Keyword</th>
-                                                    <th className="px-2 py-2 text-right font-bold text-slate-600">Vol</th>
+                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Ranking Position">Pos</th>
+                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Search Volume">Vol</th>
+                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Cost Per Click (€)">CPC</th>
+                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Competition Level (0-1)">Comp</th>
+                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="SEO Difficulty (0-100)">Diff</th>
                                                     <th className="px-2 py-2 text-center font-bold text-slate-600">Move</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {cluster.keywords?.map((k, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-                                                        <td className="px-2 py-2">
-                                                            <input
-                                                                type="checkbox"
-                                                                id={`kw-${i}-${idx}`}
-                                                                className="cursor-pointer"
-                                                            />
-                                                        </td>
-                                                        <td className="px-2 py-2 text-slate-700">{k.keyword}</td>
-                                                        <td className="px-2 py-2 text-right text-green-600 font-mono">{k.volume}</td>
-                                                        <td className="px-2 py-2 text-center">
-                                                            <select
-                                                                className="text-xs border border-slate-300 rounded px-1 py-0.5"
-                                                                onChange={(e) => {
-                                                                    const targetClusterIdx = parseInt(e.target.value);
-                                                                    if (targetClusterIdx !== i) {
-                                                                        if (confirm(`Move "${k.keyword}" to cluster "${researchData.clusters[targetClusterIdx].name}"?`)) {
-                                                                            const newClusters = [...researchData.clusters];
-                                                                            // Remove from current cluster
-                                                                            newClusters[i].keywords = newClusters[i].keywords.filter((_, kidx) => kidx !== idx);
-                                                                            // Add to target cluster
-                                                                            if (!newClusters[targetClusterIdx].keywords) {
-                                                                                newClusters[targetClusterIdx].keywords = [];
+                                                {cluster.keywords?.map((k, idx) => {
+                                                    // Color coding for metrics
+                                                    const getCpcColor = (cpc) => {
+                                                        if (!cpc || cpc === 0) return 'text-slate-400';
+                                                        if (cpc < 1) return 'text-green-600';
+                                                        if (cpc < 3) return 'text-yellow-600';
+                                                        return 'text-red-600';
+                                                    };
+
+                                                    const getCompColor = (comp) => {
+                                                        if (!comp || comp === 0) return 'text-slate-400';
+                                                        if (comp < 0.3) return 'text-green-600';
+                                                        if (comp < 0.7) return 'text-yellow-600';
+                                                        return 'text-red-600';
+                                                    };
+
+                                                    const getDiffColor = (diff) => {
+                                                        if (!diff || diff === 0) return 'text-slate-400';
+                                                        if (diff < 30) return 'text-green-600';
+                                                        if (diff < 60) return 'text-yellow-600';
+                                                        return 'text-red-600';
+                                                    };
+
+                                                    return (
+                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
+                                                            <td className="px-2 py-2">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    id={`kw-${i}-${idx}`}
+                                                                    className="cursor-pointer"
+                                                                />
+                                                            </td>
+                                                            <td className="px-2 py-2 text-slate-700">{k.keyword}</td>
+                                                            <td className={`px-2 py-2 text-right font-mono text-xs font-bold ${k.position ? (
+                                                                    k.position <= 3 ? 'text-green-600' :
+                                                                        k.position <= 10 ? 'text-yellow-600' :
+                                                                            'text-slate-400'
+                                                                ) : 'text-slate-300'
+                                                                }`}>
+                                                                {k.position || '-'}
+                                                            </td>
+                                                            <td className="px-2 py-2 text-right text-green-600 font-mono">{k.volume}</td>
+                                                            <td className={`px-2 py-2 text-right font-mono text-xs ${getCpcColor(k.cpc)}`}>
+                                                                {k.cpc ? `€${k.cpc.toFixed(2)}` : '-'}
+                                                            </td>
+                                                            <td className={`px-2 py-2 text-right font-mono text-xs ${getCompColor(k.competition)}`}>
+                                                                {k.competition ? k.competition.toFixed(2) : '-'}
+                                                            </td>
+                                                            <td className={`px-2 py-2 text-right font-mono text-xs ${getDiffColor(k.difficulty)}`}>
+                                                                {k.difficulty || '-'}
+                                                            </td>
+                                                            <td className="px-2 py-2 text-center">
+                                                                <select
+                                                                    className="text-xs border border-slate-300 rounded px-1 py-0.5"
+                                                                    onChange={(e) => {
+                                                                        const targetClusterIdx = parseInt(e.target.value);
+                                                                        if (targetClusterIdx !== i) {
+                                                                            if (confirm(`Move "${k.keyword}" to cluster "${researchData.clusters[targetClusterIdx].name}"?`)) {
+                                                                                const newClusters = [...researchData.clusters];
+                                                                                // Remove from current cluster
+                                                                                newClusters[i].keywords = newClusters[i].keywords.filter((_, kidx) => kidx !== idx);
+                                                                                // Add to target cluster
+                                                                                if (!newClusters[targetClusterIdx].keywords) {
+                                                                                    newClusters[targetClusterIdx].keywords = [];
+                                                                                }
+                                                                                newClusters[targetClusterIdx].keywords.push(k);
+                                                                                setResearchData({ ...researchData, clusters: newClusters });
                                                                             }
-                                                                            newClusters[targetClusterIdx].keywords.push(k);
-                                                                            setResearchData({ ...researchData, clusters: newClusters });
                                                                         }
-                                                                    }
-                                                                    e.target.value = i; // Reset selector
-                                                                }}
-                                                                value={i}
-                                                            >
-                                                                <option value={i}>--</option>
-                                                                {researchData.clusters.map((c, cidx) => (
-                                                                    cidx !== i && (
-                                                                        <option key={cidx} value={cidx}>
-                                                                            → {c.name}
-                                                                        </option>
-                                                                    )
-                                                                ))}
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                                        e.target.value = i; // Reset selector
+                                                                    }}
+                                                                    value={i}
+                                                                >
+                                                                    <option value={i}>--</option>
+                                                                    {researchData.clusters.map((c, cidx) => (
+                                                                        cidx !== i && (
+                                                                            <option key={cidx} value={cidx}>
+                                                                                → {c.name}
+                                                                            </option>
+                                                                        )
+                                                                    ))}
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
                                             </tbody>
                                         </table>
                                     </div>

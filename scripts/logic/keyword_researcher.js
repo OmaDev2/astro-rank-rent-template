@@ -76,6 +76,58 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
 
     console.log(`   📊 Dataset para IA: ${uniqueKeywords.length} keywords.`);
 
+    // NUEVO: Crear log detallado del proceso
+    let analysisLog = `# 📊 Análisis de Clustering - ${cleanNiche} en ${cleanCity}\n\n`;
+    analysisLog += `**Fecha:** ${new Date().toLocaleString('es-ES')}\n`;
+    analysisLog += `**Location Code:** ${targetLoc}\n\n`;
+    analysisLog += `---\n\n`;
+
+    // Log 1: Keywords por competidor
+    analysisLog += `## 🔍 Keywords Extraídas por Competidor\n\n`;
+    for (const [domain, keywords] of Object.entries(competitorKeywordsMap)) {
+        analysisLog += `### ${domain}\n`;
+        analysisLog += `**Total:** ${keywords.length} keywords\n\n`;
+        analysisLog += `| Keyword | Volumen | Fuente |\n`;
+        analysisLog += `|---------|---------|--------|\n`;
+        keywords.slice(0, 20).forEach(k => {
+            analysisLog += `| ${k.keyword} | ${k.volume} | ${k.source} |\n`;
+        });
+        if (keywords.length > 20) {
+            analysisLog += `| ... y ${keywords.length - 20} más |\n`;
+        }
+        analysisLog += `\n`;
+    }
+
+    // Log 2: Keywords relacionadas (seed)
+    analysisLog += `## 🌱 Keywords Relacionadas (Seed)\n\n`;
+    const seedKws = allKeywords.filter(k => k.source === 'related');
+    analysisLog += `**Total:** ${seedKws.length} keywords\n\n`;
+    analysisLog += `| Keyword | Volumen |\n`;
+    analysisLog += `|---------|--------|\n`;
+    seedKws.slice(0, 30).forEach(k => {
+        analysisLog += `| ${k.keyword} | ${k.volume} |\n`;
+    });
+    if (seedKws.length > 30) {
+        analysisLog += `| ... y ${seedKws.length - 30} más |\n`;
+    }
+    analysisLog += `\n`;
+
+    // Log 3: Proceso de filtrado
+    analysisLog += `## 🔬 Proceso de Filtrado y Deduplicación\n\n`;
+    analysisLog += `- **Keywords totales extraídas:** ${allKeywords.length}\n`;
+    analysisLog += `- **Keywords después de deduplicación:** ${uniqueKeywords.length}\n`;
+    analysisLog += `- **Keywords descartadas (sin volumen):** ${allKeywords.length - uniqueKeywords.length}\n\n`;
+
+    // Log 4: Top 50 keywords enviadas a IA
+    analysisLog += `## 🎯 Top 50 Keywords Enviadas a Gemini AI\n\n`;
+    analysisLog += `Estas son las keywords que se usaron para el clustering:\n\n`;
+    analysisLog += `| # | Keyword | Volumen | Fuente |\n`;
+    analysisLog += `|---|---------|---------|--------|\n`;
+    uniqueKeywords.slice(0, 50).forEach((k, i) => {
+        analysisLog += `| ${i + 1} | ${k.keyword} | ${k.volume} | ${k.source} |\n`;
+    });
+    analysisLog += `\n`;
+
     // 4. Clustering con Gemini
     const prompt = `
         Actúa como experto SEO profesional. Objetivo: Crear arquitectura web para "${cleanNiche}" en "${cleanCity}".
@@ -86,8 +138,9 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
         TAREA:
         1. Agrupa estas keywords en CLUSTERS temáticos para crear páginas de servicio
         2. Para cada cluster, selecciona la "Focal Keyword" (mayor volumen + intención comercial)
-        3. Genera 5 VARIACIONES DIFERENTES de meta tags para cada cluster
-        4. Define 5 zonas/barrios locales de ${cleanCity}
+        3. Calcula el "volume" del cluster como la SUMA TOTAL de los volúmenes de TODAS las keywords del cluster
+        4. Genera 5 VARIACIONES DIFERENTES de meta tags para cada cluster
+        5. Define 5 zonas/barrios locales de ${cleanCity}
         
         REGLAS SEO ESTRICTAS para meta tags:
         - H1: Máximo 60 caracteres, incluir focal keyword de forma natural
@@ -104,7 +157,7 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
                 {
                     "name": "Nombre del Cluster/Servicio",
                     "main_keyword": "focal keyword",
-                    "volume": 100,
+                    "volume": 0,  // IMPORTANTE: Suma TOTAL de volúmenes de TODAS las keywords del cluster
                     "meta_suggestions": [
                         {
                             "h1": "H1 Optimizado Variación 1",
@@ -156,6 +209,41 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
             niche: cleanNiche,
             city: cleanCity
         };
+
+        // NUEVO: Añadir sección de resultados del clustering al log
+        analysisLog += `## 🎨 Resultados del Clustering\n\n`;
+        analysisLog += `**Total de Clusters Generados:** ${plan.clusters?.length || 0}\n\n`;
+
+        plan.clusters?.forEach((cluster, i) => {
+            const totalVol = cluster.keywords?.reduce((sum, k) => sum + (k.volume || 0), 0) || 0;
+            analysisLog += `### Cluster ${i + 1}: ${cluster.name}\n\n`;
+            analysisLog += `- **Focal Keyword:** ${cluster.main_keyword}\n`;
+            analysisLog += `- **Volumen Total:** ${totalVol}\n`;
+            analysisLog += `- **Keywords en el cluster:** ${cluster.keywords?.length || 0}\n\n`;
+
+            if (cluster.keywords && cluster.keywords.length > 0) {
+                analysisLog += `| Keyword | Volumen |\n`;
+                analysisLog += `|---------|--------|\n`;
+                cluster.keywords.forEach(k => {
+                    analysisLog += `| ${k.keyword} | ${k.volume} |\n`;
+                });
+                analysisLog += `\n`;
+            }
+
+            // Mostrar las 5 sugerencias de meta tags
+            if (cluster.meta_suggestions && cluster.meta_suggestions.length > 0) {
+                analysisLog += `**Meta Tag Suggestions:**\n\n`;
+                cluster.meta_suggestions.forEach((suggestion, idx) => {
+                    analysisLog += `${idx + 1}. **H1:** ${suggestion.h1}\n`;
+                    analysisLog += `   - **Title:** ${suggestion.seo_title}\n`;
+                    analysisLog += `   - **Description:** ${suggestion.seo_description}\n\n`;
+                });
+            }
+        });
+
+        // Guardar el log en un archivo
+        await fs.writeFile('clustering_analysis.md', analysisLog);
+        console.log(`   📄 Análisis guardado en: clustering_analysis.md`);
 
         await fs.writeFile('project_plan.json', JSON.stringify(finalData, null, 2));
         return finalData;

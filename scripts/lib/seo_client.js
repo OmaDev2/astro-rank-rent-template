@@ -108,46 +108,92 @@ export async function getTopCompetitors(keyword, locationInput) {
 }
 
 // 2. Obtener Keywords de Competidores
-export async function getCompetitorKeywords(domain, locationInput) {
-    const locParams = getLocationParams(locationInput);
+export async function getCompetitorKeywords(domain, locationInput, top10Only = true) {
+    // IMPORTANTE: DataForSEO Labs endpoints solo aceptan países, no ciudades
+    // Siempre usamos "Spain" para Labs, independientemente de la ciudad seleccionada
+    const locationName = "Spain";
+
+    console.log(`📍 Using location for Labs: ${locationName} (original input: ${locationInput})`);
+    console.log(`🎯 Filter: ${top10Only ? 'TOP 10 positions only' : 'All positions'}`);
+
     let allKeywords = [];
 
-    const result = await postDataForSEO('/dataforseo_labs/google/keywords_for_site/live', [{
+    const payload = [{
         target: domain,
-        ...locParams,
+        location_name: locationName,
         language_name: "Spanish",
-        limit: 20,
-        filters: [["keyword_info.search_volume", ">", 0]]
-    }]);
+        limit: 50,  // Aumentamos el límite porque vamos a filtrar
+        filters: [
+            ["keyword_info.search_volume", ">", 0],
+            // Si top10Only está activo, solo keywords en posiciones 1-10
+            ...(top10Only ? [["ranked_serp_element.serp_item.rank_absolute", "<=", 10]] : [])
+        ]
+    }];
 
-    if (result && result[0].items) {
-        allKeywords = result[0].items.map(k => ({
-            keyword: k.keyword_info.keyword,
-            volume: k.keyword_info.search_volume,
-            source: 'competitor'
-        }));
+    console.log(`🔍 DEBUG keywords_for_site payload:`, JSON.stringify(payload, null, 2));
+
+    const result = await postDataForSEO('/dataforseo_labs/google/keywords_for_site/live', payload);
+
+    if (result && result[0] && result[0].items) {
+        allKeywords = result[0].items.map(k => {
+            // DataForSEO devuelve la keyword directamente en el item
+            const kwData = k.keyword_data || k;
+            const kwInfo = kwData.keyword_info || kwData;
+            const rankInfo = k.ranked_serp_element?.serp_item;
+
+            return {
+                keyword: kwInfo.keyword || k.keyword || 'unknown',
+                volume: kwInfo.search_volume || k.search_volume || 0,
+                cpc: kwInfo.cpc || k.cpc || 0,
+                competition: kwInfo.competition || k.competition || 0,
+                competition_level: kwInfo.competition_level || k.competition_level || 'UNKNOWN',
+                difficulty: k.keyword_properties?.keyword_difficulty || 0,
+                position: rankInfo?.rank_absolute || null,  // NUEVO: posición de ranking
+                source: 'competitor'
+            };
+        });
+
+        console.log(`✅ Extracted ${allKeywords.length} keywords from ${domain} ${top10Only ? '(TOP 10)' : '(ALL)'}`);
+        if (allKeywords.length > 0) {
+            console.log(`   Sample keyword:`, allKeywords[0]);
+        }
     }
     return allKeywords;
 }
 
 // 3. Obtener Keywords Relacionadas
 export async function getRelatedKeywords(keyword, locationInput) {
-    const locParams = getLocationParams(locationInput);
+    // IMPORTANTE: DataForSEO Labs endpoints solo aceptan países, no ciudades
+    const locationName = "Spain";
+
+    console.log(`📍 Using location for Labs: ${locationName} (original input: ${locationInput})`);
 
     const result = await postDataForSEO('/dataforseo_labs/google/related_keywords/live', [{
         keyword,
-        ...locParams,
+        location_name: locationName,
         language_name: "Spanish",
         limit: 30
     }]);
 
-    if (!result || !result[0].items) return [];
+    if (!result || !result[0] || !result[0].items) return [];
 
-    return result[0].items.map(k => ({
-        keyword: k.keyword_info.keyword,
-        volume: k.keyword_info.search_volume,
-        source: 'related'
-    }));
+    const keywords = result[0].items.map(k => {
+        const kwData = k.keyword_data || k;
+        const kwInfo = kwData.keyword_info || kwData;
+
+        return {
+            keyword: kwInfo.keyword || k.keyword || 'unknown',
+            volume: kwInfo.search_volume || k.search_volume || 0,
+            cpc: kwInfo.cpc || k.cpc || 0,
+            competition: kwInfo.competition || k.competition || 0,
+            competition_level: kwInfo.competition_level || k.competition_level || 'UNKNOWN',
+            difficulty: k.keyword_properties?.keyword_difficulty || 0,
+            source: 'related'
+        };
+    });
+
+    console.log(`✅ Extracted ${keywords.length} related keywords for "${keyword}"`);
+    return keywords;
 }
 
 // 4. Obtener Preguntas Frecuentes (People Also Ask)
