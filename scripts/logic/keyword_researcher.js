@@ -1,5 +1,4 @@
-import { getTopCompetitors, getRelatedKeywords, getCompetitorKeywords, getPeopleAlsoAsk } from '../lib/seo_client.js';
-import { analyzeCompetitor } from '../lib/scraper.js';
+import { getTopCompetitors, getRelatedKeywords, getCompetitorKeywords } from '../lib/seo_client.js';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
@@ -8,141 +7,127 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash", // O gemini-1.5-flash si 2.5 da error
     generationConfig: { responseMimeType: "application/json" }
 });
 
-export async function runFullResearch(niche, city, seedKeyword) {
-    const searchQuery = seedKeyword || `${niche} ${city}`;
-    console.log(`🚀 Logic: Investigando ${searchQuery} (Nicho: ${niche}, Ciudad: ${city})...`);
+export async function getInitialCompetitors(niche, location_code) {
+    console.log(`🚀 Logic: Buscando competidores para "${niche}" en Location Code: ${location_code}...`);
+    const cleanNiche = niche.trim();
+    const searchQuery = `${cleanNiche}`;
+    return await getTopCompetitors(niche, location_code);
+}
 
-    // 1. Obtener Competidores
-    const competitors = await getTopCompetitors(searchQuery, "Spain");
+export async function generateClustersFromSelection(niche, city, competitors, location_code) {
+    // Si no viene código, usamos España (2724) por defecto
+    const targetLoc = location_code || 2724;
+    const cleanCity = city.trim();
+    const cleanNiche = niche.trim();
 
-    // 2. Obtener Volumen de Búsqueda Real (Mercado General) using city for location
-    let keywordsData = await getRelatedKeywords(searchQuery, city);
+    console.log(`🚀 Logic: Clusterizando para "${cleanNiche}" en "${cleanCity}" (Loc: ${targetLoc})...`);
 
-    // FALLBACK: Si no hay datos para "Nicho + Ciudad", probamos solo "Nicho" con ubicación ciudad
-    if (!keywordsData || keywordsData.length < 5) {
-        console.log("   ⚠️ Pocos datos para nicho + ciudad. Probando nicho general con ubicación ciudad...");
-        const generalData = await getRelatedKeywords(niche, city);
-        keywordsData = [...keywordsData, ...generalData];
-    }
+    let allKeywords = [];
+    const competitorKeywordsMap = {};
 
-    // Filtrar keywords que contengan tanto palabras del nicho como la ciudad
-    const nicheWords = niche.toLowerCase().split(' ');
-    const cityLower = city.toLowerCase();
-    const filteredKeywords = keywordsData.filter(k => {
-        const lower = k.keyword.toLowerCase();
-        const hasNiche = nicheWords.some(w => lower.includes(w));
-        const hasCity = lower.includes(cityLower);
-        return hasNiche && hasCity;
-    });
+    // 1. Obtener keywords de competidores (USANDO targetLoc)
+    for (const domain of competitors) {
+        console.log(`   🔍 Analizando competidor: ${domain}...`);
+        // CAMBIO: "Spain" -> targetLoc
+        const compKeywords = await getCompetitorKeywords(domain, targetLoc);
 
-    const topKeywords = filteredKeywords.sort((a, b) => b.volume - a.volume).slice(0, 20);
-
-    // 3. ROBO DE KEYWORDS (Espionaje a Competidores)
-    const competitorKeywords = {};
-    // Removed duplicate declaration of nicheWords – we already have it above
-
-
-    for (const comp of competitors) {
-        const kw = await getCompetitorKeywords(comp.domain, "Spain");
-
-        // Guardamos los primeros 10 keywords del competidor sin filtrado adicional
-        competitorKeywords[comp.domain] = kw.slice(0, 10);
-    }
-
-    // 4. PREGUNTAS REALES (People Also Ask)
-    const paaQuestions = await getPeopleAlsoAsk(searchQuery, "Spain");
-
-    // 5. Analizar Estructura y Contenido
-    const analyzedData = [];
-    for (const comp of competitors) {
-        const analysis = await analyzeCompetitor(comp.url);
-        if (analysis) {
-            analysis.rankingKeywords = competitorKeywords[comp.domain] || [];
-            analyzedData.push(analysis);
+        if (compKeywords.length > 0) {
+            allKeywords = [...allKeywords, ...compKeywords];
+            competitorKeywordsMap[domain] = compKeywords;
         }
     }
 
-    // 6. Consultar a Gemini
-    const prompt = `
-        Actúa como Arquitecto SEO experto y Estratega de Contenidos.
-        Proyecto: ${niche} en ${city}.
-        
-        DATOS DE MERCADO (Lo que busca la gente):
-        ${JSON.stringify(topKeywords, null, 2)}
-        
-        PREGUNTAS REALES DE USUARIOS (PAA):
-        ${JSON.stringify(paaQuestions, null, 2)}
-        
-        ANÁLISIS DE COMPETENCIA (Lo que tienen ellos):
-        ${JSON.stringify(analyzedData, null, 2)}
-        
-        TU TAREA:
-        1. Agrupa las keywords (tanto de mercado como de competidores) en "Clusters Temáticos" lógicos.
-           - Ejemplo: "Liposuction NYC", "Arm Lipo", "Chin Lipo" -> Son clusters diferentes.
-           - Elimina duplicados y agrupa variantes cercanas.
-        2. Para cada Cluster, actúa como un experto SEO y genera:
-           - Un H1 optimizado.
-           - Un SEO Title (max 60 chars).
-           - Una Meta Description (max 160 chars).
-           - Asigna las keywords específicas que pertenecen a este cluster.
+    // 2. Obtener keywords relacionadas (Seed) (USANDO targetLoc)
+    console.log(`   🔍 Buscando keywords relacionadas...`);
+    // CAMBIO: "Spain" -> targetLoc
+    const seedKeywords = await getRelatedKeywords(`${cleanNiche} ${cleanCity}`, targetLoc);
 
-        FORMATO JSON REQUERIDO:
-        {
-            "market_analysis": "Resumen estratégico del mercado.",
-            "clusters": [
-                {
-                    "name": "Nombre del Cluster (ej: Body Lift New York)",
-                    "main_keyword": "keyword principal del cluster",
-                    "volume": 0, // Volumen total estimado del cluster
-                    "h1": "H1 Sugerido",
-                    "seo_title": "SEO Title Sugerido",
-                    "seo_description": "Meta Description Sugerida",
-                    "keywords": [
-                        {"keyword": "kw1", "volume": 100, "cpc": 2.5},
-                        {"keyword": "kw2", "volume": 50, "cpc": 1.0}
-                    ]
-                }
-            ],
-            "locations": ["Lista de 5 barrios/zonas importantes de ${city} para SEO Local"],
-            "home_structure": {
-                "h1": "H1 optimizado para la Home",
-                "h2s": ["Lista de 3 H2 persuasivos para la Home"]
+    if (seedKeywords && seedKeywords.length > 0) {
+        allKeywords = [...allKeywords, ...seedKeywords];
+    }
+
+    // 3. Filtrado y Deduplicación
+    const uniqueMap = new Map();
+
+    allKeywords.forEach(k => {
+        if (!k.keyword) return;
+        const text = k.keyword.toLowerCase().trim();
+
+        // Filtro más permisivo: Incluir todas las keywords con volumen
+        // (El filtrado semántico lo hará la IA después)
+        const hasVolume = k.volume && k.volume > 0;
+
+        if (hasVolume) {
+            // Si ya existe, nos quedamos con el que tenga el dato más completo
+            if (!uniqueMap.has(text) || (k.volume > (uniqueMap.get(text).volume || 0))) {
+                uniqueMap.set(text, k);
             }
         }
+    });
+
+    // Ordenar por volumen
+    let uniqueKeywords = Array.from(uniqueMap.values())
+        .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+        .slice(0, 150); // Top 150
+
+    console.log(`   📊 Dataset para IA: ${uniqueKeywords.length} keywords.`);
+
+    // 4. Clustering con Gemini
+    const prompt = `
+        Actúa como experto SEO. Objetivo: Arquitectura web para "${cleanNiche}" en "${cleanCity}".
         
-        Responde SOLO con el JSON.
+        INPUT (Keywords + Volumen Local):
+        ${JSON.stringify(uniqueKeywords.map(k => `${k.keyword} (${k.volume})`))}
+        
+        TAREA:
+        1. Agrupa en CLUSTERS temáticos para servicios.
+        2. Selecciona la "Focal Keyword" (Mayor volumen/intención).
+        3. Define 5 zonas locales.
+        
+        DEVUELVE JSON:
+        {
+            "market_analysis": "Análisis breve",
+            "clusters": [
+                {
+                    "name": "Nombre Cluster",
+                    "main_keyword": "keyword principal",
+                    "volume": 100,
+                    "h1": "H1 Optimizado",
+                    "seo_title": "Meta Title",
+                    "seo_description": "Meta Desc",
+                    "keywords": [{"keyword": "kw", "volume": 10}]
+                }
+            ],
+            "locations": ["Zona 1", "Zona 2"],
+            "home_structure": { "h1": "...", "h2s": ["..."] }
+        }
     `;
 
     try {
         const result = await model.generateContent(prompt);
-        let responseText = result.response.text();
-        responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const responseText = result.response.text();
+        const jsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const plan = JSON.parse(jsonStr);
 
-        let plan = JSON.parse(responseText);
-
-        // Inyectar datos fijos y evidencia
-        plan.niche = niche;
-        plan.city = city;
-        plan.siteName = `${niche} ${city} Pro`;
-
-        plan.raw_data = {
-            top_keywords: topKeywords,
-            competitors: competitors, // Added competitors list
-            competitor_keywords: competitorKeywords,
-            paa_questions: paaQuestions
+        const finalData = {
+            ...plan,
+            raw_data: {
+                top_keywords: uniqueKeywords.slice(0, 50),
+                competitor_keywords: competitorKeywordsMap
+            },
+            niche: cleanNiche,
+            city: cleanCity
         };
 
-        // Guardamos copia local por si acaso (opcional, pero útil para debug)
-        await fs.writeFile('project_plan.json', JSON.stringify(plan, null, 2));
-
-        return plan;
+        await fs.writeFile('project_plan.json', JSON.stringify(finalData, null, 2));
+        return finalData;
 
     } catch (error) {
-        console.error("❌ Error generando el plan:", error);
-        throw error;
+        console.error("❌ Error en Gemini Clustering:", error);
+        throw new Error("Fallo al generar clusters con IA. Inténtalo de nuevo.");
     }
 }

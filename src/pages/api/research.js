@@ -1,22 +1,18 @@
-import { runFullResearch } from '../../../scripts/logic/keyword_researcher';
+import { getInitialCompetitors } from '../../../scripts/logic/keyword_researcher';
 
 export const POST = async ({ request }) => {
     try {
         const body = await request.json();
-        const { niche, city } = body;
+        const { niche, city, locationCode } = body;
 
-        if (!niche || !city) {
-            return new Response(JSON.stringify({ error: "Faltan datos" }), { status: 400 });
-        }
+        console.log(`📡 API Research: Buscando competidores para ${niche} (Location ID: ${locationCode || 'Auto'})...`);
 
-        // Ejecutamos la lógica
-        const { seedKeyword } = body;
-        const data = await runFullResearch(niche, city, seedKeyword);
+        const competitors = await getInitialCompetitors(niche, locationCode);
 
-        return new Response(JSON.stringify(data), {
-            status: 200,
-            headers: { "Content-Type": "application/json" }
-        });
+        // Devolvemos estructura lista para el frontend
+        return new Response(JSON.stringify({
+            raw_data: { competitors: competitors }
+        }), { status: 200 });
 
     } catch (e) {
         console.error("API Error:", e);
