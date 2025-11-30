@@ -25,7 +25,13 @@ async function generateData(prompt, context = '') {
         // Log para debug
         console.log(`      📝 Respuesta recibida (${text.length} chars)`);
 
-        const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        // Limpiar el texto: remover markdown code blocks y limpiar saltos de línea problemáticos
+        let jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+
+        // NUEVO: Reemplazar saltos de línea dentro de strings por espacios
+        // Esto evita errores de parsing cuando Gemini genera strings multilínea
+        jsonStr = jsonStr.replace(/("\w+"\s*:\s*"[^"]*)\n([^"]*")/g, '$1 $2');
+
         const parsed = JSON.parse(jsonStr);
 
         console.log(`      ✅ JSON parseado correctamente`);
@@ -48,6 +54,109 @@ async function generateData(prompt, context = '') {
 
         throw error;
     }
+}
+
+// Función para extraer keywords de cola larga tipo pregunta
+function extractLongTailQuestions(clusterKeywords) {
+    if (!clusterKeywords || !Array.isArray(clusterKeywords)) return [];
+
+    const questionPatterns = [
+        'cómo', 'como', 'cuánto', 'cuanto', 'qué', 'que', 'cuál', 'cual', 'cuáles', 'cuales',
+        'dónde', 'donde', 'por qué', 'por que', 'para qué', 'para que', 'cuándo', 'cuando'
+    ];
+
+    return clusterKeywords
+        .filter(k => {
+            const words = k.keyword.split(' ');
+            const hasQuestion = questionPatterns.some(p =>
+                k.keyword.toLowerCase().includes(p)
+            );
+            // 4+ palabras, volumen > 10, y contiene patrón de pregunta
+            return words.length >= 4 && (k.volume || 0) > 10 && hasQuestion;
+        })
+        .slice(0, 5);  // Máximo 5 FAQs por servicio
+}
+
+// Función para generar FAQs con Gemini
+async function generateFAQs(serviceName, city, longTailKeywords) {
+    const keywordsList = longTailKeywords.map(k => `- ${k.keyword} (${k.volume} búsquedas/mes)`).join('\n');
+
+    const prompt = `
+        Actúa como experto en SEO local.
+        Genera una sección de Preguntas Frecuentes (FAQs) para el servicio "${serviceName}" en "${city}".
+        
+        KEYWORDS DE COLA LARGA (Úsalas como inspiración):
+        ${keywordsList || '(No hay keywords específicas, genera preguntas generales relevantes)'}
+        
+        INSTRUCCIONES:
+        1. Crea 3-5 preguntas y respuestas.
+        2. Si hay keywords de pregunta, ÚSALAS literalmente en las preguntas.
+        3. Las respuestas deben ser útiles, de 40-60 palabras.
+        4. Incluye el nombre de la ciudad ("${city}") de forma natural en algunas respuestas.
+        5. Tono profesional pero cercano.
+        
+        IMPORTANTE: Genera SOLO JSON válido. NO uses saltos de línea dentro de los strings.
+        
+        Estructura JSON requerida:
+        {
+            "faqs": [
+                {
+                    "question": "¿Pregunta 1?",
+                    "answer": "Respuesta 1..."
+                },
+                ...
+            ]
+        }
+    `;
+
+    try {
+        const data = await generateData(prompt, `FAQs para ${serviceName}`);
+
+        if (!data || !data.faqs || !Array.isArray(data.faqs)) return '';
+
+        let section = '\n\n## Preguntas Frecuentes\n\n';
+        data.faqs.forEach(item => {
+            section += `### ${item.question}\n\n${item.answer}\n\n`;
+        });
+
+        return section;
+    } catch (error) {
+        console.error(`      ⚠️  Error generando FAQs para ${serviceName}:`, error.message);
+        return '';
+    }
+}
+
+// Función para generar sección de servicios relacionados (interlinking)
+function generateRelatedServices(currentCluster, allClusters, city) {
+    // Excluir el servicio actual y tomar máximo 3
+    const relatedClusters = allClusters
+        .filter(c => c.name !== currentCluster.name)
+        .slice(0, 3);
+
+    if (relatedClusters.length === 0) return '';
+
+    // Extraer solo el nombre de la ciudad (antes de la primera coma)
+    const cityName = city.split(',')[0].trim();
+
+    let section = '\n\n## Servicios Relacionados\n\n';
+    section += 'Descubre otros servicios profesionales que ofrecemos en ' + cityName + ':\n\n';
+
+    relatedClusters.forEach(cluster => {
+        const slug = cluster.name
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-');
+
+        // Usar la descripción corta del meta tag o generar una
+        const selectedIdx = cluster.selected_suggestion || 0;
+        const metaTags = cluster.meta_suggestions?.[selectedIdx];
+        const shortDesc = metaTags?.seo_description?.substring(0, 80) || `Servicio profesional de ${cluster.name}`;
+
+        section += `- **[${cluster.name}](/${slug}/)** - ${shortDesc}\n`;
+    });
+
+    return section;
 }
 
 async function main() {
@@ -83,24 +192,26 @@ async function main() {
         Actúa como experto en SEO y Copywriting.
         Genera el contenido para la página de inicio de un sitio de "${plan.niche}" en "${plan.city}".
         
+        IMPORTANTE: Genera SOLO JSON válido. NO uses saltos de línea dentro de los strings.
+        
         Estructura requerida (JSON):
         {
             "hero": {
                 "heading": "${plan.home_structure?.h1 || `${plan.niche} en ${plan.city}`}",
-                "subheading": "Subtítulo persuasivo de 15-20 palabras"
+                "subheading": "Subtítulo persuasivo de 15-20 palabras en UNA SOLA LÍNEA"
             },
             "seoContentTitle": "${plan.home_structure?.h2s?.[0] || `¿Por qué elegir nuestros servicios de ${plan.niche}?`}",
             "seoContent": "Texto SEO de 500-600 palabras en formato Markdown. Usa H2 y H3. Ataca la keyword principal '${plan.niche} en ${plan.city}'.",
             "features": [
-                { "title": "Característica 1", "description": "Breve descripción" },
-                { "title": "Característica 2", "description": "Breve descripción" },
-                { "title": "Característica 3", "description": "Breve descripción" }
+                { "title": "Característica 1", "description": "Breve descripción en una línea" },
+                { "title": "Característica 2", "description": "Breve descripción en una línea" },
+                { "title": "Característica 3", "description": "Breve descripción en una línea" }
             ],
             "faq": [
-                { "question": "Pregunta 1", "answer": "Respuesta breve" },
-                { "question": "Pregunta 2", "answer": "Respuesta breve" },
-                { "question": "Pregunta 3", "answer": "Respuesta breve" },
-                { "question": "Pregunta 4", "answer": "Respuesta breve" }
+                { "question": "Pregunta 1", "answer": "Respuesta breve en una línea" },
+                { "question": "Pregunta 2", "answer": "Respuesta breve en una línea" },
+                { "question": "Pregunta 3", "answer": "Respuesta breve en una línea" },
+                { "question": "Pregunta 4", "answer": "Respuesta breve en una línea" }
             ]
         }
         
@@ -125,7 +236,7 @@ async function main() {
         const homeMdx = `---
 hero:
   heading: ${escapeYaml(homeData.hero.heading)}
-  headingHighlight: ${homeData.hero.headingHighlight}
+  headingHighlight: ${homeData.hero.headingHighlight || 'null'}
   subheading: >-
     ${homeData.hero.subheading}
 servicesSection:
@@ -134,10 +245,10 @@ servicesSection:
   subtitle: >-
     Servicio profesional y garantizado. Presupuesto sin compromiso.
 features:
-${homeData.features.map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${f.description}`).join('\n')}
+${(homeData.features || []).map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${f.description}`).join('\n')}
 seoContentTitle: ${escapeYaml(homeData.seoContentTitle)}
 faq:
-${homeData.faq.map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
+${(homeData.faq || []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
 blocks:
   - discriminant: hero
   - discriminant: services
@@ -156,22 +267,26 @@ ${homeData.seoContent}
         console.warn(`   ⚠️  No se pudo generar contenido para Home`);
     }
 
-    // 3. CONFIGURAR EL NEGOCIO (GLOBAL SETTINGS)
-    console.log("\n⚙️  Configurando Keystatic...");
+    // 2. CONFIGURAR KEYSTATIC (global.yaml)
+    console.log(`\n⚙️  Configurando Keystatic...`);
 
-    const businessConfig = {
-        "siteName": plan.siteName || `${plan.niche} ${plan.city}`,
-        "niche": plan.niche,
-        "city": plan.city,
-        "phone": "600 000 000",
-        "email": "contacto@ejemplo.com",
-        "businessType": "LocalBusiness",
-        "ctaText": "Pedir Presupuesto",
-        "coordinates": { "lat": "40.416", "lng": "-3.703" }
-    };
+    // Extraer solo el nombre de la ciudad (antes de la primera coma)
+    const cityName = plan.city.split(',')[0].trim();
+
+    const businessConfigYaml = `siteName: ${plan.niche} ${cityName}
+niche: ${plan.niche}
+city: ${cityName}
+phone: 600 000 000
+email: contacto@ejemplo.com
+businessType: LocalBusiness
+ctaText: Pedir Presupuesto
+coordinates:
+  lat: '40.416'
+  lng: '-3.703'
+`;
 
     await fs.mkdir('src/content/business', { recursive: true });
-    await fs.writeFile('src/content/business/global.json', JSON.stringify(businessConfig, null, 2));
+    await fs.writeFile('src/content/business/global.yaml', businessConfigYaml);
 
     // 3. GENERAR SERVICIOS (MDX) - Usando clusters
     const services = plan.clusters || [];
@@ -210,6 +325,14 @@ ${homeData.seoContent}
 
         const data = await generateData(prompt);
         if (data) {
+            // NUEVO: Generar sección de interlinking
+            const relatedServicesSection = generateRelatedServices(cluster, services, plan.city);
+
+            // NUEVO: Generar FAQs automáticas
+            const longTailKeywords = extractLongTailQuestions(cluster.keywords);
+            // Usar cityName (definido arriba) en lugar de plan.city para evitar "Barcelona,Catalonia,Spain" en el texto
+            const faqsSection = await generateFAQs(serviceName, cityName, longTailKeywords);
+
             const mdx = `---
 title: "${data.title}"
 shortDesc: "${data.shortDesc}"
@@ -222,12 +345,12 @@ blocks:
   - discriminant: "content"
   - discriminant: "cta"
 ---
-${data.content}`;
+${data.content}${relatedServicesSection}${faqsSection}`;
 
             const filePath = path.join('src/content/services', `${slug}.mdx`);
             await fs.mkdir(path.dirname(filePath), { recursive: true });
             await fs.writeFile(filePath, mdx);
-            console.log(`      ✅ Creado: ${slug}.mdx`);
+            console.log(`      ✅ Creado: ${slug}.mdx (con ${services.length - 1} links relacionados y FAQs)`);
         } else {
             console.warn(`      ⚠️  SALTADO: No se pudo generar ${serviceName}`);
         }

@@ -1,15 +1,10 @@
-siteName: FONTANERO sevilla
-niche: 'Fontaneria '
-logo: '@assets/images/logo.png'
-siteUrl: ' https://fontanerosevilla.com'
-businessType: HomeAndConstructionBusiness
-city: 'SEVILLA '
-address: Gran Via 33
+siteName: Parquetista Barcelona
+niche: Parquetista
+city: Barcelona
+phone: 600 000 000
+email: contacto@ejemplo.com
+businessType: LocalBusiness
+ctaText: Pedir Presupuesto
 coordinates:
-  lat: '37.38952788266018'
-  lng: '-5.9804673959351495'
-phone: 644 16 16 02
-whatsapp: '34644161602'
-email: fontanerossevilla@gmail.com
-schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
-ctaText: 'LLAMAR AHORA '
+  lat: '40.416'
+  lng: '-3.703'
