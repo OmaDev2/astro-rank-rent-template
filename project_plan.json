@@ -1,26 +1,891 @@
 {
-  "services": [
-    "Desatascos urgentes en Sevilla",
-    "Reparación de fugas de agua 24h",
-    "Instalación y reparación de calentadores",
-    "Cambio de bañera por ducha en Sevilla",
-    "Servicios de fontanería general",
-    "Instalación de gas y calderas"
+  "market_analysis": "El mercado de parquetistas en Barcelona presenta una sólida demanda de servicios de instalación, reparación (acuchillado, pulido, eliminación de arañazos) y mantenimiento de suelos de madera. Los usuarios buscan activamente información sobre costes y presupuestos, comparativas de productos (parquet, tarima, laminado, vinílico, exterior) y opciones específicas de materiales. Existe un claro interés en la búsqueda de profesionales locales y en soluciones para cocinas o exteriores. Los competidores abarcan una amplia gama de servicios, desde la instalación general hasta el tratamiento de maderas específicas, lo que indica un mercado maduro y competitivo donde la especialización y la claridad en los servicios y precios serán clave para destacar.",
+  "clusters": [
+    {
+      "name": "Parquetistas en Barcelona: Servicio General",
+      "main_keyword": "Parquetista Barcelona",
+      "volume": 1060,
+      "h1": "Parquetistas en Barcelona | Expertos en Instalación y Restauración de Parquet",
+      "seo_title": "Parquetista en Barcelona | Instalación y Restauración",
+      "seo_description": "Encuentra el mejor parquetista en Barcelona para la instalación, reparación y acuchillado de suelos de madera. Presupuesto sin compromiso. ¡Contáctanos!",
+      "keywords": [
+        {
+          "keyword": "parquet cerca de mi",
+          "volume": 1000,
+          "cpc": 0
+        },
+        {
+          "keyword": "mejores empresas de reformas en barcelona",
+          "volume": 50,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelos de madera barcelona",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "¿Qué es un parquetista?",
+          "volume": 0,
+          "cpc": 0
+        }
+      ]
+    },
+    {
+      "name": "Instalación de Parquet y Tarima en Barcelona",
+      "main_keyword": "Instalación Parquet Barcelona",
+      "volume": 10200,
+      "h1": "Instalación de Parquet y Tarima Flotante en Barcelona | Suelos de Madera y Laminados",
+      "seo_title": "Instalación de Parquet y Tarima en Barcelona | Precios",
+      "seo_description": "Expertos en instalación de parquet en Barcelona. Colocación de parquet flotante, laminado, vinílico y de madera natural. Presupuestos a medida sin compromiso.",
+      "keywords": [
+        {
+          "keyword": "poner suelo madera",
+          "volume": 30,
+          "cpc": 0
+        },
+        {
+          "keyword": "parquet de madera",
+          "volume": 1300,
+          "cpc": 0
+        },
+        {
+          "keyword": "parquets de madera",
+          "volume": 1300,
+          "cpc": 0
+        },
+        {
+          "keyword": "parquet flotante",
+          "volume": 1600,
+          "cpc": 0
+        },
+        {
+          "keyword": "parquet vinilico",
+          "volume": 1600,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo laminado madera",
+          "volume": 390,
+          "cpc": 0
+        },
+        {
+          "keyword": "tarima flotante suelo laminado",
+          "volume": 210,
+          "cpc": 0
+        },
+        {
+          "keyword": "parquet suelo madera",
+          "volume": 260,
+          "cpc": 0
+        },
+        {
+          "keyword": "tarima parquet de madera",
+          "volume": 20,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo laminado imitación madera",
+          "volume": 90,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo madera",
+          "volume": 2400,
+          "cpc": 0
+        }
+      ]
+    },
+    {
+      "name": "Acuchillado, Reparación y Restauración de Parquet",
+      "main_keyword": "Acuchillar Parquet Barcelona",
+      "volume": 7950,
+      "h1": "Acuchillado, Reparación y Restauración de Parquet en Barcelona",
+      "seo_title": "Acuchillar Parquet Barcelona | Reparación de Suelos",
+      "seo_description": "Servicio profesional de acuchillado, pulido y reparación de parquet en Barcelona. Devolvemos el brillo y la vida a tu suelo de madera. Pide tu presupuesto.",
+      "keywords": [
+        {
+          "keyword": "acuchillar parquet barcelona",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "pulir parquet madera",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "reparar suelo madera rayado",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "quitar arañazos tarima",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "renovador liberon parquet opiniones",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "masilla para madera",
+          "volume": 6600,
+          "cpc": 0
+        },
+        {
+          "keyword": "imprimación madera",
+          "volume": 1300,
+          "cpc": 0
+        }
+      ]
+    },
+    {
+      "name": "Tarima Exterior en Barcelona: Instalación y Mantenimiento",
+      "main_keyword": "Tarima Exterior Barcelona",
+      "volume": 230,
+      "h1": "Instalación y Mantenimiento de Tarima Exterior en Barcelona",
+      "seo_title": "Tarima Exterior Barcelona | Instalación y Tratamiento",
+      "seo_description": "Especialistas en tarimas de exterior en Barcelona. Instalación y tratamiento de suelos de madera para terrazas y jardines. ¡Presupuesto sin compromiso!",
+      "keywords": [
+        {
+          "keyword": "tarima tratada exterior",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "tarima encapsulada exterior",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "tablas madera suelo exterior",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "lamas madera suelo exterior",
+          "volume": 20,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo exterior imitación madera bricodepot",
+          "volume": 30,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo terraza exterior imitacion madera",
+          "volume": 140,
+          "cpc": 0
+        },
+        {
+          "keyword": "madera tratada para suelo exterior",
+          "volume": 10,
+          "cpc": 0
+        }
+      ]
+    },
+    {
+      "name": "Precios y Presupuestos de Parquet en Barcelona",
+      "main_keyword": "Precios Parquet Barcelona",
+      "volume": 0,
+      "h1": "Precios de Parquet en Barcelona: ¿Cuánto Cuesta el m2 y Servicios?",
+      "seo_title": "Precios Parquet Barcelona | Coste m2 e Instalación",
+      "seo_description": "Descubre el precio del m2 de parquet y el coste de un parquetista en Barcelona. Solicita tu presupuesto personalizado y sin compromiso para tu proyecto.",
+      "keywords": [
+        {
+          "keyword": "¿Cuánto cobra un parquetista?",
+          "volume": 0,
+          "cpc": 0
+        },
+        {
+          "keyword": "¿Cuánto cuesta el m2 de parquet?",
+          "volume": 0,
+          "cpc": 0
+        }
+      ]
+    },
+    {
+      "name": "Guía: ¿Qué Parquet Elegir? Tipos y Comparativas",
+      "main_keyword": "Tipos de Parquet",
+      "volume": 19320,
+      "h1": "Guía Definitiva: ¿Qué Parquet Elegir? Tipos, Ventajas y Precios",
+      "seo_title": "Qué Parquet Elegir | Tipos, Precios y Comparativas",
+      "seo_description": "Descubre los mejores tipos de parquet: laminado, flotante, madera natural, vinílico. Compara y elige el suelo ideal para tu hogar. Guía completa y consejos.",
+      "keywords": [
+        {
+          "keyword": "¿Qué parquet es el mejor?",
+          "volume": 0,
+          "cpc": 0
+        },
+        {
+          "keyword": "mejor madera para parquet",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "tarima flotante o suelo laminado",
+          "volume": 210,
+          "cpc": 0
+        },
+        {
+          "keyword": "mejor parquet o tarima",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelos laminados fotos",
+          "volume": 30,
+          "cpc": 0
+        },
+        {
+          "keyword": "decoracion suelos laminados",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "cocinas con suelo de parquet",
+          "volume": 40,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo madera segunda mano",
+          "volume": 10,
+          "cpc": 0
+        },
+        {
+          "keyword": "madera de haya",
+          "volume": 1900,
+          "cpc": 0
+        },
+        {
+          "keyword": "porcelanico imitación madera",
+          "volume": 3600,
+          "cpc": 0
+        },
+        {
+          "keyword": "suelo porcelanico imitacion madera",
+          "volume": 8100,
+          "cpc": 0
+        },
+        {
+          "keyword": "revestimientos madera paredes",
+          "volume": 5400,
+          "cpc": 0
+        }
+      ]
+    }
   ],
   "locations": [
-    "Fontanero en Triana",
-    "Fontanero en Nervión",
-    "Fontanero en Los Remedios",
-    "Fontanero en La Macarena",
-    "Fontanero en Casco Antiguo"
+    "Eixample",
+    "Gràcia",
+    "Sant Martí",
+    "Sants-Montjuïc",
+    "Sarrià-Sant Gervasi"
   ],
-  "home_h1": "Fontanero Urgente en Sevilla | Servicios 24 Horas y Expertos",
-  "home_h2s": [
-    "Atención Inmediata 24/7 para Cualquier Urgencia en Sevilla",
-    "Especialistas en Desatascos, Fugas y Reparaciones Rápidas",
-    "Tu Fontanero de Confianza en Sevilla: Calidad, Garantía y Precios Transparentes"
-  ],
-  "niche": "Fontanero Urgente",
-  "city": "Sevilla",
-  "siteName": "Fontanero Urgente Sevilla Pro"
+  "home_structure": {
+    "h1": "Parquetistas en Barcelona: Instalación, Reparación y Restauración de Parquet",
+    "h2s": [
+      "Expertos en Suelos de Madera para tu Hogar o Negocio en Barcelona",
+      "Servicios de Parquet en Barcelona: Calidad, Experiencia y Garantía",
+      "Pide tu Presupuesto Gratis para tu Proyecto de Parquet en toda Barcelona"
+    ]
+  },
+  "niche": "Parquetista ",
+  "city": "Barcelona ",
+  "siteName": "Parquetista  Barcelona  Pro",
+  "raw_data": {
+    "top_keywords": [],
+    "competitors": [
+      {
+        "url": "https://parquetistabarcelona.com/",
+        "title": "Parquetista en Barcelona | Instalación de ...",
+        "domain": "parquetistabarcelona.com",
+        "description": "Solicita tu presupuesto gratuito para un servicio de instalación de suelo de parquet en Barcelona. Puedes solicitarlo llamando al 641 08 87 69 o enviándonos un ..."
+      },
+      {
+        "url": "https://www.habitissimo.es/empresas/parquetistas/barcelona",
+        "title": "Los 10 mejores Parquetistas en Barcelona",
+        "domain": "www.habitissimo.es",
+        "description": "Encuentra los mejores profesionales del parquet y de la reforma de suelos de madera en Barcelona: expertos en instalar, reparar y barnizar parquet."
+      },
+      {
+        "url": "https://parquetsserra.es/",
+        "title": "Parquets Serra",
+        "domain": "parquetsserra.es",
+        "description": "Parquets Serra - Tu empresa de parquet en Barcelona; 931382972 · 625376638 · info ... En Barcelona, el suelo de parquet es muy popular debido a sus ventajas."
+      },
+      {
+        "url": "https://www.pintparket.es/pintparket/parquetistas-profesionales",
+        "title": "Parquetistas profesionales",
+        "domain": "www.pintparket.es",
+        "description": "Pintparket cuenta con un equipo de instaladores con más de 20 años de experiencia que realizan instalaciones de parquet por Barcelona y el Maresme."
+      },
+      {
+        "url": "https://www.barcelonaparquet.net/",
+        "title": "Parquetistas Barcelona: Instalación de Parquets y ...",
+        "domain": "www.barcelonaparquet.net",
+        "description": "Crea un ambiente acogedor con maderas certificadas de primera calidad. Instalación de parquets, tarimas, puertas y pavimentos en Barcelona y alrededores."
+      },
+      {
+        "url": "https://pavidisseny.com/",
+        "title": "INSTALADOR DE PARQUET EN BARCELONA ...",
+        "domain": "pavidisseny.com",
+        "description": "Como profesionales especializados en suelos de madera suelos laminados o tarimas, te podemos instalar cualquier tipo de parquet tu casa, oficina o comercio."
+      },
+      {
+        "url": "https://www.parquetsnaturales.com/",
+        "title": "Parquets Naturales | Parquets y revestimientos de suelo en ...",
+        "domain": "www.parquetsnaturales.com",
+        "description": "Si necesitas una instalación o cambio de parquet, cuenta con los mejores expertos en parquet de madera en Barcelona (por proximidad en Eixample, Sarrià - Sant ..."
+      },
+      {
+        "url": "https://www.studioparquet.com/",
+        "title": "Studio Parquet: Venta e Instalación de Parquet en Barcelona",
+        "domain": "www.studioparquet.com",
+        "description": "Nos dedicamos a la venta e instalación de pavimentos y revestimientos desde 2003, con una amplia oferta de colecciones y materiales y una clara orientación de ..."
+      },
+      {
+        "url": "https://parquetbcn.com/contacto/",
+        "title": "Contacto - Interiorisme Parquet BCN",
+        "domain": "parquetbcn.com",
+        "description": "Llámanos. 698530471 ; ¿Dónde encontrarnos? Carrer Cartagena, 393, 08024, Barcelona ; Envíanos un email. info@parquetbcn.com ..."
+      },
+      {
+        "url": "https://armariosclosed.com/carpinteros-de-madera/instaladores-de-parquet/",
+        "title": "Instaladores de parquet Barcelona",
+        "domain": "armariosclosed.com",
+        "description": "Instaladores de parquet de calidad AC5, tarima flotante resistente al rayado e hidrófugo. Variedad de suelos: sintético, laminado, vinilo, madera natural, ..."
+      }
+    ],
+    "competitor_keywords": {
+      "parquetistabarcelona.com": [
+        {
+          "keyword": "restaurar parquet barcelona",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cocinas con suelo de parquet",
+          "volume": 40,
+          "source": "competitor"
+        },
+        {
+          "keyword": "acuchillar parquet barcelona",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pisos en granollers",
+          "volume": 2400,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima blanca envejecida",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima tratada exterior",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima con cajas",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "quitar arañazos tarima",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima encapsulada exterior",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima de castaño",
+          "volume": 40,
+          "source": "competitor"
+        }
+      ],
+      "www.habitissimo.es": [
+        {
+          "keyword": "empresas reformas viviendas madrid",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "reformas de tejados",
+          "volume": 170,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tejados y reformas",
+          "volume": 70,
+          "source": "competitor"
+        },
+        {
+          "keyword": "empresas de reformas de viviendas",
+          "volume": 70,
+          "source": "competitor"
+        },
+        {
+          "keyword": "reformas de tejados coruña",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "reformas tejados y cubiertas",
+          "volume": 40,
+          "source": "competitor"
+        },
+        {
+          "keyword": "empresas impermeabilizacion tejados",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "empresas de tejados",
+          "volume": 170,
+          "source": "competitor"
+        },
+        {
+          "keyword": "iva reformas viviendas",
+          "volume": 590,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mejores empresas de reformas en barcelona",
+          "volume": 50,
+          "source": "competitor"
+        }
+      ],
+      "parquetsserra.es": [
+        {
+          "keyword": "acuchillar parquet barcelona",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "reparar suelo madera rayado",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "acuchillar parquet vitoria",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "acuchillar parquet gijon",
+          "volume": 40,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tablas madera suelo exterior",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "lamas madera suelo exterior",
+          "volume": 20,
+          "source": "competitor"
+        },
+        {
+          "keyword": "acuchillar parquet murcia",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo exterior imitación madera bricodepot",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo terraza exterior imitacion madera",
+          "volume": 140,
+          "source": "competitor"
+        },
+        {
+          "keyword": "madera tratada para suelo exterior",
+          "volume": 10,
+          "source": "competitor"
+        }
+      ],
+      "www.pintparket.es": [
+        {
+          "keyword": "tarima flotante suelo laminado",
+          "volume": 210,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo laminado madera",
+          "volume": 390,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet suelo madera",
+          "volume": 260,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mejor madera para parquet",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mejor fregona para suelo laminado",
+          "volume": 50,
+          "source": "competitor"
+        },
+        {
+          "keyword": "poner suelo madera",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima parquet de madera",
+          "volume": 20,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima flotante o suelo laminado",
+          "volume": 210,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mejor parquet o tarima",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo laminado imitación madera",
+          "volume": 90,
+          "source": "competitor"
+        }
+      ],
+      "www.barcelonaparquet.net": [
+        {
+          "keyword": "madera de haya",
+          "volume": 1900,
+          "source": "competitor"
+        },
+        {
+          "keyword": "textura madera",
+          "volume": 2900,
+          "source": "competitor"
+        },
+        {
+          "keyword": "encimera madera",
+          "volume": 2400,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet directo",
+          "volume": 1300,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pisos en granollers",
+          "volume": 2400,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pisos en colindres",
+          "volume": 1900,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet vinilico",
+          "volume": 1600,
+          "source": "competitor"
+        },
+        {
+          "keyword": "porcelanico imitación madera",
+          "volume": 3600,
+          "source": "competitor"
+        },
+        {
+          "keyword": "revestimientos madera paredes",
+          "volume": 5400,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mortero de madera antiguo",
+          "volume": 10,
+          "source": "competitor"
+        }
+      ],
+      "pavidisseny.com": [
+        {
+          "keyword": "parquet de madera",
+          "volume": 1300,
+          "source": "competitor"
+        },
+        {
+          "keyword": "masilla para madera",
+          "volume": 6600,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet flotante",
+          "volume": 1600,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo porcelanico imitacion madera",
+          "volume": 8100,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mesa flotante",
+          "volume": 1300,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquets de madera",
+          "volume": 1300,
+          "source": "competitor"
+        },
+        {
+          "keyword": "imprimación madera",
+          "volume": 1300,
+          "source": "competitor"
+        },
+        {
+          "keyword": "madera suelo",
+          "volume": 2400,
+          "source": "competitor"
+        },
+        {
+          "keyword": "percheros madera",
+          "volume": 1300,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mesita flotante",
+          "volume": 1300,
+          "source": "competitor"
+        }
+      ],
+      "www.parquetsnaturales.com": [
+        {
+          "keyword": "alfombras para suelos de madera",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pulir parquet madera",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos de madera barcelona",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos laminados asturias",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos laminados vigo",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos laminados fotos",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos laminados bricomart ac5",
+          "volume": 140,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos laminados faus opiniones",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos laminados en malaga",
+          "volume": 50,
+          "source": "competitor"
+        },
+        {
+          "keyword": "decoracion suelos laminados",
+          "volume": 10,
+          "source": "competitor"
+        }
+      ],
+      "www.studioparquet.com": [
+        {
+          "keyword": "parquet cerca de mi",
+          "volume": 1000,
+          "source": "competitor"
+        },
+        {
+          "keyword": "venta piso pino montano",
+          "volume": 720,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pisos en hamburgo",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "renovador liberon parquet opiniones",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pisos en alcorcon milanuncios",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tiendas de parquet en mataro",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "solvia pisos badalona",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo madera segunda mano",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pisos olivarera carmona",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet flotante new york",
+          "volume": 10,
+          "source": "competitor"
+        }
+      ],
+      "parquetbcn.com": [
+        {
+          "keyword": "comprar parquet antiguo",
+          "volume": 30,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pulidor parquet barcelona",
+          "volume": 140,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet barato precios",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio pulir parquet barcelona",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo tarima blanco",
+          "volume": 20,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima suelo laminado",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos tarima flotante",
+          "volume": 720,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet acrilico",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "colocación parquet",
+          "volume": 210,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet antideslizante",
+          "volume": 20,
+          "source": "competitor"
+        }
+      ],
+      "armariosclosed.com": [
+        {
+          "keyword": "fabricante mobiliario hotelaria",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "mobiliario a medida",
+          "volume": 260,
+          "source": "competitor"
+        },
+        {
+          "keyword": "muebles sipo armarios",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "muebles martin armarios",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "euro muebles armarios",
+          "volume": 210,
+          "source": "competitor"
+        },
+        {
+          "keyword": "fabricante muebles diseño",
+          "volume": 20,
+          "source": "competitor"
+        },
+        {
+          "keyword": "muebles baix llobregat",
+          "volume": 20,
+          "source": "competitor"
+        },
+        {
+          "keyword": "muebles torre del mar",
+          "volume": 90,
+          "source": "competitor"
+        },
+        {
+          "keyword": "muebles madera hogar",
+          "volume": 10,
+          "source": "competitor"
+        },
+        {
+          "keyword": "ali hogar muebles",
+          "volume": 10,
+          "source": "competitor"
+        }
+      ]
+    },
+    "paa_questions": [
+      "¿Cuánto cobra un parquetista?",
+      "¿Cuánto cuesta el m2 de parquet?",
+      "¿Qué es un parquetista?",
+      "¿Qué parquet es el mejor?"
+    ]
+  }
 }

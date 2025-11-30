@@ -17,6 +17,15 @@ export async function analyzeCompetitor(url) {
         const h3s = $('h3').map((i, el) => $(el).text().trim()).get();
         const title = $('title').text().trim();
         const metaDesc = $('meta[name="description"]').attr('content');
+        const metaKeywords = $('meta[name="keywords"]').attr('content');
+
+        // Extraemos texto del contenido (limpiando scripts y estilos)
+        $('script').remove();
+        $('style').remove();
+        $('nav').remove();
+        $('header').remove();
+        $('footer').remove();
+        const contentText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 1500); // Primeros 1500 chars
 
         // Extraemos enlaces internos para detectar sus servicios
         const links = $('a').map((i, el) => ({
@@ -28,7 +37,9 @@ export async function analyzeCompetitor(url) {
             url,
             title,
             metaDesc,
+            metaKeywords,
             h1,
+            contentText, // Texto real de la web
             structure: { h2s: h2s.slice(0, 8), h3s: h3s.slice(0, 5) }, // Limitamos para no saturar a Gemini
             possibleServices: links.slice(0, 10) // Muestra de enlaces
         };

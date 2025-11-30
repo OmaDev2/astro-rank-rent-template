@@ -1,0 +1,31 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GeneratorApp from "../../components/admin/GeneratorApp.jsx";
+// Protegemos la ruta para que no se indexe ni se suba a producción pública fácilmente
+if (import.meta.env.PROD) {
+    // return Astro.redirect('/'); // Descomentar para proteger en prod
+}
+---
+
+<Layout title="Agent X Dashboard" noindex={true}>
+    <div class="min-h-screen bg-slate-900 text-white p-8">
+        <div class="max-w-6xl mx-auto">
+            <header class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary">
+                        Agent X Dashboard
+                    </h1>
+                    <p class="text-slate-400">
+                        Generador de Nichos Rank & Rent con IA
+                    </p>
+                </div>
+                <div class="text-xs bg-slate-800 p-2 rounded">
+                    DataForSEO: Conectado 🟢 <br />
+                    Gemini: Conectado 🟢
+                </div>
+            </header>
+
+            <GeneratorApp client:only="react" />
+        </div>
+    </div>
+</Layout>

@@ -72,35 +72,40 @@ async function main() {
     // 2. GENERAR CONTENIDO DE LA HOME (KEYWORD PRINCIPAL)
     console.log(`\n🏠 Generando contenido SEO para la Home...`);
 
+    // Extraemos preguntas reales (PAA) si existen
+    const realQuestions = plan.raw_data?.paa_questions || [];
+    const faqInstruction = realQuestions.length > 0
+        ? `Usa estas PREGUNTAS REALES de usuarios para la sección FAQ (responde de forma experta): ${JSON.stringify(realQuestions)}`
+        : `Genera 4 preguntas frecuentes relevantes para el nicho.`;
+
     const homePrompt = `
-        Genera contenido SEO optimizado para la página HOME.
-        - Keyword Principal: "${plan.niche} ${plan.city}"
-        - Ciudad: "${plan.city}"
-        - Nicho: "${plan.niche}"
+        Actúa como experto en SEO y Copywriting.
+        Genera el contenido para la página de inicio de un sitio de "${plan.niche}" en "${plan.city}".
         
-        El contenido debe atacar la keyword principal y posicionar en Google.
-        
-        JSON Structure:
+        Estructura requerida (JSON):
         {
             "hero": {
-                "heading": "H1 principal con keyword (sin ciudad al final)",
-                "headingHighlight": "CIUDAD en mayúsculas",
-                "subheading": "Subtítulo persuasivo y claro"
+                "heading": "${plan.home_h1}",
+                "subheading": "Subtítulo persuasivo de 15-20 palabras"
             },
-            "seoContentTitle": "Título para sección de contenido SEO",
-            "seoContent": "Contenido markdown de 500-600 palabras optimizado para SEO, con H2 y H3, explicando servicios, ventajas, experiencia. Debe incluir la keyword principal naturalmente.",
+            "seoContentTitle": "${plan.home_h2s[0]}",
+            "seoContent": "Texto SEO de 500-600 palabras en formato Markdown. Usa H2 y H3. Ataca la keyword principal '${plan.niche} en ${plan.city}'.",
             "features": [
-                {"title": "Característica 1", "description": "Descripción"},
-                {"title": "Característica 2", "description": "Descripción"},
-                {"title": "Característica 3", "description": "Descripción"}
+                { "title": "Característica 1", "description": "Breve descripción" },
+                { "title": "Característica 2", "description": "Breve descripción" },
+                { "title": "Característica 3", "description": "Breve descripción" }
             ],
             "faq": [
-                {"question": "Pregunta frecuente 1", "answer": "Respuesta detallada"},
-                {"question": "Pregunta frecuente 2", "answer": "Respuesta detallada"},
-                {"question": "Pregunta frecuente 3", "answer": "Respuesta detallada"},
-                {"question": "Pregunta frecuente 4", "answer": "Respuesta detallada"}
+                { "question": "Pregunta 1", "answer": "Respuesta breve" },
+                { "question": "Pregunta 2", "answer": "Respuesta breve" },
+                { "question": "Pregunta 3", "answer": "Respuesta breve" },
+                { "question": "Pregunta 4", "answer": "Respuesta breve" }
             ]
         }
+        
+        INSTRUCCIONES ADICIONALES:
+        - ${faqInstruction}
+        - El tono debe ser profesional y confiable.
     `;
 
     const homeData = await generateData(homePrompt, 'Home Page');
