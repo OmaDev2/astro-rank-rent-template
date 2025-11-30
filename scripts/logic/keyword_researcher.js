@@ -18,13 +18,14 @@ export async function getInitialCompetitors(niche, location_code) {
     return await getTopCompetitors(niche, location_code);
 }
 
-export async function generateClustersFromSelection(niche, city, competitors, location_code) {
+export async function generateClustersFromSelection(niche, city, competitors, location_code, top10Filter = true) {
     // Si no viene código, usamos España (2724) por defecto
     const targetLoc = location_code || 2724;
     const cleanCity = city.trim();
     const cleanNiche = niche.trim();
 
     console.log(`🚀 Logic: Clusterizando para "${cleanNiche}" en "${cleanCity}" (Loc: ${targetLoc})...`);
+    console.log(`🎯 TOP 10 Filter: ${top10Filter ? 'ENABLED' : 'DISABLED'}`);
 
     let allKeywords = [];
     const competitorKeywordsMap = {};
@@ -33,7 +34,7 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
     for (const domain of competitors) {
         console.log(`   🔍 Analizando competidor: ${domain}...`);
         // CAMBIO: "Spain" -> targetLoc
-        const compKeywords = await getCompetitorKeywords(domain, targetLoc);
+        const compKeywords = await getCompetitorKeywords(domain, targetLoc, top10Filter);
 
         if (compKeywords.length > 0) {
             allKeywords = [...allKeywords, ...compKeywords];
@@ -41,16 +42,35 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
         }
     }
 
-    // 2. Obtener keywords relacionadas (Seed) (USANDO targetLoc)
+    // 2. Obtener keywords relacionadas (seed)
     console.log(`   🔍 Buscando keywords relacionadas...`);
-    // CAMBIO: "Spain" -> targetLoc
-    const seedKeywords = await getRelatedKeywords(`${cleanNiche} ${cleanCity}`, targetLoc);
+    const relatedKeywords = await getRelatedKeywords(cleanNiche, targetLoc);
+    allKeywords = [...allKeywords, ...relatedKeywords];
 
-    if (seedKeywords && seedKeywords.length > 0) {
-        allKeywords = [...allKeywords, ...seedKeywords];
-    }
+    console.log(`   📊 Total keywords antes de filtrado: ${allKeywords.length}`);
 
-    // 3. Filtrado y Deduplicación
+    // NUEVO: Filtro de relevancia semántica
+    const nicheTerms = cleanNiche.toLowerCase().split(' ');
+    const irrelevantPatterns = [
+        'restaurante', 'restaurant', 'hotel', 'hostal', 'bar', 'café', 'cafeteria',
+        'tienda', 'shop', 'store', 'supermercado', 'mercado', 'farmacia', 'pharmacy'
+    ];
+
+    // Filtrar keywords completamente irrelevantes
+    allKeywords = allKeywords.filter(k => {
+        const kwLower = k.keyword.toLowerCase();
+
+        // Si contiene algún término irrelevante Y NO contiene ningún término del niche, descartarla
+        const hasIrrelevant = irrelevantPatterns.some(pattern => kwLower.includes(pattern));
+        const hasNicheTerm = nicheTerms.some(term => term.length > 3 && kwLower.includes(term));
+
+        // Mantener si: NO tiene términos irrelevantes O tiene términos del niche
+        return !hasIrrelevant || hasNicheTerm;
+    });
+
+    console.log(`   🧹 Después de filtro de relevancia: ${allKeywords.length} keywords`);
+
+    // 3. Deduplicar y filtrar por volumenduplicación
     const uniqueMap = new Map();
 
     allKeywords.forEach(k => {
@@ -87,10 +107,10 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
     for (const [domain, keywords] of Object.entries(competitorKeywordsMap)) {
         analysisLog += `### ${domain}\n`;
         analysisLog += `**Total:** ${keywords.length} keywords\n\n`;
-        analysisLog += `| Keyword | Volumen | Fuente |\n`;
-        analysisLog += `|---------|---------|--------|\n`;
+        analysisLog += `| Keyword | Volumen | Pos | Fuente |\n`;
+        analysisLog += `|---------|---------|-----|--------|\n`;
         keywords.slice(0, 20).forEach(k => {
-            analysisLog += `| ${k.keyword} | ${k.volume} | ${k.source} |\n`;
+            analysisLog += `| ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} |\n`;
         });
         if (keywords.length > 20) {
             analysisLog += `| ... y ${keywords.length - 20} más |\n`;
@@ -121,10 +141,10 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
     // Log 4: Top 50 keywords enviadas a IA
     analysisLog += `## 🎯 Top 50 Keywords Enviadas a Gemini AI\n\n`;
     analysisLog += `Estas son las keywords que se usaron para el clustering:\n\n`;
-    analysisLog += `| # | Keyword | Volumen | Fuente |\n`;
-    analysisLog += `|---|---------|---------|--------|\n`;
+    analysisLog += `| # | Keyword | Volumen | Pos | Fuente |\n`;
+    analysisLog += `|---|---------|---------|-----|--------|\n`;
     uniqueKeywords.slice(0, 50).forEach((k, i) => {
-        analysisLog += `| ${i + 1} | ${k.keyword} | ${k.volume} | ${k.source} |\n`;
+        analysisLog += `| ${i + 1} | ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} |\n`;
     });
     analysisLog += `\n`;
 

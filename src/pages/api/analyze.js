@@ -3,16 +3,17 @@ import { generateClustersFromSelection } from '../../../scripts/logic/keyword_re
 export const POST = async ({ request }) => {
     try {
         const body = await request.json();
-        const { niche, city, competitors, locationCode, locationName } = body;
+        const { niche, city, competitors, locationCode, locationName, top10Filter = true } = body;
 
         if (!niche || !city || !competitors || competitors.length === 0) {
             return new Response(JSON.stringify({ error: "Faltan competidores seleccionados" }), { status: 400 });
         }
 
         console.log(`📡 API Analyze: Clusterizando (Location: ${locationName || locationCode || 'Auto'})...`);
+        console.log(`🎯 TOP 10 Filter: ${top10Filter ? 'ENABLED' : 'DISABLED'}`);
 
-        // Pasamos locationName para Labs endpoints (keywords_for_site, related_keywords)
-        const data = await generateClustersFromSelection(niche, city, competitors, locationName || locationCode);
+        // Pasamos locationName para Labs endpoints y top10Filter
+        const data = await generateClustersFromSelection(niche, city, competitors, locationName || locationCode, top10Filter);
 
         return new Response(JSON.stringify(data), {
             status: 200,

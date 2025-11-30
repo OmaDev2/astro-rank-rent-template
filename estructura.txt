@@ -6,6 +6,7 @@
 ├── SETUP_GUIDE.md
 ├── astro.config.mjs
 ├── check_exports.mjs
+├── clustering_analysis.md
 ├── docs
 │   ├── GOOGLE_SEARCH_CONSOLE.md
 │   └── SETTINGS_STRUCTURE.md
@@ -6710,6 +6711,7 @@
 │   ├── logic
 │   │   └── keyword_researcher.js
 │   ├── research_niche.js
+│   ├── test_locations.js
 │   ├── test_research_logic.js
 │   └── test_seo.js
 ├── src
@@ -6781,4 +6783,4 @@
 ├── tsconfig.json
 └── update_slugs.mjs
 
-1937 directories, 4845 files
+1937 directories, 4847 files

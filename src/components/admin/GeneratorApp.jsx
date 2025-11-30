@@ -11,7 +11,8 @@ export default function GeneratorApp() {
         locationName: null,  // Nombre completo para Labs endpoints
         searchEngine: 'google.es',
         searchLocation: 'Spain',
-        seedKeyword: ''
+        seedKeyword: '',
+        top10Filter: true  // NUEVO: Filtrar solo TOP 10 posiciones
     });
     const [researchData, setResearchData] = useState(null);
     const [selectedCompetitors, setSelectedCompetitors] = useState(new Set());
@@ -89,7 +90,8 @@ export default function GeneratorApp() {
                     city: formData.city,
                     competitors: selectedDomainsArray,
                     locationCode: formData.locationCode,
-                    locationName: formData.locationName  // NUEVO: nombre para Labs endpoints
+                    locationName: formData.locationName,  // NUEVO: nombre para Labs endpoints
+                    top10Filter: formData.top10Filter  // NUEVO: filtro TOP 10
                 })
             });
 
@@ -190,6 +192,30 @@ export default function GeneratorApp() {
                                 />
                             </div>
                         </div>
+
+                        {/* TOP 10 Filter Toggle */}
+                        <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
+                            <label className="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <div className="text-sm font-medium text-slate-200">
+                                        🎯 Filter TOP 10 Positions Only
+                                    </div>
+                                    <div className="text-xs text-slate-400 mt-1">
+                                        Extract only keywords where competitors rank in positions 1-10 (higher quality)
+                                    </div>
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.top10Filter}
+                                        onChange={(e) => setFormData({ ...formData, top10Filter: e.target.checked })}
+                                        className="sr-only peer"
+                                    />
+                                    <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                </div>
+                            </label>
+                        </div>
+
                         <button type="submit" className="w-full px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2">
                             Continue <ChevronRight className="w-5 h-5" />
                         </button>
@@ -527,10 +553,10 @@ export default function GeneratorApp() {
                                                             </td>
                                                             <td className="px-2 py-2 text-slate-700">{k.keyword}</td>
                                                             <td className={`px-2 py-2 text-right font-mono text-xs font-bold ${k.position ? (
-                                                                    k.position <= 3 ? 'text-green-600' :
-                                                                        k.position <= 10 ? 'text-yellow-600' :
-                                                                            'text-slate-400'
-                                                                ) : 'text-slate-300'
+                                                                k.position <= 3 ? 'text-green-600' :
+                                                                    k.position <= 10 ? 'text-yellow-600' :
+                                                                        'text-slate-400'
+                                                            ) : 'text-slate-300'
                                                                 }`}>
                                                                 {k.position || '-'}
                                                             </td>

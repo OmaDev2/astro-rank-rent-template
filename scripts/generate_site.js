@@ -16,10 +16,11 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Función auxiliar para crear JSONs de datos
 async function generateData(prompt, context = '') {
+    let text = '';  // Declarar fuera del try para que esté disponible en el catch
     try {
         console.log(`      ⏳ Consultando a Gemini...`);
         const result = await model.generateContent(prompt);
-        const text = result.response.text();
+        text = result.response.text();
 
         // Log para debug
         console.log(`      📝 Respuesta recibida (${text.length} chars)`);
@@ -45,7 +46,7 @@ async function generateData(prompt, context = '') {
             await delay(30000);
         }
 
-        return null;
+        throw error;
     }
 }
 

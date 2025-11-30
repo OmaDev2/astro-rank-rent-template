@@ -122,33 +122,50 @@ export async function getCompetitorKeywords(domain, locationInput, top10Only = t
         target: domain,
         location_name: locationName,
         language_name: "Spanish",
-        limit: 50,  // Aumentamos el límite porque vamos a filtrar
+        limit: 100,
         filters: [
-            ["keyword_info.search_volume", ">", 0],
-            // Si top10Only está activo, solo keywords en posiciones 1-10
-            ...(top10Only ? [["ranked_serp_element.serp_item.rank_absolute", "<=", 10]] : [])
+            ["keyword_data.keyword_info.search_volume", ">", 0],
+            // Filtro TOP 10 a nivel de API (ahora funciona con ranked_keywords)
+            ...(top10Only ? [
+                "and",
+                [
+                    ["ranked_serp_element.serp_item.rank_absolute", "<=", 10],
+                    "and",
+                    ["ranked_serp_element.serp_item.type", "<>", "paid"]
+                ]
+            ] : [])
         ]
     }];
 
-    console.log(`🔍 DEBUG keywords_for_site payload:`, JSON.stringify(payload, null, 2));
+    console.log(`🔍 DEBUG ranked_keywords payload:`, JSON.stringify(payload, null, 2));
 
-    const result = await postDataForSEO('/dataforseo_labs/google/keywords_for_site/live', payload);
+    // CAMBIO: Usar ranked_keywords en lugar de keywords_for_site
+    const result = await postDataForSEO('/dataforseo_labs/google/ranked_keywords/live', payload);
 
     if (result && result[0] && result[0].items) {
+        console.log(`📦 DEBUG: Received ${result[0].items.length} total items from API`);
+        if (result[0].items.length > 0) {
+            console.log(`📦 DEBUG: Sample raw item:`, JSON.stringify(result[0].items[0], null, 2));
+        }
+
         allKeywords = result[0].items.map(k => {
-            // DataForSEO devuelve la keyword directamente en el item
-            const kwData = k.keyword_data || k;
-            const kwInfo = kwData.keyword_info || kwData;
-            const rankInfo = k.ranked_serp_element?.serp_item;
+            // Extraer datos de keyword_data
+            const kwData = k.keyword_data || {};
+            const kwInfo = kwData.keyword_info || {};
+            const kwProps = kwData.keyword_properties || {};
+
+            // IMPORTANTE: ranked_keywords tiene la posición en ranked_serp_element
+            const rankInfo = k.ranked_serp_element?.serp_item || {};
 
             return {
-                keyword: kwInfo.keyword || k.keyword || 'unknown',
-                volume: kwInfo.search_volume || k.search_volume || 0,
-                cpc: kwInfo.cpc || k.cpc || 0,
-                competition: kwInfo.competition || k.competition || 0,
-                competition_level: kwInfo.competition_level || k.competition_level || 'UNKNOWN',
-                difficulty: k.keyword_properties?.keyword_difficulty || 0,
-                position: rankInfo?.rank_absolute || null,  // NUEVO: posición de ranking
+                keyword: kwData.keyword || kwInfo.keyword || 'unknown',
+                volume: kwInfo.search_volume || 0,
+                cpc: kwInfo.cpc || 0,
+                competition: kwInfo.competition || 0,
+                competition_level: kwInfo.competition_level || 'UNKNOWN',
+                difficulty: kwProps.keyword_difficulty || 0,
+                position: rankInfo.rank_absolute || null,  // ⭐ Ahora sí tenemos posición
+                etv: k.etv || 0,  // NUEVO: Tráfico estimado
                 source: 'competitor'
             };
         });

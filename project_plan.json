@@ -1,486 +1,658 @@
 {
-  "market_analysis": "El mercado de parquetistas en Barcelona demuestra una alta demanda de suelos de imitación madera, así como de parquet laminado y tarima flotante. La restauración y el mantenimiento de suelos de madera son servicios esenciales, con un interés creciente en revestimientos de paredes que un parquetista puede ofrecer.",
+  "market_analysis": "El mercado de parquet en Barcelona muestra una alta demanda de instalación y variedad de tipos de suelo, con fuerte interés en precios por m2 y soluciones para espacios específicos como cocinas y baños. La competencia por keywords locales es clave para captar clientes.",
   "clusters": [
     {
-      "name": "Suelos Imitación Madera (Porcelánico y Laminado)",
-      "main_keyword": "suelo porcelanico imitacion madera",
-      "volume": 23630,
+      "name": "Instalación de Parquet Barcelona",
+      "main_keyword": "Instalador de Parquet Barcelona",
+      "volume": 8030,
       "meta_suggestions": [
         {
-          "h1": "Instala Suelo Porcelánico Imitación Madera en Barcelona",
-          "seo_title": "Suelos Imitación Madera de Calidad en Barcelona | Parquetista",
-          "seo_description": "Descubre la belleza del suelo porcelánico imitación madera. Durabilidad y estética para tu hogar en Barcelona. ¡Pide presupuesto hoy!"
+          "h1": "Tu Instalador de Parquet en Barcelona | Profesional",
+          "seo_title": "Parquetista Profesional en Barcelona | Expertos",
+          "seo_description": "Buscas poner parquet en Barcelona? Ofrecemos instalación profesional de todo tipo de suelos laminados y de madera. Pide tu presupuesto sin compromiso."
         },
         {
-          "h1": "Suelos que Imitan Madera: Descubre Nuestros Estilos 2024",
-          "seo_title": "Porcelánico y Laminado Imitación Madera | Textura Natural",
-          "seo_description": "Amplia gama de suelos imitación madera en Barcelona. Efecto natural y resistencia. ¡Inspírate con nuestros diseños más actuales!"
+          "h1": "Colocación de Parquet de Calidad en Barcelona 2024",
+          "seo_title": "Expertos en Colocar Parquet en Barcelona | Calidad",
+          "seo_description": "Instala tu parquet con garantía en Barcelona. Nuestro equipo de parquetistas te ofrece un acabado perfecto con rodapiés. ¡Contáctanos hoy para más información!"
         },
         {
-          "h1": "Precio Suelo Imitación Madera en Barcelona | Ofertas 2024",
-          "seo_title": "Instalación de Suelo Imitación Madera Barato en BCN",
-          "seo_description": "¿Buscas suelo porcelánico imitación madera a buen precio en Barcelona? Soluciones económicas y duraderas. ¡Consulta nuestras ofertas ahora!"
+          "h1": "Poner Suelo Laminado y Parquet con Rodapiés en BCN",
+          "seo_title": "Instalación de Suelos Laminados y Parquet en BCN",
+          "seo_description": "Instalamos parquet y suelo laminado en Barcelona. Acabados impecables con o sin rodapiés. Pide un presupuesto adaptado a tu proyecto de instalación."
         },
         {
-          "h1": "Expertos en Suelo Imitación Madera en Barcelona y Entorno",
-          "seo_title": "Tu Parquetista para Suelos Im. Madera en Gràcia, Barcelona",
-          "seo_description": "Instalamos suelo imitación madera en Barcelona y sus barrios. Calidad garantizada por parquetistas expertos. ¡Contáctanos cerca de ti!"
+          "h1": "Parquetista Cerca de Ti en Barcelona | Instaladores",
+          "seo_title": "Instaladores de Parquet en Barcelona y Alrededores",
+          "seo_description": "Necesitas un parquetista en Barcelona? Estamos cerca de ti para instalar tu suelo con rapidez y eficiencia. Expertos en colocación. ¡Llama ahora y consulta!"
         },
         {
-          "h1": "La Mejor Elección: Suelo Imitación Madera para tu Hogar",
-          "seo_title": "Resistencia y Diseño: Suelo Porcelánico Imitación Madera",
-          "seo_description": "¿Por qué elegir suelo imitación madera? Durabilidad, fácil mantenimiento y estética. Tu opción ideal en Barcelona. ¡Solicita tu guía gratis!"
+          "h1": "Instalación de Parquet en Barcelona ¡Oferta 2024!",
+          "seo_title": "Tu Nuevo Parquet en Barcelona: Instalación Rápida",
+          "seo_description": "Renueva tu hogar con parquet nuevo en Barcelona. Instalación profesional este 2024 con precios inmejorables. Colocar parquet nunca fue tan fácil. ¡Solicita tu oferta ya!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "suelo porcelanico imitacion madera",
-          "volume": 8100
+          "keyword": "unknown",
+          "volume": 1600
         },
         {
-          "keyword": "porcelanico imitación madera",
-          "volume": 3600
-        },
-        {
-          "keyword": "suelo imitación madera",
-          "volume": 3600
-        },
-        {
-          "keyword": "suelos que imitan madera",
-          "volume": 3600
-        },
-        {
-          "keyword": "suelo imitacion madera",
-          "volume": 3600
-        },
-        {
-          "keyword": "textura madera",
-          "volume": 2900
-        },
-        {
-          "keyword": "suelo laminado imitación madera",
-          "volume": 90
-        },
-        {
-          "keyword": "suelo laminado imitacion madera",
-          "volume": 90
-        },
-        {
-          "keyword": "hule imitación madera",
-          "volume": 50
-        }
-      ]
-    },
-    {
-      "name": "Parquet Laminado Barcelona",
-      "main_keyword": "parquet laminado",
-      "volume": 3840,
-      "meta_suggestions": [
-        {
-          "h1": "Instalación de Parquet Laminado de Calidad en Barcelona",
-          "seo_title": "Expertos en Suelo Laminado en Barcelona | Precios 2024",
-          "seo_description": "Descubre nuestro parquet laminado en Barcelona. Amplia variedad de estilos y acabados para tu hogar. ¡Pide tu presupuesto sin compromiso!"
-        },
-        {
-          "h1": "Tu Mejor Opción: Parquet Laminado Flotante y Resistente",
-          "seo_title": "Suelo Laminado Roble y Madera Natural | Instaladores BCN",
-          "seo_description": "Instalamos suelo laminado en Barcelona. Variedad en roble y madera natural. Ideal para un acabado duradero. ¡Contacta hoy con nosotros!"
-        },
-        {
-          "h1": "Parquet Laminado Barato en Barcelona | Ofertas y Precios",
-          "seo_title": "Precio Parquet Laminado en Barcelona | Ahorra en tu Suelo",
-          "seo_description": "¿Buscas parquet laminado económico en Barcelona? Ofrecemos la mejor relación calidad-precio. ¡Presupuesto gratis y sin compromiso!"
-        },
-        {
-          "h1": "Parquet Laminado Profesional Cerca de Ti en Barcelona",
-          "seo_title": "Instalación de Parquet Laminado en Eixample, Barcelona",
-          "seo_description": "Tu parquetista de confianza en Barcelona para suelo laminado. Instalación rápida y garantizada. ¡Llámanos para una visita técnica!"
-        },
-        {
-          "h1": "Guía Completa de Parquet Laminado para tu Hogar 2024",
-          "seo_title": "Elige tu Suelo Laminado: Madera o Flotante en Barcelona",
-          "seo_description": "¿Parquet laminado o flotante? Te asesoramos en Barcelona. Guía definitiva para elegir el mejor suelo. ¡Descubre nuestras soluciones!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "parquet laminado",
-          "volume": 2400
-        },
-        {
-          "keyword": "suelo laminado madera",
-          "volume": 390
-        },
-        {
-          "keyword": "suelo laminado roble",
+          "keyword": "instalador de parquet",
           "volume": 320
         },
         {
-          "keyword": "tarima flotante suelo laminado",
-          "volume": 210
+          "keyword": "instalacion de parquet",
+          "volume": 320
         },
         {
-          "keyword": "tarima flotante o suelo laminado",
-          "volume": 210
+          "keyword": "instalación de parquet",
+          "volume": 320
         },
         {
-          "keyword": "suelo laminado madera natural",
-          "volume": 110
-        },
-        {
-          "keyword": "tarima flotante laminado",
-          "volume": 90
-        },
-        {
-          "keyword": "suelo laminado flotante",
-          "volume": 50
-        },
-        {
-          "keyword": "parquet laminado flotante",
-          "volume": 50
-        }
-      ]
-    },
-    {
-      "name": "Tarima Flotante y Parquet de Madera Natural",
-      "main_keyword": "tarima de madera",
-      "volume": 15880,
-      "meta_suggestions": [
-        {
-          "h1": "Instalación Profesional de Tarima de Madera en Barcelona",
-          "seo_title": "Tarima Flotante y Suelos de Madera Natural en Barcelona",
-          "seo_description": "Expertos en tarima de madera y parquet flotante en Barcelona. Calidad y belleza para tus suelos. ¡Solicita tu presupuesto personalizado!"
-        },
-        {
-          "h1": "Descubre la Mejor Tarima Flotante de Madera Natural 2024",
-          "seo_title": "Parquet de Madera Roble o Haya | Tarimas Exterior BCN",
-          "seo_description": "Tarimas de madera roble, haya y opciones para exterior en Barcelona. Suelos que elevan el valor de tu hogar. ¡Consulta nuestro catálogo!"
-        },
-        {
-          "h1": "Precio y Ofertas en Tarima Flotante de Madera en Barcelona",
-          "seo_title": "Tu Tarima Flotante de Madera Barata en Barcelona | 2024",
-          "seo_description": "Consigue tarima de madera de calidad al mejor precio en Barcelona. Opciones para todos los presupuestos. ¡Pide tu oferta exclusiva!"
-        },
-        {
-          "h1": "Especialistas en Tarima Flotante de Madera en Sarrià, BCN",
-          "seo_title": "Parquetista para Tarima de Madera y Flotante en BCN",
-          "seo_description": "Instalación y asesoramiento experto en tarima flotante y suelos de madera en Barcelona. ¡Tu parquetista de confianza cerca de ti!"
-        },
-        {
-          "h1": "Tarima de Madera para Suelo Radiante y Exterior en Barcelona",
-          "seo_title": "Suelos de Madera Duraderos: Tarima Flotante y Exterior",
-          "seo_description": "¿Buscas tarima de madera resistente para suelo radiante o exterior en Barcelona? Máxima durabilidad garantizada. ¡Conoce nuestras soluciones!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "tarima de madera",
-          "volume": 2400
-        },
-        {
-          "keyword": "madera suelo",
-          "volume": 2400
-        },
-        {
-          "keyword": "parquet flotante",
-          "volume": 1600
-        },
-        {
-          "keyword": "parquet de madera",
-          "volume": 1300
-        },
-        {
-          "keyword": "parquets de madera",
-          "volume": 1300
-        },
-        {
-          "keyword": "madera suelos exterior",
-          "volume": 1300
-        },
-        {
-          "keyword": "parquet suelo madera",
+          "keyword": "como colocar el parquet",
           "volume": 260
         },
         {
-          "keyword": "tarima flotante exterior",
+          "keyword": "como colocar parquet",
           "volume": 260
         },
         {
-          "keyword": "tarima flotante madera",
+          "keyword": "como colocar un parquet",
+          "volume": 260
+        },
+        {
+          "keyword": "como poner parquet",
+          "volume": 260
+        },
+        {
+          "keyword": "como poner un parquet",
+          "volume": 260
+        },
+        {
+          "keyword": "cómo poner parquet",
+          "volume": 260
+        },
+        {
+          "keyword": "cómo colocar parquet",
+          "volume": 260
+        },
+        {
+          "keyword": "colocar parquet",
           "volume": 210
         },
         {
-          "keyword": "parquet o tarima flotante",
+          "keyword": "parquet instalacion",
+          "volume": 210
+        },
+        {
+          "keyword": "poner parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "instalacion parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "instalación parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "instalar parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "colocacion de parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "instalador de suelo laminado",
+          "volume": 170
+        },
+        {
+          "keyword": "colocacion parquet",
+          "volume": 90
+        },
+        {
+          "keyword": "instalaparquet",
+          "volume": 90
+        },
+        {
+          "keyword": "parquets a mida",
+          "volume": 210
+        },
+        {
+          "keyword": "patrón colocación parquet",
+          "volume": 260
+        },
+        {
+          "keyword": "formas de colocar el parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "formas de colocar parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "poner suelo laminado sobre baldosa",
+          "volume": 170
+        },
+        {
+          "keyword": "zocalo suelo",
           "volume": 140
         },
         {
-          "keyword": "parquet y tarima flotante",
+          "keyword": "parquet con rodapié blanco",
+          "volume": 170
+        },
+        {
+          "keyword": "parquet con zocalo blanco",
           "volume": 140
         },
         {
-          "keyword": "suelo madera roble",
+          "keyword": "parquet con zócalo blanco",
+          "volume": 140
+        },
+        {
+          "keyword": "suelo madera rodapie blanco",
+          "volume": 90
+        }
+      ]
+    },
+    {
+      "name": "Precio y Presupuesto de Parquet",
+      "main_keyword": "Precio Parquet m2 Barcelona",
+      "volume": 5100,
+      "meta_suggestions": [
+        {
+          "h1": "Precio Parquet por m2 en Barcelona | Tarifas 2024",
+          "seo_title": "Cuánto Cuesta Poner Parquet m2 en Barcelona?",
+          "seo_description": "Descubre el precio del parquet por m2 en Barcelona. Ofrecemos presupuestos claros y ajustados a tu medida. ¡Solicita el tuyo sin compromiso para tu hogar!"
+        },
+        {
+          "h1": "Costo de Instalación de Parquet en Barcelona m2",
+          "seo_title": "Precio Poner Parquet en Barcelona: Cuánto Cuesta?",
+          "seo_description": "Calcula cuánto cuesta instalar parquet en Barcelona. Presupuestos detallados por m2 para tu suelo laminado o de madera. ¡Pídenos información hoy!"
+        },
+        {
+          "h1": "Presupuesto Parquet Barcelona | Precios Transparentes",
+          "seo_title": "Presupuestos de Parquet en Barcelona | Sin Sorpresas",
+          "seo_description": "Consigue tu presupuesto de parquet en Barcelona con total transparencia. El mejor precio por m2, sin letra pequeña. ¡Contacta y compara nuestros servicios!"
+        },
+        {
+          "h1": "Comparar Precio Parquet m2 Instalado en Barcelona",
+          "seo_title": "Parquet Barcelona: Precio m2 Instalado | Mejores Ofertas",
+          "seo_description": "Buscas el mejor precio de parquet instalado en Barcelona? Obtén un presupuesto competitivo y sin compromiso. Calidad garantizada en cada instalación."
+        },
+        {
+          "h1": "Precio Poner Parquet en Piso 70m2 o 100m2 Barcelona",
+          "seo_title": "Cuánto Cuesta el Parquet en tu Piso de Barcelona?",
+          "seo_description": "Averigua el precio del parquet para tu piso de 70m2 o 100m2 en Barcelona. Presupuestos a medida, instalación incluida. ¡Infórmate ahora y decide!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "parquet precio",
+          "volume": 720
+        },
+        {
+          "keyword": "precio parquet",
+          "volume": 720
+        },
+        {
+          "keyword": "parquet precio m2",
+          "volume": 390
+        },
+        {
+          "keyword": "precio m2 parquet",
+          "volume": 390
+        },
+        {
+          "keyword": "cuanto cuesta poner parquet",
+          "volume": 320
+        },
+        {
+          "keyword": "precio poner suelo laminado leroy merlin",
+          "volume": 480
+        },
+        {
+          "keyword": "precio parquet piso 70m2",
+          "volume": 210
+        },
+        {
+          "keyword": "precio instalacion parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "precio instalación parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "parquet instalacion precio",
+          "volume": 170
+        },
+        {
+          "keyword": "precio suelo parquet",
+          "volume": 140
+        },
+        {
+          "keyword": "suelo parquet precio",
+          "volume": 140
+        },
+        {
+          "keyword": "cuánto cuesta poner",
+          "volume": 140
+        },
+        {
+          "keyword": "parquet suelo precio",
+          "volume": 140
+        },
+        {
+          "keyword": "precio de parquet",
+          "volume": 140
+        },
+        {
+          "keyword": "precio parquet m2 instalado",
           "volume": 110
         },
         {
-          "keyword": "suelos de tarima de madera",
-          "volume": 90
+          "keyword": "cuanto cuesta poner parquet en un piso de 100m2",
+          "volume": 110
         },
         {
-          "keyword": "suelo parquet flotante",
-          "volume": 90
+          "keyword": "cuánto cuesta poner parquet en un piso de 100m2",
+          "volume": 110
         },
         {
-          "keyword": "suelo tarima roble",
-          "volume": 50
+          "keyword": "presupuesto parquet",
+          "volume": 110
         },
         {
-          "keyword": "parquet vs tarima flotante",
-          "volume": 50
+          "keyword": "precio instalación suelo laminado leroy merlín",
+          "volume": 110
         },
         {
-          "keyword": "tarima de castaño",
-          "volume": 40
+          "keyword": "parquet presupuesto",
+          "volume": 110
+        }
+      ]
+    },
+    {
+      "name": "Tipos de Parquet y Suelos (Materiales y Diseños)",
+      "main_keyword": "Tipos de Parquet y Suelos Laminados Barcelona",
+      "volume": 9460,
+      "meta_suggestions": [
+        {
+          "h1": "Descubre los Tipos de Parquet y Suelos en Barcelona",
+          "seo_title": "Guía Completa Tipos de Parquet y Suelos en BCN",
+          "seo_description": "Explora nuestra amplia gama de tipos de parquet en Barcelona: laminado, sintético, madera, vinílico. Encuentra el ideal para tu hogar en 2024."
         },
         {
-          "keyword": "suelo tarima flotante colores",
-          "volume": 40
+          "h1": "Parquet Sintético, Madera y Vinílico en Barcelona",
+          "seo_title": "Elige tu Suelo: Parquet Sintético o Madera en BCN",
+          "seo_description": "Asesoramiento experto en parquet sintético, de madera o vinílico en Barcelona. Soluciones duraderas para cada espacio y estilo. ¡Consúltanos ya!"
         },
         {
-          "keyword": "tarima blanca envejecida",
-          "volume": 30
+          "h1": "Parquet Gris, Roble y Suelos AC6 Resistentes BCN",
+          "seo_title": "Suelos AC6, Roble Natural y Parquet Gris en Barcelona",
+          "seo_description": "Parquet gris, roble natural o suelos AC6 en Barcelona. Descubre las últimas tendencias y la mayor resistencia para tu suelo. ¡Visita nuestra exposición!"
         },
         {
-          "keyword": "poner suelo madera",
-          "volume": 30
+          "h1": "La Mejor Selección de Parquets en Barcelona | Calidad",
+          "seo_title": "Los Mejores Tipos de Parquet en Barcelona 2024",
+          "seo_description": "Buscas el mejor parquet en Barcelona? Te ofrecemos variedad y calidad en suelos laminados, SPC y de madera. ¡Tu elección perfecta te espera, cerca de ti!"
         },
         {
-          "keyword": "cambiar parquet por tarima",
-          "volume": 30
+          "h1": "Finfloor, Exterpark y Suelos SPC Innovadores Barcelona",
+          "seo_title": "Marcas de Parquet en Barcelona: Finfloor, SPC y Más",
+          "seo_description": "Conoce las marcas líderes como Finfloor y Exterpark en Barcelona. Innovación en suelos laminados y vinílicos SPC. ¡Pide consejo experto sobre tipos de suelos!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "parquet gris",
+          "volume": 880
         },
         {
-          "keyword": "tarima madera roble",
-          "volume": 30
+          "keyword": "parquet sintetico",
+          "volume": 720
         },
         {
-          "keyword": "montar tarima exterior",
-          "volume": 20
+          "keyword": "tipos de parquet",
+          "volume": 720
         },
         {
-          "keyword": "tarima parquet de madera",
-          "volume": 20
+          "keyword": "parquets sinteticos",
+          "volume": 720
         },
         {
-          "keyword": "suelos de madera tarima flotante",
-          "volume": 20
+          "keyword": "tipos de parquet de madera",
+          "volume": 320
         },
         {
-          "keyword": "tarima tratada exterior",
-          "volume": 10
+          "keyword": "parquet tipos de madera",
+          "volume": 320
         },
         {
-          "keyword": "tarima encapsulada exterior",
-          "volume": 10
+          "keyword": "suelo vinílico spc opiniones",
+          "volume": 320
         },
         {
-          "keyword": "parquet ignífugo",
-          "volume": 10
+          "keyword": "tarima roble natural",
+          "volume": 260
         },
         {
-          "keyword": "parquet artesanal",
-          "volume": 10
+          "keyword": "suelo laminado ac 6",
+          "volume": 260
         },
         {
-          "keyword": "suelo madera reciclada",
-          "volume": 10
+          "keyword": "suelo laminado ac6",
+          "volume": 260
         },
         {
-          "keyword": "parquet haya natural",
-          "volume": 10
-        },
-        {
-          "keyword": "mejor madera para parquet",
-          "volume": 10
-        },
-        {
-          "keyword": "mejor parquet o tarima",
-          "volume": 10
-        },
-        {
-          "keyword": "suelo madera o laminado",
-          "volume": 10
-        },
-        {
-          "keyword": "poner tarima sobre parquet",
-          "volume": 10
-        },
-        {
-          "keyword": "precio suelo tarima madera",
-          "volume": 10
-        },
-        {
-          "keyword": "tarima flotante madera suelo radiante",
-          "volume": 10
-        },
-        {
-          "keyword": "suelo radiante y tarima madera",
-          "volume": 10
-        },
-        {
-          "keyword": "tarima flotante madera roble",
-          "volume": 10
-        },
-        {
-          "keyword": "distintos tipos de pisos",
-          "volume": 10
-        },
-        {
-          "keyword": "tablas para pisos de madera medidas",
-          "volume": 10
-        },
-        {
-          "keyword": "madera de haya",
-          "volume": 1900
-        },
-        {
-          "keyword": "parquet industrial",
+          "keyword": "suelos roble natural",
           "volume": 210
+        },
+        {
+          "keyword": "suelo spc opiniones",
+          "volume": 210
+        },
+        {
+          "keyword": "suelos spc opiniones",
+          "volume": 210
+        },
+        {
+          "keyword": "madera de ipé",
+          "volume": 210
+        },
+        {
+          "keyword": "parquet tipos",
+          "volume": 140
+        },
+        {
+          "keyword": "tipos parquet",
+          "volume": 140
+        },
+        {
+          "keyword": "cual es la mejor tarima para una casa",
+          "volume": 140
+        },
+        {
+          "keyword": "madera ipe exterior",
+          "volume": 140
+        },
+        {
+          "keyword": "ipe madera exterior",
+          "volume": 140
+        },
+        {
+          "keyword": "parquet biselado",
+          "volume": 110
+        },
+        {
+          "keyword": "parquet ac6",
+          "volume": 110
+        },
+        {
+          "keyword": "tipos de parquets",
+          "volume": 90
+        },
+        {
+          "keyword": "suelos tipo parquet",
+          "volume": 90
+        },
+        {
+          "keyword": "suelo laminado ac6 resistente al agua",
+          "volume": 90
+        },
+        {
+          "keyword": "tarima flotante ac6",
+          "volume": 90
+        },
+        {
+          "keyword": "flint floor",
+          "volume": 260
+        },
+        {
+          "keyword": "roble glamour finfloor",
+          "volume": 260
+        },
+        {
+          "keyword": "roble retro finfloor",
+          "volume": 260
+        },
+        {
+          "keyword": "finfloor roble glamour",
+          "volume": 260
+        },
+        {
+          "keyword": "parquet leroy merlin precios",
+          "volume": 260
+        },
+        {
+          "keyword": "parquet leroy merlin ofertas",
+          "volume": 260
+        },
+        {
+          "keyword": "exterpark",
+          "volume": 260
+        },
+        {
+          "keyword": "pavidisseny",
+          "volume": 170
+        },
+        {
+          "keyword": "finfloor opiniones",
+          "volume": 170
+        },
+        {
+          "keyword": "natural parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "opiniones finfloor",
+          "volume": 170
+        },
+        {
+          "keyword": "roble chic finfloor",
+          "volume": 110
         }
       ]
     },
     {
-      "name": "Restauración, Acuchillado y Mantenimiento de Parquet",
-      "main_keyword": "acuchillar parquet barcelona",
-      "volume": 9750,
+      "name": "Parquet para Espacios Específicos",
+      "main_keyword": "Parquet en Cocina, Baño y Escaleras Barcelona",
+      "volume": 4830,
       "meta_suggestions": [
         {
-          "h1": "Acuchillar Parquet en Barcelona: Tu Suelo Como Nuevo",
-          "seo_title": "Restauración y Acuchillado de Parquet en Barcelona",
-          "seo_description": "¿Necesitas acuchillar tu parquet en Barcelona? Expertos en restauración de suelos de madera. ¡Devuelve el brillo a tu hogar hoy!"
+          "h1": "Parquet para Cocinas, Baños y Escaleras en Barcelona",
+          "seo_title": "Parquet Resistente: Cocinas, Baños y Escaleras BCN",
+          "seo_description": "Instala parquet en cualquier espacio de tu hogar en Barcelona: cocinas, baños y escaleras. Soluciones duraderas y estéticas para cada rincón. ¡Descúbrelas!"
         },
         {
-          "h1": "Quita Arañazos y Protege Tu Parquet con Nuestros Servicios",
-          "seo_title": "Mantenimiento y Restauración de Tarima y Parquet BCN",
-          "seo_description": "Elimina arañazos y protege tu parquet en Barcelona. Servicios de mantenimiento y barnizado profesional. ¡Tu suelo siempre impecable!"
+          "h1": "Parquet Resistente al Agua en Cocinas y Baños Barcelona",
+          "seo_title": "Parquet para Zonas Húmedas: Cocina y Baño en BCN",
+          "seo_description": "Parquet impermeable y resistente para cocinas y baños en Barcelona. Disfruta de la calidez de la madera sin preocupaciones. ¡Pide asesoramiento hoy!"
         },
         {
-          "h1": "Precio Acuchillar Parquet en Barcelona | Presupuesto Gratis",
-          "seo_title": "Costo de Restaurar Parquet en Barcelona | Ofertas 2024",
-          "seo_description": "¿Cuánto cuesta acuchillar parquet en Barcelona? Solicita un presupuesto sin compromiso y descubre nuestras tarifas. ¡Mejora tu suelo ya!"
+          "h1": "Suelos para Escaleras y Parquet con Suelo Radiante BCN",
+          "seo_title": "Suelo Radiante y Parquet en Escaleras de Barcelona",
+          "seo_description": "Expertos en instalar parquet en escaleras y compatible con suelo radiante en Barcelona. Soluciones técnicas y personalizadas. ¡Consulta ahora nuestros servicios!"
         },
         {
-          "h1": "Servicio Integral de Restauración de Parquet en Barcelona",
-          "seo_title": "Acuchillado, Barnizado y Reparación de Parquet en BCN",
-          "seo_description": "Tu parquetista de Barcelona para acuchillado, barnizado, masilla y reparación de suelos de madera. ¡Expertos en cuidar tu parquet!"
+          "h1": "Ideas de Parquet para Cocina, Baño y Exterior en BCN",
+          "seo_title": "Diseño y Funcionalidad: Parquet en cada Espacio BCN",
+          "seo_description": "Transforma tu cocina, baño o exterior con parquet en Barcelona. Te asesoramos en diseño y funcionalidad para cada área específica. ¡Inspírate con nosotros!"
         },
         {
-          "h1": "La Mejor Restauración de Parquet en Barcelona 2024",
-          "seo_title": "Expertos en Acuchillar Parquet en Sants-Montjuïc, BCN",
-          "seo_description": "Calidad y rapidez en restauración de parquet en Barcelona. Resultados que superan tus expectativas. ¡Contacta para un servicio top!"
+          "h1": "Parquet Adaptado a Cualquier Espacio | Barcelona Expertos",
+          "seo_title": "Parquet de Cocina, Baño o Terraza en Barcelona 2024",
+          "seo_description": "Tu parquetista experto en Barcelona adapta el suelo a tus necesidades. Cocinas, baños, terrazas, escaleras. ¡Llámanos para un estudio personalizado!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "masilla para madera",
-          "volume": 6600
+          "keyword": "cocina parquet",
+          "volume": 320
         },
         {
-          "keyword": "barniz para madera exterior",
-          "volume": 1600
+          "keyword": "parquet cocina",
+          "volume": 320
         },
         {
-          "keyword": "imprimación madera",
-          "volume": 1300
+          "keyword": "parquet en la cocina",
+          "volume": 320
         },
         {
-          "keyword": "arañazos parquet",
-          "volume": 70
+          "keyword": "cocina con parquet",
+          "volume": 320
         },
         {
-          "keyword": "mejor fregona para suelo laminado",
-          "volume": 50
+          "keyword": "escalera parquet",
+          "volume": 210
         },
         {
-          "keyword": "productos para dar brillo al parquet",
-          "volume": 40
+          "keyword": "escaleras con parquet",
+          "volume": 210
         },
         {
-          "keyword": "orillera parquet",
-          "volume": 30
+          "keyword": "escaleras parquet",
+          "volume": 210
         },
         {
-          "keyword": "restaurar parquet barcelona",
-          "volume": 10
+          "keyword": "parquet en escaleras",
+          "volume": 210
         },
         {
-          "keyword": "acuchillar parquet barcelona",
-          "volume": 10
+          "keyword": "parquet y suelo radiante",
+          "volume": 210
         },
         {
-          "keyword": "quitar arañazos tarima",
-          "volume": 10
+          "keyword": "suelo radiante parquet",
+          "volume": 210
         },
         {
-          "keyword": "proteger parquet",
-          "volume": 10
+          "keyword": "parquet en baño",
+          "volume": 210
         },
         {
-          "keyword": "disimular rayones parquet",
-          "volume": 10
+          "keyword": "parquet en baños",
+          "volume": 210
         },
         {
-          "keyword": "pintar suelo tarima flotante",
-          "volume": 10
+          "keyword": "parquet en el baño",
+          "volume": 210
+        },
+        {
+          "keyword": "baño con parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "baños con parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "ideas suelo exterior económico",
+          "volume": 170
+        },
+        {
+          "keyword": "escalera de parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "escaleras de parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "tarima flotante en escaleras",
+          "volume": 170
+        },
+        {
+          "keyword": "tarima en escaleras",
+          "volume": 170
+        },
+        {
+          "keyword": "escalera tarima flotante",
+          "volume": 170
+        },
+        {
+          "keyword": "suelo radiante para parquet",
+          "volume": 110
+        },
+        {
+          "keyword": "parquet para suelo radiante",
+          "volume": 110
         }
       ]
     },
     {
-      "name": "Revestimientos de Paredes de Madera",
-      "main_keyword": "revestimientos madera paredes",
-      "volume": 5450,
+      "name": "Mantenimiento y Reparación de Parquet",
+      "main_keyword": "Limpiar y Reparar Parquet Barcelona",
+      "volume": 1910,
       "meta_suggestions": [
         {
-          "h1": "Revestimientos de Madera para Paredes en Barcelona",
-          "seo_title": "Madera para Paredes: Revestimientos y Paneles Decorativos",
-          "seo_description": "Transforma tus espacios con nuestros revestimientos de madera para paredes en Barcelona. Diseño y calidez para tu hogar. ¡Descubre estilos!"
+          "h1": "Limpieza y Reparación de Parquet en Barcelona",
+          "seo_title": "Mantenimiento y Reparación de Parquet en Barcelona",
+          "seo_description": "Expertos en limpieza y reparación de parquet en Barcelona. Devolvemos la vida a tu suelo con tratamientos profesionales. ¡Pide tu cita hoy mismo!"
         },
         {
-          "h1": "Paneles y Listones de Madera para Paredes Modernas 2024",
-          "seo_title": "Revestimientos de Paredes con Textura Madera Natural BCN",
-          "seo_description": "Ofrecemos revestimientos de madera con texturas naturales en Barcelona. Soluciones estéticas y duraderas para cualquier estancia. ¡Pide tu catálogo!"
+          "h1": "Reparar Parquet Levantado o Dañado en Barcelona",
+          "seo_title": "Soluciones para Parquet Levantado en Barcelona",
+          "seo_description": "Tu parquet levantado por agua o dañado tiene solución en Barcelona. Reparaciones expertas para un suelo perfecto y duradero. ¡Llámanos sin compromiso!"
         },
         {
-          "h1": "Precio Revestimientos Madera Paredes en Barcelona | 2024",
-          "seo_title": "Ofertas en Revestimientos de Madera para Paredes BCN",
-          "seo_description": "Consigue los mejores revestimientos de madera para paredes en Barcelona a precios competitivos. Calidad y diseño a tu alcance. ¡Solicita presupuesto!"
+          "h1": "Cómo Fregar y Limpiar el Parquet Correctamente Barcelona",
+          "seo_title": "Guía para Limpiar y Cuidar Parquet en Barcelona",
+          "seo_description": "Aprende cómo fregar y limpiar tu parquet en Barcelona para mantenerlo impecable. Consejos y productos recomendados por profesionales."
         },
         {
-          "h1": "Instalación de Revestimientos Madera Paredes en Gràcia, BCN",
-          "seo_title": "Tu Parquetista para Revestimientos de Madera en Barcelona",
-          "seo_description": "Especialistas en instalar revestimientos de madera para paredes en Barcelona y alrededores. Estilo y aislamiento. ¡Contacta a tu experto local!"
+          "h1": "Mantenimiento Preventivo de Parquet en Barcelona 2024",
+          "seo_title": "Protege y Cuida tu Parquet en Barcelona | 2024",
+          "seo_description": "Prolonga la vida útil de tu parquet en Barcelona con nuestro servicio de mantenimiento. Limpieza profunda y protección garantizada para tu suelo."
         },
         {
-          "h1": "Crea Ambientes Únicos con Nuestros Revestimientos de Madera",
-          "seo_title": "Diseño Personalizado: Revestimientos Madera para Paredes",
-          "seo_description": "¿Buscas revestimientos de madera personalizados en Barcelona? Aporta calidez y elegancia a tus paredes. ¡Diseñamos tu proyecto ideal!"
+          "h1": "Servicio Rápido de Limpieza y Reparación Parquet BCN",
+          "seo_title": "Reparación de Parquet Urgente en Barcelona | Expertos",
+          "seo_description": "Necesitas limpiar o reparar tu parquet en Barcelona urgentemente? Servicio rápido y eficaz para un suelo como nuevo. ¡Contacta ya a nuestros expertos!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "revestimientos madera paredes",
-          "volume": 5400
+          "keyword": "como fregar el parquet",
+          "volume": 390
         },
         {
-          "keyword": "listones de madera textura",
-          "volume": 30
+          "keyword": "como fregar parquet",
+          "volume": 390
         },
         {
-          "keyword": "maderas oscuras naturales",
-          "volume": 20
+          "keyword": "como limpiar parquet",
+          "volume": 320
+        },
+        {
+          "keyword": "fregar el parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "fregar parquet",
+          "volume": 210
+        },
+        {
+          "keyword": "como limpiar el suelo de parquet",
+          "volume": 170
+        },
+        {
+          "keyword": "reparar parquet levantado",
+          "volume": 110
+        },
+        {
+          "keyword": "parquet levantado por agua",
+          "volume": 110
         }
       ]
     }
@@ -488,1743 +660,2339 @@
   "locations": [
     "Eixample",
     "Gràcia",
-    "Sants-Montjuïc",
     "Sarrià-Sant Gervasi",
-    "Les Corts"
+    "Sants-Montjuïc",
+    "Sant Martí"
   ],
   "home_structure": {
-    "h1": "Parquetistas Expertos en Barcelona: Tu Suelo de Ensueño",
+    "h1": "Parquetista en Barcelona | Instalación y Mantenimiento de Parquet",
     "h2s": [
-      "Instalación de Parquet y Tarima Flotante",
-      "Restauración y Mantenimiento Profesional",
-      "Suelos Laminados y de Imitación Madera de Calidad"
+      "Expertos en Instalación de Suelos Laminados y Parquet",
+      "Descubre los Mejores Tipos de Parquet para tu Hogar",
+      "Precios de Parquet por m2 y Presupuestos a Medida",
+      "Servicios de Mantenimiento y Reparación de Parquet",
+      "Parquet para Cocinas, Baños, Escaleras y Espacios Únicos"
     ]
   },
   "raw_data": {
     "top_keywords": [
       {
-        "keyword": "suelo porcelanico imitacion madera",
-        "volume": 8100,
-        "cpc": 0.15,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "masilla para madera",
-        "volume": 6600,
-        "cpc": 0.12,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "revestimientos madera paredes",
-        "volume": 5400,
-        "cpc": 0.18,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "porcelanico imitación madera",
-        "volume": 3600,
-        "cpc": 0.15,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo imitación madera",
-        "volume": 3600,
-        "cpc": 0.12,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelos que imitan madera",
-        "volume": 3600,
-        "cpc": 0.12,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo imitacion madera",
-        "volume": 3600,
-        "cpc": 0.12,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "textura madera",
-        "volume": 2900,
-        "cpc": 0.16,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "pisos en granollers",
-        "volume": 2400,
-        "cpc": 0.2,
-        "competition": 0.68,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "encimera madera",
-        "volume": 2400,
-        "cpc": 0.18,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "madera suelo",
-        "volume": 2400,
-        "cpc": 0.23,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet laminado",
-        "volume": 2400,
-        "cpc": 0.19,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 3,
-        "source": "competitor"
-      },
-      {
-        "keyword": "tarima de madera",
-        "volume": 2400,
-        "cpc": 0.34,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "madera de haya",
-        "volume": 1900,
-        "cpc": 0.19,
-        "competition": 0.73,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "pisos en colindres",
-        "volume": 1900,
-        "cpc": 0.05,
-        "competition": 0.26,
+        "keyword": "unknown",
+        "volume": 1600,
+        "cpc": 2.24,
+        "competition": 0.22,
         "competition_level": "LOW",
         "difficulty": 0,
-        "source": "competitor"
+        "source": "related"
       },
       {
-        "keyword": "parquet vinilico",
-        "volume": 1600,
-        "cpc": 0.22,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 17,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet flotante",
-        "volume": 1600,
-        "cpc": 0.21,
+        "keyword": "parquet gris",
+        "volume": 880,
+        "cpc": 0.11999999731779099,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 8,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "barniz para madera exterior",
-        "volume": 1600,
-        "cpc": 0.14,
+        "keyword": "parquet sintetico",
+        "volume": 720,
+        "cpc": 0.33000001311302185,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 4,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "parquet directo",
-        "volume": 1300,
-        "cpc": 0.64,
-        "competition": 0.14,
+        "keyword": "tipos de parquet",
+        "volume": 720,
+        "cpc": 0.23999999463558197,
+        "competition": 0.9900000095367432,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 5,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquets sinteticos",
+        "volume": 720,
+        "cpc": 0.33000001311302185,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 5,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet precio",
+        "volume": 720,
+        "cpc": 0.28999999165534973,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 6,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "precio parquet",
+        "volume": 720,
+        "cpc": 0.28999999165534973,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 7,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "precio poner suelo laminado leroy merlin",
+        "volume": 480,
+        "cpc": 0.7900000214576721,
+        "competition": 0.9700000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 5,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet precio m2",
+        "volume": 390,
+        "cpc": 0.3199999928474426,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 4,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "precio m2 parquet",
+        "volume": 390,
+        "cpc": 0.3199999928474426,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 3,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como fregar el parquet",
+        "volume": 390,
+        "cpc": 0.3400000035762787,
+        "competition": 0.9900000095367432,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 8,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como fregar parquet",
+        "volume": 390,
+        "cpc": 0.3400000035762787,
+        "competition": 0.9900000095367432,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 10,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "instalador de parquet",
+        "volume": 320,
+        "cpc": 2.190000057220459,
+        "competition": 0.23000000417232513,
         "competition_level": "LOW",
         "difficulty": 0,
+        "position": 10,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "parquet de madera",
-        "volume": 1300,
-        "cpc": 0.36,
+        "keyword": "cuanto cuesta poner parquet",
+        "volume": 320,
+        "cpc": 0.9200000166893005,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 4,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "mesa flotante",
-        "volume": 1300,
-        "cpc": 0.36,
+        "keyword": "suelo vinílico spc opiniones",
+        "volume": 320,
+        "cpc": 0.3700000047683716,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 5,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "parquets de madera",
-        "volume": 1300,
-        "cpc": 0.36,
+        "keyword": "instalacion de parquet",
+        "volume": 320,
+        "cpc": 1.3600000143051147,
+        "competition": 0.3100000023841858,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 9,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "instalación de parquet",
+        "volume": 320,
+        "cpc": 1.3600000143051147,
+        "competition": 0.3100000023841858,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 9,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "tipos de parquet de madera",
+        "volume": 320,
+        "cpc": 0.15000000596046448,
+        "competition": 0.7200000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 6,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como limpiar parquet",
+        "volume": 320,
+        "cpc": 0.4099999964237213,
+        "competition": 0.9800000190734863,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 8,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet tipos de madera",
+        "volume": 320,
+        "cpc": 0.15000000596046448,
+        "competition": 0.7200000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 7,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "cocina parquet",
+        "volume": 320,
+        "cpc": 0.1899999976158142,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 4,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "imprimación madera",
-        "volume": 1300,
-        "cpc": 0.12,
+        "keyword": "parquet cocina",
+        "volume": 320,
+        "cpc": 0.1899999976158142,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 7,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "percheros madera",
-        "volume": 1300,
-        "cpc": 0.5,
+        "keyword": "parquet en la cocina",
+        "volume": 320,
+        "cpc": 0.1899999976158142,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 6,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "mesita flotante",
-        "volume": 1300,
-        "cpc": 0.36,
+        "keyword": "cocina con parquet",
+        "volume": 320,
+        "cpc": 0.1899999976158142,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 10,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "madera suelos exterior",
-        "volume": 1300,
-        "cpc": 0.25,
+        "keyword": "como colocar el parquet",
+        "volume": 260,
+        "cpc": 0.1899999976158142,
+        "competition": 0.07000000029802322,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 3,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como colocar parquet",
+        "volume": 260,
+        "cpc": 0.1899999976158142,
+        "competition": 0.07000000029802322,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 2,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como colocar un parquet",
+        "volume": 260,
+        "cpc": 0.1899999976158142,
+        "competition": 0.07000000029802322,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 2,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como poner parquet",
+        "volume": 260,
+        "cpc": 2.380000114440918,
+        "competition": 0.07999999821186066,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 3,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "como poner un parquet",
+        "volume": 260,
+        "cpc": 2.380000114440918,
+        "competition": 0.07999999821186066,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 2,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "cómo poner parquet",
+        "volume": 260,
+        "cpc": 2.380000114440918,
+        "competition": 0.07999999821186066,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 2,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "cómo colocar parquet",
+        "volume": 260,
+        "cpc": 0.1899999976158142,
+        "competition": 0.07000000029802322,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 5,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "tarima roble natural",
+        "volume": 260,
+        "cpc": 0.30000001192092896,
+        "competition": 0.9900000095367432,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 5,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "precio poner parquet leroy merlin",
+        "volume": 260,
+        "cpc": 1.5299999713897705,
         "competition": 1,
         "competition_level": "HIGH",
         "difficulty": 0,
+        "position": 5,
+        "etv": 0,
         "source": "competitor"
       },
       {
-        "keyword": "pisos pino montano",
-        "volume": 1300,
-        "cpc": 0.14,
-        "competition": 0.48,
+        "keyword": "flint floor",
+        "volume": 260,
+        "cpc": 2.680000066757202,
+        "competition": 0.14000000059604645,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 7,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet leroy merlin precios",
+        "volume": 260,
+        "cpc": 0.09000000357627869,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 8,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "roble glamour finfloor",
+        "volume": 260,
+        "cpc": 0.30000001192092896,
+        "competition": 0.7699999809265137,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 6,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "roble retro finfloor",
+        "volume": 260,
+        "cpc": 0.2800000011920929,
+        "competition": 0.6899999976158142,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 7,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "finfloor roble glamour",
+        "volume": 260,
+        "cpc": 0.30000001192092896,
+        "competition": 0.7699999809265137,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 8,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet leroy merlin ofertas",
+        "volume": 260,
+        "cpc": 0.15000000596046448,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 10,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "patrón colocación parquet",
+        "volume": 260,
+        "cpc": 0.28999999165534973,
+        "competition": 0.12999999523162842,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 7,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "suelo laminado ac 6",
+        "volume": 260,
+        "cpc": 0.5299999713897705,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 10,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "suelo laminado ac6",
+        "volume": 260,
+        "cpc": 0.5299999713897705,
+        "competition": 1,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 10,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "exterpark",
+        "volume": 260,
+        "cpc": 1.2300000190734863,
+        "competition": 0.7699999809265137,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 10,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquets a mida",
+        "volume": 210,
+        "cpc": 0,
+        "competition": 0.07000000029802322,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 1,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "colocar parquet",
+        "volume": 210,
+        "cpc": 1.340000033378601,
+        "competition": 0.3100000023841858,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 3,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "escalera parquet",
+        "volume": 210,
+        "cpc": 0.10000000149011612,
+        "competition": 0.9700000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 2,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "escaleras con parquet",
+        "volume": 210,
+        "cpc": 0.10000000149011612,
+        "competition": 0.9700000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 3,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "escaleras parquet",
+        "volume": 210,
+        "cpc": 0.10000000149011612,
+        "competition": 0.9700000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 2,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet en escaleras",
+        "volume": 210,
+        "cpc": 0.10000000149011612,
+        "competition": 0.9700000286102295,
+        "competition_level": "HIGH",
+        "difficulty": 0,
+        "position": 4,
+        "etv": 0,
+        "source": "competitor"
+      },
+      {
+        "keyword": "parquet instalacion",
+        "volume": 210,
+        "cpc": 2.0899999141693115,
+        "competition": 0.6600000262260437,
         "competition_level": "MEDIUM",
         "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet barato",
-        "volume": 590,
-        "cpc": 0.32,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo laminado madera",
-        "volume": 390,
-        "cpc": 0.27,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 5,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo laminado roble",
-        "volume": 320,
-        "cpc": 0.32,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet suelo madera",
-        "volume": 260,
-        "cpc": 0.27,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "tarima flotante exterior",
-        "volume": 260,
-        "cpc": 0.41,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet industrial",
-        "volume": 210,
-        "cpc": 0.18,
-        "competition": 0.77,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "tarima flotante suelo laminado",
-        "volume": 210,
-        "cpc": 0.17,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 1,
-        "source": "competitor"
-      },
-      {
-        "keyword": "tarima flotante o suelo laminado",
-        "volume": 210,
-        "cpc": 0.17,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "tarima flotante madera",
-        "volume": 210,
-        "cpc": 0.55,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet o tarima flotante",
-        "volume": 140,
-        "cpc": 0.22,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "parquet y tarima flotante",
-        "volume": 140,
-        "cpc": 0.22,
-        "competition": 0.99,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo laminado madera natural",
-        "volume": 110,
-        "cpc": 0.29,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo madera roble",
-        "volume": 110,
-        "cpc": 0.29,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "pasador de madera",
-        "volume": 90,
-        "cpc": 0.24,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 53,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo laminado imitación madera",
-        "volume": 90,
-        "cpc": 0.19,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo laminado imitacion madera",
-        "volume": 90,
-        "cpc": 0.19,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelos de tarima de madera",
-        "volume": 90,
-        "cpc": 0.34,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 5,
-        "source": "competitor"
-      },
-      {
-        "keyword": "tarima flotante laminado",
-        "volume": 90,
-        "cpc": 0.36,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 2,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo parquet flotante",
-        "volume": 90,
-        "cpc": 0.22,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "arañazos parquet",
-        "volume": 70,
-        "cpc": 0.22,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "hule imitación madera",
-        "volume": 50,
-        "cpc": 0.15,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "mejor fregona para suelo laminado",
-        "volume": 50,
-        "cpc": 0.31,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
-        "source": "competitor"
-      },
-      {
-        "keyword": "suelo tarima roble",
-        "volume": 50,
-        "cpc": 0.28,
-        "competition": 1,
-        "competition_level": "HIGH",
-        "difficulty": 0,
+        "position": 6,
+        "etv": 0,
         "source": "competitor"
       }
     ],
     "competitor_keywords": {
-      "parquetistabarcelona.com": [
+      "www.barcelonaparquet.net": [
         {
-          "keyword": "restaurar parquet barcelona",
-          "volume": 10,
-          "cpc": 1.18,
-          "competition": 0.5,
+          "keyword": "barcelona parquet",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 18,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquets barcelona",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 9,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet barcelona",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 15,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet terrassa",
+          "volume": 170,
+          "cpc": 1.100000023841858,
+          "competition": 0.5299999713897705,
           "competition_level": "MEDIUM",
           "difficulty": 0,
+          "position": 10,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "cocinas con suelo de parquet",
-          "volume": 40,
-          "cpc": 0.2,
-          "competition": 0.25,
+          "keyword": "parquet en barcelona",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 15,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalador de parquet",
+          "volume": 320,
+          "cpc": 2.190000057220459,
+          "competition": 0.23000000417232513,
           "competition_level": "LOW",
           "difficulty": 0,
+          "position": 10,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "acuchillar parquet barcelona",
-          "volume": 10,
-          "cpc": 1.94,
-          "competition": 0.3,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en granollers",
-          "volume": 2400,
-          "cpc": 0.2,
-          "competition": 0.68,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima blanca envejecida",
-          "volume": 30,
-          "cpc": 0.45,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 13,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima tratada exterior",
-          "volume": 10,
-          "cpc": 0.04,
-          "competition": 0.67,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima con cajas",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "competition_level": "UNKNOWN",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "quitar arañazos tarima",
-          "volume": 10,
-          "cpc": 0.3,
+          "keyword": "ideas suelo exterior económico",
+          "volume": 170,
+          "cpc": 0.25,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima encapsulada exterior",
-          "volume": 10,
-          "cpc": 1.62,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 42,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima de castaño",
-          "volume": 40,
-          "cpc": 0.32,
-          "competition": 0.82,
-          "competition_level": "HIGH",
-          "difficulty": 42,
-          "source": "competitor"
-        },
-        {
-          "keyword": "montar tarima exterior",
-          "volume": 20,
-          "cpc": 0.29,
-          "competition": 0.79,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet directo",
-          "volume": 1300,
-          "cpc": 0.64,
-          "competition": 0.14,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet vinilico",
-          "volume": 1600,
-          "cpc": 0.22,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 17,
-          "source": "competitor"
-        },
-        {
-          "keyword": "orillera parquet",
-          "volume": 30,
-          "cpc": 0.27,
-          "competition": 0.88,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet ignífugo",
-          "volume": 10,
-          "cpc": 1.46,
-          "competition": 0.84,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "arañazos parquet",
-          "volume": 70,
-          "cpc": 0.22,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet artesanal",
-          "volume": 10,
-          "cpc": 0.9,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "proteger parquet",
-          "volume": 10,
-          "cpc": 0.27,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet barato",
-          "volume": 590,
-          "cpc": 0.32,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet industrial",
-          "volume": 210,
-          "cpc": 0.18,
-          "competition": 0.77,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        }
-      ],
-      "www.parquets-barcelona.es": [
-        {
-          "keyword": "madera de haya",
-          "volume": 1900,
-          "cpc": 0.19,
-          "competition": 0.73,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "textura madera",
-          "volume": 2900,
-          "cpc": 0.16,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "encimera madera",
-          "volume": 2400,
-          "cpc": 0.18,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet directo",
-          "volume": 1300,
-          "cpc": 0.64,
-          "competition": 0.14,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en granollers",
-          "volume": 2400,
-          "cpc": 0.2,
-          "competition": 0.68,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en colindres",
-          "volume": 1900,
-          "cpc": 0.05,
-          "competition": 0.26,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet vinilico",
-          "volume": 1600,
-          "cpc": 0.22,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 17,
-          "source": "competitor"
-        },
-        {
-          "keyword": "porcelanico imitación madera",
-          "volume": 3600,
-          "cpc": 0.15,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "revestimientos madera paredes",
-          "volume": 5400,
-          "cpc": 0.18,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "mortero de madera antiguo",
-          "volume": 10,
-          "cpc": 3.48,
-          "competition": 0.91,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo madera reciclada",
-          "volume": 10,
-          "cpc": 0.03,
-          "competition": 0.97,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pasador de madera",
-          "volume": 90,
-          "cpc": 0.24,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 53,
-          "source": "competitor"
-        },
-        {
-          "keyword": "listones de madera textura",
-          "volume": 30,
-          "cpc": 0,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "disimular rayones parquet",
-          "volume": 10,
-          "cpc": 0.13,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "maderas oscuras naturales",
-          "volume": 20,
-          "cpc": 0.2,
-          "competition": 0.84,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "encimera madera epoxi",
-          "volume": 10,
-          "cpc": 0.46,
-          "competition": 0.69,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "productos para dar brillo al parquet",
-          "volume": 40,
-          "cpc": 0.12,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 49,
-          "source": "competitor"
-        },
-        {
-          "keyword": "hule imitación madera",
-          "volume": 50,
-          "cpc": 0.15,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima blanca envejecida",
-          "volume": 30,
-          "cpc": 0.45,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 13,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet haya natural",
-          "volume": 10,
-          "cpc": 0.72,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
           "source": "competitor"
         }
       ],
       "www.parquetsamida.info": [
         {
-          "keyword": "madera de haya",
-          "volume": 1900,
-          "cpc": 0.19,
-          "competition": 0.73,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "textura madera",
-          "volume": 2900,
-          "cpc": 0.16,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "encimera madera",
-          "volume": 2400,
-          "cpc": 0.18,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet directo",
-          "volume": 1300,
-          "cpc": 0.64,
-          "competition": 0.14,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en granollers",
-          "volume": 2400,
-          "cpc": 0.2,
-          "competition": 0.68,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en colindres",
-          "volume": 1900,
-          "cpc": 0.05,
-          "competition": 0.26,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet vinilico",
-          "volume": 1600,
-          "cpc": 0.22,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 17,
-          "source": "competitor"
-        },
-        {
-          "keyword": "porcelanico imitación madera",
-          "volume": 3600,
-          "cpc": 0.15,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "revestimientos madera paredes",
-          "volume": 5400,
-          "cpc": 0.18,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "mortero de madera antiguo",
-          "volume": 10,
-          "cpc": 3.48,
-          "competition": 0.91,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo madera reciclada",
-          "volume": 10,
-          "cpc": 0.03,
-          "competition": 0.97,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pasador de madera",
-          "volume": 90,
-          "cpc": 0.24,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 53,
-          "source": "competitor"
-        },
-        {
-          "keyword": "listones de madera textura",
-          "volume": 30,
+          "keyword": "parquets a mida",
+          "volume": 210,
           "cpc": 0,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "disimular rayones parquet",
-          "volume": 10,
-          "cpc": 0.13,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "maderas oscuras naturales",
-          "volume": 20,
-          "cpc": 0.2,
-          "competition": 0.84,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "encimera madera epoxi",
-          "volume": 10,
-          "cpc": 0.46,
-          "competition": 0.69,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "productos para dar brillo al parquet",
-          "volume": 40,
-          "cpc": 0.12,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 49,
-          "source": "competitor"
-        },
-        {
-          "keyword": "hule imitación madera",
-          "volume": 50,
-          "cpc": 0.15,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima blanca envejecida",
-          "volume": 30,
-          "cpc": 0.45,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 13,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet haya natural",
-          "volume": 10,
-          "cpc": 0.72,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        }
-      ],
-      "www.barcelonaparquet.net": [
-        {
-          "keyword": "madera de haya",
-          "volume": 1900,
-          "cpc": 0.19,
-          "competition": 0.73,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "textura madera",
-          "volume": 2900,
-          "cpc": 0.16,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "encimera madera",
-          "volume": 2400,
-          "cpc": 0.18,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet directo",
-          "volume": 1300,
-          "cpc": 0.64,
-          "competition": 0.14,
+          "competition": 0.07000000029802322,
           "competition_level": "LOW",
           "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en granollers",
-          "volume": 2400,
-          "cpc": 0.2,
-          "competition": 0.68,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pisos en colindres",
-          "volume": 1900,
-          "cpc": 0.05,
-          "competition": 0.26,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet vinilico",
-          "volume": 1600,
-          "cpc": 0.22,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 17,
-          "source": "competitor"
-        },
-        {
-          "keyword": "porcelanico imitación madera",
-          "volume": 3600,
-          "cpc": 0.15,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "revestimientos madera paredes",
-          "volume": 5400,
-          "cpc": 0.18,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "mortero de madera antiguo",
-          "volume": 10,
-          "cpc": 3.48,
-          "competition": 0.91,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo madera reciclada",
-          "volume": 10,
-          "cpc": 0.03,
-          "competition": 0.97,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pasador de madera",
-          "volume": 90,
-          "cpc": 0.24,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 53,
-          "source": "competitor"
-        },
-        {
-          "keyword": "listones de madera textura",
-          "volume": 30,
-          "cpc": 0,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "disimular rayones parquet",
-          "volume": 10,
-          "cpc": 0.13,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "maderas oscuras naturales",
-          "volume": 20,
-          "cpc": 0.2,
-          "competition": 0.84,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "encimera madera epoxi",
-          "volume": 10,
-          "cpc": 0.46,
-          "competition": 0.69,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "productos para dar brillo al parquet",
-          "volume": 40,
-          "cpc": 0.12,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 49,
-          "source": "competitor"
-        },
-        {
-          "keyword": "hule imitación madera",
-          "volume": 50,
-          "cpc": 0.15,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima blanca envejecida",
-          "volume": 30,
-          "cpc": 0.45,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 13,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet haya natural",
-          "volume": 10,
-          "cpc": 0.72,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
           "source": "competitor"
         }
       ],
       "pavidisseny.com": [
         {
-          "keyword": "parquet de madera",
-          "volume": 1300,
-          "cpc": 0.36,
+          "keyword": "colocar parquet",
+          "volume": 210,
+          "cpc": 1.340000033378601,
+          "competition": 0.3100000023841858,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como colocar el parquet",
+          "volume": 260,
+          "cpc": 0.1899999976158142,
+          "competition": 0.07000000029802322,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como colocar parquet",
+          "volume": 260,
+          "cpc": 0.1899999976158142,
+          "competition": 0.07000000029802322,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como colocar un parquet",
+          "volume": 260,
+          "cpc": 0.1899999976158142,
+          "competition": 0.07000000029802322,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como poner parquet",
+          "volume": 260,
+          "cpc": 2.380000114440918,
+          "competition": 0.07999999821186066,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como poner un parquet",
+          "volume": 260,
+          "cpc": 2.380000114440918,
+          "competition": 0.07999999821186066,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cómo poner parquet",
+          "volume": 260,
+          "cpc": 2.380000114440918,
+          "competition": 0.07999999821186066,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escalera de parquet",
+          "volume": 170,
+          "cpc": 0.11999999731779099,
+          "competition": 0.9300000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escalera parquet",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escaleras con parquet",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escaleras de parquet",
+          "volume": 170,
+          "cpc": 0.11999999731779099,
+          "competition": 0.9300000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escaleras parquet",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalar parquet",
+          "volume": 170,
+          "cpc": 2.690000057220459,
+          "competition": 0.5099999904632568,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet barcelona",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 15,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet con zocalo blanco",
+          "volume": 140,
+          "cpc": 0.10999999940395355,
+          "competition": 0.8700000047683716,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet con zócalo blanco",
+          "volume": 140,
+          "cpc": 0.10999999940395355,
+          "competition": 0.8700000047683716,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en barcelona",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 15,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en escaleras",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet instalacion",
+          "volume": 210,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet tipos",
+          "volume": 140,
+          "cpc": 0.28999999165534973,
+          "competition": 0.8199999928474426,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "pavidisseny",
+          "volume": 170,
+          "cpc": 0,
+          "competition": 0.03999999910593033,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "poner parquet",
+          "volume": 210,
+          "cpc": 1.5199999809265137,
+          "competition": 0.5899999737739563,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio parquet m2 instalado",
+          "volume": 110,
+          "cpc": 0.7099999785423279,
+          "competition": 0.6100000143051147,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio parquet piso 70m2",
+          "volume": 210,
+          "cpc": 0.8399999737739563,
+          "competition": 0.9800000190734863,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos barcelona",
+          "volume": 170,
+          "cpc": 0.8199999928474426,
+          "competition": 0.2199999988079071,
+          "competition_level": "LOW",
+          "difficulty": 4,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tipos de parquets",
+          "volume": 90,
+          "cpc": 0.25999999046325684,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 1,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "masilla para madera",
-          "volume": 6600,
-          "cpc": 0.12,
+          "keyword": "tipos parquet",
+          "volume": 140,
+          "cpc": 0.28999999165534973,
+          "competition": 0.8199999928474426,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cuanto cuesta poner parquet",
+          "volume": 320,
+          "cpc": 0.9200000166893005,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "parquet flotante",
-          "volume": 1600,
-          "cpc": 0.21,
+          "keyword": "cuanto cuesta poner parquet en un piso de 100m2",
+          "volume": 110,
+          "cpc": 0.9599999785423279,
+          "competition": 0.49000000953674316,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cuánto cuesta poner parquet en un piso de 100m2",
+          "volume": 110,
+          "cpc": 0.9599999785423279,
+          "competition": 0.49000000953674316,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "finfloor opiniones",
+          "volume": 170,
+          "cpc": 0.5799999833106995,
+          "competition": 0.18000000715255737,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalacion parquet",
+          "volume": 210,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
+          "competition_level": "MEDIUM",
+          "difficulty": 10,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "natural parquet",
+          "volume": 170,
+          "cpc": 3.3899998664855957,
+          "competition": 0.17000000178813934,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "opiniones finfloor",
+          "volume": 170,
+          "cpc": 0.5799999833106995,
+          "competition": 0.18000000715255737,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet con rodapié blanco",
+          "volume": 170,
+          "cpc": 0.18000000715255737,
+          "competition": 0.6200000047683716,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet precio m2",
+          "volume": 390,
+          "cpc": 0.3199999928474426,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo porcelanico imitacion madera",
-          "volume": 8100,
-          "cpc": 0.15,
+          "keyword": "parquet y suelo radiante",
+          "volume": 210,
+          "cpc": 0.46000000834465027,
+          "competition": 0.6800000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio instalacion parquet",
+          "volume": 170,
+          "cpc": 0.8600000143051147,
+          "competition": 0.699999988079071,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio instalación parquet",
+          "volume": 170,
+          "cpc": 0.8600000143051147,
+          "competition": 0.699999988079071,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio m2 parquet",
+          "volume": 390,
+          "cpc": 0.3199999928474426,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 3,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "mesa flotante",
-          "volume": 1300,
-          "cpc": 0.36,
+          "keyword": "pulido parquet barcelona",
+          "volume": 140,
+          "cpc": 2.2899999618530273,
+          "competition": 0.4099999964237213,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "reparar parquet levantado",
+          "volume": 110,
+          "cpc": 2.0199999809265137,
+          "competition": 0.4699999988079071,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo radiante para parquet",
+          "volume": 110,
+          "cpc": 0.46000000834465027,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tienda de parquet barcelona",
+          "volume": 90,
+          "cpc": 2.8899998664855957,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 14,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tiendas de parquet en barcelona",
+          "volume": 90,
+          "cpc": 2.8899998664855957,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 7,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "zocalo suelo",
+          "volume": 140,
+          "cpc": 0.20999999344348907,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "parquets de madera",
-          "volume": 1300,
-          "cpc": 0.36,
+          "keyword": "colocacion de parquet",
+          "volume": 170,
+          "cpc": 1.1699999570846558,
+          "competition": 0.30000001192092896,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "colocacion parquet",
+          "volume": 90,
+          "cpc": 1.4300000667572021,
+          "competition": 0.7699999809265137,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cuánto cuesta poner",
+          "volume": 140,
+          "cpc": 0,
+          "competition": 0.009999999776482582,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cómo colocar parquet",
+          "volume": 260,
+          "cpc": 0.1899999976158142,
+          "competition": 0.07000000029802322,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "fregar el parquet",
+          "volume": 210,
+          "cpc": 0.3799999952316284,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 6,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "imprimación madera",
-          "volume": 1300,
-          "cpc": 0.12,
+          "keyword": "instalación parquet",
+          "volume": 210,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet instalacion precio",
+          "volume": 170,
+          "cpc": 0.8600000143051147,
+          "competition": 0.699999988079071,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet para suelo radiante",
+          "volume": 110,
+          "cpc": 0.46000000834465027,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet sintetico",
+          "volume": 720,
+          "cpc": 0.33000001311302185,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "madera suelo",
-          "volume": 2400,
-          "cpc": 0.23,
+          "keyword": "precio poner suelo laminado leroy merlin",
+          "volume": 480,
+          "cpc": 0.7900000214576721,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio suelo parquet",
+          "volume": 140,
+          "cpc": 0.17000000178813934,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "percheros madera",
-          "volume": 1300,
-          "cpc": 0.5,
+          "keyword": "presupuesto parquet",
+          "volume": 110,
+          "cpc": 4.190000057220459,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "mesita flotante",
-          "volume": 1300,
-          "cpc": 0.36,
+          "keyword": "suelo parquet precio",
+          "volume": 140,
+          "cpc": 0.17000000178813934,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo imitación madera",
-          "volume": 3600,
-          "cpc": 0.12,
-          "competition": 0.99,
+          "keyword": "suelo radiante parquet",
+          "volume": 210,
+          "cpc": 0.46000000834465027,
+          "competition": 0.6800000071525574,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "parquet laminado",
-          "volume": 2400,
-          "cpc": 0.19,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 3,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelos que imitan madera",
-          "volume": 3600,
-          "cpc": 0.12,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "barniz para madera exterior",
-          "volume": 1600,
-          "cpc": 0.14,
+          "keyword": "suelo vinílico spc opiniones",
+          "volume": 320,
+          "cpc": 0.3700000047683716,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "madera suelos exterior",
-          "volume": 1300,
+          "keyword": "suelos roble natural",
+          "volume": 210,
           "cpc": 0.25,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 4,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "pisos pino montano",
-          "volume": 1300,
-          "cpc": 0.14,
-          "competition": 0.48,
-          "competition_level": "MEDIUM",
+          "keyword": "tarima roble natural",
+          "volume": 260,
+          "cpc": 0.30000001192092896,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "tarima de madera",
-          "volume": 2400,
-          "cpc": 0.34,
+          "keyword": "tipos de parquet",
+          "volume": 720,
+          "cpc": 0.23999999463558197,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "barcelona parquet",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 18,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "base aislante suelo laminado 10 mm",
+          "volume": 140,
+          "cpc": 0.20999999344348907,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como limpiar el suelo de parquet",
+          "volume": 170,
+          "cpc": 0.36000001430511475,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalacion de parquet",
+          "volume": 320,
+          "cpc": 1.3600000143051147,
+          "competition": 0.3100000023841858,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalación de parquet",
+          "volume": 320,
+          "cpc": 1.3600000143051147,
+          "competition": 0.3100000023841858,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquets sinteticos",
+          "volume": 720,
+          "cpc": 0.33000001311302185,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo imitacion madera",
-          "volume": 3600,
-          "cpc": 0.12,
-          "competition": 0.99,
+          "keyword": "precio instalación suelo laminado leroy merlín",
+          "volume": 110,
+          "cpc": 0.9300000071525574,
+          "competition": 0.5299999713897705,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio poner parquet leroy merlin",
+          "volume": 260,
+          "cpc": 1.5299999713897705,
+          "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "distintos tipos de pisos",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "competition_level": "UNKNOWN",
+          "keyword": "suelo spc opiniones",
+          "volume": 210,
+          "cpc": 0.27000001072883606,
+          "competition": 1,
+          "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 8,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "tablas para pisos de madera medidas",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "competition_level": "UNKNOWN",
+          "keyword": "suelos spc opiniones",
+          "volume": 210,
+          "cpc": 0.27000001072883606,
+          "competition": 1,
+          "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelos tipo parquet",
+          "volume": 90,
+          "cpc": 0.1599999964237213,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tipos de parquet de madera",
+          "volume": 320,
+          "cpc": 0.15000000596046448,
+          "competition": 0.7200000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como fregar el parquet",
+          "volume": 390,
+          "cpc": 0.3400000035762787,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como limpiar parquet",
+          "volume": 320,
+          "cpc": 0.4099999964237213,
+          "competition": 0.9800000190734863,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "flint floor",
+          "volume": 260,
+          "cpc": 2.680000066757202,
+          "competition": 0.14000000059604645,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "madera ipe exterior",
+          "volume": 140,
+          "cpc": 0.41999998688697815,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet biselado",
+          "volume": 110,
+          "cpc": 0.12999999523162842,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet leroy merlin precios",
+          "volume": 260,
+          "cpc": 0.09000000357627869,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet levantado por agua",
+          "volume": 110,
+          "cpc": 0,
+          "competition": 0.019999999552965164,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet precio",
+          "volume": 720,
+          "cpc": 0.28999999165534973,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet suelo precio",
+          "volume": 140,
+          "cpc": 0.17000000178813934,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet tipos de madera",
+          "volume": 320,
+          "cpc": 0.15000000596046448,
+          "competition": 0.7200000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "roble chic finfloor",
+          "volume": 110,
+          "cpc": 0.20000000298023224,
+          "competition": 0.8500000238418579,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "roble glamour finfloor",
+          "volume": 260,
+          "cpc": 0.30000001192092896,
+          "competition": 0.7699999809265137,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "roble retro finfloor",
+          "volume": 260,
+          "cpc": 0.2800000011920929,
+          "competition": 0.6899999976158142,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo madera rodapie blanco",
+          "volume": 90,
+          "cpc": 0.1599999964237213,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "como fregar parquet",
+          "volume": 390,
+          "cpc": 0.3400000035762787,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "finfloor roble glamour",
+          "volume": 260,
+          "cpc": 0.30000001192092896,
+          "competition": 0.7699999809265137,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "formas de colocar el parquet",
+          "volume": 210,
+          "cpc": 0.09000000357627869,
+          "competition": 0.07999999821186066,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "fregar parquet",
+          "volume": 210,
+          "cpc": 0.3799999952316284,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "limpiar suelo laminado mercadona",
+          "volume": 90,
+          "cpc": 0.029999999329447746,
+          "competition": 0.7799999713897705,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet gris",
+          "volume": 880,
+          "cpc": 0.11999999731779099,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet leroy merlin ofertas",
+          "volume": 260,
+          "cpc": 0.15000000596046448,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "poner suelo laminado sobre baldosa",
+          "volume": 170,
+          "cpc": 0.6100000143051147,
+          "competition": 0.6700000166893005,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio de parquet",
+          "volume": 140,
+          "cpc": 0.30000001192092896,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio parquet",
+          "volume": 720,
+          "cpc": 0.28999999165534973,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
           "source": "competitor"
         }
       ],
       "www.pintparket.es": [
         {
-          "keyword": "tarima flotante suelo laminado",
+          "keyword": "formas de colocar el parquet",
           "volume": 210,
-          "cpc": 0.17,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 1,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo laminado madera",
-          "volume": 390,
-          "cpc": 0.27,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 5,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet suelo madera",
-          "volume": 260,
-          "cpc": 0.27,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "mejor madera para parquet",
-          "volume": 10,
-          "cpc": 0.36,
-          "competition": 0.95,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "mejor fregona para suelo laminado",
-          "volume": 50,
-          "cpc": 0.31,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "poner suelo madera",
-          "volume": 30,
-          "cpc": 0.36,
-          "competition": 0.98,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima parquet de madera",
-          "volume": 20,
-          "cpc": 0.11,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima flotante o suelo laminado",
-          "volume": 210,
-          "cpc": 0.17,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "mejor parquet o tarima",
-          "volume": 10,
-          "cpc": 0.1,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo laminado imitación madera",
-          "volume": 90,
-          "cpc": 0.19,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo laminado imitacion madera",
-          "volume": 90,
-          "cpc": 0.19,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo madera o laminado",
-          "volume": 10,
-          "cpc": 0.04,
-          "competition": 0.23,
+          "cpc": 0.09000000357627869,
+          "competition": 0.07999999821186066,
           "competition_level": "LOW",
-          "difficulty": 45,
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo laminado madera natural",
+          "keyword": "formas de colocar parquet",
+          "volume": 210,
+          "cpc": 0.09000000357627869,
+          "competition": 0.07999999821186066,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet biselado",
           "volume": 110,
-          "cpc": 0.29,
+          "cpc": 0.12999999523162842,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en baño",
+          "volume": 210,
+          "cpc": 0.25999999046325684,
+          "competition": 0.8600000143051147,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en baños",
+          "volume": 210,
+          "cpc": 0.25999999046325684,
+          "competition": 0.8600000143051147,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 2,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en el baño",
+          "volume": 210,
+          "cpc": 0.25999999046325684,
+          "competition": 0.8600000143051147,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 1,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escaleras con parquet",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escaleras parquet",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en escaleras",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 5,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet para suelo radiante",
+          "volume": 110,
+          "cpc": 0.46000000834465027,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 3,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cual es la mejor tarima para una casa",
+          "volume": 140,
+          "cpc": 0.6100000143051147,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "poner tarima sobre parquet",
-          "volume": 10,
-          "cpc": 0.56,
-          "competition": 0.59,
+          "keyword": "escalera parquet",
+          "volume": 210,
+          "cpc": 0.10000000149011612,
+          "competition": 0.9700000286102295,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escaleras de parquet",
+          "volume": 170,
+          "cpc": 0.11999999731779099,
+          "competition": 0.9300000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "patrón colocación parquet",
+          "volume": 260,
+          "cpc": 0.28999999165534973,
+          "competition": 0.12999999523162842,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cocina parquet",
+          "volume": 320,
+          "cpc": 0.1899999976158142,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 4,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "colocacion parquet",
+          "volume": 90,
+          "cpc": 1.4300000667572021,
+          "competition": 0.7699999809265137,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalación parquet",
+          "volume": 210,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
           "competition_level": "MEDIUM",
           "difficulty": 0,
+          "position": 10,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "cambiar parquet por tarima",
-          "volume": 30,
-          "cpc": 1.4,
-          "competition": 0.84,
+          "keyword": "parquet ac6",
+          "volume": 110,
+          "cpc": 0.36000001430511475,
+          "competition": 1,
           "competition_level": "HIGH",
-          "difficulty": 46,
+          "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelos de tarima de madera",
+          "keyword": "tarima flotante en escaleras",
+          "volume": 170,
+          "cpc": 0.12999999523162842,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "baño con parquet",
+          "volume": 210,
+          "cpc": 0.25999999046325684,
+          "competition": 0.8600000143051147,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escalera de parquet",
+          "volume": 170,
+          "cpc": 0.11999999731779099,
+          "competition": 0.9300000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 8,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet cocina",
+          "volume": 320,
+          "cpc": 0.1899999976158142,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet en la cocina",
+          "volume": 320,
+          "cpc": 0.1899999976158142,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet instalacion",
+          "volume": 210,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo radiante parquet",
+          "volume": 210,
+          "cpc": 0.46000000834465027,
+          "competition": 0.6800000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "tarima en escaleras",
+          "volume": 170,
+          "cpc": 0.12999999523162842,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "baños con parquet",
+          "volume": 210,
+          "cpc": 0.25999999046325684,
+          "competition": 0.8600000143051147,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cocina con parquet",
+          "volume": 320,
+          "cpc": 0.1899999976158142,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "escalera tarima flotante",
+          "volume": 170,
+          "cpc": 0.12999999523162842,
+          "competition": 0.9900000095367432,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "ipe madera exterior",
+          "volume": 140,
+          "cpc": 0.41999998688697815,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "madera de ipé",
+          "volume": 210,
+          "cpc": 0.2199999988079071,
+          "competition": 0.7300000190734863,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet y suelo radiante",
+          "volume": 210,
+          "cpc": 0.46000000834465027,
+          "competition": 0.6800000071525574,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo laminado ac 6",
+          "volume": 260,
+          "cpc": 0.5299999713897705,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo laminado ac6 resistente al agua",
           "volume": 90,
-          "cpc": 0.34,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 5,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelos de madera tarima flotante",
-          "volume": 20,
-          "cpc": 0.6,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "precio suelo tarima madera",
-          "volume": 10,
-          "cpc": 0.37,
+          "cpc": 0.3400000035762787,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 8,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "tarima flotante madera suelo radiante",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "competition_level": "UNKNOWN",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo radiante y tarima madera",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0.95,
+          "keyword": "tarima flotante ac6",
+          "volume": 90,
+          "cpc": 0.49000000953674316,
+          "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "barcelona parquet",
+          "volume": 880,
+          "cpc": 2.8600001335144043,
+          "competition": 0.5799999833106995,
+          "competition_level": "MEDIUM",
+          "difficulty": 18,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "finfloor opiniones",
+          "volume": 170,
+          "cpc": 0.5799999833106995,
+          "competition": 0.18000000715255737,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "opiniones finfloor",
+          "volume": 170,
+          "cpc": 0.5799999833106995,
+          "competition": 0.18000000715255737,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "suelo laminado ac6",
+          "volume": 260,
+          "cpc": 0.5299999713897705,
+          "competition": 1,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
           "source": "competitor"
         }
       ],
-      "parkmobel.es": [
+      "instalaparquet.com": [
         {
-          "keyword": "tarima flotante suelo laminado",
+          "keyword": "instalacion parquet",
           "volume": 210,
-          "cpc": 0.17,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 1,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
+          "competition_level": "MEDIUM",
+          "difficulty": 10,
+          "position": 6,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "tarima flotante madera roble",
-          "volume": 10,
-          "cpc": 0.57,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima flotante o suelo laminado",
-          "volume": 210,
-          "cpc": 0.17,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima flotante laminado",
+          "keyword": "instalaparquet",
           "volume": 90,
-          "cpc": 0.36,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 2,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima flotante madera suelo radiante",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "competition_level": "UNKNOWN",
+          "cpc": 1.6800000667572021,
+          "competition": 0.09000000357627869,
+          "competition_level": "LOW",
           "difficulty": 0,
+          "position": 3,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo tarima roble",
-          "volume": 50,
-          "cpc": 0.28,
+          "keyword": "parquet presupuesto",
+          "volume": 110,
+          "cpc": 4.190000057220459,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 1,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo laminado roble",
-          "volume": 320,
-          "cpc": 0.32,
+          "keyword": "presupuesto parquet",
+          "volume": 110,
+          "cpc": 4.190000057220459,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 1,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo laminado flotante",
-          "volume": 50,
-          "cpc": 0.19,
-          "competition": 0.99,
+          "keyword": "instalador de suelo laminado",
+          "volume": 170,
+          "cpc": 2.069999933242798,
+          "competition": 0.8199999928474426,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 6,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "parquet laminado flotante",
-          "volume": 50,
-          "cpc": 0.2,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima flotante exterior",
-          "volume": 260,
-          "cpc": 0.41,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima madera roble",
-          "volume": 30,
-          "cpc": 0.59,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "tarima flotante madera",
-          "volume": 210,
-          "cpc": 0.55,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo parquet roble",
-          "volume": 50,
-          "cpc": 0.13,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo parquet flotante",
-          "volume": 90,
-          "cpc": 0.22,
-          "competition": 1,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "pintar suelo tarima flotante",
-          "volume": 10,
-          "cpc": 0.02,
-          "competition": 0.96,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "suelo tarima flotante colores",
-          "volume": 40,
-          "cpc": 0.4,
-          "competition": 0.94,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet o tarima flotante",
-          "volume": 140,
-          "cpc": 0.22,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet y tarima flotante",
-          "volume": 140,
-          "cpc": 0.22,
-          "competition": 0.99,
-          "competition_level": "HIGH",
-          "difficulty": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquet vs tarima flotante",
-          "volume": 50,
-          "cpc": 0.1,
-          "competition": 0.53,
+          "keyword": "instalar parquet",
+          "volume": 170,
+          "cpc": 2.690000057220459,
+          "competition": 0.5099999904632568,
           "competition_level": "MEDIUM",
           "difficulty": 0,
+          "position": 5,
+          "etv": 0,
           "source": "competitor"
         },
         {
-          "keyword": "suelo madera roble",
-          "volume": 110,
-          "cpc": 0.29,
+          "keyword": "instalador de parquet",
+          "volume": 320,
+          "cpc": 2.190000057220459,
+          "competition": 0.23000000417232513,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet instalacion",
+          "volume": 210,
+          "cpc": 2.0899999141693115,
+          "competition": 0.6600000262260437,
+          "competition_level": "MEDIUM",
+          "difficulty": 0,
+          "position": 9,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "precio instalación parquet",
+          "volume": 170,
+          "cpc": 0.8600000143051147,
+          "competition": 0.699999988079071,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "cuanto cuesta poner parquet",
+          "volume": 320,
+          "cpc": 0.9200000166893005,
           "competition": 1,
           "competition_level": "HIGH",
           "difficulty": 0,
+          "position": 7,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "instalación de parquet",
+          "volume": 320,
+          "cpc": 1.3600000143051147,
+          "competition": 0.3100000023841858,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "parquet instalacion precio",
+          "volume": 170,
+          "cpc": 0.8600000143051147,
+          "competition": 0.699999988079071,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 6,
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "exterpark",
+          "volume": 260,
+          "cpc": 1.2300000190734863,
+          "competition": 0.7699999809265137,
+          "competition_level": "HIGH",
+          "difficulty": 0,
+          "position": 10,
+          "etv": 0,
           "source": "competitor"
         }
       ]
