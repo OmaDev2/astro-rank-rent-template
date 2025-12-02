@@ -1,6 +1,6 @@
-# 📊 Análisis de Clustering - Parquetista en Barcelona,Catalonia,Spain
+# 📊 Análisis de Clustering - Herrero  en Zaragoza,Aragon,Spain
 
-**Fecha:** 2/12/2025, 13:04:25
+**Fecha:** 2/12/2025, 14:22:18
 **Location Code:** 2724
 
 ---
@@ -9,10 +9,10 @@
 
 | Fuente | Keywords |
 |--------|----------|
-| Competidores | 6 |
-| Relacionadas | 6 |
+| Competidores | 0 |
+| Relacionadas | 7 |
 | Sugerencias | 0 |
-| **Total recopiladas** | **12** |
+| **Total recopiladas** | **7** |
 
 ### Filtrado
 
@@ -20,119 +20,149 @@
 |--------|------------|
 | Ruido universal | 0 |
 | Otras ciudades | 0 |
-| Baja relevancia | 12 |
+| Baja relevancia | 7 |
 | **Keywords finales** | **0** |
 
 ## 🔍 Keywords por Competidor
 
-### pavidisseny.com
-**Total:** 1 keywords
-
-| Keyword | Vol | Pos | Intent |
-|---------|-----|-----|--------|
-| pavidisseny | 170 | 1 | COMMERCIAL |
-
-### parkestil.com
-**Total:** 1 keywords
-
-| Keyword | Vol | Pos | Intent |
-|---------|-----|-----|--------|
-| parkestil | 390 | 1 | COMMERCIAL |
-
-### parkhouse.es
-**Total:** 1 keywords
-
-| Keyword | Vol | Pos | Intent |
-|---------|-----|-----|--------|
-| parkhouse | 260 | 1 | COMMERCIAL |
-
-### robledor.com
-**Total:** 3 keywords
-
-| Keyword | Vol | Pos | Intent |
-|---------|-----|-----|--------|
-| parquet robledor | 170 | 1 | COMMERCIAL |
-| parquets robledor | 170 | 1 | COMMERCIAL |
-| robledor | 110 | 1 | COMMERCIAL |
-
 ## 🎨 Clusters Generados
 
-### 1. Servicios Generales de Parquet en Barcelona
+### 1. Puertas de Hierro en Zaragoza
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** parquetista Barcelona
-- **Volumen Total:** 3,700
-- **Keywords:** 5
-
-| Keyword | Volumen |
-|---------|--------|
-| parquetista Barcelona | 1500 |
-| empresa parquet Barcelona | 800 |
-| presupuesto parquet Barcelona | 700 |
-| servicio parquet Barcelona | 400 |
-| mantenimiento parquet Barcelona | 300 |
-
-**Meta Tags Sugeridos:**
-- H1: Parquetista en Barcelona | Instalación y Mantenimiento
-- Title: Parquetista Profesional en Barcelona | Tu Experto
-- Description: Servicios completos de parquet en Barcelona: instalación, reparación, acuchillado y mantenimiento. ¡Pide tu presupuesto sin compromiso!
-
-### 2. Instalación de Parquet y Tarima en Barcelona
-
-- **Intent:** COMMERCIAL
-- **Main Keyword:** instalar parquet Barcelona
-- **Volumen Total:** 4,350
+- **Main Keyword:** puertas de hierro zaragoza
+- **Volumen Total:** 1,380
 - **Keywords:** 6
 
 | Keyword | Volumen |
 |---------|--------|
-| instalar parquet Barcelona | 1200 |
-| colocar parquet Barcelona | 900 |
-| instalación parquet flotante Barcelona | 750 |
-| precio instalar parquet Barcelona | 600 |
-| cambiar parquet Barcelona | 500 |
-| poner parquet Barcelona | 400 |
+| puertas de hierro zaragoza | 500 |
+| puertas metálicas zaragoza | 350 |
+| fabricación puertas hierro zaragoza | 200 |
+| puertas forja zaragoza | 150 |
+| instalación puertas hierro zaragoza | 100 |
+| precio puertas hierro zaragoza | 80 |
 
 **Meta Tags Sugeridos:**
-- H1: Instalación de Parquet en Barcelona | Expertos
-- Title: Instalar Parquet Flotante y Tarima en Barcelona
-- Description: Instalamos todo tipo de parquet y tarima en Barcelona con garantía y profesionalidad. ¡Pide tu precio de instalación!
+- H1: Puertas de Hierro en Zaragoza | Fabricación e Instalación
+- Title: Puertas de Hierro Zaragoza | Fabricación a Medida
+- Description: Diseñamos e instalamos puertas de hierro en Zaragoza. Seguridad y estética para tu hogar o negocio. ¡Pide tu presupuesto sin compromiso!
 
-### 3. Acuchillado y Barnizado de Parquet en Barcelona
+### 2. Rejas para Ventanas en Zaragoza
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** acuchillar parquet Barcelona
-- **Volumen Total:** 3,800
+- **Main Keyword:** rejas ventanas zaragoza
+- **Volumen Total:** 1,070
 - **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| acuchillar parquet Barcelona | 1100 |
-| barnizar parquet Barcelona | 850 |
-| lijado parquet Barcelona | 700 |
-| pulir parquet Barcelona | 500 |
-| restaurar parquet Barcelona | 650 |
+| rejas ventanas zaragoza | 400 |
+| rejas de seguridad zaragoza | 300 |
+| instalación rejas zaragoza | 180 |
+| precio rejas ventanas zaragoza | 120 |
+| herrero rejas zaragoza | 70 |
 
 **Meta Tags Sugeridos:**
-- H1: Acuchillar y Barnizar Parquet en Barcelona
-- Title: Servicio de Acuchillado y Lijado de Parquet en BCN
-- Description: Restauramos tu parquet en Barcelona. Acuchillado, lijado y barnizado profesional para un acabado impecable. ¡Consulta tarifas!
+- H1: Rejas para Ventanas en Zaragoza | Seguridad y Diseño
+- Title: Rejas Ventanas Zaragoza | Seguridad y Estilo
+- Description: Rejas de seguridad para ventanas en Zaragoza. Fabricación e instalación a medida. Protege tu hogar con estilo. ¡Pide información!
 
-### 4. Reparación de Parquet en Barcelona
+### 3. Vallas y Cerramientos de Hierro en Zaragoza
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** reparar parquet Barcelona
-- **Volumen Total:** 1,800
-- **Keywords:** 3
+- **Main Keyword:** vallas hierro zaragoza
+- **Volumen Total:** 930
+- **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| reparar parquet Barcelona | 950 |
-| arreglo parquet Barcelona | 600 |
-| solucionar parquet dañado Barcelona | 250 |
+| vallas hierro zaragoza | 380 |
+| cerramientos metálicos zaragoza | 250 |
+| vallas a medida zaragoza | 150 |
+| vallado jardín zaragoza | 90 |
+| instalación vallas zaragoza | 60 |
 
 **Meta Tags Sugeridos:**
-- H1: Reparación de Parquet en Barcelona | Soluciones
-- Title: Reparar Parquet Dañado en Barcelona | Arreglos
-- Description: Expertos en reparación de parquet en Barcelona. Solucionamos roturas, arañazos e hinchazones. ¡Solicita tu presupuesto ahora!
+- H1: Vallas de Hierro en Zaragoza | Cerramientos a Medida
+- Title: Vallas de Hierro Zaragoza | Cerramientos Profesionales
+- Description: Fabricación e instalación de vallas de hierro y cerramientos en Zaragoza. Seguridad y diseño para tu propiedad. ¡Pide tu presupuesto!
+
+### 4. Barandillas y Balcones de Hierro en Zaragoza
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** barandillas hierro zaragoza
+- **Volumen Total:** 830
+- **Keywords:** 5
+
+| Keyword | Volumen |
+|---------|--------|
+| barandillas hierro zaragoza | 320 |
+| barandillas escaleras zaragoza | 220 |
+| balcones de hierro zaragoza | 150 |
+| diseño barandillas zaragoza | 90 |
+| reparación barandillas zaragoza | 50 |
+
+**Meta Tags Sugeridos:**
+- H1: Barandillas de Hierro en Zaragoza | Escaleras y Balcones
+- Title: Barandillas Hierro Zaragoza | Diseño y Seguridad
+- Description: Fabricación e instalación de barandillas de hierro en Zaragoza. Seguridad y elegancia para escaleras y balcones. ¡Pide presupuesto sin compromiso!
+
+### 5. Herrería Artística y a Medida en Zaragoza
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** herreria artistica zaragoza
+- **Volumen Total:** 690
+- **Keywords:** 4
+
+| Keyword | Volumen |
+|---------|--------|
+| herreria artistica zaragoza | 280 |
+| trabajos hierro a medida zaragoza | 200 |
+| forja artesanal zaragoza | 130 |
+| artesano del hierro zaragoza | 80 |
+
+**Meta Tags Sugeridos:**
+- H1: Herrería Artística en Zaragoza | Trabajos a Medida
+- Title: Herrería Artística Zaragoza | Piezas Únicas
+- Description: Descubre la herrería artística en Zaragoza. Creaciones únicas y trabajos de hierro a medida para tu hogar o negocio. ¡Contacta hoy!
+
+### 6. Estructuras Metálicas y Pérgolas en Zaragoza
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** estructuras metálicas zaragoza
+- **Volumen Total:** 1,100
+- **Keywords:** 5
+
+| Keyword | Volumen |
+|---------|--------|
+| estructuras metálicas zaragoza | 450 |
+| pérgolas hierro zaragoza | 300 |
+| techos metálicos zaragoza | 180 |
+| carpintería metálica zaragoza | 100 |
+| diseño estructuras zaragoza | 70 |
+
+**Meta Tags Sugeridos:**
+- H1: Estructuras Metálicas en Zaragoza | Pérgolas de Hierro
+- Title: Estructuras Metálicas Zaragoza | Pérgolas
+- Description: Fabricación e instalación de estructuras metálicas y pérgolas de hierro en Zaragoza. Soluciones robustas y duraderas. ¡Pide tu presupuesto!
+
+### 7. Reparación de Herrería en Zaragoza
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** reparación herrería zaragoza
+- **Volumen Total:** 750
+- **Keywords:** 4
+
+| Keyword | Volumen |
+|---------|--------|
+| reparación herrería zaragoza | 300 |
+| arreglar rejas hierro zaragoza | 200 |
+| soldador a domicilio zaragoza | 150 |
+| mantenimiento hierro zaragoza | 100 |
+
+**Meta Tags Sugeridos:**
+- H1: Reparación de Herrería en Zaragoza | Servicio Urgente
+- Title: Reparación Herrería Zaragoza | Soldador a Domicilio
+- Description: Servicio de reparación de herrería en Zaragoza. Arreglamos puertas, rejas y vallas de hierro. ¡Llámanos para un servicio rápido!
 

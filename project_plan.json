@@ -1,355 +1,430 @@
 {
-  "market_analysis": "El mercado de parquetistas en Barcelona es competitivo pero con alta demanda. La estrategia se centrará en la optimización local y en segmentar claramente los servicios principales (instalación, reparación, acuchillado) para captar usuarios con intención comercial específica y mejorar el CTR.",
+  "market_analysis": "El mercado de herrería en Zaragoza presenta una sólida oportunidad para posicionarse ofreciendo servicios especializados y a medida. La estrategia se centrará en la intención comercial de los usuarios, destacando la calidad artesanal y la capacidad de atender diferentes necesidades, desde seguridad hasta estética y funcionalidad.",
   "clusters": [
     {
-      "name": "Servicios Generales de Parquet en Barcelona",
+      "name": "Puertas de Hierro en Zaragoza",
       "intent": "COMMERCIAL",
-      "main_keyword": "parquetista Barcelona",
-      "volume": 3700,
+      "main_keyword": "puertas de hierro zaragoza",
+      "volume": 1380,
       "meta_suggestions": [
         {
-          "h1": "Parquetista en Barcelona | Instalación y Mantenimiento",
-          "seo_title": "Parquetista Profesional en Barcelona | Tu Experto",
-          "seo_description": "Servicios completos de parquet en Barcelona: instalación, reparación, acuchillado y mantenimiento. ¡Pide tu presupuesto sin compromiso!"
+          "h1": "Puertas de Hierro en Zaragoza | Fabricación e Instalación",
+          "seo_title": "Puertas de Hierro Zaragoza | Fabricación a Medida",
+          "seo_description": "Diseñamos e instalamos puertas de hierro en Zaragoza. Seguridad y estética para tu hogar o negocio. ¡Pide tu presupuesto sin compromiso!"
         },
         {
-          "h1": "Expertos en Parquet en Barcelona | Soluciones Integrales",
-          "seo_title": "Tu Empresa de Parquet en Barcelona | Presupuesto Gratis",
-          "seo_description": "Buscas un parquetista en Barcelona? Ofrecemos calidad y garantía en todos nuestros servicios. ¡Contáctanos y pide tu presupuesto hoy!"
+          "h1": "Fabricación de Puertas de Hierro a Medida en Zaragoza",
+          "seo_title": "Puertas Metálicas Zaragoza | Expertos en Forja",
+          "seo_description": "Especialistas en puertas metálicas y de forja en Zaragoza. Alta calidad y durabilidad garantizada. ¡Llámanos ahora!"
         },
         {
-          "h1": "Servicios de Parquet en Barcelona | Calidad Garantizada",
-          "seo_title": "Parquet en Barcelona: Instalación, Reparación, Mantenimiento",
-          "seo_description": "La mejor empresa de parquet en Barcelona. Te asesoramos y realizamos el trabajo con profesionalidad. ¡Llámanos para más info!"
+          "h1": "Instalación y Reparación de Puertas Metálicas Zaragoza",
+          "seo_title": "Herrero Zaragoza | Puertas de Entrada y Garaje",
+          "seo_description": "Necesitas puertas de hierro en Zaragoza? Fabricamos, instalamos y reparamos. Visita nuestra web y contacta."
         },
         {
-          "h1": "Tu Parquetista de Confianza en Barcelona",
-          "seo_title": "Parquetista Barcelona: Servicios a Domicilio | Precios",
-          "seo_description": "Necesitas un experto en parquet en Barcelona? Ofrecemos soluciones rápidas y eficaces para tu suelo. ¡Pide tu cita ya!"
+          "h1": "Presupuesto Puertas de Hierro | Herrería Zaragoza",
+          "seo_title": "Puertas de Hierro Forjado en Zaragoza | Diseño Único",
+          "seo_description": "Descubre nuestras puertas de hierro forjado en Zaragoza. Diseños exclusivos y personalizados. ¡Consúltanos tu proyecto hoy!"
         },
         {
-          "h1": "Parquetistas en Barcelona | Renueva tu Suelo",
-          "seo_title": "Barcelona Parquetistas: Precios y Presupuestos Online",
-          "seo_description": "Descubre nuestros servicios de parquet en Barcelona. Instalación, reparación y mantenimiento a precios competitivos. ¡Solicita tu consulta!"
+          "h1": "Herrero Especialista en Puertas de Hierro Zaragoza",
+          "seo_title": "Puertas de Hierro y Forja | Zaragoza",
+          "seo_description": "El mejor herrero en Zaragoza para tus puertas de hierro. Calidad, experiencia y satisfacción garantizada. ¡Presupuesto gratis!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "parquetista Barcelona",
-          "volume": 1500
+          "keyword": "puertas de hierro zaragoza",
+          "volume": 500
         },
         {
-          "keyword": "empresa parquet Barcelona",
-          "volume": 800
+          "keyword": "puertas metálicas zaragoza",
+          "volume": 350
         },
         {
-          "keyword": "presupuesto parquet Barcelona",
-          "volume": 700
+          "keyword": "fabricación puertas hierro zaragoza",
+          "volume": 200
         },
         {
-          "keyword": "servicio parquet Barcelona",
+          "keyword": "puertas forja zaragoza",
+          "volume": 150
+        },
+        {
+          "keyword": "instalación puertas hierro zaragoza",
+          "volume": 100
+        },
+        {
+          "keyword": "precio puertas hierro zaragoza",
+          "volume": 80
+        }
+      ],
+      "related_questions": []
+    },
+    {
+      "name": "Rejas para Ventanas en Zaragoza",
+      "intent": "COMMERCIAL",
+      "main_keyword": "rejas ventanas zaragoza",
+      "volume": 1070,
+      "meta_suggestions": [
+        {
+          "h1": "Rejas para Ventanas en Zaragoza | Seguridad y Diseño",
+          "seo_title": "Rejas Ventanas Zaragoza | Seguridad y Estilo",
+          "seo_description": "Rejas de seguridad para ventanas en Zaragoza. Fabricación e instalación a medida. Protege tu hogar con estilo. ¡Pide información!"
+        },
+        {
+          "h1": "Instalación de Rejas de Seguridad en Ventanas Zaragoza",
+          "seo_title": "Rejas de Seguridad Zaragoza | Herrería Profesional",
+          "seo_description": "Especialistas en rejas de seguridad en Zaragoza. Soluciones robustas y estéticas para tu tranquilidad. ¡Contacta hoy!"
+        },
+        {
+          "h1": "Fabricación de Rejas para Ventanas a Medida Zaragoza",
+          "seo_title": "Herrero Zaragoza | Rejas para Casas y Locales",
+          "seo_description": "Tu herrero de confianza en Zaragoza para rejas de ventanas. Calidad y acabados profesionales. ¡Presupuesto sin compromiso!"
+        },
+        {
+          "h1": "Precio Rejas Ventanas Zaragoza | Presupuesto Rápido",
+          "seo_title": "Rejas de Hierro para Ventanas en Zaragoza",
+          "seo_description": "Ofrecemos las mejores rejas de hierro para ventanas en Zaragoza. Modelos personalizados y duraderos. ¡Llámanos!"
+        },
+        {
+          "h1": "Herrería en Zaragoza | Rejas Fijas y Extensibles",
+          "seo_title": "Rejas Zaragoza | Protección para Tu Hogar",
+          "seo_description": "Protege tus ventanas en Zaragoza con nuestras rejas. Fabricación a medida y atención personalizada. ¡Solicita tu consulta!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "rejas ventanas zaragoza",
           "volume": 400
         },
         {
-          "keyword": "mantenimiento parquet Barcelona",
+          "keyword": "rejas de seguridad zaragoza",
           "volume": 300
+        },
+        {
+          "keyword": "instalación rejas zaragoza",
+          "volume": 180
+        },
+        {
+          "keyword": "precio rejas ventanas zaragoza",
+          "volume": 120
+        },
+        {
+          "keyword": "herrero rejas zaragoza",
+          "volume": 70
         }
       ],
-      "related_questions": [
-        "¿Cuánto cuesta un parquetista en Barcelona?",
-        "¿Qué servicios ofrece una empresa de parquet en Barcelona?",
-        "¿Cómo pedir un presupuesto de parquet en Barcelona?"
-      ]
+      "related_questions": []
     },
     {
-      "name": "Instalación de Parquet y Tarima en Barcelona",
+      "name": "Vallas y Cerramientos de Hierro en Zaragoza",
       "intent": "COMMERCIAL",
-      "main_keyword": "instalar parquet Barcelona",
-      "volume": 4350,
+      "main_keyword": "vallas hierro zaragoza",
+      "volume": 930,
       "meta_suggestions": [
         {
-          "h1": "Instalación de Parquet en Barcelona | Expertos",
-          "seo_title": "Instalar Parquet Flotante y Tarima en Barcelona",
-          "seo_description": "Instalamos todo tipo de parquet y tarima en Barcelona con garantía y profesionalidad. ¡Pide tu precio de instalación!"
+          "h1": "Vallas de Hierro en Zaragoza | Cerramientos a Medida",
+          "seo_title": "Vallas de Hierro Zaragoza | Cerramientos Profesionales",
+          "seo_description": "Fabricación e instalación de vallas de hierro y cerramientos en Zaragoza. Seguridad y diseño para tu propiedad. ¡Pide tu presupuesto!"
         },
         {
-          "h1": "Colocación de Parquet en Barcelona | Rápido y Eficaz",
-          "seo_title": "Colocar Parquet Flotante Barcelona | Presupuesto",
-          "seo_description": "Especialistas en la colocación de parquet y tarima en Barcelona. Acabados perfectos para tu hogar o negocio. ¡Consulta sin compromiso!"
+          "h1": "Cerramientos Metálicos en Zaragoza | Soluciones Robustas",
+          "seo_title": "Cerramientos Metálicos Zaragoza | Vallas Jardín",
+          "seo_description": "Expertos en cerramientos metálicos en Zaragoza para jardines y parcelas. Calidad garantizada. ¡Contacta ahora!"
         },
         {
-          "h1": "Instalación de Tarima Flotante en Barcelona",
-          "seo_title": "Instaladores de Parquet en Barcelona | Mejor Precio",
-          "seo_description": "Servicio de instalación de parquet y tarima flotante en Barcelona. Expertos cualificados y materiales de primera. ¡Pide tu presupuesto!"
+          "h1": "Instalación de Vallas a Medida en Zaragoza",
+          "seo_title": "Herrero Zaragoza | Vallas y Cercados",
+          "seo_description": "Tu herrero de confianza en Zaragoza para vallas y cercados de hierro. Durabilidad y acabados perfectos. ¡Llámanos hoy!"
         },
         {
-          "h1": "Poner Parquet en Barcelona | Reformas y Obras",
-          "seo_title": "Precio Instalar Parquet Barcelona | Presupuestos Online",
-          "seo_description": "Necesitas poner parquet nuevo? Te ofrecemos la mejor solución de instalación en Barcelona. ¡Llámanos y solicita tu estimación gratuita!"
+          "h1": "Vallado para Jardín Zaragoza | Estética y Seguridad",
+          "seo_title": "Vallas Jardín Zaragoza | Presupuesto Online",
+          "seo_description": "Buscas vallado para tu jardín en Zaragoza? Ofrecemos soluciones personalizadas y precios competitivos. ¡Solicita tu cita!"
         },
         {
-          "h1": "Cambiar Parquet en Barcelona | Moderniza tu Hogar",
-          "seo_title": "Cambiar Suelo de Parquet en Barcelona | Ofertas",
-          "seo_description": "Moderniza tu espacio con un nuevo parquet. Cambiamos tu suelo en Barcelona con rapidez y a precios competitivos. ¡Descubre nuestras ofertas!"
+          "h1": "Herrería Zaragoza | Vallas Decorativas y Funcionales",
+          "seo_title": "Vallas Decorativas Zaragoza | Expertos en Hierro",
+          "seo_description": "Vallas de hierro decorativas y funcionales en Zaragoza. Diseño único para tu espacio exterior. ¡Descubre nuestro catálogo!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "instalar parquet Barcelona",
-          "volume": 1200
+          "keyword": "vallas hierro zaragoza",
+          "volume": 380
         },
         {
-          "keyword": "colocar parquet Barcelona",
-          "volume": 900
-        },
-        {
-          "keyword": "instalación parquet flotante Barcelona",
-          "volume": 750
-        },
-        {
-          "keyword": "precio instalar parquet Barcelona",
-          "volume": 600
-        },
-        {
-          "keyword": "cambiar parquet Barcelona",
-          "volume": 500
-        },
-        {
-          "keyword": "poner parquet Barcelona",
-          "volume": 400
-        }
-      ],
-      "related_questions": [
-        "¿Cuánto cuesta instalar parquet en Barcelona?",
-        "¿Qué tipos de parquet se pueden instalar en Barcelona?",
-        "¿Cuánto tiempo se tarda en colocar parquet flotante?"
-      ]
-    },
-    {
-      "name": "Acuchillado y Barnizado de Parquet en Barcelona",
-      "intent": "COMMERCIAL",
-      "main_keyword": "acuchillar parquet Barcelona",
-      "volume": 3800,
-      "meta_suggestions": [
-        {
-          "h1": "Acuchillar y Barnizar Parquet en Barcelona",
-          "seo_title": "Servicio de Acuchillado y Lijado de Parquet en BCN",
-          "seo_description": "Restauramos tu parquet en Barcelona. Acuchillado, lijado y barnizado profesional para un acabado impecable. ¡Consulta tarifas!"
-        },
-        {
-          "h1": "Lijado y Barnizado de Parquet en Barcelona",
-          "seo_title": "Precio Acuchillar Parquet Barcelona | Restauración",
-          "seo_description": "Tu parquet como nuevo con nuestro servicio de lijado y barnizado en Barcelona. Máxima calidad y durabilidad. ¡Pide tu presupuesto ahora!"
-        },
-        {
-          "h1": "Restauración de Parquet en Barcelona | Calidad",
-          "seo_title": "Acuchillado Parquet y Pulido en Barcelona Capital",
-          "seo_description": "Expertos en restauración de parquet en Barcelona. Devolvemos el brillo y la vida a tu suelo con técnicas avanzadas. ¡Llámanos!"
-        },
-        {
-          "h1": "Pulido de Parquet en Barcelona | Acabado Profesional",
-          "seo_title": "Barnizar Parquet en Barcelona | Presupuesto Gratis",
-          "seo_description": "Servicio profesional de pulido y barnizado de parquet en Barcelona. ¡Protege y embellece tu suelo de madera! ¡Consulta nuestros precios!"
-        },
-        {
-          "h1": "Renovar Parquet Barcelona | Acuchillado Garantizado",
-          "seo_title": "Acuchillar Parquet Barcelona Precios y Ofertas",
-          "seo_description": "Renueva el aspecto de tu parquet en Barcelona con nuestro servicio de acuchillado. ¡Garantía de calidad y resultados excelentes!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "acuchillar parquet Barcelona",
-          "volume": 1100
-        },
-        {
-          "keyword": "barnizar parquet Barcelona",
-          "volume": 850
-        },
-        {
-          "keyword": "lijado parquet Barcelona",
-          "volume": 700
-        },
-        {
-          "keyword": "pulir parquet Barcelona",
-          "volume": 500
-        },
-        {
-          "keyword": "restaurar parquet Barcelona",
-          "volume": 650
-        },
-        {
-          "keyword": "reparar parquet Barcelona",
-          "volume": 950
-        },
-        {
-          "keyword": "arreglo parquet Barcelona",
-          "volume": 600
-        },
-        {
-          "keyword": "solucionar parquet dañado Barcelona",
+          "keyword": "cerramientos metálicos zaragoza",
           "volume": 250
+        },
+        {
+          "keyword": "vallas a medida zaragoza",
+          "volume": 150
+        },
+        {
+          "keyword": "vallado jardín zaragoza",
+          "volume": 90
+        },
+        {
+          "keyword": "instalación vallas zaragoza",
+          "volume": 60
         }
       ],
-      "related_questions": [
-        "¿Cuál es el precio de acuchillar parquet en Barcelona?",
-        "¿Cada cuánto tiempo se debe lijar y barnizar el parquet?",
-        "¿Qué barniz es mejor para parquet en Barcelona?"
-      ]
+      "related_questions": []
     },
     {
-      "name": "Reparación de Parquet en Barcelona",
+      "name": "Barandillas y Balcones de Hierro en Zaragoza",
       "intent": "COMMERCIAL",
-      "main_keyword": "reparar parquet Barcelona",
-      "volume": 1800,
+      "main_keyword": "barandillas hierro zaragoza",
+      "volume": 830,
       "meta_suggestions": [
         {
-          "h1": "Reparación de Parquet en Barcelona | Soluciones",
-          "seo_title": "Reparar Parquet Dañado en Barcelona | Arreglos",
-          "seo_description": "Expertos en reparación de parquet en Barcelona. Solucionamos roturas, arañazos e hinchazones. ¡Solicita tu presupuesto ahora!"
+          "h1": "Barandillas de Hierro en Zaragoza | Escaleras y Balcones",
+          "seo_title": "Barandillas Hierro Zaragoza | Diseño y Seguridad",
+          "seo_description": "Fabricación e instalación de barandillas de hierro en Zaragoza. Seguridad y elegancia para escaleras y balcones. ¡Pide presupuesto sin compromiso!"
         },
         {
-          "h1": "Arreglo de Parquet en Barcelona | Tu Suelo Perfecto",
-          "seo_title": "Arreglar Parquet Flotante Barcelona | Rápido y Fiable",
-          "seo_description": "Problemas con tu parquet? Ofrecemos arreglo profesional de parquet en Barcelona. ¡Deja tu suelo como nuevo! ¡Pide tu cita hoy!"
+          "h1": "Balcones de Hierro a Medida en Zaragoza",
+          "seo_title": "Balcones de Hierro Zaragoza | Herrería Artística",
+          "seo_description": "Diseñamos y creamos balcones de hierro a medida en Zaragoza. Estilo y durabilidad garantizados. ¡Consúltanos tu proyecto!"
         },
         {
-          "h1": "Servicio de Reparación de Parquet en Barcelona",
-          "seo_title": "Reparación de Suelos de Parquet en Barcelona Ciudad",
-          "seo_description": "Reparamos cualquier tipo de daño en tu parquet en Barcelona. Grietas, golpes, zonas levantadas. ¡Consulta nuestros servicios!"
+          "h1": "Barandillas para Escaleras en Zaragoza | Expertos Forja",
+          "seo_title": "Barandillas Escaleras Zaragoza | Calidad Forja",
+          "seo_description": "Especialistas en barandillas de hierro para escaleras en Zaragoza. Soluciones personalizadas y de alta calidad. ¡Llámanos!"
         },
         {
-          "h1": "Solucionar Problemas de Parquet en Barcelona",
-          "seo_title": "Reparación Parquet Barcelona | Presupuesto Online",
-          "seo_description": "Tu parquet tiene desperfectos? En Barcelona, somos tus especialistas en la reparación de suelos de madera. ¡Pide tu valoración gratis!"
+          "h1": "Diseño y Fabricación de Barandillas en Hierro Zaragoza",
+          "seo_title": "Herrero Zaragoza | Barandillas y Pasamanos",
+          "seo_description": "Tu herrero en Zaragoza para barandillas y pasamanos de hierro. Innovación y artesanía en cada detalle. ¡Pide tu cita!"
         },
         {
-          "h1": "Parquet Hinchado? Reparación Experta en Barcelona",
-          "seo_title": "Expertos en Arreglo de Parquet en Barcelona",
-          "seo_description": "Reparamos parquet hinchado, rayado o con manchas en Barcelona. Devolvemos la belleza a tu suelo. ¡Contáctanos y recupera tu parquet!"
+          "h1": "Reparación y Mantenimiento de Barandillas en Zaragoza",
+          "seo_title": "Barandillas de Exterior Zaragoza | Resistencia",
+          "seo_description": "Ofrecemos reparación y mantenimiento de barandillas en Zaragoza. Servicios profesionales y duraderos. ¡Solicita información!"
         }
       ],
       "selected_suggestion": 0,
-      "keywords": [],
-      "related_questions": [
-        "¿Cómo reparar arañazos en parquet de madera?",
-        "¿Cuál es el precio de reparar parquet hinchado en Barcelona?",
-        "¿Se puede reparar parquet sin acuchillar?"
-      ]
+      "keywords": [
+        {
+          "keyword": "barandillas hierro zaragoza",
+          "volume": 320
+        },
+        {
+          "keyword": "barandillas escaleras zaragoza",
+          "volume": 220
+        },
+        {
+          "keyword": "balcones de hierro zaragoza",
+          "volume": 150
+        },
+        {
+          "keyword": "diseño barandillas zaragoza",
+          "volume": 90
+        },
+        {
+          "keyword": "reparación barandillas zaragoza",
+          "volume": 50
+        }
+      ],
+      "related_questions": []
+    },
+    {
+      "name": "Herrería Artística y a Medida en Zaragoza",
+      "intent": "COMMERCIAL",
+      "main_keyword": "herreria artistica zaragoza",
+      "volume": 690,
+      "meta_suggestions": [
+        {
+          "h1": "Herrería Artística en Zaragoza | Trabajos a Medida",
+          "seo_title": "Herrería Artística Zaragoza | Piezas Únicas",
+          "seo_description": "Descubre la herrería artística en Zaragoza. Creaciones únicas y trabajos de hierro a medida para tu hogar o negocio. ¡Contacta hoy!"
+        },
+        {
+          "h1": "Trabajos de Hierro a Medida | Artesanía Zaragoza",
+          "seo_title": "Herrero Artesano Zaragoza | Forja Creativa",
+          "seo_description": "Especialistas en trabajos de hierro a medida en Zaragoza. Forja artesanal para proyectos personalizados. ¡Pide tu presupuesto!"
+        },
+        {
+          "h1": "Forja Artesanal en Zaragoza | Piezas Exclusivas",
+          "seo_title": "Forja Zaragoza | Diseño y Creación en Hierro",
+          "seo_description": "Encuentra piezas de forja artesanal en Zaragoza. Muebles, lámparas y elementos decorativos únicos. ¡Visita nuestra web!"
+        },
+        {
+          "h1": "Artesano del Hierro en Zaragoza | Diseño Personalizado",
+          "seo_title": "Trabajos a Medida Hierro Zaragoza",
+          "seo_description": "Tu artesano del hierro en Zaragoza para diseños personalizados. Soluciones creativas y de alta calidad. ¡Llámanos!"
+        },
+        {
+          "h1": "Herrería Creativa y Decorativa en Zaragoza",
+          "seo_title": "Herrería Decorativa Zaragoza | Proyectos Únicos",
+          "seo_description": "Realizamos proyectos de herrería decorativa en Zaragoza. Transformamos tus ideas en piezas de arte en hierro. ¡Consúltanos!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "herreria artistica zaragoza",
+          "volume": 280
+        },
+        {
+          "keyword": "trabajos hierro a medida zaragoza",
+          "volume": 200
+        },
+        {
+          "keyword": "forja artesanal zaragoza",
+          "volume": 130
+        },
+        {
+          "keyword": "artesano del hierro zaragoza",
+          "volume": 80
+        }
+      ],
+      "related_questions": []
+    },
+    {
+      "name": "Estructuras Metálicas y Pérgolas en Zaragoza",
+      "intent": "COMMERCIAL",
+      "main_keyword": "estructuras metálicas zaragoza",
+      "volume": 1100,
+      "meta_suggestions": [
+        {
+          "h1": "Estructuras Metálicas en Zaragoza | Pérgolas de Hierro",
+          "seo_title": "Estructuras Metálicas Zaragoza | Pérgolas",
+          "seo_description": "Fabricación e instalación de estructuras metálicas y pérgolas de hierro en Zaragoza. Soluciones robustas y duraderas. ¡Pide tu presupuesto!"
+        },
+        {
+          "h1": "Pérgolas de Hierro a Medida en Zaragoza",
+          "seo_title": "Pérgolas Hierro Zaragoza | Diseño Personalizado",
+          "seo_description": "Diseñamos y creamos pérgolas de hierro a medida en Zaragoza. Protección y estilo para tu terraza o jardín. ¡Contacta ahora!"
+        },
+        {
+          "h1": "Carpintería Metálica en Zaragoza | Techados y Cerramientos",
+          "seo_title": "Carpintería Metálica Zaragoza | Techados",
+          "seo_description": "Expertos en carpintería metálica en Zaragoza. Techados, cerramientos y estructuras de alta calidad. ¡Llámanos hoy!"
+        },
+        {
+          "h1": "Diseño y Construcción de Estructuras Metálicas Zaragoza",
+          "seo_title": "Herrero Zaragoza | Estructuras y Cubiertas",
+          "seo_description": "Tu herrero en Zaragoza para estructuras metálicas y cubiertas. Proyectos industriales y residenciales. ¡Presupuesto gratis!"
+        },
+        {
+          "h1": "Techados Metálicos en Zaragoza | Soluciones Personalizadas",
+          "seo_title": "Techados Metálicos Zaragoza | Calidad Garantizada",
+          "seo_description": "Ofrecemos techados metálicos en Zaragoza. Protección duradera y estética para cualquier espacio. ¡Solicita tu consulta!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "estructuras metálicas zaragoza",
+          "volume": 450
+        },
+        {
+          "keyword": "pérgolas hierro zaragoza",
+          "volume": 300
+        },
+        {
+          "keyword": "techos metálicos zaragoza",
+          "volume": 180
+        },
+        {
+          "keyword": "carpintería metálica zaragoza",
+          "volume": 100
+        },
+        {
+          "keyword": "diseño estructuras zaragoza",
+          "volume": 70
+        }
+      ],
+      "related_questions": []
+    },
+    {
+      "name": "Reparación de Herrería en Zaragoza",
+      "intent": "COMMERCIAL",
+      "main_keyword": "reparación herrería zaragoza",
+      "volume": 750,
+      "meta_suggestions": [
+        {
+          "h1": "Reparación de Herrería en Zaragoza | Servicio Urgente",
+          "seo_title": "Reparación Herrería Zaragoza | Soldador a Domicilio",
+          "seo_description": "Servicio de reparación de herrería en Zaragoza. Arreglamos puertas, rejas y vallas de hierro. ¡Llámanos para un servicio rápido!"
+        },
+        {
+          "h1": "Soldador a Domicilio en Zaragoza | Reparaciones Rápidas",
+          "seo_title": "Soldador Zaragoza | Arreglos de Hierro",
+          "seo_description": "Necesitas un soldador a domicilio en Zaragoza? Reparaciones de hierro al instante. ¡Contacta para un presupuesto!"
+        },
+        {
+          "h1": "Mantenimiento de Hierro en Zaragoza | Durabilidad Garantizada",
+          "seo_title": "Mantenimiento Herrería Zaragoza | Alarga la Vida Útil",
+          "seo_description": "Servicio de mantenimiento para tus estructuras de hierro en Zaragoza. Previene deterioros y alarga su vida útil. ¡Infórmate!"
+        },
+        {
+          "h1": "Arreglar Rejas de Hierro en Zaragoza | Expertos Forja",
+          "seo_title": "Arreglo Rejas Hierro Zaragoza | Servicio Profesional",
+          "seo_description": "Expertos en arreglar rejas de hierro en Zaragoza. Dejamos tus rejas como nuevas con garantía profesional. ¡Pide tu cita hoy!"
+        },
+        {
+          "h1": "Herrería en Zaragoza | Soluciones de Reparación Rápida",
+          "seo_title": "Reparaciones Hierro Zaragoza | Tu Herrero Local",
+          "seo_description": "Tu herrero local en Zaragoza para reparaciones de hierro. Fiabilidad y eficiencia en cada trabajo. ¡Consúltanos tu necesidad!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "reparación herrería zaragoza",
+          "volume": 300
+        },
+        {
+          "keyword": "arreglar rejas hierro zaragoza",
+          "volume": 200
+        },
+        {
+          "keyword": "soldador a domicilio zaragoza",
+          "volume": 150
+        },
+        {
+          "keyword": "mantenimiento hierro zaragoza",
+          "volume": 100
+        }
+      ],
+      "related_questions": []
     }
   ],
   "locations": [
-    "Eixample",
-    "Gràcia",
-    "Sarrià-Sant Gervasi",
-    "Les Corts",
-    "Sant Martí"
+    "Actur-Rey Fernando",
+    "Delicias",
+    "Casco Histórico",
+    "San José",
+    "Valdespartera"
   ],
   "home_structure": {
-    "h1": "Parquetista en Barcelona | Instalación, Reparación y Acuchillado Profesional",
+    "h1": "Herrero en Zaragoza | Trabajos de Forja y Hierro a Medida",
     "h2s": [
-      "Nuestros Servicios de Parquet en Barcelona",
-      "Por Qué Elegirnos: Expertos en Suelos de Madera en Barcelona",
-      "Solicita tu Presupuesto Gratuito para tu Proyecto de Parquet"
+      "Expertos en Diseño y Fabricación de Estructuras Metálicas",
+      "Nuestros Servicios: Puertas, Rejas, Vallas y Más en Zaragoza",
+      "Herrería Artística y Soluciones Personalizadas para tu Hogar o Negocio"
     ]
   },
   "raw_data": {
     "top_keywords": [],
-    "competitor_keywords": {
-      "pavidisseny.com": [
-        {
-          "keyword": "pavidisseny",
-          "volume": 170,
-          "cpc": 0,
-          "competition": 0.03999999910593033,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "position": 1,
-          "url": "https://pavidisseny.com/",
-          "etv": 0,
-          "source": "competitor"
-        }
-      ],
-      "parkestil.com": [
-        {
-          "keyword": "parkestil",
-          "volume": 390,
-          "cpc": 0.5,
-          "competition": 0.09000000357627869,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "position": 1,
-          "url": "https://parkestil.com/",
-          "etv": 0,
-          "source": "competitor"
-        }
-      ],
-      "parkhouse.es": [
-        {
-          "keyword": "parkhouse",
-          "volume": 260,
-          "cpc": 0,
-          "competition": 0.05000000074505806,
-          "competition_level": "LOW",
-          "difficulty": 8,
-          "position": 1,
-          "url": "https://parkhouse.es/",
-          "etv": 0,
-          "source": "competitor"
-        }
-      ],
-      "robledor.com": [
-        {
-          "keyword": "parquet robledor",
-          "volume": 170,
-          "cpc": 0.14000000059604645,
-          "competition": 0.07000000029802322,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "position": 1,
-          "url": "https://robledor.com/",
-          "etv": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "parquets robledor",
-          "volume": 170,
-          "cpc": 0.14000000059604645,
-          "competition": 0.07000000029802322,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "position": 1,
-          "url": "https://robledor.com/",
-          "etv": 0,
-          "source": "competitor"
-        },
-        {
-          "keyword": "robledor",
-          "volume": 110,
-          "cpc": 0,
-          "competition": 0.14000000059604645,
-          "competition_level": "LOW",
-          "difficulty": 0,
-          "position": 1,
-          "url": "https://robledor.com/",
-          "etv": 0,
-          "source": "competitor"
-        }
-      ]
-    },
+    "competitor_keywords": {},
     "paa_questions": [],
     "stats": {
-      "fromCompetitors": 6,
-      "fromRelated": 6,
+      "fromCompetitors": 0,
+      "fromRelated": 7,
       "fromSuggestions": 0,
       "filteredByCity": 0,
       "filteredByNoise": 0,
-      "filteredByRelevance": 12
+      "filteredByRelevance": 7
     }
   },
-  "niche": "Parquetista",
-  "city": "Barcelona,Catalonia,Spain"
+  "niche": "Herrero ",
+  "city": "Zaragoza,Aragon,Spain"
 }
