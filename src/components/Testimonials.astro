@@ -28,18 +28,18 @@ const { testimonials } = Astro.props;
                         <div class="bg-secondary p-8 rounded-2xl border border-heading/10 shadow-lg relative hover:-translate-y-1 transition-transform duration-300">
                             <div class="flex items-center mb-6">
                                 <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-xl mr-4 shadow-md">
-                                    {testimonial.data.initials ||
-                                        testimonial.data.name.charAt(0)}
+                                    {testimonial.initials ||
+                                        testimonial.name.charAt(0)}
                                 </div>
                                 <div>
                                     <div class="font-bold text-heading">
-                                        {testimonial.data.name}
+                                        {testimonial.name}
                                     </div>
                                     <div class="flex text-yellow-400 text-xs mt-1">
                                         {Array.from({ length: 5 }).map(
                                             (_, i) => (
                                                 <Star
-                                                    className={`w-4 h-4 ${i < testimonial.data.rating ? "fill-current" : "text-gray-600"}`}
+                                                    className={`w-4 h-4 ${i < (testimonial.rating || 5) ? "fill-current" : "text-gray-600"}`}
                                                 />
                                             ),
                                         )}
@@ -47,7 +47,7 @@ const { testimonials } = Astro.props;
                                 </div>
                             </div>
                             <p class="text-body italic relative z-10 leading-relaxed">
-                                "{testimonial.data.text}"
+                                "{testimonial.text}"
                             </p>
                         </div>
                     ))}

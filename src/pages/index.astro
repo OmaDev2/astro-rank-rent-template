@@ -17,15 +17,36 @@ import HomeServices from "../components/blocks/home/HomeServices.astro";
 import HomeAbout from "../components/blocks/home/HomeAbout.astro";
 import HomeFeatures from "../components/blocks/home/HomeFeatures.astro";
 import HomeContact from "../components/blocks/home/HomeContact.astro";
+import HomeProcess from "../components/blocks/home/HomeProcess.astro";
 
 // 1. Fetch Data
 const featuredServices = await getCollection(
 	"services",
 	({ data }) => data.featured === true,
 );
-const testimonials = await getCollection("testimonials");
+const testimonialsCollection = await getCollection("testimonials");
 const home = await getEntry("pages", "home");
 const homeData = home?.data || {};
+
+// Prioritize testimonials from Home Singleton, fallback to Collection
+const rawTestimonials =
+	homeData.testimonials && homeData.testimonials.length > 0
+		? homeData.testimonials.map((t: any) => ({
+				name: t.author,
+				text: t.quote,
+				location: t.location,
+				initials: t.initials,
+				rating: 5, // Default rating for home singleton testimonials
+			}))
+		: testimonialsCollection.map((t) => ({
+				name: t.data.name,
+				text: t.data.text,
+				location: "", // Collection doesn't have location in schema currently?
+				initials: t.data.initials,
+				rating: t.data.rating,
+			}));
+
+const testimonials = rawTestimonials;
 
 // Render contenido SEO
 const { Content: SeoContentRendered } = home
@@ -117,6 +138,11 @@ const schema: WithContext<LocalBusiness> = {
 
 				case "contact":
 					return <HomeContact config={config} />;
+
+				case "process":
+					return homeData.process ? (
+						<HomeProcess process={homeData.process} />
+					) : null;
 
 				case "testimonials":
 					return <Testimonials testimonials={testimonials} />;

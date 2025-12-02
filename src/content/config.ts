@@ -197,6 +197,24 @@ const pages = defineCollection({
             answer: z.string(),
         })).optional(),
 
+        // Testimonials (Home Singleton)
+        testimonials: z.array(z.object({
+            quote: z.string(),
+            author: z.string(),
+            location: z.string().optional(),
+            initials: z.string().optional(),
+        })).optional(),
+
+        // Process Section
+        process: z.object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            steps: z.array(z.object({
+                title: z.string(),
+                description: z.string(),
+            })),
+        }).optional(),
+
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
@@ -204,6 +222,7 @@ const pages = defineCollection({
                 z.object({ discriminant: z.literal('services') }),
                 z.object({ discriminant: z.literal('about') }),
                 z.object({ discriminant: z.literal('features') }),
+                z.object({ discriminant: z.literal('process') }),
                 z.object({ discriminant: z.literal('contact') }),
                 z.object({ discriminant: z.literal('testimonials') }),
                 z.object({ discriminant: z.literal('content') }),

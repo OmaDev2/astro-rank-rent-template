@@ -409,6 +409,22 @@ export default config({
                     }
                 ),
 
+                // --- PROCESO DE TRABAJO ---
+                process: fields.object({
+                    title: fields.text({ label: 'Título Sección' }),
+                    description: fields.text({ label: 'Descripción', multiline: true }),
+                    steps: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Título del Paso' }),
+                            description: fields.text({ label: 'Descripción', multiline: true }),
+                        }),
+                        {
+                            label: 'Pasos del Proceso',
+                            itemLabel: (props) => props.fields.title.value || 'Paso',
+                        }
+                    ),
+                }, { label: 'Sección Proceso de Trabajo' }),
+
                 // --- NUEVO: PAGE BUILDER PARA HOMEPAGE ---
                 blocks: fields.blocks({
                     hero: {
@@ -443,6 +459,10 @@ export default config({
                         label: 'Preguntas Frecuentes',
                         schema: fields.empty()
                     },
+                    process: {
+                        label: 'Proceso de Trabajo',
+                        schema: fields.empty()
+                    },
                     locations: {
                         label: 'Listado de Zonas',
                         schema: fields.empty()
@@ -457,7 +477,7 @@ export default config({
                 }),
                 // ------------------------------------------
             }
-        })
+        }),
     },
 
     // --- COLECCIONES ---
