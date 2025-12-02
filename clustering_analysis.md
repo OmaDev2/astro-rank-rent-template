@@ -1,6 +1,6 @@
-# 📊 Análisis de Clustering - quitar gotele  en Barcelona,Catalonia,Spain
+# 📊 Análisis de Clustering - Parquetista en Barcelona,Catalonia,Spain
 
-**Fecha:** 2/12/2025, 9:40:16
+**Fecha:** 2/12/2025, 13:04:25
 **Location Code:** 2724
 
 ---
@@ -9,10 +9,10 @@
 
 | Fuente | Keywords |
 |--------|----------|
-| Competidores | 17 |
+| Competidores | 6 |
 | Relacionadas | 6 |
 | Sugerencias | 0 |
-| **Total recopiladas** | **23** |
+| **Total recopiladas** | **12** |
 
 ### Filtrado
 
@@ -20,74 +20,119 @@
 |--------|------------|
 | Ruido universal | 0 |
 | Otras ciudades | 0 |
-| Baja relevancia | 7 |
-| **Keywords finales** | **16** |
+| Baja relevancia | 12 |
+| **Keywords finales** | **0** |
 
 ## 🔍 Keywords por Competidor
 
-### xn--quitargotel-lbb.com
-**Total:** 13 keywords
+### pavidisseny.com
+**Total:** 1 keywords
 
 | Keyword | Vol | Pos | Intent |
 |---------|-----|-----|--------|
-| cuanto vale quitar el gotele | 140 | 7 | COMMERCIAL |
-| precio m2 quitar gotele | 210 | 7 | COMMERCIAL |
-| precio quitar gotelé piso 100 metros | 320 | 7 | COMMERCIAL |
-| precio quitar gotelé y pintar | 110 | 9 | COMMERCIAL |
-| presupuesto quitar gotele | 170 | 7 | COMMERCIAL |
-| presupuesto quitar gotelé | 170 | 9 | COMMERCIAL |
-| quitar gotele precio | 1600 | 7 | COMMERCIAL |
-| quitar gotele presupuesto | 170 | 7 | COMMERCIAL |
-| quitar gotele y pintar precio | 110 | 8 | COMMERCIAL |
-| quitar gotelé precio m2 | 210 | 8 | COMMERCIAL |
-| cuanto cuesta quitar el gotele | 880 | 9 | COMMERCIAL |
-| quitar gotele precio m2 | 210 | 9 | COMMERCIAL |
-| precio quitar gotele y pintar | 110 | 10 | COMMERCIAL |
+| pavidisseny | 170 | 1 | COMMERCIAL |
 
-### www.pintor.barcelona
-**Total:** 4 keywords
+### parkestil.com
+**Total:** 1 keywords
 
 | Keyword | Vol | Pos | Intent |
 |---------|-----|-----|--------|
-| precios pintores | 140 | 6 | COMMERCIAL |
-| pintor escaleras | 260 | 8 | COMMERCIAL |
-| presupuesto pintor | 480 | 9 | COMMERCIAL |
-| pintor precio | 140 | 9 | COMMERCIAL |
+| parkestil | 390 | 1 | COMMERCIAL |
 
-## ❓ People Also Ask
+### parkhouse.es
+**Total:** 1 keywords
 
-- ¿Cuánto cuesta quitar el gotelé en Barcelona?
-- ¿Cuánto cobra un pintor por m2 cerca de Barcelona?
-- ¿Cómo quitar el gotelé barato?
-- ¿Qué es quitar el gotelé?
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| parkhouse | 260 | 1 | COMMERCIAL |
+
+### robledor.com
+**Total:** 3 keywords
+
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| parquet robledor | 170 | 1 | COMMERCIAL |
+| parquets robledor | 170 | 1 | COMMERCIAL |
+| robledor | 110 | 1 | COMMERCIAL |
 
 ## 🎨 Clusters Generados
 
-### 1. Quitar Gotelé Precio en Barcelona
+### 1. Servicios Generales de Parquet en Barcelona
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** quitar gotele precio
-- **Volumen Total:** 4,410
-- **Keywords:** 13
+- **Main Keyword:** parquetista Barcelona
+- **Volumen Total:** 3,700
+- **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| quitar gotele precio | 1600 |
-| cuanto cuesta quitar el gotele | 880 |
-| precio m2 quitar gotele | 210 |
-| quitar gotele precio m2 | 210 |
-| presupuesto quitar gotele | 170 |
-| quitar gotele presupuesto | 170 |
-| quitar gotele y pintar precio | 110 |
-| precio quitar gotele y pintar | 110 |
-| cuanto vale quitar el gotele | 140 |
-| precio quitar gotelé piso 100 metros | 320 |
-| quitar gotelé precio m2 | 210 |
-| presupuesto quitar gotelé | 170 |
-| precio quitar gotelé y pintar | 110 |
+| parquetista Barcelona | 1500 |
+| empresa parquet Barcelona | 800 |
+| presupuesto parquet Barcelona | 700 |
+| servicio parquet Barcelona | 400 |
+| mantenimiento parquet Barcelona | 300 |
 
 **Meta Tags Sugeridos:**
-- H1: Quitar Gotelé en Barcelona: Precios y Presupuestos
-- Title: Quitar Gotelé Barcelona: Precios, Coste m2 y Presupuesto
-- Description: Descubre el precio de quitar gotelé en Barcelona. Presupuesto sin compromiso para tu piso. ¡Transforma tus paredes ahora!
+- H1: Parquetista en Barcelona | Instalación y Mantenimiento
+- Title: Parquetista Profesional en Barcelona | Tu Experto
+- Description: Servicios completos de parquet en Barcelona: instalación, reparación, acuchillado y mantenimiento. ¡Pide tu presupuesto sin compromiso!
+
+### 2. Instalación de Parquet y Tarima en Barcelona
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** instalar parquet Barcelona
+- **Volumen Total:** 4,350
+- **Keywords:** 6
+
+| Keyword | Volumen |
+|---------|--------|
+| instalar parquet Barcelona | 1200 |
+| colocar parquet Barcelona | 900 |
+| instalación parquet flotante Barcelona | 750 |
+| precio instalar parquet Barcelona | 600 |
+| cambiar parquet Barcelona | 500 |
+| poner parquet Barcelona | 400 |
+
+**Meta Tags Sugeridos:**
+- H1: Instalación de Parquet en Barcelona | Expertos
+- Title: Instalar Parquet Flotante y Tarima en Barcelona
+- Description: Instalamos todo tipo de parquet y tarima en Barcelona con garantía y profesionalidad. ¡Pide tu precio de instalación!
+
+### 3. Acuchillado y Barnizado de Parquet en Barcelona
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** acuchillar parquet Barcelona
+- **Volumen Total:** 3,800
+- **Keywords:** 5
+
+| Keyword | Volumen |
+|---------|--------|
+| acuchillar parquet Barcelona | 1100 |
+| barnizar parquet Barcelona | 850 |
+| lijado parquet Barcelona | 700 |
+| pulir parquet Barcelona | 500 |
+| restaurar parquet Barcelona | 650 |
+
+**Meta Tags Sugeridos:**
+- H1: Acuchillar y Barnizar Parquet en Barcelona
+- Title: Servicio de Acuchillado y Lijado de Parquet en BCN
+- Description: Restauramos tu parquet en Barcelona. Acuchillado, lijado y barnizado profesional para un acabado impecable. ¡Consulta tarifas!
+
+### 4. Reparación de Parquet en Barcelona
+
+- **Intent:** COMMERCIAL
+- **Main Keyword:** reparar parquet Barcelona
+- **Volumen Total:** 1,800
+- **Keywords:** 3
+
+| Keyword | Volumen |
+|---------|--------|
+| reparar parquet Barcelona | 950 |
+| arreglo parquet Barcelona | 600 |
+| solucionar parquet dañado Barcelona | 250 |
+
+**Meta Tags Sugeridos:**
+- H1: Reparación de Parquet en Barcelona | Soluciones
+- Title: Reparar Parquet Dañado en Barcelona | Arreglos
+- Description: Expertos en reparación de parquet en Barcelona. Solucionamos roturas, arañazos e hinchazones. ¡Solicita tu presupuesto ahora!
 
