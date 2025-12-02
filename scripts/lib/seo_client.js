@@ -78,43 +78,50 @@ async function postDataForSEO(endpoint, data) {
     }
 }
 
-// 1. Obtener Competidores (SERP)
+// 1. Obtener los 10 primeros resultados REALES de Google SERP
 export async function getTopCompetitors(keyword, locationInput) {
     const locParams = getLocationParams(locationInput);
 
+    console.log(`🔍 Obteniendo SERP real para: "${keyword}"`);
+
     const results = await postDataForSEO('/serp/google/organic/live/advanced', [{
         keyword,
-        ...locParams, // Inyectamos location_name o location_code
+        ...locParams,
         language_code: "es",
-        depth: 10
+        depth: 10  // Solo los primeros 10 resultados
     }]);
 
-    if (!results || !results[0].items) return [];
+    if (!results || !results[0] || !results[0].items) {
+        console.warn('⚠️ No se obtuvieron resultados SERP');
+        return [];
+    }
 
-    return results[0].items
+    // Devolver EXACTAMENTE los 10 primeros resultados orgánicos, SIN FILTRAR
+    const organicResults = results[0].items
         .filter(item => item.type === 'organic')
-        .map(item => ({
+        .slice(0, 10)
+        .map((item, index) => ({
+            position: index + 1,
             url: item.url,
             title: item.title,
             domain: item.domain,
             description: item.description
-        }))
-        .filter((value, index, self) =>
-            index === self.findIndex((t) => (
-                t.domain === value.domain
-            ))
-        ) // Únicos por dominio
-        .slice(0, 10); // Top 10
+        }));
+
+    console.log(`✅ SERP obtenida: ${organicResults.length} resultados orgánicos`);
+    organicResults.forEach(r => {
+        console.log(`   ${r.position}. ${r.domain} - ${r.title}`);
+    });
+
+    return organicResults;
 }
 
-// 2. Obtener Keywords de Competidores
+// 2. Obtener Keywords de Competidores ESPECÍFICOS (de la SERP real)
 export async function getCompetitorKeywords(domain, locationInput, top10Only = true) {
-    // IMPORTANTE: DataForSEO Labs endpoints solo aceptan países, no ciudades
-    // Siempre usamos "Spain" para Labs, independientemente de la ciudad seleccionada
     const locationName = "Spain";
 
     console.log(`📍 Using location for Labs: ${locationName} (original input: ${locationInput})`);
-    console.log(`🎯 Filter: ${top10Only ? 'TOP 10 positions only' : 'All positions'}`);
+    console.log(`🎯 Extrayendo keywords de: ${domain} ${top10Only ? '(TOP 10)' : '(ALL)'}`);
 
     let allKeywords = [];
 
@@ -122,10 +129,10 @@ export async function getCompetitorKeywords(domain, locationInput, top10Only = t
         target: domain,
         location_name: locationName,
         language_name: "Spanish",
-        limit: 100,
+        limit: 100,  // Máximo de keywords por competidor
         filters: [
             ["keyword_data.keyword_info.search_volume", ">", 0],
-            // Filtro TOP 10 a nivel de API (ahora funciona con ranked_keywords)
+            // Filtro TOP 10 a nivel de API
             ...(top10Only ? [
                 "and",
                 [
@@ -165,6 +172,7 @@ export async function getCompetitorKeywords(domain, locationInput, top10Only = t
                 competition_level: kwInfo.competition_level || 'UNKNOWN',
                 difficulty: kwProps.keyword_difficulty || 0,
                 position: rankInfo.rank_absolute || null,  // ⭐ Ahora sí tenemos posición
+                url: rankInfo.url || null, // ⭐ NUEVO: URL que rankea
                 etv: k.etv || 0,  // NUEVO: Tráfico estimado
                 source: 'competitor'
             };
@@ -178,36 +186,55 @@ export async function getCompetitorKeywords(domain, locationInput, top10Only = t
     return allKeywords;
 }
 
-// 3. Obtener Keywords Relacionadas
+// 3. Obtener Keywords Relacionadas con filtrado semántico
 export async function getRelatedKeywords(keyword, locationInput) {
-    // IMPORTANTE: DataForSEO Labs endpoints solo aceptan países, no ciudades
     const locationName = "Spain";
-
     console.log(`📍 Using location for Labs: ${locationName} (original input: ${locationInput})`);
+
+    // Extraer términos clave del keyword original
+    const keywordTerms = keyword.toLowerCase().split(' ').filter(t => t.length > 2);
 
     const result = await postDataForSEO('/dataforseo_labs/google/related_keywords/live', [{
         keyword,
         location_name: locationName,
         language_name: "Spanish",
-        limit: 30
+        limit: 50,  // Aumentamos para tener más opciones
+        // Filtros en la API para mejorar relevancia
+        filters: [
+            ["keyword_data.keyword_info.search_volume", ">", 50],  // Mínimo 50 búsquedas
+            "and",
+            ["keyword_data.keyword_info.search_volume", "<", 50000]  // Máximo 50k (evitar genéricas)
+        ]
     }]);
 
     if (!result || !result[0] || !result[0].items) return [];
 
-    const keywords = result[0].items.map(k => {
-        const kwData = k.keyword_data || k;
-        const kwInfo = kwData.keyword_info || kwData;
+    // Calcular relevancia semántica para cada keyword relacionada
+    const keywords = result[0].items
+        .map(k => {
+            const kwData = k.keyword_data || k;
+            const kwInfo = kwData.keyword_info || kwData;
+            const kwText = (kwData.keyword || kwInfo.keyword || '').toLowerCase();
 
-        return {
-            keyword: kwInfo.keyword || k.keyword || 'unknown',
-            volume: kwInfo.search_volume || k.search_volume || 0,
-            cpc: kwInfo.cpc || k.cpc || 0,
-            competition: kwInfo.competition || k.competition || 0,
-            competition_level: kwInfo.competition_level || k.competition_level || 'UNKNOWN',
-            difficulty: k.keyword_properties?.keyword_difficulty || 0,
-            source: 'related'
-        };
-    });
+            // Calcular score de relevancia
+            let relevanceScore = 0;
+            keywordTerms.forEach(term => {
+                if (kwText.includes(term)) relevanceScore += 2;
+            });
+
+            // Penalizar si es demasiado genérica
+            if (kwText.split(' ').length === 1) relevanceScore -= 3;
+
+            return {
+                keyword: kwInfo.keyword || k.keyword || 'unknown',
+                volume: kwInfo.search_volume || k.search_volume || 0,
+                cpc: kwInfo.cpc || k.cpc || 0,
+                competition: kwInfo.competition || k.competition || 0,
+                competition_level: kwInfo.competition_level || k.competition_level || 'UNKNOWN',
+                difficulty: k.keyword_properties?.keyword_difficulty || 0,
+                source: 'related'
+            };
+        });
 
     console.log(`✅ Extracted ${keywords.length} related keywords for "${keyword}"`);
     return keywords;

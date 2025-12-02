@@ -1,27 +1,64 @@
-import { generateClustersFromSelection } from '../../../scripts/logic/keyword_researcher';
+import { generateSmartClusters } from '../../../scripts/logic/keyword_researcher_v2.js';
 
 export const POST = async ({ request }) => {
     try {
         const body = await request.json();
-        const { niche, city, competitors, locationCode, locationName, top10Filter = true } = body;
+        const { niche, city, competitors, location, top10Filter = true } = body;
 
-        if (!niche || !city || !competitors || competitors.length === 0) {
-            return new Response(JSON.stringify({ error: "Faltan competidores seleccionados" }), { status: 400 });
+        // Validación detallada
+        if (!niche) {
+            return new Response(JSON.stringify({
+                error: "Falta el parámetro 'niche'"
+            }), { status: 400 });
+        }
+        if (!city) {
+            return new Response(JSON.stringify({
+                error: "Falta el parámetro 'city'"
+            }), { status: 400 });
+        }
+        if (!competitors || !Array.isArray(competitors)) {
+            return new Response(JSON.stringify({
+                error: "El parámetro 'competitors' debe ser un array"
+            }), { status: 400 });
+        }
+        if (competitors.length === 0) {
+            return new Response(JSON.stringify({
+                error: "Debes seleccionar al menos un competidor"
+            }), { status: 400 });
         }
 
-        console.log(`📡 API Analyze: Clusterizando (Location: ${locationName || locationCode || 'Auto'})...`);
-        console.log(`🎯 TOP 10 Filter: ${top10Filter ? 'ENABLED' : 'DISABLED'}`);
+        console.log(`📡 API Analyze v2: Clustering "${niche}" en "${city}"`);
+        console.log(`🎯 Competidores: ${competitors.length}`);
+        console.log(`🔍 TOP 10 Filter: ${top10Filter ? 'ON' : 'OFF'}`);
 
-        // Pasamos locationName para Labs endpoints y top10Filter
-        const data = await generateClustersFromSelection(niche, city, competitors, locationName || locationCode, top10Filter);
+        // Extraer solo los dominios del array de competidores
+        const domains = competitors.map(c => c.domain || c);
 
-        return new Response(JSON.stringify(data), {
+        // Generar clusters con sistema v2 mejorado (SEO local)
+        const plan = await generateSmartClusters(
+            niche,
+            city,
+            domains,
+            location || city,
+            {
+                top10Filter: top10Filter,
+                minRelevanceScore: 5,        // Estricto para SEO local
+                includeInformational: false, // Solo comercial
+                maxKeywordsForAI: 150
+            }
+        );
+
+        console.log(`✅ Clusters generados: ${plan.clusters?.length || 0}`);
+
+        return new Response(JSON.stringify(plan), {
             status: 200,
             headers: { "Content-Type": "application/json" }
         });
 
     } catch (e) {
-        console.error("API Error:", e);
-        return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+        console.error("❌ API Analyze Error:", e);
+        return new Response(JSON.stringify({
+            error: e.message || "Error al generar clusters"
+        }), { status: 500 });
     }
 }

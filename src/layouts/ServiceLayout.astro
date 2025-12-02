@@ -91,9 +91,17 @@ const defaultBlocks: Block[] = [
 const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
 
 // Preparar props para el HeroBlock (Adaptación de datos)
+// Limpiar el título para evitar "Servicio en Barcelona en Barcelona"
+// Si el título ya contiene la ciudad, la quitamos porque el HeroBlock la añade automáticamente
+const cleanTitle = title
+    .replace(new RegExp(`\\s+en\\s+${city}`, "i"), "") // " en Barcelona"
+    .replace(new RegExp(`\\s+${city}`, "i"), "") // " Barcelona"
+    .replace(/\|\s*.*$/, "") // Eliminar todo después de un pipe "|"
+    .trim();
+
 const heroProps = {
     locationName: city, // En servicios, la "ubicación" es la ciudad principal
-    niche: title, // En servicios, el "nicho" es el título del servicio
+    niche: cleanTitle, // En servicios, el "nicho" es el título del servicio limpio
     heroImage: heroImage,
     phone: phone,
     zipCodes: [], // Servicios genéricos no suelen llevar CP específicos

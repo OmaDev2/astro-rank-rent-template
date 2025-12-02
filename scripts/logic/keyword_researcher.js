@@ -7,7 +7,7 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash", // O gemini-1.5-flash si 2.5 da error
+    model: "gemini-2.5-flash", // Changed to Flash 2.5 as requested
     generationConfig: { responseMimeType: "application/json" }
 });
 
@@ -49,26 +49,67 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
 
     console.log(`   📊 Total keywords antes de filtrado: ${allKeywords.length}`);
 
-    // NUEVO: Filtro de relevancia semántica
-    const nicheTerms = cleanNiche.toLowerCase().split(' ');
-    const irrelevantPatterns = [
-        'restaurante', 'restaurant', 'hotel', 'hostal', 'bar', 'café', 'cafeteria',
-        'tienda', 'shop', 'store', 'supermercado', 'mercado', 'farmacia', 'pharmacy'
+    // SISTEMA INTELIGENTE: Filtrado adaptativo basado en relevancia semántica
+    const nicheTerms = cleanNiche.toLowerCase().split(' ').filter(term => term.length > 2);
+
+    // Lista universal de patrones obviamente irrelevantes (independiente del nicho)
+    const universalIrrelevantPatterns = [
+        'instagram', 'tiktok', 'meme', 'significado espiritual', 'horoscopo',
+        'juego del calamar', 'squid game', 'brainrot', 'en inglés', 'en frances'
     ];
 
-    // Filtrar keywords completamente irrelevantes
+    // Paso 1: Eliminar keywords obviamente irrelevantes (ruido universal)
     allKeywords = allKeywords.filter(k => {
         const kwLower = k.keyword.toLowerCase();
-
-        // Si contiene algún término irrelevante Y NO contiene ningún término del niche, descartarla
-        const hasIrrelevant = irrelevantPatterns.some(pattern => kwLower.includes(pattern));
-        const hasNicheTerm = nicheTerms.some(term => term.length > 3 && kwLower.includes(term));
-
-        // Mantener si: NO tiene términos irrelevantes O tiene términos del niche
-        return !hasIrrelevant || hasNicheTerm;
+        return !universalIrrelevantPatterns.some(pattern => kwLower.includes(pattern));
     });
 
-    console.log(`   🧹 Después de filtro de relevancia: ${allKeywords.length} keywords`);
+    console.log(`   🗑️ Después de eliminar ruido universal: ${allKeywords.length} keywords`);
+
+    // Paso 2: Calcular relevancia semántica para cada keyword
+    allKeywords = allKeywords.map(k => {
+        const kwLower = k.keyword.toLowerCase();
+        let relevanceScore = 0;
+
+        // +3 puntos por cada término del niche que contenga
+        nicheTerms.forEach(term => {
+            if (kwLower.includes(term)) {
+                relevanceScore += 3;
+            }
+        });
+
+        // +2 puntos si viene de competidor (más confiable)
+        if (k.source === 'competitor') {
+            relevanceScore += 2;
+        }
+
+        // +1 punto por volumen alto (>500)
+        if (k.volume > 500) {
+            relevanceScore += 1;
+        }
+
+        // Penalización: -5 si es demasiado genérica (1 sola palabra)
+        if (k.keyword.split(' ').length === 1 && k.keyword.length < 8) {
+            relevanceScore -= 5;
+        }
+
+        return { ...k, relevanceScore };
+    });
+
+    // Paso 3: Filtrar por score mínimo (keywords con al menos 1 punto de relevancia)
+    const minRelevanceScore = 1;
+    allKeywords = allKeywords.filter(k => k.relevanceScore >= minRelevanceScore);
+
+    console.log(`   🎯 Después de filtro inteligente: ${allKeywords.length} keywords`);
+
+    // Paso 4: Ordenar por relevancia (las más relevantes primero)
+    allKeywords.sort((a, b) => {
+        // Primero por relevancia, luego por volumen
+        if (b.relevanceScore !== a.relevanceScore) {
+            return b.relevanceScore - a.relevanceScore;
+        }
+        return (b.volume || 0) - (a.volume || 0);
+    });
 
     // 3. Deduplicar y filtrar por volumenduplicación
     const uniqueMap = new Map();
@@ -84,7 +125,11 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
         if (hasVolume) {
             // Si ya existe, nos quedamos con el que tenga el dato más completo
             if (!uniqueMap.has(text) || (k.volume > (uniqueMap.get(text).volume || 0))) {
-                uniqueMap.set(text, k);
+                // Preservar URL y Source
+                uniqueMap.set(text, {
+                    ...k,
+                    keyword: text // Asegurar lowercase
+                });
             }
         }
     });
@@ -107,10 +152,10 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
     for (const [domain, keywords] of Object.entries(competitorKeywordsMap)) {
         analysisLog += `### ${domain}\n`;
         analysisLog += `**Total:** ${keywords.length} keywords\n\n`;
-        analysisLog += `| Keyword | Volumen | Pos | Fuente |\n`;
-        analysisLog += `|---------|---------|-----|--------|\n`;
+        analysisLog += `| Keyword | Volumen | Pos | Fuente | URL |\n`;
+        analysisLog += `|---------|---------|-----|--------|-----|\n`;
         keywords.slice(0, 20).forEach(k => {
-            analysisLog += `| ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} |\n`;
+            analysisLog += `| ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} | ${k.url || '-'} |\n`;
         });
         if (keywords.length > 20) {
             analysisLog += `| ... y ${keywords.length - 20} más |\n`;
@@ -141,68 +186,60 @@ export async function generateClustersFromSelection(niche, city, competitors, lo
     // Log 4: Top 50 keywords enviadas a IA
     analysisLog += `## 🎯 Top 50 Keywords Enviadas a Gemini AI\n\n`;
     analysisLog += `Estas son las keywords que se usaron para el clustering:\n\n`;
-    analysisLog += `| # | Keyword | Volumen | Pos | Fuente |\n`;
-    analysisLog += `|---|---------|---------|-----|--------|\n`;
+    analysisLog += `| # | Keyword | Volumen | Pos | Fuente | URL |\n`;
+    analysisLog += `|---|---------|---------|-----|--------|-----|\n`;
     uniqueKeywords.slice(0, 50).forEach((k, i) => {
-        analysisLog += `| ${i + 1} | ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} |\n`;
+        analysisLog += `| ${i + 1} | ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} | ${k.url || '-'} |\n`;
     });
     analysisLog += `\n`;
 
     // 4. Clustering con Gemini
     const prompt = `
-        Actúa como experto SEO profesional. Objetivo: Crear arquitectura web para "${cleanNiche}" en "${cleanCity}".
+        ACTÚA COMO: Experto en Arquitectura Web y SEO Estratégico.
+        OBJETIVO: Identificar los SERVICIOS PRINCIPALES (Commercial Intent) que ofrecen los competidores y separarlos de temas informativos (Blog/Info).
+
+        INPUT DATA (Keywords + Contexto):
+        ${JSON.stringify(uniqueKeywords.map(k => ({
+        keyword: k.keyword,
+        volume: k.volume,
+        source: k.source, // 'competitor' o 'related'
+        url: k.url || '' // URL que rankea (pista de intención)
+    })))}
         
-        INPUT (Keywords + Volumen Local):
-        ${JSON.stringify(uniqueKeywords.map(k => `${k.keyword} (${k.volume})`))}
-        
-        TAREA:
-        1. Agrupa estas keywords en CLUSTERS temáticos para crear páginas de servicio
-        2. Para cada cluster, selecciona la "Focal Keyword" (mayor volumen + intención comercial)
-        3. Calcula el "volume" del cluster como la SUMA TOTAL de los volúmenes de TODAS las keywords del cluster
-        4. Genera 5 VARIACIONES DIFERENTES de meta tags para cada cluster
-        5. Define 5 zonas/barrios locales de ${cleanCity}
+        INSTRUCCIONES DE ANÁLISIS:
+        1. Analiza la INTENCIÓN DE BÚSQUEDA de cada keyword usando la URL y el término:
+           - **COMMERCIAL (Servicios):** Si la URL sugiere una página de servicio (ej: /servicios/, /instalacion/, root domain) o la keyword es transaccional ("precio", "empresa", "instalador").
+           - **INFORMATIONAL (Blog):** Si la URL sugiere blog (ej: /blog/, /consejos/, /guia/, /como-hacer/) o la keyword es informativa ("cómo limpiar", "qué es", "ideas").
+        2. Agrupa las keywords en CLUSTERS temáticos.
+        3. Clasifica cada cluster como "COMMERCIAL" o "INFORMATIONAL".
+        4. **PRIORIDAD:** Tu objetivo principal es definir la arquitectura de SERVICIOS.
         
         REGLAS SEO ESTRICTAS para meta tags:
         - H1: Máximo 60 caracteres, incluir focal keyword de forma natural
-        - SEO Title: Máximo 60 caracteres, NO repetir focal keyword exacta, usar sinónimos o variaciones
-        - Meta Description: Máximo 160 caracteres, persuasiva, incluir call-to-action
+        - SEO Title: Máximo 60 caracteres, NO repetir focal keyword exacta, usar sinónimos
+        - Meta Description: Máximo 160 caracteres, persuasiva, incluir CTA
         - Usar keywords secundarias del cluster en títulos
-        - Incluir modificadores: "Best", "Top", "Guide", "2024", "Precio", "Cerca de ti", etc.
-        - Cada variación debe ser ÚNICA y ofrecer un ángulo diferente
         
         DEVUELVE JSON (IMPORTANTE: Respetar esta estructura exacta):
         {
-            "market_analysis": "Análisis breve del mercado local (2-3 líneas)",
+            "market_analysis": "Breve análisis de qué servicios priorizan los competidores y qué temas informativos cubren.",
             "clusters": [
                 {
                     "name": "Nombre del Cluster/Servicio",
+                    "intent": "COMMERCIAL", // o "INFORMATIONAL"
                     "main_keyword": "focal keyword",
-                    "volume": 0,  // IMPORTANTE: Suma TOTAL de volúmenes de TODAS las keywords del cluster
+                    "volume": 0,  // Suma TOTAL de volúmenes
                     "meta_suggestions": [
                         {
                             "h1": "H1 Optimizado Variación 1",
-                            "seo_title": "Meta Title Variación 1 (sin repetir focal keyword)",
-                            "seo_description": "Meta Description Variación 1 con CTA"
+                            "seo_title": "Meta Title Variación 1",
+                            "seo_description": "Meta Description Variación 1"
                         },
-                        {
-                            "h1": "H1 Optimizado Variación 2",
-                            "seo_title": "Meta Title Variación 2 (ángulo diferente)",
-                            "seo_description": "Meta Description Variación 2 con CTA"
-                        },
-                        {
-                            "h1": "H1 Optimizado Variación 3",
-                            "seo_title": "Meta Title Variación 3 (enfoque precio/calidad)",
-                            "seo_description": "Meta Description Variación 3 con CTA"
-                        },
-                        {
-                            "h1": "H1 Optimizado Variación 4",
-                            "seo_title": "Meta Title Variación 4 (enfoque local)",
-                            "seo_description": "Meta Description Variación 4 con CTA"
-                        },
+                        // ... 5 variaciones ...
                         {
                             "h1": "H1 Optimizado Variación 5",
-                            "seo_title": "Meta Title Variación 5 (enfoque urgencia/2024)",
-                            "seo_description": "Meta Description Variación 5 con CTA"
+                            "seo_title": "Meta Title Variación 5",
+                            "seo_description": "Meta Description Variación 5"
                         }
                     ],
                     "selected_suggestion": 0,

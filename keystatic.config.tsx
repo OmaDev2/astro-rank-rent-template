@@ -372,6 +372,27 @@ export default config({
                     }
                 ),
 
+                // --- TESTIMONIOS ---
+                testimonials: fields.array(
+                    fields.object({
+                        quote: fields.text({
+                            label: 'Testimonio',
+                            multiline: true
+                        }),
+                        author: fields.text({ label: 'Nombre del Cliente' }),
+                        location: fields.text({ label: 'Ubicación (Barrio/Ciudad)' }),
+                        initials: fields.text({
+                            label: 'Iniciales',
+                            description: 'Ej: JP para Juan Pérez'
+                        }),
+                    }),
+                    {
+                        label: 'Testimonios de Clientes',
+                        description: 'Reseñas y opiniones de clientes satisfechos',
+                        itemLabel: (props) => props.fields.author.value || 'Testimonio',
+                    }
+                ),
+
                 // --- SEO CONTENT ---
                 seoContentTitle: fields.text({ label: 'Título Sección SEO (Texto Final)' }),
                 content: fields.mdx({ label: 'Contenido SEO (Texto Final)' }),

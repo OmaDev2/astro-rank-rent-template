@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import JSON5 from 'json5';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,34 +17,30 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Función auxiliar para crear JSONs de datos
 async function generateData(prompt, context = '') {
-    let text = '';  // Declarar fuera del try para que esté disponible en el catch
+    let text = '';
     try {
         console.log(`      ⏳ Consultando a Gemini...`);
         const result = await model.generateContent(prompt);
         text = result.response.text();
 
-        // Log para debug
         console.log(`      📝 Respuesta recibida (${text.length} chars)`);
 
-        // Limpiar el texto: remover markdown code blocks y limpiar saltos de línea problemáticos
+        // Limpiar el texto: remover markdown code blocks
         let jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
-        // NUEVO: Reemplazar saltos de línea dentro de strings por espacios
-        // Esto evita errores de parsing cuando Gemini genera strings multilínea
-        jsonStr = jsonStr.replace(/("\w+"\s*:\s*"[^"]*)\n([^"]*")/g, '$1 $2');
-
-        const parsed = JSON.parse(jsonStr);
+        // 🔥 Usar JSON5 que es más tolerante con comillas escapadas y saltos de línea
+        const parsed = JSON5.parse(jsonStr);
 
         console.log(`      ✅ JSON parseado correctamente`);
 
-        // Delay para evitar rate limits (2 segundos entre llamadas)
+        // Delay para evitar rate limits
         await delay(2000);
 
         return parsed;
     } catch (error) {
         console.error(`      ❌ ERROR en generateData (${context}):`, error.message);
-        if (error.message.includes('JSON')) {
-            console.error(`      📄 Respuesta que falló:`, text?.substring(0, 200));
+        if (error.message.includes('JSON') || error.message.includes('parse')) {
+            console.error(`      📄 Respuesta que falló:`, text?.substring(0, 500) + '...');
         }
 
         // Si es rate limit, esperar más tiempo
@@ -112,17 +109,12 @@ async function generateFAQs(serviceName, city, longTailKeywords) {
     try {
         const data = await generateData(prompt, `FAQs para ${serviceName}`);
 
-        if (!data || !data.faqs || !Array.isArray(data.faqs)) return '';
+        if (!data || !data.faqs || !Array.isArray(data.faqs)) return [];
 
-        let section = '\n\n## Preguntas Frecuentes\n\n';
-        data.faqs.forEach(item => {
-            section += `### ${item.question}\n\n${item.answer}\n\n`;
-        });
-
-        return section;
+        return data.faqs;
     } catch (error) {
         console.error(`      ⚠️  Error generando FAQs para ${serviceName}:`, error.message);
-        return '';
+        return [];
     }
 }
 
@@ -133,31 +125,27 @@ function generateRelatedServices(currentCluster, allClusters, city) {
         .filter(c => c.name !== currentCluster.name)
         .slice(0, 3);
 
-    if (relatedClusters.length === 0) return '';
+    if (relatedClusters.length === 0) return [];
 
-    // Extraer solo el nombre de la ciudad (antes de la primera coma)
-    const cityName = city.split(',')[0].trim();
-
-    let section = '\n\n## Servicios Relacionados\n\n';
-    section += 'Descubre otros servicios profesionales que ofrecemos en ' + cityName + ':\n\n';
-
-    relatedClusters.forEach(cluster => {
+    return relatedClusters.map(cluster => {
         const slug = cluster.name
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
             .replace(/\s+/g, '-');
 
-        // Usar la descripción corta del meta tag o generar una
-        const selectedIdx = cluster.selected_suggestion || 0;
-        const metaTags = cluster.meta_suggestions?.[selectedIdx];
-        const shortDesc = metaTags?.seo_description?.substring(0, 80) || `Servicio profesional de ${cluster.name}`;
+        // Generar una descripción corta basada en el nombre
+        const desc = `Buscas ${cluster.name.toLowerCase()} en ${city.split(',')[0]}? Ofrecemos instalación profesional de todo tipo.`;
 
-        section += `- **[${cluster.name}](/${slug}/)** - ${shortDesc}\n`;
+        return {
+            title: cluster.name,
+            url: `/${slug}/`,
+            desc: desc.substring(0, 100) // Limitar longitud
+        };
     });
-
-    return section;
 }
+
+
 
 async function main() {
     console.log("🚀 INICIANDO GENERADOR DE SITIO...");
@@ -189,35 +177,73 @@ async function main() {
         : `Genera 4 preguntas frecuentes relevantes para el nicho.`;
 
     const homePrompt = `
-        Actúa como experto en SEO y Copywriting.
-        Genera el contenido para la página de inicio de un sitio de "${plan.niche}" en "${plan.city}".
-        
-        IMPORTANTE: Genera SOLO JSON válido. NO uses saltos de línea dentro de los strings.
-        
-        Estructura requerida (JSON):
-        {
-            "hero": {
-                "heading": "${plan.home_structure?.h1 || `${plan.niche} en ${plan.city}`}",
-                "subheading": "Subtítulo persuasivo de 15-20 palabras en UNA SOLA LÍNEA"
-            },
-            "seoContentTitle": "${plan.home_structure?.h2s?.[0] || `¿Por qué elegir nuestros servicios de ${plan.niche}?`}",
-            "seoContent": "Texto SEO de 500-600 palabras en formato Markdown. Usa H2 y H3. Ataca la keyword principal '${plan.niche} en ${plan.city}'.",
-            "features": [
-                { "title": "Característica 1", "description": "Breve descripción en una línea" },
-                { "title": "Característica 2", "description": "Breve descripción en una línea" },
-                { "title": "Característica 3", "description": "Breve descripción en una línea" }
-            ],
-            "faq": [
-                { "question": "Pregunta 1", "answer": "Respuesta breve en una línea" },
-                { "question": "Pregunta 2", "answer": "Respuesta breve en una línea" },
-                { "question": "Pregunta 3", "answer": "Respuesta breve en una línea" },
-                { "question": "Pregunta 4", "answer": "Respuesta breve en una línea" }
-            ]
-        }
-        
-        INSTRUCCIONES ADICIONALES:
-        - ${faqInstruction}
-        - El tono debe ser profesional y confiable.
+Actúa como experto en SEO y Copywriting.
+Genera contenido para la home de "${plan.niche}" en "${plan.city}".
+
+DIRECTRICES E-E-A-T (Google Quality Raters):
+1. Experience: Menciona casos reales, problemas resueltos
+2. Expertise: Técnicas específicas, materiales, normativas
+3. Authoritativeness: Años de experiencia (10-15), proyectos completados
+4. Trustworthiness: Garantías, transparencia, proceso claro
+
+Estructura JSON:
+{
+    "hero": {
+        "heading": "${plan.home_structure?.h1 || `${plan.niche} en ${plan.city}`}",
+        "subheading": "Subtítulo persuasivo de 15-20 palabras que destaque el beneficio principal y la experiencia"
+    },
+    "seoContentTitle": "${plan.home_structure?.h2s?.[0] || `¿Por qué elegir nuestros servicios de ${plan.niche}?`}",
+    "seoContent": "Contenido SEO de 500-600 palabras en Markdown.
+
+Estructura:
+## Introducción (100 palabras)
+- Problema que resuelve el servicio
+- Beneficio principal
+- Mención de ${plan.city}
+
+## Beneficios Principales (200 palabras)
+### Beneficio 1 Específico
+- Explicación con datos concretos
+- Ejemplo o caso de uso
+
+### Beneficio 2 Específico
+- Explicación con datos concretos
+- Ejemplo o caso de uso
+
+## Por Qué Elegirnos en ${plan.city} (150 palabras)
+- Experiencia local (mencionar años específicos)
+- Diferenciadores clave
+- Garantías específicas
+
+## Proceso de Trabajo (100 palabras)
+- Pasos claros (3-4)
+- Tiempos estimados
+- Transparencia
+
+Incluye:
+- Keyword '${plan.niche} en ${plan.city}' 3-5 veces
+- Menciona barrios de ${plan.city}
+- Datos específicos (años, garantías, certificaciones)
+- Tono profesional pero cercano",
+    "features": [
+        { "title": "Característica Diferenciadora 1", "description": "Descripción específica con beneficio medible (ej: 'Taller Propio: Sin intermediarios, fabricamos en ${plan.city}')" },
+        { "title": "Característica Diferenciadora 2", "description": "Descripción específica con beneficio medible (ej: 'Garantía de 5 años: Materiales certificados')" },
+        { "title": "Característica Diferenciadora 3", "description": "Descripción específica con beneficio medible (ej: '+15 Años: Desde 2010 en el sector')" }
+    ],
+    "faq": [
+        { "question": "Pregunta frecuente 1 (usar keywords reales si existen)", "answer": "Respuesta de 40-60 palabras, específica y útil" },
+        { "question": "Pregunta frecuente 2", "answer": "Respuesta de 40-60 palabras, específica y útil" },
+        { "question": "Pregunta frecuente 3", "answer": "Respuesta de 40-60 palabras, específica y útil" },
+        { "question": "Pregunta frecuente 4", "answer": "Respuesta de 40-60 palabras, específica y útil" }
+    ]
+}
+
+INSTRUCCIONES ADICIONALES:
+- ${faqInstruction}
+- Menciona certificaciones o normativas si aplican
+- Incluye garantías específicas (años, satisfacción)
+- Usa números concretos (proyectos, clientes, años)
+- Tono: Profesional pero cercano
     `;
 
     const homeData = await generateData(homePrompt, 'Home Page');
@@ -233,19 +259,67 @@ async function main() {
             return str;
         };
 
+        // 🔥 Des-escapar los \n en el contenido SEO
+        const cleanSeoContent = homeData.seoContent.replace(/\\n/g, '\n');
+
+        // Extraer solo el nombre de la ciudad (ej: "Barcelona,Catalonia,Spain" → "Barcelona")
+        const cityName = plan.city.split(',')[0].trim();
+
+        // 🔥 NUEVO: Generar testimonios (después de definir cityName)
+        const testimonialsPrompt = `
+Genera 3 testimonios realistas para un negocio de "${plan.niche}" en "${cityName}".
+
+Requisitos:
+- Testimonios específicos y creíbles
+- Mencionar aspectos concretos del servicio
+- Tono natural, español de España
+- Variar entre particulares y empresas
+- Incluir barrios reales de ${cityName}
+
+JSON:
+{
+  "testimonials": [
+    {
+      "quote": "Testimonio de 25-35 palabras",
+      "author": "Nombre Apellido",
+      "location": "Barrio de ${cityName}",
+      "initials": "NA"
+    }
+  ]
+}
+    `;
+
+        const testimonialsData = await generateData(testimonialsPrompt, 'Testimonials');
+
         const homeMdx = `---
 hero:
   heading: ${escapeYaml(homeData.hero.heading)}
-  headingHighlight: ${homeData.hero.headingHighlight || 'null'}
   subheading: >-
     ${homeData.hero.subheading}
 servicesSection:
   title: ${plan.niche}
-  titleHighlight: en ${plan.city}
+  titleHighlight: en ${cityName}
   subtitle: >-
     Servicio profesional y garantizado. Presupuesto sin compromiso.
+aboutSection:
+  title: "¿Por Qué Elegirnos para ${plan.niche} en ${cityName}?"
+  description: >-
+    Somos especialistas en ${plan.niche} en ${cityName} con más de 15 años de experiencia transformando espacios. Hemos completado más de 500 proyectos en la zona, trabajando con materiales certificados y técnicas profesionales. Nuestro equipo está cualificado y actualizado en las últimas normativas del sector. Garantizamos acabados perfectos y satisfacción total en cada trabajo.
+  yearsExperience: "15+"
+  image: "/images/home/about-placeholder.jpg"
+  features:
+    - title: "Taller Propio en ${cityName}"
+      description: "Sin intermediarios. Fabricamos y controlamos todo el proceso para garantizar la máxima calidad y ajustar precios."
+    - title: "Materiales Certificados"
+      description: "Trabajamos solo con proveedores homologados. Todos nuestros materiales cumplen normativas vigentes."
+    - title: "Garantía de Satisfacción"
+      description: "Garantía de 5 años en todos nuestros trabajos. Si no quedas satisfecho, lo arreglamos sin coste."
+  buttonText: "Conoce Más Sobre Nosotros"
+  buttonLink: "/nosotros"
 features:
 ${(homeData.features || []).map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${f.description}`).join('\n')}
+testimonials:
+${(testimonialsData?.testimonials || []).map(t => `  - quote: "${t.quote}"\n    author: "${t.author}"\n    location: "${t.location}"\n    initials: "${t.initials}"`).join('\n')}
 seoContentTitle: ${escapeYaml(homeData.seoContentTitle)}
 faq:
 ${(homeData.faq || []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
@@ -254,10 +328,14 @@ blocks:
   - discriminant: services
   - discriminant: about
   - discriminant: features
+  - discriminant: testimonials
+  - discriminant: content
+  - discriminant: faq
+  - discriminant: locations
   - discriminant: cta
 ---
 
-${homeData.seoContent}
+${cleanSeoContent}
 `;
 
         await fs.mkdir('src/content/pages', { recursive: true });
@@ -306,51 +384,85 @@ coordinates:
         };
 
         const prompt = `
-            Genera datos JSON para página de servicio.
-            - Servicio: "${serviceName}"
-            - Ciudad: "${plan.city}"
-            - Nicho: "${plan.niche}"
-            - Focal Keyword: "${cluster.main_keyword}"
-            - Keywords relacionadas: ${JSON.stringify(cluster.keywords?.slice(0, 5).map(k => k.keyword))}
+            Actúa como experto en SEO y Copywriting.
+            Escribe el contenido para una página de servicio: "${serviceName}" en "${cityName}".
             
-            JSON Structure:
+            KEYWORDS PRINCIPALES:
+            ${cluster.keywords.slice(0, 5).map(k => `- ${k.keyword}`).join('\n')}
+            
+            ESTRUCTURA REQUERIDA (JSON):
             {
                 "title": "${metaTags.h1}",
-                "shortDesc": "Short SEO description (100 chars)",
+                "shortDesc": "${metaTags.seo_description.substring(0, 150)}...",
                 "seoTitle": "${metaTags.seo_title}",
                 "seoDesc": "${metaTags.seo_description}",
-                "content": "Markdown text (400 words). Incluye las keywords relacionadas de forma natural."
+                "content": "Contenido en Markdown (aprox 600 palabras). Usa H2 y H3. Incluye negritas en keywords importantes."
             }
+            
+            IMPORTANTE: Genera SOLO JSON válido. NO uses saltos de línea dentro de los strings.
         `;
 
         const data = await generateData(prompt);
         if (data) {
-            // NUEVO: Generar sección de interlinking
-            const relatedServicesSection = generateRelatedServices(cluster, services, plan.city);
+            // Helper para escapar strings YAML
+            const escapeYaml = (str) => {
+                if (!str) return '';
+                // Si contiene caracteres especiales, envolver en comillas
+                if (str.includes(':') || str.includes('#') || str.includes('|') || str.includes('>')) {
+                    return `"${str.replace(/"/g, '\\"')}"`;
+                }
+                return str;
+            };
 
-            // NUEVO: Generar FAQs automáticas
+            // NUEVO: Generar sección de interlinking
+            const relatedLinks = generateRelatedServices(cluster, services, plan.city); // Assuming generateRelatedServices now returns an array of objects {title, url, desc}
+
+            // NUEVO: Generar FAQs automáticas (Array de objetos)
             const longTailKeywords = extractLongTailQuestions(cluster.keywords);
             // Usar cityName (definido arriba) en lugar de plan.city para evitar "Barcelona,Catalonia,Spain" en el texto
-            const faqsSection = await generateFAQs(serviceName, cityName, longTailKeywords);
+            const faqsArray = await generateFAQs(serviceName, cityName, longTailKeywords);
 
-            const mdx = `---
-title: "${data.title}"
-shortDesc: "${data.shortDesc}"
-icon: "Hammer"
-heroImage: "/images/services/default.jpg"
-seoTitle: "${data.seoTitle}"
-seoDesc: "${data.seoDesc}"
-blocks:
-  - discriminant: "hero"
-  - discriminant: "content"
-  - discriminant: "cta"
----
-${data.content}${relatedServicesSection}${faqsSection}`;
+            const faqYaml = faqsArray.map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`);
+
+            // IMPORTANTE: Asegurar jerarquía correcta (H2 como máximo nivel en contenido)
+            // Si Gemini devuelve un H1 (# Título), lo bajamos a H2 (## Título)
+            let cleanContent = data.content.replace(/^#\s+/gm, '## ');
+
+            // 🔥 NUEVO: Des-escapar los \n para que se conviertan en saltos de línea reales
+            cleanContent = cleanContent.replace(/\\n/g, '\n');
+
+            // Construir el frontmatter
+            const mdx = [
+                '---',
+                `title: "${data.title}"`,
+                `shortDesc: "${data.shortDesc}"`,
+                `icon: "${cluster.icon || 'Hammer'}"`, // Use cluster.icon if available, otherwise default to 'Hammer'
+                `heroImage: "/images/services/default.jpg"`,
+                `featured: true`,
+                `seoTitle: "${data.seoTitle}"`,
+                `seoDesc: "${data.seoDesc}"`,
+                'faq:',
+                ...faqYaml,
+                'blocks:',
+                '  - discriminant: "hero"',
+                '  - discriminant: "content"',
+                '  - discriminant: "faq"',
+                '  - discriminant: "cta"',
+                '---',
+                cleanContent, // Usar contenido limpio con saltos de línea reales
+                '',
+                '## Servicios Relacionados',
+                '',
+                `Descubre otros servicios profesionales que ofrecemos en ${cityName}:`,
+                '',
+                ...relatedLinks.map(link => `- **[${link.title}](${link.url})** - ${link.desc}`),
+                ''
+            ].join('\n');
 
             const filePath = path.join('src/content/services', `${slug}.mdx`);
             await fs.mkdir(path.dirname(filePath), { recursive: true });
             await fs.writeFile(filePath, mdx);
-            console.log(`      ✅ Creado: ${slug}.mdx (con ${services.length - 1} links relacionados y FAQs)`);
+            console.log(`      ✅ Creado: ${slug}.mdx (con ${services.length - 1} links relacionados y ${faqsArray.length} FAQs)`);
         } else {
             console.warn(`      ⚠️  SALTADO: No se pudo generar ${serviceName}`);
         }
@@ -380,6 +492,9 @@ ${data.content}${relatedServicesSection}${faqsSection}`;
 
         const data = await generateData(prompt);
         if (data) {
+            // 🔥 Des-escapar los \n para formato correcto
+            const cleanContent = data.content.replace(/\\n/g, '\n');
+
             const zipArray = data.zipCode ? `["${data.zipCode}"]` : `[]`;
             const mdx = `---
 name: "${data.name}"
@@ -394,7 +509,7 @@ blocks:
   - discriminant: "content"
   - discriminant: "cta"
 ---
-${data.content}`;
+${cleanContent}`;
 
             const filePath = path.join('src/content/locations', `${slug}.mdx`);
             await fs.mkdir(path.dirname(filePath), { recursive: true });

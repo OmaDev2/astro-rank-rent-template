@@ -40,11 +40,11 @@ export default function GeneratorApp() {
         }));
     };
 
-    // PASO 1: OBTENER LISTA DE COMPETIDORES
+    // PASO 1: OBTENER LISTA DE COMPETIDORES (usando API v2)
     const handleResearch = async (e) => {
         e.preventDefault();
         setStep('loading');
-        setLogs(["🚀 Buscando competidores en Google..."]);
+        setLogs(["🚀 Buscando competidores locales en Google..."]);
 
         try {
             const res = await fetch('/api/research', {
@@ -53,7 +53,7 @@ export default function GeneratorApp() {
                 body: JSON.stringify({
                     niche: formData.niche,
                     city: formData.city,
-                    locationCode: formData.locationCode  // NUEVO: enviar código de ubicación
+                    location: formData.locationName || formData.city.toLowerCase()  // v2 usa 'location'
                 })
             });
             const data = await res.json();
@@ -74,10 +74,15 @@ export default function GeneratorApp() {
         }
     };
 
-    // PASO 2: CLUSTERIZAR
+    // PASO 2: CLUSTERIZAR (usando API v2 con SEO local)
     const handleFinishSelection = async () => {
         setStep('loading');
-        setLogs(["🕵️ Extrayendo keywords...", "🧠 IA realizando Clustering...", "✨ Optimizando Meta Tags..."]);
+        setLogs([
+            "🕵️ Extrayendo keywords de competidores locales...",
+            "🎯 Filtrando por relevancia local...",
+            "🧠 IA realizando Clustering inteligente...",
+            "✨ Optimizando Meta Tags para SEO local..."
+        ]);
 
         try {
             const selectedDomainsArray = Array.from(selectedCompetitors);
@@ -89,9 +94,8 @@ export default function GeneratorApp() {
                     niche: formData.niche,
                     city: formData.city,
                     competitors: selectedDomainsArray,
-                    locationCode: formData.locationCode,
-                    locationName: formData.locationName,  // NUEVO: nombre para Labs endpoints
-                    top10Filter: formData.top10Filter  // NUEVO: filtro TOP 10
+                    location: formData.locationName || formData.city.toLowerCase(),  // v2 usa 'location'
+                    top10Filter: formData.top10Filter !== false  // Default true
                 })
             });
 
@@ -346,10 +350,22 @@ export default function GeneratorApp() {
                         <div key={i} className="bg-white rounded-xl overflow-hidden shadow-xl border border-slate-200 text-slate-800">
                             <div className="bg-slate-800 p-4 flex justify-between items-center">
                                 <div className="flex items-center gap-3">
-                                    <span className="bg-indigo-500 text-white text-xs px-2 py-1 rounded font-bold">SILO {i + 1}</span>
-                                    <h3 className="text-lg font-bold text-white">{cluster.name}</h3>
+                                    <div className="flex flex-col">
+                                        <span className="bg-indigo-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold w-fit mb-1">
+                                            SERVICE CLUSTER {i + 1}
+                                        </span>
+                                        <h3 className="text-xl font-bold text-white">{cluster.name}</h3>
+                                    </div>
+                                    <div className="group relative">
+                                        <AlertTriangle className="w-4 h-4 text-slate-400 cursor-help" />
+                                        <div className="absolute left-0 bottom-full mb-2 w-64 bg-slate-900 text-slate-300 text-xs p-2 rounded shadow-xl border border-slate-700 hidden group-hover:block z-10">
+                                            A <strong>Service Cluster</strong> represents a specific service page on your site. It groups related keywords to build a comprehensive page that ranks for multiple terms.
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="text-xs text-slate-400 font-mono">Vol Total: {cluster.volume}</div>
+                                <div className="text-xs text-slate-400 font-mono bg-slate-900 px-3 py-1 rounded border border-slate-700">
+                                    Total Vol: <span className="text-green-400 font-bold">{cluster.volume}</span>
+                                </div>
                             </div>
 
                             <div className="p-6 grid lg:grid-cols-2 gap-8">
