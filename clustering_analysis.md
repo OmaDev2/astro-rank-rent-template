@@ -1,6 +1,6 @@
-# 📊 Análisis de Clustering - Herrero  en Zaragoza,Aragon,Spain
+# 📊 Análisis de Clustering - Herrero  en Barcelona,Catalonia,Spain
 
-**Fecha:** 2/12/2025, 14:22:18
+**Fecha:** 2/12/2025, 14:47:14
 **Location Code:** 2724
 
 ---
@@ -27,142 +27,103 @@
 
 ## 🎨 Clusters Generados
 
-### 1. Puertas de Hierro en Zaragoza
+### 1. Rejas de Seguridad y Cerramientos Metálicos
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** puertas de hierro zaragoza
-- **Volumen Total:** 1,380
+- **Main Keyword:** herrero rejas barcelona
+- **Volumen Total:** 3,200
 - **Keywords:** 6
 
 | Keyword | Volumen |
 |---------|--------|
-| puertas de hierro zaragoza | 500 |
-| puertas metálicas zaragoza | 350 |
-| fabricación puertas hierro zaragoza | 200 |
-| puertas forja zaragoza | 150 |
-| instalación puertas hierro zaragoza | 100 |
-| precio puertas hierro zaragoza | 80 |
+| herrero rejas barcelona | 800 |
+| instalacion rejas seguridad barcelona | 650 |
+| rejas hierro barcelona | 500 |
+| rejas metalicas barcelona | 400 |
+| precio rejas seguridad barcelona | 300 |
+| cerramientos metalicos barcelona | 550 |
 
 **Meta Tags Sugeridos:**
-- H1: Puertas de Hierro en Zaragoza | Fabricación e Instalación
-- Title: Puertas de Hierro Zaragoza | Fabricación a Medida
-- Description: Diseñamos e instalamos puertas de hierro en Zaragoza. Seguridad y estética para tu hogar o negocio. ¡Pide tu presupuesto sin compromiso!
+- H1: Rejas de Seguridad en Barcelona | Herrero Profesional
+- Title: Rejas Seguridad y Cerramientos Metálicos en Barcelona
+- Description: Instalación de rejas de seguridad y cerramientos metálicos en Barcelona. Protege tu hogar o negocio con soluciones a medida. ¡Pide presupuesto sin compromiso!
 
-### 2. Rejas para Ventanas en Zaragoza
+### 2. Puertas Metálicas y de Garaje a Medida
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** rejas ventanas zaragoza
-- **Volumen Total:** 1,070
+- **Main Keyword:** herrero puertas barcelona
+- **Volumen Total:** 2,850
 - **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| rejas ventanas zaragoza | 400 |
-| rejas de seguridad zaragoza | 300 |
-| instalación rejas zaragoza | 180 |
-| precio rejas ventanas zaragoza | 120 |
-| herrero rejas zaragoza | 70 |
+| herrero puertas barcelona | 750 |
+| instalacion puertas metalicas barcelona | 600 |
+| puertas hierro forjado barcelona | 450 |
+| puertas blindadas barcelona | 700 |
+| puertas de garaje metalicas barcelona | 350 |
 
 **Meta Tags Sugeridos:**
-- H1: Rejas para Ventanas en Zaragoza | Seguridad y Diseño
-- Title: Rejas Ventanas Zaragoza | Seguridad y Estilo
-- Description: Rejas de seguridad para ventanas en Zaragoza. Fabricación e instalación a medida. Protege tu hogar con estilo. ¡Pide información!
+- H1: Puertas Metálicas en Barcelona | Fabricación e Instalación
+- Title: Puertas Metálicas, Blindadas y de Garaje en Barcelona
+- Description: Fabricamos e instalamos puertas metálicas, blindadas y de garaje en Barcelona. Seguridad y diseño a medida para tu hogar o negocio. ¡Pide presupuesto ahora!
 
-### 3. Vallas y Cerramientos de Hierro en Zaragoza
+### 3. Barandillas, Balcones y Escaleras Metálicas
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** vallas hierro zaragoza
-- **Volumen Total:** 930
-- **Keywords:** 5
+- **Main Keyword:** herrero barandillas barcelona
+- **Volumen Total:** 2,150
+- **Keywords:** 6
 
 | Keyword | Volumen |
 |---------|--------|
-| vallas hierro zaragoza | 380 |
-| cerramientos metálicos zaragoza | 250 |
-| vallas a medida zaragoza | 150 |
-| vallado jardín zaragoza | 90 |
-| instalación vallas zaragoza | 60 |
+| herrero barandillas barcelona | 550 |
+| barandillas hierro barcelona | 400 |
+| balcones hierro barcelona | 300 |
+| fabricacion barandillas barcelona | 250 |
+| reparacion barandillas barcelona | 200 |
+| escaleras metalicas barcelona | 450 |
 
 **Meta Tags Sugeridos:**
-- H1: Vallas de Hierro en Zaragoza | Cerramientos a Medida
-- Title: Vallas de Hierro Zaragoza | Cerramientos Profesionales
-- Description: Fabricación e instalación de vallas de hierro y cerramientos en Zaragoza. Seguridad y diseño para tu propiedad. ¡Pide tu presupuesto!
+- H1: Barandillas y Balcones Metálicos en Barcelona | Herrero
+- Title: Barandillas, Balcones y Escaleras Metálicas en Barcelona
+- Description: Fabricación e instalación de barandillas, balcones y escaleras metálicas en Barcelona. Diseños modernos y clásicos a tu medida. ¡Pídenos presupuesto!
 
-### 4. Barandillas y Balcones de Hierro en Zaragoza
-
-- **Intent:** COMMERCIAL
-- **Main Keyword:** barandillas hierro zaragoza
-- **Volumen Total:** 830
-- **Keywords:** 5
-
-| Keyword | Volumen |
-|---------|--------|
-| barandillas hierro zaragoza | 320 |
-| barandillas escaleras zaragoza | 220 |
-| balcones de hierro zaragoza | 150 |
-| diseño barandillas zaragoza | 90 |
-| reparación barandillas zaragoza | 50 |
-
-**Meta Tags Sugeridos:**
-- H1: Barandillas de Hierro en Zaragoza | Escaleras y Balcones
-- Title: Barandillas Hierro Zaragoza | Diseño y Seguridad
-- Description: Fabricación e instalación de barandillas de hierro en Zaragoza. Seguridad y elegancia para escaleras y balcones. ¡Pide presupuesto sin compromiso!
-
-### 5. Herrería Artística y a Medida en Zaragoza
+### 4. Estructuras Metálicas y Trabajos de Soldadura a Medida
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** herreria artistica zaragoza
-- **Volumen Total:** 690
+- **Main Keyword:** estructuras metalicas barcelona
+- **Volumen Total:** 2,400
 - **Keywords:** 4
 
 | Keyword | Volumen |
 |---------|--------|
-| herreria artistica zaragoza | 280 |
-| trabajos hierro a medida zaragoza | 200 |
-| forja artesanal zaragoza | 130 |
-| artesano del hierro zaragoza | 80 |
+| estructuras metalicas barcelona | 900 |
+| trabajos hierro a medida barcelona | 600 |
+| herreria artistica barcelona | 400 |
+| servicios de soldadura barcelona | 500 |
 
 **Meta Tags Sugeridos:**
-- H1: Herrería Artística en Zaragoza | Trabajos a Medida
-- Title: Herrería Artística Zaragoza | Piezas Únicas
-- Description: Descubre la herrería artística en Zaragoza. Creaciones únicas y trabajos de hierro a medida para tu hogar o negocio. ¡Contacta hoy!
+- H1: Estructuras Metálicas en Barcelona | Herrero Soldador
+- Title: Estructuras Metálicas y Soldadura a Medida en Barcelona
+- Description: Diseño y fabricación de estructuras metálicas en Barcelona. Expertos en soldadura y trabajos a medida para cualquier proyecto. ¡Solicita tu presupuesto!
 
-### 6. Estructuras Metálicas y Pérgolas en Zaragoza
-
-- **Intent:** COMMERCIAL
-- **Main Keyword:** estructuras metálicas zaragoza
-- **Volumen Total:** 1,100
-- **Keywords:** 5
-
-| Keyword | Volumen |
-|---------|--------|
-| estructuras metálicas zaragoza | 450 |
-| pérgolas hierro zaragoza | 300 |
-| techos metálicos zaragoza | 180 |
-| carpintería metálica zaragoza | 100 |
-| diseño estructuras zaragoza | 70 |
-
-**Meta Tags Sugeridos:**
-- H1: Estructuras Metálicas en Zaragoza | Pérgolas de Hierro
-- Title: Estructuras Metálicas Zaragoza | Pérgolas
-- Description: Fabricación e instalación de estructuras metálicas y pérgolas de hierro en Zaragoza. Soluciones robustas y duraderas. ¡Pide tu presupuesto!
-
-### 7. Reparación de Herrería en Zaragoza
+### 5. Automatismos y Motores para Puertas de Garaje
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** reparación herrería zaragoza
-- **Volumen Total:** 750
+- **Main Keyword:** automatismos puertas barcelona
+- **Volumen Total:** 1,600
 - **Keywords:** 4
 
 | Keyword | Volumen |
 |---------|--------|
-| reparación herrería zaragoza | 300 |
-| arreglar rejas hierro zaragoza | 200 |
-| soldador a domicilio zaragoza | 150 |
-| mantenimiento hierro zaragoza | 100 |
+| automatismos puertas barcelona | 600 |
+| motorizacion puertas garaje barcelona | 450 |
+| reparacion automatismos barcelona | 300 |
+| motores puertas barcelona | 250 |
 
 **Meta Tags Sugeridos:**
-- H1: Reparación de Herrería en Zaragoza | Servicio Urgente
-- Title: Reparación Herrería Zaragoza | Soldador a Domicilio
-- Description: Servicio de reparación de herrería en Zaragoza. Arreglamos puertas, rejas y vallas de hierro. ¡Llámanos para un servicio rápido!
+- H1: Automatismos Puertas Barcelona | Instalación y Reparación
+- Title: Automatismos y Motores para Puertas de Garaje en Barcelona
+- Description: Instalación y reparación de automatismos para puertas en Barcelona. Motorización para puertas de garaje y cancelas. ¡Pide tu presupuesto personalizado!
 

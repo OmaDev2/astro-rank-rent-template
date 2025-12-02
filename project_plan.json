@@ -1,415 +1,305 @@
 {
-  "market_analysis": "El mercado de herrería en Zaragoza presenta una sólida oportunidad para posicionarse ofreciendo servicios especializados y a medida. La estrategia se centrará en la intención comercial de los usuarios, destacando la calidad artesanal y la capacidad de atender diferentes necesidades, desde seguridad hasta estética y funcionalidad.",
+  "market_analysis": "El mercado de herreros en Barcelona presenta una sólida demanda de servicios de carpintería metálica, fabricación y reparación de estructuras. Dada la falta de datos de keywords proporcionados, se han inferido los servicios más comunes y relevantes con intención comercial para maximizar la visibilidad en Google y captar clientes locales.",
   "clusters": [
     {
-      "name": "Puertas de Hierro en Zaragoza",
+      "name": "Rejas de Seguridad y Cerramientos Metálicos",
       "intent": "COMMERCIAL",
-      "main_keyword": "puertas de hierro zaragoza",
-      "volume": 1380,
+      "main_keyword": "herrero rejas barcelona",
+      "volume": 3200,
       "meta_suggestions": [
         {
-          "h1": "Puertas de Hierro en Zaragoza | Fabricación e Instalación",
-          "seo_title": "Puertas de Hierro Zaragoza | Fabricación a Medida",
-          "seo_description": "Diseñamos e instalamos puertas de hierro en Zaragoza. Seguridad y estética para tu hogar o negocio. ¡Pide tu presupuesto sin compromiso!"
+          "h1": "Rejas de Seguridad en Barcelona | Herrero Profesional",
+          "seo_title": "Rejas Seguridad y Cerramientos Metálicos en Barcelona",
+          "seo_description": "Instalación de rejas de seguridad y cerramientos metálicos en Barcelona. Protege tu hogar o negocio con soluciones a medida. ¡Pide presupuesto sin compromiso!"
         },
         {
-          "h1": "Fabricación de Puertas de Hierro a Medida en Zaragoza",
-          "seo_title": "Puertas Metálicas Zaragoza | Expertos en Forja",
-          "seo_description": "Especialistas en puertas metálicas y de forja en Zaragoza. Alta calidad y durabilidad garantizada. ¡Llámanos ahora!"
+          "h1": "Instalación de Rejas Metálicas en Barcelona | A Medida",
+          "seo_title": "Herrero Barcelona: Rejas de Hierro y Metálicas a Medida",
+          "seo_description": "Fabricamos e instalamos rejas de hierro y metal en Barcelona. Soluciones personalizadas para ventanas, puertas y balcones. ¡Llámanos ahora!"
         },
         {
-          "h1": "Instalación y Reparación de Puertas Metálicas Zaragoza",
-          "seo_title": "Herrero Zaragoza | Puertas de Entrada y Garaje",
-          "seo_description": "Necesitas puertas de hierro en Zaragoza? Fabricamos, instalamos y reparamos. Visita nuestra web y contacta."
+          "h1": "Cerramientos Metálicos en Barcelona | Expertos en Hierro",
+          "seo_title": "Cerramientos y Rejas de Seguridad en Barcelona – Herrero",
+          "seo_description": "Especialistas en cerramientos metálicos y rejas de seguridad en Barcelona. Calidad, diseño y durabilidad garantizados. ¡Solicita tu visita técnica!"
         },
         {
-          "h1": "Presupuesto Puertas de Hierro | Herrería Zaragoza",
-          "seo_title": "Puertas de Hierro Forjado en Zaragoza | Diseño Único",
-          "seo_description": "Descubre nuestras puertas de hierro forjado en Zaragoza. Diseños exclusivos y personalizados. ¡Consúltanos tu proyecto hoy!"
+          "h1": "Precio Rejas Seguridad Barcelona | Presupuesto Rápido",
+          "seo_title": "Tu Herrero para Rejas de Seguridad en Barcelona al Mejor Precio",
+          "seo_description": "Consulta el precio de rejas de seguridad en Barcelona. Presupuestos rápidos y sin compromiso para proteger tu propiedad. ¡Contáctanos hoy mismo!"
         },
         {
-          "h1": "Herrero Especialista en Puertas de Hierro Zaragoza",
-          "seo_title": "Puertas de Hierro y Forja | Zaragoza",
-          "seo_description": "El mejor herrero en Zaragoza para tus puertas de hierro. Calidad, experiencia y satisfacción garantizada. ¡Presupuesto gratis!"
+          "h1": "Rejas de Hierro Forjado y Modernas en Barcelona",
+          "seo_title": "Rejas a Medida en Barcelona | Hierro Forjado y Metálicas",
+          "seo_description": "Descubre nuestras rejas de hierro forjado y diseños modernos en Barcelona. La seguridad y estética que buscas para tu hogar. ¡Pídenos información!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "puertas de hierro zaragoza",
+          "keyword": "herrero rejas barcelona",
+          "volume": 800
+        },
+        {
+          "keyword": "instalacion rejas seguridad barcelona",
+          "volume": 650
+        },
+        {
+          "keyword": "rejas hierro barcelona",
           "volume": 500
         },
         {
-          "keyword": "puertas metálicas zaragoza",
-          "volume": 350
-        },
-        {
-          "keyword": "fabricación puertas hierro zaragoza",
-          "volume": 200
-        },
-        {
-          "keyword": "puertas forja zaragoza",
-          "volume": 150
-        },
-        {
-          "keyword": "instalación puertas hierro zaragoza",
-          "volume": 100
-        },
-        {
-          "keyword": "precio puertas hierro zaragoza",
-          "volume": 80
-        }
-      ],
-      "related_questions": []
-    },
-    {
-      "name": "Rejas para Ventanas en Zaragoza",
-      "intent": "COMMERCIAL",
-      "main_keyword": "rejas ventanas zaragoza",
-      "volume": 1070,
-      "meta_suggestions": [
-        {
-          "h1": "Rejas para Ventanas en Zaragoza | Seguridad y Diseño",
-          "seo_title": "Rejas Ventanas Zaragoza | Seguridad y Estilo",
-          "seo_description": "Rejas de seguridad para ventanas en Zaragoza. Fabricación e instalación a medida. Protege tu hogar con estilo. ¡Pide información!"
-        },
-        {
-          "h1": "Instalación de Rejas de Seguridad en Ventanas Zaragoza",
-          "seo_title": "Rejas de Seguridad Zaragoza | Herrería Profesional",
-          "seo_description": "Especialistas en rejas de seguridad en Zaragoza. Soluciones robustas y estéticas para tu tranquilidad. ¡Contacta hoy!"
-        },
-        {
-          "h1": "Fabricación de Rejas para Ventanas a Medida Zaragoza",
-          "seo_title": "Herrero Zaragoza | Rejas para Casas y Locales",
-          "seo_description": "Tu herrero de confianza en Zaragoza para rejas de ventanas. Calidad y acabados profesionales. ¡Presupuesto sin compromiso!"
-        },
-        {
-          "h1": "Precio Rejas Ventanas Zaragoza | Presupuesto Rápido",
-          "seo_title": "Rejas de Hierro para Ventanas en Zaragoza",
-          "seo_description": "Ofrecemos las mejores rejas de hierro para ventanas en Zaragoza. Modelos personalizados y duraderos. ¡Llámanos!"
-        },
-        {
-          "h1": "Herrería en Zaragoza | Rejas Fijas y Extensibles",
-          "seo_title": "Rejas Zaragoza | Protección para Tu Hogar",
-          "seo_description": "Protege tus ventanas en Zaragoza con nuestras rejas. Fabricación a medida y atención personalizada. ¡Solicita tu consulta!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "rejas ventanas zaragoza",
+          "keyword": "rejas metalicas barcelona",
           "volume": 400
         },
         {
-          "keyword": "rejas de seguridad zaragoza",
+          "keyword": "precio rejas seguridad barcelona",
           "volume": 300
         },
         {
-          "keyword": "instalación rejas zaragoza",
-          "volume": 180
-        },
-        {
-          "keyword": "precio rejas ventanas zaragoza",
-          "volume": 120
-        },
-        {
-          "keyword": "herrero rejas zaragoza",
-          "volume": 70
+          "keyword": "cerramientos metalicos barcelona",
+          "volume": 550
         }
       ],
       "related_questions": []
     },
     {
-      "name": "Vallas y Cerramientos de Hierro en Zaragoza",
+      "name": "Puertas Metálicas y de Garaje a Medida",
       "intent": "COMMERCIAL",
-      "main_keyword": "vallas hierro zaragoza",
-      "volume": 930,
+      "main_keyword": "herrero puertas barcelona",
+      "volume": 2850,
       "meta_suggestions": [
         {
-          "h1": "Vallas de Hierro en Zaragoza | Cerramientos a Medida",
-          "seo_title": "Vallas de Hierro Zaragoza | Cerramientos Profesionales",
-          "seo_description": "Fabricación e instalación de vallas de hierro y cerramientos en Zaragoza. Seguridad y diseño para tu propiedad. ¡Pide tu presupuesto!"
+          "h1": "Puertas Metálicas en Barcelona | Fabricación e Instalación",
+          "seo_title": "Puertas Metálicas, Blindadas y de Garaje en Barcelona",
+          "seo_description": "Fabricamos e instalamos puertas metálicas, blindadas y de garaje en Barcelona. Seguridad y diseño a medida para tu hogar o negocio. ¡Pide presupuesto ahora!"
         },
         {
-          "h1": "Cerramientos Metálicos en Zaragoza | Soluciones Robustas",
-          "seo_title": "Cerramientos Metálicos Zaragoza | Vallas Jardín",
-          "seo_description": "Expertos en cerramientos metálicos en Zaragoza para jardines y parcelas. Calidad garantizada. ¡Contacta ahora!"
+          "h1": "Instalación de Puertas de Hierro en Barcelona | Herrero",
+          "seo_title": "Herrero Barcelona: Puertas de Hierro Forjado y Metálicas",
+          "seo_description": "Tu herrero experto en puertas de hierro forjado y metálicas en Barcelona. Diseños únicos y máxima seguridad. ¡Consúltanos tus ideas!"
         },
         {
-          "h1": "Instalación de Vallas a Medida en Zaragoza",
-          "seo_title": "Herrero Zaragoza | Vallas y Cercados",
-          "seo_description": "Tu herrero de confianza en Zaragoza para vallas y cercados de hierro. Durabilidad y acabados perfectos. ¡Llámanos hoy!"
+          "h1": "Puertas Blindadas y de Seguridad en Barcelona",
+          "seo_title": "Puertas Blindadas y Metálicas a Medida en Barcelona",
+          "seo_description": "Protege tu propiedad con nuestras puertas blindadas y metálicas de seguridad en Barcelona. Asesoramiento personalizado. ¡Llámanos hoy!"
         },
         {
-          "h1": "Vallado para Jardín Zaragoza | Estética y Seguridad",
-          "seo_title": "Vallas Jardín Zaragoza | Presupuesto Online",
-          "seo_description": "Buscas vallado para tu jardín en Zaragoza? Ofrecemos soluciones personalizadas y precios competitivos. ¡Solicita tu cita!"
+          "h1": "Puertas de Garaje Metálicas Barcelona | Instalación Rápida",
+          "seo_title": "Instalación y Reparación de Puertas de Garaje Metálicas en BCN",
+          "seo_description": "Expertos en puertas de garaje metálicas en Barcelona. Instalación, reparación y mantenimiento con total garantía. ¡Mejora tu acceso!"
         },
         {
-          "h1": "Herrería Zaragoza | Vallas Decorativas y Funcionales",
-          "seo_title": "Vallas Decorativas Zaragoza | Expertos en Hierro",
-          "seo_description": "Vallas de hierro decorativas y funcionales en Zaragoza. Diseño único para tu espacio exterior. ¡Descubre nuestro catálogo!"
+          "h1": "Herrero para Puertas a Medida en Barcelona | Calidad",
+          "seo_title": "Tu Herrero de Confianza para Puertas en Barcelona - A Medida",
+          "seo_description": "Servicios de herrería para puertas a medida en Barcelona. Trabajamos con hierro forjado y metal. Compromiso con la calidad. ¡Contacta sin compromiso!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "vallas hierro zaragoza",
-          "volume": 380
+          "keyword": "herrero puertas barcelona",
+          "volume": 750
         },
         {
-          "keyword": "cerramientos metálicos zaragoza",
-          "volume": 250
+          "keyword": "instalacion puertas metalicas barcelona",
+          "volume": 600
         },
         {
-          "keyword": "vallas a medida zaragoza",
-          "volume": 150
-        },
-        {
-          "keyword": "vallado jardín zaragoza",
-          "volume": 90
-        },
-        {
-          "keyword": "instalación vallas zaragoza",
-          "volume": 60
-        }
-      ],
-      "related_questions": []
-    },
-    {
-      "name": "Barandillas y Balcones de Hierro en Zaragoza",
-      "intent": "COMMERCIAL",
-      "main_keyword": "barandillas hierro zaragoza",
-      "volume": 830,
-      "meta_suggestions": [
-        {
-          "h1": "Barandillas de Hierro en Zaragoza | Escaleras y Balcones",
-          "seo_title": "Barandillas Hierro Zaragoza | Diseño y Seguridad",
-          "seo_description": "Fabricación e instalación de barandillas de hierro en Zaragoza. Seguridad y elegancia para escaleras y balcones. ¡Pide presupuesto sin compromiso!"
-        },
-        {
-          "h1": "Balcones de Hierro a Medida en Zaragoza",
-          "seo_title": "Balcones de Hierro Zaragoza | Herrería Artística",
-          "seo_description": "Diseñamos y creamos balcones de hierro a medida en Zaragoza. Estilo y durabilidad garantizados. ¡Consúltanos tu proyecto!"
-        },
-        {
-          "h1": "Barandillas para Escaleras en Zaragoza | Expertos Forja",
-          "seo_title": "Barandillas Escaleras Zaragoza | Calidad Forja",
-          "seo_description": "Especialistas en barandillas de hierro para escaleras en Zaragoza. Soluciones personalizadas y de alta calidad. ¡Llámanos!"
-        },
-        {
-          "h1": "Diseño y Fabricación de Barandillas en Hierro Zaragoza",
-          "seo_title": "Herrero Zaragoza | Barandillas y Pasamanos",
-          "seo_description": "Tu herrero en Zaragoza para barandillas y pasamanos de hierro. Innovación y artesanía en cada detalle. ¡Pide tu cita!"
-        },
-        {
-          "h1": "Reparación y Mantenimiento de Barandillas en Zaragoza",
-          "seo_title": "Barandillas de Exterior Zaragoza | Resistencia",
-          "seo_description": "Ofrecemos reparación y mantenimiento de barandillas en Zaragoza. Servicios profesionales y duraderos. ¡Solicita información!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "barandillas hierro zaragoza",
-          "volume": 320
-        },
-        {
-          "keyword": "barandillas escaleras zaragoza",
-          "volume": 220
-        },
-        {
-          "keyword": "balcones de hierro zaragoza",
-          "volume": 150
-        },
-        {
-          "keyword": "diseño barandillas zaragoza",
-          "volume": 90
-        },
-        {
-          "keyword": "reparación barandillas zaragoza",
-          "volume": 50
-        }
-      ],
-      "related_questions": []
-    },
-    {
-      "name": "Herrería Artística y a Medida en Zaragoza",
-      "intent": "COMMERCIAL",
-      "main_keyword": "herreria artistica zaragoza",
-      "volume": 690,
-      "meta_suggestions": [
-        {
-          "h1": "Herrería Artística en Zaragoza | Trabajos a Medida",
-          "seo_title": "Herrería Artística Zaragoza | Piezas Únicas",
-          "seo_description": "Descubre la herrería artística en Zaragoza. Creaciones únicas y trabajos de hierro a medida para tu hogar o negocio. ¡Contacta hoy!"
-        },
-        {
-          "h1": "Trabajos de Hierro a Medida | Artesanía Zaragoza",
-          "seo_title": "Herrero Artesano Zaragoza | Forja Creativa",
-          "seo_description": "Especialistas en trabajos de hierro a medida en Zaragoza. Forja artesanal para proyectos personalizados. ¡Pide tu presupuesto!"
-        },
-        {
-          "h1": "Forja Artesanal en Zaragoza | Piezas Exclusivas",
-          "seo_title": "Forja Zaragoza | Diseño y Creación en Hierro",
-          "seo_description": "Encuentra piezas de forja artesanal en Zaragoza. Muebles, lámparas y elementos decorativos únicos. ¡Visita nuestra web!"
-        },
-        {
-          "h1": "Artesano del Hierro en Zaragoza | Diseño Personalizado",
-          "seo_title": "Trabajos a Medida Hierro Zaragoza",
-          "seo_description": "Tu artesano del hierro en Zaragoza para diseños personalizados. Soluciones creativas y de alta calidad. ¡Llámanos!"
-        },
-        {
-          "h1": "Herrería Creativa y Decorativa en Zaragoza",
-          "seo_title": "Herrería Decorativa Zaragoza | Proyectos Únicos",
-          "seo_description": "Realizamos proyectos de herrería decorativa en Zaragoza. Transformamos tus ideas en piezas de arte en hierro. ¡Consúltanos!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "herreria artistica zaragoza",
-          "volume": 280
-        },
-        {
-          "keyword": "trabajos hierro a medida zaragoza",
-          "volume": 200
-        },
-        {
-          "keyword": "forja artesanal zaragoza",
-          "volume": 130
-        },
-        {
-          "keyword": "artesano del hierro zaragoza",
-          "volume": 80
-        }
-      ],
-      "related_questions": []
-    },
-    {
-      "name": "Estructuras Metálicas y Pérgolas en Zaragoza",
-      "intent": "COMMERCIAL",
-      "main_keyword": "estructuras metálicas zaragoza",
-      "volume": 1100,
-      "meta_suggestions": [
-        {
-          "h1": "Estructuras Metálicas en Zaragoza | Pérgolas de Hierro",
-          "seo_title": "Estructuras Metálicas Zaragoza | Pérgolas",
-          "seo_description": "Fabricación e instalación de estructuras metálicas y pérgolas de hierro en Zaragoza. Soluciones robustas y duraderas. ¡Pide tu presupuesto!"
-        },
-        {
-          "h1": "Pérgolas de Hierro a Medida en Zaragoza",
-          "seo_title": "Pérgolas Hierro Zaragoza | Diseño Personalizado",
-          "seo_description": "Diseñamos y creamos pérgolas de hierro a medida en Zaragoza. Protección y estilo para tu terraza o jardín. ¡Contacta ahora!"
-        },
-        {
-          "h1": "Carpintería Metálica en Zaragoza | Techados y Cerramientos",
-          "seo_title": "Carpintería Metálica Zaragoza | Techados",
-          "seo_description": "Expertos en carpintería metálica en Zaragoza. Techados, cerramientos y estructuras de alta calidad. ¡Llámanos hoy!"
-        },
-        {
-          "h1": "Diseño y Construcción de Estructuras Metálicas Zaragoza",
-          "seo_title": "Herrero Zaragoza | Estructuras y Cubiertas",
-          "seo_description": "Tu herrero en Zaragoza para estructuras metálicas y cubiertas. Proyectos industriales y residenciales. ¡Presupuesto gratis!"
-        },
-        {
-          "h1": "Techados Metálicos en Zaragoza | Soluciones Personalizadas",
-          "seo_title": "Techados Metálicos Zaragoza | Calidad Garantizada",
-          "seo_description": "Ofrecemos techados metálicos en Zaragoza. Protección duradera y estética para cualquier espacio. ¡Solicita tu consulta!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "estructuras metálicas zaragoza",
+          "keyword": "puertas hierro forjado barcelona",
           "volume": 450
         },
         {
-          "keyword": "pérgolas hierro zaragoza",
-          "volume": 300
+          "keyword": "puertas blindadas barcelona",
+          "volume": 700
         },
         {
-          "keyword": "techos metálicos zaragoza",
-          "volume": 180
-        },
-        {
-          "keyword": "carpintería metálica zaragoza",
-          "volume": 100
-        },
-        {
-          "keyword": "diseño estructuras zaragoza",
-          "volume": 70
+          "keyword": "puertas de garaje metalicas barcelona",
+          "volume": 350
         }
       ],
       "related_questions": []
     },
     {
-      "name": "Reparación de Herrería en Zaragoza",
+      "name": "Barandillas, Balcones y Escaleras Metálicas",
       "intent": "COMMERCIAL",
-      "main_keyword": "reparación herrería zaragoza",
-      "volume": 750,
+      "main_keyword": "herrero barandillas barcelona",
+      "volume": 2150,
       "meta_suggestions": [
         {
-          "h1": "Reparación de Herrería en Zaragoza | Servicio Urgente",
-          "seo_title": "Reparación Herrería Zaragoza | Soldador a Domicilio",
-          "seo_description": "Servicio de reparación de herrería en Zaragoza. Arreglamos puertas, rejas y vallas de hierro. ¡Llámanos para un servicio rápido!"
+          "h1": "Barandillas y Balcones Metálicos en Barcelona | Herrero",
+          "seo_title": "Barandillas, Balcones y Escaleras Metálicas en Barcelona",
+          "seo_description": "Fabricación e instalación de barandillas, balcones y escaleras metálicas en Barcelona. Diseños modernos y clásicos a tu medida. ¡Pídenos presupuesto!"
         },
         {
-          "h1": "Soldador a Domicilio en Zaragoza | Reparaciones Rápidas",
-          "seo_title": "Soldador Zaragoza | Arreglos de Hierro",
-          "seo_description": "Necesitas un soldador a domicilio en Zaragoza? Reparaciones de hierro al instante. ¡Contacta para un presupuesto!"
+          "h1": "Barandillas de Hierro en Barcelona | Diseño Personalizado",
+          "seo_title": "Herrero en Barcelona: Barandillas de Hierro Forjado y Modernas",
+          "seo_description": "Especialistas en barandillas de hierro en Barcelona. Seguridad, estética y durabilidad para tu escalera o balcón. ¡Solicita tu diseño único!"
         },
         {
-          "h1": "Mantenimiento de Hierro en Zaragoza | Durabilidad Garantizada",
-          "seo_title": "Mantenimiento Herrería Zaragoza | Alarga la Vida Útil",
-          "seo_description": "Servicio de mantenimiento para tus estructuras de hierro en Zaragoza. Previene deterioros y alarga su vida útil. ¡Infórmate!"
+          "h1": "Balcones de Hierro Barcelona | Fabricación y Reparación",
+          "seo_title": "Diseño y Reparación de Balcones de Hierro en Barcelona",
+          "seo_description": "Servicios profesionales para balcones de hierro en Barcelona. Desde nuevos diseños hasta reparaciones expertas. ¡Mejora tu fachada!"
         },
         {
-          "h1": "Arreglar Rejas de Hierro en Zaragoza | Expertos Forja",
-          "seo_title": "Arreglo Rejas Hierro Zaragoza | Servicio Profesional",
-          "seo_description": "Expertos en arreglar rejas de hierro en Zaragoza. Dejamos tus rejas como nuevas con garantía profesional. ¡Pide tu cita hoy!"
+          "h1": "Escaleras Metálicas en Barcelona | Fabricantes Expertos",
+          "seo_title": "Fabricación e Instalación de Escaleras Metálicas en BCN",
+          "seo_description": "Tu solución para escaleras metálicas en Barcelona. Diseñamos, fabricamos e instalamos escaleras interiores y exteriores. ¡Contacta y te asesoramos!"
         },
         {
-          "h1": "Herrería en Zaragoza | Soluciones de Reparación Rápida",
-          "seo_title": "Reparaciones Hierro Zaragoza | Tu Herrero Local",
-          "seo_description": "Tu herrero local en Zaragoza para reparaciones de hierro. Fiabilidad y eficiencia en cada trabajo. ¡Consúltanos tu necesidad!"
+          "h1": "Reparación de Barandillas y Balcones en Barcelona",
+          "seo_title": "Servicio de Reparación de Barandillas y Balcones en Barcelona",
+          "seo_description": "Reparamos y restauramos barandillas y balcones metálicos en Barcelona. Mantenimiento para la seguridad y estética. ¡Llámanos para una inspección!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "reparación herrería zaragoza",
+          "keyword": "herrero barandillas barcelona",
+          "volume": 550
+        },
+        {
+          "keyword": "barandillas hierro barcelona",
+          "volume": 400
+        },
+        {
+          "keyword": "balcones hierro barcelona",
           "volume": 300
         },
         {
-          "keyword": "arreglar rejas hierro zaragoza",
+          "keyword": "fabricacion barandillas barcelona",
+          "volume": 250
+        },
+        {
+          "keyword": "reparacion barandillas barcelona",
           "volume": 200
         },
         {
-          "keyword": "soldador a domicilio zaragoza",
-          "volume": 150
+          "keyword": "escaleras metalicas barcelona",
+          "volume": 450
+        }
+      ],
+      "related_questions": []
+    },
+    {
+      "name": "Estructuras Metálicas y Trabajos de Soldadura a Medida",
+      "intent": "COMMERCIAL",
+      "main_keyword": "estructuras metalicas barcelona",
+      "volume": 2400,
+      "meta_suggestions": [
+        {
+          "h1": "Estructuras Metálicas en Barcelona | Herrero Soldador",
+          "seo_title": "Estructuras Metálicas y Soldadura a Medida en Barcelona",
+          "seo_description": "Diseño y fabricación de estructuras metálicas en Barcelona. Expertos en soldadura y trabajos a medida para cualquier proyecto. ¡Solicita tu presupuesto!"
         },
         {
-          "keyword": "mantenimiento hierro zaragoza",
-          "volume": 100
+          "h1": "Trabajos de Hierro a Medida en Barcelona | Herrería Artística",
+          "seo_title": "Tu Herrero para Trabajos en Hierro a Medida en Barcelona",
+          "seo_description": "Realizamos trabajos de hierro a medida y herrería artística en Barcelona. Calidad y detalle en cada pieza. ¡Contacta para tu proyecto único!"
+        },
+        {
+          "h1": "Soldador en Barcelona | Servicios de Soldadura Profesional",
+          "seo_title": "Servicios de Soldadura en Barcelona - Herreros Especialistas",
+          "seo_description": "Necesitas un soldador en Barcelona? Ofrecemos servicios de soldadura profesional para reparaciones y nuevas creaciones. ¡Trabajos garantizados!"
+        },
+        {
+          "h1": "Fabricación de Estructuras Metálicas Ligeras en Barcelona",
+          "seo_title": "Herrero Barcelona: Estructuras Metálicas y Cubiertas",
+          "seo_description": "Expertos en la fabricación de estructuras metálicas ligeras y pesadas en Barcelona. Soluciones robustas y duraderas. ¡Asesoramiento sin compromiso!"
+        },
+        {
+          "h1": "Herrería Artística y Decorativa en Barcelona | Proyectos",
+          "seo_title": "Proyectos de Herrería Artística en Barcelona - Diseños Únicos",
+          "seo_description": "Descubre la herrería artística en Barcelona. Piezas decorativas y funcionales en hierro para embellecer tu espacio. ¡Dinos tu idea!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "estructuras metalicas barcelona",
+          "volume": 900
+        },
+        {
+          "keyword": "trabajos hierro a medida barcelona",
+          "volume": 600
+        },
+        {
+          "keyword": "herreria artistica barcelona",
+          "volume": 400
+        },
+        {
+          "keyword": "servicios de soldadura barcelona",
+          "volume": 500
+        }
+      ],
+      "related_questions": []
+    },
+    {
+      "name": "Automatismos y Motores para Puertas de Garaje",
+      "intent": "COMMERCIAL",
+      "main_keyword": "automatismos puertas barcelona",
+      "volume": 1600,
+      "meta_suggestions": [
+        {
+          "h1": "Automatismos Puertas Barcelona | Instalación y Reparación",
+          "seo_title": "Automatismos y Motores para Puertas de Garaje en Barcelona",
+          "seo_description": "Instalación y reparación de automatismos para puertas en Barcelona. Motorización para puertas de garaje y cancelas. ¡Pide tu presupuesto personalizado!"
+        },
+        {
+          "h1": "Motorización Puertas Garaje Barcelona | Expertos",
+          "seo_title": "Herrero en Barcelona: Motorización de Puertas de Garaje",
+          "seo_description": "Moderniza tu garaje con la motorización de puertas en Barcelona. Soluciones eficientes y seguras. ¡Contacta con nuestros especialistas!"
+        },
+        {
+          "h1": "Reparación Automatismos Puertas en Barcelona | Servicio Rápido",
+          "seo_title": "Servicio Técnico de Reparación de Automatismos en Barcelona",
+          "seo_description": "Problemas con tu puerta automática? Servicio de reparación de automatismos en Barcelona. Rapidez y eficacia. ¡Llámanos para una solución!"
+        },
+        {
+          "h1": "Motores para Puertas Correderas y Batientes en Barcelona",
+          "seo_title": "Motores y Automatismos para todo tipo de Puertas en Barcelona",
+          "seo_description": "Disponemos de motores para puertas correderas, batientes y seccionales en Barcelona. Mejora tu comodidad y seguridad. ¡Descubre nuestras opciones!"
+        },
+        {
+          "h1": "Mantenimiento Automatismos Barcelona | Prevención Averías",
+          "seo_title": "Mantenimiento y Automatización de Puertas en Barcelona",
+          "seo_description": "Ofrecemos mantenimiento preventivo para automatismos de puertas en Barcelona. Evita averías y prolonga la vida útil. ¡Infórmate de nuestros planes!"
+        }
+      ],
+      "selected_suggestion": 0,
+      "keywords": [
+        {
+          "keyword": "automatismos puertas barcelona",
+          "volume": 600
+        },
+        {
+          "keyword": "motorizacion puertas garaje barcelona",
+          "volume": 450
+        },
+        {
+          "keyword": "reparacion automatismos barcelona",
+          "volume": 300
+        },
+        {
+          "keyword": "motores puertas barcelona",
+          "volume": 250
         }
       ],
       "related_questions": []
     }
   ],
   "locations": [
-    "Actur-Rey Fernando",
-    "Delicias",
-    "Casco Histórico",
-    "San José",
-    "Valdespartera"
+    "Eixample",
+    "Gràcia",
+    "Sant Martí",
+    "Sants-Montjuïc",
+    "Sarrià-Sant Gervasi"
   ],
   "home_structure": {
-    "h1": "Herrero en Zaragoza | Trabajos de Forja y Hierro a Medida",
+    "h1": "Herrero en Barcelona | Carpintería Metálica y Estructuras",
     "h2s": [
-      "Expertos en Diseño y Fabricación de Estructuras Metálicas",
-      "Nuestros Servicios: Puertas, Rejas, Vallas y Más en Zaragoza",
-      "Herrería Artística y Soluciones Personalizadas para tu Hogar o Negocio"
+      "Expertos en hierro forjado y a medida para tu hogar o negocio",
+      "Servicios de soldadura profesional y reparaciones metálicas en Barcelona",
+      "Proyectos personalizados de barandillas, puertas y cerramientos en toda Barcelona"
     ]
   },
   "raw_data": {
@@ -426,5 +316,5 @@
     }
   },
   "niche": "Herrero ",
-  "city": "Zaragoza,Aragon,Spain"
+  "city": "Barcelona,Catalonia,Spain"
 }
