@@ -3,14 +3,20 @@ import { Star } from "lucide-react";
 
 interface Props {
     testimonials: any[];
+    bgClass?: string;
 }
 
-const { testimonials } = Astro.props;
+const { testimonials, bgClass = "bg-surface" } = Astro.props;
+
+// Determine card background based on section background
+const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
 ---
 
 {
     testimonials && testimonials.length > 0 && (
-        <section class="py-20 bg-surface relative overflow-hidden border-t border-heading/5">
+        <section
+            class={`py-20 ${bgClass} relative overflow-hidden border-t border-heading/5`}
+        >
             <div class="container mx-auto px-4">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-heading font-bold text-heading mb-4">
@@ -25,7 +31,9 @@ const { testimonials } = Astro.props;
 
                 <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {testimonials.map((testimonial) => (
-                        <div class="bg-secondary p-8 rounded-2xl border border-heading/10 shadow-lg relative hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class={`${cardBgClass} p-8 rounded-2xl border border-heading/10 shadow-lg relative hover:-translate-y-1 transition-transform duration-300`}
+                        >
                             <div class="flex items-center mb-6">
                                 <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-xl mr-4 shadow-md">
                                     {testimonial.initials ||

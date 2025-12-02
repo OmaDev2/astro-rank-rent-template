@@ -111,7 +111,11 @@ const schema: WithContext<LocalBusiness> = {
 	schema={schema}
 >
 	{
-		finalBlocks.map((block: any) => {
+		finalBlocks.map((block: any, index: number) => {
+			// Alternar fondos: Par = Secondary (Oscuro), Impar = Surface (Claro/Contraste)
+			// El Hero (index 0) suele tener su propia imagen, pero mantenemos la lógica para consistencia
+			const bgClass = index % 2 === 0 ? "bg-secondary" : "bg-surface";
+
 			switch (block.discriminant) {
 				case "hero":
 					return <HomeHero hero={homeData.hero} config={config} />;
@@ -122,34 +126,49 @@ const schema: WithContext<LocalBusiness> = {
 							servicesSection={homeData.servicesSection}
 							featuredServices={featuredServices}
 							city={config.city}
+							bgClass={bgClass}
 						/>
 					);
 
 				case "about":
-					return <HomeAbout aboutSection={homeData.aboutSection} />;
+					return (
+						<HomeAbout
+							aboutSection={homeData.aboutSection}
+							bgClass={bgClass}
+						/>
+					);
 
 				case "features":
 					return (
 						<HomeFeatures
 							features={homeData.features}
 							city={config.city}
+							bgClass={bgClass}
 						/>
 					);
 
 				case "contact":
-					return <HomeContact config={config} />;
+					return <HomeContact config={config} bgClass={bgClass} />;
 
 				case "process":
 					return homeData.process ? (
-						<HomeProcess process={homeData.process} />
+						<HomeProcess
+							process={homeData.process}
+							bgClass={bgClass}
+						/>
 					) : null;
 
 				case "testimonials":
-					return <Testimonials testimonials={testimonials} />;
+					return (
+						<Testimonials
+							testimonials={testimonials}
+							bgClass={bgClass}
+						/>
+					);
 
 				case "content":
 					return homeData.seoContentTitle ? (
-						<section class="py-20 bg-secondary">
+						<section class={`py-20 ${bgClass}`}>
 							<div class="container mx-auto px-4 max-w-4xl">
 								<h2 class="text-3xl font-heading font-bold text-heading mb-8">
 									{homeData.seoContentTitle}
@@ -163,19 +182,21 @@ const schema: WithContext<LocalBusiness> = {
 
 				case "faq":
 					return homeData.faq && homeData.faq.length > 0 ? (
-						<div class="container mx-auto px-4 max-w-4xl py-20">
-							<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
-								Preguntas Frecuentes
-							</h2>
-							<FaqAccordion items={homeData.faq} />
+						<div class={`py-20 ${bgClass}`}>
+							<div class="container mx-auto px-4 max-w-4xl">
+								<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
+									Preguntas Frecuentes
+								</h2>
+								<FaqAccordion items={homeData.faq} />
+							</div>
 						</div>
 					) : null;
 
 				case "locations":
-					return <LocationsSection />;
+					return <LocationsSection bgClass={bgClass} />;
 
 				case "cta":
-					return <FinalCTA />;
+					return <FinalCTA bgClass={bgClass} />;
 
 				default:
 					return null;

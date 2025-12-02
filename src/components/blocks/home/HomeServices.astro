@@ -1,9 +1,14 @@
 ---
 import { ArrowRight } from "lucide-react";
-const { servicesSection, featuredServices, city } = Astro.props;
+const {
+    servicesSection,
+    featuredServices,
+    city,
+    bgClass = "bg-secondary",
+} = Astro.props;
 ---
 
-<section id="servicios" class="py-20 bg-secondary border-b border-heading/10">
+<section id="servicios" class={`py-20 ${bgClass} border-b border-heading/10`}>
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
             <div class="flex items-center justify-center gap-4 mb-4">

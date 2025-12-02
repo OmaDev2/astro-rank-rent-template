@@ -105,11 +105,13 @@ const design = defineCollection({
     schema: z.object({
         theme: z.enum([
             'industrial', 'corporate', 'nature', 'urgent',
-            'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light'
+            'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light',
+            'clay_paper', 'forest_stone', 'classic_workshop'
         ]).optional().default('industrial'),
 
         fontPair: z.enum([
-            'modern', 'robust', 'elegant', 'friendly', 'tech'
+            'modern', 'robust', 'elegant', 'friendly', 'tech',
+            'artisan_warm', 'artisan_natural', 'artisan_classic'
         ]).optional().default('modern'),
     }),
 });

@@ -8,14 +8,18 @@ interface Props {
             description: string;
         }[];
     };
+    bgClass?: string;
 }
 
-const { process } = Astro.props;
+const { process, bgClass = "bg-surface" } = Astro.props;
+
+// Determine card background based on section background for contrast
+const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
 ---
 
 {
     process && process.steps && process.steps.length > 0 && (
-        <section class="py-20 bg-surface relative overflow-hidden">
+        <section class={`py-20 ${bgClass} relative overflow-hidden`}>
             <div class="container mx-auto px-4">
                 <div class="text-center mb-16 max-w-3xl mx-auto">
                     {process.title && (
@@ -41,7 +45,7 @@ const { process } = Astro.props;
                                 {/* Content Side */}
                                 <div class="flex-1 md:w-1/2 p-6">
                                     <div
-                                        class={`bg-secondary p-8 rounded-2xl shadow-lg border border-heading/5 relative hover:-translate-y-1 transition-transform duration-300 ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}
+                                        class={`${cardBgClass} p-8 rounded-2xl shadow-lg border border-heading/5 relative hover:-translate-y-1 transition-transform duration-300 ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}
                                     >
                                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-2xl opacity-50" />
                                         <h3 class="text-2xl font-bold text-heading mb-3">
@@ -54,7 +58,9 @@ const { process } = Astro.props;
                                 </div>
 
                                 {/* Center Circle */}
-                                <div class="absolute left-0 md:left-1/2 w-10 h-10 rounded-full bg-secondary border-4 border-primary flex items-center justify-center z-10 -translate-x-1/2 md:-translate-x-1/2 shadow-md">
+                                <div
+                                    class={`absolute left-0 md:left-1/2 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center z-10 -translate-x-1/2 md:-translate-x-1/2 shadow-md`}
+                                >
                                     <span class="font-bold text-primary text-sm">
                                         {index + 1}
                                     </span>

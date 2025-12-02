@@ -12,9 +12,13 @@ const staticZones = [
     "Área Metropolitana",
     "Polígonos Industriales",
 ];
+
+const { bgClass = "bg-secondary" } = Astro.props;
+const cardBgClass =
+    bgClass === "bg-secondary" ? "bg-surface/50" : "bg-secondary/50";
 ---
 
-<section id="zonas" class="py-20 bg-secondary border-t border-heading/10">
+<section id="zonas" class={`py-20 ${bgClass} border-t border-heading/10`}>
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-4xl font-heading font-bold text-heading mb-4">
@@ -32,7 +36,7 @@ const staticZones = [
                 locations.map((loc) => (
                     <a
                         href={`/zona/${loc.slug}`}
-                        class="group flex items-center p-4 bg-surface/50 rounded-lg border border-heading/10 hover:border-primary transition-all hover:shadow-lg hover:shadow-primary/20"
+                        class={`group flex items-center p-4 ${cardBgClass} rounded-lg border border-heading/10 hover:border-primary transition-all hover:shadow-lg hover:shadow-primary/20`}
                     >
                         <div class="p-3 bg-surface rounded-full text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
                             <MapPin className="w-6 h-6" />

@@ -1,17 +1,21 @@
 ---
-import { Phone, MapPin } from "lucide-react";
+import { Phone, MapPin, MessageCircle } from "lucide-react";
 import HeroContactForm from "../../HeroContactForm.astro";
-const { config } = Astro.props;
+const { config, bgClass = "bg-secondary" } = Astro.props;
+
+// Determine inner container background based on section background
+const containerBgClass =
+    bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
 ---
 
-<section id="presupuesto" class="py-20 bg-secondary relative overflow-hidden">
+<section id="presupuesto" class={`py-20 ${bgClass} relative overflow-hidden`}>
     <div
         class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"
     >
     </div>
     <div class="container mx-auto px-4 relative z-10">
         <div
-            class="max-w-4xl mx-auto bg-surface rounded-2xl border border-heading/10 shadow-2xl overflow-hidden flex flex-col md:flex-row"
+            class={`max-w-4xl mx-auto ${containerBgClass} rounded-2xl border border-heading/10 shadow-2xl overflow-hidden flex flex-col md:flex-row`}
         >
             <div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
                 <h2 class="text-3xl font-heading font-bold text-heading mb-4">
@@ -21,32 +25,69 @@ const { config } = Astro.props;
                     Cuéntanos tu proyecto. Te respondemos con una valoración
                     gratuita y sin compromiso.
                 </p>
-                <div class="space-y-4">
-                    <div class="flex items-center text-body">
+                <div class="space-y-8">
+                    <div class="flex items-start group">
                         <div
-                            class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-4"
+                            class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm"
                         >
-                            <Phone className="w-5 h-5" />
+                            <Phone className="w-6 h-6" />
                         </div>
                         <div>
-                            <div class="text-xs text-body/70 uppercase">
+                            <div
+                                class="text-sm text-body/60 uppercase tracking-wider font-bold mb-1"
+                            >
                                 Llámanos ahora
-                            </div><div class="font-bold text-heading">
-                                {config.phone}
                             </div>
+                            <a
+                                href={`tel:${config.phone.replace(/\s/g, "")}`}
+                                class="text-2xl font-heading font-bold text-heading hover:text-primary transition-colors"
+                            >
+                                {config.phone}
+                            </a>
                         </div>
                     </div>
-                    <div class="flex items-center text-body">
+
+                    {
+                        config.whatsapp && (
+                            <div class="flex items-start group">
+                                <div class="w-12 h-12 rounded-xl bg-[#25D366]/10 flex items-center justify-center text-[#25D366] mr-6 group-hover:bg-[#25D366] group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <MessageCircle className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div class="text-sm text-body/60 uppercase tracking-wider font-bold mb-1">
+                                        WhatsApp
+                                    </div>
+                                    <a
+                                        href={`https://wa.me/${config.whatsapp.replace(/\D/g, "")}`}
+                                        target="_blank"
+                                        class="text-2xl font-heading font-bold text-heading hover:text-[#25D366] transition-colors"
+                                    >
+                                        {config.whatsapp}
+                                    </a>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    <div class="flex items-start group">
                         <div
-                            class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary mr-4"
+                            class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm"
                         >
-                            <MapPin className="w-5 h-5" />
+                            <MapPin className="w-6 h-6" />
                         </div>
                         <div>
-                            <div class="text-xs text-body/70 uppercase">
+                            <div
+                                class="text-sm text-body/60 uppercase tracking-wider font-bold mb-1"
+                            >
                                 Trabajamos en
-                            </div><div class="font-bold text-heading">
-                                {config.city} y alrededores
+                            </div>
+                            <div
+                                class="text-xl font-heading font-bold text-heading"
+                            >
+                                {config.city}
+                                <span class="text-body font-normal text-base"
+                                    >y alrededores</span
+                                >
                             </div>
                         </div>
                     </div>

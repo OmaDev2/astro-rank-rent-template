@@ -29,5 +29,23 @@ export const fontPairs = {
         googleFontsUrl: 'https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Exo+2:wght@300;400;600&display=swap',
         fontHeading: "'Chakra Petch', sans-serif",
         fontBody: "'Exo 2', sans-serif",
+    },
+    artisan_warm: {
+        label: 'Artesano Cálido (Merriweather / Lora)',
+        googleFontsUrl: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Lora:wght@400;500;600&display=swap',
+        fontHeading: "'Merriweather', serif",
+        fontBody: "'Lora', serif",
+    },
+    artisan_natural: {
+        label: 'Artesano Natural (Crimson Text / Source Serif)',
+        googleFontsUrl: 'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600;700&family=Source+Serif+4:wght@400;500;600&display=swap',
+        fontHeading: "'Crimson Text', serif",
+        fontBody: "'Source Serif 4', serif",
+    },
+    artisan_classic: {
+        label: 'Artesano Clásico (Cormorant / EB Garamond)',
+        googleFontsUrl: 'https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=EB+Garamond:wght@400;500;600&display=swap',
+        fontHeading: "'Cormorant', serif",
+        fontBody: "'EB Garamond', serif",
     }
 };

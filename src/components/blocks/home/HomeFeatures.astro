@@ -1,12 +1,16 @@
 ---
 import * as LucideIcons from "lucide-react";
-const { features, city } = Astro.props;
+const { features, city, bgClass = "bg-secondary" } = Astro.props;
 const getIcon = (name: string) =>
     (LucideIcons as any)[name] || LucideIcons.CheckCircle;
 if (!features || features.length === 0) return null;
+
+// Determine card background based on section background
+const cardBgClass =
+    bgClass === "bg-secondary" ? "bg-surface/50" : "bg-secondary/50";
 ---
 
-<section class="py-20 bg-secondary border-y border-heading/10">
+<section class={`py-20 ${bgClass} border-y border-heading/10`}>
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
             <h2 class="text-4xl font-heading font-bold text-heading mb-4">
@@ -21,7 +25,9 @@ if (!features || features.length === 0) return null;
                         feature.icon || "CheckCircle",
                     );
                     return (
-                        <div class="group relative p-8 bg-surface/50 rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
+                        <div
+                            class={`group relative p-8 ${cardBgClass} rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10`}
+                        >
                             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                             <div class="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <IconComponent className="w-8 h-8 text-white" />

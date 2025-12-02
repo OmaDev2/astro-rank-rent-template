@@ -1,10 +1,10 @@
 ---
 import { CheckCircle, ArrowRight } from "lucide-react";
-const { aboutSection } = Astro.props;
+const { aboutSection, bgClass = "bg-secondary" } = Astro.props;
 if (!aboutSection) return null;
 ---
 
-<section class="py-20 bg-secondary border-b border-heading/10">
+<section class={`py-20 ${bgClass} border-b border-heading/10`}>
     <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div class="relative">

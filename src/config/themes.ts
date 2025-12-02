@@ -118,5 +118,41 @@ export const themes = {
             textMuted: '71 85 105',  // Slate 600 (Gris medio)
         },
         gradient: 'linear-gradient(to right, rgb(255 255 255), rgb(241 245 249))'
+    },
+    clay_paper: {
+        label: 'Arcilla y Papel (Artesano Cálido)',
+        colors: {
+            primary: '180 83 9',      // Orange 800 (Terracota)
+            secondary: '254 252 232', // Yellow 50 (Crema/Pergamino)
+            surface: '255 255 255',   // White (Papel)
+            accent: '217 119 6',      // Amber 600 (Arcilla clara)
+            textMain: '78 29 29',     // Brown 900 (Café oscuro)
+            textMuted: '120 53 15',   // Orange 900 (Marrón medio)
+        },
+        gradient: 'linear-gradient(135deg, rgb(254 252 232) 0%, rgb(254 243 199) 100%)'
+    },
+    forest_stone: {
+        label: 'Bosque y Piedra (Artesano Natural)',
+        colors: {
+            primary: '77 124 15',     // Lime 800 (Verde Oliva)
+            secondary: '241 245 249', // Slate 50 (Gris Piedra muy suave)
+            surface: '248 250 252',   // Slate 50 (Superficie clara)
+            accent: '161 98 7',       // Yellow 800 (Madera/Ocre)
+            textMain: '30 41 59',     // Slate 800 (Gris oscuro)
+            textMuted: '71 85 105',   // Slate 600 (Gris medio)
+        },
+        gradient: 'linear-gradient(to bottom right, rgb(241 245 249), rgb(226 232 240))'
+    },
+    classic_workshop: {
+        label: 'Taller Clásico (Artesano Premium)',
+        colors: {
+            primary: '180 83 9',      // Orange 800 (Bronce/Dorado viejo)
+            secondary: '23 37 84',    // Blue 950 (Azul Marino profundo)
+            surface: '30 41 59',      // Slate 800 (Madera oscura)
+            accent: '234 179 8',      // Yellow 500 (Oro)
+            textMain: '255 255 255',  // White
+            textMuted: '203 213 225', // Slate 300 (Gris claro)
+        },
+        gradient: 'linear-gradient(135deg, rgb(23 37 84) 0%, rgb(30 41 59) 100%)'
     }
 };
