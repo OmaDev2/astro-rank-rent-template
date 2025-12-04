@@ -1,312 +1,610 @@
-import { getTopCompetitors, getRelatedKeywords, getCompetitorKeywords } from '../lib/seo_client.js';
+
+import {
+    getCompetitorKeywords,
+    getRelatedKeywords,
+    getKeywordSuggestions,
+    getKeywordIdeas,
+    getPeopleAlsoAsk,
+    getLocationCode
+} from '../lib/seo_client_v2.js';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
-import fs from 'fs/promises';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash", // Changed to Flash 2.5 as requested
-    generationConfig: { responseMimeType: "application/json" }
-});
+// ============================================================================
+// CONFIGURACIÓN PARA SEO LOCAL
+// ============================================================================
 
-export async function getInitialCompetitors(niche, location_code) {
-    console.log(`🚀 Logic: Buscando competidores para "${niche}" en Location Code: ${location_code}...`);
-    const cleanNiche = niche.trim();
-    const searchQuery = `${cleanNiche}`;
-    return await getTopCompetitors(niche, location_code);
+const LOCAL_SEO_CONFIG = {
+    top10Filter: false,           // Captura todas las posiciones
+    minRelevanceScore: 3,         // Score mínimo aceptable
+    minSearchVolume: 10,          // Volumen mínimo (ajustado a 10 para evitar ceros)
+    maxKeywordsForAI: 200,        // Keywords para clustering
+    includeInformational: true    // Incluir FAQs
+};
+
+// ============================================================================
+// PATRONES PARA SEO LOCAL
+// ============================================================================
+
+const LOCAL_COMMERCIAL_PATTERNS = [
+    // Precio y presupuesto
+    'precio', 'presupuesto', 'coste', 'costo', 'cuanto cuesta', 'tarifas',
+
+    // Cualidades del servicio
+    'barato', 'económico', 'oferta', 'profesional', 'urgente',
+
+    // Acción comercial
+    'empresa', 'empresas', 'servicio', 'servicios', 'contratar',
+    'instalación', 'reparación', 'mantenimiento', 'taller',
+
+    // Localización
+    'cerca de mi', 'cerca de mí', 'en mi zona', 'cerca', 'domicilio',
+
+    // Urgencia (clave en servicios locales)
+    'urgente', 'urgencias', '24 horas', '24h', 'emergencia',
+    'rápido', 'inmediato', 'mismo día'
+];
+
+const NOISE_PATTERNS = [
+    'instagram', 'tiktok', 'facebook', 'youtube', 'twitter', 'linkedin',
+    'meme', 'significado', 'horoscopo', 'definición', 'sinónimo',
+    'wikipedia', 'pdf', 'descargar', 'gratis', 'torrent',
+    'minecraft', 'fortnite', 'roblox', 'lego', 'playmobil',
+    'empleo', 'trabajo de', 'sueldo', 'vacantes', 'curso', 'aprender'
+];
+
+const BLACKLIST_DOMAINS = [
+    'instagram.com', 'facebook.com', 'twitter.com', 'linkedin.com', 'pinterest.com',
+    'youtube.com', 'tiktok.com', 'amazon.es', 'amazon.com', 'ebay.es', 'ebay.com',
+    'milanuncios.com', 'wallapop.com', 'habitissimo.es', 'cronoshare.com', 'zaask.es',
+    'paginasamarillas.es', 'yelp.es', 'tripadvisor.es', 'wikipedia.org', 'boe.es'
+];
+
+// ============================================================================
+// SCORING OPTIMIZADO PARA SEO LOCAL
+// ============================================================================
+
+function calculateLocalScore(keywordObj, niche, city, services = []) {
+    let score = 0;
+    let reasons = [];
+    const text = keywordObj.keyword.toLowerCase();
+    const nicheLower = niche.toLowerCase();
+    const cityLower = city.toLowerCase();
+
+    // 1. Contiene la ciudad (+20)
+    if (text.includes(cityLower)) {
+        score += 20;
+        reasons.push('+20 ciudad');
+    }
+
+    // 2. Contiene el nicho exacto (+15)
+    if (text.includes(nicheLower)) {
+        score += 15;
+        reasons.push('+15 nicho');
+    }
+
+    // 3. Contiene palabras de servicios validados (+15)
+    // Esto asegura que "rejas" tenga score alto si validaste ese servicio
+    if (services && services.length > 0) {
+        const matchesService = services.some(s => {
+            // Simplificamos el servicio para buscar coincidencias (ej: "Rejas..." -> "rejas")
+            const simple = simplifyServiceQuery(s).toLowerCase().split(' ')[0];
+            return simple.length > 3 && text.includes(simple);
+        });
+        if (matchesService) {
+            score += 15;
+            reasons.push('+15 servicio');
+        }
+    }
+
+    // 🎯 REGLA 2: TÉRMINOS DEL NICHO (Original REGLA 2, now REGLA 4)
+    const nicheTerms = niche.toLowerCase().split(' ').filter(t => t.length > 2);
+    let nicheTermCount = 0;
+    nicheTerms.forEach(term => {
+        if (text.includes(term)) {
+            nicheTermCount++;
+        }
+    });
+    if (nicheTermCount > 0) {
+        score += 10 * nicheTermCount;
+        reasons.push(`+${10 * nicheTermCount} nicho parcial`);
+    }
+
+    // 🎯 REGLA 3: INTENCIÓN COMERCIAL
+    const hasCommercialIntent = LOCAL_COMMERCIAL_PATTERNS.some(pattern => text.includes(pattern));
+    if (hasCommercialIntent) {
+        score += 10;
+        reasons.push('+10 comercial');
+    }
+
+    // 🎯 REGLA 4: LONG TAIL (3+ palabras)
+    const wordCount = text.split(' ').length;
+    if (wordCount >= 3) {
+        score += 5;
+        reasons.push('+5 long-tail');
+    }
+
+    // 🎯 REGLA 4: DATOS DE COMPETIDOR
+    if (keywordObj.source === 'competitor') {
+        if (keywordObj.position <= 3) {
+            score += 10;
+            reasons.push('+10 competidor TOP 3');
+        } else if (keywordObj.position <= 10) {
+            score += 6;
+            reasons.push('+6 competidor TOP 10');
+        } else if (keywordObj.position <= 20) {
+            score += 3;
+            reasons.push('+3 competidor TOP 20');
+        } else {
+            score += 1;
+            reasons.push('+1 competidor');
+        }
+    }
+
+    // 🎯 REGLA 5: VOLUMEN DE BÚSQUEDA
+    const vol = keywordObj.volume || 0;
+    if (vol >= 1000) {
+        score += 5;
+        reasons.push('+5 vol >1000');
+    } else if (vol >= 500) {
+        score += 4;
+        reasons.push('+4 vol >500');
+    } else if (vol >= 100) {
+        score += 3;
+        reasons.push('+3 vol >100');
+    } else if (vol >= 50) {
+        score += 2;
+        reasons.push('+2 vol >50');
+    } else if (vol >= 10) {
+        score += 1;
+        reasons.push('+1 vol >10');
+    }
+
+    // ⚠️ PENALIZACIONES
+
+    // Otras ciudades
+    // Otras ciudades
+    const SPANISH_CITIES = ['madrid', 'barcelona', 'sevilla', 'valencia', 'zaragoza', 'málaga', 'bilbao', 'murcia', 'alicante', 'córdoba', 'valladolid', 'sabadell', 'terrassa', 'badalona'];
+    const otherCityMatch = SPANISH_CITIES.filter(c => c !== cityLower).find(c =>
+        new RegExp(`\\b${c}\\b`, 'i').test(text)
+    );
+
+    if (otherCityMatch) {
+        score -= 25;
+        reasons.push(`-25 otra ciudad (${otherCityMatch})`);
+    }
+
+    // Palabras demasiado genéricas
+    if (wordCount === 1 && vol < 50 && nicheTermCount === 0) {
+        score -= 5;
+        reasons.push('-5 muy genérica');
+    }
+
+    // ✨ BONUS: Preguntas
+    if (/^(cómo|qué|cuál|dónde|por qué|cuánto)/i.test(text)) {
+        score += 3;
+        reasons.push('+3 pregunta FAQ');
+    }
+
+    return { score, reasons };
 }
 
-export async function generateClustersFromSelection(niche, city, competitors, location_code, top10Filter = true) {
-    // Si no viene código, usamos España (2724) por defecto
-    const targetLoc = location_code || 2724;
-    const cleanCity = city.trim();
-    const cleanNiche = niche.trim();
+// ============================================================================
+// FUNCIÓN PRINCIPAL - SEO LOCAL UNIVERSAL
+// ============================================================================
 
-    console.log(`🚀 Logic: Clusterizando para "${cleanNiche}" en "${cleanCity}" (Loc: ${targetLoc})...`);
-    console.log(`🎯 TOP 10 Filter: ${top10Filter ? 'ENABLED' : 'DISABLED'}`);
+export async function generateSmartClusters(nicheRaw, cityRaw, competitors, location, options = {}) {
+    // Limpieza de inputs
+    const niche = nicheRaw.trim();
+    const city = cityRaw.trim();
 
+    // Merge configuración
+    const config = {
+        ...LOCAL_SEO_CONFIG,
+        ...options,
+        minRelevanceScore: options.minRelevanceScore !== undefined ? options.minRelevanceScore : LOCAL_SEO_CONFIG.minRelevanceScore
+    };
+
+    const { skipClustering = false } = options;
+
+    const locationCode = getLocationCode(location || city);
     let allKeywords = [];
-    const competitorKeywordsMap = {};
+    const stats = {
+        fromCompetitors: 0,
+        fromRelated: 0,
+        fromSuggestions: 0,
+        fromIdeas: 0,
+        fromServices: 0,
+        totalCollected: 0,
+        afterFiltering: 0
+    };
 
-    // 1. Obtener keywords de competidores (USANDO targetLoc)
+    console.log('\n' + '═'.repeat(70));
+    console.log(`🚀 SEO LOCAL: ${niche.toUpperCase()} en ${city.toUpperCase()}`);
+    console.log('═'.repeat(70));
+    console.log(`📍 Location: ${locationCode}`);
+    console.log(`🎯 Min Relevance Score: ${config.minRelevanceScore}`);
+    console.log(`📋 Servicios Específicos: ${config.specificServices?.length || 0}`);
+    console.log('═'.repeat(70) + '\n');
+
+    // ========================================================================
+    // FASE 1: COMPETIDORES
+    // ========================================================================
+    console.log('📊 FASE 1: Analizando competidores...\n');
+
     for (const domain of competitors) {
-        console.log(`   🔍 Analizando competidor: ${domain}...`);
-        // CAMBIO: "Spain" -> targetLoc
-        const compKeywords = await getCompetitorKeywords(domain, targetLoc, top10Filter);
+        try {
+            console.log(`   🔍 ${domain}...`);
+            const keywords = await getCompetitorKeywords(
+                domain,
+                locationCode,
+                city,
+                config.top10Filter
+            );
 
-        if (compKeywords.length > 0) {
-            allKeywords = [...allKeywords, ...compKeywords];
-            competitorKeywordsMap[domain] = compKeywords;
+            if (keywords && keywords.length > 0) {
+                // Marcar fuente
+                const tagged = keywords.map(k => ({ ...k, source: 'competitor' }));
+                allKeywords.push(...tagged);
+                stats.fromCompetitors += keywords.length;
+                console.log(`      ✅ ${keywords.length} keywords`);
+            } else {
+                console.log(`      ⚠️ Sin datos`);
+            }
+        } catch (error) {
+            console.error(`      ❌ Error: ${error.message}`);
         }
     }
 
-    // 2. Obtener keywords relacionadas (seed)
-    console.log(`   🔍 Buscando keywords relacionadas...`);
-    const relatedKeywords = await getRelatedKeywords(cleanNiche, targetLoc);
-    allKeywords = [...allKeywords, ...relatedKeywords];
+    // ========================================================================
+    // FASE 2: KEYWORDS RELACIONADAS
+    // ========================================================================
+    console.log('\n📊 FASE 2: Keywords relacionadas...\n');
 
-    console.log(`   📊 Total keywords antes de filtrado: ${allKeywords.length}`);
+    try {
+        const relatedMain = await getRelatedKeywords(`${niche} ${city}`, locationCode, city);
+        const relatedNiche = await getRelatedKeywords(niche, locationCode, city);
 
-    // SISTEMA INTELIGENTE: Filtrado adaptativo basado en relevancia semántica
-    const nicheTerms = cleanNiche.toLowerCase().split(' ').filter(term => term.length > 2);
+        const taggedMain = relatedMain.map(k => ({ ...k, source: 'related_main' }));
+        const taggedNiche = relatedNiche.map(k => ({ ...k, source: 'related_niche' }));
 
-    // Lista universal de patrones obviamente irrelevantes (independiente del nicho)
-    const universalIrrelevantPatterns = [
-        'instagram', 'tiktok', 'meme', 'significado espiritual', 'horoscopo',
-        'juego del calamar', 'squid game', 'brainrot', 'en inglés', 'en frances'
-    ];
+        allKeywords.push(...taggedMain, ...taggedNiche);
+        stats.fromRelated = relatedMain.length + relatedNiche.length;
 
-    // Paso 1: Eliminar keywords obviamente irrelevantes (ruido universal)
+        console.log(`   ✅ ${stats.fromRelated} keywords`);
+    } catch (error) {
+        console.error(`   ❌ Error: ${error.message}`);
+    }
+
+    // ========================================================================
+    // FASE 3: SUGERENCIAS
+    // ========================================================================
+    console.log('\n📊 FASE 3: Sugerencias...\n');
+
+    try {
+        const suggestions = await getKeywordSuggestions(`${niche} ${city}`, locationCode);
+        // Filtrado básico por ciudad para sugerencias
+        const filtered = suggestions.filter(k => k.keyword.toLowerCase().includes(city.toLowerCase()));
+
+        const tagged = filtered.map(k => ({ ...k, source: 'suggestion' }));
+        allKeywords.push(...tagged);
+        stats.fromSuggestions = filtered.length;
+
+        console.log(`   ✅ ${stats.fromSuggestions} keywords`);
+    } catch (error) {
+        console.error(`   ❌ Error: ${error.message}`);
+    }
+
+    // ========================================================================
+    // FASE 4: IDEAS
+    // ========================================================================
+    console.log('\n📊 FASE 4: Ideas long-tail...\n');
+
+    try {
+        const ideasMain = await getKeywordIdeas(`${niche} ${city}`, locationCode);
+        const filtered = ideasMain.filter(k => k.keyword.toLowerCase().includes(city.toLowerCase()));
+
+        const tagged = filtered.map(k => ({ ...k, source: 'idea' }));
+        allKeywords.push(...tagged);
+        stats.fromIdeas = filtered.length;
+
+        console.log(`   ✅ ${stats.fromIdeas} keywords`);
+    } catch (error) {
+        // La API de ideas a veces falla si no hay suficientes datos
+        console.log(`   ⚠️ No se encontraron ideas long-tail (API restriction)`);
+    }
+
+    // ========================================================================
+    // FASE 5: SERVICIOS ESPECÍFICOS (Híbrido: Frontend + Auto)
+    // ========================================================================
+    console.log('\n📊 FASE 5: Expandiendo servicios...\n');
+
+    let servicesToExpand = config.specificServices || [];
+
+    // Si no hay servicios del frontend, intentamos autodetectar
+    if (servicesToExpand.length === 0) {
+        console.log('   🧠 Auto-detectando servicios (fallback)...');
+        servicesToExpand = await autoDetectServices(niche, city, locationCode);
+    }
+
+    if (servicesToExpand.length > 0) {
+        console.log(`   🎯 Servicios a procesar: ${servicesToExpand.length}`);
+
+        for (const service of servicesToExpand) {
+            try {
+                // 1. Simplificar query (ej: "Rejas de Seguridad..." -> "Rejas Seguridad")
+                const simplifiedService = simplifyServiceQuery(service);
+
+                console.log(`      🔍 "${service}" -> Query: "${simplifiedService}"...`);
+
+                // 2. Búsqueda AMPLIA (sin ciudad) para capturar variedad
+                // Usamos locationCode para que sea relevante al país/región
+                const relatedService = await getRelatedKeywords(
+                    simplifiedService,
+                    locationCode
+                );
+
+                if (relatedService.length > 0) {
+                    // Filtrar keywords que sean MUY genéricas si no contienen la ciudad
+                    // Pero mantenemos las que sean buenas oportunidades
+                    const tagged = relatedService.map(k => ({ ...k, source: 'service_expansion' }));
+                    allKeywords.push(...tagged);
+                    stats.fromServices += relatedService.length;
+                    console.log(`         ✅ ${relatedService.length} keywords encontradas`);
+                } else {
+                    // Fallback: Intentar con ciudad si la genérica falló
+                    const queryWithCity = `${simplifiedService} ${city}`;
+                    console.log(`         ⚠️ Reintentando con ciudad: "${queryWithCity}"...`);
+                    const relatedCity = await getRelatedKeywords(queryWithCity, locationCode);
+
+                    if (relatedCity.length > 0) {
+                        const tagged = relatedCity.map(k => ({ ...k, source: 'service_expansion' }));
+                        allKeywords.push(...tagged);
+                        stats.fromServices += relatedCity.length;
+                        console.log(`         ✅ ${relatedCity.length} keywords (con ciudad)`);
+                    } else {
+                        console.log(`         ❌ Sin resultados`);
+                    }
+                }
+            } catch (error) {
+                console.log(`      ⚠️ Error en servicio "${service}"`);
+            }
+        }
+        console.log(`   ✅ ${stats.fromServices} keywords de servicios`);
+    } else {
+        console.log('   ⚠️ No hay servicios para expandir');
+    }
+
+    stats.totalCollected = allKeywords.length;
+
+    // ========================================================================
+    // FASE 6: FILTRADO INTELIGENTE
+    // ========================================================================
+    console.log('\n🔬 FASE 6: Filtrado inteligente...\n');
+    console.log(`   📊 Total recopilado: ${stats.totalCollected}`);
+
+    // 1. Eliminar ruido universal
     allKeywords = allKeywords.filter(k => {
         const kwLower = k.keyword.toLowerCase();
-        return !universalIrrelevantPatterns.some(pattern => kwLower.includes(pattern));
+        return !NOISE_PATTERNS.some(pattern => kwLower.includes(pattern));
     });
+    console.log(`   🗑️ Después de filtrar ruido: ${allKeywords.length}`);
 
-    console.log(`   🗑️ Después de eliminar ruido universal: ${allKeywords.length} keywords`);
-
-    // Paso 2: Calcular relevancia semántica para cada keyword
+    // 2. Calcular relevancia detallada
+    console.log(`   🎯 Calculando relevancia...`);
     allKeywords = allKeywords.map(k => {
-        const kwLower = k.keyword.toLowerCase();
-        let relevanceScore = 0;
-
-        // +3 puntos por cada término del niche que contenga
-        nicheTerms.forEach(term => {
-            if (kwLower.includes(term)) {
-                relevanceScore += 3;
-            }
-        });
-
-        // +2 puntos si viene de competidor (más confiable)
-        if (k.source === 'competitor') {
-            relevanceScore += 2;
-        }
-
-        // +1 punto por volumen alto (>500)
-        if (k.volume > 500) {
-            relevanceScore += 1;
-        }
-
-        // Penalización: -5 si es demasiado genérica (1 sola palabra)
-        if (k.keyword.split(' ').length === 1 && k.keyword.length < 8) {
-            relevanceScore -= 5;
-        }
-
-        return { ...k, relevanceScore };
+        // Pasamos los servicios específicos para dar bonus
+        const { score, reasons } = calculateLocalScore(k, niche, city, config.specificServices);
+        return { ...k, relevanceScore: score, relevanceReasons: reasons };
     });
 
-    // Paso 3: Filtrar por score mínimo (keywords con al menos 1 punto de relevancia)
-    const minRelevanceScore = 1;
-    allKeywords = allKeywords.filter(k => k.relevanceScore >= minRelevanceScore);
+    // 3. Filtrar por score y volumen
+    // NOTA: Aquí somos más permisivos con las keywords de servicios
+    // Si vienen de 'service_expansion', permitimos un score un poco más bajo si tienen buen volumen
+    const validKeywords = allKeywords.filter(k => {
+        const isService = k.source === 'service_expansion';
+        const minScore = isService ? Math.max(1, config.minRelevanceScore - 2) : config.minRelevanceScore;
 
-    console.log(`   🎯 Después de filtro inteligente: ${allKeywords.length} keywords`);
-
-    // Paso 4: Ordenar por relevancia (las más relevantes primero)
-    allKeywords.sort((a, b) => {
-        // Primero por relevancia, luego por volumen
-        if (b.relevanceScore !== a.relevanceScore) {
-            return b.relevanceScore - a.relevanceScore;
-        }
-        return (b.volume || 0) - (a.volume || 0);
+        return k.relevanceScore >= minScore && (k.volume || 0) >= config.minSearchVolume;
     });
 
-    // 3. Deduplicar y filtrar por volumenduplicación
+    stats.afterFiltering = validKeywords.length;
+    console.log(`   ✅ Keywords válidas: ${stats.afterFiltering}`);
+
+    // ========================================================================
+    // FASE 7: DEDUPLICACIÓN
+    // ========================================================================
+    console.log('\n🔄 FASE 7: Deduplicación...\n');
+
     const uniqueMap = new Map();
-
-    allKeywords.forEach(k => {
-        if (!k.keyword) return;
+    validKeywords.forEach(k => {
         const text = k.keyword.toLowerCase().trim();
+        const existing = uniqueMap.get(text);
 
-        // Filtro más permisivo: Incluir todas las keywords con volumen
-        // (El filtrado semántico lo hará la IA después)
-        const hasVolume = k.volume && k.volume > 0;
+        // Nos quedamos con la versión que tenga mejor score o más volumen
+        if (!existing || k.relevanceScore > existing.relevanceScore) {
+            uniqueMap.set(text, { ...k, keyword: text });
+        }
+    });
 
-        if (hasVolume) {
-            // Si ya existe, nos quedamos con el que tenga el dato más completo
-            if (!uniqueMap.has(text) || (k.volume > (uniqueMap.get(text).volume || 0))) {
-                // Preservar URL y Source
-                uniqueMap.set(text, {
-                    ...k,
-                    keyword: text // Asegurar lowercase
-                });
+    // Ordenar por relevancia y luego volumen
+    let finalKeywords = Array.from(uniqueMap.values())
+        .sort((a, b) => {
+            if (b.relevanceScore !== a.relevanceScore) {
+                return b.relevanceScore - a.relevanceScore;
             }
-        }
-    });
+            return (b.volume || 0) - (a.volume || 0);
+        })
+        .slice(0, config.maxKeywordsForAI); // Limitar para la IA
 
-    // Ordenar por volumen
-    let uniqueKeywords = Array.from(uniqueMap.values())
-        .sort((a, b) => (b.volume || 0) - (a.volume || 0))
-        .slice(0, 150); // Top 150
+    console.log(`   ✅ Keywords únicas para clustering: ${finalKeywords.length}`);
 
-    console.log(`   📊 Dataset para IA: ${uniqueKeywords.length} keywords.`);
+    // ========================================================================
+    // FASE 8: PEOPLE ALSO ASK
+    // ========================================================================
+    console.log('\n❓ FASE 8: People Also Ask...\n');
 
-    // NUEVO: Crear log detallado del proceso
-    let analysisLog = `# 📊 Análisis de Clustering - ${cleanNiche} en ${cleanCity}\n\n`;
-    analysisLog += `**Fecha:** ${new Date().toLocaleString('es-ES')}\n`;
-    analysisLog += `**Location Code:** ${targetLoc}\n\n`;
-    analysisLog += `---\n\n`;
-
-    // Log 1: Keywords por competidor
-    analysisLog += `## 🔍 Keywords Extraídas por Competidor\n\n`;
-    for (const [domain, keywords] of Object.entries(competitorKeywordsMap)) {
-        analysisLog += `### ${domain}\n`;
-        analysisLog += `**Total:** ${keywords.length} keywords\n\n`;
-        analysisLog += `| Keyword | Volumen | Pos | Fuente | URL |\n`;
-        analysisLog += `|---------|---------|-----|--------|-----|\n`;
-        keywords.slice(0, 20).forEach(k => {
-            analysisLog += `| ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} | ${k.url || '-'} |\n`;
-        });
-        if (keywords.length > 20) {
-            analysisLog += `| ... y ${keywords.length - 20} más |\n`;
-        }
-        analysisLog += `\n`;
+    let paaQuestions = [];
+    try {
+        paaQuestions = await getPeopleAlsoAsk(`${niche} ${city}`, locationCode);
+        console.log(`   ✅ ${paaQuestions.length} preguntas encontradas`);
+    } catch (error) {
+        console.log(`   ⚠️ No se pudieron obtener preguntas PAA`);
     }
 
-    // Log 2: Keywords relacionadas (seed)
-    analysisLog += `## 🌱 Keywords Relacionadas (Seed)\n\n`;
-    const seedKws = allKeywords.filter(k => k.source === 'related');
-    analysisLog += `**Total:** ${seedKws.length} keywords\n\n`;
-    analysisLog += `| Keyword | Volumen |\n`;
-    analysisLog += `|---------|--------|\n`;
-    seedKws.slice(0, 30).forEach(k => {
-        analysisLog += `| ${k.keyword} | ${k.volume} |\n`;
-    });
-    if (seedKws.length > 30) {
-        analysisLog += `| ... y ${seedKws.length - 30} más |\n`;
+    // ========================================================================
+    // FASE 9: CLUSTERING CON GEMINI (El paso final para la Web)
+    // ========================================================================
+
+    let clusters = [];
+
+    if (!skipClustering) {
+        console.log('\n🧠 FASE 9: Clustering con Gemini AI...\n');
+        clusters = await runGeminiClustering(finalKeywords, niche, city);
+    } else {
+        console.log('\n⏸️ FASE 9: Clustering OMITIDO (skipClustering=true)....\n');
     }
-    analysisLog += `\n`;
 
-    // Log 3: Proceso de filtrado
-    analysisLog += `## 🔬 Proceso de Filtrado y Deduplicación\n\n`;
-    analysisLog += `- **Keywords totales extraídas:** ${allKeywords.length}\n`;
-    analysisLog += `- **Keywords después de deduplicación:** ${uniqueKeywords.length}\n`;
-    analysisLog += `- **Keywords descartadas (sin volumen):** ${allKeywords.length - uniqueKeywords.length}\n\n`;
+    console.log('═'.repeat(70));
+    console.log('✅ PROCESO COMPLETADO');
+    console.log('═'.repeat(70));
+    console.log(`📊 Estadísticas Finales:`);
+    console.log(`   - Clusters generados: ${clusters.length}`);
+    console.log(`   - Keywords totales usadas: ${finalKeywords.length}`);
+    console.log('═'.repeat(70) + '\n');
 
-    // Log 4: Top 50 keywords enviadas a IA
-    analysisLog += `## 🎯 Top 50 Keywords Enviadas a Gemini AI\n\n`;
-    analysisLog += `Estas son las keywords que se usaron para el clustering:\n\n`;
-    analysisLog += `| # | Keyword | Volumen | Pos | Fuente | URL |\n`;
-    analysisLog += `|---|---------|---------|-----|--------|-----|\n`;
-    uniqueKeywords.slice(0, 50).forEach((k, i) => {
-        analysisLog += `| ${i + 1} | ${k.keyword} | ${k.volume} | ${k.position || '-'} | ${k.source} | ${k.url || '-'} |\n`;
-    });
-    analysisLog += `\n`;
+    return {
+        clusters: clusters,
+        stats: stats,
+        market_analysis: `Análisis de ${niche} en ${city}. ${finalKeywords.length} keywords relevantes encontradas.`,
+        raw_data: {
+            competitors: competitors, // Usamos la variable competitors del scope superior
+            top_keywords: finalKeywords
+        },
+        paa_questions: paaQuestions
+    };
+}
 
-    // 4. Clustering con Gemini
-    const prompt = `
-        ACTÚA COMO: Experto en Arquitectura Web y SEO Estratégico.
-        OBJETIVO: Identificar los SERVICIOS PRINCIPALES (Commercial Intent) que ofrecen los competidores y separarlos de temas informativos (Blog/Info).
+// ============================================================================
+// FUNCIONES AUXILIARES
+// ============================================================================
 
-        INPUT DATA (Keywords + Contexto):
-        ${JSON.stringify(uniqueKeywords.map(k => ({
-        keyword: k.keyword,
-        volume: k.volume,
-        source: k.source, // 'competitor' o 'related'
-        url: k.url || '' // URL que rankea (pista de intención)
-    })))}
-        
-        INSTRUCCIONES DE ANÁLISIS:
-        1. Analiza la INTENCIÓN DE BÚSQUEDA de cada keyword usando la URL y el término:
-           - **COMMERCIAL (Servicios):** Si la URL sugiere una página de servicio (ej: /servicios/, /instalacion/, root domain) o la keyword es transaccional ("precio", "empresa", "instalador").
-           - **INFORMATIONAL (Blog):** Si la URL sugiere blog (ej: /blog/, /consejos/, /guia/, /como-hacer/) o la keyword es informativa ("cómo limpiar", "qué es", "ideas").
-        2. Agrupa las keywords en CLUSTERS temáticos.
-        3. Clasifica cada cluster como "COMMERCIAL" o "INFORMATIONAL".
-        4. **PRIORIDAD:** Tu objetivo principal es definir la arquitectura de SERVICIOS.
-        
-        REGLAS SEO ESTRICTAS para meta tags:
-        - H1: Máximo 60 caracteres, incluir focal keyword de forma natural
-        - SEO Title: Máximo 60 caracteres, NO repetir focal keyword exacta, usar sinónimos
-        - Meta Description: Máximo 160 caracteres, persuasiva, incluir CTA
-        - Usar keywords secundarias del cluster en títulos
-        
-        DEVUELVE JSON (IMPORTANTE: Respetar esta estructura exacta):
-        {
-            "market_analysis": "Breve análisis de qué servicios priorizan los competidores y qué temas informativos cubren.",
-            "clusters": [
-                {
-                    "name": "Nombre del Cluster/Servicio",
-                    "intent": "COMMERCIAL", // o "INFORMATIONAL"
-                    "main_keyword": "focal keyword",
-                    "volume": 0,  // Suma TOTAL de volúmenes
-                    "meta_suggestions": [
-                        {
-                            "h1": "H1 Optimizado Variación 1",
-                            "seo_title": "Meta Title Variación 1",
-                            "seo_description": "Meta Description Variación 1"
-                        },
-                        // ... 5 variaciones ...
-                        {
-                            "h1": "H1 Optimizado Variación 5",
-                            "seo_title": "Meta Title Variación 5",
-                            "seo_description": "Meta Description Variación 5"
-                        }
-                    ],
-                    "selected_suggestion": 0,
-                    "keywords": [{"keyword": "kw", "volume": 10}]
+async function autoDetectServices(niche, city, location) {
+    try {
+        const related = await getRelatedKeywords(niche, location, city);
+        const servicePatterns = new Map();
+
+        related.forEach(kw => {
+            const words = kw.keyword.toLowerCase().split(' ');
+            for (let i = 0; i < words.length - 1; i++) {
+                if (words[i].length < 3) continue;
+                const bigram = `${words[i]} ${words[i + 1]}`;
+                if (!bigram.includes(city.toLowerCase())) {
+                    servicePatterns.set(bigram, (servicePatterns.get(bigram) || 0) + 1);
                 }
-            ],
-            "locations": ["Zona 1", "Zona 2", "Zona 3", "Zona 4", "Zona 5"],
-            "home_structure": { "h1": "H1 para homepage", "h2s": ["H2 sección 1", "H2 sección 2"] }
+            }
+        });
+
+        return Array.from(servicePatterns.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([service]) => service);
+    } catch (error) {
+        return [];
+    }
+}
+
+export async function runGeminiClustering(keywords, niche, city) {
+    if (keywords.length === 0) return [];
+
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const prompt = `
+    ACTÚA COMO: Experto en SEO y Arquitectura Web.
+    
+    TAREA: Agrupar la siguiente lista de keywords en CLUSTERS SEMÁNTICOS para una web de "${niche}" en "${city}".
+    
+    LISTA DE KEYWORDS:
+    ${keywords.map(k => `- ${k.keyword} (Vol: ${k.volume}, Score: ${k.relevanceScore})`).join('\n')}
+    
+    INSTRUCCIONES:
+    1. Agrupa las keywords por INTENCIÓN DE SERVICIO (ej: "Rejas", "Puertas", "Barandillas").
+    2. Ignora keywords que sean basura o no encajen en servicios comerciales.
+    3. Crea entre 3 y 8 clusters principales.
+    4. Asigna un nombre comercial atractivo a cada cluster.
+    5. Genera METADATOS SEO optimizados para cada cluster (H1, Title, Description) enfocados en "${city}".
+    
+    FORMATO JSON:
+    [
+        {
+            "name": "Nombre del Cluster (ej: Rejas de Seguridad)",
+            "slug": "rejas-seguridad-barcelona",
+            "intent": "COMMERCIAL",
+            "meta_suggestions": {
+                "h1": "Título H1 Optimizado (ej: Rejas de Seguridad a Medida en Barcelona)",
+                "seo_title": "Título SEO (ej: Rejas de Seguridad Barcelona | Precios y Modelos)",
+                "seo_description": "Meta descripción persuasiva incluyendo keywords principales y llamada a la acción."
+            },
+            "keywords": [
+                { "keyword": "rejas barcelona", "volume": 100, "cpc": 1.5, "difficulty": 20 },
+                ...
+            ]
         }
+    ]
+    
+    IMPORTANTE: Devuelve SOLO el JSON.
     `;
 
     try {
         const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
-        const jsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const plan = JSON.parse(jsonStr);
+        const response = await result.response;
+        const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        const clusters = JSON.parse(text);
 
-        const finalData = {
-            ...plan,
-            raw_data: {
-                top_keywords: uniqueKeywords.slice(0, 50),
-                competitor_keywords: competitorKeywordsMap
-            },
-            niche: cleanNiche,
-            city: cleanCity
-        };
-
-        // NUEVO: Añadir sección de resultados del clustering al log
-        analysisLog += `## 🎨 Resultados del Clustering\n\n`;
-        analysisLog += `**Total de Clusters Generados:** ${plan.clusters?.length || 0}\n\n`;
-
-        plan.clusters?.forEach((cluster, i) => {
-            const totalVol = cluster.keywords?.reduce((sum, k) => sum + (k.volume || 0), 0) || 0;
-            analysisLog += `### Cluster ${i + 1}: ${cluster.name}\n\n`;
-            analysisLog += `- **Focal Keyword:** ${cluster.main_keyword}\n`;
-            analysisLog += `- **Volumen Total:** ${totalVol}\n`;
-            analysisLog += `- **Keywords en el cluster:** ${cluster.keywords?.length || 0}\n\n`;
-
-            if (cluster.keywords && cluster.keywords.length > 0) {
-                analysisLog += `| Keyword | Volumen |\n`;
-                analysisLog += `|---------|--------|\n`;
-                cluster.keywords.forEach(k => {
-                    analysisLog += `| ${k.keyword} | ${k.volume} |\n`;
-                });
-                analysisLog += `\n`;
-            }
-
-            // Mostrar las 5 sugerencias de meta tags
-            if (cluster.meta_suggestions && cluster.meta_suggestions.length > 0) {
-                analysisLog += `**Meta Tag Suggestions:**\n\n`;
-                cluster.meta_suggestions.forEach((suggestion, idx) => {
-                    analysisLog += `${idx + 1}. **H1:** ${suggestion.h1}\n`;
-                    analysisLog += `   - **Title:** ${suggestion.seo_title}\n`;
-                    analysisLog += `   - **Description:** ${suggestion.seo_description}\n\n`;
-                });
-            }
-        });
-
-        // Guardar el log en un archivo
-        await fs.writeFile('clustering_analysis.md', analysisLog);
-        console.log(`   📄 Análisis guardado en: clustering_analysis.md`);
-
-        await fs.writeFile('project_plan.json', JSON.stringify(finalData, null, 2));
-        return finalData;
-
+        // Enriquecer clusters con datos originales
+        return clusters.map(c => ({
+            ...c,
+            keywords: c.keywords.map(k => {
+                const original = keywords.find(ok => ok.keyword === k.keyword);
+                return original || k;
+            })
+        }));
     } catch (error) {
-        console.error("❌ Error en Gemini Clustering:", error);
-        throw new Error("Fallo al generar clusters con IA. Inténtalo de nuevo.");
+        console.error("Error en Gemini Clustering:", error);
+        // Fallback: un solo cluster con todo
+        return [{
+            name: `Servicios de ${niche}`,
+            keywords: keywords
+        }];
     }
+}
+
+
+function simplifyServiceQuery(serviceName) {
+    // 1. Eliminar paréntesis y su contenido
+    let clean = serviceName.replace(/\(.*\)/g, '');
+
+    // 2. Lista de "Stop Words" en español para eliminar
+    const stopWords = [' de ', ' para ', ' y ', ' en ', ' con ', ' a ', ' la ', ' el ', ' los ', ' las ', ' del ', ' por '];
+
+    stopWords.forEach(word => {
+        clean = clean.replace(new RegExp(word, 'gi'), ' ');
+    });
+
+    // 3. Limpiar espacios dobles y trim
+    clean = clean.replace(/\s+/g, ' ').trim();
+
+    // 4. Quedarse con las primeras 2-3 palabras significativas
+    const words = clean.split(' ').filter(w => w.length > 2);
+
+    if (words.length > 3) {
+        return words.slice(0, 3).join(' ');
+    }
+
+    return clean;
 }

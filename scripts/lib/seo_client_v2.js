@@ -57,6 +57,41 @@ const LOCATION_CODES = {
     'comunidad valenciana': 20319
 };
 
+// ============================================================================
+// CLASIFICACIÓN DE COMPETIDORES
+// ============================================================================
+
+// Lista de dominios que típicamente no son competidores reales
+const LOW_QUALITY_DOMAINS = [
+    'instagram.com',
+    'facebook.com',
+    'twitter.com',
+    'linkedin.com',
+    'pinterest.com',
+    'tiktok.com',
+    'habitissimo.es',
+    'milanuncios.com',
+    'wallapop.com',
+    'cronoshare.com',
+    'zaask.es',
+    'google.com',
+    'youtube.com',
+    'yelp.com',
+    'tripadvisor.com',
+    'foursquare.com'
+];
+
+/**
+ * Clasifica un competidor según la calidad del dominio
+ */
+export function classifyCompetitor(domain) {
+    const isLowQuality = LOW_QUALITY_DOMAINS.some(bad => domain.includes(bad));
+    return {
+        recommended: !isLowQuality,
+        reason: isLowQuality ? 'Agregador/Red Social' : 'Competidor directo'
+    };
+}
+
 /**
  * Obtiene el location_code correcto para DataForSEO
  */
@@ -67,37 +102,68 @@ export function getLocationCode(location) {
     if (typeof location === 'number') return location;
     if (!isNaN(location)) return parseInt(location);
 
-    // Buscar en el mapa
-    const normalized = location.toLowerCase().trim();
-    return LOCATION_CODES[normalized] || 2724;
+    // Normalizar
+    let normalized = location.toLowerCase().trim();
+
+    // Intento 1: Búsqueda directa
+    if (LOCATION_CODES[normalized]) return LOCATION_CODES[normalized];
+
+    // Intento 2: Si tiene comas (ej: "Malaga,Andalusia,Spain"), coger solo la ciudad
+    if (normalized.includes(',')) {
+        const cityPart = normalized.split(',')[0].trim();
+        if (LOCATION_CODES[cityPart]) return LOCATION_CODES[cityPart];
+    }
+
+    return 2724;
 }
 
 /**
- * Obtiene el nombre de ubicación para DataForSEO Labs
- * (Labs API requiere location_name, no location_code)
+ * Convierte ubicación a location_name para DataForSEO Labs API
+ * IMPORTANTE: Labs API solo acepta PAÍSES, no ciudades específicas
+ * @param {string|number|null} location - Ubicación (ciudad, código, o null)
+ * @returns {string|null} Nombre del país o null si no hay ubicación
  */
 export function getLocationName(location) {
-    if (!location) return "Spain";
+    // Si no hay ubicación, devolver null (sin fallback forzado)
+    if (!location) return null;
 
-    const normalized = location.toLowerCase().trim();
+    // Si ya es un string de nombre
+    if (typeof location === 'string' && isNaN(location)) {
+        const normalized = location.toLowerCase().trim();
 
-    // Mapeo de nombres en español a nombres que acepta DataForSEO
-    const nameMap = {
-        'españa': 'Spain',
-        'spain': 'Spain',
-        'madrid': 'Madrid,Autonomous Community of Madrid,Spain',
-        'barcelona': 'Barcelona,Catalonia,Spain',
-        'valencia': 'Valencia,Valencian Community,Spain',
-        'sevilla': 'Seville,Andalusia,Spain',
-        'málaga': 'Malaga,Andalusia,Spain',
-        'malaga': 'Malaga,Andalusia,Spain',
-        'bilbao': 'Bilbao,Basque Country,Spain',
-        'zaragoza': 'Zaragoza,Aragon,Spain',
-        'cataluña': 'Catalonia,Spain',
-        'andalucía': 'Andalusia,Spain'
-    };
+        // Todas las ubicaciones españolas se convierten a "Spain"
+        const spanishLocations = [
+            'españa', 'spain', 'madrid', 'barcelona', 'valencia',
+            'sevilla', 'málaga', 'malaga', 'bilbao', 'zaragoza',
+            'alicante', 'córdoba', 'cordoba', 'granada', 'murcia',
+            'cataluña', 'catalonia', 'andalucía', 'andalucia',
+            'comunidad de madrid', 'país vasco', 'pais vasco', 'galicia',
+            'castilla y león', 'comunidad valenciana'
+        ];
 
-    return nameMap[normalized] || location;
+        if (spanishLocations.includes(normalized)) {
+            return 'Spain';
+        }
+
+        // Si tiene formato "ciudad,region,pais", extraer país
+        if (normalized.includes(',')) {
+            const parts = normalized.split(',');
+            const country = parts[parts.length - 1].trim();
+            return country.charAt(0).toUpperCase() + country.slice(1);
+        }
+
+        return 'Spain'; // Default para strings no reconocidos
+    }
+
+    // Si es un código numérico, convertir a país
+    const code = typeof location === 'number' ? location : parseInt(location);
+
+    // Todos los códigos españoles (2724, 1005xxx, 203xx) → "Spain"
+    if (code === 2724 || (code >= 1005000 && code <= 1006000) || (code >= 20300 && code <= 20400)) {
+        return 'Spain';
+    }
+
+    return 'Spain'; // Default para códigos no reconocidos
 }
 
 // ============================================================================
@@ -268,13 +334,17 @@ export async function getTopCompetitors(keyword, location) {
     const organicResults = results[0].items
         .filter(item => item.type === 'organic')
         .slice(0, 10)
-        .map((item, index) => ({
-            position: index + 1,
-            url: item.url,
-            title: item.title,
-            domain: item.domain,
-            description: item.description
-        }));
+        .map((item, index) => {
+            const classification = classifyCompetitor(item.domain);
+            return {
+                position: index + 1,
+                url: item.url,
+                title: item.title,
+                domain: item.domain,
+                description: item.description,
+                ...classification
+            };
+        });
 
     console.log(`✅ ${organicResults.length} resultados orgánicos`);
     return organicResults;
@@ -285,10 +355,10 @@ export async function getTopCompetitors(keyword, location) {
  * IMPORTANTE: Labs API solo acepta países, no ciudades
  */
 export async function getCompetitorKeywords(domain, location, targetCity, top10Only = true) {
-    // Labs API SOLO acepta países ("Spain"), no ciudades
-    const locationName = "Spain";
+    // Labs API SOLO acepta países, no ciudades específicas
+    const locationName = getLocationName(location);
 
-    console.log(`🎯 Keywords de: ${domain} (${locationName}) ${top10Only ? '[TOP 10]' : '[ALL]'}`);
+    console.log(`🎯 Keywords de: ${domain} ${locationName ? `(${locationName})` : '(Global)'} ${top10Only ? '[TOP 10]' : '[ALL]'}`);
 
     const filters = [
         ["keyword_data.keyword_info.search_volume", ">", 0]
@@ -303,13 +373,19 @@ export async function getCompetitorKeywords(domain, location, targetCity, top10O
         ]);
     }
 
-    const result = await postDataForSEO('/dataforseo_labs/google/ranked_keywords/live', [{
+    const payload = {
         target: domain,
-        location_name: locationName,
         language_name: "Spanish",
         limit: 100,
         filters
-    }]);
+    };
+
+    // Solo incluir location_name si existe
+    if (locationName) {
+        payload.location_name = locationName;
+    }
+
+    const result = await postDataForSEO('/dataforseo_labs/google/ranked_keywords/live', [payload]);
 
     if (!result?.[0]?.items) return [];
 
@@ -332,38 +408,38 @@ export async function getCompetitorKeywords(domain, location, targetCity, top10O
         };
     });
 
-    // 🔥 FILTRADO LOCAL MEJORADO
+    // 🔥 FILTRADO LOCAL DESACTIVADO - Confiamos en el scoring de relevancia
+    // El filtro de ciudad era demasiado estricto y eliminaba keywords valiosas
+    // Ahora extraemos TODAS las keywords del competidor y dejamos que el
+    // sistema de relevancia (advancedRelevanceScore) haga la priorización
+
+    /*
     if (targetCity) {
         const beforeCount = keywords.length;
         const cityLower = targetCity.toLowerCase();
-        const nicheTerms = domain.split('.')[0].toLowerCase(); // Inferir nicho del dominio
+        const nicheTerms = domain.split('.')[0].toLowerCase();
 
         keywords = keywords.filter(k => {
             const kwLower = k.keyword.toLowerCase();
-
-            // ✅ PRIORIDAD 1: Keywords que contienen la ciudad objetivo
             if (kwLower.includes(cityLower)) return true;
 
-            // ✅ PRIORIDAD 2: Keywords muy relevantes al nicho (sin ciudad pero útiles)
             const hasNicheTerm = kwLower.includes(nicheTerms) ||
                 kwLower.includes('quitar') ||
                 kwLower.includes('alisar') ||
                 kwLower.includes('pintor');
 
-            // ❌ Rechazar si tiene otra ciudad
             const otherCities = SPANISH_CITIES.filter(c => c !== cityLower);
             const hasOtherCity = otherCities.some(city =>
                 new RegExp(`\\b${city}\\b`, 'i').test(kwLower)
             );
 
             if (hasOtherCity) return false;
-
-            // Permitir keywords relevantes sin ciudad si tienen buen volumen
             return hasNicheTerm && k.volume > 100;
         });
 
         console.log(`   📍 Filtrado local: ${beforeCount} → ${keywords.length} keywords`);
     }
+    */
 
     console.log(`✅ ${keywords.length} keywords extraídas de ${domain}`);
     return keywords;
@@ -374,21 +450,27 @@ export async function getCompetitorKeywords(domain, location, targetCity, top10O
  * IMPORTANTE: Labs API solo acepta países
  */
 export async function getRelatedKeywords(keyword, location, targetCity) {
-    // Labs API SOLO acepta países
-    const locationName = "Spain";
-    console.log(`🌱 Keywords relacionadas: "${keyword}" (${locationName})`);
+    // Labs API SOLO acepta países, no ciudades específicas
+    const locationName = getLocationName(location);
+    console.log(`🌱 Keywords relacionadas: "${keyword}" ${locationName ? `(${locationName})` : '(Global)'}`);
 
-    const result = await postDataForSEO('/dataforseo_labs/google/related_keywords/live', [{
+    const payload = {
         keyword,
-        location_name: locationName,
         language_name: "Spanish",
-        limit: 100,
+        limit: 500,  // Aumentado de 100 a 500 para capturar máxima variedad
         filters: [
             ["keyword_data.keyword_info.search_volume", ">", 10],
             "and",
             ["keyword_data.keyword_info.search_volume", "<", 100000]
         ]
-    }]);
+    };
+
+    // Solo incluir location_name si existe
+    if (locationName) {
+        payload.location_name = locationName;
+    }
+
+    const result = await postDataForSEO('/dataforseo_labs/google/related_keywords/live', [payload]);
 
     if (!result?.[0]?.items) return [];
 
@@ -397,7 +479,7 @@ export async function getRelatedKeywords(keyword, location, targetCity) {
         const kwInfo = kwData.keyword_info || kwData;
 
         return {
-            keyword: kwInfo.keyword || 'unknown',
+            keyword: kwData.keyword || 'unknown',  // El keyword está en keyword_data.keyword
             volume: kwInfo.search_volume || 0,
             cpc: kwInfo.cpc || 0,
             competition: kwInfo.competition || 0,
@@ -407,12 +489,17 @@ export async function getRelatedKeywords(keyword, location, targetCity) {
         };
     });
 
-    // 🔥 NUEVO: Filtrar por ciudad
+    // 🔥 FILTRADO DE CIUDAD DESACTIVADO - Capturar máxima variedad
+    // El filtro eliminaba keywords valiosas como "rejas de seguridad", "barandillas", etc.
+    // Confiamos en el scoring de relevancia para priorizar
+
+    /*
     if (targetCity) {
         const beforeCount = keywords.length;
         keywords = filterByCity(keywords, targetCity);
         console.log(`   📍 Filtrado ciudad: ${beforeCount} → ${keywords.length} keywords`);
     }
+    */
 
     console.log(`✅ ${keywords.length} keywords relacionadas`);
     return keywords;
@@ -422,15 +509,22 @@ export async function getRelatedKeywords(keyword, location, targetCity) {
  * Obtener keywords de sugerencia (autocomplete)
  */
 export async function getKeywordSuggestions(keyword, location) {
-    const locationCode = getLocationCode(location);
-    console.log(`💡 Sugerencias para: "${keyword}"`);
+    // Labs API SOLO acepta location_name (países), no location_code
+    const locationName = getLocationName(location);
+    console.log(`💡 Sugerencias para: "${keyword}" ${locationName ? `(${locationName})` : '(Global)'}`);
 
-    const result = await postDataForSEO('/dataforseo_labs/google/keyword_suggestions/live', [{
+    const payload = {
         keyword,
-        location_code: locationCode,
-        language_code: "es",
-        limit: 50
-    }]);
+        language_name: "Spanish",
+        limit: 700  // Aumentado de 50 a 700 para máxima cobertura
+    };
+
+    // Solo incluir location_name si existe
+    if (locationName) {
+        payload.location_name = locationName;
+    }
+
+    const result = await postDataForSEO('/dataforseo_labs/google/keyword_suggestions/live', [payload]);
 
     if (!result?.[0]?.items) return [];
 
@@ -440,6 +534,45 @@ export async function getKeywordSuggestions(keyword, location) {
         cpc: k.keyword_info?.cpc || 0,
         competition: k.keyword_info?.competition || 0,
         source: 'suggestion'
+    }));
+}
+
+/**
+ * Obtener ideas de keywords (long-tail variations)
+ * Este endpoint genera variaciones automáticas combinando el seed con modificadores
+ * Ejemplo: "herrero" → "herrero cerca de mi", "reparación herrero", "precio herrero", etc.
+ */
+export async function getKeywordIdeas(keyword, location) {
+    const locationName = getLocationName(location);
+    console.log(`💡 Ideas de keywords para: "${keyword}" ${locationName ? `(${locationName})` : '(Global)'}`);
+
+    const payload = {
+        keyword,
+        language_name: "Spanish",
+        include_seed_keyword: true,
+        include_serp_info: false,
+        limit: 1000,  // Máximo permitido para capturar todas las variaciones
+        filters: [
+            ["keyword_data.keyword_info.search_volume", ">", 10]
+        ]
+    };
+
+    // Solo incluir location_name si existe
+    if (locationName) {
+        payload.location_name = locationName;
+    }
+
+    const result = await postDataForSEO('/dataforseo_labs/google/keyword_ideas/live', [payload]);
+
+    if (!result?.[0]?.items) return [];
+
+    return result[0].items.map(k => ({
+        keyword: k.keyword,
+        volume: k.keyword_info?.search_volume || 0,
+        cpc: k.keyword_info?.cpc || 0,
+        competition: k.keyword_info?.competition || 0,
+        difficulty: k.keyword_properties?.keyword_difficulty || 0,
+        source: 'idea'
     }));
 }
 
@@ -510,6 +643,7 @@ export default {
     getCompetitorKeywords,
     getRelatedKeywords,
     getKeywordSuggestions,
+    getKeywordIdeas,
     getPeopleAlsoAsk,
     getSearchVolume,
     getLocationCode,

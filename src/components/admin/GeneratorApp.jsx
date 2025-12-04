@@ -17,9 +17,17 @@ export default function GeneratorApp() {
     });
     const [researchData, setResearchData] = useState(null);
     const [selectedCompetitors, setSelectedCompetitors] = useState(new Set());
+    const [extractionOptions, setExtractionOptions] = useState({
+        top10Only: true,  // ✅ Default to Top 10 Only (Phase 1 recommendation)
+        minRelevance: 5,
+        includeInfo: false,
+        maxKeywords: 200,
+        specificServices: '' // ✅ New field for specific services
+    });
     const [logs, setLogs] = useState([]);
     const [saving, setSaving] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [discoveredServices, setDiscoveredServices] = useState([]); // ✅ Nuevo estado para servicios
 
     // Auto-update seed keyword
     useEffect(() => {
@@ -31,23 +39,71 @@ export default function GeneratorApp() {
         }
     }, [formData.niche, formData.city]);
 
-    const handleResearch = async (e) => {
+    const handleDiscoverServices = async (e) => {
         e.preventDefault();
+
+        // Validación frontend
+        if (!formData.niche || !formData.niche.trim()) {
+            alert('Por favor, ingresa un nicho/servicio');
+            return;
+        }
+        if (!formData.city || !formData.city.trim()) {
+            alert('Por favor, selecciona una ciudad');
+            return;
+        }
+
+        setStep('loading');
+        setLogs(["🧠 Consultando a Gemini sobre servicios del nicho..."]);
+
+        try {
+            const res = await fetch('/api/discover-services', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ niche: formData.niche.trim() })
+            });
+
+            const data = await res.json();
+
+            if (data.error) {
+                console.error('❌ API Error:', data);
+                throw new Error(data.error);
+            }
+
+            setDiscoveredServices(data.services || []);
+            setStep('services'); // ✅ Vamos al paso de validación de servicios
+        } catch (err) {
+            console.error('❌ Request failed:', err);
+            alert(err.message);
+            setStep('input');
+        }
+    };
+
+    const handleGetCompetitors = async () => {
         setStep('loading');
         setLogs(["🚀 Buscando competidores locales en Google..."]);
 
         try {
+            const requestBody = {
+                niche: formData.niche.trim(),
+                city: formData.city.trim(),
+                location: formData.locationName || formData.city.toLowerCase()
+            };
+
+            console.log('📤 Sending request:', requestBody);
+
             const res = await fetch('/api/research', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    niche: formData.niche,
-                    city: formData.city,
-                    location: formData.locationName || formData.city.toLowerCase()
-                })
+                body: JSON.stringify(requestBody)
             });
+
             const data = await res.json();
-            if (data.error) throw new Error(data.error);
+
+            if (data.error) {
+                console.error('❌ API Error:', data);
+                throw new Error(data.error);
+            }
+
             setResearchData(data);
             if (data.raw_data?.competitors) {
                 const allDomains = new Set(data.raw_data.competitors.map(c => c.domain));
@@ -55,18 +111,18 @@ export default function GeneratorApp() {
             }
             setStep('selection');
         } catch (err) {
+            console.error('❌ Request failed:', err);
             alert(err.message);
-            setStep('input');
+            setStep('services'); // Volver a servicios si falla
         }
     };
 
-    const handleFinishSelection = async () => {
+    const handleExtractKeywords = async () => {
         setStep('loading');
         setLogs([
             "🕵️ Extrayendo keywords de competidores locales...",
             "🎯 Filtrando por relevancia local...",
-            "🧠 IA realizando Clustering inteligente...",
-            "✨ Optimizando Meta Tags para SEO local..."
+            "✨ Preparando lista para revisión..."
         ]);
 
         try {
@@ -79,22 +135,58 @@ export default function GeneratorApp() {
                     city: formData.city,
                     competitors: selectedDomainsArray,
                     location: formData.locationName || formData.city.toLowerCase(),
-                    top10Filter: formData.top10Filter !== false
+                    options: {
+                        ...extractionOptions,
+                        specificServices: discoveredServices,
+                        skipClustering: true // ✅ Importante: Pausar antes de clusterizar
+                    }
                 })
             });
 
             const data = await res.json();
             if (data.error) throw new Error(data.error);
 
-            // Asegurar estructura para edición
-            if (!data.home_structure) data.home_structure = { h1: '', h2s: [] };
-
             setResearchData(data);
-            setStep('review');
+            setStep('keywords'); // ✅ Vamos al paso de revisión de keywords
 
         } catch (err) {
             alert(err.message);
             setStep('selection');
+        }
+    };
+
+    const handleClusterKeywords = async () => {
+        setStep('loading');
+        setLogs([
+            "🧠 IA realizando Clustering inteligente...",
+            "✨ Optimizando Meta Tags para SEO local...",
+            "🏗️ Estructurando estrategia de contenidos..."
+        ]);
+
+        try {
+            const res = await fetch('/api/cluster', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    keywords: researchData.raw_data.top_keywords,
+                    niche: formData.niche,
+                    city: formData.city
+                })
+            });
+
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+
+            setResearchData(prev => ({
+                ...prev,
+                clusters: data.clusters,
+                home_structure: { h1: '', h2s: [] } // Inicializar estructura
+            }));
+            setStep('review');
+
+        } catch (err) {
+            alert(err.message);
+            setStep('keywords');
         }
     };
 
@@ -193,8 +285,10 @@ export default function GeneratorApp() {
     const Stepper = ({ currentStep }) => {
         const steps = [
             { id: 1, name: 'Location', key: 'input' },
-            { id: 2, name: 'Services', key: 'selection' },
-            { id: 3, name: 'Strategy', key: 'review' }
+            { id: 2, name: 'Services', key: 'services' },
+            { id: 3, name: 'Competitors', key: 'selection' },
+            { id: 4, name: 'Keywords', key: 'keywords' },
+            { id: 5, name: 'Strategy', key: 'review' }
         ];
 
         return (
@@ -202,8 +296,10 @@ export default function GeneratorApp() {
                 {steps.map((s, idx) => {
                     const isActive = currentStep === s.key;
                     let isCompleted = false;
-                    if (currentStep === 'selection' && idx < 1) isCompleted = true;
-                    if (currentStep === 'review' && idx < 2) isCompleted = true;
+                    if (currentStep === 'services' && idx < 1) isCompleted = true;
+                    if (currentStep === 'selection' && idx < 2) isCompleted = true;
+                    if (currentStep === 'keywords' && idx < 3) isCompleted = true;
+                    if (currentStep === 'review' && idx < 4) isCompleted = true;
                     if (currentStep === 'success') isCompleted = true;
 
                     return (
@@ -221,148 +317,155 @@ export default function GeneratorApp() {
 
     if (step === 'input') {
         return (
-            <div className="max-w-4xl mx-auto text-white">
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-indigo-400 mb-2 flex items-center justify-center gap-2">
-                        AI Wizard by <span className="text-white">Agent X</span>
-                    </h2>
+            <div className="max-w-2xl mx-auto">
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl font-bold text-white mb-4">
+                        Generador de Nichos <span className="text-blue-400">Rank & Rent</span>
+                    </h1>
+                    <p className="text-slate-400">
+                        Automatiza tu investigación de palabras clave, clustering y estructura web.
+                    </p>
                 </div>
-                <Stepper currentStep={step} />
-                <div className="bg-slate-800 p-8 rounded-xl shadow-2xl border border-slate-700">
-                    <form onSubmit={handleResearch} className="space-y-8">
+
+                <form onSubmit={handleDiscoverServices} className="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
+                            Enter a <span className="text-white font-bold underline decoration-indigo-500">Keyword</span> that best describes your Business
+                        </label>
+                        <input className="w-full bg-slate-900 border border-slate-700 rounded-lg py-4 px-4 focus:ring-2 focus:ring-indigo-500 outline-none text-lg placeholder-slate-600" placeholder="e.g. Parquetista" value={formData.niche} onChange={e => setFormData({ ...formData, niche: e.target.value })} required />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">
-                                Enter a <span className="text-white font-bold underline decoration-indigo-500">Keyword</span> that best describes your Business
-                            </label>
-                            <input className="w-full bg-slate-900 border border-slate-700 rounded-lg py-4 px-4 focus:ring-2 focus:ring-indigo-500 outline-none text-lg placeholder-slate-600" placeholder="e.g. Parquetista" value={formData.niche} onChange={e => setFormData({ ...formData, niche: e.target.value })} required />
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Search Engine</label>
+                            <select className="w-full bg-slate-900 border border-slate-700 rounded-lg py-3 px-4" value={formData.searchEngine} onChange={e => setFormData({ ...formData, searchEngine: e.target.value })}>
+                                <option value="google.com">google.com (US)</option>
+                                <option value="google.es">google.es (Spain)</option>
+                            </select>
                         </div>
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <LocationAutocomplete
+                                onLocationSelect={(code, name) => {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        city: name,
+                                        locationCode: code,
+                                        locationName: name
+                                    }));
+                                }}
+                                defaultValue={formData.city}
+                            />
+                        </div>
+                    </div>
+
+                    {/* TOP 10 Filter Toggle */}
+                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
+                        <label className="flex items-center justify-between cursor-pointer">
                             <div>
-                                <label className="block text-sm font-medium text-slate-300 mb-2">Search Engine</label>
-                                <select className="w-full bg-slate-900 border border-slate-700 rounded-lg py-3 px-4" value={formData.searchEngine} onChange={e => setFormData({ ...formData, searchEngine: e.target.value })}>
-                                    <option value="google.com">google.com (US)</option>
-                                    <option value="google.es">google.es (Spain)</option>
-                                </select>
+                                <div className="text-sm font-medium text-slate-200">
+                                    🎯 Filter TOP 10 Positions Only
+                                </div>
+                                <div className="text-xs text-slate-400 mt-1">
+                                    Extract only keywords where competitors rank in positions 1-10 (higher quality)
+                                </div>
                             </div>
-                            <div>
-                                <LocationAutocomplete
-                                    onLocationSelect={(code, name) => {
-                                        setFormData(prev => ({
-                                            ...prev,
-                                            city: name,
-                                            locationCode: code,
-                                            locationName: name
-                                        }));
-                                    }}
-                                    defaultValue={formData.city}
+                            <div className="relative">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.top10Filter}
+                                    onChange={(e) => setFormData({ ...formData, top10Filter: e.target.checked })}
+                                    className="sr-only peer"
                                 />
+                                <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                             </div>
-                        </div>
+                        </label>
+                    </div>
 
-                        {/* TOP 10 Filter Toggle */}
-                        <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
-                            <label className="flex items-center justify-between cursor-pointer">
-                                <div>
-                                    <div className="text-sm font-medium text-slate-200">
-                                        🎯 Filter TOP 10 Positions Only
-                                    </div>
-                                    <div className="text-xs text-slate-400 mt-1">
-                                        Extract only keywords where competitors rank in positions 1-10 (higher quality)
-                                    </div>
+                    {/* Generate Locations Toggle */}
+                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
+                        <label className="flex items-center justify-between cursor-pointer">
+                            <div>
+                                <div className="text-sm font-medium text-slate-200">
+                                    🌍 Generate Location Pages (Barrios)
                                 </div>
-                                <div className="relative">
-                                    <input
-                                        type="checkbox"
-                                        checked={formData.top10Filter}
-                                        onChange={(e) => setFormData({ ...formData, top10Filter: e.target.checked })}
-                                        className="sr-only peer"
-                                    />
-                                    <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                <div className="text-xs text-slate-400 mt-1">
+                                    Create individual landing pages for each neighborhood/district (Optional)
                                 </div>
-                            </label>
-                        </div>
+                            </div>
+                            <div className="relative">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.generateLocations}
+                                    onChange={(e) => setFormData({ ...formData, generateLocations: e.target.checked })}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </div>
+                        </label>
+                    </div>
 
-                        {/* Generate Locations Toggle */}
-                        <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
-                            <label className="flex items-center justify-between cursor-pointer">
-                                <div>
-                                    <div className="text-sm font-medium text-slate-200">
-                                        🌍 Generate Location Pages (Barrios)
-                                    </div>
-                                    <div className="text-xs text-slate-400 mt-1">
-                                        Create individual landing pages for each neighborhood/district (Optional)
-                                    </div>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type="checkbox"
-                                        checked={formData.generateLocations}
-                                        onChange={(e) => setFormData({ ...formData, generateLocations: e.target.checked })}
-                                        className="sr-only peer"
-                                    />
-                                    <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                                </div>
-                            </label>
-                        </div>
-
-                        <button type="submit" className="w-full px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2">
-                            Continue <ChevronRight className="w-5 h-5" />
-                        </button>
-                    </form>
-                </div>
+                    <button type="submit" className="w-full px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2">
+                        Continue <ChevronRight className="w-5 h-5" />
+                    </button>
+                </form>
             </div>
         );
     }
 
-    if (step === 'loading' || step === 'generating') {
-        const progressSteps = step === 'loading' ? [
-            { icon: '🔍', text: 'Buscando competidores en Google...', done: logs.length > 0 },
-            { icon: '📊', text: 'Extrayendo keywords de competidores...', done: logs.length > 1 },
-            { icon: '🎯', text: 'Filtrando por relevancia local...', done: logs.length > 2 },
-            { icon: '🧠', text: 'IA realizando Clustering inteligente...', done: logs.length > 3 },
-            { icon: '✨', text: 'Optimizando Meta Tags para SEO...', done: logs.length > 4 }
-        ] : [
-            { icon: '📋', text: 'Plan guardado correctamente', done: true },
-            { icon: '🏗️', text: 'Construyendo sitio web...', done: logs.length > 1 },
-            { icon: '📝', text: 'Generando contenido con IA...', done: logs.length > 2 },
-            { icon: '🎨', text: 'Aplicando diseño artesano...', done: logs.length > 3 }
-        ];
-
+    if (step === 'services') {
         return (
-            <div className="max-w-4xl mx-auto text-white py-20">
-                <div className="text-center mb-8">
-                    <Loader2 className="w-16 h-16 animate-spin mx-auto mb-6 text-indigo-500" />
-                    <h3 className="text-2xl font-bold mb-2">
-                        {step === 'loading' ? 'Analizando Datos...' : 'Construyendo Web...'}
-                    </h3>
-                    <p className="text-slate-400 text-sm">Por favor espera mientras procesamos tu solicitud</p>
+            <div className="max-w-4xl mx-auto text-white">
+                <div className="mb-8">
+                    <h2 className="text-2xl font-bold mb-2">Validar Servicios</h2>
+                    <p className="text-slate-400">Gemini ha identificado estos servicios para tu nicho. Edita o añade los que falten.</p>
                 </div>
 
-                {/* Progress Steps */}
-                <div className="max-w-md mx-auto bg-slate-900 rounded-lg border border-slate-800 overflow-hidden mb-6">
-                    {progressSteps.map((stepItem, idx) => (
-                        <div
-                            key={idx}
-                            className={`flex items-center gap-3 p-4 border-b border-slate-800 last:border-b-0 transition-all ${stepItem.done ? 'bg-slate-800/50' : 'bg-slate-900'
-                                }`}
+                <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {discoveredServices.map((service, idx) => (
+                            <div key={idx} className="flex items-center gap-2 bg-slate-900 p-3 rounded border border-slate-700">
+                                <input
+                                    type="text"
+                                    value={service}
+                                    onChange={(e) => {
+                                        const newServices = [...discoveredServices];
+                                        newServices[idx] = e.target.value;
+                                        setDiscoveredServices(newServices);
+                                    }}
+                                    className="bg-transparent border-none text-white w-full focus:ring-0"
+                                />
+                                <button
+                                    onClick={() => {
+                                        const newServices = discoveredServices.filter((_, i) => i !== idx);
+                                        setDiscoveredServices(newServices);
+                                    }}
+                                    className="text-slate-500 hover:text-red-400"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                        ))}
+                        <button
+                            onClick={() => setDiscoveredServices([...discoveredServices, 'Nuevo Servicio'])}
+                            className="flex items-center justify-center gap-2 bg-slate-900/50 p-3 rounded border border-dashed border-slate-600 text-slate-400 hover:text-white hover:border-slate-400 transition-colors"
                         >
-                            <span className="text-2xl">{stepItem.icon}</span>
-                            <span className={`flex-1 text-sm ${stepItem.done ? 'text-green-400' : 'text-slate-500'}`}>
-                                {stepItem.text}
-                            </span>
-                            {stepItem.done && (
-                                <Check className="w-5 h-5 text-green-400" />
-                            )}
-                        </div>
-                    ))}
+                            <Plus className="w-4 h-4" /> Añadir Servicio
+                        </button>
+                    </div>
                 </div>
 
-                {/* Log Console */}
-                <div className="max-w-md mx-auto bg-slate-950 p-4 rounded-lg text-left font-mono text-xs text-green-400 h-32 overflow-y-auto border border-slate-800">
-                    {logs.map((l, i) => (
-                        <div key={i} className="mb-1 animate-fade-in">{l}</div>
-                    ))}
-                    <div className="animate-pulse">▊</div>
+                <div className="flex justify-between">
+                    <button
+                        onClick={() => setStep('input')}
+                        className="px-6 py-3 rounded-lg font-bold text-slate-400 hover:text-white"
+                    >
+                        Atrás
+                    </button>
+                    <button
+                        onClick={handleGetCompetitors}
+                        className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-lg font-bold flex items-center gap-2"
+                    >
+                        Continuar a Competidores <ChevronRight className="w-5 h-5" />
+                    </button>
                 </div>
             </div>
         );
@@ -387,33 +490,208 @@ export default function GeneratorApp() {
                         </button>
                     </div>
 
-                    <div className="grid gap-4">
+                    {/* Extraction Options */}
+                    <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700 space-y-3">
+                        <h3 className="font-bold text-blue-200 flex items-center gap-2">
+                            <Settings className="w-5 h-5" /> Opciones de Extracción
+                        </h3>
+                        <label className="flex items-center gap-3 text-sm cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={!extractionOptions.top10Only}
+                                onChange={(e) => setExtractionOptions({ ...extractionOptions, top10Only: !e.target.checked })}
+                                className="w-4 h-4 text-blue-600 rounded"
+                            />
+                            <span className="text-blue-100">Extraer TODAS las keywords (no solo top 10)</span>
+                        </label>
+                        <label className="flex items-center gap-3 text-sm cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={extractionOptions.includeInfo}
+                                onChange={(e) => setExtractionOptions({ ...extractionOptions, includeInfo: e.target.checked })}
+                                className="w-4 h-4 text-blue-600 rounded"
+                            />
+                            <span className="text-blue-100">Incluir keywords informacionales</span>
+                        </label>
+
+                        {/* Nuevo: Control de Relevancia */}
+                        <div className="pt-2 border-t border-blue-700/30">
+                            <label className="block text-sm text-blue-100 mb-2">
+                                Filtro de Relevancia Mínima: <span className="font-bold text-blue-300">{extractionOptions.minRelevance}</span>
+                                <span className="text-xs text-blue-400 ml-2">(0 = sin filtro, 10 = muy estricto)</span>
+                            </label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="10"
+                                value={extractionOptions.minRelevance}
+                                onChange={(e) => setExtractionOptions({ ...extractionOptions, minRelevance: parseInt(e.target.value) })}
+                                className="w-full h-2 bg-blue-700 rounded-lg appearance-none cursor-pointer"
+                            />
+                            <div className="flex justify-between text-xs text-blue-300 mt-1">
+                                <span>Más keywords</span>
+                                <span>Más calidad</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Competitors List */}
+                    <div className="grid gap-3">
                         {researchData.raw_data?.competitors?.map((comp, idx) => (
-                            <div key={idx} className="bg-white text-slate-900 p-4 rounded-lg border border-slate-200 shadow-sm flex justify-between items-center">
-                                <div>
-                                    <div className="text-xs text-slate-500">{comp.url}</div>
-                                    <h3 className="font-bold text-indigo-900">{comp.title}</h3>
+                            <div
+                                key={idx}
+                                className={`bg-white text-slate-900 p-4 rounded-lg border-2 transition-all cursor-pointer ${selectedCompetitors.has(comp.domain)
+                                    ? 'border-indigo-500 bg-indigo-50'
+                                    : 'border-slate-200 hover:border-slate-300'
+                                    } ${!comp.recommended ? 'opacity-60' : ''}`}
+                                onClick={() => {
+                                    const newSet = new Set(selectedCompetitors);
+                                    if (selectedCompetitors.has(comp.domain)) newSet.delete(comp.domain);
+                                    else newSet.add(comp.domain);
+                                    setSelectedCompetitors(newSet);
+                                }}
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-start gap-3 flex-1">
+                                        <input
+                                            type="checkbox"
+                                            className="w-5 h-5 text-indigo-600 rounded border-slate-300 mt-1"
+                                            checked={selectedCompetitors.has(comp.domain)}
+                                            onChange={(e) => e.stopPropagation()}
+                                        />
+                                        <div className="flex-1">
+                                            <div className="font-bold text-indigo-900">{comp.domain}</div>
+                                            <div className="text-sm text-slate-600 line-clamp-1">{comp.title}</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col items-end gap-1">
+                                        <span className="text-xs text-slate-500">Pos. {comp.position}</span>
+                                        {comp.recommended ? (
+                                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded font-medium">
+                                                ✓ Recomendado
+                                            </span>
+                                        ) : (
+                                            <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded font-medium">
+                                                {comp.reason}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
-                                <input
-                                    type="checkbox"
-                                    className="w-6 h-6 text-indigo-600 rounded border-slate-300 cursor-pointer"
-                                    checked={selectedCompetitors.has(comp.domain)}
-                                    onChange={(e) => {
-                                        const newSet = new Set(selectedCompetitors);
-                                        if (e.target.checked) newSet.add(comp.domain);
-                                        else newSet.delete(comp.domain);
-                                        setSelectedCompetitors(newSet);
-                                    }}
-                                />
                             </div>
                         ))}
                     </div>
 
-                    <div className="flex justify-end pt-6 border-t border-slate-700">
-                        <button onClick={handleFinishSelection} className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center gap-2">
-                            <Check className="w-5 h-5" /> Finish & Analyze
+                    <div className="flex justify-between items-center pt-6 border-t border-slate-700">
+                        <button
+                            onClick={() => setStep('services')}
+                            className="px-6 py-3 rounded-lg font-bold text-slate-400 hover:text-white"
+                        >
+                            Atrás
                         </button>
+                        <div className="flex items-center gap-4">
+                            <div className="text-sm text-slate-400">
+                                {selectedCompetitors.size} de {researchData.raw_data?.competitors?.length || 0} competidores seleccionados
+                            </div>
+                            <button
+                                onClick={handleExtractKeywords}
+                                disabled={selectedCompetitors.size === 0}
+                                className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Search className="w-5 h-5" /> Extraer Keywords
+                            </button>
+                        </div>
                     </div>
+                </div>
+            </div>
+        );
+    }
+
+
+
+    // VISTA DE REVISIÓN DE KEYWORDS (NUEVO)
+    if (step === 'keywords' && researchData) {
+        const keywords = researchData.raw_data?.top_keywords || [];
+
+        return (
+            <div className="max-w-6xl mx-auto text-white">
+                <Stepper currentStep="keywords" />
+
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 className="text-2xl font-bold">Revisión de Keywords</h2>
+                        <p className="text-slate-400">
+                            Hemos encontrado <span className="text-indigo-400 font-bold">{keywords.length}</span> keywords relevantes.
+                            Revisa y elimina las que no encajen antes de clusterizar.
+                        </p>
+                    </div>
+                    <div className="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 text-sm">
+                        Total Volumen: <span className="text-green-400 font-bold">{keywords.reduce((acc, k) => acc + (k.volume || 0), 0)}</span>
+                    </div>
+                </div>
+
+                <div className="bg-slate-900 rounded-xl border border-slate-700 overflow-hidden mb-6">
+                    <div className="overflow-x-auto max-h-[600px]">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-slate-800 text-slate-400 sticky top-0 z-10">
+                                <tr>
+                                    <th className="p-4">Keyword</th>
+                                    <th className="p-4">Volumen</th>
+                                    <th className="p-4">Score</th>
+                                    <th className="p-4">Fuente</th>
+                                    <th className="p-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800">
+                                {keywords.map((k, idx) => (
+                                    <tr key={idx} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="p-4 font-medium text-white">{k.keyword}</td>
+                                        <td className="p-4 text-slate-300">{k.volume}</td>
+                                        <td className="p-4">
+                                            <span className={`px-2 py-1 rounded text-xs font-bold ${k.relevanceScore >= 8 ? 'bg-green-900 text-green-300' :
+                                                k.relevanceScore >= 5 ? 'bg-blue-900 text-blue-300' :
+                                                    'bg-slate-700 text-slate-300'
+                                                }`}>
+                                                {k.relevanceScore}
+                                            </span>
+                                        </td>
+                                        <td className="p-4 text-xs text-slate-500 uppercase">{k.source}</td>
+                                        <td className="p-4">
+                                            <button
+                                                onClick={() => {
+                                                    const newKeywords = keywords.filter((_, i) => i !== idx);
+                                                    setResearchData(prev => ({
+                                                        ...prev,
+                                                        raw_data: {
+                                                            ...prev.raw_data,
+                                                            top_keywords: newKeywords
+                                                        }
+                                                    }));
+                                                }}
+                                                className="text-slate-500 hover:text-red-400 transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-6 border-t border-slate-700">
+                    <button
+                        onClick={() => setStep('selection')}
+                        className="px-6 py-3 rounded-lg font-bold text-slate-400 hover:text-white"
+                    >
+                        Atrás
+                    </button>
+                    <button
+                        onClick={handleClusterKeywords}
+                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center gap-2"
+                    >
+                        <Bot className="w-5 h-5" /> Generar Clusters con IA
+                    </button>
                 </div>
             </div>
         );
@@ -848,17 +1126,85 @@ export default function GeneratorApp() {
         );
     }
 
+    // --- LOADING OVERLAY ---
+    if (step === 'loading' || step === 'generating') {
+        return (
+            <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-4">
+                <div className="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center space-y-6">
+                    <div className="relative w-20 h-20 mx-auto">
+                        <div className="absolute inset-0 border-4 border-indigo-500/30 rounded-full"></div>
+                        <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                        <Bot className="absolute inset-0 m-auto text-indigo-400 w-8 h-8 animate-pulse" />
+                    </div>
+
+                    <div>
+                        <h2 className="text-2xl font-bold text-white mb-2">
+                            {step === 'generating' ? 'Construyendo Sitio Web' : 'Analizando Datos'}
+                        </h2>
+                        <p className="text-slate-400 text-sm">
+                            Esto puede tomar unos momentos...
+                        </p>
+                    </div>
+
+                    <div className="bg-slate-950 rounded-lg p-4 text-left h-48 overflow-y-auto font-mono text-xs border border-slate-800 shadow-inner">
+                        {logs.map((log, i) => (
+                            <div key={i} className="mb-2 last:mb-0">
+                                <span className="text-slate-500">[{new Date().toLocaleTimeString()}]</span>{' '}
+                                <span className={i === logs.length - 1 ? "text-indigo-400 font-bold animate-pulse" : "text-slate-300"}>
+                                    {log}
+                                </span>
+                            </div>
+                        ))}
+                        {logs.length === 0 && (
+                            <span className="text-slate-600 italic">Iniciando proceso...</span>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // --- SUCCESS VIEW ---
     if (step === 'success') {
         return (
-            <div className="max-w-4xl mx-auto text-center py-20 bg-slate-800 rounded-xl shadow-xl border border-green-900 text-white">
-                <div className="w-24 h-24 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Check className="w-12 h-12 text-green-500" />
+            <div className="max-w-2xl mx-auto text-center py-12 animate-fade-in">
+                <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/50">
+                    <Check className="w-12 h-12 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold mb-2">¡Web Terminada!</h2>
-                <p className="text-slate-400 mb-8">El sitio ha sido generado y configurado.</p>
+                <h2 className="text-4xl font-bold text-white mb-4">¡Sitio Generado con Éxito!</h2>
+                <p className="text-xl text-slate-300 mb-8">
+                    Tu proyecto de Rank & Rent está listo y optimizado.
+                </p>
+
+                <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 mb-8 text-left">
+                    <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                        <List className="w-5 h-5 text-indigo-400" /> Resumen de Generación:
+                    </h3>
+                    <ul className="space-y-2 text-slate-300">
+                        <li className="flex items-center gap-2">
+                            <Check className="w-4 h-4 text-green-500" /> Home Page (Artisan Quality)
+                        </li>
+                        <li className="flex items-center gap-2">
+                            <Check className="w-4 h-4 text-green-500" /> {researchData?.clusters?.length || 0} Páginas de Servicios
+                        </li>
+                        {formData.generateLocations && (
+                            <li className="flex items-center gap-2">
+                                <Check className="w-4 h-4 text-green-500" /> {researchData?.locations?.length || 0} Landing Pages Locales
+                            </li>
+                        )}
+                        <li className="flex items-center gap-2">
+                            <Check className="w-4 h-4 text-green-500" /> Configuración SEO & Schema
+                        </li>
+                    </ul>
+                </div>
+
                 <div className="flex justify-center gap-4">
-                    <a href="/" target="_blank" className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold">Ver Web</a>
-                    <a href="/keystatic" target="_blank" className="bg-slate-700 text-white px-8 py-3 rounded-lg font-bold">Ir al CMS</a>
+                    <a href="/" target="_blank" className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold shadow-lg flex items-center gap-2 transition-transform hover:scale-105">
+                        <Eye className="w-5 h-5" /> Ver Sitio Web
+                    </a>
+                    <button onClick={() => window.location.reload()} className="bg-slate-700 hover:bg-slate-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-transform hover:scale-105">
+                        Crear Nuevo Proyecto
+                    </button>
                 </div>
             </div>
         );

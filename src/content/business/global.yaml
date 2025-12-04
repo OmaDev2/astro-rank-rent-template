@@ -1,10 +1,15 @@
-siteName: Parquetista Barcelona
-niche: Parquetista
-city: Barcelona
-phone: 600 000 000
-email: contacto@ejemplo.com
+siteName: 'Pintor  barcelona '
+niche: 'Pintor '
+siteUrl: tupintorbarcelona.com
 businessType: LocalBusiness
-ctaText: Pedir Presupuesto
+city: 'Barcelona '
+address: Amadeo Vives 15
 coordinates:
-  lat: '40.416'
-  lng: '-3.703'
+  lat: '41.40338'
+  lng: '2.17403'
+phone: '644371602'
+whatsapp: '34644371602'
+email: olga.millan@gmail.com
+schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
+nif: '43675068'
+ctaText: 'Llamame soy Olga '

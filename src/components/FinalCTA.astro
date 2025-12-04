@@ -3,11 +3,10 @@ import { Phone, ArrowRight } from "lucide-react";
 import { getEntry } from "astro:content";
 
 const business = await getEntry("business", "global");
-const { phone, niche, ctaText } = business?.data || {
-    phone: "600 000 000",
-    niche: "Profesional",
-    ctaText: "PEDIR PRESUPUESTO",
-};
+const data = business?.data || {};
+const phone = data.phone || "600 000 000";
+const niche = data.niche || "Profesional";
+const ctaText = data.ctaText || "PEDIR PRESUPUESTO";
 
 const { bgClass } = Astro.props;
 ---
@@ -39,7 +38,7 @@ const { bgClass } = Astro.props;
         </p>
 
         <a
-            href={`tel:${phone.replace(/\s/g, "")}`}
+            href={`tel:${(phone || "").replace(/\s/g, "")}`}
             class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary rounded-xl transition-all hover:bg-slate-50 hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-black/20 group"
         >
             <Phone className="w-5 h-5 mr-3 group-hover:animate-pulse" />

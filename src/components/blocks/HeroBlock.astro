@@ -12,8 +12,8 @@ const defaultHeroImage = isIndustrial
 
 const finalHeroImage = heroImage || defaultHeroImage;
 const heroSubtitle = isIndustrial
-    ? `Servicios de ${niche.toLowerCase()} para empresas y naves industriales.`
-    : `Soluciones de ${niche.toLowerCase()} para particulares y comunidades.`;
+    ? `Servicios de ${(niche || "servicio").toLowerCase()} para empresas y naves industriales.`
+    : `Soluciones de ${(niche || "servicio").toLowerCase()} para particulares y comunidades.`;
 ---
 
 <section
@@ -52,7 +52,7 @@ const heroSubtitle = isIndustrial
                 <h1
                     class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-none"
                 >
-                    {niche.toUpperCase()} EN <br />
+                    {(niche || "Servicio").toUpperCase()} EN <br />
                     <span
                         class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent uppercase"
                     >
@@ -70,7 +70,7 @@ const heroSubtitle = isIndustrial
 
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a
-                        href={`tel:${phone.replace(/\s/g, "")}`}
+                        href={`tel:${(phone || "").replace(/\s/g, "")}`}
                         class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg hover:shadow-primary/40"
                     >
                         <Phone className="w-5 h-5 mr-2" /> Llamar Ahora

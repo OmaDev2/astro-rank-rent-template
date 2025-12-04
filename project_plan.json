@@ -1,320 +1,729 @@
 {
-  "market_analysis": "El mercado de herreros en Barcelona presenta una sólida demanda de servicios de carpintería metálica, fabricación y reparación de estructuras. Dada la falta de datos de keywords proporcionados, se han inferido los servicios más comunes y relevantes con intención comercial para maximizar la visibilidad en Google y captar clientes locales.",
+  "market_analysis": "El mercado de 'herrero en Barcelona' presenta una alta demanda local y comercial, dominada por búsquedas de intención transaccional y urgencia ('cerca de mí'). Dada la naturaleza genérica de las keywords principales, la estrategia se centra en crear clusters de servicios específicos que absorban estas búsquedas amplias, garantizando la granularidad necesaria para un posicionamiento efectivo.",
   "clusters": [
     {
-      "name": "Rejas de Seguridad y Cerramientos Metálicos",
+      "name": "Puertas, Cancelas y Vallas de Hierro a Medida",
       "intent": "COMMERCIAL",
-      "main_keyword": "herrero rejas barcelona",
-      "volume": 3200,
+      "main_keyword": "herrero barcelona",
+      "volume": 1070,
       "meta_suggestions": [
         {
-          "h1": "Rejas de Seguridad en Barcelona | Herrero Profesional",
-          "seo_title": "Rejas Seguridad y Cerramientos Metálicos en Barcelona",
-          "seo_description": "Instalación de rejas de seguridad y cerramientos metálicos en Barcelona. Protege tu hogar o negocio con soluciones a medida. ¡Pide presupuesto sin compromiso!"
+          "h1": "Herrero Barcelona: Puertas y Cancelas de Hierro a Medida",
+          "seo_title": "Puertas y Cancelas de Hierro en Barcelona | Herrero Profesional",
+          "seo_description": "Fabricamos e instalamos puertas de hierro personalizadas y cancelas metálicas en Barcelona. Solicita tu presupuesto sin compromiso. ¡Contacta ahora!"
         },
         {
-          "h1": "Instalación de Rejas Metálicas en Barcelona | A Medida",
-          "seo_title": "Herrero Barcelona: Rejas de Hierro y Metálicas a Medida",
-          "seo_description": "Fabricamos e instalamos rejas de hierro y metal en Barcelona. Soluciones personalizadas para ventanas, puertas y balcones. ¡Llámanos ahora!"
+          "h1": "Puertas y Vallas de Hierro Personalizadas en Barcelona",
+          "seo_title": "Herrería en Barcelona para Puertas y Vallas a Medida",
+          "seo_description": "Diseño y fabricación de puertas y vallas de hierro de alta calidad en Barcelona. Herreros profesionales a tu servicio. ¡Pide información!"
         },
         {
-          "h1": "Cerramientos Metálicos en Barcelona | Expertos en Hierro",
-          "seo_title": "Cerramientos y Rejas de Seguridad en Barcelona – Herrero",
-          "seo_description": "Especialistas en cerramientos metálicos y rejas de seguridad en Barcelona. Calidad, diseño y durabilidad garantizados. ¡Solicita tu visita técnica!"
+          "h1": "Fabricación de Puertas de Hierro para tu Hogar en Barcelona",
+          "seo_title": "Herreros Expertos: Puertas Metálicas y Cancelas Barcelona",
+          "seo_description": "Soluciones duraderas en puertas y cancelas de hierro para hogares y negocios en Barcelona. Trabajos profesionales garantizados. ¡Llámanos!"
         },
         {
-          "h1": "Precio Rejas Seguridad Barcelona | Presupuesto Rápido",
-          "seo_title": "Tu Herrero para Rejas de Seguridad en Barcelona al Mejor Precio",
-          "seo_description": "Consulta el precio de rejas de seguridad en Barcelona. Presupuestos rápidos y sin compromiso para proteger tu propiedad. ¡Contáctanos hoy mismo!"
+          "h1": "Herreros en Barcelona: Especialistas en Portones de Hierro",
+          "seo_title": "Portones y Cancelas de Hierro a Medida en Barcelona",
+          "seo_description": "Creamos portones de hierro a medida para entradas y garajes en Barcelona. Confía en herreros con experiencia. ¡Contáctanos hoy!"
         },
         {
-          "h1": "Rejas de Hierro Forjado y Modernas en Barcelona",
-          "seo_title": "Rejas a Medida en Barcelona | Hierro Forjado y Metálicas",
-          "seo_description": "Descubre nuestras rejas de hierro forjado y diseños modernos en Barcelona. La seguridad y estética que buscas para tu hogar. ¡Pídenos información!"
+          "h1": "Cancelas de Hierro y Vallas Metálicas en la Ciudad Condal",
+          "seo_title": "Herrero en Barcelona: Vallas y Cancelas de Hierro | Presupuesto",
+          "seo_description": "Tu herrero en Barcelona para la fabricación e instalación de vallas y cancelas de hierro. Calidad y diseño asegurados. ¡Pide tu cita!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "herrero rejas barcelona",
-          "volume": 800
+          "keyword": "herrero barcelona",
+          "volume": 390
         },
         {
-          "keyword": "instalacion rejas seguridad barcelona",
-          "volume": 650
+          "keyword": "herreros barcelona",
+          "volume": 390
         },
         {
-          "keyword": "rejas hierro barcelona",
-          "volume": 500
+          "keyword": "herreros profesionales",
+          "volume": 30
         },
         {
-          "keyword": "rejas metalicas barcelona",
-          "volume": 400
+          "keyword": "hierro barcelona",
+          "volume": 170
         },
         {
-          "keyword": "precio rejas seguridad barcelona",
-          "volume": 300
-        },
-        {
-          "keyword": "cerramientos metalicos barcelona",
-          "volume": 550
+          "keyword": "herrero oficio",
+          "volume": 90
         }
       ],
       "related_questions": []
     },
     {
-      "name": "Puertas Metálicas y de Garaje a Medida",
+      "name": "Rejas de Seguridad, Barandillas y Cerramientos Metálicos",
       "intent": "COMMERCIAL",
-      "main_keyword": "herrero puertas barcelona",
-      "volume": 2850,
+      "main_keyword": "herrero en barcelona",
+      "volume": 920,
       "meta_suggestions": [
         {
-          "h1": "Puertas Metálicas en Barcelona | Fabricación e Instalación",
-          "seo_title": "Puertas Metálicas, Blindadas y de Garaje en Barcelona",
-          "seo_description": "Fabricamos e instalamos puertas metálicas, blindadas y de garaje en Barcelona. Seguridad y diseño a medida para tu hogar o negocio. ¡Pide presupuesto ahora!"
+          "h1": "Herrero en Barcelona: Rejas de Seguridad y Barandillas",
+          "seo_title": "Rejas de Seguridad y Barandillas de Hierro en Barcelona",
+          "seo_description": "Instalamos rejas de seguridad y barandillas metálicas a medida en Barcelona. Protege tu hogar con nuestros herreros. ¡Pide tu presupuesto online!"
         },
         {
-          "h1": "Instalación de Puertas de Hierro en Barcelona | Herrero",
-          "seo_title": "Herrero Barcelona: Puertas de Hierro Forjado y Metálicas",
-          "seo_description": "Tu herrero experto en puertas de hierro forjado y metálicas en Barcelona. Diseños únicos y máxima seguridad. ¡Consúltanos tus ideas!"
+          "h1": "Barandillas y Rejas Metálicas Personalizadas en Barcelona",
+          "seo_title": "Herreros en Barcelona: Cerramientos y Rejas de Calidad",
+          "seo_description": "Expertos en barandillas de hierro para escaleras y balcones, así como rejas de seguridad en Barcelona. Estilo y protección. ¡Infórmate ahora!"
         },
         {
-          "h1": "Puertas Blindadas y de Seguridad en Barcelona",
-          "seo_title": "Puertas Blindadas y Metálicas a Medida en Barcelona",
-          "seo_description": "Protege tu propiedad con nuestras puertas blindadas y metálicas de seguridad en Barcelona. Asesoramiento personalizado. ¡Llámanos hoy!"
+          "h1": "Cerramientos Metálicos y Forja Artesanal en Barcelona",
+          "seo_title": "Rejas, Barandillas y Cerramientos en Barcelona | Tu Herrero",
+          "seo_description": "Tu herrero de confianza en Barcelona para cerramientos, rejas y barandillas de hierro. Soluciones duraderas y estéticas. ¡Contacta sin compromiso!"
         },
         {
-          "h1": "Puertas de Garaje Metálicas Barcelona | Instalación Rápida",
-          "seo_title": "Instalación y Reparación de Puertas de Garaje Metálicas en BCN",
-          "seo_description": "Expertos en puertas de garaje metálicas en Barcelona. Instalación, reparación y mantenimiento con total garantía. ¡Mejora tu acceso!"
+          "h1": "Instalación Profesional de Rejas en Ventanas de Barcelona",
+          "seo_title": "Herrería Barcelona: Rejas para Ventanas y Barandales",
+          "seo_description": "Protección para ventanas y balcones con rejas y barandales de hierro en Barcelona. Herreros artesanos y expertos. ¡Descubre nuestros diseños!"
         },
         {
-          "h1": "Herrero para Puertas a Medida en Barcelona | Calidad",
-          "seo_title": "Tu Herrero de Confianza para Puertas en Barcelona - A Medida",
-          "seo_description": "Servicios de herrería para puertas a medida en Barcelona. Trabajamos con hierro forjado y metal. Compromiso con la calidad. ¡Contacta sin compromiso!"
+          "h1": "Herreros en la Ciudad Condal: Barandillas y Cerramientos",
+          "seo_title": "Barandillas para Escaleras y Cerramientos Metálicos Barcelona",
+          "seo_description": "Servicio de fabricación e instalación de barandillas y cerramientos metálicos en Barcelona. Mejora tu seguridad y estética. ¡Llámanos!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "herrero puertas barcelona",
-          "volume": 750
+          "keyword": "herrero en barcelona",
+          "volume": 390
         },
         {
-          "keyword": "instalacion puertas metalicas barcelona",
-          "volume": 600
+          "keyword": "herreros en barcelona",
+          "volume": 390
         },
         {
-          "keyword": "puertas hierro forjado barcelona",
-          "volume": 450
+          "keyword": "herreria barcelona",
+          "volume": 140
         },
         {
-          "keyword": "puertas blindadas barcelona",
-          "volume": 700
+          "keyword": "herrero trabajo",
+          "volume": 50
         },
         {
-          "keyword": "puertas de garaje metalicas barcelona",
-          "volume": 350
+          "keyword": "herrero artesano barcelona",
+          "volume": 10
         }
       ],
       "related_questions": []
     },
     {
-      "name": "Barandillas, Balcones y Escaleras Metálicas",
+      "name": "Soldadura, Reparaciones y Servicios Urgentes de Herrería",
       "intent": "COMMERCIAL",
-      "main_keyword": "herrero barandillas barcelona",
-      "volume": 2150,
+      "main_keyword": "herrero cerca de mi",
+      "volume": 8060,
       "meta_suggestions": [
         {
-          "h1": "Barandillas y Balcones Metálicos en Barcelona | Herrero",
-          "seo_title": "Barandillas, Balcones y Escaleras Metálicas en Barcelona",
-          "seo_description": "Fabricación e instalación de barandillas, balcones y escaleras metálicas en Barcelona. Diseños modernos y clásicos a tu medida. ¡Pídenos presupuesto!"
+          "h1": "Herrero Cerca de Mí en Barcelona: Reparaciones Urgentes",
+          "seo_title": "Soldador y Herrero Urgente en Barcelona | Reparaciones Rápida",
+          "seo_description": "¿Necesitas un herrero cerca de ti en Barcelona? Servicio de soldadura y reparaciones urgentes de hierro. Atención rápida y profesional. ¡Llama ya!"
         },
         {
-          "h1": "Barandillas de Hierro en Barcelona | Diseño Personalizado",
-          "seo_title": "Herrero en Barcelona: Barandillas de Hierro Forjado y Modernas",
-          "seo_description": "Especialistas en barandillas de hierro en Barcelona. Seguridad, estética y durabilidad para tu escalera o balcón. ¡Solicita tu diseño único!"
+          "h1": "Servicio Rápido de Soldadura a Domicilio en Barcelona",
+          "seo_title": "Herreros Cerca de Mí Ubicación: Soldadura y Arreglos Barcelona",
+          "seo_description": "Tu herrero y soldador en Barcelona para cualquier reparación metálica. Servicio a domicilio rápido y eficiente. ¡Contacta para una solución!"
         },
         {
-          "h1": "Balcones de Hierro Barcelona | Fabricación y Reparación",
-          "seo_title": "Diseño y Reparación de Balcones de Hierro en Barcelona",
-          "seo_description": "Servicios profesionales para balcones de hierro en Barcelona. Desde nuevos diseños hasta reparaciones expertas. ¡Mejora tu fachada!"
+          "h1": "Herrero Soldador Barcelona: Reparaciones de Hierro y Metal",
+          "seo_title": "Herrero near me en Barcelona | Reparaciones de Metal Urgentes",
+          "seo_description": "Expertos herreros soldadores en Barcelona para arreglos y mantenimiento de estructuras de hierro. Calidad garantizada. ¡Solicita tu servicio hoy!"
         },
         {
-          "h1": "Escaleras Metálicas en Barcelona | Fabricantes Expertos",
-          "seo_title": "Fabricación e Instalación de Escaleras Metálicas en BCN",
-          "seo_description": "Tu solución para escaleras metálicas en Barcelona. Diseñamos, fabricamos e instalamos escaleras interiores y exteriores. ¡Contacta y te asesoramos!"
+          "h1": "Reparaciones de Herrería y Soldadura Profesional en Barcelona",
+          "seo_title": "Herrero Profesional para Reparaciones en Barcelona | Urgente",
+          "seo_description": "Servicios de reparación de herrería en Barcelona: soldadura, puertas, rejas y más. Actuamos con rapidez y eficacia. ¡Consúltanos tu caso!"
         },
         {
-          "h1": "Reparación de Barandillas y Balcones en Barcelona",
-          "seo_title": "Servicio de Reparación de Barandillas y Balcones en Barcelona",
-          "seo_description": "Reparamos y restauramos barandillas y balcones metálicos en Barcelona. Mantenimiento para la seguridad y estética. ¡Llámanos para una inspección!"
+          "h1": "Tu Herrero Urgente en Barcelona: Soluciones de Soldadura",
+          "seo_title": "Servicio de Herrería y Soldadura en Barcelona | ¡Emergencias!",
+          "seo_description": "Para cualquier urgencia con hierro o metal en Barcelona, tu herrero y soldador está listo. Soluciones duraderas al instante. ¡Disponibilidad 24h!"
         }
       ],
       "selected_suggestion": 0,
       "keywords": [
         {
-          "keyword": "herrero barandillas barcelona",
-          "volume": 550
+          "keyword": "herrero cerca de mi",
+          "volume": 2400
         },
         {
-          "keyword": "barandillas hierro barcelona",
-          "volume": 400
+          "keyword": "herreros cerca de mi ubicación",
+          "volume": 140
         },
         {
-          "keyword": "balcones hierro barcelona",
-          "volume": 300
+          "keyword": "herrero near me",
+          "volume": 110
         },
         {
-          "keyword": "fabricacion barandillas barcelona",
-          "volume": 250
+          "keyword": "herrero soldador barcelona",
+          "volume": 10
         },
         {
-          "keyword": "reparacion barandillas barcelona",
-          "volume": 200
-        },
-        {
-          "keyword": "escaleras metalicas barcelona",
-          "volume": 450
+          "keyword": "herrero",
+          "volume": 5400
         }
       ],
-      "related_questions": []
-    },
-    {
-      "name": "Estructuras Metálicas y Trabajos de Soldadura a Medida",
-      "intent": "COMMERCIAL",
-      "main_keyword": "estructuras metalicas barcelona",
-      "volume": 2400,
-      "meta_suggestions": [
-        {
-          "h1": "Estructuras Metálicas en Barcelona | Herrero Soldador",
-          "seo_title": "Estructuras Metálicas y Soldadura a Medida en Barcelona",
-          "seo_description": "Diseño y fabricación de estructuras metálicas en Barcelona. Expertos en soldadura y trabajos a medida para cualquier proyecto. ¡Solicita tu presupuesto!"
-        },
-        {
-          "h1": "Trabajos de Hierro a Medida en Barcelona | Herrería Artística",
-          "seo_title": "Tu Herrero para Trabajos en Hierro a Medida en Barcelona",
-          "seo_description": "Realizamos trabajos de hierro a medida y herrería artística en Barcelona. Calidad y detalle en cada pieza. ¡Contacta para tu proyecto único!"
-        },
-        {
-          "h1": "Soldador en Barcelona | Servicios de Soldadura Profesional",
-          "seo_title": "Servicios de Soldadura en Barcelona - Herreros Especialistas",
-          "seo_description": "Necesitas un soldador en Barcelona? Ofrecemos servicios de soldadura profesional para reparaciones y nuevas creaciones. ¡Trabajos garantizados!"
-        },
-        {
-          "h1": "Fabricación de Estructuras Metálicas Ligeras en Barcelona",
-          "seo_title": "Herrero Barcelona: Estructuras Metálicas y Cubiertas",
-          "seo_description": "Expertos en la fabricación de estructuras metálicas ligeras y pesadas en Barcelona. Soluciones robustas y duraderas. ¡Asesoramiento sin compromiso!"
-        },
-        {
-          "h1": "Herrería Artística y Decorativa en Barcelona | Proyectos",
-          "seo_title": "Proyectos de Herrería Artística en Barcelona - Diseños Únicos",
-          "seo_description": "Descubre la herrería artística en Barcelona. Piezas decorativas y funcionales en hierro para embellecer tu espacio. ¡Dinos tu idea!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "estructuras metalicas barcelona",
-          "volume": 900
-        },
-        {
-          "keyword": "trabajos hierro a medida barcelona",
-          "volume": 600
-        },
-        {
-          "keyword": "herreria artistica barcelona",
-          "volume": 400
-        },
-        {
-          "keyword": "servicios de soldadura barcelona",
-          "volume": 500
-        }
-      ],
-      "related_questions": []
-    },
-    {
-      "name": "Automatismos y Motores para Puertas de Garaje",
-      "intent": "COMMERCIAL",
-      "main_keyword": "automatismos puertas barcelona",
-      "volume": 1600,
-      "meta_suggestions": [
-        {
-          "h1": "Automatismos Puertas Barcelona | Instalación y Reparación",
-          "seo_title": "Automatismos y Motores para Puertas de Garaje en Barcelona",
-          "seo_description": "Instalación y reparación de automatismos para puertas en Barcelona. Motorización para puertas de garaje y cancelas. ¡Pide tu presupuesto personalizado!"
-        },
-        {
-          "h1": "Motorización Puertas Garaje Barcelona | Expertos",
-          "seo_title": "Herrero en Barcelona: Motorización de Puertas de Garaje",
-          "seo_description": "Moderniza tu garaje con la motorización de puertas en Barcelona. Soluciones eficientes y seguras. ¡Contacta con nuestros especialistas!"
-        },
-        {
-          "h1": "Reparación Automatismos Puertas en Barcelona | Servicio Rápido",
-          "seo_title": "Servicio Técnico de Reparación de Automatismos en Barcelona",
-          "seo_description": "Problemas con tu puerta automática? Servicio de reparación de automatismos en Barcelona. Rapidez y eficacia. ¡Llámanos para una solución!"
-        },
-        {
-          "h1": "Motores para Puertas Correderas y Batientes en Barcelona",
-          "seo_title": "Motores y Automatismos para todo tipo de Puertas en Barcelona",
-          "seo_description": "Disponemos de motores para puertas correderas, batientes y seccionales en Barcelona. Mejora tu comodidad y seguridad. ¡Descubre nuestras opciones!"
-        },
-        {
-          "h1": "Mantenimiento Automatismos Barcelona | Prevención Averías",
-          "seo_title": "Mantenimiento y Automatización de Puertas en Barcelona",
-          "seo_description": "Ofrecemos mantenimiento preventivo para automatismos de puertas en Barcelona. Evita averías y prolonga la vida útil. ¡Infórmate de nuestros planes!"
-        }
-      ],
-      "selected_suggestion": 0,
-      "keywords": [
-        {
-          "keyword": "automatismos puertas barcelona",
-          "volume": 600
-        },
-        {
-          "keyword": "motorizacion puertas garaje barcelona",
-          "volume": 450
-        },
-        {
-          "keyword": "reparacion automatismos barcelona",
-          "volume": 300
-        },
-        {
-          "keyword": "motores puertas barcelona",
-          "volume": 250
-        }
-      ],
-      "related_questions": []
+      "related_questions": [
+        "¿Cuánto cobra la mano de obra un herrero?",
+        "¿Cuál es la diferencia entre un herrero y un soldador?",
+        "¿Qué arreglan los herreros?"
+      ]
     }
   ],
   "locations": [
     "Eixample",
     "Gràcia",
-    "Sant Martí",
     "Sants-Montjuïc",
+    "Les Corts",
     "Sarrià-Sant Gervasi"
   ],
   "home_structure": {
-    "h1": "Herrero en Barcelona | Carpintería Metálica y Estructuras",
+    "h1": "Herrero en Barcelona: Expertos en Forja, Soldadura y Hierro a Medida",
     "h2s": [
-      "Expertos en hierro forjado y a medida para tu hogar o negocio",
-      "Servicios de soldadura profesional y reparaciones metálicas en Barcelona",
-      "Proyectos personalizados de barandillas, puertas y cerramientos en toda Barcelona"
+      "Servicios Profesionales de Herrería y Carpintería Metálica en Barcelona",
+      "Fabricación e Instalación de Productos de Hierro a Medida",
+      "Reparaciones Urgentes y Mantenimiento de Estructuras Metálicas"
     ]
   },
   "raw_data": {
-    "top_keywords": [],
-    "competitor_keywords": {},
-    "paa_questions": [],
+    "top_keywords": [
+      {
+        "keyword": "herrero barcelona",
+        "volume": 390,
+        "cpc": 0.7400000095367432,
+        "competition": 0.25999999046325684,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 8,
+        "url": "https://www.herreriabarcelona.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 25,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+5 contiene \"herrero\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herreros barcelona",
+        "volume": 390,
+        "cpc": 0.7400000095367432,
+        "competition": 0.25999999046325684,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 10,
+        "url": "https://puertasdehierro.es/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 25,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+5 contiene \"herrero\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero en barcelona",
+        "volume": 390,
+        "cpc": 0.7400000095367432,
+        "competition": 0.25999999046325684,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 5,
+        "url": "https://tuherrerobarcelona.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 25,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+5 contiene \"herrero\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herreros en barcelona",
+        "volume": 390,
+        "cpc": 0.7400000095367432,
+        "competition": 0.25999999046325684,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 7,
+        "url": "https://tuherrerobarcelona.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 25,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+5 contiene \"herrero\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "hierro barcelona",
+        "volume": 170,
+        "cpc": 0.3499999940395355,
+        "competition": 0.25999999046325684,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 6,
+        "url": "https://www.cghierros.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 20,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herreria barcelona",
+        "volume": 140,
+        "cpc": 0.3799999952316284,
+        "competition": 0.20000000298023224,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 5,
+        "url": "https://www.herreriabarcelona.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 20,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero artesano barcelona",
+        "volume": 10,
+        "cpc": 0,
+        "competition": 0,
+        "source": "suggestion",
+        "relevanceScore": 20,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+5 contiene \"herrero\""
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero soldador barcelona",
+        "volume": 10,
+        "cpc": 1.37,
+        "competition": 0.19,
+        "source": "suggestion",
+        "relevanceScore": 20,
+        "relevanceReasons": [
+          "+15 ciudad \"barcelona\"",
+          "+5 contiene \"herrero\""
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herreros cerca de mi ubicación",
+        "volume": 140,
+        "cpc": 1.1200000047683716,
+        "competition": 0.10000000149011612,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 10,
+        "url": "https://www.cghierros.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 16,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\"",
+          "+3 comercial",
+          "+3 competidor top 10",
+          "+2 volumen >100",
+          "+3 long-tail comercial"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero cerca de mi",
+        "volume": 2400,
+        "cpc": 0.55,
+        "competition": 0.06,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "source": "related",
+        "relevanceScore": 14,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\"",
+          "+3 comercial",
+          "+3 volumen >500",
+          "+3 long-tail comercial"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero near me",
+        "volume": 110,
+        "cpc": 0.41999998688697815,
+        "competition": 0.029999999329447746,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "position": 6,
+        "url": "https://www.cghierros.com/",
+        "etv": 0,
+        "source": "competitor",
+        "relevanceScore": 10,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\"",
+          "+3 competidor top 10",
+          "+2 volumen >100"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herreros profesionales",
+        "volume": 30,
+        "cpc": 0,
+        "competition": 0.02,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "source": "related",
+        "relevanceScore": 10,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\"",
+          "+5 muy comercial"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero",
+        "volume": 5400,
+        "cpc": 0.46,
+        "competition": 0.01,
+        "competition_level": "LOW",
+        "difficulty": 9,
+        "source": "related",
+        "relevanceScore": 8,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\"",
+          "+3 volumen >500"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero oficio",
+        "volume": 90,
+        "cpc": 0,
+        "competition": 0,
+        "competition_level": "LOW",
+        "difficulty": 0,
+        "source": "related",
+        "relevanceScore": 6,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\"",
+          "+1 volumen >50"
+        ],
+        "intent": "COMMERCIAL"
+      },
+      {
+        "keyword": "herrero trabajo",
+        "volume": 50,
+        "cpc": 0,
+        "competition": 0,
+        "competition_level": "LOW",
+        "difficulty": 17,
+        "source": "related",
+        "relevanceScore": 5,
+        "relevanceReasons": [
+          "+5 contiene \"herrero\""
+        ],
+        "intent": "COMMERCIAL"
+      }
+    ],
+    "competitor_keywords": {
+      "www.herreriabarcelona.com": [
+        {
+          "keyword": "herreria barcelona",
+          "volume": 140,
+          "cpc": 0.3799999952316284,
+          "competition": 0.20000000298023224,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 5,
+          "url": "https://www.herreriabarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herrero barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 8,
+          "url": "https://www.herreriabarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        }
+      ],
+      "puertasdehierro.es": [
+        {
+          "keyword": "herrero barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 5,
+          "url": "https://puertasdehierro.es/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreros barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 10,
+          "url": "https://puertasdehierro.es/",
+          "etv": 0,
+          "source": "competitor"
+        }
+      ],
+      "tuherrerobarcelona.com": [
+        {
+          "keyword": "herrero en barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 5,
+          "url": "https://tuherrerobarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herrero barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "url": "https://tuherrerobarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herrero sabadell",
+          "volume": 590,
+          "cpc": 0,
+          "competition": 0.009999999776482582,
+          "competition_level": "LOW",
+          "difficulty": 5,
+          "position": 2,
+          "url": "https://tuherrerobarcelona.com/herrero-sabadell/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreros barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 7,
+          "url": "https://tuherrerobarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreros en barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 7,
+          "url": "https://tuherrerobarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        }
+      ],
+      "elherrerodebarcelona.com": [
+        {
+          "keyword": "herreros barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 5,
+          "url": "https://elherrerodebarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreria barcelona",
+          "volume": 140,
+          "cpc": 0.3799999952316284,
+          "competition": 0.20000000298023224,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "url": "https://elherrerodebarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herrero en barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "url": "https://elherrerodebarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreros en barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "url": "https://elherrerodebarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herrero barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 7,
+          "url": "https://elherrerodebarcelona.com/",
+          "etv": 0,
+          "source": "competitor"
+        }
+      ],
+      "www.cghierros.com": [
+        {
+          "keyword": "herrero near me",
+          "volume": 110,
+          "cpc": 0.41999998688697815,
+          "competition": 0.029999999329447746,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "url": "https://www.cghierros.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreros barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 8,
+          "url": "https://www.cghierros.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herrero en barcelona",
+          "volume": 390,
+          "cpc": 0.7400000095367432,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 10,
+          "url": "https://www.cghierros.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "hierro barcelona",
+          "volume": 170,
+          "cpc": 0.3499999940395355,
+          "competition": 0.25999999046325684,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 6,
+          "url": "https://www.cghierros.com/",
+          "etv": 0,
+          "source": "competitor"
+        },
+        {
+          "keyword": "herreros cerca de mi ubicación",
+          "volume": 140,
+          "cpc": 1.1200000047683716,
+          "competition": 0.10000000149011612,
+          "competition_level": "LOW",
+          "difficulty": 0,
+          "position": 10,
+          "url": "https://www.cghierros.com/",
+          "etv": 0,
+          "source": "competitor"
+        }
+      ]
+    },
+    "paa_questions": [
+      {
+        "question": "¿Cuánto cobra la mano de obra un herrero?",
+        "answer": null
+      },
+      {
+        "question": "¿Cuál es la diferencia entre un herrero y un soldador?",
+        "answer": null
+      },
+      {
+        "question": "¿Cómo se les dice a los herreros en España?",
+        "answer": null
+      },
+      {
+        "question": "¿Qué arreglan los herreros?",
+        "answer": null
+      }
+    ],
     "stats": {
-      "fromCompetitors": 0,
-      "fromRelated": 7,
-      "fromSuggestions": 0,
-      "filteredByCity": 0,
-      "filteredByNoise": 0,
-      "filteredByRelevance": 7
+      "fromCompetitors": 19,
+      "fromRelated": 10,
+      "fromSuggestions": 9,
+      "fromIdeas": 0,
+      "fromServices": 8,
+      "filteredByCity": 1,
+      "filteredByNoise": 2,
+      "filteredByRelevance": 5
     }
   },
-  "niche": "Herrero ",
-  "city": "Barcelona,Catalonia,Spain"
+  "niche": "herrero",
+  "city": "barcelona"
 }

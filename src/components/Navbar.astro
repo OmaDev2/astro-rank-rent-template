@@ -117,7 +117,7 @@ const locations = await getCollection("locations");
 
             <div class="flex items-center gap-4 shrink-0">
                 <a
-                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    href={`tel:${(phone || "").replace(/\s/g, "")}`}
                     class="hidden md:flex items-center gap-2 bg-primary hover:bg-accent text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 whitespace-nowrap"
                 >
                     <Phone className="w-4 h-4" />
@@ -196,7 +196,7 @@ const locations = await getCollection("locations");
                 }
 
                 <a
-                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    href={`tel:${(phone || "").replace(/\s/g, "")}`}
                     class="mt-8 flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full text-xl font-bold shadow-xl active:scale-95 transition-transform"
                 >
                     <Phone className="w-6 h-6" />

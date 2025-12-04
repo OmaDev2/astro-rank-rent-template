@@ -70,8 +70,8 @@ const projects = defineCollection({
 const business = defineCollection({
     type: 'data',
     schema: z.object({
-        siteName: z.string(),
-        niche: z.string(),
+        siteName: z.string().optional(),
+        niche: z.string().optional(),
         logo: z.string().optional(),
         siteUrl: z.string().optional(),
         businessType: z.enum([
@@ -84,13 +84,13 @@ const business = defineCollection({
             'MedicalBusiness',
             'HealthAndBeautyBusiness'
         ]).default('LocalBusiness'),
-        city: z.string(),
+        city: z.string().optional(),
         address: z.string().optional(),
         coordinates: z.object({
-            lat: z.string(),
-            lng: z.string(),
+            lat: z.string().optional(),
+            lng: z.string().optional(),
         }).optional(),
-        phone: z.string(),
+        phone: z.string().optional(),
         whatsapp: z.string().optional(),
         email: z.string().optional(),
         schedule: z.string().optional(),

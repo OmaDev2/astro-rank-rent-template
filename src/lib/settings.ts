@@ -12,21 +12,24 @@ export async function getSettings() {
     const schema = await getEntry('schema', 'global');
 
     return {
-        // Business info
-        siteName: business?.data?.siteName || 'Mi Negocio',
-        niche: business?.data?.niche || '',
+        // Business info (Datos Dummy por defecto para evitar errores)
+        siteName: business?.data?.siteName || 'Mi Negocio Local',
+        niche: business?.data?.niche || 'Servicio Profesional',
         logo: business?.data?.logo || '',
-        siteUrl: business?.data?.siteUrl || '',
+        siteUrl: business?.data?.siteUrl || 'https://ejemplo.com',
         businessType: business?.data?.businessType || 'LocalBusiness',
-        city: business?.data?.city || '',
-        address: business?.data?.address || '',
-        coordinates: business?.data?.coordinates || { lat: '', lng: '' },
-        phone: business?.data?.phone || '',
-        whatsapp: business?.data?.whatsapp || '',
-        email: business?.data?.email || '',
-        schedule: business?.data?.schedule || '',
-        nif: business?.data?.nif || '',
-        ctaText: business?.data?.ctaText || 'Contactar',
+        city: business?.data?.city || 'Tu Ciudad',
+        address: business?.data?.address || 'Calle Principal 123',
+        coordinates: {
+            lat: business?.data?.coordinates?.lat || '40.4168',
+            lng: business?.data?.coordinates?.lng || '-3.7038'
+        },
+        phone: business?.data?.phone || '600 000 000',
+        whatsapp: business?.data?.whatsapp || '600 000 000',
+        email: business?.data?.email || 'contacto@ejemplo.com',
+        schedule: business?.data?.schedule || 'Lunes a Viernes: 9:00 - 18:00',
+        nif: business?.data?.nif || 'B12345678',
+        ctaText: business?.data?.ctaText || 'PEDIR PRESUPUESTO',
 
         // Design
         theme: design?.data?.theme || 'industrial',

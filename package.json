@@ -1,0 +1,42 @@
+{
+    "name": "astro-rank-rent-template",
+    "type": "module",
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro"
+    },
+    "dependencies": {
+        "@astrojs/mdx": "^4.0.3",
+        "@astrojs/netlify": "^6.0.0",
+        "@astrojs/partytown": "^2.1.2",
+        "@astrojs/react": "^4.1.2",
+        "@astrojs/sitemap": "^3.2.1",
+        "@astrojs/tailwind": "^5.1.4",
+        "@google/generative-ai": "^0.21.0",
+        "@keystatic/astro": "^5.0.3",
+        "@keystatic/core": "^0.5.30",
+        "@tailwindcss/typography": "^0.5.19",
+        "astro": "^5.1.1",
+        "astro-seo": "^0.8.4",
+        "axios": "^1.7.9",
+        "canvas-confetti": "^1.9.3",
+        "clsx": "^2.1.1",
+        "dotenv": "^16.4.7",
+        "framer-motion": "^11.15.0",
+        "json5": "^2.2.3",
+        "lucide-react": "^0.460.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "tailwind-merge": "^2.6.0",
+        "tailwindcss": "^3.4.17",
+        "tailwindcss-animate": "^1.0.7"
+    },
+    "devDependencies": {
+        "@types/react": "^19.0.2",
+        "@types/react-dom": "^19.0.2"
+    }
+}

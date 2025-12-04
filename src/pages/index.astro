@@ -49,9 +49,14 @@ const rawTestimonials =
 const testimonials = rawTestimonials;
 
 // Render contenido SEO
-const { Content: SeoContentRendered } = home
-	? await home.render()
-	: { Content: () => null };
+let SeoContentRendered;
+try {
+	const renderResult = home ? await home.render() : { Content: () => null };
+	SeoContentRendered = renderResult.Content;
+} catch (e) {
+	console.error("Error rendering home content:", e);
+	SeoContentRendered = () => null;
+}
 
 // 2. Global Settings
 const business = await getEntry("business", "global");

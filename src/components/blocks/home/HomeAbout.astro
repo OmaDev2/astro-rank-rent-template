@@ -43,7 +43,10 @@ if (!aboutSection) return null;
                 <h2
                     class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-8"
                 >
-                    {aboutSection.title}
+                    {
+                        aboutSection.title ||
+                            "⚠️ Configura el Título en CMS (Home > Sobre Nosotros)"
+                    }
                 </h2>
                 <div class="prose prose-invert prose-lg text-body mb-8">
                     {

@@ -1,18 +1,14 @@
 {
-    "description": "",
+    "description": "Somos expertos en soluciones rápidas y profesionales. Llámanos para cualquier urgencia.",
+    "disclaimer": "Este sitio web ofrece servicios profesionales de reparación y mantenimiento.",
     "footerLinks": [
         {
             "label": "Aviso Legal",
-            "url": "/aviso-legal/"
+            "url": "/aviso-legal"
         },
         {
             "label": "Privacidad",
-            "url": "/privacidad/"
-        },
-        {
-            "label": "Cookies",
-            "url": "/cookies/"
+            "url": "/privacidad"
         }
-    ],
-    "disclaimer": "Este sitio web actúa como intermediario de servicios profesionales."
+    ]
 }

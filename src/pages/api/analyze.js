@@ -1,9 +1,9 @@
-import { generateSmartClusters } from '../../../scripts/logic/keyword_researcher_v2.js';
+import { generateSmartClusters } from '../../../scripts/logic/keyword_researcher.js';
 
 export const POST = async ({ request }) => {
     try {
         const body = await request.json();
-        const { niche, city, competitors, location, top10Filter = true } = body;
+        const { niche, city, competitors, location, options = {} } = body;
 
         // Validación detallada
         if (!niche) {
@@ -29,22 +29,24 @@ export const POST = async ({ request }) => {
 
         console.log(`📡 API Analyze v2: Clustering "${niche}" en "${city}"`);
         console.log(`🎯 Competidores: ${competitors.length}`);
-        console.log(`🔍 TOP 10 Filter: ${top10Filter ? 'ON' : 'OFF'}`);
+        console.log(`🔍 Opciones:`, options);
 
         // Extraer solo los dominios del array de competidores
         const domains = competitors.map(c => c.domain || c);
 
-        // Generar clusters con sistema v2 mejorado (SEO local)
+        // Generar clusters con opciones configurables
         const plan = await generateSmartClusters(
             niche,
             city,
             domains,
             location || city,
             {
-                top10Filter: top10Filter,
-                minRelevanceScore: 5,        // Estricto para SEO local
-                includeInformational: false, // Solo comercial
-                maxKeywordsForAI: 150
+                top10Filter: options.top10Only !== undefined ? options.top10Only : false,
+                minRelevanceScore: options.minRelevance !== undefined ? options.minRelevance : 0,
+                includeInformational: options.includeInfo !== undefined ? options.includeInfo : false,
+                maxKeywordsForAI: options.maxKeywords || 300,
+                specificServices: options.specificServices || [],
+                skipClustering: options.skipClustering || false // ✅ Pasar flag
             }
         );
 

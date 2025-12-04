@@ -61,7 +61,7 @@ const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
                     </a>
 
                     <a
-                        href={`tel:${phone.replace(/\s/g, "")}`}
+                        href={`tel:${(phone || "").replace(/\s/g, "")}`}
                         class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border-2 border-primary hover:bg-primary hover:text-white rounded-lg transition-all transform hover:-translate-y-0.5"
                     >
                         <Phone className="w-5 h-5 mr-2" />

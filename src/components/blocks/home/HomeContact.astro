@@ -39,10 +39,10 @@ const containerBgClass =
                                 Llámanos ahora
                             </div>
                             <a
-                                href={`tel:${config.phone.replace(/\s/g, "")}`}
+                                href={`tel:${(config.phone || "").replace(/\s/g, "")}`}
                                 class="text-2xl font-heading font-bold text-heading hover:text-primary transition-colors"
                             >
-                                {config.phone}
+                                {config.phone || "Teléfono no disponible"}
                             </a>
                         </div>
                     </div>
@@ -58,7 +58,7 @@ const containerBgClass =
                                         WhatsApp
                                     </div>
                                     <a
-                                        href={`https://wa.me/${config.whatsapp.replace(/\D/g, "")}`}
+                                        href={`https://wa.me/${(config.whatsapp || "").replace(/\D/g, "")}`}
                                         target="_blank"
                                         class="text-2xl font-heading font-bold text-heading hover:text-[#25D366] transition-colors"
                                     >

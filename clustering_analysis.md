@@ -1,7 +1,7 @@
-# 📊 Análisis de Clustering - Herrero  en Barcelona,Catalonia,Spain
+# 📊 Análisis de Clustering - herrero en barcelona
 
-**Fecha:** 2/12/2025, 14:47:14
-**Location Code:** 2724
+**Fecha:** 3/12/2025, 20:05:46
+**Location Code:** 1005492
 
 ---
 
@@ -9,121 +9,137 @@
 
 | Fuente | Keywords |
 |--------|----------|
-| Competidores | 0 |
-| Relacionadas | 7 |
-| Sugerencias | 0 |
-| **Total recopiladas** | **7** |
+| Competidores | 19 |
+| Relacionadas | 10 |
+| Sugerencias | 9 |
+| **Total recopiladas** | **38** |
 
 ### Filtrado
 
 | Filtro | Eliminadas |
 |--------|------------|
-| Ruido universal | 0 |
-| Otras ciudades | 0 |
-| Baja relevancia | 7 |
-| **Keywords finales** | **0** |
+| Ruido universal | 2 |
+| Otras ciudades | 1 |
+| Baja relevancia | 5 |
+| **Keywords finales** | **15** |
 
 ## 🔍 Keywords por Competidor
 
+### www.herreriabarcelona.com
+**Total:** 2 keywords
+
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| herreria barcelona | 140 | 5 | COMMERCIAL |
+| herrero barcelona | 390 | 8 | COMMERCIAL |
+
+### puertasdehierro.es
+**Total:** 2 keywords
+
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| herrero barcelona | 390 | 5 | COMMERCIAL |
+| herreros barcelona | 390 | 10 | COMMERCIAL |
+
+### tuherrerobarcelona.com
+**Total:** 5 keywords
+
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| herrero en barcelona | 390 | 5 | COMMERCIAL |
+| herrero barcelona | 390 | 6 | COMMERCIAL |
+| herrero sabadell | 590 | 2 | COMMERCIAL |
+| herreros barcelona | 390 | 7 | COMMERCIAL |
+| herreros en barcelona | 390 | 7 | COMMERCIAL |
+
+### elherrerodebarcelona.com
+**Total:** 5 keywords
+
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| herreros barcelona | 390 | 5 | COMMERCIAL |
+| herreria barcelona | 140 | 6 | COMMERCIAL |
+| herrero en barcelona | 390 | 6 | COMMERCIAL |
+| herreros en barcelona | 390 | 6 | COMMERCIAL |
+| herrero barcelona | 390 | 7 | COMMERCIAL |
+
+### www.cghierros.com
+**Total:** 5 keywords
+
+| Keyword | Vol | Pos | Intent |
+|---------|-----|-----|--------|
+| herrero near me | 110 | 6 | COMMERCIAL |
+| herreros barcelona | 390 | 8 | COMMERCIAL |
+| herrero en barcelona | 390 | 10 | COMMERCIAL |
+| hierro barcelona | 170 | 6 | COMMERCIAL |
+| herreros cerca de mi ubicación | 140 | 10 | COMMERCIAL |
+
+## ❓ People Also Ask
+
+- ¿Cuánto cobra la mano de obra un herrero?
+- ¿Cuál es la diferencia entre un herrero y un soldador?
+- ¿Cómo se les dice a los herreros en España?
+- ¿Qué arreglan los herreros?
+
 ## 🎨 Clusters Generados
 
-### 1. Rejas de Seguridad y Cerramientos Metálicos
+### 1. Puertas, Cancelas y Vallas de Hierro a Medida
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** herrero rejas barcelona
-- **Volumen Total:** 3,200
-- **Keywords:** 6
-
-| Keyword | Volumen |
-|---------|--------|
-| herrero rejas barcelona | 800 |
-| instalacion rejas seguridad barcelona | 650 |
-| rejas hierro barcelona | 500 |
-| rejas metalicas barcelona | 400 |
-| precio rejas seguridad barcelona | 300 |
-| cerramientos metalicos barcelona | 550 |
-
-**Meta Tags Sugeridos:**
-- H1: Rejas de Seguridad en Barcelona | Herrero Profesional
-- Title: Rejas Seguridad y Cerramientos Metálicos en Barcelona
-- Description: Instalación de rejas de seguridad y cerramientos metálicos en Barcelona. Protege tu hogar o negocio con soluciones a medida. ¡Pide presupuesto sin compromiso!
-
-### 2. Puertas Metálicas y de Garaje a Medida
-
-- **Intent:** COMMERCIAL
-- **Main Keyword:** herrero puertas barcelona
-- **Volumen Total:** 2,850
+- **Main Keyword:** herrero barcelona
+- **Volumen Total:** 1,070
 - **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| herrero puertas barcelona | 750 |
-| instalacion puertas metalicas barcelona | 600 |
-| puertas hierro forjado barcelona | 450 |
-| puertas blindadas barcelona | 700 |
-| puertas de garaje metalicas barcelona | 350 |
+| herrero barcelona | 390 |
+| herreros barcelona | 390 |
+| herreros profesionales | 30 |
+| hierro barcelona | 170 |
+| herrero oficio | 90 |
 
 **Meta Tags Sugeridos:**
-- H1: Puertas Metálicas en Barcelona | Fabricación e Instalación
-- Title: Puertas Metálicas, Blindadas y de Garaje en Barcelona
-- Description: Fabricamos e instalamos puertas metálicas, blindadas y de garaje en Barcelona. Seguridad y diseño a medida para tu hogar o negocio. ¡Pide presupuesto ahora!
+- H1: Herrero Barcelona: Puertas y Cancelas de Hierro a Medida
+- Title: Puertas y Cancelas de Hierro en Barcelona | Herrero Profesional
+- Description: Fabricamos e instalamos puertas de hierro personalizadas y cancelas metálicas en Barcelona. Solicita tu presupuesto sin compromiso. ¡Contacta ahora!
 
-### 3. Barandillas, Balcones y Escaleras Metálicas
+### 2. Rejas de Seguridad, Barandillas y Cerramientos Metálicos
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** herrero barandillas barcelona
-- **Volumen Total:** 2,150
-- **Keywords:** 6
+- **Main Keyword:** herrero en barcelona
+- **Volumen Total:** 920
+- **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| herrero barandillas barcelona | 550 |
-| barandillas hierro barcelona | 400 |
-| balcones hierro barcelona | 300 |
-| fabricacion barandillas barcelona | 250 |
-| reparacion barandillas barcelona | 200 |
-| escaleras metalicas barcelona | 450 |
+| herrero en barcelona | 390 |
+| herreros en barcelona | 390 |
+| herreria barcelona | 140 |
+| herrero trabajo | 50 |
+| herrero artesano barcelona | 10 |
 
 **Meta Tags Sugeridos:**
-- H1: Barandillas y Balcones Metálicos en Barcelona | Herrero
-- Title: Barandillas, Balcones y Escaleras Metálicas en Barcelona
-- Description: Fabricación e instalación de barandillas, balcones y escaleras metálicas en Barcelona. Diseños modernos y clásicos a tu medida. ¡Pídenos presupuesto!
+- H1: Herrero en Barcelona: Rejas de Seguridad y Barandillas
+- Title: Rejas de Seguridad y Barandillas de Hierro en Barcelona
+- Description: Instalamos rejas de seguridad y barandillas metálicas a medida en Barcelona. Protege tu hogar con nuestros herreros. ¡Pide tu presupuesto online!
 
-### 4. Estructuras Metálicas y Trabajos de Soldadura a Medida
+### 3. Soldadura, Reparaciones y Servicios Urgentes de Herrería
 
 - **Intent:** COMMERCIAL
-- **Main Keyword:** estructuras metalicas barcelona
-- **Volumen Total:** 2,400
-- **Keywords:** 4
+- **Main Keyword:** herrero cerca de mi
+- **Volumen Total:** 8,060
+- **Keywords:** 5
 
 | Keyword | Volumen |
 |---------|--------|
-| estructuras metalicas barcelona | 900 |
-| trabajos hierro a medida barcelona | 600 |
-| herreria artistica barcelona | 400 |
-| servicios de soldadura barcelona | 500 |
+| herrero cerca de mi | 2400 |
+| herreros cerca de mi ubicación | 140 |
+| herrero near me | 110 |
+| herrero soldador barcelona | 10 |
+| herrero | 5400 |
 
 **Meta Tags Sugeridos:**
-- H1: Estructuras Metálicas en Barcelona | Herrero Soldador
-- Title: Estructuras Metálicas y Soldadura a Medida en Barcelona
-- Description: Diseño y fabricación de estructuras metálicas en Barcelona. Expertos en soldadura y trabajos a medida para cualquier proyecto. ¡Solicita tu presupuesto!
-
-### 5. Automatismos y Motores para Puertas de Garaje
-
-- **Intent:** COMMERCIAL
-- **Main Keyword:** automatismos puertas barcelona
-- **Volumen Total:** 1,600
-- **Keywords:** 4
-
-| Keyword | Volumen |
-|---------|--------|
-| automatismos puertas barcelona | 600 |
-| motorizacion puertas garaje barcelona | 450 |
-| reparacion automatismos barcelona | 300 |
-| motores puertas barcelona | 250 |
-
-**Meta Tags Sugeridos:**
-- H1: Automatismos Puertas Barcelona | Instalación y Reparación
-- Title: Automatismos y Motores para Puertas de Garaje en Barcelona
-- Description: Instalación y reparación de automatismos para puertas en Barcelona. Motorización para puertas de garaje y cancelas. ¡Pide tu presupuesto personalizado!
+- H1: Herrero Cerca de Mí en Barcelona: Reparaciones Urgentes
+- Title: Soldador y Herrero Urgente en Barcelona | Reparaciones Rápida
+- Description: ¿Necesitas un herrero cerca de ti en Barcelona? Servicio de soldadura y reparaciones urgentes de hierro. Atención rápida y profesional. ¡Llama ya!
 

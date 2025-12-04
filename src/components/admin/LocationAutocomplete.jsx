@@ -49,19 +49,56 @@ export default function LocationAutocomplete({ onLocationSelect, defaultValue = 
         }
     };
 
+    // Actualizar el callback cuando el usuario escribe (sin seleccionar del dropdown)
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setQuery(value);
+
+        // Si el usuario borra la selección, resetear
+        if (value === '') {
+            setSelectedLocation(null);
+            if (onLocationSelect) {
+                onLocationSelect(null, '');
+            }
+        } else if (value.length >= 3) {
+            // Actualizar con el valor escrito (aunque no haya seleccionado del dropdown)
+            if (onLocationSelect) {
+                onLocationSelect(null, value);
+            }
+        }
+    };
+
     return (
         <div className="relative">
             <label className="block text-sm font-medium text-slate-300 mb-2">
-                Ubicación
+                Ciudad <span className="text-red-400">*</span>
             </label>
+
+            {/* Info tooltip */}
+            <div className="mb-3 bg-blue-900/20 border border-blue-700/30 rounded-lg p-3 text-xs text-blue-200">
+                <div className="flex items-start gap-2">
+                    <span className="text-blue-400 mt-0.5">ℹ️</span>
+                    <div>
+                        <p className="font-medium text-blue-100 mb-1">¿Cómo funciona la ubicación?</p>
+                        <ul className="space-y-1 text-blue-200/80">
+                            <li>• <strong>Con ciudad:</strong> Búsqueda de competidores específicos de esa ciudad</li>
+                            <li>• <strong>Sin ciudad:</strong> Búsqueda más amplia a nivel de España</li>
+                        </ul>
+                        <p className="mt-2 text-blue-300/60 italic text-[10px]">
+                            Nota: La API de keywords solo acepta países, no ciudades específicas
+                        </p>
+                    </div>
+                </div>
+            </div>
 
             <input
                 type="text"
                 className="w-full bg-slate-900 border border-slate-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-indigo-500 outline-none text-white"
                 placeholder="Escribe una ciudad (ej: Barcelona)"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={handleInputChange}
                 onFocus={() => locations.length > 0 && setShowDropdown(true)}
+                required
             />
 
             {/* Dropdown de resultados */}
@@ -70,6 +107,7 @@ export default function LocationAutocomplete({ onLocationSelect, defaultValue = 
                     {locations.map((loc) => (
                         <button
                             key={loc.code}
+                            type="button"
                             onClick={() => handleSelect(loc)}
                             className="w-full text-left px-4 py-3 hover:bg-slate-700 transition-colors border-b border-slate-700 last:border-b-0"
                         >
@@ -99,8 +137,26 @@ export default function LocationAutocomplete({ onLocationSelect, defaultValue = 
 
             {/* Mostrar ubicación seleccionada */}
             {selectedLocation && (
-                <div className="mt-2 text-xs text-slate-400">
-                    ✓ Seleccionado: <span className="text-green-400 font-mono">{selectedLocation.name}</span> (Code: {selectedLocation.code})
+                <div className="mt-2 p-2 bg-green-900/20 border border-green-700/30 rounded text-xs">
+                    <div className="flex items-center gap-2 text-green-400">
+                        <span>✓</span>
+                        <span className="font-medium">Seleccionado:</span>
+                        <span className="font-mono">{selectedLocation.name}</span>
+                        <span className="text-green-500/60">(Code: {selectedLocation.code})</span>
+                    </div>
+                    <div className="mt-1 text-green-300/60 text-[10px]">
+                        → Competidores: búsqueda específica de {selectedLocation.name} | Keywords: nivel España
+                    </div>
+                </div>
+            )}
+
+            {/* Mostrar cuando hay texto pero no selección del dropdown */}
+            {!selectedLocation && query.length > 0 && (
+                <div className="mt-2 p-2 bg-yellow-900/20 border border-yellow-700/30 rounded text-xs text-yellow-200">
+                    <div className="flex items-center gap-2">
+                        <span>⚠️</span>
+                        <span>Usando "{query}" como ciudad (puedes seleccionar del dropdown para mayor precisión)</span>
+                    </div>
                 </div>
             )}
         </div>

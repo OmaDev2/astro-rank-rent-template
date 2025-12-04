@@ -3,13 +3,20 @@ import { getTopCompetitors, getLocationCode } from '../../../scripts/lib/seo_cli
 export const POST = async ({ request }) => {
     try {
         const body = await request.json();
+        console.log('📥 Request body received:', JSON.stringify(body, null, 2));
+
         const { niche, city, location } = body;
 
-        // Validación
+        // Validación mejorada
         if (!niche || !city) {
+            console.error('❌ Validation failed:', { niche, city });
             return new Response(JSON.stringify({
-                error: "Faltan parámetros requeridos: 'niche' y 'city'"
-            }), { status: 400 });
+                error: "Faltan parámetros requeridos: 'niche' y 'city'",
+                received: { niche, city, location }
+            }), {
+                status: 400,
+                headers: { "Content-Type": "application/json" }
+            });
         }
 
         console.log(`📡 API Research v2: "${niche}" en "${city}"`);

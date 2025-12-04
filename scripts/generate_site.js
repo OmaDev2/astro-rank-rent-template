@@ -39,22 +39,40 @@ async function generateData(prompt, context = '') {
     }
 }
 
-// Función para generar FAQs con Gemini
-async function generateFAQs(serviceName, city, longTailKeywords) {
+// Función para generar FAQs con Gemini (Priorizando PAA)
+async function generateFAQs(serviceName, city, longTailKeywords, paaQuestions = []) {
     const keywordsList = (longTailKeywords || []).map(k => `- ${k.keyword}`).join('\n');
+
+    // Filtrar preguntas PAA relevantes para este servicio si es posible
+    // O usar las generales si no hay específicas
+    const relevantPAA = paaQuestions.slice(0, 5).map(q => `- ${q.question}`).join('\n');
+
+    let instructions = '';
+    if (relevantPAA) {
+        instructions = `
+        USAR ESTAS PREGUNTAS REALES DE GOOGLE (PAA) COMO PRIORIDAD:
+        ${relevantPAA}
+        
+        Si necesitas más, inventa otras relevantes basadas en las keywords.
+        `;
+    } else {
+        instructions = `Crea 4 preguntas frecuentes altamente relevantes para este servicio.`;
+    }
 
     const prompt = `
         Actúa como un artesano experto con 20 años de experiencia.
         Genera una sección de Preguntas Frecuentes (FAQs) para el servicio "${serviceName}" en "${city}".
         
-        KEYWORDS (Inspiración):
+        ${instructions}
+        
+        KEYWORDS (Contexto):
         ${keywordsList}
         
-        INSTRUCCIONES:
-        1. Crea 4 preguntas y respuestas.
-        2. Tono: Profesional, cercano, de experto a cliente.
-        3. Respuestas detalladas (50-70 palabras) que demuestren conocimiento técnico.
-        4. Incluye el nombre de la ciudad ("${city}") de forma natural.
+        INSTRUCCIONES DE RESPUESTA:
+        1. Tono: Profesional, cercano, de experto a cliente.
+        2. Respuestas detalladas (50-70 palabras) que demuestren conocimiento técnico.
+        3. Incluye el nombre de la ciudad ("${city}") de forma natural en las respuestas.
+        4. Formato JSON estricto.
         
         JSON:
         {
@@ -85,16 +103,51 @@ async function main() {
 
     const cityName = plan.city.split(',')[0].trim();
 
-    // 2. GENERAR HOME (Con estructura definida por usuario)
+    // 2. IDENTIFICAR CLUSTER PRINCIPAL (HOME)
+    // Buscamos el cluster con mayor volumen y relevancia para ser la Home
+    let mainCluster = null;
+    let serviceClusters = [];
+
+    if (plan.clusters && plan.clusters.length > 0) {
+        // Ordenar por volumen descendente
+        const sortedClusters = [...plan.clusters].sort((a, b) => b.volume - a.volume);
+
+        // El mejor candidato es el primero (mayor volumen)
+        mainCluster = sortedClusters[0];
+
+        // El resto son servicios
+        serviceClusters = plan.clusters.filter(c => c.name !== mainCluster.name);
+
+        console.log(`🏆 Main Cluster detectado para Home: "${mainCluster.name}" (Vol: ${mainCluster.volume})`);
+        console.log(`📦 Clusters restantes para Servicios: ${serviceClusters.length}`);
+    } else {
+        console.warn("⚠️ No hay clusters definidos en el plan.");
+    }
+
+    // 3. GENERAR HOME (Con estructura definida por usuario + Main Cluster)
     console.log(`\n🏠 Generando Home (Artisan Quality)...`);
 
-    const homeH1 = plan.home_structure?.h1 || `${plan.niche} en ${cityName}`;
+    // Usar H1 del plan o del main cluster
+    const homeH1 = plan.home_structure?.h1 || mainCluster?.meta_suggestions?.[0]?.h1 || `${plan.niche} en ${cityName}`;
     const homeH2s = plan.home_structure?.h2s || [];
+
+    // Keywords del main cluster para enriquecer
+    const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10).join(', ') || '';
+
+    // Lista de servicios para contexto
+    const servicesList = serviceClusters.map(c => c.name).join(', ');
 
     const homePrompt = `
         Actúa como un maestro artesano y experto en marketing local.
         Escribe el contenido para la home de una empresa de "${plan.niche}" en "${cityName}".
         
+        CONTEXTO DE SERVICIOS OFRECIDOS:
+        ${servicesList}
+        
+        FOCUS SEO:
+        - Keyword Principal: "${mainCluster?.main_keyword || plan.niche + ' ' + cityName}"
+        - Keywords Secundarias: ${mainKeywords}
+
         ESTRUCTURA OBLIGATORIA:
         - H1: "${homeH1}"
         - Secciones H2: ${JSON.stringify(homeH2s)}
@@ -109,14 +162,23 @@ async function main() {
         {
             "hero": {
                 "heading": "${homeH1}",
-                "subheading": "Subtítulo potente de 2 líneas que combine promesa de valor y garantía."
+                "subheading": "Subtítulo potente de 2 líneas que combine promesa de valor (seguridad/diseño) y garantía local."
+            },
+            "about": {
+                "title": "Título atractivo sobre la empresa (ej: Herreros de Confianza en Barcelona)",
+                "description": "Descripción de 3-4 líneas sobre la experiencia, el taller propio y el compromiso con el cliente. Sin relleno.",
+                "features": [
+                    { "title": "Característica 1 (ej: Taller Propio)", "description": "Breve explicación..." },
+                    { "title": "Característica 2 (ej: Sin Intermediarios)", "description": "Breve explicación..." },
+                    { "title": "Característica 3 (ej: Acabados Premium)", "description": "Breve explicación..." }
+                ]
             },
             "seoContentTitle": "${homeH2s[0] || `Expertos en ${plan.niche}`}",
-            "seoContent": "Texto en Markdown (600 palabras). Usa los H2 proporcionados. Incluye listas, negritas y párrafos cortos. Habla de la historia de la empresa en ${cityName}.",
+            "seoContent": "Texto en Markdown (600 palabras). Usa los H2 proporcionados. Incluye listas, negritas y párrafos cortos. Habla de la historia de la empresa en ${cityName} y menciona los servicios principales (${servicesList}).",
             "features": [
-                { "title": "Característica 1 (ej: Taller Propio)", "description": "Descripción detallada..." },
-                { "title": "Característica 2 (ej: Garantía Real)", "description": "Descripción detallada..." },
-                { "title": "Característica 3 (ej: Materiales)", "description": "Descripción detallada..." }
+                { "title": "Ventaja Competitiva 1", "description": "Descripción detallada..." },
+                { "title": "Ventaja Competitiva 2", "description": "Descripción detallada..." },
+                { "title": "Ventaja Competitiva 3", "description": "Descripción detallada..." }
             ],
             "faq": [
                 { "question": "Pregunta frecuente real 1", "answer": "Respuesta experta..." },
@@ -130,34 +192,30 @@ async function main() {
 
     if (homeData) {
         // Generar testimonios realistas
-        const testimonialsPrompt = `Genera 3 testimonios muy realistas para ${plan.niche} en ${cityName}. Usa nombres catalanes/españoles y barrios reales. JSON: { "testimonials": [{ "quote": "...", "author": "...", "location": "...", "initials": ".." }] }`;
+        const testimonialsPrompt = `Genera 3 testimonios muy realistas para ${plan.niche} en ${cityName}. Que mencionen servicios específicos como ${servicesList.split(',').slice(0, 3).join(', ')}. Usa barrios reales. JSON: { "testimonials": [{ "quote": "...", "author": "...", "location": "...", "initials": ".." }] }`;
         const testimonialsData = await generateData(testimonialsPrompt, 'Testimonials');
 
         const escapeYaml = (str) => str ? `"${str.replace(/"/g, '\\"')}"` : '';
+        const indentYaml = (str) => str ? str.replace(/\n/g, '\n    ') : '';
 
         const homeMdx = `---
 hero:
   heading: ${escapeYaml(homeData.hero.heading)}
   subheading: >-
-    ${homeData.hero.subheading}
+    ${indentYaml(homeData.hero.subheading)}
 servicesSection:
-  title: ${plan.niche}
+  title: ${plan.niche.charAt(0).toUpperCase() + plan.niche.slice(1)}
   titleHighlight: en ${cityName}
   subtitle: >-
     Soluciones profesionales a medida. Calidad artesanal garantizada.
 aboutSection:
-  title: "Maestros del ${plan.niche} en ${cityName}"
+  title: ${escapeYaml(homeData.about.title)}
   description: >-
-    Con más de 15 años de trayectoria en ${cityName}, nuestro equipo combina técnicas tradicionales con tecnología moderna. No somos intermediarios; somos artesanos comprometidos con la excelencia en cada detalle.
+    ${indentYaml(homeData.about.description)}
   yearsExperience: "15+"
   image: "/images/home/about-placeholder.jpg"
   features:
-    - title: "Atención Personalizada"
-      description: "Trato directo con el técnico, sin comerciales agresivos."
-    - title: "Presupuestos Claros"
-      description: "Sin sorpresas ni letra pequeña. Precio cerrado."
-    - title: "Limpieza y Orden"
-      description: "Cuidamos su hogar como si fuera el nuestro."
+${(homeData.about.features || []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.description)}`).join('\n')}
   buttonText: "Solicitar Visita Técnica"
   buttonLink: "/contacto"
 features:
@@ -186,14 +244,17 @@ ${homeData.seoContent}
     }
 
     // 3. GENERAR SERVICIOS (Clusters)
-    const services = plan.clusters || [];
-    console.log(`\n🛠️  Generando ${services.length} Servicios...`);
+    // 4. GENERAR PÁGINAS DE SERVICIOS (Desde Clusters Filtrados)
+    console.log(`\n🛠️ Generando ${serviceClusters.length} Páginas de Servicios...`);
 
-    for (const cluster of services) {
+    for (const cluster of serviceClusters) {
         const serviceName = cluster.name;
         console.log(`   > ${serviceName}...`);
-        const slug = serviceName.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
+        const serviceSlug = serviceName
+            .toLowerCase()
+            .replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
         const selectedIdx = cluster.selected_suggestion || 0;
         const metaTags = cluster.meta_suggestions?.[selectedIdx] || { h1: serviceName, seo_title: serviceName, seo_description: "" };
 
@@ -221,12 +282,18 @@ ${homeData.seoContent}
 
         const data = await generateData(prompt, serviceName);
         if (data) {
-            const faqs = await generateFAQs(serviceName, cityName, cluster.keywords);
+            // Pasamos las preguntas PAA del plan global
+            const faqs = await generateFAQs(serviceName, cityName, cluster.keywords, plan.raw_data?.paa_questions || []);
             const faqYaml = faqs.map(q => `  - question: "${q.question}"\n    answer: >-\n      ${q.answer}`);
 
             // Generar enlaces relacionados
-            const related = services.filter(s => s.name !== serviceName).slice(0, 3).map(s => {
-                const sSlug = s.name.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            // Generar related services (links internos)
+            const related = serviceClusters.filter(s => s.name !== serviceName).slice(0, 3).map(s => {
+                const sSlug = s.name
+                    .toLowerCase()
+                    .replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
                 return `- **[${s.name}](/servicios/${sSlug})**: Especialistas en ${s.name.toLowerCase()}.`;
             });
 
@@ -253,10 +320,10 @@ ${data.content}
 
 ${related.join('\n')}
 `;
-            const filePath = path.join('src/content/services', `${slug}.mdx`);
+            const filePath = path.join('src/content/services', `${serviceSlug}.mdx`);
             await fs.mkdir(path.dirname(filePath), { recursive: true });
             await fs.writeFile(filePath, mdx);
-            console.log(`      ✅ Servicio creado: ${slug}.mdx`);
+            console.log(`      ✅ Servicio creado: ${serviceSlug}.mdx`);
         }
     }
 
