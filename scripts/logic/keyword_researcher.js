@@ -21,8 +21,8 @@ dotenv.config();
 const LOCAL_SEO_CONFIG = {
     top10Filter: false,           // Captura todas las posiciones
     minRelevanceScore: 3,         // Score mínimo aceptable
-    minSearchVolume: 10,          // Volumen mínimo (ajustado a 10 para evitar ceros)
-    maxKeywordsForAI: 200,        // Keywords para clustering
+    minSearchVolume: 0,           // ✅ BAJAMOS A 0: En local, el volumen bajo es normal y valioso
+    maxKeywordsForAI: 1000,       // ✅ SUBIMOS A 1000: Prácticamente sin límite para local
     includeInformational: true    // Incluir FAQs
 };
 
@@ -281,9 +281,45 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     }
 
     // ========================================================================
-    // FASE 3: SUGERENCIAS
+    // FASE 3: SEMILLAS CREATIVAS (GEMINI + DATA FOR SEO) - NUEVO 🚀
     // ========================================================================
-    console.log('\n📊 FASE 3: Sugerencias...\n');
+    console.log('\n📊 FASE 3: Semillas Creativas (Estrategia Maestro)...');
+
+    try {
+        // 1. Generar semillas con Gemini
+        const creativeSeeds = await generateCreativeSeedsWithGemini(niche);
+        console.log(`   🧠 Gemini generó ${creativeSeeds.length} semillas creativas.`);
+
+        // 2. Seleccionar las mejores (top 5-10 para no saturar API)
+        // Priorizamos problemas y preguntas que suelen tener menos competencia
+        const seedsToProcess = creativeSeeds.slice(0, 8);
+        console.log(`   🎯 Procesando ${seedsToProcess.length} semillas en DataForSEO...`);
+
+        for (const seed of seedsToProcess) {
+            try {
+                // NO añadimos la ciudad para que la búsqueda de relacionadas sea más amplia
+                // La API ya filtra por país (Spain) con locationCode
+                const query = seed;
+                const related = await getRelatedKeywords(query, locationCode);
+
+                if (related.length > 0) {
+                    const tagged = related.map(k => ({ ...k, source: 'creative_seed' }));
+                    allKeywords.push(...tagged);
+                    stats.fromSuggestions += related.length; // Sumamos a suggestions
+                    console.log(`      ✅ "${seed}": ${related.length} keywords`);
+                }
+            } catch (err) {
+                // Ignorar error individual
+            }
+        }
+    } catch (error) {
+        console.error(`   ❌ Error en Fase Creativa: ${error.message}`);
+    }
+
+    // ========================================================================
+    // FASE 4: SUGERENCIAS
+    // ========================================================================
+    console.log('\n📊 FASE 4: Sugerencias...\n');
 
     try {
         const suggestions = await getKeywordSuggestions(`${niche} ${city}`, locationCode);
@@ -292,7 +328,7 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
 
         const tagged = filtered.map(k => ({ ...k, source: 'suggestion' }));
         allKeywords.push(...tagged);
-        stats.fromSuggestions = filtered.length;
+        stats.fromSuggestions += filtered.length;
 
         console.log(`   ✅ ${stats.fromSuggestions} keywords`);
     } catch (error) {
@@ -300,9 +336,10 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     }
 
     // ========================================================================
-    // FASE 4: IDEAS
+    // FASE 5: IDEAS (DESACTIVADA POR ERROR API Y REDUNDANCIA)
     // ========================================================================
-    console.log('\n📊 FASE 4: Ideas long-tail...\n');
+    /*
+    console.log('\n📊 FASE 5: Ideas long-tail...\n');
 
     try {
         const ideasMain = await getKeywordIdeas(`${niche} ${city}`, locationCode);
@@ -317,11 +354,12 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
         // La API de ideas a veces falla si no hay suficientes datos
         console.log(`   ⚠️ No se encontraron ideas long-tail (API restriction)`);
     }
+    */
 
     // ========================================================================
-    // FASE 5: SERVICIOS ESPECÍFICOS (Híbrido: Frontend + Auto)
+    // FASE 6: SERVICIOS ESPECÍFICOS (Híbrido: Frontend + Auto)
     // ========================================================================
-    console.log('\n📊 FASE 5: Expandiendo servicios...\n');
+    console.log('\n📊 FASE 6: Expandiendo servicios...\n');
 
     let servicesToExpand = config.specificServices || [];
 
@@ -343,10 +381,17 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
 
                 // 2. Búsqueda AMPLIA (sin ciudad) para capturar variedad
                 // Usamos locationCode para que sea relevante al país/región
-                const relatedService = await getRelatedKeywords(
+                let relatedService = await getRelatedKeywords(
                     simplifiedService,
                     locationCode
                 );
+
+                // FALLBACK INTELIGENTE: Si falla con 3 palabras, probamos con 2
+                if (relatedService.length === 0 && simplifiedService.split(' ').length > 2) {
+                    const shorterQuery = simplifiedService.split(' ').slice(0, 2).join(' ');
+                    console.log(`         ⚠️ Sin resultados. Reintentando más corto: "${shorterQuery}"...`);
+                    relatedService = await getRelatedKeywords(shorterQuery, locationCode);
+                }
 
                 if (relatedService.length > 0) {
                     // Filtrar keywords que sean MUY genéricas si no contienen la ciudad
@@ -382,9 +427,9 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     stats.totalCollected = allKeywords.length;
 
     // ========================================================================
-    // FASE 6: FILTRADO INTELIGENTE
+    // FASE 7: FILTRADO INTELIGENTE
     // ========================================================================
-    console.log('\n🔬 FASE 6: Filtrado inteligente...\n');
+    console.log('\n🔬 FASE 7: Filtrado inteligente...\n');
     console.log(`   📊 Total recopilado: ${stats.totalCollected}`);
 
     // 1. Eliminar ruido universal
@@ -416,9 +461,9 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     console.log(`   ✅ Keywords válidas: ${stats.afterFiltering}`);
 
     // ========================================================================
-    // FASE 7: DEDUPLICACIÓN
+    // FASE 8: DEDUPLICACIÓN
     // ========================================================================
-    console.log('\n🔄 FASE 7: Deduplicación...\n');
+    console.log('\n🔄 FASE 8: Deduplicación...\n');
 
     const uniqueMap = new Map();
     validKeywords.forEach(k => {
@@ -444,9 +489,9 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     console.log(`   ✅ Keywords únicas para clustering: ${finalKeywords.length}`);
 
     // ========================================================================
-    // FASE 8: PEOPLE ALSO ASK
+    // FASE 9: PEOPLE ALSO ASK
     // ========================================================================
-    console.log('\n❓ FASE 8: People Also Ask...\n');
+    console.log('\n❓ FASE 9: People Also Ask...\n');
 
     let paaQuestions = [];
     try {
@@ -457,16 +502,16 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     }
 
     // ========================================================================
-    // FASE 9: CLUSTERING CON GEMINI (El paso final para la Web)
+    // FASE 10: CLUSTERING CON GEMINI (El paso final para la Web)
     // ========================================================================
 
     let clusters = [];
 
     if (!skipClustering) {
-        console.log('\n🧠 FASE 9: Clustering con Gemini AI...\n');
+        console.log('\n🧠 FASE 10: Clustering con Gemini AI...\n');
         clusters = await runGeminiClustering(finalKeywords, niche, city);
     } else {
-        console.log('\n⏸️ FASE 9: Clustering OMITIDO (skipClustering=true)....\n');
+        console.log('\n⏸️ FASE 10: Clustering OMITIDO (skipClustering=true)....\n');
     }
 
     console.log('═'.repeat(70));
@@ -478,7 +523,7 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     console.log('═'.repeat(70) + '\n');
 
     // ========================================================================
-    // FASE 10: ESTRUCTURA HOME (Añadido para el Frontend)
+    // FASE 11: ESTRUCTURA HOME (Añadido para el Frontend)
     // ========================================================================
 
     let homeStructure = {
@@ -515,6 +560,8 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     }
 
     return {
+        niche: niche,
+        city: city,
         clusters: clusters,
         home_structure: homeStructure, // ✅ AÑADIDO
         stats: stats,
@@ -556,6 +603,52 @@ async function autoDetectServices(niche, city, location) {
     }
 }
 
+async function generateCreativeSeedsWithGemini(niche) {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+
+    const prompt = `
+    Actúa como un Especialista SEO Senior y Estratega de Contenidos.
+
+    Estoy realizando una investigación de palabras clave (Keyword Research) para un cliente/negocio que ofrece el siguiente servicio: "${niche}".
+
+    Necesito que generes una lista de 30 ideas de "Palabras Clave Semilla" (Seed Keywords) y variaciones temáticas para introducir en mi herramienta SEO y descubrir Longtails.
+
+    No inventes volúmenes de búsqueda. Céntrate en la intención de búsqueda.
+
+    La lista debe estar dividida y categorizada de la siguiente manera para cubrir todo el embudo (funnel):
+
+    1. **Servicios Específicos:** (Desglosa el servicio principal en sub-servicios técnicos o nichos).
+    2. **Puntos de Dolor / Problemas:** (Qué busca el usuario cuando tiene el problema antes de saber la solución. Ej: "mancha humedad techo" en lugar de "impermeabilización").
+    3. **Intención Transaccional/Comercial:** (Palabras que denotan compra inminente: precio, presupuesto, urgente, empresa de...).
+    4. **Preguntas Informativas:** (Qué, cómo, cuánto, por qué... relacionadas con el servicio).
+    5. **Público Objetivo / Escenarios:** (Servicio + para quién/dónde. Ej: para empresas, para comunidades, en altura, industrial...).
+
+    IMPORTANTE:
+    Devuelve SOLO una lista plana de keywords separadas por coma, sin títulos de categorías ni numeración. Solo las keywords.
+    Ejemplo de salida:
+    reparación de fugas, mancha en el techo, cuánto cuesta fontanero, fontanero urgente, fontanería para comunidades...
+    `;
+
+    try {
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        // Limpiar y convertir a array
+        const seeds = text.split(',')
+            .map(s => s.trim())
+            .filter(s => s.length > 3) // Filtrar basura corta
+            .filter(s => !s.includes('**')) // Filtrar cabeceras si se colaron
+            .slice(0, 30); // Limitar a 30
+
+        return seeds;
+    } catch (error) {
+        console.error("Error generando semillas con Gemini:", error);
+        return [];
+    }
+}
+
 export async function runGeminiClustering(keywords, niche, city) {
     if (keywords.length === 0) return [];
 
@@ -563,42 +656,46 @@ export async function runGeminiClustering(keywords, niche, city) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
     const prompt = `
-    ACTÚA COMO: Experto en SEO y Arquitectura Web.
+    ACTÚA COMO: Experto en SEO Técnico y Arquitectura de Información.
     
-    TAREA: Agrupar la siguiente lista de keywords en CLUSTERS SEMÁNTICOS para una web de "${niche}" en "${city}".
+    CONTEXTO:
+    Estamos creando la estructura de una web local para el nicho "${niche}" en la ciudad de "${city}".
     
-    LISTA DE KEYWORDS:
-    ${keywords.map(k => `- ${k.keyword} (Vol: ${k.volume}, Score: ${k.relevanceScore})`).join('\n')}
+    OBJETIVO:
+    Agrupar la lista de keywords proporcionada en CLUSTERS SEMÁNTICOS lógicos que se convertirán en URLs de servicio (Landing Pages).
     
-    INSTRUCCIONES:
-    1. Agrupa las keywords por INTENCIÓN DE SERVICIO (ej: "Rejas", "Puertas", "Barandillas").
-    2. Ignora keywords que sean basura o no encajen en servicios comerciales.
-    3. Crea entre 3 y 8 clusters principales.
-    4. Asigna un nombre comercial atractivo a cada cluster.
-    5. Genera METADATOS SEO optimizados para cada cluster (H1, Title, Description) enfocados en "${city}".
+    LISTA DE KEYWORDS (Datos brutos):
+    ${keywords.map(k => `- KW: "${k.keyword}" | Vol: ${k.volume} | CPC: ${k.cpc || 0} | Diff: ${k.difficulty || 0}`).join('\n')}
     
-    FORMATO JSON:
+    INSTRUCCIONES DE AGRUPACIÓN:
+    1. **ATOMIZACIÓN:** Agrupa por INTENCIÓN DE SERVICIO muy específica (ej: "Alisado" separado de "Pintura"). No mezcles conceptos distintos en un mismo cluster.
+    2. **PROBLEMAS:** Si hay keywords de problemas (ej: "Humedades", "Grietas", "Gotelé"), crea clusters dedicados a la solución de esos problemas.
+    3. **HOME:** Agrupa las keywords genéricas (ej: "pintor barcelona", "precio pintor", "empresa de pintura") en un cluster llamado "HOME" o "General".
+    4. **CANTIDAD:** Crea entre 5 y 12 clusters. Prefiere clusters pequeños y específicos.
+    5. **SLUG:** Incluye la ciudad en el slug (estructura plana).
+    
+    FORMATO DE SALIDA (JSON ESTRICTO):
+    Debes devolver UNICAMENTE un objeto JSON válido, sin bloques de código markdown (\`\`\`) ni texto introductorio.
+    
+    Estructura requerida:
     [
         {
-            "name": "Nombre del Cluster (ej: Rejas de Seguridad)",
-            "slug": "rejas-seguridad-barcelona",
-            "intent": "COMMERCIAL",
+            "name": "Nombre comercial del servicio (ej: Alisado de Paredes)",
+            "slug": "alisado-paredes-barcelona",
             "intent": "COMMERCIAL",
             "meta_suggestions": [
                 {
-                    "h1": "Título H1 Optimizado (ej: Rejas de Seguridad a Medida en Barcelona)",
-                    "seo_title": "Título SEO (ej: Rejas de Seguridad Barcelona | Precios y Modelos)",
-                    "seo_description": "Meta descripción persuasiva incluyendo keywords principales y llamada a la acción."
+                    "h1": "H1 optimizado con keyword principal + ciudad",
+                    "seo_title": "Title Tag atractivo (max 60 chars)",
+                    "seo_description": "Meta description con CTR alto (max 155 chars)"
                 }
             ],
             "keywords": [
-                { "keyword": "rejas barcelona", "volume": 100, "cpc": 1.5, "difficulty": 20 },
+                { "keyword": "alisar paredes precio", "volume": 200, "cpc": 0.5, "difficulty": 15 },
                 ...
             ]
         }
     ]
-    
-    IMPORTANTE: Devuelve SOLO el JSON.
     `;
 
     try {

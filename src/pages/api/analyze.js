@@ -44,7 +44,7 @@ export const POST = async ({ request }) => {
                 top10Filter: options.top10Only !== undefined ? options.top10Only : false,
                 minRelevanceScore: options.minRelevance !== undefined ? options.minRelevance : 0,
                 includeInformational: options.includeInfo !== undefined ? options.includeInfo : false,
-                maxKeywordsForAI: options.maxKeywords || 300,
+                maxKeywordsForAI: options.maxKeywords || undefined,
                 specificServices: options.specificServices || [],
                 skipClustering: options.skipClustering || false // ✅ Pasar flag
             }

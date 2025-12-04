@@ -1,6 +1,16 @@
 ---
+import { Image } from "astro:assets";
+import defaultHeroImage from "../../../assets/images/hero-home.png"; // Importamos la imagen generada
 import { Phone } from "lucide-react";
+
 const { hero, config } = Astro.props;
+
+// Lógica Híbrida:
+// Si la imagen es el placeholder por defecto, usamos la versión optimizada de Astro.
+// Si es una imagen subida por el usuario (CMS), usamos la ruta string normal.
+const isDefaultImage =
+    !hero?.backgroundImage ||
+    hero.backgroundImage === "/images/home/hero-placeholder.jpg";
 const heroBgImage =
     hero?.backgroundImage || "/images/home/hero-placeholder.jpg";
 ---
@@ -9,11 +19,22 @@ const heroBgImage =
     class="relative h-[85vh] min-h-[600px] flex items-center bg-secondary overflow-hidden"
 >
     <div class="absolute inset-0 w-full h-full">
-        <img
-            src={heroBgImage}
-            alt={`${config.niche} en ${config.city}`}
-            class="w-full h-full object-cover opacity-40"
-        />
+        {
+            isDefaultImage ? (
+                <Image
+                    src={defaultHeroImage}
+                    alt={`${config.niche} en ${config.city}`}
+                    class="w-full h-full object-cover opacity-40"
+                    loading="eager"
+                />
+            ) : (
+                <img
+                    src={heroBgImage}
+                    alt={`${config.niche} en ${config.city}`}
+                    class="w-full h-full object-cover opacity-40"
+                />
+            )
+        }
     </div>
     <div
         class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent"

@@ -1,7 +1,15 @@
 ---
+import { Image } from "astro:assets";
+import defaultAboutImage from "../../../assets/images/about-us.png";
 import { CheckCircle, ArrowRight } from "lucide-react";
+
 const { aboutSection, bgClass = "bg-secondary" } = Astro.props;
 if (!aboutSection) return null;
+
+const isDefaultImage =
+    !aboutSection.image ||
+    aboutSection.image === "/images/home/about-placeholder.jpg";
+const aboutImage = aboutSection.image || "/images/home/about-placeholder.jpg";
 ---
 
 <section class={`py-20 ${bgClass} border-b border-heading/10`}>
@@ -11,12 +19,21 @@ if (!aboutSection) return null;
                 <div
                     class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]"
                 >
-                    <img
-                        src={aboutSection.image ||
-                            "/images/home/about-placeholder.jpg"}
-                        alt={aboutSection.title}
-                        class="w-full h-full object-cover"
-                    />
+                    {
+                        isDefaultImage ? (
+                            <Image
+                                src={defaultAboutImage}
+                                alt={aboutSection.title || "Sobre Nosotros"}
+                                class="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <img
+                                src={aboutImage}
+                                alt={aboutSection.title || "Sobre Nosotros"}
+                                class="w-full h-full object-cover"
+                            />
+                        )
+                    }
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
                     >

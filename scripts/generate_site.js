@@ -41,47 +41,67 @@ async function generateData(prompt, context = '') {
 
 // Función para generar FAQs con Gemini (Priorizando PAA)
 async function generateFAQs(serviceName, city, longTailKeywords, paaQuestions = []) {
-    const keywordsList = (longTailKeywords || []).map(k => `- ${k.keyword}`).join('\n');
+    // Unimos keywords con comas para que se entiendan como conceptos relacionados, no solo una lista
+    const keywordsString = (longTailKeywords || []).map(k => k.keyword).join(', ');
 
-    // Filtrar preguntas PAA relevantes para este servicio si es posible
-    // O usar las generales si no hay específicas
+    // Lógica para instrucciones de PAA
+    let paaInstructions = '';
     const relevantPAA = paaQuestions.slice(0, 5).map(q => `- ${q.question}`).join('\n');
 
-    let instructions = '';
-    if (relevantPAA) {
-        instructions = `
-        USAR ESTAS PREGUNTAS REALES DE GOOGLE (PAA) COMO PRIORIDAD:
+    if (relevantPAA.length > 0) {
+        paaInstructions = `
+        OBJETIVO PRINCIPAL: Responder a las intenciones de búsqueda reales de los usuarios.
+        Usa PRIORITARIAMENTE las siguientes preguntas "People Also Ask" (PAA) de Google si son coherentes con el servicio:
         ${relevantPAA}
         
-        Si necesitas más, inventa otras relevantes basadas en las keywords.
+        Si alguna PAA es demasiado genérica, adáptala ligeramente al contexto de "${serviceName}".
+        Si necesitas completar hasta llegar a 4 preguntas, genera nuevas basadas en los "Puntos de Dolor" habituales de este servicio.
         `;
     } else {
-        instructions = `Crea 4 preguntas frecuentes altamente relevantes para este servicio.`;
+        paaInstructions = `
+        Genera 4 preguntas frecuentes basadas en los problemas más comunes, dudas sobre precios o tiempos de espera que suelen tener los clientes de "${serviceName}".
+        `;
     }
 
     const prompt = `
-        Actúa como un artesano experto con 20 años de experiencia.
-        Genera una sección de Preguntas Frecuentes (FAQs) para el servicio "${serviceName}" en "${city}".
-        
-        ${instructions}
-        
-        KEYWORDS (Contexto):
-        ${keywordsList}
-        
-        INSTRUCCIONES DE RESPUESTA:
-        1. Tono: Profesional, cercano, de experto a cliente.
-        2. Respuestas detalladas (50-70 palabras) que demuestren conocimiento técnico.
-        3. Incluye el nombre de la ciudad ("${city}") de forma natural en las respuestas.
-        4. Formato JSON estricto.
-        
-        JSON:
-        {
-            "faqs": [
-                { "question": "¿...?", "answer": "..." }
-            ]
-        }
+    ACTÚA COMO: Experto en atención al cliente y artesano veterano.
+    
+    TAREA: Generar sección de FAQs para "${serviceName}" en "${city}".
+    
+    INPUT DATA:
+    - Keywords Semánticas: ${keywordsString}
+    - Preguntas Reales (Google PAA): ${JSON.stringify(relevantPAA)}
+    
+    REGLAS:
+    1. TONO: Autoridad empática. Respuestas de 40-60 palabras.
+    2. LOCALIZACIÓN: Menciona "${city}" o normativas locales si aplica.
+    3. SCHEMA: Estructura lista para FAQSchema.
+    
+    FORMATO DE SALIDA (JSON ÚNICO Y ESTRICTO):
+    Devuelve SOLO un objeto JSON con esta estructura exacta:
+    {
+        "faqs": [
+            {
+                "question": "Pregunta frecuente (usar las PAA si son relevantes o variaciones)",
+                "answer": "Respuesta directa, útil y con keyword semántica integrada de forma natural."
+            },
+            {
+                "question": "Pregunta sobre precio/presupuesto",
+                "answer": "Respuesta orientativa sin dar precio fijo, enfatizando 'ver el trabajo in situ'."
+            },
+            {
+                "question": "Pregunta sobre tiempos/garantía",
+                "answer": "Respuesta que denote profesionalidad."
+            },
+            {
+                "question": "Pregunta sobre urgencias o disponibilidad en ${city}",
+                "answer": "Respuesta local."
+            }
+        ]
+    }
     `;
 
+    // Nota: Si usas la API de Gemini directamente, asegúrate de pasar config: { responseMimeType: "application/json" }
     const data = await generateData(prompt, `FAQs ${serviceName}`);
     return data?.faqs || [];
 }
@@ -132,115 +152,115 @@ async function main() {
     const homeH2s = plan.home_structure?.h2s || [];
 
     // Keywords del main cluster para enriquecer
-    const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10).join(', ') || '';
+    const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || [];
 
     // Lista de servicios para contexto
-    const servicesList = serviceClusters.map(c => c.name).join(', ');
+    const servicesList = serviceClusters.map(c => c.name);
 
+    // --- NUEVO PROMPT HOME ---
     const homePrompt = `
-        Actúa como un maestro artesano y experto en marketing local.
-        Escribe el contenido para la home de una empresa de "${plan.niche}" en "${cityName}".
-        
-        CONTEXTO DE SERVICIOS OFRECIDOS:
-        ${servicesList}
-        
-        FOCUS SEO:
-        - Keyword Principal: "${mainCluster?.main_keyword || plan.niche + ' ' + cityName}"
-        - Keywords Secundarias: ${mainKeywords}
-
-        ESTRUCTURA OBLIGATORIA:
-        - H1: "${homeH1}"
-        - Secciones H2: ${JSON.stringify(homeH2s)}
-        
-        TONO Y ESTILO (ARTISAN):
-        - Autoridad y Confianza: Habla de "nosotros", "nuestro taller", "nuestra experiencia".
-        - Local: Menciona barrios específicos de ${cityName}, tradiciones locales o arquitectura típica si aplica.
-        - Calidad: Enfatiza materiales, acabados, garantías y trato personal.
-        - NO uses lenguaje genérico de IA ("En el vibrante paisaje de..."). Sé directo y profesional.
-        
-        JSON REQUERIDO:
-        {
-            "hero": {
-                "heading": "${homeH1}",
-                "subheading": "Subtítulo potente de 2 líneas que combine promesa de valor (seguridad/diseño) y garantía local."
-            },
-            "about": {
-                "title": "Título atractivo sobre la empresa (ej: Herreros de Confianza en Barcelona)",
-                "description": "Descripción de 3-4 líneas sobre la experiencia, el taller propio y el compromiso con el cliente. Sin relleno.",
-                "features": [
-                    { "title": "Característica 1 (ej: Taller Propio)", "description": "Breve explicación..." },
-                    { "title": "Característica 2 (ej: Sin Intermediarios)", "description": "Breve explicación..." },
-                    { "title": "Característica 3 (ej: Acabados Premium)", "description": "Breve explicación..." }
-                ]
-            },
-            "seoContentTitle": "${homeH2s[0] || `Expertos en ${plan.niche}`}",
-            "seoContent": "Texto en Markdown (600 palabras). Usa los H2 proporcionados. Incluye listas, negritas y párrafos cortos. Habla de la historia de la empresa en ${cityName} y menciona los servicios principales (${servicesList}).",
-            "features": [
-                { "title": "Ventaja Competitiva 1", "description": "Descripción detallada..." },
-                { "title": "Ventaja Competitiva 2", "description": "Descripción detallada..." },
-                { "title": "Ventaja Competitiva 3", "description": "Descripción detallada..." }
-            ],
-            "faq": [
-                { "question": "Pregunta frecuente real 1", "answer": "Respuesta experta..." },
-                { "question": "Pregunta frecuente real 2", "answer": "Respuesta experta..." },
-                { "question": "Pregunta frecuente real 3", "answer": "Respuesta experta..." }
-            ],
-            "contactSection": {
-                "title": "Título persuasivo para pedir presupuesto (ej: ¿Urgencia? Llámanos)",
-                "subtitle": "Subtítulo que elimine fricción (ej: Sin compromiso, precio cerrado por teléfono)"
-            },
-            "locationsSection": {
-                "title": "Título sobre cobertura geográfica (ej: Atendemos en todo ${cityName})",
-                "subtitle": "Subtítulo sobre rapidez de desplazamiento"
-            }
-        }
+    ACTÚA COMO: Un maestro artesano y experto en marketing local con 20 años de experiencia.
+    
+    TAREA: Escribir el contenido JSON para la HOME de una empresa de "${plan.niche}" en "${cityName}".
+    
+    CONTEXTO DE SERVICIOS:
+    ${servicesList.map(s => `- ${s}`).join('\n')}
+    
+    FOCUS SEO:
+    - Keyword Principal: "${plan.niche} en ${cityName}"
+    - Keywords Secundarias: ${mainKeywords.join(', ')}
+    
+    ESTRUCTURA VISUAL REQUERIDA (Mapping):
+    - H1: "${homeH1}"
+    - Secciones H2: ${JSON.stringify(homeH2s)}
+    
+    TONO Y ESTILO (ARTISAN MODE):
+    - Autoridad: Habla de "nuestro taller", "técnicas propias", "acabados perfectos".
+    - Local: Menciona barrios reales de ${cityName} (ej: "trabajamos mucho por la zona centro...").
+    - Anti-IA: PROHIBIDO usar palabras como "vibrante", "tapiz", "sinfonía", "inigualable". Sé directo.
+    
+    FORMATO DE SALIDA (JSON ÚNICO Y ESTRICTO):
+    Devuelve SOLO un objeto JSON con esta estructura exacta:
+    {
+        "meta": {
+            "title": "Title tag optimizado (max 60 chars)",
+            "description": "Meta description persuasiva con CTR alto"
+        },
+        "hero_section": {
+            "h1": "${homeH1}",
+            "subheadline": "Subtítulo de 2 líneas que refuerce la propuesta de valor local",
+            "cta_primary": "Texto botón (ej: Pedir Presupuesto)",
+            "cta_secondary": "Texto botón secundario (ej: Ver Galería)"
+        },
+        "intro_content": {
+            "title": "Un título H2 atractivo",
+            "paragraphs": ["Párrafo 1 (historia/local)", "Párrafo 2 (calidad/garantía)"]
+        },
+        "services_grid_intro": "Breve frase introductoria antes de mostrar los servicios",
+        "why_us_bullets": [
+            { "title": "Título beneficio", "desc": "Descripción corta" },
+            { "title": "Título beneficio", "desc": "Descripción corta" },
+            { "title": "Título beneficio", "desc": "Descripción corta" }
+        ],
+        "features": [ // Añadido para compatibilidad con MDX existente
+             { "title": "Ventaja 1", "description": "Desc..." },
+             { "title": "Ventaja 2", "description": "Desc..." },
+             { "title": "Ventaja 3", "description": "Desc..." }
+        ],
+        "local_closing": "Párrafo final mencionando zonas de cobertura en ${cityName}",
+        "faq": [ // Añadido para compatibilidad
+            { "question": "Pregunta 1", "answer": "Respuesta 1" },
+            { "question": "Pregunta 2", "answer": "Respuesta 2" },
+            { "question": "Pregunta 3", "answer": "Respuesta 3" }
+        ]
+    }
     `;
 
     const homeData = await generateData(homePrompt, 'Home Page');
 
     if (homeData) {
         // Generar testimonios realistas
-        const testimonialsPrompt = `Genera 3 testimonios muy realistas para ${plan.niche} en ${cityName}. Que mencionen servicios específicos como ${servicesList.split(',').slice(0, 3).join(', ')}. Usa barrios reales. JSON: { "testimonials": [{ "quote": "...", "author": "...", "location": "...", "initials": ".." }] }`;
+        const testimonialsPrompt = `Genera 3 testimonios muy realistas para ${plan.niche} en ${cityName}. Que mencionen servicios específicos como ${servicesList.slice(0, 3).join(', ')}. Usa barrios reales. JSON: { "testimonials": [{ "quote": "...", "author": "...", "location": "...", "initials": ".." }] }`;
         const testimonialsData = await generateData(testimonialsPrompt, 'Testimonials');
 
-        const escapeYaml = (str) => str ? `"${str.replace(/"/g, '\\"')}"` : '';
+        const escapeYaml = (str) => str ? `"${str.replace(/"/g, '\\"')}"` : '""';
         const indentYaml = (str) => str ? str.replace(/\n/g, '\n    ') : '';
 
+        // MAPPING NUEVO JSON -> MDX
         const homeMdx = `---
 hero:
-  heading: ${escapeYaml(homeData.hero.heading)}
+  heading: ${escapeYaml(homeData.hero_section?.h1)}
   subheading: >-
-    ${indentYaml(homeData.hero.subheading)}
+    ${indentYaml(homeData.hero_section?.subheadline)}
 servicesSection:
   title: ${plan.niche.charAt(0).toUpperCase() + plan.niche.slice(1)}
   titleHighlight: en ${cityName}
   subtitle: >-
-    Soluciones profesionales a medida. Calidad artesanal garantizada.
+    ${indentYaml(homeData.services_grid_intro || "Soluciones profesionales a medida.")}
 aboutSection:
-  title: ${escapeYaml(homeData.about.title)}
+  title: ${escapeYaml(homeData.intro_content?.title)}
   description: >-
-    ${indentYaml(homeData.about.description)}
+    ${indentYaml(homeData.intro_content?.paragraphs?.join('\n\n') || "")}
   yearsExperience: "15+"
   image: "/images/home/about-placeholder.jpg"
   features:
-${(homeData.about.features || []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.description)}`).join('\n')}
+${(homeData.why_us_bullets || []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.desc)}`).join('\n')}
   buttonText: "Solicitar Visita Técnica"
   buttonLink: "/contacto"
 features:
 ${(homeData.features || []).map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${escapeYaml(f.description)}`).join('\n')}
 testimonials:
 ${(testimonialsData?.testimonials || []).map(t => `  - quote: ${escapeYaml(t.quote)}\n    author: "${t.author}"\n    location: "${t.location}"\n    initials: "${t.initials}"`).join('\n')}
-seoContentTitle: ${escapeYaml(homeData.seoContentTitle)}
+seoContentTitle: "Expertos en ${plan.niche}"
 faq:
 ${(homeData.faq || []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
 contactSection:
-  title: ${escapeYaml(homeData.contactSection?.title || "¿Necesitas un Presupuesto?")}
+  title: "Contacta con Nosotros"
   subtitle: >-
-    ${indentYaml(homeData.contactSection?.subtitle || "Cuéntanos tu proyecto.")}
+    ${indentYaml(homeData.local_closing || "Presupuesto sin compromiso.")}
 locationsSection:
-  title: ${escapeYaml(homeData.locationsSection?.title || "Zonas de Servicio")}
-  subtitle: >-
-    ${indentYaml(homeData.locationsSection?.subtitle || "Llegamos a toda la ciudad.")}
+  title: "Zonas de Servicio"
+  subtitle: "Llegamos a toda la ciudad."
 stickyPhone: true
 blocks:
   - discriminant: hero
@@ -256,7 +276,7 @@ blocks:
   - discriminant: content
 ---
 
-${homeData.seoContent}
+${homeData.intro_content?.paragraphs?.join('\n\n') || ""}
 `;
         await fs.mkdir('src/content/pages', { recursive: true });
         await fs.writeFile('src/content/pages/home.mdx', homeMdx);
@@ -275,39 +295,66 @@ ${homeData.seoContent}
             .replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n')
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/^-+|-+$/g, '');
+
+        const clusterKeywords = cluster.keywords.map(k => k.keyword);
         const selectedIdx = cluster.selected_suggestion || 0;
         const metaTags = cluster.meta_suggestions?.[selectedIdx] || { h1: serviceName, seo_title: serviceName, seo_description: "" };
 
-        const prompt = `
-            Actúa como un técnico especialista en "${serviceName}".
-            Escribe una página de venta para este servicio en "${cityName}".
-            
-            KEYWORDS: ${cluster.keywords.slice(0, 5).map(k => k.keyword).join(', ')}
-            
-            ESTRUCTURA:
-            - Introducción: Problema común y solución experta.
-            - Proceso de Trabajo: Pasos técnicos detallados (ej: preparación, ejecución, acabados).
-            - Materiales/Tecnología: Menciona marcas o tipos de materiales de calidad.
-            - Por qué nosotros: Experiencia específica en este servicio.
-            
-            JSON:
-            {
-                "title": "${metaTags.h1}",
-                "shortDesc": "Descripción corta para cards (20 palabras)",
-                "seoTitle": "${metaTags.seo_title}",
-                "seoDesc": "${metaTags.seo_description}",
-                "content": "Markdown (600 palabras). Usa H2 y H3. Tono técnico pero accesible."
-            }
+        // --- NUEVO PROMPT SERVICIO ---
+        const servicePrompt = `
+        ACTÚA COMO: Un técnico especialista senior en "${serviceName}".
+        
+        TAREA: Escribir una LANDING PAGE DE VENTA para este servicio en "${cityName}".
+        
+        KEYWORDS (DATASET COMPLETO - REFERENCIA SEMÁNTICA):
+        ${clusterKeywords.join(', ')}
+        
+        ESTRUCTURA MENTAL:
+        - No vendas humo, vende solución técnica.
+        - Habla de materiales específicos, marcas de calidad o herramientas.
+        - Explica el proceso paso a paso para generar confianza.
+        - IMPORTANTE: Tienes acceso a todas las keywords del cluster. Úsalas para enriquecer el texto con la mayor variedad semántica posible. No es necesario usarlas todas literalmente si son redundantes, pero sí cubrir todas las INTENCIONES de búsqueda que representan.
+        - NO hagas "keyword stuffing". Prioriza la naturalidad.
+        
+        FORMATO DE SALIDA (JSON ÚNICO Y ESTRICTO):
+        Devuelve SOLO un objeto JSON con esta estructura exacta:
+        {
+            "meta": {
+                "title": "Title tag enfocado en ${serviceName} ${cityName}",
+                "description": "Meta description transaccional incluyendo keywords principales"
+            },
+            "hero": {
+                "h1": "${metaTags.h1}", 
+                "lead_text": "Texto introductorio atacando el problema principal del cliente y usando keywords."
+            },
+            "problem_agitation": {
+                "h2": "Título sobre el problema (ej: ¿Grietas que vuelven a salir?)",
+                "content": "Texto empático describiendo la molestia. Integra keywords de dolor (ej: humedad, desconchones)."
+            },
+            "solution_technical": {
+                "h2": "Nuestra solución técnica",
+                "content": "Descripción de la solución usando terminología experta. Integra keywords de solución."
+            },
+            "process_steps": [
+                { "step_number": 1, "title": "Preparación", "description": "Detalle técnico..." },
+                { "step_number": 2, "title": "Ejecución", "description": "Detalle técnico..." },
+                { "step_number": 3, "title": "Acabados", "description": "Detalle técnico..." }
+            ],
+            "materials_section": {
+                "title": "Materiales que utilizamos",
+                "items": ["Material 1", "Material 2", "Herramienta especial"]
+            },
+            "final_cta": "Frase de cierre contundente para pedir presupuesto"
+        }
         `;
 
-        const data = await generateData(prompt, serviceName);
+        const data = await generateData(servicePrompt, serviceName);
         if (data) {
             // Pasamos las preguntas PAA del plan global
             const faqs = await generateFAQs(serviceName, cityName, cluster.keywords, plan.raw_data?.paa_questions || []);
             const faqYaml = faqs.map(q => `  - question: "${q.question}"\n    answer: >-\n      ${q.answer}`);
 
             // Generar enlaces relacionados
-            // Generar related services (links internos)
             const related = serviceClusters.filter(s => s.name !== serviceName).slice(0, 3).map(s => {
                 const sSlug = s.name
                     .toLowerCase()
@@ -317,14 +364,31 @@ ${homeData.seoContent}
                 return `- **[${s.name}](/servicios/${sSlug})**: Especialistas en ${s.name.toLowerCase()}.`;
             });
 
+            // Construir contenido MDX desde las secciones del JSON
+            const contentBody = `
+## ${data.problem_agitation?.h2 || "El Problema"}
+${data.problem_agitation?.content || ""}
+
+## ${data.solution_technical?.h2 || "Nuestra Solución"}
+${data.solution_technical?.content || ""}
+
+## Proceso de Trabajo
+${(data.process_steps || []).map(s => `### ${s.step_number}. ${s.title}\n${s.description}`).join('\n\n')}
+
+## ${data.materials_section?.title || "Materiales"}
+${(data.materials_section?.items || []).map(i => `- ${i}`).join('\n')}
+
+> **${data.final_cta || "Contáctanos hoy mismo."}**
+`;
+
             const mdx = `---
-title: "${data.title}"
-shortDesc: "${data.shortDesc}"
+title: "${data.hero?.h1 || serviceName}"
+shortDesc: "${data.hero?.lead_text?.slice(0, 100) || "Servicio profesional"}"
 icon: "Hammer"
 heroImage: "/images/services/default.jpg"
 featured: true
-seoTitle: "${data.seoTitle}"
-seoDesc: "${data.seoDesc}"
+seoTitle: "${data.meta?.title || serviceName}"
+seoDesc: "${data.meta?.description || ""}"
 faq:
 ${faqYaml.join('\n')}
 blocks:
@@ -334,7 +398,7 @@ blocks:
   - discriminant: "cta"
 ---
 
-${data.content}
+${contentBody}
 
 ## Otros Servicios en ${cityName}
 

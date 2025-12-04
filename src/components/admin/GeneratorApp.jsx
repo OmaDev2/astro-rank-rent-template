@@ -21,7 +21,7 @@ export default function GeneratorApp() {
         top10Only: true,  // ✅ Default to Top 10 Only (Phase 1 recommendation)
         minRelevance: 5,
         includeInfo: false,
-        maxKeywords: 200,
+        maxKeywords: 1000,
         specificServices: '' // ✅ New field for specific services
     });
     const [logs, setLogs] = useState([]);

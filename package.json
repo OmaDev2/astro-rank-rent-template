@@ -7,7 +7,9 @@
         "start": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
-        "astro": "astro"
+        "astro": "astro",
+        "reset": "node scripts/reset.js",
+        "export": "node scripts/export_client.js"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.3",
