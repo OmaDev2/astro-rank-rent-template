@@ -477,8 +477,46 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     console.log(`   - Keywords totales usadas: ${finalKeywords.length}`);
     console.log('═'.repeat(70) + '\n');
 
+    // ========================================================================
+    // FASE 10: ESTRUCTURA HOME (Añadido para el Frontend)
+    // ========================================================================
+
+    let homeStructure = {
+        h1: `${niche} en ${city}`,
+        h2s: ["Nuestros Servicios", "Por qué elegirnos", "Opiniones de Clientes", "Preguntas Frecuentes"]
+    };
+
+    if (clusters.length > 0) {
+        // El cluster con más volumen suele ser el mejor candidato para la Home
+        const mainCluster = [...clusters].sort((a, b) => {
+            const volA = a.keywords.reduce((sum, k) => sum + (k.volume || 0), 0);
+            const volB = b.keywords.reduce((sum, k) => sum + (k.volume || 0), 0);
+            return volB - volA;
+        })[0];
+
+        if (mainCluster && mainCluster.meta_suggestions && mainCluster.meta_suggestions[0]) {
+            homeStructure.h1 = mainCluster.meta_suggestions[0].h1;
+        }
+
+        // Usar los nombres de los otros clusters como H2s de servicios
+        const serviceH2s = clusters
+            .filter(c => c.name !== mainCluster?.name)
+            .slice(0, 4)
+            .map(c => c.name);
+
+        if (serviceH2s.length > 0) {
+            homeStructure.h2s = [
+                ...serviceH2s,
+                "Sobre Nosotros",
+                "Opiniones",
+                "Contacto"
+            ];
+        }
+    }
+
     return {
         clusters: clusters,
+        home_structure: homeStructure, // ✅ AÑADIDO
         stats: stats,
         market_analysis: `Análisis de ${niche} en ${city}. ${finalKeywords.length} keywords relevantes encontradas.`,
         raw_data: {
@@ -545,11 +583,14 @@ export async function runGeminiClustering(keywords, niche, city) {
             "name": "Nombre del Cluster (ej: Rejas de Seguridad)",
             "slug": "rejas-seguridad-barcelona",
             "intent": "COMMERCIAL",
-            "meta_suggestions": {
-                "h1": "Título H1 Optimizado (ej: Rejas de Seguridad a Medida en Barcelona)",
-                "seo_title": "Título SEO (ej: Rejas de Seguridad Barcelona | Precios y Modelos)",
-                "seo_description": "Meta descripción persuasiva incluyendo keywords principales y llamada a la acción."
-            },
+            "intent": "COMMERCIAL",
+            "meta_suggestions": [
+                {
+                    "h1": "Título H1 Optimizado (ej: Rejas de Seguridad a Medida en Barcelona)",
+                    "seo_title": "Título SEO (ej: Rejas de Seguridad Barcelona | Precios y Modelos)",
+                    "seo_description": "Meta descripción persuasiva incluyendo keywords principales y llamada a la acción."
+                }
+            ],
             "keywords": [
                 { "keyword": "rejas barcelona", "volume": 100, "cpc": 1.5, "difficulty": 20 },
                 ...
@@ -567,13 +608,35 @@ export async function runGeminiClustering(keywords, niche, city) {
         const clusters = JSON.parse(text);
 
         // Enriquecer clusters con datos originales
-        return clusters.map(c => ({
+        const enrichedClusters = clusters.map(c => ({
             ...c,
             keywords: c.keywords.map(k => {
                 const original = keywords.find(ok => ok.keyword === k.keyword);
                 return original || k;
             })
         }));
+
+        // GUARDAR EN ARCHIVO PARA PERSISTENCIA
+        const mdContent = `# Análisis de Clustering: ${niche} en ${city}
+Fecha: ${new Date().toLocaleString()}
+Modelo: gemini-2.5-pro
+
+${enrichedClusters.map(c => `
+## 📂 ${c.name} (${c.keywords.length} keywords)
+**Slug:** \`${c.slug}\`
+**Intención:** ${c.intent}
+**H1 Sugerido:** ${c.meta_suggestions?.[0]?.h1 || 'N/A'}
+**SEO Title:** ${c.meta_suggestions?.[0]?.seo_title || 'N/A'}
+
+| Keyword | Vol | Score |
+|---------|-----|-------|
+${c.keywords.map(k => `| ${k.keyword} | ${k.volume} | ${k.relevanceScore} |`).join('\n')}
+`).join('\n---\n')}
+`;
+        fs.writeFileSync('clustering_analysis.md', mdContent);
+        console.log('   💾 Clusters guardados en clustering_analysis.md');
+
+        return enrichedClusters;
     } catch (error) {
         console.error("Error en Gemini Clustering:", error);
         // Fallback: un solo cluster con todo

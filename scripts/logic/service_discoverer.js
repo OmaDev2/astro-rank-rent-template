@@ -16,22 +16,26 @@ export async function discoverNicheServices(niche) {
     const prompt = `
     ACTÚA COMO: Experto en SEO Local y Estrategia de Negocios.
     
-    OBJETIVO: Identificar los 6-10 servicios comerciales MÁS RENTABLES y BUSCADOS para el nicho: "${niche}".
+    OBJETIVO: Identificar una lista exhaustiva de SERVICIOS ESPECÍFICOS (entre 10 y 15) para el nicho: "${niche}".
     
-    INSTRUCCIONES:
-    1. Piensa en qué busca realmente un cliente cuando necesita un "${niche}".
-    2. Ignora servicios genéricos (ej: "reparaciones", "mantenimiento") si no son específicos.
-    3. Ignora herramientas o materiales (ej: "martillo", "hierro").
-    4. Céntrate en SERVICIOS o PRODUCTOS INSTALADOS.
+    INSTRUCCIONES CRÍTICAS:
+    1. DESGLOSA AL MÁXIMO: No agrupes servicios diferentes en una misma línea.
+       - ❌ MAL: "Alisado de paredes y eliminación de gotelé"
+       - ✅ BIEN: "Alisado de paredes", "Eliminación de gotelé" (como dos items separados)
+       - ❌ MAL: "Pintura de interiores y exteriores"
+       - ✅ BIEN: "Pintura de interiores", "Pintura de exteriores"
+    2. BUSCA LA ESPECIFICIDAD: Piensa en qué escribe el usuario en Google.
+    3. Ignora servicios genéricos (ej: "reparaciones", "mantenimiento") si no son específicos.
+    4. Ignora herramientas o materiales sueltos.
     
     FORMATO JSON:
     {
         "services": [
-            "Nombre del servicio 1 (ej: Rejas de Seguridad)",
-            "Nombre del servicio 2 (ej: Puertas de Garaje)",
+            "Servicio específico 1",
+            "Servicio específico 2",
             ...
         ],
-        "reasoning": "Breve explicación de por qué elegiste estos servicios"
+        "reasoning": "Breve explicación"
     }
     `;
 
