@@ -1,15 +1,15 @@
-siteName: 'Pintor  barcelona '
-niche: 'Pintor '
-siteUrl: tupintorbarcelona.com
+siteName: '[NOMBRE DE TU EMPRESA]'
+niche: '[TU NICHO]'
+siteUrl: https://tu-dominio.com
 businessType: LocalBusiness
-city: 'Barcelona '
-address: Amadeo Vives 15
+city: '[TU CIUDAD]'
+address: '[TU DIRECCIÓN]'
 coordinates:
-  lat: '41.40338'
-  lng: '2.17403'
-phone: '644371602'
-whatsapp: '34644371602'
-email: olga.millan@gmail.com
-schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
-nif: '43675068'
-ctaText: 'Llamame soy Olga '
+  lat: '40.416775'
+  lng: '-3.703790'
+phone: '000000000'
+whatsapp: '34000000000'
+email: contacto@tu-dominio.com
+schedule: Lun-Vie 9:00-20:00
+nif: '00000000X'
+ctaText: 'Solicitar Presupuesto'

@@ -7,6 +7,7 @@ async function resetProject() {
     const pathsToDelete = [
         'src/content/pages/home.mdx',
         'src/content/services', // Borraremos la carpeta entera y la recrearemos
+        'src/content/locations', // ✅ Borramos también las zonas generadas
         'project_plan.json',
         'clustering_analysis.md'
     ];
