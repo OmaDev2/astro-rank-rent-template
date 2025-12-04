@@ -153,7 +153,13 @@ const schema: WithContext<LocalBusiness> = {
 					);
 
 				case "contact":
-					return <HomeContact config={config} bgClass={bgClass} />;
+					return (
+						<HomeContact
+							config={config}
+							bgClass={bgClass}
+							contactSection={homeData.contactSection}
+						/>
+					);
 
 				case "process":
 					return homeData.process ? (
@@ -198,7 +204,12 @@ const schema: WithContext<LocalBusiness> = {
 					) : null;
 
 				case "locations":
-					return <LocationsSection bgClass={bgClass} />;
+					return (
+						<LocationsSection
+							bgClass={bgClass}
+							locationsSection={homeData.locationsSection}
+						/>
+					);
 
 				case "cta":
 					return <FinalCTA bgClass={bgClass} />;
@@ -209,6 +220,6 @@ const schema: WithContext<LocalBusiness> = {
 		})
 	}
 
-	<WhatsAppButton />
+	<WhatsAppButton stickyPhone={homeData.stickyPhone} />
 	<Footer />
 </Layout>

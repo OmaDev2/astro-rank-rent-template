@@ -8,7 +8,7 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-pro",
     generationConfig: { responseMimeType: "application/json" }
 });
 
@@ -184,7 +184,15 @@ async function main() {
                 { "question": "Pregunta frecuente real 1", "answer": "Respuesta experta..." },
                 { "question": "Pregunta frecuente real 2", "answer": "Respuesta experta..." },
                 { "question": "Pregunta frecuente real 3", "answer": "Respuesta experta..." }
-            ]
+            ],
+            "contactSection": {
+                "title": "Título persuasivo para pedir presupuesto (ej: ¿Urgencia? Llámanos)",
+                "subtitle": "Subtítulo que elimine fricción (ej: Sin compromiso, precio cerrado por teléfono)"
+            },
+            "locationsSection": {
+                "title": "Título sobre cobertura geográfica (ej: Atendemos en todo ${cityName})",
+                "subtitle": "Subtítulo sobre rapidez de desplazamiento"
+            }
         }
     `;
 
@@ -225,15 +233,27 @@ ${(testimonialsData?.testimonials || []).map(t => `  - quote: ${escapeYaml(t.quo
 seoContentTitle: ${escapeYaml(homeData.seoContentTitle)}
 faq:
 ${(homeData.faq || []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
+contactSection:
+  title: ${escapeYaml(homeData.contactSection?.title || "¿Necesitas un Presupuesto?")}
+  subtitle: >-
+    ${indentYaml(homeData.contactSection?.subtitle || "Cuéntanos tu proyecto.")}
+locationsSection:
+  title: ${escapeYaml(homeData.locationsSection?.title || "Zonas de Servicio")}
+  subtitle: >-
+    ${indentYaml(homeData.locationsSection?.subtitle || "Llegamos a toda la ciudad.")}
+stickyPhone: true
 blocks:
   - discriminant: hero
   - discriminant: services
   - discriminant: about
   - discriminant: features
+  - discriminant: process
   - discriminant: testimonials
-  - discriminant: content
   - discriminant: faq
+  - discriminant: contact
+  - discriminant: locations
   - discriminant: cta
+  - discriminant: content
 ---
 
 ${homeData.seoContent}

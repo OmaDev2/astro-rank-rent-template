@@ -13,7 +13,7 @@ const staticZones = [
     "Polígonos Industriales",
 ];
 
-const { bgClass = "bg-secondary" } = Astro.props;
+const { bgClass = "bg-secondary", locationsSection } = Astro.props;
 const cardBgClass =
     bgClass === "bg-secondary" ? "bg-surface/50" : "bg-secondary/50";
 ---
@@ -22,12 +22,14 @@ const cardBgClass =
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-4xl font-heading font-bold text-heading mb-4">
-                Zonas de Servicio
+                {locationsSection?.title || "Zonas de Servicio"}
             </h2>
             <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
             <p class="text-body max-w-2xl mx-auto">
-                Nos desplazamos por toda la provincia de {city}. Llegamos donde
-                nos necesites con nuestro taller móvil.
+                {
+                    locationsSection?.subtitle ||
+                        `Nos desplazamos por toda la provincia de ${city}. Llegamos donde nos necesites con nuestro taller móvil.`
+                }
             </p>
         </div>
 

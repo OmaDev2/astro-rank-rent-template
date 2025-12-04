@@ -1,7 +1,7 @@
 ---
 import { Phone, MapPin, MessageCircle } from "lucide-react";
 import HeroContactForm from "../../HeroContactForm.astro";
-const { config, bgClass = "bg-secondary" } = Astro.props;
+const { config, bgClass = "bg-secondary", contactSection } = Astro.props;
 
 // Determine inner container background based on section background
 const containerBgClass =
@@ -19,11 +19,13 @@ const containerBgClass =
         >
             <div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
                 <h2 class="text-3xl font-heading font-bold text-heading mb-4">
-                    ¿Necesitas un Presupuesto?
+                    {contactSection?.title || "¿Necesitas un Presupuesto?"}
                 </h2>
                 <p class="text-body mb-8">
-                    Cuéntanos tu proyecto. Te respondemos con una valoración
-                    gratuita y sin compromiso.
+                    {
+                        contactSection?.subtitle ||
+                            "Cuéntanos tu proyecto. Te respondemos con una valoración gratuita y sin compromiso."
+                    }
                 </p>
                 <div class="space-y-8">
                     <div class="flex items-start group">

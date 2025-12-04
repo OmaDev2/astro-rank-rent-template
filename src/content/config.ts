@@ -217,6 +217,21 @@ const pages = defineCollection({
             })),
         }).optional(),
 
+        // Contact Section (Home)
+        contactSection: z.object({
+            title: z.string().optional(),
+            subtitle: z.string().optional(),
+        }).optional(),
+
+        // Locations Section (Home)
+        locationsSection: z.object({
+            title: z.string().optional(),
+            subtitle: z.string().optional(),
+        }).optional(),
+
+        // Options
+        stickyPhone: z.boolean().optional().default(true),
+
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [

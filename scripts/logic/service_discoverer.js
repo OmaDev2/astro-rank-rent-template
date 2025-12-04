@@ -6,7 +6,7 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-pro",
     generationConfig: { responseMimeType: "application/json" }
 });
 
@@ -38,13 +38,21 @@ export async function discoverNicheServices(niche) {
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
-        const text = response.text();
+        let text = response.text();
+
+        // Limpiar markdown si existe
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+
         const data = JSON.parse(text);
 
         return data;
 
     } catch (error) {
         console.error('❌ Error consultando a Gemini:', error);
-        throw new Error('Failed to discover services');
+        // Loguear el texto que falló al parsear si es posible
+        if (error instanceof SyntaxError) {
+            console.error('❌ Error de sintaxis JSON. Respuesta recibida:', error.message);
+        }
+        throw new Error(`Failed to discover services: ${error.message}`);
     }
 }

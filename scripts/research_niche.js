@@ -15,7 +15,7 @@ const PROJECT = {
 // -----------------------------------------------
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
 async function main() {
     console.log(`\n🚀 INICIANDO INVESTIGACIÓN PROFUNDA PARA: ${PROJECT.niche} en ${PROJECT.city}...\n`);

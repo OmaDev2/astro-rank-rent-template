@@ -431,6 +431,25 @@ export default config({
                     ),
                 }, { label: 'Sección Proceso de Trabajo' }),
 
+                // --- SECCIÓN CONTACTO (HOME) ---
+                contactSection: fields.object({
+                    title: fields.text({ label: 'Título Sección' }),
+                    subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
+                }, { label: 'Sección Contacto (Home)' }),
+
+                // --- SECCIÓN ZONAS (HOME) ---
+                locationsSection: fields.object({
+                    title: fields.text({ label: 'Título Sección' }),
+                    subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
+                }, { label: 'Sección Zonas (Home)' }),
+
+                // --- OPCIONES EXTRA ---
+                stickyPhone: fields.checkbox({
+                    label: '📞 Mostrar Botón de Llamada Flotante (Móvil)',
+                    description: 'Añade un botón de "Llamar Ahora" fijo en la parte inferior para móviles (ideal urgencias).',
+                    defaultValue: true
+                }),
+
                 // --- NUEVO: PAGE BUILDER PARA HOMEPAGE ---
                 blocks: fields.blocks({
                     hero: {
