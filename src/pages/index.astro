@@ -18,6 +18,7 @@ import HomeAbout from "../components/blocks/home/HomeAbout.astro";
 import HomeFeatures from "../components/blocks/home/HomeFeatures.astro";
 import HomeContact from "../components/blocks/home/HomeContact.astro";
 import HomeProcess from "../components/blocks/home/HomeProcess.astro";
+import HomeServicesOnePage from "../components/blocks/home/HomeServicesOnePage.astro";
 
 // 1. Fetch Data
 const featuredServices = await getCollection(
@@ -131,6 +132,16 @@ const schema: WithContext<LocalBusiness> = {
 							servicesSection={homeData.servicesSection}
 							featuredServices={featuredServices}
 							city={config.city}
+							bgClass={bgClass}
+						/>
+					);
+
+				case "services_list":
+					return (
+						<HomeServicesOnePage
+							title={homeData.servicesSection?.title}
+							subtitle={homeData.servicesSection?.subtitle}
+							services={homeData.servicesList}
 							bgClass={bgClass}
 						/>
 					);

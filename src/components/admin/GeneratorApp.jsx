@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X } from 'lucide-react';
+import { Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X, FileText, Upload } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
 
 export default function GeneratorApp() {
@@ -13,8 +13,11 @@ export default function GeneratorApp() {
         searchLocation: 'Spain',
         seedKeyword: '',
         top10Filter: true,
-        generateLocations: false // NUEVO: Toggle para generar páginas de localidades
+        generateLocations: false, // NUEVO: Toggle para generar páginas de localidades
+        onePageMode: false // NUEVO: Toggle para sitios de una sola página (Micro-Nicho)
     });
+    const [manualMode, setManualMode] = useState(false);
+    const [manualInput, setManualInput] = useState('');
     const [researchData, setResearchData] = useState(null);
     const [selectedCompetitors, setSelectedCompetitors] = useState(new Set());
     const [extractionOptions, setExtractionOptions] = useState({
@@ -38,6 +41,54 @@ export default function GeneratorApp() {
             }));
         }
     }, [formData.niche, formData.city]);
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setManualInput(event.target.result);
+        };
+        reader.readAsText(file);
+    };
+
+    const handleManualProcess = async (e) => {
+        e.preventDefault();
+        if (!formData.niche || !formData.city) {
+            alert('Por favor, completa Nicho y Ciudad');
+            return;
+        }
+        if (!manualInput.trim()) {
+            alert('Por favor, ingresa tus palabras clave');
+            return;
+        }
+
+        setStep('loading');
+        setLogs(["📝 Procesando lista manual...", "📊 Analizando volúmenes...", "✨ Preparando revisión..."]);
+
+        try {
+            const res = await fetch('/api/manual_process', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    text: manualInput,
+                    niche: formData.niche,
+                    city: formData.city
+                })
+            });
+
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+
+            setResearchData(data);
+            setStep('keywords'); // Jump directly to keywords review
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+            setStep('input');
+        }
+    };
 
     const handleDiscoverServices = async (e) => {
         e.preventDefault();
@@ -196,7 +247,8 @@ export default function GeneratorApp() {
         try {
             const planToSave = {
                 ...researchData,
-                generate_locations: formData.generateLocations // Pasamos la config al plan
+                generate_locations: formData.generateLocations, // Pasamos la config al plan
+                one_page_mode: formData.onePageMode // Pasamos el modo one page
             };
 
             const res = await fetch('/api/save_plan', {
@@ -218,9 +270,15 @@ export default function GeneratorApp() {
     const handleGenerate = async () => {
         setShowConfirmModal(false);
 
-        // Primero guardamos el plan modificado
-        const saved = await handleSavePlan();
-        if (!saved) return;
+        // Construimos el plan completo con las opciones actuales
+        const fullPlan = {
+            ...researchData,
+            generate_locations: formData.generateLocations,
+            one_page_mode: formData.onePageMode
+        };
+
+        // Guardamos el plan explícitamente primero (opcional, ya que generate lo hace, pero por seguridad)
+        await handleSavePlan();
 
         setStep('generating');
         setLogs([
@@ -232,7 +290,8 @@ export default function GeneratorApp() {
         try {
             const res = await fetch('/api/generate', {
                 method: 'POST',
-                body: JSON.stringify(researchData)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(fullPlan) // ✅ ENVIAMOS EL PLAN COMPLETO CON FLAGS
             });
             const result = await res.json();
             if (result.success) setStep('success');
@@ -248,7 +307,8 @@ export default function GeneratorApp() {
         if (!researchData?.clusters) return { clusters: 0, keywords: 0, pages: 0 };
         const clusters = researchData.clusters.length;
         const keywords = researchData.clusters.reduce((sum, c) => sum + (c.keywords?.length || 0), 0);
-        const pages = clusters + 1 + (formData.generateLocations ? (researchData.locations?.length || 0) : 0);
+        // Si es One Page Mode, NO sumamos los clusters (servicios) a las páginas
+        const pages = (formData.onePageMode ? 0 : clusters) + 1 + (formData.generateLocations ? (researchData.locations?.length || 0) : 0);
         return { clusters, keywords, pages };
     };
 
@@ -327,7 +387,46 @@ export default function GeneratorApp() {
                     </p>
                 </div>
 
-                <form onSubmit={handleDiscoverServices} className="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl space-y-6">
+                {/* LOAD PLAN BUTTON */}
+                <div className="flex justify-center mb-8">
+                    <button
+                        onClick={async () => {
+                            try {
+                                const res = await fetch('/project_plan.json');
+                                if (!res.ok) throw new Error('No hay un plan guardado previo.');
+                                const plan = await res.json();
+                                setResearchData(plan);
+                                setFormData({
+                                    ...formData,
+                                    niche: plan.niche,
+                                    city: plan.city,
+                                    generateLocations: plan.generate_locations || false,
+                                    onePageMode: plan.one_page_mode || false
+                                });
+                                setStep('review');
+                            } catch (err) {
+                                alert(err.message);
+                            }
+                        }}
+                        className="text-indigo-400 hover:text-indigo-300 text-sm font-bold flex items-center gap-2 border border-indigo-500/30 px-4 py-2 rounded-lg hover:bg-indigo-500/10 transition-all"
+                    >
+                        <Database className="w-4 h-4" /> Cargar Último Plan Guardado
+                    </button>
+                </div>
+
+                <form onSubmit={manualMode ? handleManualProcess : handleDiscoverServices} className="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl space-y-6">
+
+                    {/* MANUAL MODE TOGGLE */}
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            onClick={() => setManualMode(!manualMode)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${manualMode ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+                        >
+                            <FileText className="w-4 h-4" />
+                            {manualMode ? 'Modo Manual Activo' : 'Activar Modo Manual'}
+                        </button>
+                    </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-300 mb-2">
                             Enter a <span className="text-white font-bold underline decoration-indigo-500">Keyword</span> that best describes your Business
@@ -357,28 +456,29 @@ export default function GeneratorApp() {
                         </div>
                     </div>
 
-                    {/* TOP 10 Filter Toggle */}
-                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
-                        <label className="flex items-center justify-between cursor-pointer">
-                            <div>
-                                <div className="text-sm font-medium text-slate-200">
-                                    🎯 Filter TOP 10 Positions Only
-                                </div>
-                                <div className="text-xs text-slate-400 mt-1">
-                                    Extract only keywords where competitors rank in positions 1-10 (higher quality)
-                                </div>
+                    {manualMode ? (
+                        <div className="animate-fade-in space-y-4">
+                            <div className="flex justify-between items-end">
+                                <label className="block text-sm font-medium text-slate-300">
+                                    Paste Keywords or Upload CSV <span className="text-slate-500">(Keyword, Volume)</span>
+                                </label>
+                                <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 transition-colors">
+                                    <Upload className="w-3 h-3" /> Upload CSV
+                                    <input type="file" accept=".csv,.txt" className="hidden" onChange={handleFileUpload} />
+                                </label>
                             </div>
-                            <div className="relative">
-                                <input
-                                    type="checkbox"
-                                    checked={formData.top10Filter}
-                                    onChange={(e) => setFormData({ ...formData, top10Filter: e.target.checked })}
-                                    className="sr-only peer"
-                                />
-                                <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                            </div>
-                        </label>
-                    </div>
+                            <textarea
+                                className="w-full h-64 bg-slate-900 border border-slate-700 rounded-lg py-4 px-4 focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-mono placeholder-slate-600"
+                                placeholder={`Ejemplo CSV:\nkeyword;volumen\nquitar gotele;500\nalisar paredes;300\n...`}
+                                value={manualInput}
+                                onChange={e => setManualInput(e.target.value)}
+                                required
+                            />
+                            <p className="text-xs text-slate-500">
+                                * Detectamos automáticamente separadores como comas (,) o punto y coma (;).
+                            </p>
+                        </div>
+                    ) : null}
 
                     {/* Generate Locations Toggle */}
                     <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
@@ -396,6 +496,29 @@ export default function GeneratorApp() {
                                     type="checkbox"
                                     checked={formData.generateLocations}
                                     onChange={(e) => setFormData({ ...formData, generateLocations: e.target.checked })}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    {/* One Page Mode Toggle */}
+                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
+                        <label className="flex items-center justify-between cursor-pointer">
+                            <div>
+                                <div className="text-sm font-medium text-slate-200">
+                                    📄 Micro-Niche Mode (One Page Only)
+                                </div>
+                                <div className="text-xs text-slate-400 mt-1">
+                                    Generate only the Homepage. Ideal for very specific services (e.g. "Quitar Gotelé").
+                                </div>
+                            </div>
+                            <div className="relative">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.onePageMode}
+                                    onChange={(e) => setFormData({ ...formData, onePageMode: e.target.checked })}
                                     className="sr-only peer"
                                 />
                                 <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
@@ -712,7 +835,18 @@ export default function GeneratorApp() {
                         <h2 className="text-xl font-bold text-white">Estrategia SEO Generada</h2>
                         <p className="text-xs text-slate-400">{researchData.market_analysis?.substring(0, 100)}...</p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 items-center">
+                        {/* One Page Mode Toggle in Review Step */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-2 rounded-lg border border-slate-600">
+                            <input
+                                type="checkbox"
+                                checked={formData.onePageMode}
+                                onChange={(e) => setFormData({ ...formData, onePageMode: e.target.checked })}
+                                className="w-4 h-4 rounded border-slate-500 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            <span className="text-xs font-bold text-slate-300">One Page Mode</span>
+                        </label>
+
                         <button onClick={handleSavePlan} disabled={saving} className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg">
                             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Guardar Plan
                         </button>
@@ -1076,6 +1210,54 @@ export default function GeneratorApp() {
                         </div>
                     ))}
                 </div>
+
+                {/* LOCATIONS MANAGEMENT (Only if enabled) */}
+                {formData.generateLocations && (
+                    <div className="mt-8 bg-slate-900/80 p-6 rounded-xl border border-indigo-500/30">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-bold text-indigo-400 flex items-center gap-2">
+                                <MapPin className="w-5 h-5" /> Estrategia de Localidades
+                            </h3>
+                            <button
+                                onClick={() => {
+                                    const loc = prompt("Nombre de la localidad o barrio:");
+                                    if (loc && loc.trim()) {
+                                        const newLocations = [...(researchData.locations || [])];
+                                        newLocations.push(loc.trim());
+                                        setResearchData({ ...researchData, locations: newLocations });
+                                    }
+                                }}
+                                className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-sm font-bold flex items-center gap-1"
+                            >
+                                <Plus className="w-4 h-4" /> Añadir Zona
+                            </button>
+                        </div>
+
+                        {(!researchData.locations || researchData.locations.length === 0) ? (
+                            <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-lg text-slate-500">
+                                <p>No hay localidades definidas.</p>
+                                <p className="text-sm">Añade barrios o ciudades cercanas para generar landing pages locales.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {researchData.locations.map((loc, idx) => (
+                                    <div key={idx} className="bg-slate-800 p-3 rounded-lg border border-slate-700 flex justify-between items-center group">
+                                        <span className="text-slate-200 font-medium">{loc}</span>
+                                        <button
+                                            onClick={() => {
+                                                const newLocations = researchData.locations.filter((_, i) => i !== idx);
+                                                setResearchData({ ...researchData, locations: newLocations });
+                                            }}
+                                            className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* CONFIRMATION MODAL */}
                 {showConfirmModal && (

@@ -229,6 +229,12 @@ const pages = defineCollection({
             subtitle: z.string().optional(),
         }).optional(),
 
+        // Services List (One Page Mode)
+        servicesList: z.array(z.object({
+            title: z.string(),
+            description: z.string(),
+        })).optional(),
+
         // Options
         stickyPhone: z.boolean().optional().default(true),
 
@@ -237,6 +243,7 @@ const pages = defineCollection({
             z.discriminatedUnion('discriminant', [
                 z.object({ discriminant: z.literal('hero') }),
                 z.object({ discriminant: z.literal('services') }),
+                z.object({ discriminant: z.literal('services_list') }), // Nuevo bloque
                 z.object({ discriminant: z.literal('about') }),
                 z.object({ discriminant: z.literal('features') }),
                 z.object({ discriminant: z.literal('process') }),
@@ -320,3 +327,5 @@ export const collections = {
     footer,
 
 };
+
+// Force reload

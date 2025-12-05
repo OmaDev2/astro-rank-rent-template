@@ -446,134 +446,69 @@ export async function getCompetitorKeywords(domain, location, targetCity, top10O
 }
 
 /**
- * Obtener keywords relacionadas (seed expansion)
- * IMPORTANTE: Labs API solo acepta países
+ * Obtener keywords relacionadas (Google Ads API - City Level)
+ * Reemplaza a Labs API para soportar granularidad por CIUDAD
  */
 export async function getRelatedKeywords(keyword, location, targetCity) {
-    // Labs API SOLO acepta países, no ciudades específicas
-    const locationName = getLocationName(location);
-    console.log(`🌱 Keywords relacionadas: "${keyword}" ${locationName ? `(${locationName})` : '(Global)'}`);
+    const locationCode = getLocationCode(location);
+    console.log(`🌱 Keywords relacionadas (Ads API): "${keyword}" (Location: ${locationCode})`);
 
     const payload = {
-        keyword,
-        language_name: "Spanish",
-        limit: 500,  // Aumentado de 100 a 500 para capturar máxima variedad
-        filters: [
-            ["keyword_data.keyword_info.search_volume", ">", 10],
-            "and",
-            ["keyword_data.keyword_info.search_volume", "<", 100000]
-        ]
+        keywords: [keyword],
+        location_code: locationCode,
+        language_code: "es",
+        include_seed_keyword: true,
+        limit: 100 // Ads API suele devolver muchas
     };
 
-    // Solo incluir location_name si existe
-    if (locationName) {
-        payload.location_name = locationName;
-    }
-
-    const result = await postDataForSEO('/dataforseo_labs/google/related_keywords/live', [payload]);
+    const result = await postDataForSEO('/keywords_data/google_ads/keyword_ideas/live', [payload]);
 
     if (!result?.[0]?.items) return [];
 
-    let keywords = result[0].items.map(k => {
-        const kwData = k.keyword_data || k;
-        const kwInfo = kwData.keyword_info || kwData;
-
-        return {
-            keyword: kwData.keyword || 'unknown',  // El keyword está en keyword_data.keyword
-            volume: kwInfo.search_volume || 0,
-            cpc: kwInfo.cpc || 0,
-            competition: kwInfo.competition || 0,
-            competition_level: kwInfo.competition_level || 'UNKNOWN',
-            difficulty: kwData.keyword_properties?.keyword_difficulty || 0,
-            source: 'related'
-        };
-    });
-
-    // 🔥 FILTRADO DE CIUDAD DESACTIVADO - Capturar máxima variedad
-    // El filtro eliminaba keywords valiosas como "rejas de seguridad", "barandillas", etc.
-    // Confiamos en el scoring de relevancia para priorizar
-
-    /*
-    if (targetCity) {
-        const beforeCount = keywords.length;
-        keywords = filterByCity(keywords, targetCity);
-        console.log(`   📍 Filtrado ciudad: ${beforeCount} → ${keywords.length} keywords`);
-    }
-    */
-
-    console.log(`✅ ${keywords.length} keywords relacionadas`);
-    return keywords;
+    return result[0].items.map(k => ({
+        keyword: k.text,
+        volume: k.keyword_info?.search_volume || 0,
+        cpc: k.keyword_info?.cpc || 0,
+        competition: k.keyword_info?.competition || 0,
+        competition_level: k.keyword_info?.competition_level || 'UNKNOWN',
+        source: 'related_ads'
+    }));
 }
 
 /**
- * Obtener keywords de sugerencia (autocomplete)
+ * Obtener sugerencias de Autocomplete (Google Autocomplete - City Level)
+ * Reemplaza a Labs API para obtener lo que la gente realmente escribe en esa ciudad
  */
 export async function getKeywordSuggestions(keyword, location) {
-    // Labs API SOLO acepta location_name (países), no location_code
-    const locationName = getLocationName(location);
-    console.log(`💡 Sugerencias para: "${keyword}" ${locationName ? `(${locationName})` : '(Global)'}`);
+    const locationCode = getLocationCode(location);
+    console.log(`💡 Autocomplete para: "${keyword}" (Location: ${locationCode})`);
 
     const payload = {
         keyword,
-        language_name: "Spanish",
-        limit: 700  // Aumentado de 50 a 700 para máxima cobertura
+        location_code: locationCode,
+        language_code: "es",
+        cursor_pointer: 0
     };
 
-    // Solo incluir location_name si existe
-    if (locationName) {
-        payload.location_name = locationName;
-    }
-
-    const result = await postDataForSEO('/dataforseo_labs/google/keyword_suggestions/live', [payload]);
+    const result = await postDataForSEO('/serp/google/autocomplete/live', [payload]);
 
     if (!result?.[0]?.items) return [];
 
+    // Autocomplete no devuelve volúmenes, así que los marcamos para buscar volumen después si es necesario
+    // O simplemente devolvemos la lista limpia
     return result[0].items.map(k => ({
         keyword: k.keyword,
-        volume: k.keyword_info?.search_volume || 0,
-        cpc: k.keyword_info?.cpc || 0,
-        competition: k.keyword_info?.competition || 0,
-        source: 'suggestion'
+        volume: 0, // Autocomplete no da volumen
+        source: 'autocomplete'
     }));
 }
 
 /**
- * Obtener ideas de keywords (long-tail variations)
- * Este endpoint genera variaciones automáticas combinando el seed con modificadores
- * Ejemplo: "herrero" → "herrero cerca de mi", "reparación herrero", "precio herrero", etc.
+ * Obtener ideas de keywords (Google Ads API)
+ * Alias para getRelatedKeywords pero con configuración para más amplitud
  */
 export async function getKeywordIdeas(keyword, location) {
-    const locationName = getLocationName(location);
-    console.log(`💡 Ideas de keywords para: "${keyword}" ${locationName ? `(${locationName})` : '(Global)'}`);
-
-    const payload = {
-        keyword,
-        language_name: "Spanish",
-        include_seed_keyword: true,
-        include_serp_info: false,
-        limit: 1000,  // Máximo permitido para capturar todas las variaciones
-        filters: [
-            ["keyword_data.keyword_info.search_volume", ">", 10]
-        ]
-    };
-
-    // Solo incluir location_name si existe
-    if (locationName) {
-        payload.location_name = locationName;
-    }
-
-    const result = await postDataForSEO('/dataforseo_labs/google/keyword_ideas/live', [payload]);
-
-    if (!result?.[0]?.items) return [];
-
-    return result[0].items.map(k => ({
-        keyword: k.keyword,
-        volume: k.keyword_info?.search_volume || 0,
-        cpc: k.keyword_info?.cpc || 0,
-        competition: k.keyword_info?.competition || 0,
-        difficulty: k.keyword_properties?.keyword_difficulty || 0,
-        source: 'idea'
-    }));
+    return getRelatedKeywords(keyword, location);
 }
 
 /**

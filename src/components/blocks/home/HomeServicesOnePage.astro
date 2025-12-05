@@ -1,0 +1,57 @@
+---
+import { CheckCircle } from "lucide-react";
+
+const { title, subtitle, services, bgClass = "bg-secondary" } = Astro.props;
+
+// Si no hay servicios, no renderizamos nada
+if (!services || services.length === 0) return null;
+---
+
+<section id="servicios" class={`py-20 ${bgClass} border-b border-heading/10`}>
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-12 bg-primary"></div>
+                <span
+                    class="text-primary font-bold uppercase tracking-widest text-sm"
+                    >Nuestros Servicios</span
+                >
+                <div class="h-px w-12 bg-primary"></div>
+            </div>
+            <h2
+                class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
+            >
+                {title || "Nuestros Servicios"}
+            </h2>
+            {
+                subtitle && (
+                    <p class="text-body max-w-2xl mx-auto text-lg">
+                        {subtitle}
+                    </p>
+                )
+            }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {
+                services.map((service: any) => (
+                    <div class="group relative overflow-hidden rounded-xl bg-surface p-8 border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                        <div class="mb-6 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                            <CheckCircle className="w-6 h-6" />
+                        </div>
+
+                        <h3 class="text-2xl font-heading font-bold text-heading mb-4 group-hover:text-primary transition-colors">
+                            {service.title}
+                        </h3>
+
+                        <p class="text-body leading-relaxed">
+                            {service.description}
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
