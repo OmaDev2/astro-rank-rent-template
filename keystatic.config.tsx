@@ -341,6 +341,18 @@ export default config({
                     subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
                 }, { label: 'Sección Servicios' }),
 
+                // --- LISTA DE SERVICIOS (ONE PAGE MODE) ---
+                servicesList: fields.array(
+                    fields.object({
+                        title: fields.text({ label: 'Título del Servicio' }),
+                        description: fields.text({ label: 'Descripción', multiline: true }),
+                    }),
+                    {
+                        label: 'Lista de Servicios (Modo One Page)',
+                        itemLabel: (props) => props.fields.title.value || 'Servicio',
+                    }
+                ),
+
                 // --- SECCIÓN SOBRE NOSOTROS (NUEVA) ---
                 aboutSection: fields.object({
                     title: fields.text({ label: 'Título Principal' }),
@@ -458,6 +470,10 @@ export default config({
                     },
                     services: {
                         label: 'Grilla de Servicios',
+                        schema: fields.empty()
+                    },
+                    services_list: {
+                        label: 'Lista de Servicios (One Page)',
                         schema: fields.empty()
                     },
                     about: {

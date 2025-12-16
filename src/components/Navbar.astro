@@ -61,7 +61,10 @@ const locations = await getCollection("locations");
                         }
 
                         // CASO 2: DESPLEGABLE SERVICIOS
-                        if (item.type === "services_dropdown") {
+                        if (
+                            item.type === "services_dropdown" &&
+                            services.length > 0
+                        ) {
                             return (
                                 <div class="relative group">
                                     <button class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1 py-4">
@@ -83,7 +86,10 @@ const locations = await getCollection("locations");
                         }
 
                         // CASO 3: DESPLEGABLE ZONAS
-                        if (item.type === "locations_dropdown") {
+                        if (
+                            item.type === "locations_dropdown" &&
+                            locations.length > 0
+                        ) {
                             return (
                                 <div class="relative group">
                                     <button class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1 py-4">

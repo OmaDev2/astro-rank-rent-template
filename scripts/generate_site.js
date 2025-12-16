@@ -123,6 +123,28 @@ async function main() {
 
     const cityName = plan.city.split(',')[0].trim();
 
+    // --- 1.5 ASEGURAR DIRECTORIOS DE CONTENIDO ---
+    // Astro falla si las carpetas de colecciones no existen, aunque estén vacías.
+    const contentDirs = [
+        'src/content/services',
+        'src/content/locations',
+        'src/content/testimonials',
+        'src/content/pages',
+        'src/content/business',
+        'src/content/design',
+        'src/content/social',
+        'src/content/analytics',
+        'src/content/schema',
+        'src/content/navigation',
+        'src/content/footer',
+        'src/content/projects'
+    ];
+
+    console.log("📁 Asegurando estructura de directorios...");
+    for (const dir of contentDirs) {
+        await fs.mkdir(dir, { recursive: true });
+    }
+
     // 2. IDENTIFICAR CLUSTER PRINCIPAL (HOME)
     // Buscamos el cluster con mayor volumen y relevancia para ser la Home
     let mainCluster = null;
