@@ -11,7 +11,8 @@
         "reset": "node scripts/utils/reset.js",
         "export": "node scripts/utils/export_client.js",
         "manual": "node scripts/utils/manual_research.js",
-        "generate_site": "node scripts/generate_site.js"
+        "generate_site": "node scripts/generate_site.js",
+        "research:wizard": "node scripts/utils/research_wizard.js"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.3",

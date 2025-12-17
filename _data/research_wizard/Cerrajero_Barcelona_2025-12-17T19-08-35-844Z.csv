@@ -1,0 +1,51 @@
+Category,Keyword/Question,Intent,Volume,Competition,CPC
+Main,"Cerrajero urgente Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Cerrajero 24 horas Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Cerrajeros Barcelona precios",Commercial/Informational,N/A,N/A,N/A
+Main,"Cerrajero a domicilio Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Cerrajeros baratos Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Abrir puerta Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Reparación cerraduras Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Cambiar cerradura Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Instalación cerraduras Barcelona",Commercial/Informational,N/A,N/A,N/A
+Main,"Cerrajero cerca de mí Barcelona",Commercial/Informational,N/A,N/A,N/A
+LongTail,"cómo optimizar mi sitio web para búsquedas por voz",Commercial/Informational,N/A,N/A,N/A
+LongTail,"mejores prácticas para seo de voz en 2024",Commercial/Informational,N/A,N/A,N/A
+LongTail,"reparación urgente de lavadora en mi zona 24 horas",Commercial/Informational,N/A,N/A,N/A
+LongTail,"cuánto cuesta un fontanero urgente un domingo",Commercial/Informational,N/A,N/A,N/A
+LongTail,"dónde encontrar un servicio de limpieza de alfombras con reseñas verificadas",Commercial/Informational,N/A,N/A,N/A
+LongTail,"agencia seo especializada en ecommerce de ropa deportiva",Commercial/Informational,N/A,N/A,N/A
+LongTail,"qué tipo de seguro de coche necesito para conductor novel",Commercial/Informational,N/A,N/A,N/A
+LongTail,"receta fácil de tarta de manzana con masa quebrada casera",Commercial/Informational,N/A,N/A,N/A
+LongTail,"programa de entrenamiento personalizado para maratón en 12 semanas",Commercial/Informational,N/A,N/A,N/A
+LongTail,"tutorial paso a paso para crear una tienda online con wordpress y woocommerce",Commercial/Informational,N/A,N/A,N/A
+NLP,"Aquí hay 10 frases o variaciones de lenguaje natural para las búsquedas",Commercial/Informational,N/A,N/A,N/A
+NLP,"enfocadas en cómo una persona mayor o alguien sin conocimiento técnico las formularía:
+
+1.  Necesito ayuda con mi correo electrónico.
+2.  ¿Cómo hago para ver fotos en mi aparato?
+3.  ¿Dónde encuentro las noticias en este teléfono?
+4.  No entiendo cómo usar esta cosa para hablar con mi nieto/a.
+5.  Quiero buscar algo en internet",Commercial/Informational,N/A,N/A,N/A
+NLP,"¿cómo le hago?
+6.  ¿Cómo prendo esta cosa que me mandan mensajes?
+7.  Necesito ayuda para cambiar la letra",Commercial/Informational,N/A,N/A,N/A
+NLP,"está muy chiquita.
+8.  ¿Cómo le hablo a la máquina para que me haga caso?
+9.  ¿Dónde está la cosa para llamar a mi hija?
+10. ¿Cómo hago para que este aparato me diga la hora?",Commercial/Informational,N/A,N/A,N/A
+Semantic,"Amaestramiento",Commercial/Informational,N/A,N/A,N/A
+Semantic,"ganzúa",Commercial/Informational,N/A,N/A,N/A
+Semantic,"bombín",Commercial/Informational,N/A,N/A,N/A
+Semantic,"cerrojo",Commercial/Informational,N/A,N/A,N/A
+Semantic,"cilindro de seguridad",Commercial/Informational,N/A,N/A,N/A
+Semantic,"extracción de llaves",Commercial/Informational,N/A,N/A,N/A
+Semantic,"bumping",Commercial/Informational,N/A,N/A,N/A
+Semantic,"cerradura de gorjas",Commercial/Informational,N/A,N/A,N/A
+Semantic,"llave maestra",Commercial/Informational,N/A,N/A,N/A
+Semantic,"apertura judicial",Commercial/Informational,N/A,N/A,N/A
+FAQ,"¿Cuál es el precio total del servicio, incluyendo todos los costos adicionales?",Informational,-,-,-
+FAQ,"¿Cuánto tiempo tomará completar el servicio desde el inicio hasta la finalización?",Informational,-,-,-
+FAQ,"¿Ofrecen alguna garantía o política de reembolso si no estoy satisfecho con el resultado?",Informational,-,-,-
+FAQ,"¿Cómo se compara su precio con el de otros proveedores similares en el mercado?",Informational,-,-,-
+FAQ,"¿Qué sucede si surgen problemas o retrasos inesperados durante la prestación del servicio y cómo afectaría al precio final?",Informational,-,-,-
