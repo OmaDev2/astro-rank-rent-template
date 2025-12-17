@@ -16,6 +16,12 @@ export default {
 				heading: 'rgb(var(--color-text-heading) / <alpha-value>)',
 				text: 'rgb(var(--color-text-body) / <alpha-value>)',
 				body: 'rgb(var(--color-text-body) / <alpha-value>)', // Alias for text-body to match user request
+
+				// Brand Colors (Semantic)
+				brand: {
+					whatsapp: '#25D366',
+					'whatsapp-dark': '#128C7E', // Standard dark teal for hover
+				},
 			},
 			fontFamily: {
 				sans: ['var(--font-body)', 'sans-serif'],

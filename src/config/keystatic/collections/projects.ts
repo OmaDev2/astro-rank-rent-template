@@ -1,7 +1,7 @@
 import { collection, fields } from '@keystatic/core';
 
 export const projects = collection({
-    label: 'Portafolio',
+    label: '💼 Portafolio',
     slugField: 'title',
     path: 'src/content/projects/*',
     format: { contentField: 'content' },

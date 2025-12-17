@@ -35,7 +35,7 @@ Accede a `http://localhost:4321/keystatic` y configura:
 
 ### 3. Personalización de Contenido
 
-#### Página de Inicio
+#### 
 - [ ] Editar título y subtítulo del Hero
 - [ ] Actualizar sección "Sobre Nosotros"
 - [ ] Añadir/editar testimonios

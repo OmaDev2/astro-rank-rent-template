@@ -10,32 +10,14 @@ import { CheckCircle, ArrowRight, Shield } from "lucide-react";
 import HeroBlock from "../components/blocks/HeroBlock.astro";
 import FeaturesBlock from "../components/blocks/FeaturesBlock.astro";
 
-// --- 1. DEFINICIÓN DE TIPOS ---
-interface Service {
-    slug: string;
-    data: {
-        title: string;
-        shortDesc?: string;
-    };
-}
-
-interface Location {
-    slug: string;
-    data: {
-        name: string;
-    };
-}
-
-interface Block {
-    discriminant: "hero" | "features" | "content" | "faq" | "cta";
-}
+import type { Service, Location, Block, FAQItem } from "../types";
 
 interface Props {
     title: string;
     shortDesc: string;
     icon: string;
     heroImage?: string;
-    faq?: Array<{ question: string; answer: string }>;
+    faq?: FAQItem[];
     content: any;
     slug: string;
     // Datos globales

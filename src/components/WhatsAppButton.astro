@@ -69,7 +69,14 @@ const phoneUrl = `tel:${business?.data?.phone?.replace(/\s/g, "") || ""}`;
         right: 24px;
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(
+            135deg,
+            theme("colors.brand.whatsapp") 0%,
+            theme("colors.brand.whatsapp-dark") 100%
+        );
+        border-radius: 50%;
         border-radius: 50%;
         display: flex;
         align-items: center;

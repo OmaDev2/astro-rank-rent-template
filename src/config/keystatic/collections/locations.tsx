@@ -2,7 +2,7 @@ import { collection, fields } from '@keystatic/core';
 import { MousePointer2, AlertTriangle, Phone, Building, Image } from 'lucide-react';
 
 export const locations = collection({
-    label: 'Zonas de Servicio',
+    label: '📍 Zonas de Servicio',
     slugField: 'name',
     path: 'src/content/locations/*',
     format: { contentField: 'content' },
