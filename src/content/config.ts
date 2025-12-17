@@ -75,14 +75,37 @@ const business = defineCollection({
         logo: z.string().optional(),
         siteUrl: z.string().optional(),
         businessType: z.enum([
+            'LocalBusiness',
             'Locksmith',
             'Plumber',
             'Electrician',
-            'LocalBusiness',
-            'HomeAndConstructionBusiness',
             'LegalService',
+            'TravelAgency',
+            'AutoRental',
+            'ProfessionalService',
+            'InsuranceAgency',
+            'BarberShop',
+            'RealEstateAgent',
+            'SportsActivityLocation',
+            'Dentist',
             'MedicalBusiness',
-            'HealthAndBeautyBusiness'
+            'AccountingService',
+            'GeneralContractor',
+            'PetStore',
+            'HealthAndBeautyBusiness',
+            'Pharmacy',
+            'Florist',
+            'HomeAndConstructionBusiness',
+            'JewelryStore',
+            'MovingCompany',
+            'HousePainter',
+            'HairSalon',
+            'Restaurant',
+            'AutoRepair',
+            'RoofingContractor',
+            'TaxiService',
+            'Store',
+            'VeterinaryCare'
         ]).default('LocalBusiness'),
         city: z.string().optional(),
         address: z.string().optional(),
@@ -310,6 +333,29 @@ const footer = defineCollection({
     }),
 });
 
+const blog = defineCollection({
+    schema: z.object({
+        title: z.string(),
+        pubDate: z.string().optional(), // ISO date string
+        description: z.string().optional(),
+        author: z.string().optional(),
+        image: z.string().optional(),
+        tags: z.array(z.string()).optional(),
+        category: z.string().optional(),
+        featured: z.boolean().default(false),
+
+        // Content blocks for rich layout if needed
+        blocks: z.array(
+            z.discriminatedUnion('discriminant', [
+                z.object({ discriminant: z.literal('content') }),
+                z.object({ discriminant: z.literal('faq') }),
+                z.object({ discriminant: z.literal('cta') }),
+                z.object({ discriminant: z.literal('related_posts') }), // Future proofing
+            ])
+        ).optional(),
+    }),
+});
+
 
 export const collections = {
     locations,
@@ -325,6 +371,7 @@ export const collections = {
     navigation,
     form,
     footer,
+    blog,
 
 };
 

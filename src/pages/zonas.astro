@@ -32,78 +32,119 @@ const schema: WithContext<CollectionPage> = {
 ---
 
 <Layout
-    title={`Zonas de Servicio | ${siteName}`}
-    description={`Cobertura de ${niche} en ${city} y provincia.`}
+    title={`Cobertura Premium | ${siteName}`}
+    description={`Servicio de ${niche} líder en ${city} y toda la provincia. Consulta nuestras zonas de cobertura especializada.`}
     schema={schema}
 >
-    <section class="relative py-20 bg-secondary overflow-hidden">
-        <div
-            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop')] bg-cover bg-center opacity-10"
-        >
-        </div>
-        <div
-            class="absolute inset-0 bg-gradient-to-b from-secondary via-secondary/90 to-secondary"
-        >
+    {/* --- HERO SECTION PREMIUM --- */}
+    <section
+        class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-zinc-950"
+    >
+        <div class="absolute inset-0 z-0">
+            <div
+                class="absolute inset-0 bg-gradient-to-b from-zinc-950/50 via-zinc-950/80 to-zinc-950 z-10"
+            >
+            </div>
+            <img
+                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop"
+                alt="Fondo Abstracto"
+                class="w-full h-full object-cover opacity-30 mix-blend-overlay grayscale"
+            />
         </div>
 
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-3xl mx-auto text-center">
-                <div class="flex items-center justify-center gap-2 mb-6">
-                    <MapPin className="w-8 h-8 text-primary" />
-                    <span
-                        class="text-primary font-bold uppercase tracking-widest text-sm"
-                        >Cobertura Total</span
-                    >
-                </div>
-                <h1
-                    class="text-5xl lg:text-6xl font-heading font-bold text-heading mb-6"
+        <div class="container mx-auto px-4 relative z-20 text-center">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 mb-8 animate-fade-in-up"
+            >
+                <MapPin className="w-4 h-4 text-primary-400" />
+                <span
+                    class="text-xs font-bold tracking-[0.2em] text-white/80 uppercase"
+                    >Cobertura Oficial</span
                 >
-                    Zonas de Servicio
-                </h1>
-                <p class="text-xl text-body leading-relaxed">
-                    Ofrecemos servicios de {niche} profesional en {city} capital
-                    y toda la provincia. Consulta si llegamos a tu zona.
-                </p>
             </div>
+
+            <h1
+                class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-tight uppercase animate-fade-in-up delay-100"
+            >
+                Donde Tú <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-indigo-400"
+                    >Estás</span
+                >
+            </h1>
+
+            <p
+                class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200"
+            >
+                Desplegamos nuestros equipos de {niche} en {city} capital y los principales
+                distritos. Servicio rápido, discreto y de alta gama.
+            </p>
         </div>
     </section>
 
-    <section class="py-20 bg-secondary border-t border-heading/5">
-        <div class="container mx-auto px-4">
+    {/* --- ZONAS CONTENT --- */}
+    <section class="py-24 bg-zinc-950 border-t border-white/5 relative">
+        {/* Decorative elements */}
+        <div
+            class="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-[100px] pointer-events-none"
+        >
+        </div>
+        <div
+            class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none"
+        >
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10 space-y-24">
+            {/* Zonas Residenciales */}
             {
                 residenciales.length > 0 && (
-                    <div class="mb-16">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="p-3 bg-primary/20 rounded-lg">
-                                <Home className="w-6 h-6 text-primary" />
-                            </div>
+                    <div class="group/section">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/10 pb-8">
                             <div>
-                                <h2 class="text-3xl font-heading font-bold text-heading">
-                                    Zonas Residenciales
+                                <div class="flex items-center gap-3 mb-2 text-primary-400">
+                                    <Home className="w-6 h-6" />
+                                    <span class="text-sm font-bold tracking-widest uppercase">
+                                        Barrios Exclusivos
+                                    </span>
+                                </div>
+                                <h2 class="text-4xl font-bold text-white">
+                                    Residencial
                                 </h2>
-                                <p class="text-body/70 text-sm">
-                                    Viviendas y comunidades
-                                </p>
                             </div>
+                            <p class="text-zinc-500 text-sm max-w-md text-right md:text-left">
+                                Atención prioritaria en urbanizaciones privadas
+                                y domicilios particulares.
+                            </p>
                         </div>
+
                         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {residenciales.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                                    class="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all hover:bg-white/10 hover:border-primary-500/50 hover:shadow-2xl hover:shadow-primary-500/10 hover:-translate-y-1"
                                 >
-                                    <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
-                                            {location.data.name}
-                                        </h3>
-                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                    <div class="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-0 translate-x-4">
+                                        <ArrowRight className="w-6 h-6 text-primary-400" />
                                     </div>
-                                    <div class="flex flex-wrap gap-2">
-                                        {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-heading/5 text-body/70 rounded">
-                                                CP {zip}
+
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors">
+                                        {location.data.name}
+                                    </h3>
+
+                                    <div class="flex flex-wrap gap-2 mt-4">
+                                        {location.data.zipCodes
+                                            .slice(0, 3)
+                                            .map((zip) => (
+                                                <span class="text-xs font-mono px-2 py-1 bg-black/30 text-zinc-400 rounded border border-white/5">
+                                                    {zip}
+                                                </span>
+                                            ))}
+                                        {location.data.zipCodes.length > 3 && (
+                                            <span class="text-xs font-mono px-2 py-1 bg-black/30 text-zinc-500 rounded border border-white/5">
+                                                +
+                                                {location.data.zipCodes.length -
+                                                    3}
                                             </span>
-                                        ))}
+                                        )}
                                     </div>
                                 </a>
                             ))}
@@ -112,40 +153,48 @@ const schema: WithContext<CollectionPage> = {
                 )
             }
 
+            {/* Zonas Industriales */}
             {
                 industriales.length > 0 && (
-                    <div class="mb-16">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="p-3 bg-primary/20 rounded-lg">
-                                <Factory className="w-6 h-6 text-primary" />
-                            </div>
+                    <div class="group/section">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/10 pb-8">
                             <div>
-                                <h2 class="text-3xl font-heading font-bold text-heading">
-                                    Polígonos Industriales
+                                <div class="flex items-center gap-3 mb-2 text-amber-400">
+                                    <Factory className="w-6 h-6" />
+                                    <span class="text-sm font-bold tracking-widest uppercase">
+                                        Empresas y Naves
+                                    </span>
+                                </div>
+                                <h2 class="text-4xl font-bold text-white">
+                                    Industrial
                                 </h2>
-                                <p class="text-body/70 text-sm">
-                                    Empresas y naves
-                                </p>
                             </div>
+                            <p class="text-zinc-500 text-sm max-w-md text-right md:text-left">
+                                Soluciones de gran escala para polígonos y
+                                centros logísticos.
+                            </p>
                         </div>
+
                         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {industriales.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                                    class="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all hover:bg-white/10 hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-500/10 hover:-translate-y-1"
                                 >
-                                    <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
-                                            {location.data.name}
-                                        </h3>
-                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                    <div class="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-0 translate-x-4">
+                                        <ArrowRight className="w-6 h-6 text-amber-400" />
                                     </div>
-                                    <div class="flex flex-wrap gap-2">
-                                        {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-heading/5 text-body/70 rounded">
-                                                CP {zip}
-                                            </span>
-                                        ))}
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">
+                                        {location.data.name}
+                                    </h3>
+                                    <div class="flex flex-wrap gap-2 mt-4">
+                                        {location.data.zipCodes
+                                            .slice(0, 3)
+                                            .map((zip) => (
+                                                <span class="text-xs font-mono px-2 py-1 bg-black/30 text-zinc-400 rounded border border-white/5">
+                                                    {zip}
+                                                </span>
+                                            ))}
                                     </div>
                                 </a>
                             ))}
@@ -154,40 +203,48 @@ const schema: WithContext<CollectionPage> = {
                 )
             }
 
+            {/* Centros Urbanos */}
             {
                 centros.length > 0 && (
-                    <div>
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="p-3 bg-primary/20 rounded-lg">
-                                <Building2 className="w-6 h-6 text-primary" />
-                            </div>
+                    <div class="group/section">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/10 pb-8">
                             <div>
-                                <h2 class="text-3xl font-heading font-bold text-heading">
-                                    Centros Urbanos
+                                <div class="flex items-center gap-3 mb-2 text-emerald-400">
+                                    <Building2 className="w-6 h-6" />
+                                    <span class="text-sm font-bold tracking-widest uppercase">
+                                        Centro Ciudad
+                                    </span>
+                                </div>
+                                <h2 class="text-4xl font-bold text-white">
+                                    Distritos Centro
                                 </h2>
-                                <p class="text-body/70 text-sm">
-                                    Zonas céntricas
-                                </p>
                             </div>
+                            <p class="text-zinc-500 text-sm max-w-md text-right md:text-left">
+                                Operativa adaptada a zonas de tráfico
+                                restringido y horarios comerciales.
+                            </p>
                         </div>
+
                         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {centros.map((location) => (
                                 <a
                                     href={`/zona/${location.slug}/`}
-                                    class="group p-6 bg-surface/50 border border-heading/10 rounded-lg hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10"
+                                    class="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all hover:bg-white/10 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 hover:-translate-y-1"
                                 >
-                                    <div class="flex items-start justify-between mb-4">
-                                        <h3 class="text-xl font-bold text-heading group-hover:text-primary transition-colors">
-                                            {location.data.name}
-                                        </h3>
-                                        <ArrowRight className="w-5 h-5 text-body/70 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                    <div class="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-0 translate-x-4">
+                                        <ArrowRight className="w-6 h-6 text-emerald-400" />
                                     </div>
-                                    <div class="flex flex-wrap gap-2">
-                                        {location.data.zipCodes.map((zip) => (
-                                            <span class="text-xs px-2 py-1 bg-heading/5 text-body/70 rounded">
-                                                CP {zip}
-                                            </span>
-                                        ))}
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+                                        {location.data.name}
+                                    </h3>
+                                    <div class="flex flex-wrap gap-2 mt-4">
+                                        {location.data.zipCodes
+                                            .slice(0, 3)
+                                            .map((zip) => (
+                                                <span class="text-xs font-mono px-2 py-1 bg-black/30 text-zinc-400 rounded border border-white/5">
+                                                    {zip}
+                                                </span>
+                                            ))}
                                     </div>
                                 </a>
                             ))}
@@ -196,23 +253,32 @@ const schema: WithContext<CollectionPage> = {
                 )
             }
 
+            {/* Empty State / CTA Final */}
             <div
-                class="mt-16 p-8 bg-gradient-to-r from-primary/20 to-accent/20 border border-primary/30 rounded-xl text-center"
+                class="mt-24 rounded-3xl bg-gradient-to-r from-zinc-900 to-black border border-white/10 p-12 text-center relative overflow-hidden group"
             >
-                <h3 class="text-2xl font-bold text-heading mb-3">
-                    ¿No encuentras tu zona?
-                </h3>
-                <p class="text-body mb-6">
-                    Aunque no esté listada, es probable que lleguemos. Consulta
-                    sin compromiso.
-                </p>
-                <a
-                    href="/contacto/"
-                    class="inline-flex items-center justify-center px-8 py-4 bg-primary hover:bg-accent text-white font-bold rounded transition-colors shadow-lg hover:shadow-primary/20"
+                <div
+                    class="absolute inset-0 bg-grid-white/[0.02] bg-[size:32px_32px] pointer-events-none"
                 >
-                    Contactar Ahora
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                </a>
+                </div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-bold text-white mb-4">
+                        ¿Tu zona no aparece en la lista?
+                    </h3>
+                    <p class="text-zinc-400 mb-8 max-w-2xl mx-auto">
+                        Cubrimos prácticamente toda la región. Si no ves tu
+                        barrio o código postal, contáctanos directamente para
+                        confirmar disponibilidad.
+                    </p>
+                    <a
+                        href="/contacto/"
+                        class="inline-flex items-center gap-3 px-8 py-4 bg-white text-black font-bold text-sm tracking-widest uppercase rounded-full hover:bg-zinc-200 transition-colors"
+                    >
+                        Consultar Disponibilidad <ArrowRight
+                            className="w-4 h-4"
+                        />
+                    </a>
+                </div>
             </div>
         </div>
     </section>

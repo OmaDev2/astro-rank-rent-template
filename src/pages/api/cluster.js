@@ -15,9 +15,9 @@ export const POST = async ({ request }) => {
 
         console.log(`🧠 API Cluster: Clustering ${keywords.length} keywords for "${niche}" in "${city}"`);
 
-        const clusters = await runGeminiClustering(keywords, niche, city);
+        const result = await runGeminiClustering(keywords, niche, city);
 
-        return new Response(JSON.stringify({ clusters }), {
+        return new Response(JSON.stringify(result), {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });

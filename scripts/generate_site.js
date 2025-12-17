@@ -1,113 +1,165 @@
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import path from 'path';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import JSON5 from 'json5';
 import dotenv from 'dotenv';
+import { validateContent, injectInternalLinks } from './content_processor.js';
 
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-pro",
-    generationConfig: { responseMimeType: "application/json" }
-});
+const MODEL_NAME = "gemini-2.5-pro";
+const CACHE_DIR = path.join(process.cwd(), '.cache', 'gemini');
+
+// Asegurar directorio de caché
+if (!fsSync.existsSync(CACHE_DIR)) {
+    fsSync.mkdirSync(CACHE_DIR, { recursive: true });
+}
+
+// --- UTILS ---
+function calculateHash(str) {
+    let hash = 0, i, chr;
+    if (str.length === 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return Math.abs(hash).toString(16);
+}
 
 // Helper para evitar rate limits
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Función auxiliar para crear JSONs de datos
-async function generateData(prompt, context = '') {
-    let text = '';
+// Cargar y procesar prompts externos
+async function loadPrompt(promptName, variables) {
     try {
-        console.log(`      ⏳ Consultando a Gemini (${context})...`);
-        const result = await model.generateContent(prompt);
-        text = result.response.text();
+        const promptPath = path.join(process.cwd(), 'src/prompts', `${promptName}.prompt.md`);
+        let content = await fs.readFile(promptPath, 'utf-8');
 
-        // Limpiar el texto: remover markdown code blocks
-        let jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        // Reemplazo simple de variables {{variable}}
+        for (const [key, value] of Object.entries(variables)) {
+            const regex = new RegExp(`{{${key}}}`, 'g');
+            // Manejamos arrays y objetos JSON stringified para listas complejas
+            let valStr = value;
+            if (Array.isArray(value)) valStr = value.join(', ');
+            if (typeof value === 'object' && value !== null) valStr = JSON.stringify(value);
+
+            content = content.replace(regex, valStr || '');
+        }
+        return content;
+    } catch (error) {
+        console.error(`❌ Error cargando prompt ${promptName}:`, error.message);
+        return null; // Prompt no encontrado
+    }
+}
+
+// Función auxiliar para crear JSONs de datos (CON CACHÉ)
+async function generateData(prompt, context = '') {
+    if (!process.env.GEMINI_API_KEY) {
+        console.error("❌ ERROR: Falta GEMINI_API_KEY en .env");
+        return null;
+    }
+
+    // CACHE CHECK
+    const cacheKey = `${context.replace(/[^a-z0-9]/gi, '_')}_${calculateHash(prompt)}.json`;
+    const cachePath = path.join(CACHE_DIR, cacheKey);
+
+    if (fsSync.existsSync(cachePath)) {
+        console.log(`      ⚡ Cache hit: ${context}`);
+        try {
+            const cachedData = JSON.parse(await fs.readFile(cachePath, 'utf-8'));
+            return cachedData;
+        } catch (e) {
+            console.warn("      ⚠️ Error leyendo caché, regenerando...");
+        }
+    }
+
+    console.log(`      ⏳ Consultando a Gemini (${context})...`);
+
+    // Configuración del modelo (re-instanciado o re-usado)
+    const model = genAI.getGenerativeModel({
+        model: MODEL_NAME,
+        generationConfig: { responseMimeType: "application/json" }
+    });
+
+    try {
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+
+        // Extracción Robusta de JSON (Soporte para CoT/Reasoning)
+        // Busca el primer '{' y el último '}' para aislar el objeto JSON
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+
+        if (!jsonMatch) {
+            console.warn(`      ⚠️ No se encontró JSON válido en la respuesta (${context}). Intentando limpieza básica...`);
+            // Fallback a limpieza simple
+            const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            const parsed = JSON5.parse(jsonStr); // Si falla aquí, irá al catch interactivo
+
+            // GUARDAR EN CACHÉ
+            await fs.writeFile(cachePath, JSON.stringify(parsed, null, 2));
+            await delay(2000);
+            return parsed;
+        }
+
+        const jsonStr = jsonMatch[0];
         const parsed = JSON5.parse(jsonStr);
+
+        // VALIDACIÓN DE CONTENIDO (Anti-IA)
+        const validation = validateContent(parsed);
+        if (!validation.valid) {
+            console.warn(`      ⚠️ ADVERTENCIA DE CALIDAD (${context}):`);
+            validation.warnings.forEach(w => console.warn(`         ${w}`));
+        }
+
+        // GUARDAR EN CACHÉ
+        await fs.writeFile(cachePath, JSON.stringify(parsed, null, 2));
 
         await delay(2000); // Delay para evitar rate limits
         return parsed;
+
     } catch (error) {
         console.error(`      ❌ ERROR en generateData (${context}):`, error.message);
         if (error.message.includes('quota') || error.message.includes('429')) {
             console.log(`      ⏸️  Rate limit detectado, esperando 30 segundos...`);
             await delay(30000);
+            // Podríamos reintentar aquí recursivamente si quisiéramos
         }
-        return null; // Devolver null para manejar el error arriba
+        return null;
     }
 }
 
-// Función para generar FAQs con Gemini (Priorizando PAA)
-async function generateFAQs(serviceName, city, longTailKeywords, paaQuestions = []) {
-    // Unimos keywords con comas para que se entiendan como conceptos relacionados, no solo una lista
+// Función para generar FAQs con Gemini (REFFACTORIZADA)
+async function generateFAQs(serviceName, city, longTailKeywords, paaQuestions = [], cityContextData = "{}") {
+    // Unimos keywords con comas para que se entiendan como conceptos relacionados
     const keywordsString = (longTailKeywords || []).map(k => k.keyword).join(', ');
 
     // Lógica para instrucciones de PAA
-    let paaInstructions = '';
-    const relevantPAA = paaQuestions.slice(0, 5).map(q => `- ${q.question}`).join('\n');
-
-    if (relevantPAA.length > 0) {
-        paaInstructions = `
-        OBJETIVO PRINCIPAL: Responder a las intenciones de búsqueda reales de los usuarios.
-        Usa PRIORITARIAMENTE las siguientes preguntas "People Also Ask" (PAA) de Google si son coherentes con el servicio:
-        ${relevantPAA}
-        
-        Si alguna PAA es demasiado genérica, adáptala ligeramente al contexto de "${serviceName}".
-        Si necesitas completar hasta llegar a 4 preguntas, genera nuevas basadas en los "Puntos de Dolor" habituales de este servicio.
-        `;
+    let relevantPAA = "";
+    if (paaQuestions.length > 0) {
+        relevantPAA = paaQuestions.slice(0, 5).map(q => `- ${q.question}`).join('\n');
     } else {
-        paaInstructions = `
-        Genera 4 preguntas frecuentes basadas en los problemas más comunes, dudas sobre precios o tiempos de espera que suelen tener los clientes de "${serviceName}".
-        `;
+        relevantPAA = "No hay preguntas PAA específicas disponibles. Genera preguntas basadas en dudas comunes (precio, tiempo, urgencia).";
     }
 
-    const prompt = `
-    ACTÚA COMO: Experto en atención al cliente y artesano veterano.
-    
-    TAREA: Generar sección de FAQs para "${serviceName}" en "${city}".
-    
-    INPUT DATA:
-    - Keywords Semánticas: ${keywordsString}
-    - Preguntas Reales (Google PAA): ${JSON.stringify(relevantPAA)}
-    
-    REGLAS:
-    1. TONO: Autoridad empática. Respuestas de 40-60 palabras.
-    2. LOCALIZACIÓN: Menciona "${city}" o normativas locales si aplica.
-    3. SCHEMA: Estructura lista para FAQSchema.
-    
-    FORMATO DE SALIDA (JSON ÚNICO Y ESTRICTO):
-    Devuelve SOLO un objeto JSON con esta estructura exacta:
-    {
-        "faqs": [
-            {
-                "question": "Pregunta frecuente (usar las PAA si son relevantes o variaciones)",
-                "answer": "Respuesta directa, útil y con keyword semántica integrada de forma natural."
-            },
-            {
-                "question": "Pregunta sobre precio/presupuesto",
-                "answer": "Respuesta orientativa sin dar precio fijo, enfatizando 'ver el trabajo in situ'."
-            },
-            {
-                "question": "Pregunta sobre tiempos/garantía",
-                "answer": "Respuesta que denote profesionalidad."
-            },
-            {
-                "question": "Pregunta sobre urgencias o disponibilidad en ${city}",
-                "answer": "Respuesta local."
-            }
-        ]
-    }
-    `;
+    const prompt = await loadPrompt('faq', {
+        serviceName,
+        city,
+        keywordsString,
+        relevantPAA,
+        cityContext: cityContextData
+    });
 
-    // Nota: Si usas la API de Gemini directamente, asegúrate de pasar config: { responseMimeType: "application/json" }
+    if (!prompt) return [];
+
     const data = await generateData(prompt, `FAQs ${serviceName}`);
     return data?.faqs || [];
 }
 
 async function main() {
-    console.log("🚀 INICIANDO GENERADOR DE SITIO (ARTISAN MODE)...");
+    console.log("🚀 INICIANDO GENERADOR DE SITIO (MODO INTEGRADO)...");
 
     // 1. LEER EL PLAN (FUENTE DE LA VERDAD)
     let plan;
@@ -123,6 +175,23 @@ async function main() {
 
     const cityName = plan.city.split(',')[0].trim();
 
+    // --- LEER CONTEXTO DE CIUDAD ---
+    let cityContextData = "";
+    try {
+        const cityDataPath = path.join(process.cwd(), 'src/data/city_data.json');
+        if (fsSync.existsSync(cityDataPath)) {
+            const raw = await fs.readFile(cityDataPath, 'utf-8');
+            cityContextData = raw; // Pasamos el string JSON crudo o lo parseamos para procesarlo mejor
+            console.log("🏙️ Contexto de ciudad cargado: src/data/city_data.json");
+        } else {
+            console.warn("⚠️ No se encontró src/data/city_data.json, usando contexto básico.");
+            cityContextData = JSON.stringify({ city: cityName, note: "Sin datos específicos." });
+        }
+    } catch (e) {
+        console.warn("⚠️ Error leyendo city_data.json:", e.message);
+    }
+
+
     // --- 1.5 ASEGURAR DIRECTORIOS DE CONTENIDO ---
     // Astro falla si las carpetas de colecciones no existen, aunque estén vacías.
     const contentDirs = [
@@ -137,7 +206,8 @@ async function main() {
         'src/content/schema',
         'src/content/navigation',
         'src/content/footer',
-        'src/content/projects'
+        'src/content/projects',
+        'src/content/blog'
     ];
 
     console.log("📁 Asegurando estructura de directorios...");
@@ -162,25 +232,31 @@ async function main() {
 
         console.log(`🏆 Main Cluster detectado para Home: "${mainCluster.name}" (Vol: ${mainCluster.volume})`);
         console.log(`📦 Clusters restantes para Servicios: ${serviceClusters.length}`);
+    } else if (plan.services) {
+        // Nueva lógica con Servicios y Blog separados
+        const sortedServices = [...plan.services].sort((a, b) => b.volume - a.volume);
+        mainCluster = sortedServices[0];
+        serviceClusters = sortedServices.filter(c => c.name !== mainCluster.name);
+        console.log(`🏆 Main Service detectado para Home: "${mainCluster.name}" (Vol: ${mainCluster.volume})`);
+        console.log(`📦 Servicios adicionales: ${serviceClusters.length}`);
     } else {
-        console.warn("⚠️ No hay clusters definidos en el plan.");
+        console.warn("⚠️ No hay clusters/servicios definidos en el plan.");
     }
 
     // 3. GENERAR HOME (Con estructura definida por usuario + Main Cluster)
-    console.log(`\n🏠 Generando Home (Artisan Quality)...`);
+    console.log(`\n🏠 Generando Home (Calidad IA)...`);
+    // 3. GENERAR HOME
+    console.log("\n🏠 Generando Home (Calidad IA)...");
 
     // Usar H1 del plan o del main cluster
-    const homeH1 = plan.home_structure?.h1 || mainCluster?.meta_suggestions?.[0]?.h1 || `${plan.niche} en ${cityName}`;
-    const homeH2s = plan.home_structure?.h2s || [];
+    const homeH1 = mainCluster ? mainCluster.cluster_name : `${plan.niche} en ${cityName}`;
+    // const homeH2s = plan.home_structure?.h2s || []; // Not used in the new prompt, but kept for context
 
     // Keywords del main cluster para enriquecer
-    const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || [];
+    // const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || []; // Not used in the new prompt, but kept for context
 
     // Lista de servicios para contexto
-    const servicesList = serviceClusters.map(c => c.name);
-
-    // --- 2. GENERAR HOME (Con "One Page Mode" en mente) ---
-    console.log(`\n🏠 Generando Home (Artisan Quality)...`);
+    const servicesList = serviceClusters.map(c => c.cluster_name);
 
     // Si es One Page Mode, pedimos explícitamente que incluya los servicios como "features" o una lista
     const isOnePage = plan.one_page_mode === true;
@@ -190,73 +266,31 @@ async function main() {
            - El contenido debe ser muy completo, cubriendo lo que normalmente iría en páginas separadas.`
         : "";
 
-    const homePrompt = `
-    ACTÚA COMO: Un experto en SEO Local y Copywriting Persuasivo.
-    
-    TAREA: Escribir el contenido para la HOME de una web de "${plan.niche}" en "${cityName}".
-    ${onePageInstruction}
-    
-    ESTRUCTURA MENTAL (Artisan Mode):
-    - Tono: Profesional, cercano, de "oficio". No corporativo frío.
-    - Autoridad: Habla de "nuestro taller", "técnicas propias", "acabados perfectos".
-    - Local: Menciona barrios reales de ${cityName} (ej: "trabajamos mucho por la zona centro...").
-    - Anti-IA: PROHIBIDO usar palabras como "vibrante", "tapiz", "sinfonía", "inigualable". Sé directo.
-    
-    FORMATO DE SALIDA (JSON ÚNICO Y ESTRICTO):
-    Devuelve SOLO un objeto JSON con esta estructura exacta:
-    {
-        "meta": {
-            "title": "Title tag optimizado (max 60 chars)",
-            "description": "Meta description persuasiva con CTR alto"
-        },
-        "hero_section": {
-            "h1": "${homeH1}",
-            "subheadline": "Subtítulo de 2 líneas que refuerce la propuesta de valor local",
-            "cta_primary": "Texto botón (ej: Pedir Presupuesto)",
-            "cta_secondary": "Texto botón secundario (ej: Ver Galería)"
-        },
-        "intro_content": {
-            "title": "Un título H2 atractivo",
-            "paragraphs": ["Párrafo 1 (historia/local)", "Párrafo 2 (calidad/garantía)"]
-        },
-        "services_grid_intro": "Breve frase introductoria antes de mostrar los servicios",
-        "why_us_bullets": [
-            { "title": "Título beneficio", "desc": "Descripción corta" },
-            { "title": "Título beneficio", "desc": "Descripción corta" },
-            { "title": "Título beneficio", "desc": "Descripción corta" }
-        ],
-        "features": [ 
-             { "title": "Ventaja 1", "description": "Desc..." },
-             { "title": "Ventaja 2", "description": "Desc..." },
-             { "title": "Ventaja 3", "description": "Desc..." }
-        ],
-        "services_list": [ // SOLO SI ES ONE PAGE MODE
-             { "title": "Servicio 1", "description": "Descripción detallada del servicio..." },
-             { "title": "Servicio 2", "description": "Descripción detallada del servicio..." }
-        ],
-        "process": {
-            "title": "Nuestro Proceso de Trabajo",
-            "description": "Cómo garantizamos la excelencia en cada paso.",
-            "steps": [
-                { "title": "Paso 1", "description": "Descripción detallada..." },
-                { "title": "Paso 2", "description": "Descripción detallada..." },
-                { "title": "Paso 3", "description": "Descripción detallada..." }
-            ]
-        },
-        "local_closing": "Párrafo final mencionando zonas de cobertura en ${cityName}",
-        "faq": [
-            { "question": "Pregunta 1", "answer": "Respuesta 1" },
-            { "question": "Pregunta 2", "answer": "Respuesta 2" },
-            { "question": "Pregunta 3", "answer": "Respuesta 3" }
-        ]
-    }
-    `;
+    // CARGAR PROMPT DESDE ARCHIVO
+    const homePrompt = await loadPrompt('home', {
+        niche: plan.niche,
+        cityName: cityName,
+        homeH1: homeH1,
+        onePageInstruction: onePageInstruction,
+        servicesList: servicesList,
+        cityContext: cityContextData // Inyeccion de contexto
+    });
 
-    const homeData = await generateData(homePrompt, 'Home Page');
+    if (!homePrompt) return; // Exit if prompt load fails
+
+    let homeData = await generateData(homePrompt, 'Home Page');
 
     if (homeData) {
-        // Generar testimonios realistas
-        const testimonialsPrompt = `Genera 3 testimonios muy realistas para ${plan.niche} en ${cityName}. Que mencionen servicios específicos como ${servicesList.slice(0, 3).join(', ')}. Usa barrios reales. JSON: { "testimonials": [{ "quote": "...", "author": "...", "location": "...", "initials": ".." }] }`;
+        // ENLAZADO INTERNO
+        // homeData = injectInternalLinks(homeData, linksMap); // Assuming injectInternalLinks is defined elsewhere
+
+        // Generar testimonios (también con prompt externo)
+        const testimonialsPrompt = await loadPrompt('testimonials', {
+            niche: plan.niche,
+            cityName: cityName,
+            servicesList: servicesList.slice(0, 3).join(', ')
+        });
+
         const testimonialsData = await generateData(testimonialsPrompt, 'Testimonials');
 
         const escapeYaml = (str) => str ? `"${str.replace(/"/g, '\\"')}"` : '""';
@@ -340,10 +374,11 @@ ${homeData.intro_content?.paragraphs?.join('\n\n') || ""}
     if (isOnePage) {
         console.log(`\n⏸️ MODO ONE PAGE: Saltando generación de páginas de servicios.`);
     } else {
+        // 4. GENERAR SERVICIOS (PÁGINAS INDIVIDUALES)
         console.log(`\n🛠️ Generando ${serviceClusters.length} Páginas de Servicios...`);
 
         for (const cluster of serviceClusters) {
-            const serviceName = cluster.name;
+            const serviceName = cluster.cluster_name;
             console.log(`   > ${serviceName}...`);
             const serviceSlug = serviceName
                 .toLowerCase()
@@ -355,58 +390,26 @@ ${homeData.intro_content?.paragraphs?.join('\n\n') || ""}
             const selectedIdx = cluster.selected_suggestion || 0;
             const metaTags = cluster.meta_suggestions?.[selectedIdx] || { h1: serviceName, seo_title: serviceName, seo_description: "" };
 
-            // --- NUEVO PROMPT SERVICIO ---
-            const servicePrompt = `
-            ACTÚA COMO: Un técnico especialista senior en "${serviceName}".
-            
-            TAREA: Escribir una LANDING PAGE DE VENTA para este servicio en "${cityName}".
-            
-            KEYWORDS (DATASET COMPLETO - REFERENCIA SEMÁNTICA):
-            ${clusterKeywords.join(', ')}
-            
-            ESTRUCTURA MENTAL:
-            - No vendas humo, vende solución técnica.
-            - Habla de materiales específicos, marcas de calidad o herramientas.
-            - Explica el proceso paso a paso para generar confianza.
-            - IMPORTANTE: Tienes acceso a todas las keywords del cluster. Úsalas para enriquecer el texto con la mayor variedad semántica posible. No es necesario usarlas todas literalmente si son redundantes, pero sí cubrir todas las INTENCIONES de búsqueda que representan.
-            - NO hagas "keyword stuffing". Prioriza la naturalidad.
-            
-            FORMATO DE SALIDA (JSON ÚNICO Y ESTRICTO):
-            Devuelve SOLO un objeto JSON con esta estructura exacta:
-            {
-                "meta": {
-                    "title": "Title tag enfocado en ${serviceName} ${cityName}",
-                    "description": "Meta description transaccional incluyendo keywords principales"
-                },
-                "hero": {
-                    "h1": "${metaTags.h1}", 
-                    "lead_text": "Texto introductorio atacando el problema principal del cliente y usando keywords."
-                },
-                "problem_agitation": {
-                    "h2": "Título sobre el problema (ej: ¿Grietas que vuelven a salir?)",
-                    "content": "Texto empático describiendo la molestia. Integra keywords de dolor (ej: humedad, desconchones)."
-                },
-                "solution_technical": {
-                    "h2": "Nuestra solución técnica",
-                    "content": "Descripción de la solución usando terminología experta. Integra keywords de solución."
-                },
-                "process_steps": [
-                    { "step_number": 1, "title": "Preparación", "description": "Detalle técnico..." },
-                    { "step_number": 2, "title": "Ejecución", "description": "Detalle técnico..." },
-                    { "step_number": 3, "title": "Acabados", "description": "Detalle técnico..." }
-                ],
-                "materials_section": {
-                    "title": "Materiales que utilizamos",
-                    "items": ["Material 1", "Material 2", "Herramienta especial"]
-                },
-                "final_cta": "Frase de cierre contundente para pedir presupuesto"
-            }
-            `;
+            // Cargar prompt externo para el servicio
+            const servicePrompt = await loadPrompt('service', {
+                serviceName: serviceName,
+                cityName: cityName,
+                clusterKeywords: clusterKeywords.join(', '),
+                h1: metaTags.h1,
+                cityContext: cityContextData // Inyeccion de contexto
+            });
 
-            const data = await generateData(servicePrompt, serviceName);
-            if (data) {
-                // Pasamos las preguntas PAA del plan global
-                const faqs = await generateFAQs(serviceName, cityName, cluster.keywords, plan.raw_data?.paa_questions || []);
+            if (!servicePrompt) continue;
+
+            let serviceData = await generateData(servicePrompt, `Service: ${serviceName}`);
+
+            if (serviceData) {
+                // ENLAZADO INTERNO
+                serviceData = injectInternalLinks(serviceData, linksMap);
+
+                // Generate FAQs using the existing generateFAQs function
+                // Pasamos cityContextData a las FAQs
+                const faqs = await generateFAQs(serviceName, cityName, cluster.keywords, plan.raw_data?.paa_questions || [], cityContextData);
                 const faqYaml = faqs.map(q => `  - question: "${q.question}"\n    answer: >-\n      ${q.answer}`);
 
                 // Generar enlaces relacionados
@@ -467,34 +470,169 @@ ${related.join('\n')}
         }
     }
 
+    // 4.5 GENERAR BLOG (ARTÍCULOS INFORMACIONALES)
+    const blogPosts = plan.blog || [];
+    if (blogPosts.length > 0) {
+        console.log(`\n📰 Generando ${blogPosts.length} Artículos de Blog...`);
+
+        for (const post of blogPosts) {
+            const articleTitle = post.name;
+            console.log(`   > ${articleTitle}...`);
+            const postSlug = articleTitle
+                .toLowerCase()
+                .replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+
+            const keywordsString = post.keywords?.map(k => k.keyword).join(', ') || "";
+            const mainKeyword = post.main_keyword || articleTitle;
+
+            // Cargar Prompt
+            const blogPrompt = await loadPrompt('blog', {
+                niche: plan.niche,
+                cityName: cityName,
+                articleTitle: articleTitle,
+                mainKeyword: mainKeyword,
+                keywordsString: keywordsString,
+                cityContext: cityContextData
+            });
+
+            if (!blogPrompt) continue;
+
+            let blogData = await generateData(blogPrompt, `Blog: ${articleTitle}`);
+
+            if (blogData) {
+                // Convertir Secciones a Markdown
+                const sectionsMd = (blogData.sections || []).map(s => `## ${s.title}\n\n${s.content}`).join('\n\n');
+
+                const finalMdx = `---
+title: "${blogData.title}"
+pubDate: "${new Date().toISOString().split('T')[0]}"
+description: "${blogData.seoDesc}"
+author: "Equipo ${plan.niche}"
+image: "/images/blog/default.jpg"
+tags: ["${plan.niche}", "${cityName}"]
+category: "Guías"
+featured: false
+blocks:
+  - discriminant: "content"
+  - discriminant: "faq"
+  - discriminant: "cta"
+---
+
+${blogData.intro}
+
+${sectionsMd}
+
+## Conclusión
+${blogData.final_thoughts}
+`;
+                const filePath = path.join('src/content/blog', `${postSlug}.mdx`);
+                await fs.mkdir(path.dirname(filePath), { recursive: true });
+                await fs.writeFile(filePath, finalMdx);
+                console.log(`      ✅ Post creado: ${postSlug}.mdx`);
+            }
+        }
+    } else {
+        console.log(`\n📰 No hay artículos de blog planificados.`);
+    }
+
     // 4. GENERAR ZONAS (OPCIONAL)
+    // 4. GENERAR ZONAS (Soporte Dual: Modo IA vs Modo Spintax)
     if (plan.generate_locations) {
-        console.log(`\n🌍 Generando ${plan.locations.length} Zonas (Artisan Local Mode)...`);
 
-        for (const location of plan.locations) {
-            console.log(`   > ${location}...`);
-            const slug = location.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        // --- MODO SPINTAX ---
+        if (plan.generation_mode === 'spintax' && plan.spintax_template) {
+            console.log(`\n🏭 MODO SPINTAX: Generando ${plan.locations.length} Zonas usando Template...`);
 
-            const prompt = `
-                Escribe una Landing Page Local para "${plan.niche}" en el barrio/zona de "${location}", ${cityName}.
-                
-                IMPORTANTE - CONTEXTO LOCAL:
-                - Investiga (simula conocimiento) sobre el tipo de viviendas en ${location} (ej: pisos antiguos, obra nueva, casas).
-                - Menciona calles principales o puntos de referencia de ${location} si es posible.
-                - Adapta el discurso: Si es zona histórica, habla de restauración. Si es nueva, de instalación moderna.
-                
-                JSON:
-                {
-                    "name": "${location}",
-                    "seoTitle": "${plan.niche} en ${location} | Servicio Local",
-                    "seoDesc": "Servicio de ${plan.niche} en ${location}. Llegamos rápido, conocemos la zona. Presupuesto gratis.",
-                    "content": "Markdown (300 palabras). Muy enfocado en la cercanía y conocimiento del barrio."
+            // Helper Spintax (Inlined to avoid import issues in build script)
+            function spin(text) {
+                if (!text || typeof text !== 'string') return text;
+                const regex = /\{([^{}]+)\}/g;
+                let processed = text;
+                while (regex.test(processed)) {
+                    processed = processed.replace(regex, (m, c) => {
+                        const opt = c.split('|');
+                        return opt[Math.floor(Math.random() * opt.length)];
+                    });
                 }
-            `;
+                return processed;
+            }
 
-            const data = await generateData(prompt, location);
-            if (data) {
+            for (const location of plan.locations) {
+                // Preparamos variables para inyectar en el template
+                // El template puede usar {Location}, {City}, {Niche} además de Spintax normal
+                const vars = {
+                    Location: location,
+                    City: cityName,
+                    Niche: plan.niche
+                };
+
+                // Función para reemplazar variables {{Variable}} y luego procesar Spintax
+                const processTemplate = (tpl) => {
+                    let text = tpl;
+                    // 1. Reemplazo de variables simples (ej: {{Location}})
+                    for (const [key, val] of Object.entries(vars)) {
+                        const vRegex = new RegExp(`{{${key}}}`, 'gi'); // Case insensitive
+                        text = text.replace(vRegex, val);
+                    }
+                    // 2. Reemplazo simple sin llaves dobles si el usuario usó {Location}
+                    // (Aunque Spintax usa {}, intentamos dar soporte básico a vars si no conflicto)
+                    text = text.replace(/{Location}/gi, location)
+                        .replace(/{City}/gi, cityName)
+                        .replace(/{Niche}/gi, plan.niche);
+
+                    // 3. Procesar Spintax
+                    return spin(text);
+                };
+
+                const slug = location.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const tpl = plan.spintax_template;
+
                 const mdx = `---
+name: "${processTemplate(tpl.name || location)}"
+type: "residencial"
+zipCodes: []
+seoTitle: "${processTemplate(tpl.seoTitle)}"
+seoDesc: "${processTemplate(tpl.seoDesc)}"
+blocks:
+  - discriminant: "hero"
+  - discriminant: "features"
+  - discriminant: "map"
+  - discriminant: "content"
+  - discriminant: "cta"
+---
+${processTemplate(tpl.content)}`;
+
+                const filePath = path.join('src/content/locations', `${slug}.mdx`);
+                await fs.mkdir(path.dirname(filePath), { recursive: true });
+                await fs.writeFile(filePath, mdx);
+                // Logging menos verboso para modo industrial
+                if (plan.locations.indexOf(location) % 10 === 0) process.stdout.write('.');
+            }
+            console.log(`\n      ✅ ${plan.locations.length} zonas generadas (Modo Spintax).`);
+
+        } else {
+            // --- MODO IA (GEMINI) ---
+            console.log(`\n🌍 Generando ${plan.locations.length} Zonas (Modo Local IA)...`);
+
+            for (const location of plan.locations) {
+                console.log(`   > ${location}...`);
+                const slug = location.toLowerCase().replace(/ /g, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                // CARGAR PROMPT DESDE ARCHIVO
+                const locationPrompt = await loadPrompt('location', {
+                    niche: plan.niche,
+                    location: location,
+                    cityName: cityName,
+                    cityContext: cityContextData
+                });
+
+                if (!locationPrompt) continue;
+
+                const data = await generateData(locationPrompt, `Zona: ${location}`);
+                if (data) {
+                    const mdx = `---
 name: "${data.name}"
 type: "residencial"
 zipCodes: []
@@ -509,10 +647,11 @@ blocks:
 ---
 ${data.content}`;
 
-                const filePath = path.join('src/content/locations', `${slug}.mdx`);
-                await fs.mkdir(path.dirname(filePath), { recursive: true });
-                await fs.writeFile(filePath, mdx);
-                console.log(`      ✅ Zona creada: ${slug}.mdx`);
+                    const filePath = path.join('src/content/locations', `${slug}.mdx`);
+                    await fs.mkdir(path.dirname(filePath), { recursive: true });
+                    await fs.writeFile(filePath, mdx);
+                    console.log(`      ✅ Zona creada: ${slug}.mdx`);
+                }
             }
         }
     } else {

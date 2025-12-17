@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 interface Props {
     image: string;
     alt: string;
@@ -50,13 +52,16 @@ const shadowClass = shadowClasses[shadow] || shadowClasses.lg;
     <div
         class={`overflow-hidden border border-heading/10 bg-surface ${roundedClass} ${shadowClass}`}
     >
-        <img
+        <Image
             src={image}
             alt={alt}
             class={`w-full h-auto group-hover:scale-105 transition-transform duration-700 ${fitClass}`}
-            loading="lazy"
+            width={1200}
+            height={630}
+            inferSize={true}
         />
     </div>
+
     {
         caption && (
             <figcaption class="text-center text-sm text-body/70 mt-3 italic">

@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Tenía las paredes con un gotelé horrible y quería darle un aire nuevo al piso. El equipo no solo alisó las paredes dejándolas perfectas, sino que además fueron súper limpios y rápidos. El acabado de la pintura es impecable. ¡Parece otro piso! Totalmente recomendables.",
+      "author": "Laura G.",
+      "location": "Chamberí, Madrid",
+      "initials": "LG"
+    },
+    {
+      "quote": "Acabamos de comprar un piso y necesitaba una mano de pintura completa. Estábamos perdidos con los colores, pero nos asesoraron genial para crear ambientes luminosos y acogedores. Cuidaron cada detalle, taparon todo a la perfección y el resultado ha sido espectacular. Un trabajo muy profesional.",
+      "author": "Carlos Fernández-Villa",
+      "location": "Barrio de Salamanca, Madrid",
+      "initials": "CF"
+    },
+    {
+      "quote": "Contactamos con ellos para pintar la fachada y el hueco de la escalera de nuestra comunidad de vecinos. Era un trabajo complicado por la altura y el estado de las paredes. Quedamos encantados con la profesionalidad, la seguridad con la que trabajaron y el resultado final. Han rejuvenecido el edificio.",
+      "author": "Javier M. (Presidente Comunidad)",
+      "location": "Malasaña, Madrid",
+      "initials": "JM"
+    }
+  ]
+}

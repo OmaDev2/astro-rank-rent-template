@@ -1,14 +1,15 @@
-siteName: 'Quitar Gotelé Barcelona '
-niche: Pintura
-siteUrl: https://quitargotelebarcelona.com
-businessType: LocalBusiness
+siteName: Quitar Gotelé Barcelona
+niche: Quitar Gotelé
+siteUrl: https://ejemplo.com
+businessType: HousePainter
 city: 'Barcelona '
+address: 'Barcelona '
 coordinates:
   lat: '40.416775'
   lng: '-3.703790'
-phone: 644 37 16 02
-whatsapp: '34644371602'
-email: QGBCN@GMAIL.COM
-schedule: Lun-Vie 9:00-20:00
+phone: 622 222 222
+whatsapp: '34622222222'
+email: quitargotele@gmail.com
+schedule: Lun-Vie 9:00-18:00
 nif: 00000000X
-ctaText: QUIERO MIS PAREDES LISAS YA!
+ctaText: 'Quiero mi paredes Lisas Ya '

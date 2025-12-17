@@ -4,9 +4,16 @@ import defaultServiceImage from "../../assets/images/service-alisado.png";
 import pinturaServiceImage from "../../assets/images/service-pintura.png";
 import { Phone, MapPin, Shield, Clock, Award, Users } from "lucide-react";
 import HeroContactForm from "../HeroContactForm.astro";
+import { spin } from "../../utils/spintax";
 
-const { locationName, niche, zipCodes, heroImage, phone, siteName } =
-    Astro.props;
+const props = Astro.props;
+const locationName = spin(props.locationName);
+const niche = spin(props.niche);
+const zipCodes = props.zipCodes;
+const heroImage = props.heroImage;
+const phone = props.phone;
+const siteName = spin(props.siteName);
+const title = spin(props.title);
 
 const isIndustrial = Astro.props.locationType === "industrial";
 
@@ -38,22 +45,17 @@ const heroSubtitle = isIndustrial
     class="relative min-h-[85vh] flex items-center bg-secondary overflow-hidden"
 >
     <div class="absolute inset-0 w-full h-full">
-        {
-            isOptimized ? (
-                <Image
-                    src={selectedImage}
-                    alt={`${niche} en ${locationName}`}
-                    class="w-full h-full object-cover opacity-40"
-                    loading="eager"
-                />
-            ) : (
-                <img
-                    src={selectedImage}
-                    alt={`${niche} en ${locationName}`}
-                    class="w-full h-full object-cover opacity-40"
-                />
-            )
-        }
+        <div class="absolute inset-0 w-full h-full">
+            <Image
+                src={selectedImage}
+                alt={`${niche} en ${locationName}`}
+                class="w-full h-full object-cover opacity-40"
+                loading="eager"
+                width={1920}
+                height={1080}
+                inferSize={typeof selectedImage === "string"}
+            />
+        </div>
     </div>
     <div
         class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/85 to-secondary/60"
@@ -61,9 +63,7 @@ const heroSubtitle = isIndustrial
     </div>
 
     <div class="container mx-auto px-4 lg:px-8 relative z-10 py-20">
-        <div
-            class="grid lg:grid-cols-[1fr,auto] gap-8 lg:gap-12 items-center max-w-7xl mx-auto"
-        >
+        <div class="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
             <div class="max-w-2xl">
                 <div class="flex flex-wrap items-center gap-3 mb-6">
                     <span
@@ -81,32 +81,37 @@ const heroSubtitle = isIndustrial
                 </div>
 
                 <h1
-                    class="text-4xl lg:text-6xl font-heading font-bold text-heading mb-6 leading-tight"
+                    class="text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight mb-6 drop-shadow-lg uppercase"
                 >
                     {
-                        Astro.props.title ||
-                            `${(niche || "Servicio").toUpperCase()} EN ${locationName}`
+                <h1 class="text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight mb-6 drop-shadow-lg uppercase">
+                    {
+                        title ? title : (
+                            // Optimización de Título para evitar redundancia
+                            locationName.toLowerCase().includes(niche?.toLowerCase()) 
+                                ? <span class="text-primary">{locationName}</span>
+                                : <span set:html={`${(niche || "Servicio")} <br/><span class="text-primary">EN ${locationName}</span>`} />
+                        )
                     }
                 </h1>
 
                 <p
-                    class="text-xl text-body mb-8 font-light border-l-4 border-primary pl-4 max-w-xl leading-relaxed"
+                    class="text-lg lg:text-xl text-white/90 mb-8 font-light border-l-4 border-primary pl-6 max-w-xl leading-relaxed backdrop-blur-sm ml-2"
                 >
-                    {heroSubtitle} Cobertura completa en {locationName}
-                    {zipCodes?.length > 0 && ` (CP ${zipCodes.join(", ")})`}.
-                    Presupuesto sin compromiso.
+                    {heroSubtitle} Disponibles en <strong class="text-white">{locationName}</strong>. 
+                    {zipCodes?.length > 0 && <span class="text-white/70 text-base block mt-2 opacity-80">Códigos Postales: {zipCodes.join(", ")}</span>}.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a
                         href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg hover:shadow-primary/40"
+                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary hover:bg-primary/90 text-white rounded-xl transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.4)] hover:shadow-[0_0_30px_rgba(var(--color-primary),0.6)] hover:-translate-y-1"
                     >
                         <Phone className="w-5 h-5 mr-2" /> Llamar Ahora
                     </a>
                     <a
                         href="#formulario"
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-surface hover:bg-surface/80 text-heading rounded transition-all border-2 border-heading/20 hover:border-primary"
+                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-white/10 hover:bg-white/20 text-white backdrop-blur-md rounded-xl transition-all border border-white/20 hover:border-white/40"
                     >
                         Pedir Presupuesto
                     </a>

@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Vivimos en un piso antiguo del Eixample y el gotelé nos tenía desesperados. El equipo se encargó de todo: el alisado de las paredes fue impecable y la pintura posterior dejó un acabado liso y moderno, justo lo que buscábamos. Lo que más valoramos fue lo cuidadosos que fueron protegiendo los muebles y lo limpio que dejaron todo al terminar. ¡Parece otra casa!",
+      "author": "Laura G.",
+      "location": "Eixample, Barcelona",
+      "initials": "LG"
+    },
+    {
+      "quote": "Acabábamos de comprar nuestro primer piso en Gràcia y quitar el gotelé era la prioridad. Nos dieron un plazo ajustado y lo cumplieron a la perfección. El proceso de lijado y preparación fue muy profesional, sin apenas polvo. Ahora las paredes están increíblemente lisas y luminosas. Un trabajo rápido, limpio y con un resultado espectacular.",
+      "author": "Marc R.",
+      "location": "Gràcia, Barcelona",
+      "initials": "MR"
+    },
+    {
+      "quote": "Contactamos con ellos para quitar el gotelé de nuestro dúplex en Sant Gervasi. El alisado de las paredes ha quedado perfecto, incluso en zonas complicadas con techos altos. Se encargaron también de la pintura final con un color que nos recomendaron y ha quedado fantástico. Muy profesionales y con una relación calidad-precio excelente.",
+      "author": "Sofía P.",
+      "location": "Sant Gervasi, Barcelona",
+      "initials": "SP"
+    }
+  ]
+}

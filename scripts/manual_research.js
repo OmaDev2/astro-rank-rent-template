@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { runGeminiClustering } from './logic/keyword_researcher.js';
+import { runGeminiClustering, importKeywordsFromCSV } from './logic/keyword_researcher.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,24 +26,28 @@ async function main() {
     // 2. Read keywords
     let keywords = [];
     try {
-        const content = await fs.readFile(file, 'utf-8');
-
-        // Try parsing as JSON
-        try {
-            const json = JSON.parse(content);
-            if (Array.isArray(json)) {
-                // Handle array of strings or objects
-                keywords = json.map(k => {
-                    if (typeof k === 'string') return { keyword: k, volume: 100 };
-                    return { ...k, volume: k.volume || 100 };
-                });
+        // 2a. Intentar parseo robusto CSV primero si termina en .csv
+        if (file.endsWith('.csv')) {
+            console.log("   📂 Detectado archivo CSV. Usando importador robusto...");
+            keywords = importKeywordsFromCSV(file);
+        } else {
+            // 2b. Fallback para .txt o JSON puro
+            const content = await fs.readFile(file, 'utf-8');
+            try {
+                const json = JSON.parse(content);
+                if (Array.isArray(json)) {
+                    keywords = json.map(k => {
+                        if (typeof k === 'string') return { keyword: k, volume: 100 };
+                        return { ...k, volume: k.volume || 100 };
+                    });
+                }
+            } catch (e) {
+                // Fallback texto linea por linea
+                keywords = content.split('\n')
+                    .map(l => l.trim())
+                    .filter(l => l.length > 0)
+                    .map(k => ({ keyword: k, volume: 100 }));
             }
-        } catch (e) {
-            // Fallback to line-by-line text
-            keywords = content.split('\n')
-                .map(l => l.trim())
-                .filter(l => l.length > 0)
-                .map(k => ({ keyword: k, volume: 100 }));
         }
 
         if (keywords.length === 0) {

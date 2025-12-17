@@ -5,12 +5,14 @@ import {
     getKeywordSuggestions,
     getKeywordIdeas,
     getPeopleAlsoAsk,
-    getLocationCode
+    getLocationCode,
+    filterByCity
 } from '../lib/seo_client_v2.js';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import { parse } from 'csv-parse/sync';
 
 dotenv.config();
 
@@ -169,7 +171,11 @@ function calculateLocalScore(keywordObj, niche, city, services = []) {
     // Otras ciudades
     // Otras ciudades
     const SPANISH_CITIES = ['madrid', 'barcelona', 'sevilla', 'valencia', 'zaragoza', 'málaga', 'bilbao', 'murcia', 'alicante', 'córdoba', 'valladolid', 'sabadell', 'terrassa', 'badalona'];
-    const otherCityMatch = SPANISH_CITIES.filter(c => c !== cityLower).find(c =>
+
+    // Excluir ciudades que estén contenidas en la ciudad objetivo
+    const citiesToExclude = SPANISH_CITIES.filter(c => !cityLower.includes(c));
+
+    const otherCityMatch = citiesToExclude.find(c =>
         new RegExp(`\\b${c}\\b`, 'i').test(text)
     );
 
@@ -212,20 +218,90 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     const { skipClustering = false } = options;
 
     const locationCode = getLocationCode(location || city);
-    let allKeywords = [];
-    const stats = {
-        fromCompetitors: 0,
-        fromRelated: 0,
-        fromSuggestions: 0,
-        fromIdeas: 0,
-        fromServices: 0,
-        totalCollected: 0,
-        afterFiltering: 0
+
+    // Sanitizar ciudad para queries (evitar "Barcelona, Spain" -> usar solo "Barcelona")
+    const simpleCity = city.includes(',') ? city.split(',')[0].trim() : city;
+
+    // --- SISTEMA DE CHECKPOINTS (RESUME) ---
+    const STATE_FILE = path.join(process.cwd(), 'keyword_research_state.json');
+    let state = {
+        niche,
+        city,
+        phases: {},
+        allKeywords: [],
+        stats: {
+            fromCompetitors: 0,
+            fromRelated: 0,
+            fromSuggestions: 0,
+            fromIdeas: 0,
+            fromServices: 0,
+            totalCollected: 0,
+            afterFiltering: 0
+        }
     };
+
+    // --- MODO MANUAL (CSV) ---
+    if (options.manualMode && options.csvPath) {
+        console.log('\n📂 MODO MANUAL DETECTADO: Cargando CSV...');
+        try {
+            const csvKeywords = importKeywordsFromCSV(options.csvPath);
+            if (csvKeywords.length > 0) {
+                console.log(`   ✅ ${csvKeywords.length} keywords importadas del CSV.`);
+                state.allKeywords.push(...csvKeywords);
+                state.stats.fromManual = csvKeywords.length; // Ensure stats has this prop or add it dynamically
+
+                // Si es modo puramente manual, marcamos las fases de API como completadas para saltarlas
+                if (options.manualMode) {
+                    console.log('   🛑 Saltando fases de API (Active DataforSEO bypassed)...');
+                    state.phases.phase1 = true;
+                    state.phases.phase2 = true;
+                    state.phases.phase3 = true;
+                    state.phases.phase4 = true;
+                    state.phases.phase5 = true; // Ideas (if existed)
+                    state.phases.phase6 = true;
+                    state.phases.phase9 = true; // PAA usually skipped in manual too unless requested
+                }
+            }
+        } catch (error) {
+            console.error(`   ❌ Error importando CSV: ${error.message}`);
+        }
+    }
+
+    // Intentar cargar estado previo
+    try {
+        if (fs.existsSync(STATE_FILE)) {
+            const savedState = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+            // Solo resumir si es el mismo nicho y ciudad
+            if (savedState.niche === niche && savedState.city === city) {
+                console.log('🔄 RESTAURANDO ESTADO PREVIO (RESUME MODE)...');
+                state = savedState;
+            }
+        }
+    } catch (e) {
+        console.warn('⚠️ No se pudo leer el estado previo:', e.message);
+    }
+
+    // Alias para facilitar acceso
+    let allKeywords = state.allKeywords;
+    const stats = state.stats;
+
+    const saveCheckpoint = (phaseName) => {
+        state.phases[phaseName] = true;
+        state.allKeywords = allKeywords;
+        state.stats = stats;
+        try {
+            fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
+            console.log(`💾 Checkpoint guardado: ${phaseName}`);
+        } catch (e) {
+            console.error('❌ Error guardando checkpoint:', e.message);
+        }
+    };
+    // ---------------------------------------
 
     console.log('\n' + '═'.repeat(70));
     console.log(`🚀 SEO LOCAL: ${niche.toUpperCase()} en ${city.toUpperCase()}`);
     console.log('═'.repeat(70));
+    // ... rest of log ...
     console.log(`📍 Location: ${locationCode}`);
     console.log(`🎯 Min Relevance Score: ${config.minRelevanceScore}`);
     console.log(`📋 Servicios Específicos: ${config.specificServices?.length || 0}`);
@@ -234,344 +310,372 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     // ========================================================================
     // FASE 1: COMPETIDORES
     // ========================================================================
-    console.log('📊 FASE 1: Analizando competidores...\n');
+    if (!state.phases.phase1) {
+        console.log('📊 FASE 1: Analizando competidores (Limitado a Top 3 para ahorro API)...\n');
 
-    for (const domain of competitors) {
-        try {
-            console.log(`   🔍 ${domain}...`);
-            const keywords = await getCompetitorKeywords(
-                domain,
-                locationCode,
-                city,
-                config.top10Filter
-            );
+        // 🔥 OPTIMIZACIÓN: Solo analizados los 3 primeros competidores
+        const topCompetitors = competitors.slice(0, 3);
 
-            if (keywords && keywords.length > 0) {
-                // Marcar fuente
-                const tagged = keywords.map(k => ({ ...k, source: 'competitor' }));
-                allKeywords.push(...tagged);
-                stats.fromCompetitors += keywords.length;
-                console.log(`      ✅ ${keywords.length} keywords`);
-            } else {
-                console.log(`      ⚠️ Sin datos`);
+        for (const domain of topCompetitors) {
+            try {
+                console.log(`   🔍 ${domain}...`);
+                const keywords = await getCompetitorKeywords(
+                    domain,
+                    locationCode,
+                    city,
+                    config.top10Filter
+                );
+
+                if (keywords && keywords.length > 0) {
+                    // Marcar fuente
+                    const tagged = keywords.map(k => ({ ...k, source: 'competitor' }));
+                    allKeywords.push(...tagged);
+                    stats.fromCompetitors += keywords.length;
+                    console.log(`      ✅ ${keywords.length} keywords`);
+                } else {
+                    console.log(`      ⚠️ Sin datos`);
+                }
+            } catch (error) {
+                console.error(`      ❌ Error: ${error.message}`);
             }
-        } catch (error) {
-            console.error(`      ❌ Error: ${error.message}`);
         }
+        saveCheckpoint('phase1');
+    } else {
+        console.log('⏩ FASE 1: COMPETIDORES (Saltado - Ya completado)');
     }
 
     // ========================================================================
     // FASE 2: KEYWORDS RELACIONADAS
     // ========================================================================
-    console.log('\n📊 FASE 2: Keywords relacionadas...\n');
+    if (!state.phases.phase2) {
+        console.log('\n📊 FASE 2: Keywords relacionadas...\n');
 
-    try {
-        const relatedMain = await getRelatedKeywords(`${niche} ${city}`, locationCode, city);
-        const relatedNiche = await getRelatedKeywords(niche, locationCode, city);
+        try {
+            const relatedMain = await getRelatedKeywords(`${niche} ${simpleCity}`, locationCode, simpleCity);
+            const relatedNiche = await getRelatedKeywords(niche, locationCode, simpleCity);
 
-        const taggedMain = relatedMain.map(k => ({ ...k, source: 'related_main' }));
-        const taggedNiche = relatedNiche.map(k => ({ ...k, source: 'related_niche' }));
+            const taggedMain = relatedMain.map(k => ({ ...k, source: 'related_main' }));
+            const taggedNiche = relatedNiche.map(k => ({ ...k, source: 'related_niche' }));
 
-        allKeywords.push(...taggedMain, ...taggedNiche);
-        stats.fromRelated = relatedMain.length + relatedNiche.length;
+            allKeywords.push(...taggedMain, ...taggedNiche);
+            stats.fromRelated = relatedMain.length + relatedNiche.length;
 
-        console.log(`   ✅ ${stats.fromRelated} keywords`);
-    } catch (error) {
-        console.error(`   ❌ Error: ${error.message}`);
+            console.log(`   ✅ ${stats.fromRelated} keywords`);
+        } catch (error) {
+            console.error(`   ❌ Error: ${error.message}`);
+        }
+        saveCheckpoint('phase2');
+    } else {
+        console.log('⏩ FASE 2: RELACIONADAS (Saltado - Ya completado)');
     }
 
     // ========================================================================
     // FASE 3: SEMILLAS CREATIVAS (GEMINI + DATA FOR SEO) - NUEVO 🚀
     // ========================================================================
-    console.log('\n📊 FASE 3: Semillas Creativas (Estrategia Maestro)...');
+    if (!state.phases.phase3) {
+        console.log('\n📊 FASE 3: Semillas Creativas (Estrategia Maestro)...');
 
-    try {
-        // 1. Generar semillas con Gemini
-        const creativeSeeds = await generateCreativeSeedsWithGemini(niche);
-        console.log(`   🧠 Gemini generó ${creativeSeeds.length} semillas creativas.`);
+        try {
+            // 1. Generar semillas con Gemini
+            const creativeSeeds = await generateCreativeSeedsWithGemini(niche);
+            console.log(`   🧠 Gemini generó ${creativeSeeds.length} semillas creativas.`);
 
-        // 2. Seleccionar las mejores (top 5-10 para no saturar API)
-        // Priorizamos problemas y preguntas que suelen tener menos competencia
-        const seedsToProcess = creativeSeeds.slice(0, 8);
-        console.log(`   🎯 Procesando ${seedsToProcess.length} semillas en DataForSEO...`);
+            // 2. Seleccionar las mejores (top 5 para no saturar API)
+            // Priorizamos problemas y preguntas que suelen tener menos competencia
+            const seedsToProcess = creativeSeeds.slice(0, 5);
+            console.log(`   🎯 Procesando ${seedsToProcess.length} semillas en DataForSEO...`);
 
-        for (const seed of seedsToProcess) {
-            try {
-                // NO añadimos la ciudad para que la búsqueda de relacionadas sea más amplia
-                // La API ya filtra por país (Spain) con locationCode
-                const query = seed;
-                const related = await getRelatedKeywords(query, locationCode);
+            for (const seed of seedsToProcess) {
+                try {
+                    // NO añadimos la ciudad para que la búsqueda de relacionadas sea más amplia
+                    // La API ya filtra por país (Spain) con locationCode
+                    const query = seed;
+                    const related = await getRelatedKeywords(query, locationCode);
 
-                if (related.length > 0) {
-                    const tagged = related.map(k => ({ ...k, source: 'creative_seed' }));
-                    allKeywords.push(...tagged);
-                    stats.fromSuggestions += related.length; // Sumamos a suggestions
-                    console.log(`      ✅ "${seed}": ${related.length} keywords`);
+                    if (related.length > 0) {
+                        const tagged = related.map(k => ({ ...k, source: 'creative_seed' }));
+                        allKeywords.push(...tagged);
+                        stats.fromSuggestions += related.length; // Sumamos a suggestions
+                        console.log(`      ✅ "${seed}": ${related.length} keywords`);
+                    }
+                } catch (err) {
+                    // Ignorar error individual
                 }
-            } catch (err) {
-                // Ignorar error individual
             }
+        } catch (error) {
+            console.error(`   ❌ Error en Fase Creativa: ${error.message}`);
         }
-    } catch (error) {
-        console.error(`   ❌ Error en Fase Creativa: ${error.message}`);
+        saveCheckpoint('phase3');
+    } else {
+        console.log('⏩ FASE 3: SEMILLAS CREATIVAS (Saltado - Ya completado)');
     }
 
     // ========================================================================
     // FASE 4: SUGERENCIAS
     // ========================================================================
-    console.log('\n📊 FASE 4: Sugerencias...\n');
+    if (!state.phases.phase4) {
+        console.log('\n📊 FASE 4: Sugerencias...\n');
 
-    try {
-        const suggestions = await getKeywordSuggestions(`${niche} ${city}`, locationCode);
-        // Filtrado básico por ciudad para sugerencias
-        const filtered = suggestions.filter(k => k.keyword.toLowerCase().includes(city.toLowerCase()));
+        try {
+            const suggestions = await getKeywordSuggestions(`${niche} ${simpleCity}`, locationCode);
+            // Filtrado básico por ciudad para sugerencias (Safe Guard)
+            const filtered = suggestions.filter(k =>
+                k.keyword &&
+                typeof k.keyword === 'string' &&
+                k.keyword.toLowerCase().includes(simpleCity.toLowerCase())
+            );
 
-        const tagged = filtered.map(k => ({ ...k, source: 'suggestion' }));
-        allKeywords.push(...tagged);
-        stats.fromSuggestions += filtered.length;
+            const tagged = filtered.map(k => ({ ...k, source: 'suggestion' }));
+            allKeywords.push(...tagged);
+            stats.fromSuggestions += filtered.length;
 
-        console.log(`   ✅ ${stats.fromSuggestions} keywords`);
-    } catch (error) {
-        console.error(`   ❌ Error: ${error.message}`);
+            console.log(`   ✅ ${stats.fromSuggestions} keywords`);
+        } catch (error) {
+            console.error(`   ❌ Error: ${error.message}`);
+        }
+        saveCheckpoint('phase4');
+    } else {
+        console.log('⏩ FASE 4: SUGERENCIAS (Saltado - Ya completado)');
     }
 
     // ========================================================================
-    // FASE 5: IDEAS (DESACTIVADA POR ERROR API Y REDUNDANCIA)
+    // FASE 5: IDEAS
     // ========================================================================
-    /*
-    console.log('\n📊 FASE 5: Ideas long-tail...\n');
-
-    try {
-        const ideasMain = await getKeywordIdeas(`${niche} ${city}`, locationCode);
-        const filtered = ideasMain.filter(k => k.keyword.toLowerCase().includes(city.toLowerCase()));
-
-        const tagged = filtered.map(k => ({ ...k, source: 'idea' }));
-        allKeywords.push(...tagged);
-        stats.fromIdeas = filtered.length;
-
-        console.log(`   ✅ ${stats.fromIdeas} keywords`);
-    } catch (error) {
-        // La API de ideas a veces falla si no hay suficientes datos
-        console.log(`   ⚠️ No se encontraron ideas long-tail (API restriction)`);
-    }
-    */
+    // ...
 
     // ========================================================================
     // FASE 6: SERVICIOS ESPECÍFICOS (Híbrido: Frontend + Auto)
     // ========================================================================
-    console.log('\n📊 FASE 6: Expandiendo servicios...\n');
+    if (!state.phases.phase6) {
+        console.log('\n📊 FASE 6: Expandiendo servicios...\n');
 
-    let servicesToExpand = config.specificServices || [];
+        let servicesToExpand = config.specificServices || [];
 
-    // Si no hay servicios del frontend, intentamos autodetectar
-    if (servicesToExpand.length === 0) {
-        console.log('   🧠 Auto-detectando servicios (fallback)...');
-        servicesToExpand = await autoDetectServices(niche, city, locationCode);
-    }
+        // Si no hay servicios del frontend, intentamos autodetectar
+        if (servicesToExpand.length === 0) {
+            console.log('   🧠 Auto-detectando servicios (fallback)...');
+            servicesToExpand = await autoDetectServices(niche, city, locationCode);
+        }
 
-    if (servicesToExpand.length > 0) {
-        console.log(`   🎯 Servicios a procesar: ${servicesToExpand.length}`);
+        if (servicesToExpand.length > 0) {
+            // 🔥 OPTIMIZACIÓN: Limitamos a los 6 servicios más relevantes para controlar costes
+            const limitedServices = servicesToExpand.slice(0, 6);
+            console.log(`   🎯 Servicios a procesar: ${limitedServices.length} (de ${servicesToExpand.length} detectados)`);
 
-        for (const service of servicesToExpand) {
-            try {
-                // 1. Simplificar query (ej: "Rejas de Seguridad..." -> "Rejas Seguridad")
-                const simplifiedService = simplifyServiceQuery(service);
+            for (const service of limitedServices) {
+                // 🛑 RATE LIMIT CUSTOM: Esperar 5s entre llamadas para evitar 429
+                await new Promise(resolve => setTimeout(resolve, 5000));
 
-                console.log(`      🔍 "${service}" -> Query: "${simplifiedService}"...`);
+                try {
+                    // 1. Simplificar query (ej: "Rejas de Seguridad..." -> "Rejas Seguridad")
+                    const simplifiedService = simplifyServiceQuery(service);
 
-                // 2. Búsqueda AMPLIA (sin ciudad) para capturar variedad
-                // Usamos locationCode para que sea relevante al país/región
-                let relatedService = await getRelatedKeywords(
-                    simplifiedService,
-                    locationCode
-                );
+                    console.log(`      🔍 "${service}" -> Query: "${simplifiedService}"...`);
 
-                // FALLBACK INTELIGENTE: Si falla con 3 palabras, probamos con 2
-                if (relatedService.length === 0 && simplifiedService.split(' ').length > 2) {
-                    const shorterQuery = simplifiedService.split(' ').slice(0, 2).join(' ');
-                    console.log(`         ⚠️ Sin resultados. Reintentando más corto: "${shorterQuery}"...`);
-                    relatedService = await getRelatedKeywords(shorterQuery, locationCode);
-                }
+                    // 2. Búsqueda AMPLIA (sin ciudad) para capturar variedad
+                    // Usamos locationCode para que sea relevante al país/región
+                    let relatedService = await getRelatedKeywords(
+                        simplifiedService,
+                        locationCode
+                    );
 
-                if (relatedService.length > 0) {
-                    // Filtrar keywords que sean MUY genéricas si no contienen la ciudad
-                    // Pero mantenemos las que sean buenas oportunidades
-                    const tagged = relatedService.map(k => ({ ...k, source: 'service_expansion' }));
-                    allKeywords.push(...tagged);
-                    stats.fromServices += relatedService.length;
-                    console.log(`         ✅ ${relatedService.length} keywords encontradas`);
-                } else {
-                    // Fallback: Intentar con ciudad si la genérica falló
-                    const queryWithCity = `${simplifiedService} ${city}`;
-                    console.log(`         ⚠️ Reintentando con ciudad: "${queryWithCity}"...`);
-                    const relatedCity = await getRelatedKeywords(queryWithCity, locationCode);
-
-                    if (relatedCity.length > 0) {
-                        const tagged = relatedCity.map(k => ({ ...k, source: 'service_expansion' }));
-                        allKeywords.push(...tagged);
-                        stats.fromServices += relatedCity.length;
-                        console.log(`         ✅ ${relatedCity.length} keywords (con ciudad)`);
-                    } else {
-                        console.log(`         ❌ Sin resultados`);
+                    // FALLBACK INTELIGENTE: Si falla con 3 palabras, probamos con 2
+                    if (relatedService.length === 0 && simplifiedService.split(' ').length > 2) {
+                        const shorterQuery = simplifiedService.split(' ').slice(0, 2).join(' ');
+                        console.log(`         ⚠️ Sin resultados. Reintentando más corto: "${shorterQuery}"...`);
+                        relatedService = await getRelatedKeywords(shorterQuery, locationCode);
                     }
+
+                    if (relatedService.length > 0) {
+                        // Filtrar keywords que sean MUY genéricas si no contienen la ciudad
+                        // Pero mantenemos las que sean buenas oportunidades
+                        const tagged = relatedService.map(k => ({ ...k, source: 'service_expansion' }));
+                        allKeywords.push(...tagged);
+                        stats.fromServices += relatedService.length;
+                        console.log(`         ✅ ${relatedService.length} keywords encontradas`);
+                    } else {
+                        // Fallback: Intentar con ciudad si la genérica falló
+                        const queryWithCity = `${simplifiedService} ${simpleCity}`;
+                        console.log(`         ⚠️ Reintentando con ciudad: "${queryWithCity}"...`);
+                        const relatedCity = await getRelatedKeywords(queryWithCity, locationCode);
+
+                        if (relatedCity.length > 0) {
+                            const tagged = relatedCity.map(k => ({ ...k, source: 'service_expansion' }));
+                            allKeywords.push(...tagged);
+                            stats.fromServices += relatedCity.length;
+                            console.log(`         ✅ ${relatedCity.length} keywords (con ciudad)`);
+                        } else {
+                            console.log(`         ❌ Sin resultados`);
+                        }
+                    }
+                } catch (error) {
+                    console.log(`      ⚠️ Error en servicio "${service}"`);
                 }
-            } catch (error) {
-                console.log(`      ⚠️ Error en servicio "${service}"`);
+            }
+        } else {
+            console.log('⏩ FASE 6: SERVICIOS ESPECÍFICOS (Saltado - Ya completado)');
+        }
+
+        stats.totalCollected = allKeywords.length;
+
+        // ========================================================================
+        // FASE 7: FILTRADO INTELIGENTE
+        // ========================================================================
+        console.log('\n🔬 FASE 7: Filtrado inteligente...\n');
+        console.log(`   📊 Total recopilado: ${stats.totalCollected}`);
+
+        // 1. Eliminar ruido universal
+        allKeywords = allKeywords.filter(k => {
+            const kwLower = k.keyword.toLowerCase();
+            return !NOISE_PATTERNS.some(pattern => kwLower.includes(pattern));
+        });
+
+        // 1.5 Filtrar ciudades irrelevantes (Estricto)
+        const countBeforeCityFilter = allKeywords.length;
+        allKeywords = filterByCity(allKeywords, city);
+        console.log(`   🏙️ Filtradas por ciudad incorrecta: ${countBeforeCityFilter - allKeywords.length}`);
+
+        console.log(`   🗑️ Después de filtrar ruido: ${allKeywords.length}`);
+
+        // 2. Calcular relevancia detallada
+        console.log(`   🎯 Calculando relevancia...`);
+        allKeywords = allKeywords.map(k => {
+            // Pasamos los servicios específicos para dar bonus
+            const { score, reasons } = calculateLocalScore(k, niche, city, config.specificServices);
+            return { ...k, relevanceScore: score, relevanceReasons: reasons };
+        });
+
+        // 3. Filtrar por score y volumen
+        // NOTA: Aquí somos más permisivos con las keywords de servicios
+        // Si vienen de 'service_expansion', permitimos un score un poco más bajo si tienen buen volumen
+        const validKeywords = allKeywords.filter(k => {
+            const isService = k.source === 'service_expansion';
+            const minScore = isService ? Math.max(1, config.minRelevanceScore - 2) : config.minRelevanceScore;
+
+            return k.relevanceScore >= minScore && (k.volume || 0) >= config.minSearchVolume;
+        });
+
+        stats.afterFiltering = validKeywords.length;
+        console.log(`   ✅ Keywords válidas: ${stats.afterFiltering}`);
+
+        // ========================================================================
+        // FASE 8: DEDUPLICACIÓN
+        // ========================================================================
+        console.log('\n🔄 FASE 8: Deduplicación...\n');
+
+        const uniqueMap = new Map();
+        validKeywords.forEach(k => {
+            const text = k.keyword.toLowerCase().trim();
+            const existing = uniqueMap.get(text);
+
+            // Nos quedamos con la versión que tenga mejor score o más volumen
+            if (!existing || k.relevanceScore > existing.relevanceScore) {
+                uniqueMap.set(text, { ...k, keyword: text });
+            }
+        });
+
+        // Ordenar por relevancia y luego volumen
+        let finalKeywords = Array.from(uniqueMap.values())
+            .sort((a, b) => {
+                if (b.relevanceScore !== a.relevanceScore) {
+                    return b.relevanceScore - a.relevanceScore;
+                }
+                return (b.volume || 0) - (a.volume || 0);
+            })
+            .slice(0, config.maxKeywordsForAI); // Limitar para la IA
+
+        console.log(`   ✅ Keywords únicas para clustering: ${finalKeywords.length}`);
+
+        // ========================================================================
+        // FASE 9: PEOPLE ALSO ASK
+        // ========================================================================
+        console.log('\n❓ FASE 9: People Also Ask...\n');
+
+        let paaQuestions = [];
+        try {
+            paaQuestions = await getPeopleAlsoAsk(`${niche} ${city}`, locationCode);
+            console.log(`   ✅ ${paaQuestions.length} preguntas encontradas`);
+        } catch (error) {
+            console.log(`   ⚠️ No se pudieron obtener preguntas PAA`);
+        }
+
+        // ========================================================================
+        // FASE 10: CLUSTERING CON GEMINI (El paso final para la Web)
+        // ========================================================================
+
+        let services = [];
+        let blog = [];
+
+        if (!skipClustering) {
+            console.log('\n🧠 FASE 10: Clustering con Gemini AI...\n');
+            const result = await runGeminiClustering(finalKeywords, niche, city);
+            services = result.services || [];
+            blog = result.blog || [];
+        } else {
+            console.log('\n⏸️ FASE 10: Clustering OMITIDO (skipClustering=true)....\n');
+        }
+
+        console.log('═'.repeat(70));
+        console.log('✅ PROCESO COMPLETADO');
+        console.log('═'.repeat(70));
+        console.log(`📊 Estadísticas Finales:`);
+        console.log(`   - Servicios generados: ${services.length}`);
+        console.log(`   - Artículos Blog generados: ${blog.length}`);
+        console.log(`   - Keywords totales usadas: ${finalKeywords.length}`);
+        console.log('═'.repeat(70) + '\n');
+
+        // ========================================================================
+        // FASE 11: ESTRUCTURA HOME (Añadido para el Frontend)
+        // ========================================================================
+
+        let homeStructure = {
+            h1: `${niche} en ${city}`,
+            h2s: ["Nuestros Servicios", "Por qué elegirnos", "Opiniones de Clientes", "Preguntas Frecuentes"]
+        };
+
+        if (services.length > 0) {
+            // El servicio con más volumen suele ser el mejor candidato para la Home
+            const mainService = [...services].sort((a, b) => {
+                const volA = a.keywords.reduce((sum, k) => sum + (k.volume || 0), 0);
+                const volB = b.keywords.reduce((sum, k) => sum + (k.volume || 0), 0);
+                return volB - volA;
+            })[0];
+
+            if (mainService && mainService.meta_suggestions && mainService.meta_suggestions[0]) {
+                homeStructure.h1 = mainService.meta_suggestions[0].h1;
+            }
+
+            // Usar los nombres de otros servicios como H2s
+            const serviceH2s = services
+                .filter(c => c.name !== mainService?.name)
+                .slice(0, 4)
+                .map(c => c.name);
+
+            if (serviceH2s.length > 0) {
+                homeStructure.h2s = [
+                    ...serviceH2s,
+                    "Sobre Nosotros",
+                    "Opiniones",
+                    "Contacto"
+                ];
             }
         }
-        console.log(`   ✅ ${stats.fromServices} keywords de servicios`);
-    } else {
-        console.log('   ⚠️ No hay servicios para expandir');
+
+        return {
+            niche: niche,
+            city: city,
+            services: services, // ✅ SEPARADO
+            blog: blog,         // ✅ SEPARADO
+            home_structure: homeStructure,
+            stats: stats,
+            market_analysis: `Análisis de ${niche} en ${city}. ${finalKeywords.length} keywords relevantes encontradas.`,
+            raw_data: {
+                competitors: competitors, // Usamos la variable competitors del scope superior
+                top_keywords: finalKeywords
+            },
+            paa_questions: paaQuestions
+        };
     }
-
-    stats.totalCollected = allKeywords.length;
-
-    // ========================================================================
-    // FASE 7: FILTRADO INTELIGENTE
-    // ========================================================================
-    console.log('\n🔬 FASE 7: Filtrado inteligente...\n');
-    console.log(`   📊 Total recopilado: ${stats.totalCollected}`);
-
-    // 1. Eliminar ruido universal
-    allKeywords = allKeywords.filter(k => {
-        const kwLower = k.keyword.toLowerCase();
-        return !NOISE_PATTERNS.some(pattern => kwLower.includes(pattern));
-    });
-    console.log(`   🗑️ Después de filtrar ruido: ${allKeywords.length}`);
-
-    // 2. Calcular relevancia detallada
-    console.log(`   🎯 Calculando relevancia...`);
-    allKeywords = allKeywords.map(k => {
-        // Pasamos los servicios específicos para dar bonus
-        const { score, reasons } = calculateLocalScore(k, niche, city, config.specificServices);
-        return { ...k, relevanceScore: score, relevanceReasons: reasons };
-    });
-
-    // 3. Filtrar por score y volumen
-    // NOTA: Aquí somos más permisivos con las keywords de servicios
-    // Si vienen de 'service_expansion', permitimos un score un poco más bajo si tienen buen volumen
-    const validKeywords = allKeywords.filter(k => {
-        const isService = k.source === 'service_expansion';
-        const minScore = isService ? Math.max(1, config.minRelevanceScore - 2) : config.minRelevanceScore;
-
-        return k.relevanceScore >= minScore && (k.volume || 0) >= config.minSearchVolume;
-    });
-
-    stats.afterFiltering = validKeywords.length;
-    console.log(`   ✅ Keywords válidas: ${stats.afterFiltering}`);
-
-    // ========================================================================
-    // FASE 8: DEDUPLICACIÓN
-    // ========================================================================
-    console.log('\n🔄 FASE 8: Deduplicación...\n');
-
-    const uniqueMap = new Map();
-    validKeywords.forEach(k => {
-        const text = k.keyword.toLowerCase().trim();
-        const existing = uniqueMap.get(text);
-
-        // Nos quedamos con la versión que tenga mejor score o más volumen
-        if (!existing || k.relevanceScore > existing.relevanceScore) {
-            uniqueMap.set(text, { ...k, keyword: text });
-        }
-    });
-
-    // Ordenar por relevancia y luego volumen
-    let finalKeywords = Array.from(uniqueMap.values())
-        .sort((a, b) => {
-            if (b.relevanceScore !== a.relevanceScore) {
-                return b.relevanceScore - a.relevanceScore;
-            }
-            return (b.volume || 0) - (a.volume || 0);
-        })
-        .slice(0, config.maxKeywordsForAI); // Limitar para la IA
-
-    console.log(`   ✅ Keywords únicas para clustering: ${finalKeywords.length}`);
-
-    // ========================================================================
-    // FASE 9: PEOPLE ALSO ASK
-    // ========================================================================
-    console.log('\n❓ FASE 9: People Also Ask...\n');
-
-    let paaQuestions = [];
-    try {
-        paaQuestions = await getPeopleAlsoAsk(`${niche} ${city}`, locationCode);
-        console.log(`   ✅ ${paaQuestions.length} preguntas encontradas`);
-    } catch (error) {
-        console.log(`   ⚠️ No se pudieron obtener preguntas PAA`);
-    }
-
-    // ========================================================================
-    // FASE 10: CLUSTERING CON GEMINI (El paso final para la Web)
-    // ========================================================================
-
-    let clusters = [];
-
-    if (!skipClustering) {
-        console.log('\n🧠 FASE 10: Clustering con Gemini AI...\n');
-        clusters = await runGeminiClustering(finalKeywords, niche, city);
-    } else {
-        console.log('\n⏸️ FASE 10: Clustering OMITIDO (skipClustering=true)....\n');
-    }
-
-    console.log('═'.repeat(70));
-    console.log('✅ PROCESO COMPLETADO');
-    console.log('═'.repeat(70));
-    console.log(`📊 Estadísticas Finales:`);
-    console.log(`   - Clusters generados: ${clusters.length}`);
-    console.log(`   - Keywords totales usadas: ${finalKeywords.length}`);
-    console.log('═'.repeat(70) + '\n');
-
-    // ========================================================================
-    // FASE 11: ESTRUCTURA HOME (Añadido para el Frontend)
-    // ========================================================================
-
-    let homeStructure = {
-        h1: `${niche} en ${city}`,
-        h2s: ["Nuestros Servicios", "Por qué elegirnos", "Opiniones de Clientes", "Preguntas Frecuentes"]
-    };
-
-    if (clusters.length > 0) {
-        // El cluster con más volumen suele ser el mejor candidato para la Home
-        const mainCluster = [...clusters].sort((a, b) => {
-            const volA = a.keywords.reduce((sum, k) => sum + (k.volume || 0), 0);
-            const volB = b.keywords.reduce((sum, k) => sum + (k.volume || 0), 0);
-            return volB - volA;
-        })[0];
-
-        if (mainCluster && mainCluster.meta_suggestions && mainCluster.meta_suggestions[0]) {
-            homeStructure.h1 = mainCluster.meta_suggestions[0].h1;
-        }
-
-        // Usar los nombres de los otros clusters como H2s de servicios
-        const serviceH2s = clusters
-            .filter(c => c.name !== mainCluster?.name)
-            .slice(0, 4)
-            .map(c => c.name);
-
-        if (serviceH2s.length > 0) {
-            homeStructure.h2s = [
-                ...serviceH2s,
-                "Sobre Nosotros",
-                "Opiniones",
-                "Contacto"
-            ];
-        }
-    }
-
-    return {
-        niche: niche,
-        city: city,
-        clusters: clusters,
-        home_structure: homeStructure, // ✅ AÑADIDO
-        stats: stats,
-        market_analysis: `Análisis de ${niche} en ${city}. ${finalKeywords.length} keywords relevantes encontradas.`,
-        raw_data: {
-            competitors: competitors, // Usamos la variable competitors del scope superior
-            top_keywords: finalKeywords
-        },
-        paa_questions: paaQuestions
-    };
 }
 
 // ============================================================================
@@ -650,97 +754,113 @@ async function generateCreativeSeedsWithGemini(niche) {
 }
 
 export async function runGeminiClustering(keywords, niche, city) {
-    if (keywords.length === 0) return [];
+    if (keywords.length === 0) return { services: [], blog_topics: [] };
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
     const prompt = `
-    ACTÚA COMO: Experto en SEO Técnico y Arquitectura de Información.
+    ACTÚA COMO: Experto en SEO Técnico y Estratega de Contenidos.
     
     CONTEXTO:
     Estamos creando la estructura de una web local para el nicho "${niche}" en la ciudad de "${city}".
     
     OBJETIVO:
-    Agrupar la lista de keywords proporcionada en CLUSTERS SEMÁNTICOS lógicos que se convertirán en URLs de servicio (Landing Pages).
-    
+    Clasificar la lista de keywords en dos grupos:
+    1. **SERVICIOS (Comercial)**: Páginas de venta para contratar el servicio.
+    2. **BLOG (Informacional)**: Artículos educativos para resolver dudas (Top of Funnel).
+
     LISTA DE KEYWORDS (Datos brutos):
-    ${keywords.map(k => `- KW: "${k.keyword}" | Vol: ${k.volume} | CPC: ${k.cpc || 0} | Diff: ${k.difficulty || 0}`).join('\n')}
+    ${keywords.slice(0, 150).map(k => `- KW: "${k.keyword}" | Vol: ${k.volume}`).join('\n')}
     
     INSTRUCCIONES DE AGRUPACIÓN:
-    1. **ATOMIZACIÓN:** Agrupa por INTENCIÓN DE SERVICIO muy específica (ej: "Alisado" separado de "Pintura"). No mezcles conceptos distintos en un mismo cluster.
-    2. **PROBLEMAS:** Si hay keywords de problemas (ej: "Humedades", "Grietas", "Gotelé"), crea clusters dedicados a la solución de esos problemas.
-    3. **HOME:** Agrupa las keywords genéricas (ej: "pintor barcelona", "precio pintor", "empresa de pintura") en un cluster llamado "HOME" o "General".
-    4. **CANTIDAD:** Crea entre 5 y 12 clusters. Prefiere clusters pequeños y específicos.
-    5. **SLUG:** Incluye la ciudad en el slug (estructura plana).
     
+    A) PARA "SERVICIOS" (Intención Transaccional):
+       - Agrupa keywords de contratación (ej: "empresa de...", "precio...", "servicio de...").
+       - Atomiza por tipo de trabajo (ej: "Alisado" es un servicio, "Pintura Decorativa" es otro).
+       - Slug: Incluye la ciudad.
+       - METADATA OBLIGATORIA: Genera H1 optimizado, SEO Title (max 60 chars) y SEO Description (max 155 chars, persuasiva).
+
+    B) PARA "BLOG" (Intención Informacional - PAA):
+       - Agrupa keywords de preguntas o problemas (ej: "cómo quitar gotelé", "manchas humedad techo", "cuánto tarda secar pintura").
+       - Crea títulos de artículos atractivos.
+       - Slug: SIN la ciudad (contenido evergreen/general), salvo que sea muy local.
+       - METADATA OBLIGATORIA: Genera H1 explicativo, SEO Title y SEO Description.
+
     FORMATO DE SALIDA (JSON ESTRICTO):
-    Debes devolver UNICAMENTE un objeto JSON válido, sin bloques de código markdown (\`\`\`) ni texto introductorio.
-    
-    Estructura requerida:
-    [
-        {
-            "name": "Nombre comercial del servicio (ej: Alisado de Paredes)",
-            "slug": "alisado-paredes-barcelona",
-            "intent": "COMMERCIAL",
-            "meta_suggestions": [
-                {
-                    "h1": "H1 optimizado con keyword principal + ciudad",
-                    "seo_title": "Title Tag atractivo (max 60 chars)",
-                    "seo_description": "Meta description con CTR alto (max 155 chars)"
-                }
-            ],
-            "keywords": [
-                { "keyword": "alisar paredes precio", "volume": 200, "cpc": 0.5, "difficulty": 15 },
-                ...
-            ]
-        }
-    ]
+    {
+        "services": [
+            {
+                "name": "Nombre Servicio",
+                "slug": "servicio-ciudad",
+                "intent": "COMMERCIAL",
+                "meta_suggestions": [{ 
+                    "h1": "Título H1 Optimizado", 
+                    "seo_title": "Título SEO | Brand",
+                    "seo_description": "Descripción atractiva para CTR..." 
+                }],
+                "keywords": ["kw1", "kw2"]
+            }
+        ],
+        "blog": [
+            {
+                "name": "Título del Artículo (H1)",
+                "slug": "titulo-articulo",
+                "intent": "INFORMATIONAL",
+                "meta_suggestions": [{ 
+                    "h1": "Título H1 Artículo",
+                    "seo_title": "Título SEO para Blog", 
+                    "seo_description": "Resumen del artículo..." 
+                }],
+                "keywords": ["pregunta 1", "duda 2"]
+            }
+        ]
+    }
     `;
 
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
-        const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-        const clusters = JSON.parse(text);
+        // Robust extraction: Find the first { and last } to ignore conversational text
+        const text = response.text();
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        const jsonString = jsonMatch ? jsonMatch[0] : text;
+        const data = JSON.parse(jsonString);
 
-        // Enriquecer clusters con datos originales
-        const enrichedClusters = clusters.map(c => ({
+        // Función helper para enriquecer clusters
+        const enrich = (list) => list.map(c => ({
             ...c,
             keywords: c.keywords.map(k => {
-                const original = keywords.find(ok => ok.keyword === k.keyword);
-                return original || k;
+                // Buscamos la keyword original completa o creamos un objeto parcial
+                const original = keywords.find(ok => ok.keyword === k); // k puede ser string en la respuesta de Gemini a veces
+                return original || { keyword: k, volume: 0, relevanceScore: 0 };
             })
         }));
 
-        // GUARDAR EN ARCHIVO PARA PERSISTENCIA
-        const mdContent = `# Análisis de Clustering: ${niche} en ${city}
-Fecha: ${new Date().toLocaleString()}
-Modelo: gemini-2.5-pro
+        const enrichedServices = enrich(data.services || []);
+        // Check for 'blog' or 'blog_topics' key to be safe with AI response variability
+        const enrichedBlog = enrich(data.blog || data.blog_topics || []);
 
-${enrichedClusters.map(c => `
-## 📂 ${c.name} (${c.keywords.length} keywords)
-**Slug:** \`${c.slug}\`
-**Intención:** ${c.intent}
-**H1 Sugerido:** ${c.meta_suggestions?.[0]?.h1 || 'N/A'}
-**SEO Title:** ${c.meta_suggestions?.[0]?.seo_title || 'N/A'}
+        // Devolvemos OBJETO SEPARADO en lugar de array plano
+        return {
+            services: enrichedServices.map(c => ({ ...c, type: 'SERVICE' })),
+            blog: enrichedBlog.map(c => ({ ...c, type: 'BLOG' }))
+        };
 
-| Keyword | Vol | Score |
-|---------|-----|-------|
-${c.keywords.map(k => `| ${k.keyword} | ${k.volume} | ${k.relevanceScore} |`).join('\n')}
-`).join('\n---\n')}
-`;
-        fs.writeFileSync('clustering_analysis.md', mdContent);
-        console.log('   💾 Clusters guardados en clustering_analysis.md');
-
-        return enrichedClusters;
     } catch (error) {
         console.error("Error en Gemini Clustering:", error);
-        // Fallback: un solo cluster con todo
-        return [{
-            name: `Servicios de ${niche}`,
-            keywords: keywords
-        }];
+        // Fallback robusto devolviendo estructura vacía pero válida
+        return {
+            services: [{
+                name: `Servicios de ${niche}`,
+                slug: `servicios-${niche.toLowerCase().replace(/\s+/g, '-')}`,
+                type: 'SERVICE',
+                intent: 'COMMERCIAL',
+                keywords: keywords,
+                meta_suggestions: []
+            }],
+            blog: []
+        };
     }
 }
 
@@ -767,4 +887,108 @@ function simplifyServiceQuery(serviceName) {
     }
 
     return clean;
+}
+export function importKeywordsFromCSV(filePath) {
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`El archivo CSV no existe: ${filePath}`);
+    }
+
+    let fileContent = fs.readFileSync(filePath, 'utf8');
+
+    // 1. Eliminar BOM
+    fileContent = fileContent.replace(/^\uFEFF/, '');
+
+    // 2. Detectar delimitador (force comma approach if looks like standard csv)
+    const firstLine = fileContent.split('\n')[0];
+    const commaCount = (firstLine.match(/,/g) || []).length;
+    const semicolonCount = (firstLine.match(/;/g) || []).length;
+
+    let delimiter = ',';
+    // Si hay muchos más ; que , usamos ;
+    if (semicolonCount > commaCount && semicolonCount > 2) delimiter = ';';
+
+    console.log(`   🔍 CSV Debug: Detected Delimiter: "${delimiter}"`);
+
+    // Parseo síncrono
+    const records = parse(fileContent, {
+        columns: false, // Usamos false para tener control total sobre índices vs headers
+        skip_empty_lines: true,
+        trim: true,
+        delimiter: delimiter,
+        relax_column_count: true,
+        relax_quotes: true,
+        quote: '"'
+    });
+
+    console.log(`   🔍 Rows Parsed: ${records.length}`);
+    if (records.length === 0) return [];
+
+    // 4. Detectar Header real
+    const firstRow = records[0];
+    const firstCol = String(firstRow[0]).trim().toLowerCase();
+
+    let hasHeader = false;
+    // La primera columna se llama "Keyword" según lo que vimos en el archivo
+    if (firstCol.includes('keyword') || firstCol.includes('word') || firstCol.includes('palabra')) {
+        hasHeader = true;
+        console.log('   🔍 Header Detected: YES');
+    }
+
+    const keywords = records.map((row, index) => {
+        // Skip header row
+        if (hasHeader && index === 0) return null;
+
+        let term = '';
+        let vol = 0;
+        let cpc = 0;
+        let kd = 0; // Keyword Difficulty
+
+        if (hasHeader) {
+            // Mapping Dinámico basado en los headers reales que vimos:
+            // 0: Keyword
+            // 1: Avg. Search Volume...
+            // 6: CPC/USD
+            // 8: Keyword Difficulty  <-- IMPORTANTE
+
+            // Re-escaneamos los headers de la fila 0 por seguridad
+            if (index > 0) { // Solo necesitamos hacer esto una vez, pero aquí lo hacemos implícito
+                // Usamos índices fijos basados en la inspección visual CONFIRMADA
+                // "Keyword" -> 0
+                // "Volume" -> 1 (AvgSearchVolume)
+                // "CPC" -> 6
+                // "Difficulty" -> 8 (Keyword Difficulty)
+
+                term = row[0];
+                vol = row[1];
+                cpc = row[6];
+                kd = row[8];
+            }
+        } else {
+            // Fallback posicional si por alguna razón falla el header check
+            term = row[0];
+            vol = row[1];
+            cpc = row[6];
+            kd = row[8];
+        }
+
+        // Limpieza y Conversión
+        if (!term || typeof term !== 'string' || term.length < 2) return null;
+        term = term.replace(/^["']|["']$/g, '').trim();
+
+        // Numeros
+        if (typeof vol === 'string') vol = parseInt(vol.replace(/[^0-9]/g, ''), 10);
+        if (typeof cpc === 'string') cpc = parseFloat(cpc.replace(',', '.').replace(/[^0-9.]/g, ''));
+        if (typeof kd === 'string') kd = parseInt(kd.replace(/[^0-9]/g, ''), 10);
+
+        return {
+            keyword: term,
+            volume: isNaN(vol) ? 0 : vol,
+            cpc: isNaN(cpc) ? 0 : cpc,
+            competition: isNaN(kd) ? 0 : kd,
+            source: 'manual_csv',
+            location_code: 'csv_import'
+        };
+    }).filter(k => k !== null);
+
+    return keywords;
 }

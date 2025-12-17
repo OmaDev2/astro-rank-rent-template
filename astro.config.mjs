@@ -19,6 +19,10 @@ export default defineConfig({
   // 🔗 Trailing slash: siempre con barra al final (bueno para SEO)
   trailingSlash: 'ignore',
 
+  image: {
+    domains: ["images.unsplash.com"],
+  },
+
   integrations: [
     react(),
     keystatic(),

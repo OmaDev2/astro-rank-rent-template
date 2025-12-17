@@ -1,6 +1,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
+import { SERVICE_DISCOVERY_PROMPT } from '../../src/prompts/service_discovery.js';
 
 dotenv.config();
 
@@ -13,31 +14,7 @@ const model = genAI.getGenerativeModel({
 export async function discoverNicheServices(niche) {
     console.log(`🧠 Consultando a Gemini sobre servicios para: "${niche}"...`);
 
-    const prompt = `
-    ACTÚA COMO: Experto en SEO Local y Estrategia de Negocios.
-    
-    OBJETIVO: Identificar una lista exhaustiva de SERVICIOS ESPECÍFICOS (entre 10 y 15) para el nicho: "${niche}".
-    
-    INSTRUCCIONES CRÍTICAS:
-    1. DESGLOSA AL MÁXIMO: No agrupes servicios diferentes en una misma línea.
-       - ❌ MAL: "Alisado de paredes y eliminación de gotelé"
-       - ✅ BIEN: "Alisado de paredes", "Eliminación de gotelé" (como dos items separados)
-       - ❌ MAL: "Pintura de interiores y exteriores"
-       - ✅ BIEN: "Pintura de interiores", "Pintura de exteriores"
-    2. BUSCA LA ESPECIFICIDAD: Piensa en qué escribe el usuario en Google.
-    3. Ignora servicios genéricos (ej: "reparaciones", "mantenimiento") si no son específicos.
-    4. Ignora herramientas o materiales sueltos.
-    
-    FORMATO JSON:
-    {
-        "services": [
-            "Servicio específico 1",
-            "Servicio específico 2",
-            ...
-        ],
-        "reasoning": "Breve explicación"
-    }
-    `;
+    const prompt = SERVICE_DISCOVERY_PROMPT(niche);
 
     try {
         const result = await model.generateContent(prompt);

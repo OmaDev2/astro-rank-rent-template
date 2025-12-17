@@ -1,0 +1,109 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import FinalCTA from "../../components/FinalCTA.astro";
+import { getCollection } from "astro:content";
+import { Calendar, User, ArrowRight } from "lucide-react";
+
+const posts = (await getCollection("blog")).sort(
+	(a, b) => {
+        const dateA = a.data.pubDate ? new Date(a.data.pubDate).valueOf() : 0;
+        const dateB = b.data.pubDate ? new Date(b.data.pubDate).valueOf() : 0;
+        return dateB - dateA;
+    }
+);
+
+// Formateador de fecha
+const formatDate = (dateString?: string) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+---
+
+<Layout title="Blog - Consejos y Guías" description="Artículos, guías y consejos útiles sobre nuestros servicios y el sector.">
+    <!-- Hero Section -->
+    <section class="relative py-20 bg-secondary overflow-hidden">
+        <div class="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-heading mb-6">
+                Nuestro <span class="text-primary">Blog</span>
+            </h1>
+            <p class="text-xl text-body max-w-2xl mx-auto">
+                Consejos expertos, guías prácticas y novedades del sector para ayudarte a tomar las mejores decisiones.
+            </p>
+        </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="py-20 bg-surface/30">
+        <div class="container mx-auto px-4">
+            {posts.length > 0 ? (
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {posts.map((post) => (
+                        <article class="bg-surface rounded-2xl shadow-sm border border-heading/5 overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full">
+                            <!-- Imagen -->
+                            <a href={`/blog/${post.slug}`} class="block aspect-video overflow-hidden relative">
+                                {post.data.image ? (
+                                    <img 
+                                        src={post.data.image} 
+                                        alt={post.data.title}
+                                        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <div class="w-full h-full bg-secondary/20 flex items-center justify-center">
+                                        <span class="text-4xl">📝</span>
+                                    </div>
+                                )}
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                            </a>
+
+                            <!-- Contenido -->
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex items-center gap-4 text-sm text-body/70 mb-4">
+                                    <span class="flex items-center gap-1">
+                                        <Calendar className="w-3 h-3" />
+                                        {formatDate(post.data.pubDate)}
+                                    </span>
+                                    {post.data.category && (
+                                        <span class="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-medium">
+                                            {post.data.category}
+                                        </span>
+                                    )}
+                                </div>
+
+                                <h2 class="text-xl font-bold text-heading mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                                    <a href={`/blog/${post.slug}`}>
+                                        {post.data.title}
+                                    </a>
+                                </h2>
+
+                                <p class="text-body text-sm line-clamp-3 mb-6">
+                                    {post.data.description}
+                                </p>
+
+                                <div class="mt-auto pt-4 border-t border-heading/5 flex justify-between items-center">
+                                    <span class="text-sm font-medium text-heading flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-xs">
+                                            <User className="w-3 h-3" />
+                                        </div>
+                                        {post.data.author || "Admin"}
+                                    </span>
+                                    <a href={`/blog/${post.slug}`} class="text-primary hover:text-primary/80 text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                        Leer más <ArrowRight className="w-4 h-4" />
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            ) : (
+                <div class="text-center py-20">
+                    <p class="text-body text-xl">No hay artículos publicados todavía.</p>
+                </div>
+            )}
+        </div>
+    </section>
+
+    <FinalCTA />
+    <Footer />
+</Layout>

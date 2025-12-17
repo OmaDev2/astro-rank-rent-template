@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Contactamos con ellos para un trabajo de pintura industrial en nuestra nave del Polígono de Ventorro del Cano. Necesitábamos un suelo resistente y nos aplicaron una pintura epoxi que ha quedado perfecta. Cumplieron plazos, algo crucial para nosotros, y fueron muy profesionales en todo momento.",
+      "author": "Javier R., Gerente de Logística",
+      "location": "Ventorro del Cano, Pozuelo de Alarcón",
+      "initials": "JR"
+    },
+    {
+      "quote": "Vivimos en La Finca y queríamos alisar el gotelé y pintar todo el piso. El trabajo ha sido de una calidad excepcional. Cuidaron cada detalle, protegieron todo el mobiliario con esmero y el acabado de las paredes es impecable. El trato fue muy cercano y el resultado final superó nuestras expectativas.",
+      "author": "Sofía G.",
+      "location": "La Finca, Pozuelo de Alarcón",
+      "initials": "SG"
+    },
+    {
+      "quote": "Como administrador de fincas, les contraté para pintar la fachada de una comunidad de vecinos en Prado de Somosaguas. El andamiaje se montó de forma rápida y segura, y el equipo trabajó de manera muy limpia y organizada, minimizando las molestias. Los vecinos están encantados con el cambio.",
+      "author": "Carlos M., Administrador",
+      "location": "Prado de Somosaguas, Pozuelo de Alarcón",
+      "initials": "CM"
+    }
+  ]
+}

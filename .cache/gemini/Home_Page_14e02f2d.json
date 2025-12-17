@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "title": "Pintores en Madrid | Presupuesto sin Compromiso | Acabados Fetén",
+    "description": "Expertos en quitar gotelé, alisar paredes y pintura de pisos en Madrid. Acabados impecables en Salamanca, Chamberí, Retiro y toda la capital. Llámanos."
+  },
+  "hero_section": {
+    "h1": "Pintores en Madrid que entienden tu casa.",
+    "subheadline": "Dejamos las paredes de tu piso lisas y perfectas. \nNos encargamos de todo: grietas, humedades y quitar el gotelé para siempre.",
+    "cta_primary": "Pedir Presupuesto Gratis",
+    "cta_secondary": "Ver nuestros trabajos"
+  },
+  "intro_content": {
+    "title": "El pintor de Madrid de toda la vida, con la técnica de hoy",
+    "paragraphs": [
+      "Llevamos más de 20 años renovando hogares y locales por todo Madrid. Desde pisos señoriales en el Barrio de Salamanca hasta lofts con carácter en Malasaña, nuestro taller ha visto de todo. No somos una empresa más; somos un equipo de maestros pintores que respeta tu casa como si fuera la nuestra: con puntualidad, limpieza y un trabajo bien hecho.",
+      "Conocemos los problemas típicos de las viviendas madrileñas: la humedad por condensación en pisos antiguos del centro, las grietas que aparecen en Chamberí o el gotelé que tantos queréis eliminar en Vallecas o Carabanchel. Por eso, no solo pintamos. Preparamos, reparamos y garantizamos un acabado que dure, resistente al sol del verano y al frío del invierno."
+    ]
+  },
+  "services_grid_intro": "Transformamos espacios. Dinos qué necesitas:",
+  "why_us_bullets": [
+    {
+      "title": "Expertos en Quitar Gotelé",
+      "desc": "Alisamos tus paredes con técnicas propias para un acabado liso perfecto, sin polvo y listo para pintar."
+    },
+    {
+      "title": "Soluciones a Humedades y Grietas",
+      "desc": "Diagnosticamos el problema, lo reparamos de raíz y aplicamos tratamientos específicos para que no vuelva a aparecer."
+    },
+    {
+      "title": "Limpieza y Puntualidad Garantizadas",
+      "desc": "Protegemos cada mueble y rincón. Cumplimos los plazos y dejamos tu casa impecable, como si no hubiéramos estado."
+    }
+  ],
+  "features": [
+    {
+      "title": "Pinturas de Alta Calidad",
+      "description": "Usamos solo materiales de primeras marcas, con opciones ecológicas y pinturas técnicas para aislar del ruido o del clima de Madrid."
+    },
+    {
+      "title": "Presupuesto Cerrado y Claro",
+      "description": "Recibirás un presupuesto detallado sin sorpresas. Lo que acordamos es lo que pagas. Transparencia total."
+    },
+    {
+      "title": "Atención en todos los distritos",
+      "description": "Damos servicio en todo Madrid Capital, cruzando la M-30 para llegar a cualquier barrio que nos necesite."
+    }
+  ],
+  "services_list": [
+    {
+      "title": "Alisado de Paredes y Eliminación de Gotelé",
+      "description": "Nuestro servicio estrella. Dejamos tus paredes completamente lisas, listas para una nueva vida. Utilizamos maquinaria de aspiración para minimizar el polvo y te entregamos un lienzo en blanco para tu decoración."
+    },
+    {
+      "title": "Pintura Plástica Interior (Pisos y Locales)",
+      "description": "Renovamos el color de tu piso, chalet u oficina con pintura plástica lavable de alta durabilidad. Te asesoramos en la elección de colores y acabados (mate, satinado) para conseguir el ambiente que buscas."
+    },
+    {
+      "title": "Tratamientos Antihumedad",
+      "description": "Solucionamos de forma definitiva los problemas de humedad por condensación o capilaridad, muy comunes en plantas bajas y pisos antiguos. Aplicamos morteros y pinturas específicas para crear una barrera eficaz."
+    },
+    {
+      "title": "Pintura Decorativa y Murales",
+      "description": "Desde estucos venecianos en un salón del Retiro a paredes con efecto hormigón en un local de Chueca. Aplicamos técnicas decorativas que convierten una pared en el foco de atención de la estancia."
+    }
+  ],
+  "process": {
+    "title": "Así trabajamos para un acabado fetén",
+    "description": "Un método claro y ordenado para garantizar tu tranquilidad y un resultado perfecto.",
+    "steps": [
+      {
+        "title": "1. Visita y Presupuesto Detallado",
+        "description": "Visitamos tu casa en Madrid para ver el trabajo en persona, entender tus necesidades y darte un presupuesto cerrado, sin compromiso y por escrito."
+      },
+      {
+        "title": "2. Preparación y Protección",
+        "description": "El día acordado, nuestro equipo llega puntual. Lo primero es proteger todo: suelos, muebles, puertas y ventanas. La limpieza es nuestra obsesión."
+      },
+      {
+        "title": "3. Ejecución y Acabados",
+        "description": "Reparamos imperfecciones, alisamos si es necesario y aplicamos las capas de pintura con la técnica adecuada. Supervisamos cada detalle para un acabado impecable."
+      },
+      {
+        "title": "4. Limpieza Final y Revisión",
+        "description": "Retiramos todas las protecciones, limpiamos la zona de trabajo y revisamos contigo el resultado final. No nos vamos hasta que no estés 100% satisfecho."
+      }
+    ]
+  },
+  "local_closing": "Damos servicio en toda la Comunidad de Madrid, con especial presencia en la capital. Tanto si vives junto al Parque del Retiro, en Chamartín, necesitas renovar un piso en Carabanchel o darle un nuevo aire a tu local en Lavapiés, nuestro equipo está listo para ayudarte. Somos tus pintores de confianza en Madrid.",
+  "faq": [
+    {
+      "question": "¿Cuánto cuesta pintar un piso en Madrid?",
+      "answer": "El precio depende de los metros cuadrados, el estado de las paredes (si hay que quitar gotelé, reparar grietas...) y el tipo de pintura. Lo mejor es que nos pidas un presupuesto gratuito y sin compromiso. Lo ajustamos al máximo sin sacrificar calidad."
+    },
+    {
+      "question": "¿Cuánto tardáis en pintar un piso de unos 80m²?",
+      "answer": "Si las paredes están en buen estado, solemos tardar entre 3 y 4 días. Si hay que alisar paredes eliminando gotelé, el proceso puede llevar entre 6 y 8 días. Te daremos un plazo cerrado en el presupuesto."
+    },
+    {
+      "question": "¿Tengo que vaciar la casa o tapar los muebles?",
+      "answer": "No tienes que preocuparte por nada. Nosotros nos encargamos de mover los muebles necesarios y de proteger absolutamente todo con plásticos y cintas. Al terminar, lo dejamos todo limpio y en su sitio."
+    }
+  ]
+}

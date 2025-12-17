@@ -2,7 +2,7 @@
 import ServiceLayout from "../layouts/ServiceLayout.astro";
 import { getCollection, getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
-import type { WithContext, Service, FAQPage } from "schema-dts";
+import type { WithContext, Service, FAQPage, BreadcrumbList } from "schema-dts";
 
 // Importar componentes MDX
 import CtaBlock from "../components/mdx/CtaBlock.astro";
@@ -48,26 +48,45 @@ const testimonials = await getCollection(
 );
 
 // 5. Schema SEO
+// 5. Schema SEO
+import { getAggregateRating, generateBreadcrumbsList } from "@/lib/seo";
+
+const aggregateRating = getAggregateRating(testimonials);
+
 const serviceSchema: WithContext<Service> = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: data.title,
     description: data.seoDesc,
     provider: {
-        "@type": "LocalBusiness",
+        "@type": (settings.businessType as any) || "LocalBusiness",
         name: settings.siteName,
         telephone: settings.phone,
+        image: data.heroImage,
         address: {
             "@type": "PostalAddress",
             addressLocality: settings.city,
             addressCountry: "ES",
         },
+        ...(aggregateRating && { aggregateRating }),
+        ...(settings.coordinates && {
+            hasMap: `https://www.google.com/maps?q=${settings.coordinates.lat},${settings.coordinates.lng}`,
+        }),
     },
     areaServed: {
         "@type": "City",
         name: settings.city,
     },
+    ...(aggregateRating && { aggregateRating }), // También a nivel de servicio
 };
+
+const breadcrumbsPoints = [
+    { name: "Inicio", item: Astro.site?.href || "https://example.com" },
+    { name: "Servicios", item: new URL("/#servicios", Astro.site).href },
+    { name: data.title, item: Astro.url.href },
+];
+
+const breadcrumbsSchema = generateBreadcrumbsList(breadcrumbsPoints);
 
 const faqSchema: WithContext<FAQPage> | null =
     data.faq && data.faq.length > 0
@@ -85,7 +104,12 @@ const faqSchema: WithContext<FAQPage> | null =
           }
         : null;
 
-const schema = faqSchema ? [serviceSchema, faqSchema] : serviceSchema;
+const schema: (
+    | WithContext<Service>
+    | WithContext<BreadcrumbList>
+    | WithContext<FAQPage>
+)[] = [serviceSchema, breadcrumbsSchema];
+if (faqSchema) schema.push(faqSchema);
 
 // 6. SEO: Título y descripción
 const pageTitle =

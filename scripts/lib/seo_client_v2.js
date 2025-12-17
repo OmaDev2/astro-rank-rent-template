@@ -201,7 +201,8 @@ export function filterByCity(keywords, targetCity) {
     if (!targetCity) return keywords;
 
     const targetCityLower = targetCity.toLowerCase().trim();
-    const otherCities = SPANISH_CITIES.filter(c => c !== targetCityLower);
+    // Excluir ciudades que estén contenidas en la ciudad objetivo (ej: "Province of Barcelona" contiene "barcelona")
+    const otherCities = SPANISH_CITIES.filter(c => !targetCityLower.includes(c));
 
     return keywords.filter(k => {
         const kwLower = k.keyword.toLowerCase();
@@ -265,7 +266,8 @@ export function calculateRelevance(keyword, niche, targetCity) {
 
     // -20 si contiene OTRA ciudad (penalización SEVERA para SEO local)
     if (cityLower) {
-        const otherCities = SPANISH_CITIES.filter(c => c !== cityLower);
+        // Excluir ciudades que estén contenidas en la ciudad objetivo
+        const otherCities = SPANISH_CITIES.filter(c => !cityLower.includes(c));
         if (otherCities.some(city => new RegExp(`\\b${city}\\b`, 'i').test(kwLower))) {
             score -= 20;
         }
@@ -441,6 +443,47 @@ export async function getCompetitorKeywords(domain, location, targetCity, top10O
     }
     */
 
+    // 4. 🔥 ENRIQUECIMIENTO DE VOLUMEN LOCAL
+    // Los datos de Labs son a nivel PAÍS. Necesitamos validarlos a nivel CIUDAD.
+    // Hacemos una llamada extra a getSearchVolume con las keywords encontradas.
+
+    if (keywords.length > 0) {
+        // Resolvemos el código de ubicación local (Ciudad) para el chequeo de volumen
+        const locationCode = getLocationCode(location);
+        console.log(`   🔄 Refinando volúmenes para ubicación: ${locationCode} (Ads API)...`);
+
+        // Solo verificamos volumen de las top 200 para no quemar créditos si hay muchas
+        const keywordsToCheck = keywords.slice(0, 200).map(k => k.keyword);
+
+        try {
+            const localVolMap = await getSearchVolume(keywordsToCheck, locationCode);
+
+            // Actualizamos las keywords con los datos locales
+            keywords = keywords.map(k => {
+                const localData = localVolMap[k.keyword.toLowerCase()];
+                if (localData) {
+                    return {
+                        ...k,
+                        volume: localData.volume, // Volumen local real
+                        cpc: localData.cpc,
+                        competition: localData.competition
+                    };
+                }
+                // Si no hay dato local (raro), mantenemos el global pero marcado con warning
+                return { ...k, is_global_volume: true };
+            });
+
+            // Filtramos las que tengan 0 búsquedas locales reales (opcional, pero recomendado para limpiar basura)
+            // A veces Labs dice 1000 (España) pero en la ciudad es 0.
+            const beforeLocalFilter = keywords.length;
+            keywords = keywords.filter(k => k.volume > 0 || k.is_global_volume);
+            console.log(`   📉 Filtrado por volumen local 0: ${beforeLocalFilter} -> ${keywords.length}`);
+
+        } catch (error) {
+            console.warn(`   ⚠️ Fallo al obtener volúmenes locales, usando datos globales: ${error.message}`);
+        }
+    }
+
     console.log(`✅ ${keywords.length} keywords extraídas de ${domain}`);
     return keywords;
 }
@@ -461,7 +504,7 @@ export async function getRelatedKeywords(keyword, location, targetCity) {
         limit: 100 // Ads API suele devolver muchas
     };
 
-    const result = await postDataForSEO('/keywords_data/google_ads/keyword_ideas/live', [payload]);
+    const result = await postDataForSEO('/keywords_data/google_ads/keywords_for_keywords/live', [payload]);
 
     if (!result?.[0]?.items) return [];
 
@@ -490,7 +533,7 @@ export async function getKeywordSuggestions(keyword, location) {
         cursor_pointer: 0
     };
 
-    const result = await postDataForSEO('/serp/google/autocomplete/live', [payload]);
+    const result = await postDataForSEO('/serp/google/autocomplete/live/advanced', [payload]);
 
     if (!result?.[0]?.items) return [];
 
@@ -544,28 +587,41 @@ export async function getPeopleAlsoAsk(keyword, location) {
 /**
  * Obtener volumen de búsqueda para lista de keywords
  */
+/**
+ * Obtener volumen de búsqueda LOCAL PRECISO (Google Ads API)
+ * Reemplaza a Labs API para obtener datos reales de la ciudad/provincia
+ */
 export async function getSearchVolume(keywords, location) {
     const locationCode = getLocationCode(location);
-    console.log(`📊 Volumen para ${keywords.length} keywords`);
+    console.log(`📊 Volumen LOCAL para ${keywords.length} keywords (Code: ${locationCode})`);
 
-    // DataForSEO acepta hasta 1000 keywords por request
-    const result = await postDataForSEO('/dataforseo_labs/google/bulk_keyword_difficulty/live', [{
-        keywords: keywords.slice(0, 1000),
+    // DataForSEO Google Ads API acepta hasta 1000 keywords
+    // Endpoint: /keywords_data/google_ads/search_volume/live
+    const payload = {
+        keywords: keywords.slice(0, 1000), // Límite de seguridad
         location_code: locationCode,
-        language_code: "es"
-    }]);
+        language_code: "es",
+        include_partner_network: false,
+        sort_by: "search_volume"
+    };
+
+    const result = await postDataForSEO('/keywords_data/google_ads/search_volume/live', [payload]);
 
     if (!result?.[0]?.items) return {};
 
     const volumeMap = {};
     result[0].items.forEach(k => {
-        volumeMap[k.keyword.toLowerCase()] = {
+        // La estructura de respuesta de Google Ads API es ligeramente diferente a Labs
+        const key = k.keyword.toLowerCase();
+        volumeMap[key] = {
             volume: k.search_volume || 0,
-            difficulty: k.keyword_difficulty || 0,
-            cpc: k.cpc || 0
+            cpc: k.cpc || 0,
+            competition: k.competition || 0, // 0-1 en Ads API
+            competition_level: k.competition_level || 'UNKNOWN'
         };
     });
 
+    console.log(`   ✅ Datos obtenidos para ${Object.keys(volumeMap).length} keywords`);
     return volumeMap;
 }
 

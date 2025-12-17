@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X, FileText, Upload } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
+import KeywordReviewTable from './KeywordReviewTable';
+import ClusterCard from './ClusterCard';
 
 export default function GeneratorApp() {
     const [step, setStep] = useState('input'); // input | loading | selection | review | generating | success
@@ -157,8 +159,13 @@ export default function GeneratorApp() {
 
             setResearchData(data);
             if (data.raw_data?.competitors) {
-                const allDomains = new Set(data.raw_data.competitors.map(c => c.domain));
-                setSelectedCompetitors(allDomains);
+                // Pre-seleccionar SOLO los recomendados
+                const recommendedDomains = new Set(
+                    data.raw_data.competitors
+                        .filter(c => c.recommended)
+                        .map(c => c.domain)
+                );
+                setSelectedCompetitors(recommendedDomains);
             }
             setStep('selection');
         } catch (err) {
@@ -230,7 +237,9 @@ export default function GeneratorApp() {
 
             setResearchData(prev => ({
                 ...prev,
-                clusters: data.clusters,
+                services: data.services || [],
+                blog: data.blog || [],
+                clusters: [], // Deprecated but kept to avoid undefined errors if referenced elsewhere
                 home_structure: { h1: '', h2s: [] } // Inicializar estructura
             }));
             setStep('review');
@@ -304,30 +313,43 @@ export default function GeneratorApp() {
 
     // Calcular totales para el modal de confirmación
     const calculateTotals = () => {
-        if (!researchData?.clusters) return { clusters: 0, keywords: 0, pages: 0 };
-        const clusters = researchData.clusters.length;
-        const keywords = researchData.clusters.reduce((sum, c) => sum + (c.keywords?.length || 0), 0);
+        const servicesCount = researchData?.services?.length || 0;
+        const blogCount = researchData?.blog?.length || 0;
+        let keywords = 0;
+
+        if (researchData?.services) keywords += researchData.services.reduce((sum, c) => sum + (c.keywords?.length || 0), 0);
+        if (researchData?.blog) keywords += researchData.blog.reduce((sum, c) => sum + (c.keywords?.length || 0), 0);
+
         // Si es One Page Mode, NO sumamos los clusters (servicios) a las páginas
-        const pages = (formData.onePageMode ? 0 : clusters) + 1 + (formData.generateLocations ? (researchData.locations?.length || 0) : 0);
-        return { clusters, keywords, pages };
+        const totalPages = (formData.onePageMode ? 0 : servicesCount) + blogCount + 1 + (formData.generateLocations ? (researchData.locations?.length || 0) : 0);
+        return { clusters: servicesCount + blogCount, keywords, pages: totalPages };
     };
 
-    // --- FUNCIONES DE GESTIÓN DE CLUSTERS ---
+    // --- FUNCIONES DE GESTIÓN DE SERVICIOS Y BLOG ---
 
-    const handleDeleteCluster = (index) => {
-        if (confirm('¿Estás seguro de eliminar este cluster completo?')) {
-            const newClusters = [...researchData.clusters];
-            newClusters.splice(index, 1);
-            setResearchData({ ...researchData, clusters: newClusters });
+    const handleDeleteService = (index) => {
+        if (confirm('¿Estás seguro de eliminar este servicio?')) {
+            const newServices = [...researchData.services];
+            newServices.splice(index, 1);
+            setResearchData({ ...researchData, services: newServices });
         }
     };
 
-    const handleAddCluster = () => {
-        const name = prompt("Nombre del nuevo servicio/cluster:");
+    const handleDeleteBlog = (index) => {
+        if (confirm('¿Estás seguro de eliminar este artículo del blog?')) {
+            const newBlog = [...researchData.blog];
+            newBlog.splice(index, 1);
+            setResearchData({ ...researchData, blog: newBlog });
+        }
+    };
+
+    const handleAddService = () => {
+        const name = prompt("Nombre del nuevo servicio:");
         if (name) {
-            const newClusters = [...(researchData.clusters || [])];
-            newClusters.push({
+            const newServices = [...(researchData.services || [])];
+            newServices.push({
                 name: name,
+                type: 'SERVICE',
                 intent: "COMMERCIAL",
                 main_keyword: name.toLowerCase(),
                 volume: 0,
@@ -338,7 +360,28 @@ export default function GeneratorApp() {
                     seo_description: `Servicio profesional de ${name} en ${formData.city}.`
                 }]
             });
-            setResearchData({ ...researchData, clusters: newClusters });
+            setResearchData({ ...researchData, services: newServices });
+        }
+    };
+
+    const handleAddBlog = () => {
+        const name = prompt("Título del nuevo artículo:");
+        if (name) {
+            const newBlog = [...(researchData.blog || [])];
+            newBlog.push({
+                name: name,
+                type: 'BLOG',
+                intent: "INFORMATIONAL",
+                main_keyword: name.toLowerCase(),
+                volume: 0,
+                keywords: [],
+                meta_suggestions: [{
+                    h1: name,
+                    seo_title: `${name} - Blog`,
+                    seo_description: `Artículo sobre ${name}.`
+                }]
+            });
+            setResearchData({ ...researchData, blog: newBlog });
         }
     };
 
@@ -403,6 +446,10 @@ export default function GeneratorApp() {
                                     generateLocations: plan.generate_locations || false,
                                     onePageMode: plan.one_page_mode || false
                                 });
+                                // Migración 'on the fly' para planes antiguos
+                                if (plan.clusters && !plan.services) {
+                                    setResearchData(prev => ({ ...prev, services: plan.clusters, blog: [] }));
+                                }
                                 setStep('review');
                             } catch (err) {
                                 alert(err.message);
@@ -605,8 +652,11 @@ export default function GeneratorApp() {
                         </div>
                         <button onClick={() => {
                             if (researchData.raw_data?.competitors) {
-                                const all = new Set(researchData.raw_data.competitors.map(c => c.domain));
-                                setSelectedCompetitors(all);
+                                // Seleccionar solo recomendados (o todos si se prefiere toggle)
+                                const recommended = researchData.raw_data.competitors
+                                    .filter(c => c.recommended)
+                                    .map(c => c.domain);
+                                setSelectedCompetitors(new Set(recommended));
                             }
                         }} className="bg-indigo-900 text-indigo-200 px-4 py-2 rounded text-sm font-bold hover:bg-indigo-800">
                             Select All Recommended
@@ -731,6 +781,7 @@ export default function GeneratorApp() {
 
 
 
+
     // VISTA DE REVISIÓN DE KEYWORDS (NUEVO)
     if (step === 'keywords' && researchData) {
         const keywords = researchData.raw_data?.top_keywords || [];
@@ -743,66 +794,34 @@ export default function GeneratorApp() {
                     <div>
                         <h2 className="text-2xl font-bold">Revisión de Keywords</h2>
                         <p className="text-slate-400">
-                            Hemos encontrado <span className="text-indigo-400 font-bold">{keywords.length}</span> keywords relevantes.
-                            Revisa y elimina las que no encajen antes de clusterizar.
+                            Revisa las keywords extraídas antes de organizarlas en clusters.
                         </p>
                     </div>
-                    <div className="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 text-sm">
-                        Total Volumen: <span className="text-green-400 font-bold">{keywords.reduce((acc, k) => acc + (k.volume || 0), 0)}</span>
-                    </div>
                 </div>
 
-                <div className="bg-slate-900 rounded-xl border border-slate-700 overflow-hidden mb-6">
-                    <div className="overflow-x-auto max-h-[600px]">
-                        <table className="w-full text-left text-sm">
-                            <thead className="bg-slate-800 text-slate-400 sticky top-0 z-10">
-                                <tr>
-                                    <th className="p-4">Keyword</th>
-                                    <th className="p-4">Volumen</th>
-                                    <th className="p-4">Score</th>
-                                    <th className="p-4">Fuente</th>
-                                    <th className="p-4">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-800">
-                                {keywords.map((k, idx) => (
-                                    <tr key={idx} className="hover:bg-slate-800/50 transition-colors">
-                                        <td className="p-4 font-medium text-white">{k.keyword}</td>
-                                        <td className="p-4 text-slate-300">{k.volume}</td>
-                                        <td className="p-4">
-                                            <span className={`px-2 py-1 rounded text-xs font-bold ${k.relevanceScore >= 8 ? 'bg-green-900 text-green-300' :
-                                                k.relevanceScore >= 5 ? 'bg-blue-900 text-blue-300' :
-                                                    'bg-slate-700 text-slate-300'
-                                                }`}>
-                                                {k.relevanceScore}
-                                            </span>
-                                        </td>
-                                        <td className="p-4 text-xs text-slate-500 uppercase">{k.source}</td>
-                                        <td className="p-4">
-                                            <button
-                                                onClick={() => {
-                                                    const newKeywords = keywords.filter((_, i) => i !== idx);
-                                                    setResearchData(prev => ({
-                                                        ...prev,
-                                                        raw_data: {
-                                                            ...prev.raw_data,
-                                                            top_keywords: newKeywords
-                                                        }
-                                                    }));
-                                                }}
-                                                className="text-slate-500 hover:text-red-400 transition-colors"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <KeywordReviewTable
+                    keywords={keywords}
+                    onUpdate={(newKeywords) => {
+                        setResearchData(prev => ({
+                            ...prev,
+                            raw_data: {
+                                ...prev.raw_data,
+                                top_keywords: newKeywords
+                            }
+                        }));
+                    }}
+                    onDelete={(kToDelete) => {
+                        setResearchData(prev => ({
+                            ...prev,
+                            raw_data: {
+                                ...prev.raw_data,
+                                top_keywords: prev.raw_data.top_keywords.filter(k => k !== kToDelete)
+                            }
+                        }));
+                    }}
+                />
 
-                <div className="flex justify-between items-center pt-6 border-t border-slate-700">
+                <div className="flex justify-between items-center pt-6 mt-6 border-t border-slate-700">
                     <button
                         onClick={() => setStep('selection')}
                         className="px-6 py-3 rounded-lg font-bold text-slate-400 hover:text-white"
@@ -811,9 +830,11 @@ export default function GeneratorApp() {
                     </button>
                     <button
                         onClick={handleClusterKeywords}
-                        className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg shadow-lg flex items-center gap-2"
+                        disabled={keywords.length === 0}
+                        className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-lg font-bold shadow-lg shadow-green-900/20 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <Bot className="w-5 h-5" /> Generar Clusters con IA
+                        <Bot className="w-5 h-5" />
+                        Generar Clusters con IA
                     </button>
                 </div>
             </div>
@@ -823,7 +844,9 @@ export default function GeneratorApp() {
     // VISTA DE REVISIÓN (STRATEGY)
     if (step === 'review' && researchData) {
         const topKeywords = researchData.raw_data?.top_keywords || [];
-        const clusters = researchData.clusters || [];
+
+        const services = researchData.services || []; // Using new separated state
+        const blog = researchData.blog || [];
 
         return (
             <div className="max-w-7xl mx-auto space-y-6 animate-fade-in text-slate-200 p-4">
@@ -921,294 +944,94 @@ export default function GeneratorApp() {
                     </div>
                 </div>
 
-                {/* CLUSTERS GRID */}
-                <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-bold text-white">Clusters de Servicios ({clusters.length})</h3>
-                    <button onClick={handleAddCluster} className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded text-sm font-bold flex items-center gap-1">
-                        <Plus className="w-4 h-4" /> Añadir Cluster
+                {/* SERVICES GRID */}
+                <div className="flex justify-between items-center mt-8">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                        <Database className="w-5 h-5 text-indigo-400" /> Servicios Transaccionales ({services.length})
+                    </h3>
+                    <button onClick={handleAddService} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg hover:shadow-indigo-500/20 transition-all">
+                        <Plus className="w-4 h-4" /> Añadir Servicio
                     </button>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
-                    {clusters.map((cluster, i) => (
-                        <div key={i} className="bg-white rounded-xl overflow-hidden shadow-xl border border-slate-200 text-slate-800">
-                            <div className="bg-slate-800 p-4 flex justify-between items-center">
-                                <div className="flex items-center gap-3">
-                                    <div className="flex flex-col">
-                                        <span className="bg-indigo-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold w-fit mb-1">
-                                            SERVICE CLUSTER {i + 1}
-                                        </span>
-                                        <input
-                                            className="bg-transparent text-xl font-bold text-white border-none outline-none focus:ring-0 p-0"
-                                            value={cluster.name}
-                                            onChange={(e) => {
-                                                const newClusters = [...researchData.clusters];
-                                                newClusters[i].name = e.target.value;
-                                                setResearchData({ ...researchData, clusters: newClusters });
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="text-xs text-slate-400 font-mono bg-slate-900 px-3 py-1 rounded border border-slate-700">
-                                        Total Vol: <span className="text-green-400 font-bold">{cluster.volume}</span>
-                                    </div>
-                                    <button
-                                        onClick={() => handleDeleteCluster(i)}
-                                        className="text-red-400 hover:text-red-300 p-1 rounded hover:bg-slate-700"
-                                        title="Eliminar Cluster"
-                                    >
-                                        <Trash2 className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="p-6 grid lg:grid-cols-2 gap-8">
-                                {/* Left: Meta Data */}
-                                <div className="space-y-4">
-                                    {/* Suggestion Selector */}
-                                    {cluster.meta_suggestions && cluster.meta_suggestions.length > 0 && (
-                                        <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200">
-                                            <label className="text-xs font-bold text-indigo-700 uppercase block mb-2">
-                                                Meta Tag Variation
-                                            </label>
-                                            <select
-                                                className="w-full bg-white border border-indigo-300 rounded px-3 py-2 text-sm font-medium text-indigo-900 focus:ring-2 focus:ring-indigo-500 outline-none"
-                                                value={cluster.selected_suggestion || 0}
-                                                onChange={(e) => {
-                                                    const newClusters = [...researchData.clusters];
-                                                    newClusters[i].selected_suggestion = parseInt(e.target.value);
-                                                    setResearchData({ ...researchData, clusters: newClusters });
-                                                }}
-                                            >
-                                                {cluster.meta_suggestions.map((_, idx) => (
-                                                    <option key={idx} value={idx}>
-                                                        Suggestion {idx + 1} of {cluster.meta_suggestions.length}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-
-                                    <div>
-                                        <label className="text-xs font-bold text-slate-500 uppercase">H1 Header</label>
-                                        <input
-                                            className="w-full border-b-2 border-slate-200 focus:border-indigo-600 outline-none py-1 text-lg font-bold text-slate-800"
-                                            value={
-                                                cluster.meta_suggestions && cluster.meta_suggestions.length > 0
-                                                    ? cluster.meta_suggestions[cluster.selected_suggestion || 0].h1
-                                                    : cluster.h1 || ''
-                                            }
-                                            onChange={(e) => {
-                                                const newClusters = [...researchData.clusters];
-                                                const selectedIdx = newClusters[i].selected_suggestion || 0;
-                                                if (newClusters[i].meta_suggestions && newClusters[i].meta_suggestions[selectedIdx]) {
-                                                    newClusters[i].meta_suggestions[selectedIdx].h1 = e.target.value;
-                                                } else {
-                                                    newClusters[i].h1 = e.target.value;
-                                                }
-                                                setResearchData({ ...researchData, clusters: newClusters });
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="bg-slate-50 p-3 rounded border border-slate-200">
-                                        <label className="text-xs font-bold text-slate-400 uppercase">SEO Title</label>
-                                        <input
-                                            className="w-full bg-transparent border-none outline-none text-sm text-blue-600 font-medium truncate"
-                                            value={
-                                                cluster.meta_suggestions && cluster.meta_suggestions.length > 0
-                                                    ? cluster.meta_suggestions[cluster.selected_suggestion || 0].seo_title
-                                                    : cluster.seo_title || ''
-                                            }
-                                            onChange={(e) => {
-                                                const newClusters = [...researchData.clusters];
-                                                const selectedIdx = newClusters[i].selected_suggestion || 0;
-                                                if (newClusters[i].meta_suggestions && newClusters[i].meta_suggestions[selectedIdx]) {
-                                                    newClusters[i].meta_suggestions[selectedIdx].seo_title = e.target.value;
-                                                } else {
-                                                    newClusters[i].seo_title = e.target.value;
-                                                }
-                                                setResearchData({ ...researchData, clusters: newClusters });
-                                            }}
-                                        />
-                                        <label className="text-xs font-bold text-slate-400 uppercase mt-2 block">Meta Description</label>
-                                        <textarea
-                                            className="w-full bg-transparent border-none outline-none text-xs text-slate-600 resize-none h-12"
-                                            value={
-                                                cluster.meta_suggestions && cluster.meta_suggestions.length > 0
-                                                    ? cluster.meta_suggestions[cluster.selected_suggestion || 0].seo_description
-                                                    : cluster.seo_description || ''
-                                            }
-                                            onChange={(e) => {
-                                                const newClusters = [...researchData.clusters];
-                                                const selectedIdx = newClusters[i].selected_suggestion || 0;
-                                                if (newClusters[i].meta_suggestions && newClusters[i].meta_suggestions[selectedIdx]) {
-                                                    newClusters[i].meta_suggestions[selectedIdx].seo_description = e.target.value;
-                                                } else {
-                                                    newClusters[i].seo_description = e.target.value;
-                                                }
-                                                setResearchData({ ...researchData, clusters: newClusters });
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Right: Keywords Management */}
-                                <div>
-                                    <div className="bg-slate-100 text-slate-600 px-3 py-2 text-xs font-bold uppercase mb-2 flex justify-between items-center">
-                                        <span>Keywords ({cluster.keywords?.length || 0})</span>
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => {
-                                                    const keyword = prompt('Enter keyword to add:');
-                                                    if (keyword && keyword.trim()) {
-                                                        const newClusters = [...researchData.clusters];
-                                                        if (!newClusters[i].keywords) newClusters[i].keywords = [];
-                                                        newClusters[i].keywords.push({
-                                                            keyword: keyword.trim(),
-                                                            volume: 0,
-                                                            source: 'manual'
-                                                        });
-                                                        setResearchData({ ...researchData, clusters: newClusters });
-                                                    }
-                                                }}
-                                                className="bg-green-600 hover:bg-green-500 text-white px-2 py-1 rounded text-xs font-bold"
-                                            >
-                                                + Add
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    const selectedKws = cluster.keywords?.filter((k, idx) =>
-                                                        document.getElementById(`kw-${i}-${idx}`)?.checked
-                                                    );
-                                                    if (selectedKws && selectedKws.length > 0) {
-                                                        if (confirm(`Delete ${selectedKws.length} selected keyword(s)?`)) {
-                                                            const newClusters = [...researchData.clusters];
-                                                            newClusters[i].keywords = cluster.keywords.filter((k, idx) =>
-                                                                !document.getElementById(`kw-${i}-${idx}`)?.checked
-                                                            );
-                                                            setResearchData({ ...researchData, clusters: newClusters });
-                                                        }
-                                                    } else {
-                                                        alert('No keywords selected');
-                                                    }
-                                                }}
-                                                className="bg-red-600 hover:bg-red-500 text-white px-2 py-1 rounded text-xs font-bold"
-                                            >
-                                                🗑 Delete
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Keyword Table */}
-                                    <div className="bg-white border border-slate-200 rounded overflow-hidden max-h-64 overflow-y-auto">
-                                        <table className="w-full text-xs">
-                                            <thead className="bg-slate-50 sticky top-0">
-                                                <tr className="border-b border-slate-200">
-                                                    <th className="px-2 py-2 text-left w-8">
-                                                        <input
-                                                            type="checkbox"
-                                                            onChange={(e) => {
-                                                                cluster.keywords?.forEach((k, idx) => {
-                                                                    const checkbox = document.getElementById(`kw-${i}-${idx}`);
-                                                                    if (checkbox) checkbox.checked = e.target.checked;
-                                                                });
-                                                            }}
-                                                            className="cursor-pointer"
-                                                        />
-                                                    </th>
-                                                    <th className="px-2 py-2 text-left font-bold text-slate-600">Keyword</th>
-                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Search Volume">Vol</th>
-                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Cost Per Click">CPC</th>
-                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="Competition (0-1)">Comp</th>
-                                                    <th className="px-2 py-2 text-right font-bold text-slate-600" title="SEO Difficulty (0-100)">Diff</th>
-                                                    <th className="px-2 py-2 text-center font-bold text-slate-600">Move</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {cluster.keywords?.map((k, idx) => {
-                                                    // Color coding helpers
-                                                    const getCpcColor = (cpc) => {
-                                                        if (!cpc || cpc === 0) return 'text-slate-400';
-                                                        if (cpc < 1) return 'text-green-600';
-                                                        if (cpc < 3) return 'text-yellow-600';
-                                                        return 'text-red-600';
-                                                    };
-
-                                                    const getCompColor = (comp) => {
-                                                        if (!comp || comp === 0) return 'text-slate-400';
-                                                        if (comp < 0.3) return 'text-green-600';
-                                                        if (comp < 0.7) return 'text-yellow-600';
-                                                        return 'text-red-600';
-                                                    };
-
-                                                    const getDiffColor = (diff) => {
-                                                        if (!diff || diff === 0) return 'text-slate-400';
-                                                        if (diff < 30) return 'text-green-600';
-                                                        if (diff < 60) return 'text-yellow-600';
-                                                        return 'text-red-600';
-                                                    };
-
-                                                    return (
-                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50">
-                                                            <td className="px-2 py-2">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    id={`kw-${i}-${idx}`}
-                                                                    className="cursor-pointer"
-                                                                />
-                                                            </td>
-                                                            <td className="px-2 py-2 text-slate-700">{k.keyword}</td>
-                                                            <td className="px-2 py-2 text-right text-green-600 font-mono font-bold">{k.volume || 0}</td>
-                                                            <td className={`px-2 py-2 text-right font-mono ${getCpcColor(k.cpc)}`}>
-                                                                {k.cpc ? `€${k.cpc.toFixed(2)}` : '-'}
-                                                            </td>
-                                                            <td className={`px-2 py-2 text-right font-mono ${getCompColor(k.competition)}`}>
-                                                                {k.competition ? k.competition.toFixed(2) : '-'}
-                                                            </td>
-                                                            <td className={`px-2 py-2 text-right font-mono ${getDiffColor(k.difficulty)}`}>
-                                                                {k.difficulty || '-'}
-                                                            </td>
-                                                            <td className="px-2 py-2 text-center">
-                                                                <select
-                                                                    className="text-xs border border-slate-300 rounded px-1 py-0.5"
-                                                                    onChange={(e) => {
-                                                                        const targetClusterIdx = parseInt(e.target.value);
-                                                                        if (targetClusterIdx !== i) {
-                                                                            if (confirm(`Move "${k.keyword}" to cluster "${researchData.clusters[targetClusterIdx].name}"?`)) {
-                                                                                const newClusters = [...researchData.clusters];
-                                                                                newClusters[i].keywords = newClusters[i].keywords.filter((_, kidx) => kidx !== idx);
-                                                                                if (!newClusters[targetClusterIdx].keywords) {
-                                                                                    newClusters[targetClusterIdx].keywords = [];
-                                                                                }
-                                                                                newClusters[targetClusterIdx].keywords.push(k);
-                                                                                setResearchData({ ...researchData, clusters: newClusters });
-                                                                            }
-                                                                        }
-                                                                        e.target.value = i;
-                                                                    }}
-                                                                    value={i}
-                                                                >
-                                                                    <option value={i}>--</option>
-                                                                    {researchData.clusters.map((c, cidx) => (
-                                                                        cidx !== i && (
-                                                                            <option key={cidx} value={cidx}>
-                                                                                → {c.name}
-                                                                            </option>
-                                                                        )
-                                                                    ))}
-                                                                </select>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    {services.map((cluster, i) => (
+                        <ClusterCard
+                            key={`service-${i}`}
+                            index={i}
+                            cluster={{
+                                ...cluster,
+                                onMoveKeyword: (keywordToMove, fromClusterIdx, toClusterIdx) => {
+                                    if (confirm(`¿Mover "${keywordToMove.keyword}" al servicio "${services[toClusterIdx].name}"?`)) {
+                                        const newServices = [...researchData.services];
+                                        // Remove from source
+                                        newServices[fromClusterIdx].keywords = newServices[fromClusterIdx].keywords.filter(k => k.keyword !== keywordToMove.keyword);
+                                        // Add to target
+                                        if (!newServices[toClusterIdx].keywords) newServices[toClusterIdx].keywords = [];
+                                        newServices[toClusterIdx].keywords.push(keywordToMove);
+                                        setResearchData({ ...researchData, services: newServices });
+                                    }
+                                }
+                            }}
+                            allClusters={services}
+                            onUpdate={(updatedCluster) => {
+                                const newServices = [...researchData.services];
+                                newServices[i] = updatedCluster;
+                                setResearchData({ ...researchData, services: newServices });
+                            }}
+                            onDelete={(idxToDelete) => handleDeleteService(idxToDelete)}
+                        />
                     ))}
+                    {services.length === 0 && (
+                        <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-xl bg-slate-800/50">
+                            <p className="text-slate-500">No hay servicios definidos.</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* BLOG GRID */}
+                <div className="flex justify-between items-center mt-12 pt-8 border-t border-slate-700">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-green-400" /> Blog & Contenido Informacional ({blog.length})
+                    </h3>
+                    <button onClick={handleAddBlog} className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg hover:shadow-green-500/20 transition-all">
+                        <Plus className="w-4 h-4" /> Añadir Artículo
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6">
+                    {blog.map((cluster, i) => (
+                        <ClusterCard
+                            key={`blog-${i}`}
+                            index={i}
+                            cluster={{
+                                ...cluster,
+                                onMoveKeyword: (keywordToMove, fromClusterIdx, toClusterIdx) => {
+                                    if (confirm(`¿Mover "${keywordToMove.keyword}" al artículo "${blog[toClusterIdx].name}"?`)) {
+                                        const newBlog = [...researchData.blog];
+                                        // Remove from source
+                                        newBlog[fromClusterIdx].keywords = newBlog[fromClusterIdx].keywords.filter(k => k.keyword !== keywordToMove.keyword);
+                                        // Add to target
+                                        if (!newBlog[toClusterIdx].keywords) newBlog[toClusterIdx].keywords = [];
+                                        newBlog[toClusterIdx].keywords.push(keywordToMove);
+                                        setResearchData({ ...researchData, blog: newBlog });
+                                    }
+                                }
+                            }}
+                            allClusters={blog}
+                            onUpdate={(updatedCluster) => {
+                                const newBlog = [...researchData.blog];
+                                newBlog[i] = updatedCluster;
+                                setResearchData({ ...researchData, blog: newBlog });
+                            }}
+                            onDelete={(idxToDelete) => handleDeleteBlog(idxToDelete)}
+                        />
+                    ))}
+                    {blog.length === 0 && (
+                        <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-xl bg-slate-800/50">
+                            <p className="text-slate-500">No hay artículos de blog definidos.</p>
+                        </div>
+                    )}
                 </div>
 
                 {/* LOCATIONS MANAGEMENT (Only if enabled) */}

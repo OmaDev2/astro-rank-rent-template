@@ -1,0 +1,4654 @@
+{
+  "niche": "Quitar gotelé ",
+  "city": "Barcelona ",
+  "market_analysis": "Manual keyword list provided by user.",
+  "raw_data": {
+    "top_keywords": [
+      {
+        "keyword": "keyword",
+        "volume": 100,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé",
+        "volume": 500,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes",
+        "volume": 500,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotelé",
+        "volume": 5000,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele precio",
+        "volume": 500,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotelé piso 100 metros",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele y pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé precio",
+        "volume": 500,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel para pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado especial para gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar paredes piso 90m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio por m2 de alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele y pintar precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotelé piso 90 metros",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotelé leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado de paredes precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotelé m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado de paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de alisar paredes y pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar y pintar paredes precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitagotele",
+        "volume": 500,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar paredes y techos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes precio m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "coste quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele pared",
+        "volume": 500,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar y pintar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar paredes gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel de pared para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé pared precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de quitar gotele y alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "repara gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con agua",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "bricotex quita gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé piso 80m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de alisar paredes de gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "acabado gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "afinar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "aguaplast alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "aguaplast para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "aguaplast para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisa gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado de paredes con yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado de paredes leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado de techos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado en paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisado pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar gotele con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar gotele con yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar gotele facil",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar gotele precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar muro",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar muro exterior",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar muros",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared azulejos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared azulejos cocina",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared con enduido",
+        "volume": 100,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared con pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared con yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared de azulejos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared de ladrillos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared después de quitar azulejos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared exterior",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared gotele precio",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared ladrillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared para pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared rugosa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pared yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes a rodillo",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes barato",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes barcelona",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con enduido",
+        "volume": 100,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con escayola",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con esponja",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con estuco",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con perlita",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con redimix",
+        "volume": 100,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes con yeso fino",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes de azulejos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes de gotele precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes de ladrillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes de yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes esquinas",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes estucadas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes exteriores",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes facil",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes gotele pintura plastica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes gotelé precio m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes irregulares",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes leroy",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes pintadas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes precio por metro",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes sin lijar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar paredes sin quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techo aguaplast",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techo de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techo escayola",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techo gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techos de escayola",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar techos gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar una pared rugosa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "alisar yeso pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "allanar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "allanar una pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "axton alisar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "axton alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "axton cubre gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "axton cubregotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "axton gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "bricomania quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "bricotex decapante",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "bricotex gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "bricotex quita gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "bricotex quita gotele precio",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "con que alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "con que alisar una pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "con que se alisan las paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "coste alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "coste alisar paredes gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "coste quitar gotele y pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubre gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubre gotelé leroy merlín",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubregotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubregotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubrir gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cubrir paredes de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "cuál es la mejor manera de quitar el gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "dar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "de gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante para gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante para quitar gotele pintura plastica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decapante quita gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decoracion con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decoracion gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "decoracion pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "dejar lisa una pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "dejar paredes lisas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "disimular el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "disimular gotele paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "disimular gotele sin quitarlo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "disimular imperfecciones en paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "disimular imperfecciones pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "echar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "echar gotele a mano",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "echar gotelé sobre pintura plástica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminacion de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar el gotele de las paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar estucado pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele con lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele facil",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "eliminar gotele precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "emparejar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "emparejar pared con yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "emplaste para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "es dificil quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "es facil quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "espatula para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "espatula quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "esponja para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "estucado gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "extraplas cubre gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "extraplas naranja",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "extraplas naranja opiniones",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "forma facil de quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "formas de quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "formas de quitar el gotele de las paredes",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "backend": [
+        "Sistema de Investigación de Keywords (DataForSEO)",
+        "Clustering Semántico con Gemini AI",
+        "Generación de Estructura Web (Home + Servicios + Entradas)",
+        "Generación de Contenido optimizado SEO",
+        "Sistema de Checkpoints (Resume)",
+        "Importación CSV Manual (KWFinder/Mangools)"
+      ],
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele al temple",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele aplastado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele blanco",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele como quitarlo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele decoracion",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele en el techo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele en paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele en pasta",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele exterior",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele fino",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele generador de precios",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele gordo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele grueso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele liso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele moderno",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele papel pintado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele para exteriores",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele pintura plastica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele que es",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele techo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele temple",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotele y pintura",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotelé 2022",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotelé como quitarlo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotelé leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotelé que es",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "gotelé y pintura",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "igualar paredes para pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "imitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "kitomasgota amazon",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "kitomasgota bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "kitomasgota leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "kitomasgota leroy merlin precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "kitomasgota opiniones",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "kitomasgota precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "leroy merlin alisar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "leroy merlin alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "leroy merlin gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "leroy merlin kitomasgota",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "leroy merlin pasta para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "leroy merlin repara gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijadora de pared para quitar gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijadora de pared quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijadora pared quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar gotele a mano",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar gotele con lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar pared para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar paredes con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lijar paredes de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "lucir gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "maneras de quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "masa para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "materiales para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "materiales para alisar paredes interiores",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "mejor forma de quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "mejor pasta para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "mejor pintura para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "mezcla para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel de pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel de pared en gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel de pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel de pared sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel decorativo pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel en gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel en pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel en pared de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel en paredes con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel encima de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel especial para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel para pared estucada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel para paredes rugosas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel para tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pared para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pared sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado apto para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado autoadhesivo sobre gotelé",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado en pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado en pared de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado en pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado en pared rugosa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado encima de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado encima gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado especial gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado especial para pared de gotelé",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para disimular gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para pared de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para paredes estucadas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado para tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado pared estucada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel pintado vinílico sobre gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel tapiz para pared rugosa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "papel vinilico para pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "para quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared alisada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared blanca gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared con gotele a pared lisa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared estucada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared gotele blanco",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared gotele papel pintado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared gotele quitar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared granulada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared rugosa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared rugosa a lisa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pared rugosa decoracion",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "paredes con gotele modernas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "paredes de gotele decoradas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "paredes gotele pintadas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "paredes granuladas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "paredes rugosas como pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta al temple gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta al temple para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta alisadora gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta alisadora gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta alisar paredes leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta cubre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta cubre gotelé a rodillo",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta cubregotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta cubregotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta de alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta especial para cubrir gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta gotele bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar gotele precios",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes bricodepot",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para alisar paredes precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para cubrir gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para igualar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para paredes lisas",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para quitar gotele bricodepot",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para quitar gotele con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para quitar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para quitar gotele precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para reparar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para tapar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta para tapar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta paredes lisas",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta preparada para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta quita gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta quitar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta renovacion para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pasta temple gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "peine rayar gotele leroy merlin",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "peine rayar gotelé leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "perlita para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pinta happy quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar con temple sobre gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar despues de quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar encima de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar gotele a mano",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar habitacion con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar liso sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar pared de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar pared estucada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar pared granulada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar pared rugosa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar paredes con gotele decoracion",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar paredes de gotelé con efectos",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar sobre gotelé pintura plástica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar una habitacion con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintar y alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintortinos reformas",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura al gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura al temple gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura alisa gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura alisado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura blanca gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura blanca interior para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura blanca para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura blanca para paredes con gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura con efectos para gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura cubre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura decorativa para paredes con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura decorativa sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura gotele en la pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura niveladora para paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para alisar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para alisar paredes leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para disimular gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para gotele interior",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para pintar sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para quitar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura para tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura plastica sobre gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura quitar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura repara gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura tapar gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pintura temple gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pinturas decorativas para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pinturas gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pinturas para gotele modernas",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "pladur para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar habitacion",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar paredes metro cuadrado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar techo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar una habitacion",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio alisar y pintar piso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio cubrir gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de alisar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de quitar el gotele de las paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de quitar gotele por metro cuadrado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio de quitar gotele y pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio gotelé m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio kitomasgota leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 alisado de paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 alisado gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 alisar paredes gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 alisar paredes gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 de alisado de paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio m2 quitar gotele y pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro alisado paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro cuadrado alisado de paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro cuadrado alisar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro cuadrado alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro cuadrado de alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro cuadrado quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio metro quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio para quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio pasta para alisar paredes",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio poner gotelé m2",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio por alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio por metro cuadrado de alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio por quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar azulejos y alisar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele casa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele habitacion",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele piso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele piso 90 metros",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele por metro cuadrado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele y alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele y pintar liso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele y pintar liso m2",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio quitar gotele y pintar piso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "precio tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "productos para alisar paredes gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "productos para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "productos para quitar gotele plastico",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "productos para tapar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "productos quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quita gotele bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quita gotele bricotex",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quita gotele leroy",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitagotele bricotex",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitaplast",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitaplast eliminador de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitaplast eliminador de gotele jafep",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitaplast jafep",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitaplast leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitaplast opiniones",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar alicatado y alisar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar azulejos baño y alisar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar azulejos cocina y alisar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar azulejos y alisar pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el estucado de la pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele con agua",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele de la pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele de las paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele facil",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele facil y rapido",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele precio metro cuadrado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele sin lijar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele tu mismo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar el gotele uno mismo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar estucado con lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar estucado facil",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar estucado paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar estucado y alisar paredes para pintar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gota",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gota pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gota paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele aguaplast",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele al temple",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele antes y despues",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele barato",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele bricodepot",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con agua y espatula",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con aguaplast",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con decapante",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con lijadora electrica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con lijadora jirafa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con pasta",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con pasta alisadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con perlita",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con vaporeta",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele con yeso fino",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele de pintura plastica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele del techo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele en casa",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele en pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele exterior",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele fachada",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele facil rapido",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele fino",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele gordo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele leroy",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele lijadora pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele pared leroy merlin",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele pintado pintura plastica",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele pintura plastica",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele plastico con agua",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele plastico con decapante",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele rapido",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele raspando",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele sin lijar",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele sin obras",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele sin raspar",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele techo facilmente",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele toupret",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele uno mismo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotele y alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé con agua y vinagre",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé con lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé opiniones",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé piso 90m2 precio",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé plástico con lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar gotelé y pintar liso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar la gota de las paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar moho pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar papel gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar papel pintado gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar picado de la pared",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar picado paredes",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar pintura gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar pintura plastica pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar pintura plástica de la pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "quitar textura de pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "rascar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "raspar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "redimix para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "refilar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "refilar paredes con escayola",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "repara gotele amazon",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "repara gotele bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "repara gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparacion gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparagotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar estucado paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar gotele a mano",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar gotele pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar grieta pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar grietas en gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar grietas en paredes con gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar pared de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "reparar paredes con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "retirar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "retirar gotele paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "rodillo para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "sacar estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "sacar estucado paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "sacar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "sacar gotele pared",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "se puede quitar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "se puede quitar el gotele con una lijadora",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "simular gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "simular gotele pared",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar agujero pared gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar el gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar estucado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar estucado paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele con aguaplast",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele con papel pintado",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele con perlita",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele con pladur",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele con rodillo",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele con yeso",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele facil",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar gotele precio",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar grietas en gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar grietas en pared con gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar grietas en paredes con gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar grietas gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tapar grietas pared gotele",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "techo de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "techo gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "temple gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "temple gotelé bricomart",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "temple para gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tipo de gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "tipo de pintura para paredes con gotelé",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "toupret gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "xylazel gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "xylazel gotele leroy merlin",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "xylazel repara gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "xylazel repara gotele leroy merlin",
+        "volume": 0,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "yeso alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "yeso para alisar paredes",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      },
+      {
+        "keyword": "yeso para quitar gotele",
+        "volume": 50,
+        "source": "manual",
+        "relevanceScore": 10
+      }
+    ],
+    "competitors": []
+  },
+  "clusters": [
+    {
+      "name": "Quitar Gotelé y Alisar Paredes",
+      "slug": "quitar-gotele-alisar-paredes-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Servicio para Quitar Gotelé y Alisar Paredes en Barcelona",
+          "seo_title": "Quitar Gotelé y Alisar Paredes en Barcelona | Acabado Liso",
+          "seo_description": "¿Cansado del gotelé? Transformamos tus paredes en superficies lisas y modernas. Servicio profesional para quitar gotelé y alisar paredes en Barcelona."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar gotelé",
+          "volume": 500,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes",
+          "volume": 500,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "gotelé",
+          "volume": 5000,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitagotele",
+          "volume": 500,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "gotele pared",
+          "volume": 500,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes de gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "eliminar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisado de paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele pared",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisado de gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes barcelona",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar muro",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "allanar pared",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "dejar paredes lisas",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gota",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele con lijadora",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele con agua",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "retirar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "sacar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Precio Quitar Gotelé y Alisar Paredes",
+      "slug": "precio-quitar-gotele-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Precio Quitar Gotelé en Barcelona",
+          "seo_title": "Precio Quitar Gotelé m² en Barcelona | Presupuesto Online",
+          "seo_description": "Calcula el precio para quitar gotelé y alisar tus paredes en Barcelona. Ofrecemos presupuesto por m², por piso o por habitación. ¡Consulta nuestras tarifas!"
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar gotele precio",
+          "volume": 500,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio quitar gotelé piso 100 metros",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio alisar paredes piso 90m2",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio por m2 de alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio quitar gotelé piso 90 metros",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisado de paredes precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio quitar gotele m2",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio de quitar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes precio m2",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "coste quitar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio alisar paredes gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotelé pared precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotelé piso 80m2",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio de alisar paredes de gotelé",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar gotele precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "coste alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "eliminar gotele precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "gotele precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio m2 alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio metro cuadrado quitar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio quitar gotele habitacion",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Quitar Gotelé y Pintar",
+      "slug": "quitar-gotele-pintar-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Quitar Gotelé y Pintar en Barcelona",
+          "seo_title": "Quitar Gotelé y Pintar en Barcelona | Servicio Completo",
+          "seo_description": "Servicio integral para quitar gotelé, alisar y pintar tus paredes en Barcelona. Renueva tu hogar con un acabado perfecto. Presupuesto sin compromiso."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar gotele y pintar",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele y pintar precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio de alisar paredes y pintar",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar y pintar paredes precio",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar y pintar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio de quitar gotele y alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "coste quitar gotele y pintar",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "pintar despues de quitar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "pintar y alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio alisar y pintar piso",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio de quitar gotele y pintar",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio m2 quitar gotele y pintar",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio quitar gotele y alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele y alisar paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotelé y pintar liso",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Instalar Papel Pintado sobre Gotelé",
+      "slug": "papel-pintado-sobre-gotele-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Instalación de Papel Pintado sobre Gotelé en Barcelona",
+          "seo_title": "Papel Pintado sobre Gotelé en Barcelona | Sin Obras",
+          "seo_description": "¿Quieres cubrir el gotelé sin obras? Instalamos papel pintado especial para paredes con gotelé en Barcelona. Renueva tu espacio de forma rápida y limpia."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "papel pintado para gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel pintado gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel pintado sobre gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel para pared con gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel pintado especial para gotelé",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel para gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel pared gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel pintado pared gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel de pared para gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel sobre gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "papel para tapar gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "tapar gotele con papel pintado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Quitar Estucado y Alisar Paredes",
+      "slug": "quitar-estucado-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Quitar Estucado de Paredes en Barcelona",
+          "seo_title": "Quitar Estucado y Alisar Paredes en Barcelona | Expertos",
+          "seo_description": "Expertos en quitar estucado y alisar paredes en Barcelona. Eliminamos texturas antiguas y dejamos tus paredes perfectas para pintar. Pide tu presupuesto."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar estucado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar estucado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "eliminar estucado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes estucadas",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio quitar estucado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar el estucado de la pared",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar estucado paredes",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "sacar estucado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "tapar estucado",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Reparación de Paredes con Gotelé",
+      "slug": "reparar-gotele-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Reparación de Gotelé en Barcelona",
+          "seo_title": "Reparar Gotelé en Barcelona | Grietas y Agujeros",
+          "seo_description": "Servicio de reparación de gotelé en Barcelona. Arreglamos grietas, agujeros y desperfectos en tus paredes, igualando la textura para un acabado invisible."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "repara gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "reparacion gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "reparar gotele pared",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "reparar grieta pared gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "reparar grietas en gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "reparar pared con gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "tapar agujero pared gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "tapar grietas en pared con gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Alisar Techos con Gotelé",
+      "slug": "alisar-techos-gotele-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Quitar Gotelé y Alisar Techos en Barcelona",
+          "seo_title": "Alisar Techos con Gotelé en Barcelona | Eliminar Textura",
+          "seo_description": "Nos especializamos en quitar el gotelé de techos en Barcelona. Dejamos tus techos lisos y preparados para pintar. Trabajo rápido, limpio y profesional."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "alisado de techos",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar techo",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar techo de gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar techo gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele del techo",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio alisar techos",
+          "volume": 50,
+          "cpc": 0,
+          "difficulty": 0
+        },
+        {
+          "keyword": "gotele en el techo",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "techo de gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "techo gotele",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    },
+    {
+      "name": "Quitar Gotelé Plástico",
+      "slug": "quitar-gotele-plastico-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Quitar Gotelé Plástico en Barcelona",
+          "seo_title": "Quitar Gotelé Plástico en Barcelona | Técnica Profesional",
+          "seo_description": "El gotelé plástico es el más difícil de quitar. Usamos técnicas y productos profesionales para eliminar el gotelé plástico en Barcelona. Garantizamos un acabado liso."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar gotele plastico",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "gotele plastico",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "eliminar gotele plastico",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele de pintura plastica",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele pintura plastica",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "lijar gotele plastico",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele al temple",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "gotele al temple",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "decapante gotele plastico",
+          "volume": 50,
+          "source": "manual",
+          "relevanceScore": 10
+        }
+      ]
+    }
+  ],
+  "home_structure": {
+    "h1": "",
+    "h2s": []
+  },
+  "generate_locations": false,
+  "one_page_mode": true
+}

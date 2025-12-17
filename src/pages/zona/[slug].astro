@@ -48,23 +48,41 @@ const allServices = await getCollection("services", ({ data }) => {
 const allLocations = await getCollection("locations");
 
 // 6. Schema SEO Local
-const localSchema: WithContext<LocalBusiness> = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: `${settings.niche} en ${data.name} | ${settings.siteName}`,
-    description: data.seoDesc,
-    telephone: settings.phone,
-    areaServed: {
-        "@type": "Place",
-        name: data.name,
-        address: {
-            "@type": "PostalAddress",
-            addressLocality: data.name,
-            postalCode: data.zipCodes ? data.zipCodes[0] : "",
-            addressCountry: "ES",
-        },
+// 6. Schema SEO Local
+import {
+    generateLocalBusinessSchema,
+    generateBreadcrumbsList,
+} from "@/lib/seo";
+
+// Recopilar testimonios (idealmente filtraríamos por zona si tuviéramos esa data,
+// por ahora usamos los destacados globalmente para dar autoridad)
+const testimonials = await getCollection(
+    "testimonials",
+    ({ data }) => data.featured === true,
+);
+
+const localSchema = generateLocalBusinessSchema(
+    {
+        siteName: `${settings.niche} en ${data.name} | ${settings.siteName}`,
+        phone: settings.phone,
+        city: data.name, // Ciudad específica de la zona
+        address: settings.address,
+        coordinates: data.coordinates,
+        image: data.heroImage,
+        businessType: settings.businessType,
     },
-};
+    testimonials,
+    Astro.url.href,
+);
+
+const breadcrumbsPoints = [
+    { name: "Inicio", item: Astro.site?.href || "https://example.com" },
+    { name: "Zonas", item: new URL("/zonas", Astro.site).href },
+    { name: data.name, item: Astro.url.href },
+];
+
+const breadcrumbsSchema = generateBreadcrumbsList(breadcrumbsPoints);
+const finalSchema = [localSchema, breadcrumbsSchema];
 
 // 7. SEO: Título y descripción
 const pageTitle =
@@ -92,7 +110,7 @@ const pageDescription =
     currentSlug={entry.slug}
     pageTitle={pageTitle}
     pageDescription={pageDescription}
-    schema={localSchema}
+    schema={finalSchema}
     mdxComponents={mdxComponents}
     blocks={data.blocks}
 />

@@ -1,6 +1,9 @@
 ---
 import { MapPin, Clock, Shield, Award } from "lucide-react";
-const { locationName, city } = Astro.props;
+import { spin } from "../../utils/spintax";
+const { locationName: rawLocationName, city: rawCity } = Astro.props;
+const locationName = spin(rawLocationName);
+const city = spin(rawCity);
 ---
 
 <section class="py-20 bg-secondary border-t border-heading/10">

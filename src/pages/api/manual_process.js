@@ -1,3 +1,4 @@
+import { parse } from 'csv-parse/sync';
 
 export const POST = async ({ request }) => {
     try {
@@ -8,51 +9,107 @@ export const POST = async ({ request }) => {
             return new Response(JSON.stringify({ error: 'Keywords text is required' }), { status: 400 });
         }
 
-        console.log(`📝 API Manual Process: Parsing keywords for "${niche}"`);
+        console.log(`📝 API Manual Process: Parsing CSV for "${niche}"`);
 
-        // Parse text
-        const lines = text.split('\n');
-        const keywords = lines
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .map(line => {
-                // 1. Detect delimiter (, or ;)
-                const delimiter = line.includes(';') ? ';' : ',';
-                const parts = line.split(delimiter);
+        // 1. Eliminar BOM
+        const fileContent = text.replace(/^\uFEFF/, '');
 
-                // 2. Try to find volume (usually last column if numeric)
-                // If only 1 part, it's just keyword
-                if (parts.length === 1) {
-                    return { keyword: parts[0].trim(), volume: 100, source: 'manual', relevanceScore: 10 };
-                }
+        // 2. Detectar delimitador
+        const firstLine = fileContent.split('\n')[0];
+        const commaCount = (firstLine.match(/,/g) || []).length;
+        const semicolonCount = (firstLine.match(/;/g) || []).length;
 
-                // If multiple parts, check if last one is volume
-                const lastPart = parts[parts.length - 1].trim();
-                const possibleVolume = parseInt(lastPart);
+        let delimiter = ',';
+        if (semicolonCount > commaCount && semicolonCount > 2) delimiter = ';';
 
-                if (!isNaN(possibleVolume)) {
-                    // Reconstruct keyword from previous parts
-                    const keyword = parts.slice(0, parts.length - 1).join(delimiter).trim();
-                    // Remove quotes if present
-                    const cleanKeyword = keyword.replace(/^["']|["']$/g, '');
-                    return { keyword: cleanKeyword, volume: possibleVolume, source: 'manual', relevanceScore: 10 };
-                }
+        console.log(`   🔍 CSV Debug: Detected Delimiter: "${delimiter}"`);
 
-                // If last part is not number, assume it's all keyword or ignore extra columns
-                // Let's just take the first column as keyword
-                const firstCol = parts[0].trim().replace(/^["']|["']$/g, '');
-                return { keyword: firstCol, volume: 100, source: 'manual', relevanceScore: 10 };
+        // 3. Parseo robusto con csv-parse
+        let records;
+        try {
+            records = parse(fileContent, {
+                columns: false,
+                skip_empty_lines: true,
+                trim: true,
+                delimiter: delimiter,
+                relax_column_count: true,
+                relax_quotes: true,
+                quote: '"'
             });
+        } catch (parseError) {
+            console.error("CSV Parse Error:", parseError);
+            throw new Error("Formato CSV inválido. Asegúrate de usar comillas si hay comas en los valores.");
+        }
+
+        if (records.length === 0) {
+            return new Response(JSON.stringify({ error: 'No data found in CSV' }), { status: 400 });
+        }
+
+        // 4. Detectar Header
+        const firstRow = records[0];
+        const firstCol = String(firstRow[0]).trim().toLowerCase();
+
+        let hasHeader = false;
+        if (firstCol.includes('keyword') || firstCol.includes('word') || firstCol.includes('palabra')) {
+            hasHeader = true;
+        }
+
+        const keywords = records.map((row, index) => {
+            // Skip header row
+            if (hasHeader && index === 0) return null;
+
+            let term = '';
+            let vol = 0;
+            let cpc = 0;
+            let kd = 0;
+
+            if (hasHeader) {
+                // Header Mapping strategy (Consistent with robust script)
+                // 0: Keyword
+                // 1: Volume
+                // 6: CPC
+                // 8: KD
+                term = row[0];
+                vol = row[1];
+                cpc = row[6];
+                kd = row[8];
+            } else {
+                // Fallback posicional
+                term = row[0];
+                vol = row[1];
+                cpc = row[6];
+                kd = row[8];
+            }
+
+            // Validation
+            if (!term || typeof term !== 'string' || term.length < 2) return null;
+            // Limpiar comillas extras si quedaron (aunque csv-parse quita las externas)
+            term = term.replace(/^["']|["']$/g, '').trim();
+
+            // Numeros
+            if (typeof vol === 'string') vol = parseInt(vol.replace(/[^0-9]/g, ''), 10);
+            if (typeof cpc === 'string') cpc = parseFloat(cpc.replace(',', '.').replace(/[^0-9.]/g, ''));
+            if (typeof kd === 'string') kd = parseInt(kd.replace(/[^0-9]/g, ''), 10);
+
+            return {
+                keyword: term,
+                volume: isNaN(vol) ? 0 : vol,
+                cpc: isNaN(cpc) ? 0 : cpc,
+                competition: isNaN(kd) ? 0 : kd, // This is KD
+                source: 'manual_csv',
+                relevanceScore: 10 // Default internal score for manual
+            };
+        }).filter(k => k !== null);
 
         const result = {
             niche,
             city,
-            market_analysis: "Manual keyword list provided by user.",
+            market_analysis: "Manual CSV Import",
             raw_data: {
                 top_keywords: keywords,
-                competitors: [] // No competitors in manual mode
+                competitors: []
             },
-            clusters: [] // Empty initially
+            clusters: []
         };
 
         return new Response(JSON.stringify(result), {

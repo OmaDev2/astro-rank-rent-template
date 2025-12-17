@@ -1,0 +1,180 @@
+---
+import Layout from "./Layout.astro";
+import Footer from "../components/Footer.astro";
+import FinalCTA from "../components/FinalCTA.astro";
+import { User, Calendar, Tag, ArrowRight } from "lucide-react";
+
+interface Props {
+    title: string;
+    description: string;
+    pubDate?: Date;
+    updatedDate?: Date;
+    author?: string;
+    heroImage?: string;
+    tags?: string[];
+    category?: string;
+}
+
+const {
+    title,
+    description,
+    pubDate,
+    updatedDate,
+    author,
+    heroImage,
+    tags,
+    category,
+} = Astro.props;
+
+// Date formatter helper if needed
+const formattedDate = pubDate
+    ? new Date(pubDate).toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<Layout title={title} description={description}>
+    <!-- Progress Bar (Opcional, detalle premium) -->
+    <div
+        id="progress-container"
+        class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent"
+    >
+        <div
+            id="progress-bar"
+            class="h-full bg-primary w-0 transition-all duration-150"
+        >
+        </div>
+    </div>
+
+    <!-- Hero del Artículo -->
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <div class="absolute inset-0 bg-secondary/95 z-0"></div>
+        <!-- Background Image con Overlay -->
+        {
+            heroImage && (
+                <div class="absolute inset-0 z-0 opacity-20">
+                    <img
+                        src={heroImage}
+                        alt={title}
+                        class="w-full h-full object-cover"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-b from-secondary via-secondary/80 to-secondary" />
+                </div>
+            )
+        }
+
+        <div class="container mx-auto px-4 relative z-10 text-center max-w-4xl">
+            <!-- Breadcrumbs / Categoría -->
+            <div
+                class="flex justify-center items-center gap-2 mb-6 text-sm text-body/80"
+            >
+                <a href="/" class="hover:text-primary transition-colors"
+                    >Inicio</a
+                >
+                <span>/</span>
+                <a href="/blog" class="hover:text-primary transition-colors"
+                    >Blog</a
+                >
+                {
+                    category && (
+                        <>
+                            <span>/</span>
+                            <span class="text-primary font-medium">
+                                {category}
+                            </span>
+                        </>
+                    )
+                }
+            </div>
+
+            <h1
+                class="text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6 leading-tight"
+            >
+                {title}
+            </h1>
+
+            <div
+                class="flex flex-wrap justify-center items-center gap-6 text-body/80 text-sm md:text-base"
+            >
+                {
+                    author && (
+                        <div class="flex items-center gap-2">
+                            <div class="p-2 bg-surface rounded-full">
+                                <User className="w-4 h-4 text-primary" />
+                            </div>
+                            <span>{author}</span>
+                        </div>
+                    )
+                }
+                {
+                    formattedDate && (
+                        <div class="flex items-center gap-2">
+                            <div class="p-2 bg-surface rounded-full">
+                                <Calendar className="w-4 h-4 text-primary" />
+                            </div>
+                            <time datetime={pubDate?.toISOString()}>
+                                {formattedDate}
+                            </time>
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenido Principal -->
+    <section class="py-12 md:py-20 bg-surface/30">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-12 gap-12">
+                <!-- Columna Central (Contenido) -->
+                <div class="lg:col-span-8 lg:col-start-3">
+                    <article
+                        class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-heading prose-li:text-body max-w-none bg-surface p-8 md:p-12 rounded-2xl shadow-sm border border-heading/5"
+                    >
+                        <slot />
+                    </article>
+
+                    <!-- Tags Footer -->
+                    {
+                        tags && tags.length > 0 && (
+                            <div class="mt-8 pt-8 border-t border-heading/10 flex flex-wrap gap-2">
+                                {tags.map((tag) => (
+                                    <span class="bg-surface border border-heading/10 text-body px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                                        <Tag className="w-3 h-3" />
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        )
+                    }
+
+                    <!-- Share / Author Box (Se puede expandir después) -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navegación entre posts o Relacionados (Placeholder) -->
+
+    <FinalCTA />
+    <Footer />
+</Layout>
+
+<script>
+    // Scroll Progress Bar
+    window.addEventListener("scroll", () => {
+        const winScroll =
+            document.body.scrollTop || document.documentElement.scrollTop;
+        const height =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        const progressBar = document.getElementById("progress-bar");
+        if (progressBar) {
+            progressBar.style.width = scrolled + "%";
+        }
+    });
+</script>
