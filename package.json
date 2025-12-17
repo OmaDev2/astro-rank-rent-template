@@ -8,9 +8,9 @@
         "build": "astro build",
         "preview": "astro preview",
         "astro": "astro",
-        "reset": "node scripts/reset.js",
-        "export": "node scripts/export_client.js",
-        "manual": "node scripts/manual_research.js",
+        "reset": "node scripts/utils/reset.js",
+        "export": "node scripts/utils/export_client.js",
+        "manual": "node scripts/utils/manual_research.js",
         "generate_site": "node scripts/generate_site.js"
     },
     "dependencies": {

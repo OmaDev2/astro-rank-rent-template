@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Teníamos un gotelé muy grueso y antiguo en todo el piso y el cambio ha sido radical. El proceso de alisado de paredes fue impecable, no ha quedado ni una imperfección. Además, se encargaron de la pintura final con un acabado satinado que ha dejado el salón súper luminoso. Muy profesionales y limpios durante todo el trabajo.",
+      "author": "Marta Jiménez",
+      "location": "Barri de Gràcia, Barcelona",
+      "initials": "M.J."
+    },
+    {
+      "quote": "Después de pedir varios presupuestos, nos decidimos por ellos por la confianza que nos transmitieron. La preparación y el masillado de las paredes de nuestro piso en el Eixample fue un trabajo de chinos, pero el resultado es espectacular. Cubrieron todo el mobiliario a la perfección y al terminar lo dejaron todo recogido. Un servicio completo y sin sorpresas en el precio.",
+      "author": "Carlos Fernández",
+      "location": "L'Eixample, Barcelona",
+      "initials": "C.F."
+    },
+    {
+      "quote": "Lo que más valoro es la atención al detalle. No se limitaron a quitar el gotelé, sino que repararon varias grietas y humedades que teníamos antes de empezar a alisar. El lijado fue muy fino y la elección de la imprimación fue clave para el acabado. Ahora las paredes parecen de obra nueva. Totalmente recomendables.",
+      "author": "Sofía Roca",
+      "location": "Poblenou, Barcelona",
+      "initials": "S.R."
+    }
+  ]
+}

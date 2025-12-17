@@ -1,0 +1,236 @@
+.
+├── README.md
+├── astro.config.mjs
+├── docs
+│   ├── SETTINGS_STRUCTURE.md
+│   ├── SETUP_GUIDE.md
+│   └── project_specs
+│       ├── ARQUITECTURA_XAGIO.md
+│       ├── AUDITORIA_SEO.md
+│       ├── CHANGELOG_IMPROVEMENTS.md
+│       ├── COMPONENTES_ACTUALIZADOS.md
+│       ├── EJECUTAR_SCRIPT_V2.md
+│       ├── GOOGLE_SEARCH_CONSOLE.md
+│       ├── INTEGRACION_DASHBOARD_V2.md
+│       ├── NUEVOS_SERVICIOS.md
+│       ├── estructura.txt
+│       └── project_structure.txt
+├── keystatic.config.tsx
+├── keyword_research_state.json
+├── kwfinder_gote_export.csv
+├── manual_keywords.txt
+├── netlify.toml
+├── package-lock.json
+├── package.json
+├── project_plan.json
+├── public
+│   ├── favicon.svg
+│   ├── images
+│   │   ├── blog
+│   │   │   └── default.jpg
+│   │   ├── content
+│   │   │   └── desatascos-y-limpieza-de-tuberias
+│   │   │       └── CleanShot 2025-11-28 at 08.35.02.png
+│   │   ├── home
+│   │   │   ├── aboutSection
+│   │   │   │   ├── image.jpg
+│   │   │   │   └── image.png
+│   │   │   └── hero
+│   │   │       └── backgroundImage.jpeg
+│   │   ├── locations
+│   │   └── services
+│   ├── llms.txt
+│   └── robots.txt
+├── reproduce_full_flow.js
+├── scripts
+│   ├── content_processor.js
+│   ├── generate_site.js
+│   ├── lib
+│   │   ├── scraper.js
+│   │   └── seo_client.js
+│   ├── logic
+│   │   ├── keyword_researcher.js
+│   │   └── service_discoverer.js
+│   ├── research_niche.js
+│   ├── tests
+│   │   ├── check_exports.mjs
+│   │   ├── test_csv_parser.js
+│   │   ├── test_full_flow.js
+│   │   ├── test_gemini.js
+│   │   ├── test_locations.js
+│   │   ├── test_phase1.js
+│   │   ├── test_research_logic.js
+│   │   ├── test_seo.js
+│   │   ├── test_service_discovery.js
+│   │   └── test_spintax.ts
+│   └── utils
+│       ├── export_client.js
+│       ├── help.js
+│       ├── list_models.js
+│       ├── manual_research.js
+│       └── reset.js
+├── src
+│   ├── assets
+│   │   ├── images
+│   │   │   ├── about-us.png
+│   │   │   ├── hero-home.png
+│   │   │   ├── logo.png
+│   │   │   ├── service-alisado.png
+│   │   │   └── service-pintura.png
+│   │   └── projects
+│   │       └── placeholder.svg
+│   ├── components
+│   │   ├── CookieBanner.astro
+│   │   ├── FaqAccordion.astro
+│   │   ├── FinalCTA.astro
+│   │   ├── Footer.astro
+│   │   ├── HeroContactForm.astro
+│   │   ├── KeystaticAdmin.tsx
+│   │   ├── LocationsSection.astro
+│   │   ├── Navbar.astro
+│   │   ├── SearchConsoleVerification.astro
+│   │   ├── SeoHead.astro
+│   │   ├── ServiceAreas.astro
+│   │   ├── Testimonials.astro
+│   │   ├── WhatsAppButton.astro
+│   │   ├── admin
+│   │   │   ├── ClusterCard.jsx
+│   │   │   ├── GeneratorApp.jsx
+│   │   │   ├── KeywordReviewTable.jsx
+│   │   │   └── LocationAutocomplete.jsx
+│   │   ├── blocks
+│   │   │   ├── FeaturesBlock.astro
+│   │   │   ├── HeroBlock.astro
+│   │   │   ├── MapBlock.astro
+│   │   │   └── home
+│   │   │       ├── HomeAbout.astro
+│   │   │       ├── HomeContact.astro
+│   │   │       ├── HomeFeatures.astro
+│   │   │       ├── HomeHero.astro
+│   │   │       ├── HomeProcess.astro
+│   │   │       ├── HomeServices.astro
+│   │   │       └── HomeServicesOnePage.astro
+│   │   ├── examples
+│   │   │   └── SchemaExample.astro
+│   │   └── mdx
+│   │       ├── AlertBlock.astro
+│   │       ├── BusinessNameBlock.astro
+│   │       ├── CtaBlock.astro
+│   │       ├── CustomImageBlock.astro
+│   │       └── PhoneBlock.astro
+│   ├── config
+│   │   ├── README.md
+│   │   ├── fonts.ts
+│   │   ├── keystatic
+│   │   │   ├── collections
+│   │   │   │   ├── blog.tsx
+│   │   │   │   ├── locations.tsx
+│   │   │   │   ├── projects.ts
+│   │   │   │   ├── services.tsx
+│   │   │   │   └── testimonials.ts
+│   │   │   └── singletons
+│   │   │       ├── analytics.ts
+│   │   │       ├── business.ts
+│   │   │       ├── design.ts
+│   │   │       ├── footer.ts
+│   │   │       ├── homepage.ts
+│   │   │       ├── navigation.ts
+│   │   │       ├── schema.ts
+│   │   │       └── social.ts
+│   │   └── themes.ts
+│   ├── content
+│   │   ├── analytics
+│   │   │   └── global.yaml
+│   │   ├── blog
+│   │   │   ├── como-alisar-paredes-con-gotele-sin-necesidad-de-lijar.mdx
+│   │   │   ├── como-quitar-gotele-al-temple-y-gotele-plastico-guia-y-diferencias.mdx
+│   │   │   ├── guia-paso-a-paso-para-quitar-el-gotele-tu-mismo-diy.mdx
+│   │   │   ├── herramientas-y-materiales-necesarios-para-quitar-gotele.mdx
+│   │   │   └── quitar-gotele-o-cubrirlo-la-decision-definitiva.mdx
+│   │   ├── business
+│   │   │   └── global.yaml
+│   │   ├── config.ts
+│   │   ├── design
+│   │   │   └── global.yaml
+│   │   ├── footer
+│   │   │   └── main.json
+│   │   ├── form
+│   │   │   └── main.json
+│   │   ├── locations
+│   │   │   └── sabadell.mdx
+│   │   ├── navigation
+│   │   │   └── main.json
+│   │   ├── pages
+│   │   │   └── home.mdx
+│   │   ├── projects
+│   │   │   ├── cerramiento-atico.mdx
+│   │   │   ├── cerramiento.mdx
+│   │   │   ├── escalera-interior.mdx
+│   │   │   ├── puerta-nave.mdx
+│   │   │   └── rejas-delicias.mdx
+│   │   ├── schema
+│   │   │   └── global.yaml
+│   │   ├── services
+│   │   ├── social
+│   │   │   └── global.yaml
+│   │   └── testimonials
+│   ├── data
+│   │   └── city_data.json
+│   ├── env.d.ts
+│   ├── layouts
+│   │   ├── BlogLayout.astro
+│   │   ├── Layout.astro
+│   │   ├── LocationLayout.astro
+│   │   └── ServiceLayout.astro
+│   ├── lib
+│   │   ├── seo.ts
+│   │   └── settings.ts
+│   ├── pages
+│   │   ├── 404.astro
+│   │   ├── [slug].astro
+│   │   ├── admin
+│   │   │   └── dashboard.astro
+│   │   ├── api
+│   │   │   ├── analyze.js
+│   │   │   ├── cluster.js
+│   │   │   ├── discover-services.js
+│   │   │   ├── generate.js
+│   │   │   ├── locations.js
+│   │   │   ├── manual_process.js
+│   │   │   ├── research.js
+│   │   │   ├── reset.js
+│   │   │   └── save_plan.js
+│   │   ├── aviso-legal.astro
+│   │   ├── blog
+│   │   │   ├── [...slug].astro
+│   │   │   └── index.astro
+│   │   ├── contacto.astro
+│   │   ├── cookies.astro
+│   │   ├── gracias.astro
+│   │   ├── index.astro
+│   │   ├── nosotros.astro
+│   │   ├── privacidad.astro
+│   │   ├── proyectos.astro
+│   │   ├── zona
+│   │   │   └── [slug].astro
+│   │   └── zonas.astro
+│   ├── prompts
+│   │   ├── blog.prompt.md
+│   │   ├── faq.prompt.md
+│   │   ├── home.prompt.md
+│   │   ├── location.prompt.md
+│   │   ├── service.prompt.md
+│   │   ├── service_discovery.js
+│   │   └── testimonials.prompt.md
+│   ├── styles
+│   │   └── global.css
+│   └── utils
+│       └── spintax.ts
+├── tailwind.config.mjs
+├── test_clustering_real.js
+├── test_location.js
+├── test_phase1_result.json
+├── tsconfig.json
+└── update_slugs.mjs
+
+58 directories, 176 files

@@ -31,6 +31,13 @@ export const homepage = singleton({
             fields.object({
                 title: fields.text({ label: 'Título del Servicio' }),
                 description: fields.text({ label: 'Descripción', multiline: true }),
+                image: fields.image({
+                    label: 'Imagen de Fondo (Opcional)',
+                    description: 'Si se añade, se mostrará como tarjeta con fondo. Si no, usará el estilo de icono.',
+                    directory: 'public/images/services',
+                    publicPath: '/images/services',
+                    validation: { isRequired: false }
+                }),
             }),
             {
                 label: 'Lista de Servicios (Modo One Page)',

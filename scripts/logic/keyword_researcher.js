@@ -7,7 +7,7 @@ import {
     getPeopleAlsoAsk,
     getLocationCode,
     filterByCity
-} from '../lib/seo_client_v2.js';
+} from '../lib/seo_client.js';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -223,7 +223,7 @@ export async function generateSmartClusters(nicheRaw, cityRaw, competitors, loca
     const simpleCity = city.includes(',') ? city.split(',')[0].trim() : city;
 
     // --- SISTEMA DE CHECKPOINTS (RESUME) ---
-    const STATE_FILE = path.join(process.cwd(), 'keyword_research_state.json');
+    const STATE_FILE = path.join(process.cwd(), '_data/keyword_research_state.json');
     let state = {
         niche,
         city,

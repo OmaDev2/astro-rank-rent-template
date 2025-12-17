@@ -256,6 +256,7 @@ const pages = defineCollection({
         servicesList: z.array(z.object({
             title: z.string(),
             description: z.string(),
+            image: z.string().optional(),
         })).optional(),
 
         // Options

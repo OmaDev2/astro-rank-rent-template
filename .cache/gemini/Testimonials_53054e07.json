@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Vivíamos en un piso antiguo en Gràcia y el gotelé hacía que todo pareciera más oscuro y anticuado. Decidimos quitarlo y no podemos estar más contentos. El equipo realizó un alisado de paredes perfecto, dejándolas increíblemente suaves. Además, nos asesoraron con el color y la pintura plástica lisa ha dado una luz increíble al salón. Muy profesionales y limpios.",
+      "author": "Laura Giménez",
+      "location": "Gràcia, Barcelona",
+      "initials": "L.G."
+    },
+    {
+      "quote": "Tenía pánico a la obra de quitar el gotelé por el polvo, pero me sorprendieron. Protegieron todos los muebles y el suelo con mucho cuidado y al terminar cada jornada lo dejaban todo recogido. El resultado en mi piso del Eixample es espectacular. No solo alisaron las paredes, sino que repararon grietas que ni sabía que existían. Parece otro piso, mucho más moderno.",
+      "author": "Javier Soler",
+      "location": "Eixample, Barcelona",
+      "initials": "J.S."
+    },
+    {
+      "quote": "Compramos un piso para reformar en Poblenou y sabíamos que lo primero era eliminar el gotelé. Fue la mejor decisión. El cambio es brutal. Cumplieron con los plazos acordados y el presupuesto. La comunicación fue fluida en todo momento. Ahora, con las paredes lisas y recién pintadas, el espacio se siente mucho más amplio y actual. Un trabajo impecable de principio a fin.",
+      "author": "Marta y Carlos",
+      "location": "Poblenou, Barcelona",
+      "initials": "M.C."
+    }
+  ]
+}

@@ -1,166 +1,226 @@
-import { getTopCompetitors, getRelatedKeywords, getCompetitorKeywords, getPeopleAlsoAsk } from './lib/seo_client.js';
-import { analyzeCompetitor } from './lib/scraper.js';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+#!/usr/bin/env node
+/**
+ * 🚀 SMART NICHE RESEARCHER v2.0
+ *
+ * Script mejorado para investigación de nichos con:
+ * - Filtrado inteligente por ciudad
+ * - Clasificación de intención (commercial/informational)
+ * - Clustering semántico avanzado
+ * - Soporte para location codes de DataForSEO
+ */
+/**
+ * RESEARCH NICHE v2.0 (ESPAÑA & LATAM OPTIMIZED)
+ *
+ * Uso:
+ *   node scripts/research_niche.js --niche "quitar gotele" --city "Barcelona"
+ */
+
+import {
+    getTopCompetitors,
+    searchLocations,
+    getLocationCode
+} from './lib/seo_client.js';
+import { generateSmartClusters } from './logic/keyword_researcher.js';
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
+import readline from 'readline';
 
 dotenv.config();
 
-// --- TUS VARIABLES (AQUÍ DEFINES EL PROYECTO) ---
-const PROJECT = {
-    niche: "Fontanero Urgente",  // <--- CÁMBIALO AQUÍ Y SE PROPAGARÁ A TODO
-    city: "Sevilla",             // <--- CÁMBIALO AQUÍ
-    targetAudience: "Particulares con urgencias 24h"
+// ============================================================================
+// CONFIGURACIÓN DEL PROYECTO
+// ============================================================================
+
+const DEFAULT_CONFIG = {
+    niche: "quitar gotele",
+    city: "Barcelona",
+    location: "barcelona",
+    top10Filter: true,
+    minRelevanceScore: 5,
+    includeInformational: true,
+    maxCompetitors: 10,
+    mode: 'standard' // 'standard' or 'microservice'
 };
-// -----------------------------------------------
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+// ============================================================================
+// PARSER DE ARGUMENTOS
+// ============================================================================
 
-async function main() {
-    console.log(`\n🚀 INICIANDO INVESTIGACIÓN PROFUNDA PARA: ${PROJECT.niche} en ${PROJECT.city}...\n`);
+function parseArgs() {
+    const args = process.argv.slice(2);
+    const config = { ...DEFAULT_CONFIG };
 
-    // 1. Obtener Competidores
-    const competitors = await getTopCompetitors(`${PROJECT.niche} ${PROJECT.city}`, "Spain");
+    for (let i = 0; i < args.length; i += 2) {
+        const key = args[i]?.replace('--', '');
+        const value = args[i + 1];
 
-    if (competitors.length === 0) {
-        console.log("❌ No se encontraron competidores (DataForSEO).");
-        return;
-    }
-
-    console.log(`✅ Analizando ${competitors.length} competidores reales...`);
-    competitors.forEach(c => console.log(`   - ${c.domain}`));
-
-    // 2. Obtener Volumen de Búsqueda Real (Mercado General)
-    console.log(`\n📊 Obteniendo datos de volumen de búsqueda (Mercado)...`);
-    let keywordsData = await getRelatedKeywords(`${PROJECT.niche} ${PROJECT.city}`, "Spain");
-
-    // FALLBACK: Si no hay datos para "Nicho + Ciudad", probamos solo "Nicho"
-    if (!keywordsData || keywordsData.length < 5) {
-        console.log("   ⚠️ Pocos datos para nicho + ciudad. Probando nicho general...");
-        const generalData = await getRelatedKeywords(PROJECT.niche, "Spain");
-        keywordsData = [...keywordsData, ...generalData];
-    }
-
-    const topKeywords = keywordsData.sort((a, b) => b.volume - a.volume).slice(0, 20);
-    console.log(`   ✅ Encontradas ${keywordsData.length} keywords con volumen.`);
-    console.log("   🔥 Top Keywords por tráfico:");
-    topKeywords.forEach(k => console.log(`      - ${k.keyword}: ${k.volume} búsquedas/mes`));
-
-    // 3. ROBO DE KEYWORDS (Espionaje a Competidores)
-    console.log(`\n🥷 Robando keywords de la competencia...`);
-    const competitorKeywords = {};
-    const nicheWords = PROJECT.niche.toLowerCase().split(' ');
-
-    for (const comp of competitors) {
-        console.log(`   > Espiando keywords de: ${comp.domain}...`);
-        const kw = await getCompetitorKeywords(comp.domain, "Spain");
-
-        // FILTRO DE CALIDAD
-        const filteredKw = kw.filter(k => {
-            const kLower = k.keyword.toLowerCase();
-            return nicheWords.some(word => kLower.includes(word)) || kLower.includes(PROJECT.city.toLowerCase());
-        });
-
-        competitorKeywords[comp.domain] = filteredKw.slice(0, 10);
-    }
-
-    // 4. PREGUNTAS REALES (People Also Ask)
-    console.log(`\n❓ Extrayendo preguntas reales de usuarios (PAA)...`);
-    const paaQuestions = await getPeopleAlsoAsk(`${PROJECT.niche} ${PROJECT.city}`, "Spain");
-    console.log(`   ✅ Encontradas ${paaQuestions.length} preguntas frecuentes.`);
-    paaQuestions.forEach(q => console.log(`      - ${q}`));
-
-    // 5. Analizar Estructura y Contenido
-    console.log(`\n🕵️‍♀️ Espiando estructura y contenido...`);
-    const analyzedData = [];
-    for (const comp of competitors) {
-        const analysis = await analyzeCompetitor(comp.url);
-        if (analysis) {
-            // Añadimos sus keywords al análisis
-            analysis.rankingKeywords = competitorKeywords[comp.domain] || [];
-            analyzedData.push(analysis);
-        }
-    }
-
-    // 6. Consultar a Gemini
-    console.log("\n🧠 Diseñando Arquitectura SEO con IA (Basada en DATOS PROFUNDOS)...");
-
-    const prompt = `
-        Actúa como Arquitecto SEO experto y Estratega de Contenidos.
-        Proyecto: ${PROJECT.niche} en ${PROJECT.city}.
-        
-        DATOS DE MERCADO (Lo que busca la gente):
-        ${JSON.stringify(topKeywords, null, 2)}
-        
-        PREGUNTAS REALES DE USUARIOS (PAA):
-        ${JSON.stringify(paaQuestions, null, 2)}
-        
-        ANÁLISIS DE COMPETENCIA (Lo que tienen ellos):
-        ${JSON.stringify(analyzedData, null, 2)}
-        
-        TU TAREA:
-        Analiza los datos y encuentra "Gaps de Contenido" (lo que ellos no cubren bien) y "Must-Haves" (lo que todos tienen).
-        Crea la estructura JSON definitiva para superarles.
-        
-        IMPORTANTE: 
-        1. Prioriza servicios con ALTO VOLUMEN de búsqueda.
-        2. Usa terminología que usan los competidores en su 'contentText' si es relevante.
-        3. Incluye servicios que ataquen keywords donde los competidores son débiles.
-        4. Asegúrate de que la estructura responda a las PREGUNTAS REALES (PAA).
-        
-        FORMATO JSON REQUERIDO:
-        {
-            "market_analysis": "Resumen estratégico del mercado y la oportunidad detectada.",
-            "services": [
-                {
-                    "title": "Título del Servicio (H1)",
-                    "main_keyword": "keyword principal",
-                    "volume": 0 // Volumen estimado basado en los datos
-                }
-            ],
-            "reasoning_services": "Explicación breve de por qué elegiste estos servicios basándote en el volumen de búsqueda",
-            "locations": ["Lista de 5 barrios/zonas importantes de ${PROJECT.city} para SEO Local"],
-            "reasoning_locations": "Explicación breve de por qué elegiste estas zonas (volumen, competencia, etc)",
-            "home_structure": {
-                "h1": "H1 optimizado para la Home",
-                "h2s": ["Lista de 3 H2 persuasivos para la Home"]
+        if (key && value) {
+            switch (key) {
+                case 'niche': config.niche = value; break;
+                case 'city':
+                    config.city = value;
+                    config.location = value.toLowerCase();
+                    break;
+                case 'location': config.location = value; break;
+                case 'top10': config.top10Filter = value.toLowerCase() === 'true'; break;
+                case 'min-relevance': config.minRelevanceScore = parseInt(value) || 3; break;
+                case 'include-info': config.includeInformational = value.toLowerCase() === 'true'; break;
+                case 'mode': config.mode = value; break;
             }
         }
-        
-        Responde SOLO con el JSON.
-    `;
+    }
+    return config;
+}
+
+// ============================================================================
+// INTERFAZ INTERACTIVA
+// ============================================================================
+
+async function promptUser(question) {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    return new Promise(resolve => {
+        rl.question(question, answer => {
+            rl.close();
+            resolve(answer.trim());
+        });
+    });
+}
+
+async function selectCompetitors(competitors) {
+    console.log('\n📋 COMPETIDORES ENCONTRADOS:\n');
+    competitors.forEach((c, i) => {
+        console.log(`   ${i + 1}. ${c.domain}`);
+        console.log(`      ${c.title}`);
+        console.log(`      ${c.url}\n`);
+    });
+
+    console.log('💡 Opciones:');
+    console.log('   - Presiona ENTER para usar todos');
+    console.log('   - Escribe números separados por coma (ej: 1,3,5,7)');
+    console.log('   - Escribe "skip" seguido de números para excluir (ej: skip 2,4)\n');
+
+    const answer = await promptUser('Selección: ');
+
+    if (!answer) {
+        return competitors.map(c => c.domain);
+    }
+
+    if (answer.toLowerCase().startsWith('skip')) {
+        const skipIndices = answer.replace('skip', '').trim()
+            .split(',')
+            .map(n => parseInt(n.trim()) - 1);
+        return competitors
+            .filter((_, i) => !skipIndices.includes(i))
+            .map(c => c.domain);
+    }
+
+    const selectedIndices = answer.split(',')
+        .map(n => parseInt(n.trim()) - 1)
+        .filter(n => n >= 0 && n < competitors.length);
+
+    return selectedIndices.map(i => competitors[i].domain);
+}
+
+// ============================================================================
+// MAIN
+// ============================================================================
+
+async function main() {
+    console.log('\n' + '═'.repeat(60));
+    console.log('🚀 SMART NICHE RESEARCHER v2.0');
+    console.log('═'.repeat(60) + '\n');
+
+    const config = parseArgs();
+
+
+    // Verificación de ENV
+    if (!process.env.DATAFORSEO_LOGIN || !process.env.DATAFORSEO_PASSWORD) {
+        console.error('❌ Error: Falta configuración de DataForSEO en .env');
+        process.exit(1);
+    }
+    if (!process.env.GEMINI_API_KEY) {
+        console.error('❌ Error: Falta GEMINI_API_KEY en .env');
+        process.exit(1);
+    }
+
+    console.log('📋 CONFIGURACIÓN:');
+    console.log(`   Nicho: ${config.niche}`);
+    console.log(`   Ciudad: ${config.city}`);
+    console.log(`   Location: ${config.location}`);
+    console.log(`   Mode: ${config.mode}\n`);
+
+    // ========================================================================
+    // PASO 1: Obtener competidores
+    // ========================================================================
+
+    console.log('🔍 PASO 1: Buscando competidores en Google SERP...\n');
+
+    const searchQuery = `${config.niche} ${config.city}`;
+    const locationCode = getLocationCode(config.location);
+
+    console.log(`   Query: "${searchQuery}"`);
+    console.log(`   Location Code: ${locationCode}\n`);
+
+    const competitors = await getTopCompetitors(searchQuery, locationCode);
+
+    if (competitors.length === 0) {
+        console.error('❌ No se encontraron competidores.');
+        process.exit(1);
+    }
+
+    // Selección interactiva
+    const selectedDomains = await selectCompetitors(competitors);
+
+    console.log(`\n✅ Competidores seleccionados: ${selectedDomains.length}`);
+    selectedDomains.forEach(d => console.log(`   - ${d}`));
+
+    // PASO 2: Generar Clusters
+    console.log('\n🧠 PASO 2: Generando clusters inteligentes...\n');
 
     try {
-        const result = await model.generateContent(prompt);
-        let responseText = result.response.text();
-        responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        // ... (call to generateSmartClusters same as before)
+        const plan = await generateSmartClusters(
+            config.niche,
+            config.city,
+            selectedDomains,
+            config.location,
+            {
+                top10Filter: config.top10Filter,
+                minRelevanceScore: config.minRelevanceScore,
+                includeInformational: true, // Siempre true ahora para el blog
+                maxKeywordsForAI: 150
+            }
+        );
 
-        let plan = JSON.parse(responseText);
+        // ... (Summary logging adapted to new structure)
+        console.log('\n' + '═'.repeat(60));
+        console.log('📊 RESUMEN DEL PLAN GENERADO');
+        console.log('═'.repeat(60) + '\n');
 
-        // --- LA CLAVE MAESTRA: INYECTAR DATOS FIJOS ---
-        // Aquí forzamos que el plan guarde lo que tú definiste, ignorando a la IA si se equivoca.
-        plan.niche = PROJECT.niche;
-        plan.city = PROJECT.city;
-        plan.siteName = `${PROJECT.niche} ${PROJECT.city} Pro`; // Generamos nombre auto
+        const serviceClusters = plan.clusters?.filter(c => c.type === 'SERVICE') || [];
+        const blogClusters = plan.clusters?.filter(c => c.type === 'BLOG') || [];
 
-        // --- NUEVO: GUARDAR EVIDENCIA PARA EL DASHBOARD ---
-        plan.raw_data = {
-            top_keywords: topKeywords,
-            competitor_keywords: competitorKeywords,
-            paa_questions: paaQuestions // Guardamos las preguntas
-        };
-        // ----------------------------------------------
+        console.log(`🎯 SERVICIOS (${serviceClusters.length}):\n`);
+        serviceClusters.forEach((cluster, i) => {
+            console.log(`   ${i + 1}. ${cluster.name} (${cluster.keywords.length} kws)`);
+        });
 
-        console.log("\n✨ ESTRATEGIA GENERADA:\n");
-        console.log(JSON.stringify(plan, null, 2));
+        console.log(`\n📚 BLOG TOPICS (${blogClusters.length}):\n`);
+        blogClusters.forEach((cluster, i) => {
+            console.log(`   ${i + 1}. ${cluster.name} (${cluster.keywords.length} kws)`);
+        });
 
+        // Save plan
         await fs.writeFile('project_plan.json', JSON.stringify(plan, null, 2));
-        console.log("\n💾 Plan guardado en 'project_plan.json'. Ahora ejecuta 'generate_site.js'.");
+        console.log('\n💾 Plan guardado en project_plan.json');
 
     } catch (error) {
-        console.error("❌ Error generando el plan:", error);
+        console.error('❌ Error:', error);
     }
 }
 
-main();
+main().catch(console.error);

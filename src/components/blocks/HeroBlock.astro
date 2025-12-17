@@ -2,22 +2,28 @@
 import { Image } from "astro:assets";
 import defaultServiceImage from "../../assets/images/service-alisado.png";
 import pinturaServiceImage from "../../assets/images/service-pintura.png";
-import { Phone, MapPin, Shield, Clock, Award, Users } from "lucide-react";
+import {
+    Phone,
+    MapPin,
+    Shield,
+    Clock,
+    CheckCircle2,
+    ArrowRight,
+} from "lucide-react";
 import HeroContactForm from "../HeroContactForm.astro";
 import { spin } from "../../utils/spintax";
 
+// --- PROPS & LOGIC ---
 const props = Astro.props;
 const locationName = spin(props.locationName);
 const niche = spin(props.niche);
 const zipCodes = props.zipCodes;
 const heroImage = props.heroImage;
 const phone = props.phone;
-const siteName = spin(props.siteName);
 const title = spin(props.title);
-
 const isIndustrial = Astro.props.locationType === "industrial";
 
-// Lógica de Selección de Imagen
+// Lógica de Selección de Imagen (Mantenida intacta)
 let selectedImage = null;
 let isOptimized = false;
 
@@ -28,7 +34,6 @@ if (!heroImage || heroImage === "/images/services/default.jpg") {
     selectedImage = pinturaServiceImage;
     isOptimized = true;
 } else {
-    // Fallback a Unsplash si no hay imagen definida y no es una de las nuestras
     selectedImage =
         heroImage ||
         (isIndustrial
@@ -37,95 +42,125 @@ if (!heroImage || heroImage === "/images/services/default.jpg") {
 }
 
 const heroSubtitle = isIndustrial
-    ? `Servicios de ${(niche || "servicio").toLowerCase()} para empresas y naves industriales.`
-    : `Soluciones de ${(niche || "servicio").toLowerCase()} para particulares y comunidades.`;
+    ? `Servicios profesionales de ${(niche || "reformas").toLowerCase()} para empresas y naves.`
+    : `Soluciones de ${(niche || "reformas").toLowerCase()} para particulares y comunidades.`;
+
+// Limpieza de teléfono para el href
+const phoneHref = (phone || "").replace(/\s/g, "");
 ---
 
 <section
-    class="relative min-h-[85vh] flex items-center bg-secondary overflow-hidden"
+    class="relative min-h-[90vh] lg:min-h-[800px] flex items-center bg-secondary overflow-hidden group"
 >
-    <div class="absolute inset-0 w-full h-full">
-        <div class="absolute inset-0 w-full h-full">
-            <Image
-                src={selectedImage}
-                alt={`${niche} en ${locationName}`}
-                class="w-full h-full object-cover opacity-40"
-                loading="eager"
-                width={1920}
-                height={1080}
-                inferSize={typeof selectedImage === "string"}
-            />
+    {/* --- 1. FONDO E IMAGEN --- */}
+    <div class="absolute inset-0 w-full h-full select-none">
+        <Image
+            src={selectedImage}
+            alt={`${niche} en ${locationName}`}
+            class="w-full h-full object-cover opacity-20 lg:opacity-30 scale-105 group-hover:scale-110 transition-transform duration-[2s]"
+            loading="eager"
+            width={1920}
+            height={1080}
+            inferSize={typeof selectedImage === "string"}
+        />
+        {/* Gradiente estilo "Cine" para oscurecer y dar foco */}
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/95 to-secondary/70"
+        >
+        </div>
+        <div
+            class="absolute inset-0 bg-gradient-to-t from-secondary via-transparent to-transparent"
+        >
         </div>
     </div>
-    <div
-        class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/85 to-secondary/60"
-    >
-    </div>
 
-    <div class="container mx-auto px-4 lg:px-8 relative z-10 py-20">
-        <div class="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-            <div class="max-w-2xl">
-                <div class="flex flex-wrap items-center gap-3 mb-6">
-                    <span
-                        class="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-primary/20 text-primary text-sm font-bold uppercase tracking-wider border border-primary/30"
-                    >
-                        <MapPin className="w-4 h-4" /> Servicio en {
-                            locationName
-                        }
+    {/* --- 2. CONTENIDO --- */}
+    <div class="container mx-auto px-4 lg:px-8 relative z-10 py-12 lg:py-20">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+            {/* --- COLUMNA IZQUIERDA: TEXTO (7 cols) --- */}
+            <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                {/* Badge Superior */}
+                <div
+                    class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest backdrop-blur-sm mx-auto lg:mx-0"
+                >
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"
+                        ></span>
+                        <span
+                            class="relative inline-flex rounded-full h-2 w-2 bg-primary"
+                        ></span>
                     </span>
-                    <span
-                        class="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-surface/80 backdrop-blur text-heading text-xs font-bold border border-heading/20"
-                    >
-                        <Shield className="w-4 h-4 text-primary" /> +15 Años Experiencia
-                    </span>
+                    Disponible en {locationName}
                 </div>
 
+                {/* Título Principal */}
                 <h1
-                    class="text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight mb-6 drop-shadow-lg uppercase"
+                    class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-black text-white leading-[1.1] drop-shadow-2xl"
                 >
                     {
-                <h1 class="text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight mb-6 drop-shadow-lg uppercase">
-                    {
-                        title ? title : (
-                            // Optimización de Título para evitar redundancia
-                            locationName.toLowerCase().includes(niche?.toLowerCase()) 
-                                ? <span class="text-primary">{locationName}</span>
-                                : <span set:html={`${(niche || "Servicio")} <br/><span class="text-primary">EN ${locationName}</span>`} />
+                        title ? (
+                            <span set:html={title} />
+                        ) : (
+                            <>
+                                {isIndustrial
+                                    ? "Soluciones Industriales"
+                                    : "Renueva Tu Espacio"}
+                                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary bg-[length:200%_auto] animate-shine mt-2">
+                                    en {locationName}
+                                </span>
+                            </>
                         )
                     }
                 </h1>
 
+                {/* Descripción */}
                 <p
-                    class="text-lg lg:text-xl text-white/90 mb-8 font-light border-l-4 border-primary pl-6 max-w-xl leading-relaxed backdrop-blur-sm ml-2"
+                    class="text-lg text-white/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light border-l-2 border-primary/30 pl-4 lg:pl-6"
                 >
-                    {heroSubtitle} Disponibles en <strong class="text-white">{locationName}</strong>. 
-                    {zipCodes?.length > 0 && <span class="text-white/70 text-base block mt-2 opacity-80">Códigos Postales: {zipCodes.join(", ")}</span>}.
+                    {heroSubtitle}
+                    <span class="hidden sm:inline"
+                        >Garantizamos resultados impecables, limpieza absoluta y
+                        cumplimiento estricto de plazos.</span
+                    >
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-4">
+                {/* Botones de Acción */}
+                <div
+                    class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4"
+                >
                     <a
-                        href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary hover:bg-primary/90 text-white rounded-xl transition-all shadow-[0_0_20px_rgba(var(--color-primary),0.4)] hover:shadow-[0_0_30px_rgba(var(--color-primary),0.6)] hover:-translate-y-1"
+                        href={`tel:${phoneHref}`}
+                        class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-primary rounded-xl overflow-hidden shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all hover:-translate-y-1"
                     >
-                        <Phone className="w-5 h-5 mr-2" /> Llamar Ahora
+                        <div
+                            class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine-fast"
+                        >
+                        </div>
+                        <Phone className="w-5 h-5 mr-3 animate-pulse" />
+                        <span>Llamar: {phone}</span>
                     </a>
+
                     <a
                         href="#formulario"
-                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-white/10 hover:bg-white/20 text-white backdrop-blur-md rounded-xl transition-all border border-white/20 hover:border-white/40"
+                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl backdrop-blur-md transition-all hover:-translate-y-1"
                     >
-                        Pedir Presupuesto
+                        <span class="mr-2">Pedir Presupuesto</span>
+                        <ArrowRight
+                            className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                        />
                     </a>
                 </div>
-            </div>
 
-            <div
-                id="formulario"
-                class="w-full lg:w-[420px] mt-8 lg:mt-0 lg:mr-8"
-            >
-                <HeroContactForm
-                    title={`¿Presupuesto para ${niche}?`}
-                    subtitle="Te respondemos hoy mismo"
-                />
+                {/* Trust Signals (Iconos inferiores) */}
+                <div
+                    class="pt-6 grid grid-cols-3 gap-2 lg:gap-8 border-t border-white/5 max-w-lg mx-auto lg:mx-0"
+                >
+                    <div
+                        class="flex flex-col lg:flex-row items-center gap-2 text-center lg:text-left"
+                    >
+                    </div>
+                </div>
             </div>
         </div>
     </div>

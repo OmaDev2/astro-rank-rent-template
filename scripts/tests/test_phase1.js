@@ -23,7 +23,7 @@ async function runTest() {
         });
 
         // Save result to inspect
-        fs.writeFileSync('test_phase1_result.json', JSON.stringify(result, null, 2));
+        fs.writeFileSync('_data/test_phase1_result.json', JSON.stringify(result, null, 2));
 
     } catch (error) {
         console.error('❌ Error en la prueba:', error);

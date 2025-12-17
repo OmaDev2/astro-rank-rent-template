@@ -1,7 +1,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
-import { SERVICE_DISCOVERY_PROMPT } from '../../src/prompts/service_discovery.js';
+import { SERVICE_DISCOVERY_PROMPT } from '../lib/ai_prompts.js';
 
 dotenv.config();
 

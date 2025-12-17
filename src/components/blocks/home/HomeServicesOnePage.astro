@@ -34,23 +34,43 @@ if (!services || services.length === 0) return null;
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {
-                services.map((service: any) => (
-                    <div class="group relative overflow-hidden rounded-xl bg-surface p-8 border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                        <div class="mb-6 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                            <CheckCircle className="w-6 h-6" />
+                services.map((service: any) =>
+                    service.image ? (
+                        // Card con Imagen de Fondo (Estilo tipo Page)
+                        <div class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]">
+                            <div
+                                class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style={`background-image: url('${service.image}')`}
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-secondary/95 via-secondary/60 to-transparent" />
+                            <div class="relative h-full flex flex-col justify-end p-8">
+                                <h3 class="text-2xl font-heading font-bold text-white mb-3 shadow-black drop-shadow-md">
+                                    {service.title}
+                                </h3>
+                                <p class="text-gray-200 mb-2 line-clamp-3 text-sm">
+                                    {service.description}
+                                </p>
+                            </div>
                         </div>
+                    ) : (
+                        // Card por defecto (Icono)
+                        <div class="group relative overflow-hidden rounded-xl bg-surface p-8 border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                        <h3 class="text-2xl font-heading font-bold text-heading mb-4 group-hover:text-primary transition-colors">
-                            {service.title}
-                        </h3>
+                            <div class="mb-6 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                <CheckCircle className="w-6 h-6" />
+                            </div>
 
-                        <p class="text-body leading-relaxed">
-                            {service.description}
-                        </p>
-                    </div>
-                ))
+                            <h3 class="text-2xl font-heading font-bold text-heading mb-4 group-hover:text-primary transition-colors">
+                                {service.title}
+                            </h3>
+
+                            <p class="text-body leading-relaxed">
+                                {service.description}
+                            </p>
+                        </div>
+                    ),
+                )
             }
         </div>
     </div>

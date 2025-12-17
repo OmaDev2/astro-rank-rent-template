@@ -381,23 +381,23 @@ aboutSection:
   yearsExperience: "15+"
   image: "/images/home/hero-placeholder.jpg"
   features:
-${(homeData.why_us_bullets || []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.desc)}`).join('\n')}
+${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.desc)}`).join('\n')}
   buttonText: "Solicitar Visita Técnica"
   buttonLink: "/contacto"
 features:
-${(homeData.features || []).map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${escapeYaml(f.description)}`).join('\n')}
+${(Array.isArray(homeData.features) ? homeData.features : []).map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${escapeYaml(f.description)}`).join('\n')}
 servicesList:
 ${finalServicesList.map(s => `  - title: ${escapeYaml(s.title)}\n    description: ${escapeYaml(s.description)}`).join('\n')}
 process:
   title: ${escapeYaml(homeData.process?.title || "Nuestro Proceso")}
   description: ${escapeYaml(homeData.process?.description || "")}
   steps:
-${(homeData.process?.steps || []).map(s => `    - title: ${escapeYaml(s.title)}\n      description: ${escapeYaml(s.description)}`).join('\n')}
+${(Array.isArray(homeData.process?.steps) ? homeData.process?.steps : []).map(s => `    - title: ${escapeYaml(s.title)}\n      description: ${escapeYaml(s.description)}`).join('\n')}
 testimonials:
-${(testimonialsData?.testimonials || []).map(t => `  - quote: ${escapeYaml(t.quote)}\n    author: "${t.author}"\n    location: "${t.location}"\n    initials: "${t.initials}"`).join('\n')}
+${(Array.isArray(testimonialsData?.testimonials) ? testimonialsData.testimonials : []).map(t => `  - quote: ${escapeYaml(t.quote)}\n    author: "${t.author}"\n    location: "${t.location}"\n    initials: "${t.initials}"`).join('\n')}
 seoContentTitle: "Expertos en ${plan.niche}"
 faq:
-${(homeData.faq || []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
+${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
 contactSection:
   title: "Contacta con Nosotros"
   subtitle: >-
