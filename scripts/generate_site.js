@@ -288,15 +288,28 @@ async function main() {
     // Keywords del main cluster para enriquecer
     // const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || [];
 
-    // Lista de servicios para contexto
-    const servicesList = serviceClusters.map(c => c.cluster_name);
+    // Lista de servicios para contexto (Enriquezida con keywords)
+    const servicesContext = serviceClusters.map(c => ({
+        name: c.cluster_name,
+        keywords: c.keywords.slice(0, 5).map(k => k.keyword).join(', ')
+    }));
 
     // Si es One Page Mode, pedimos explícitamente que incluya los servicios como "features" o una lista
     const isOnePage = plan.one_page_mode === true;
     const onePageInstruction = isOnePage
-        ? `MODO ONE PAGE ACTIVO: Esta será la ÚNICA página del sitio. 
-           - Debes incluir una lista detallada de los servicios principales (${servicesList.join(', ')}) dentro de la sección 'services_list'.
-           - El contenido debe ser muy completo, cubriendo lo que normalmente iría en páginas separadas.`
+        ? `🚨 MODO ONE PAGE (LANDING ÚNICA) ACTIVO 🚨
+           Esta será la ÚNICA página del sitio. El objetivo es convertir visitas en clientes sin que naveguen a otras páginas.
+           
+           INSTRUCCIONES CRÍTICAS:
+           1. Genera una sección 'services_list' MUY ROBUSTA.
+           2. Para cada servicio de la lista (${servicesContext.map(s => s.name).join(', ')}), debes incluir:
+              - Título atractivo.
+              - Descripción persuasiva de 2-3 líneas (menciona beneficios).
+              - Una lista de "features" o puntos clave dentro de la descripción si es posible.
+           3. El contenido debe ser suficiente para vender el servicio sin necesidad de hacer clic.
+           
+           Contexto de Keywords por Servicio:
+           ${servicesContext.map(s => `- ${s.name}: ${s.keywords}`).join('\n           ')}`
         : "";
 
     // Construir instrucción de estructura personalizada
@@ -304,8 +317,8 @@ async function main() {
     // Solo forzamos la estructura manual (H2s de servicios) si estamos en One Page Mode.
     // En modo Multi-Page, dejamos que la IA decida la mejor estructura de navegación.
     if (isOnePage && plan.home_structure?.h2s && plan.home_structure.h2s.length > 0) {
-        structureInstruction = `ESTRUCTURA REQUERIDA (OBLIGATORIO):
-        El usuario requiere que la página cubra los siguientes temas/secciones (adátalos a los campos del JSON como info_content, features, process, etc.):
+        structureInstruction = `ESTRUCTURA VISUAL REQUERIDA (Adapta el JSON a esto):
+        El usuario ha definido estos encabezados (H2) que DEBEN estar representados en el contenido (ya sea como secciones, items de lista o features):
         - ${plan.home_structure.h2s.join('\n        - ')}`;
     }
 
@@ -315,8 +328,8 @@ async function main() {
         cityName: cityName,
         homeH1: homeH1,
         onePageInstruction: onePageInstruction,
-        structureInstruction: structureInstruction, // Nueva variable
-        servicesList: servicesList,
+        structureInstruction: structureInstruction,
+        servicesList: servicesContext.map(s => s.name).join(', '), // Mantener compatibilidad simple
         cityContext: cityContextData
     });
 
@@ -329,10 +342,11 @@ async function main() {
         // homeData = injectInternalLinks(homeData, linksMap); // Assuming injectInternalLinks is defined elsewhere
 
         // Generar testimonios (también con prompt externo)
+        const servicesNames = servicesContext.map(s => s.name);
         const testimonialsPrompt = await loadPrompt('testimonials', {
             niche: plan.niche,
             cityName: cityName,
-            servicesList: servicesList.slice(0, 3).join(', ')
+            servicesList: servicesNames.slice(0, 3).join(', ')
         });
 
         const testimonialsData = await generateData(testimonialsPrompt, 'Testimonials');
@@ -343,8 +357,8 @@ async function main() {
         // Si es One Page, usamos la lista de servicios generada por IA o un fallback
         let finalServicesList = homeData.services_list || [];
         if (isOnePage && finalServicesList.length === 0) {
-            finalServicesList = servicesList.slice(0, 6).map(s => ({
-                title: s,
+            finalServicesList = servicesContext.slice(0, 6).map(s => ({
+                title: s.name,
                 description: `Especialistas en ${s.toLowerCase()} en ${cityName}.`
             }));
         }
@@ -365,7 +379,7 @@ aboutSection:
   description: >-
     ${indentYaml(homeData.intro_content?.paragraphs?.join('\n\n') || "")}
   yearsExperience: "15+"
-  image: "/images/home/about-placeholder.jpg"
+  image: "/images/home/hero-placeholder.jpg"
   features:
 ${(homeData.why_us_bullets || []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.desc)}`).join('\n')}
   buttonText: "Solicitar Visita Técnica"

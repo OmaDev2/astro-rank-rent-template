@@ -52,9 +52,12 @@ Primero tu razonamiento (texto plano), LUEGO el bloque de código JSON.
             { "title": "Ventaja 2", "description": "Desc..." },
             { "title": "Ventaja 3", "description": "Desc..." }
     ],
-    "services_list": [ // SOLO SI ES ONE PAGE MODE
-            { "title": "Servicio 1", "description": "Descripción detallada del servicio..." },
-            { "title": "Servicio 2", "description": "Descripción detallada del servicio..." }
+    "services_list": [ // SOLO SI ES ONE PAGE MODE (Crítico: Rellenar con detalle)
+            { 
+                "title": "Nombre Servicio", 
+                "description": "Descripción persuasiva de venta + lista de 3 puntos clave (ej: 'Incluye material, limpieza y garantía').",
+                "icon_suggestion": "Nombre de icono Lucide (ej: Hammer, Brush)"
+            }
     ],
     "process": {
         "title": "Nuestro Proceso de Trabajo",

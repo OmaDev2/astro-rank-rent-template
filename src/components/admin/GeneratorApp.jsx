@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X, FileText, Upload } from 'lucide-react';
+import {
+    Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X, FileText, Upload, Send, Play, ChevronDown, ChevronUp, RefreshCw, RotateCcw
+} from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
 import KeywordReviewTable from './KeywordReviewTable';
 import ClusterCard from './ClusterCard';
@@ -16,7 +18,8 @@ export default function GeneratorApp() {
         seedKeyword: '',
         top10Filter: true,
         generateLocations: false, // NUEVO: Toggle para generar páginas de localidades
-        onePageMode: false // NUEVO: Toggle para sitios de una sola página (Micro-Nicho)
+        onePageMode: false, // NUEVO: Toggle para sitios de una sola página (Micro-Nicho)
+        designStyle: 'industrial' // NUEVO: Estilo de diseño
     });
     const [manualMode, setManualMode] = useState(false);
     const [manualInput, setManualInput] = useState('');
@@ -33,6 +36,32 @@ export default function GeneratorApp() {
     const [saving, setSaving] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [discoveredServices, setDiscoveredServices] = useState([]); // ✅ Nuevo estado para servicios
+
+    // --- FUNCIÓN DE RESET ---
+    const handleReset = async () => {
+        if (!confirm('⚠️ ¿Estás seguro de que quieres BORRAR TODO el proyecto? \n\nEsta acción eliminará:\n- Home Page\n- Todos los servicios\n- Blog y Zonas\n- El plan actual\n\nNo se puede deshacer.')) {
+            return;
+        }
+
+        try {
+            setStep('loading');
+            setLogs(['🗑️ Eliminando archivos...', '🧹 Limpiando directorios...']);
+
+            const res = await fetch('/api/reset', { method: 'POST' });
+            const data = await res.json();
+
+            if (data.success) {
+                alert('✨ Proyecto reseteado con éxito. Empezamos de cero.');
+                window.location.reload();
+            } else {
+                throw new Error(data.errors?.join('\n') || 'Error desconocido');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('❌ Error al resetear: ' + error.message);
+            setStep('input');
+        }
+    };
 
     // Auto-update seed keyword
     useEffect(() => {
@@ -503,13 +532,27 @@ export default function GeneratorApp() {
     if (step === 'input') {
         return (
             <div className="max-w-2xl mx-auto">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-white mb-4">
-                        Generador de Nichos <span className="text-blue-400">Rank & Rent</span>
-                    </h1>
-                    <p className="text-slate-400">
-                        Automatiza tu investigación de palabras clave, clustering y estructura web.
-                    </p>
+                <div className="flex justify-between items-center mb-12">
+                    <h2 className="text-xl font-bold font-heading text-white flex items-center gap-2">
+                        <Bot className="w-6 h-6 text-indigo-400" />
+                        Generador de Sitios Rank & Rent
+                    </h2>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={handleReset}
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-red-500/30 transition-all flex items-center gap-2 font-bold"
+                            title="Resetear Proyecto (Borrar Todo)"
+                        >
+                            <RotateCcw className="w-5 h-5" /> REINICIAR
+                        </button>
+                        <button
+                            onClick={() => document.getElementById('configInput').click()}
+                            className="text-indigo-400 hover:text-indigo-300 text-sm font-bold flex items-center gap-2 px-3 py-1 rounded-lg border border-indigo-500/30 hover:bg-indigo-500/10 transition-colors"
+                        >
+                            <Upload className="w-4 h-4" /> Cargar Config
+                        </button>
+                        <input type="file" id="configInput" className="hidden" accept=".json" onChange={(e) => { /* handle config upload */ }} />
+                    </div>
                 </div>
 
                 {/* LOAD PLAN BUTTON */}
@@ -1282,6 +1325,7 @@ export default function GeneratorApp() {
         );
     }
 
+
     // --- LOADING OVERLAY ---
     if (step === 'loading' || step === 'generating') {
         return (
@@ -1358,8 +1402,8 @@ export default function GeneratorApp() {
                     <a href="/" target="_blank" className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold shadow-lg flex items-center gap-2 transition-transform hover:scale-105">
                         <Eye className="w-5 h-5" /> Ver Sitio Web
                     </a>
-                    <button onClick={() => window.location.reload()} className="bg-slate-700 hover:bg-slate-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-transform hover:scale-105">
-                        Crear Nuevo Proyecto
+                    <button onClick={handleReset} className="bg-slate-700 hover:bg-red-900 border border-slate-600 hover:border-red-500 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex items-center gap-2">
+                        <RotateCcw className="w-5 h-5" /> Borrar y Empezar de Nuevo
                     </button>
                 </div>
             </div>

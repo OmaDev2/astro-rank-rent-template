@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "¡Un trabajo impecable! Teníamos un gotelé horrible en todo el piso de Gràcia y el equipo lo quitó por completo, dejando las paredes increíblemente lisas. Fueron muy cuidadosos, cubrieron todos los muebles y limpiaron al terminar cada día. El piso ahora parece mucho más grande y luminoso. Cumplieron con los plazos, algo que se agradece mucho.",
+      "author": "Laura G.",
+      "location": "Barri de Gràcia, Barcelona",
+      "initials": "LG"
+    },
+    {
+      "quote": "Contratamos sus servicios para restaurar y pintar toda la carpintería exterior y las barandillas de los balcones en nuestro piso del Eixample. Un trabajo delicado por la antigüedad del edificio. El resultado ha sido excelente, con un acabado muy fino y resistente. Muy profesionales y respetuosos con los vecinos durante todo el proceso.",
+      "author": "Carlos Martínez",
+      "location": "Eixample Dreta, Barcelona",
+      "initials": "CM"
+    },
+    {
+      "quote": "Acabábamos de reformar nuestro loft en Poblenou y queríamos un acabado perfecto. No solo pintaron todo el espacio con una pulcritud asombrosa, sino que nos asesoraron para elegir el color de una pared de acento en el salón, que ha quedado espectacular. Se coordinaron perfectamente con los otros industriales. ¡El resultado es de revista!",
+      "author": "Sofía y David",
+      "location": "Poblenou, Barcelona",
+      "initials": "S&D"
+    }
+  ]
+}

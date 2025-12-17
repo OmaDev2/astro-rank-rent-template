@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "title": "Pintores en Barcelona | Expertos en Alisar Paredes y Gotelé",
+    "description": "Pintores profesionales en Barcelona. Especialistas en quitar gotelé, alisar paredes, pintura decorativa y solución de humedades. Presupuesto gratis y sin compromiso."
+  },
+  "hero_section": {
+    "h1": "Tus Pintores de Confianza en Barcelona",
+    "subheadline": "Transformamos tu piso en el Eixample, tu casa en Sarrià o tu local en Gràcia. Acabados perfectos y limpieza garantizada.",
+    "cta_primary": "Pedir Presupuesto Gratis",
+    "cta_secondary": "Llamar Ahora"
+  },
+  "intro_content": {
+    "title": "El Arte de la Pintura, con Sello Barcelonés",
+    "paragraphs": [
+      "Somos un equipo de pintores de Barcelona, de los de toda la vida. Conocemos cada rincón de la ciudad, desde los techos altos modernistas del Eixample hasta los apartamentos con vistas al mar en Poblenou. Entendemos que pintar tu casa no es solo dar una mano de color, es renovar tu espacio y mejorar tu calidad de vida.",
+      "Nos obsesiona el detalle, la preparación minuciosa de cada superficie y el uso de materiales de primera calidad que soporten la humedad del clima mediterráneo. Nuestro compromiso es sencillo: un trabajo impecable, entregado en el plazo acordado y dejando tu casa más limpia de lo que la encontramos."
+    ]
+  },
+  "services_grid_intro": "Descubre cómo podemos renovar tu hogar o negocio con nuestros servicios especializados.",
+  "why_us_bullets": [
+    {
+      "title": "Maestros Locales",
+      "desc": "Conocemos los edificios de Barcelona y sus problemas típicos, como las humedades por condensación en Ciutat Vella."
+    },
+    {
+      "title": "Limpieza Extrema",
+      "desc": "Protegemos cada mueble y suelo con esmero. Al terminar, solo notarás la perfección de tus nuevas paredes."
+    },
+    {
+      "title": "Garantía de Satisfacción",
+      "desc": "No terminamos el trabajo hasta que no estés 100% satisfecho con el resultado. Tu confianza es nuestra prioridad."
+    }
+  ],
+  "features": [
+    {
+      "title": "Materiales de Primera",
+      "description": "Solo usamos pinturas de alta gama, ecológicas y duraderas, específicas para el clima de Barcelona."
+    },
+    {
+      "title": "Presupuestos Transparentes",
+      "description": "Recibe un presupuesto detallado y cerrado. Sin sorpresas ni costes ocultos al final del trabajo."
+    },
+    {
+      "title": "Cumplimos los Plazos",
+      "description": "Organizamos el trabajo para minimizar las molestias y entregamos siempre en la fecha pactada."
+    }
+  ],
+  "services_list": [
+    {
+      "title": "Nuestros Servicios de Alisado: Adiós al Gotelé y Estucado",
+      "description": "Moderniza tu casa y gana luminosidad eliminando el anticuado gotelé. Nuestro proceso de alisado deja tus paredes con un acabado liso y perfecto, listas para cualquier tipo de pintura y revalorizando tu propiedad al instante. Nos encargamos de todo el proceso, desde la preparación hasta la limpieza final.\n\n**Características del servicio:**\n- **Técnica multicapa:** Aplicamos varias capas de emplaste de alta calidad para un resultado duradero y sin imperfecciones.\n- **Lijado profesional:** Utilizamos maquinaria con aspiración para minimizar el polvo en tu vivienda.\n- **Acabado listo para pintar:** Entregamos paredes perfectamente lisas, selladas y listas para el color que elijas.",
+      "icon_suggestion": "Wand2"
+    },
+    {
+      "title": "Pintura de Interiores para Pisos y Casas",
+      "description": "Dale una nueva vida a tu hogar con un servicio de pintura interior impecable. Ya sea un cambio de color completo, pintar una sola habitación o sanear techos de cocina y baño, usamos las mejores técnicas para un acabado uniforme y duradero. Aumenta la sensación de espacio y confort con colores que reflejan tu estilo.\n\n**Qué incluye:**\n- Asesoramiento en la elección de colores y acabados.\n- Protección completa de mobiliario, suelos y marcos.\n- Aplicación profesional a rodillo, pistola o brocha según la superficie.",
+      "icon_suggestion": "PaintRoller"
+    },
+    {
+      "title": "Pintura Decorativa de Alta Calidad",
+      "description": "Crea ambientes únicos y con personalidad a través de la pintura decorativa. Desde una pared de acento que transforme tu salón hasta efectos texturizados que añaden elegancia, nuestros maestros aplicadores dominan las técnicas más demandadas. Ideal para destacar espacios en locales comerciales o dar un toque de distinción a tu hogar.\n\n**Técnicas que dominamos:**\n- Estuco veneciano para un acabado marmoleado y lujoso.\n- Tierras florentinas y efectos rústicos.\n- Papel pintado y murales.",
+      "icon_suggestion": "Palette"
+    },
+    {
+      "title": "Tratamiento de Humedades y Moho",
+      "description": "Soluciona de raíz los problemas de humedad por condensación o capilaridad, tan comunes en Barcelona. No nos limitamos a tapar la mancha; identificamos el origen, saneamos la pared y aplicamos tratamientos y pinturas específicas anti-humedad y anti-moho. Recupera un ambiente sano y evita que el problema reaparezca.\n\n**Nuestro método:**\n- Diagnóstico de la causa de la humedad.\n- Saneamiento y limpieza de la zona afectada.\n- Aplicación de morteros y pinturas transpirables y fungicidas.",
+      "icon_suggestion": "Droplets"
+    },
+    {
+      "title": "Pintura de Exteriores y Fachadas",
+      "description": "Protege tu edificio del sol, la lluvia y la contaminación de la ciudad. Utilizamos pinturas para exteriores elásticas e impermeables, diseñadas para resistir las condiciones del clima mediterráneo y el ambiente salino de las zonas costeras. Renueva la imagen de tu fachada y asegura su durabilidad por muchos años.\n\n**Ideal para:**\n- Fachadas de comunidades de vecinos.\n- Muros exteriores y vallas de chalets.\n- Barandillas y carpintería metálica exterior.",
+      "icon_suggestion": "Building"
+    }
+  ],
+  "process": {
+    "title": "Así Trabajamos: Sencillo, Claro y Eficaz",
+    "description": "Nuestro proceso está diseñado para darte total tranquilidad de principio a fin.",
+    "steps": [
+      {
+        "title": "1. Contacto y Presupuesto Gratis",
+        "description": "Nos llamas o rellenas el formulario. Visitamos tu propiedad en Barcelona para entender tus necesidades, tomar medidas y darte un presupuesto cerrado y detallado sin ningún coste."
+      },
+      {
+        "title": "2. Planificación y Protección",
+        "description": "Una vez aceptado, fijamos las fechas que mejor te vengan. Antes de empezar, nuestro equipo cubre y protege meticulosamente todos tus muebles, suelos, puertas y ventanas."
+      },
+      {
+        "title": "3. Ejecución y Acabados",
+        "description": "Llevamos a cabo el trabajo con la máxima profesionalidad, prestando especial atención a la preparación de las superficies y a los acabados. Te mantenemos informado durante todo el proceso."
+      },
+      {
+        "title": "4. Limpieza y Revisión Final",
+        "description": "Al terminar, limpiamos toda la zona de trabajo a fondo. Realizamos una revisión final contigo para asegurar que cada detalle está perfecto y el resultado es de tu total agrado."
+      }
+    ]
+  },
+  "local_closing": "Damos servicio en toda Barcelona capital y área metropolitana. Ya sea que necesites alisar las paredes de tu piso en Les Corts, renovar tu oficina cerca de la Diagonal o pintar tu casa en Sant Cugat, nuestro equipo está listo para ofrecerte la máxima calidad.",
+  "faq": [
+    {
+      "question": "¿Cuánto cuesta quitar el gotelé y alisar las paredes en Barcelona?",
+      "answer": "El precio varía según los metros cuadrados, el estado de las paredes y el tipo de gotelé (temple o plástico). Para darte un precio exacto, preferimos visitar tu piso y ofrecerte un presupuesto gratuito, cerrado y sin compromiso. Así te aseguras un precio justo y sin sorpresas."
+    },
+    {
+      "question": "¿Cuánto tiempo se tarda en pintar un piso de unos 80 m²?",
+      "answer": "Generalmente, para un piso de ese tamaño, el proceso de pintura de interiores (paredes y techos) puede llevar entre 3 y 5 días, incluyendo la preparación y protección del mobiliario. Si hay que alisar paredes, el tiempo puede aumentar."
+    },
+    {
+      "question": "¿Tengo que mover los muebles yo mismo?",
+      "answer": "Nosotros nos encargamos de mover los muebles más grandes al centro de la habitación y cubrirlos cuidadosamente con plásticos protectores. Solo te pedimos que retires los objetos pequeños y personales para facilitar el trabajo y garantizar su seguridad."
+    },
+    {
+      "question": "¿Qué tipo de pintura utilizáis?",
+      "answer": "Trabajamos con las mejores marcas del mercado, utilizando pinturas plásticas de alta calidad, lavables y ecológicas (con bajo contenido en COV). Para zonas problemáticas como cocinas, baños o paredes con humedad, usamos productos específicos con propiedades anti-moho y anti-condensación."
+    }
+  ]
+}
