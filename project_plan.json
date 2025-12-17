@@ -969,19 +969,25 @@
   },
   "clusters": [],
   "home_structure": {
-    "h1": "",
-    "h2s": []
+    "h1": "Empresa de Quitar gotelé  en Province of Barcelona,Catalonia,Spain",
+    "h2s": [
+      "Quitar Gotelé y Alisar Paredes en Barcelona",
+      "Quitar Estucado en Barcelona",
+      "¿Por qué elegirnos?",
+      "Zonas de Servicio",
+      "Preguntas Frecuentes"
+    ]
   },
   "services": [
     {
-      "name": "Quitar Gotelé y Estucado en Barcelona",
+      "name": "Quitar Gotelé y Alisar Paredes en Barcelona",
       "slug": "quitar-gotele-barcelona",
       "intent": "COMMERCIAL",
       "meta_suggestions": [
         {
-          "h1": "Empresa para Quitar Gotelé en Barcelona: Presupuesto",
-          "seo_title": "Quitar Gotelé en Barcelona al Mejor Precio | Expertos",
-          "seo_description": "¿Buscas alisar tus paredes? Somos expertos en quitar gotelé y estucado en Barcelona. Pide tu presupuesto online sin compromiso y renueva tu hogar."
+          "h1": "Empresa para Quitar Gotelé y Alisar Paredes en Barcelona",
+          "seo_title": "Quitar Gotelé Barcelona | Presupuesto Inmediato | Empresa Local",
+          "seo_description": "¿Buscas un presupuesto para quitar el gotelé en Barcelona? Alisamos paredes y techos con acabados perfectos. Servicio profesional, rápido y limpio. ¡Pide precio!"
         }
       ],
       "keywords": [
@@ -1002,24 +1008,24 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "quitar estucado",
-          "volume": 130,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar estucado pared",
-          "volume": 60,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
           "keyword": "eliminar gotele",
           "volume": 30,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes gotele",
+          "volume": 30,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar gotele",
+          "volume": 20,
           "cpc": 0,
           "competition": 0,
           "source": "manual_csv",
@@ -1043,6 +1049,14 @@
         },
         {
           "keyword": "precio de quitar gotele y alisar paredes",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "precio de alisar gotele",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1086,6 +1100,14 @@
           "volume": 10,
           "cpc": 0,
           "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes barcelona",
+          "volume": 10,
+          "cpc": 1.73,
+          "competition": 12,
           "source": "manual_csv",
           "relevanceScore": 10
         },
@@ -1154,6 +1176,14 @@
           "relevanceScore": 10
         },
         {
+          "keyword": "alisar paredes de gotele precio",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
           "keyword": "presupuesto quitar gotele barcelona",
           "volume": 0,
           "cpc": 0,
@@ -1170,87 +1200,8 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "retirar gotele",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "eliminar estucado pared",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar gotele fachada",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar la gota de las paredes",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "sacar gotele pared",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        }
-      ],
-      "type": "SERVICE"
-    },
-    {
-      "name": "Alisado de Paredes en Barcelona",
-      "slug": "alisar-paredes-barcelona",
-      "intent": "COMMERCIAL",
-      "meta_suggestions": [
-        {
-          "h1": "Servicio de Alisado de Paredes en Barcelona",
-          "seo_title": "Alisar Paredes con Gotelé en Barcelona | Presupuesto",
-          "seo_description": "Transforma tus paredes con gotelé en superficies lisas y modernas. Servicio profesional de alisado de paredes y techos en Barcelona. ¡Pide tu presupuesto!"
-        }
-      ],
-      "keywords": [
-        {
-          "keyword": "alisar paredes gotele",
-          "volume": 30,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "alisar gotele",
-          "volume": 20,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "alisar paredes barcelona",
-          "volume": 10,
-          "cpc": 1.73,
-          "competition": 12,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "alisar paredes estucadas",
-          "volume": 10,
+          "keyword": "quitar gotele pared precio",
+          "volume": 0,
           "cpc": 0,
           "competition": 0,
           "source": "manual_csv",
@@ -1265,7 +1216,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "alisar techo gotele",
+          "keyword": "retirar gotele",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1273,7 +1224,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "precio de alisar gotele",
+          "keyword": "quitar gotele paredes",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1289,8 +1240,8 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "alisar paredes de gotele precio",
-          "volume": 0,
+          "keyword": "alisar techo gotele",
+          "volume": 10,
           "cpc": 0,
           "competition": 0,
           "source": "manual_csv",
@@ -1306,18 +1257,65 @@
         }
       ],
       "type": "SERVICE"
+    },
+    {
+      "name": "Quitar Estucado en Barcelona",
+      "slug": "quitar-estucado-barcelona",
+      "intent": "COMMERCIAL",
+      "meta_suggestions": [
+        {
+          "h1": "Servicio Profesional para Quitar Estucado en Barcelona",
+          "seo_title": "Quitar Estucado en Barcelona | Paredes Lisas | Expertos",
+          "seo_description": "Somos especialistas en quitar estucado en paredes y techos en Barcelona. Dejamos las superficies lisas y listas para pintar. Pide tu presupuesto sin compromiso."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar estucado",
+          "volume": 130,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar estucado pared",
+          "volume": 60,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "eliminar estucado pared",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes estucadas",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        }
+      ],
+      "type": "SERVICE"
     }
   ],
   "blog": [
     {
       "name": "Cómo Quitar el Gotelé Tú Mismo: Guía Completa Paso a Paso",
-      "slug": "como-quitar-gotele",
+      "slug": "como-quitar-gotele-paso-a-paso",
       "intent": "INFORMATIONAL",
       "meta_suggestions": [
         {
-          "h1": "Cómo Quitar el Gotelé: Guía Definitiva Paso a Paso",
-          "seo_title": "Cómo Quitar el Gotelé Fácil y Rápido [Guía 2024]",
-          "seo_description": "Aprende a quitar el gotelé de tus paredes tú mismo. Te explicamos los métodos (con agua, sin lijar...), herramientas y trucos para un acabado liso."
+          "h1": "Cómo Quitar el Gotelé Tú Mismo: Guía Completa Paso a Paso",
+          "seo_title": "Cómo Quitar el Gotelé Fácilmente: Guía DIY [Actualizada]",
+          "seo_description": "Aprende a quitar el gotelé de tus paredes como un profesional. Te explicamos los métodos (raspar, cubrir), herramientas y trucos para un acabado perfecto."
         }
       ],
       "keywords": [
@@ -1338,7 +1336,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "como se quita el estucado",
+          "keyword": "quitar gotele con agua",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1346,7 +1344,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "rascar gotele",
+          "keyword": "alisar paredes facil",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1362,7 +1360,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "como quitar estucado de las paredes",
+          "keyword": "quitar la gota de las paredes",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1386,7 +1384,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "quitar gotele con agua",
+          "keyword": "quitar gotele facil",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1394,7 +1392,31 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "quitar gotele facil",
+          "keyword": "alisar paredes sin lijar",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele en casa",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele con pasta",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotelé sin lijar",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1458,23 +1480,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "quitar el gotele",
-          "volume": 0,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
           "keyword": "como puedo quitar el gotele",
-          "volume": 0,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar el gotele sin rascar",
           "volume": 0,
           "cpc": 0,
           "competition": 0,
@@ -1490,7 +1496,23 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "quitar gotele con pasta",
+          "keyword": "videos de como quitar el gotele",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele con vapor",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "rascar gotele",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1498,23 +1520,7 @@
           "relevanceScore": 10
         },
         {
-          "keyword": "quitar gotelé sin lijar",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "alisar paredes facil",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "alisar paredes sin lijar",
+          "keyword": "para quitar gotele",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1525,14 +1531,101 @@
       "type": "BLOG"
     },
     {
-      "name": "Materiales y Herramientas para Quitar Gotelé: La Lista Definitiva",
-      "slug": "materiales-herramientas-quitar-gotele",
+      "name": "Tipos de Gotelé: ¿Temple o Plástico? Cómo Identificarlo y Eliminarlo",
+      "slug": "tipos-gotele-temple-plastico",
       "intent": "INFORMATIONAL",
       "meta_suggestions": [
         {
-          "h1": "¿Qué Necesito para Quitar el Gotelé? Lista de Materiales y Herramientas",
-          "seo_title": "Herramientas y Materiales para Quitar Gotelé | Lista",
-          "seo_description": "Descubre la lista completa de materiales y herramientas que necesitas para quitar el gotelé: pastas, masillas, lijadoras, espátulas y decapantes."
+          "h1": "Tipos de Gotelé: ¿Temple o Plástico? Cómo Saber Cuál Tienes",
+          "seo_title": "Gotelé al Temple o Plástico: Diferencias y Cómo Quitarlo",
+          "seo_description": "Descubre si tu pared tiene gotelé al temple o plástico. Te enseñamos a identificarlo con un simple truco y el método correcto para eliminar cada tipo."
+        }
+      ],
+      "keywords": [
+        {
+          "keyword": "quitar gotele pintura plastica encima",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "gotele al temple",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "eliminar gotele plastico",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele temple",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotelé temple",
+          "volume": 10,
+          "cpc": 0.8,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele pintura plastica",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes gotele pintura plastica",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele antiguo",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "como quitar el gotele plastico",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        }
+      ],
+      "type": "BLOG"
+    },
+    {
+      "name": "Herramientas y Materiales para Quitar Gotelé: La Lista Definitiva",
+      "slug": "herramientas-materiales-quitar-gotele",
+      "intent": "INFORMATIONAL",
+      "meta_suggestions": [
+        {
+          "h1": "Herramientas y Materiales para Quitar Gotelé: ¿Qué Necesitas?",
+          "seo_title": "Lista de Herramientas y Materiales para Quitar Gotelé",
+          "seo_description": "Prepara tu proyecto de alisado de paredes. Aquí tienes la lista completa de herramientas, pastas, emplastes y masillas que necesitas para quitar el gotelé."
         }
       ],
       "keywords": [
@@ -1593,6 +1686,14 @@
           "relevanceScore": 10
         },
         {
+          "keyword": "pintura para tapar gotele",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
           "keyword": "masilla para quitar el gotele",
           "volume": 10,
           "cpc": 0,
@@ -1623,19 +1724,27 @@
           "competition": 0,
           "source": "manual_csv",
           "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar pintura gotele",
+          "volume": 0,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
         }
       ],
       "type": "BLOG"
     },
     {
-      "name": "¿Quitar el Gotelé o Cubrirlo? Ventajas, Desventajas y Alternativas",
+      "name": "¿Quitar Gotelé o Cubrirlo? Ventajas, Desventajas y Cuál Elegir",
       "slug": "quitar-gotele-o-cubrirlo",
       "intent": "INFORMATIONAL",
       "meta_suggestions": [
         {
-          "h1": "¿Quitar o Cubrir el Gotelé? Analizamos la Mejor Opción",
-          "seo_title": "¿Merece la Pena Quitar el Gotelé o es Mejor Cubrirlo?",
-          "seo_description": "Analizamos las ventajas y desventajas de quitar el gotelé frente a cubrirlo o disimularlo. Descubre la solución ideal para tu casa y tu presupuesto."
+          "h1": "¿Es Mejor Quitar el Gotelé o Cubrirlo Directamente?",
+          "seo_title": "¿Quitar Gotelé o Cubrirlo? Pros, Contras y Precios",
+          "seo_description": "¿No sabes si quitar o cubrir el gotelé? Analizamos las ventajas, desventajas, precios y el resultado de cada opción para que tomes la mejor decisión."
         }
       ],
       "keywords": [
@@ -1649,14 +1758,6 @@
         },
         {
           "keyword": "como disimular el gotele",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "pintura para tapar gotele",
           "volume": 10,
           "cpc": 0,
           "competition": 0,
@@ -1683,109 +1784,14 @@
       "type": "BLOG"
     },
     {
-      "name": "Cómo Quitar Gotelé Plástico o al Temple: Diferencias y Métodos",
-      "slug": "quitar-gotele-plastico-vs-temple",
+      "name": "Cómo Alisar Paredes en Casos Especiales (Tras Azulejos, Fachadas, Cemento)",
+      "slug": "alisar-paredes-casos-especiales",
       "intent": "INFORMATIONAL",
       "meta_suggestions": [
         {
-          "h1": "Cómo Quitar Gotelé según el Tipo: Plástico vs. Temple",
-          "seo_title": "Guía para Quitar Gotelé Plástico o al Temple | Pasos",
-          "seo_description": "¿Tu gotelé es al temple o plástico? Descubre cómo identificarlo y el método correcto para eliminar cada tipo de gotelé sin dañar la pared."
-        }
-      ],
-      "keywords": [
-        {
-          "keyword": "quitar gotele pintura plastica encima",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "gotele al temple",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "eliminar gotele plastico",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar gotele temple",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar gotelé temple",
-          "volume": 10,
-          "cpc": 0.8,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar gotele pintura plastica",
-          "volume": 10,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "como quitar el gotele plastico",
-          "volume": 0,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar pintura gotele",
-          "volume": 0,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "alisar paredes gotele pintura plastica",
-          "volume": 0,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        },
-        {
-          "keyword": "quitar gotele con vapor",
-          "volume": 0,
-          "cpc": 0,
-          "competition": 0,
-          "source": "manual_csv",
-          "relevanceScore": 10
-        }
-      ],
-      "type": "BLOG"
-    },
-    {
-      "name": "Cómo Alisar Paredes de Cemento, con Azulejos o en Exteriores",
-      "slug": "como-alisar-paredes-superficies",
-      "intent": "INFORMATIONAL",
-      "meta_suggestions": [
-        {
-          "h1": "Guía Completa para Alisar Paredes (Cemento, Azulejos, Exterior)",
-          "seo_title": "Cómo Alisar Diferentes Tipos de Paredes | Guía Fácil",
-          "seo_description": "Aprende a alisar paredes de cemento, después de quitar azulejos o en exteriores. Te explicamos las técnicas y materiales para un resultado perfecto."
+          "h1": "Guía para Alisar Paredes Difíciles: Cemento, Fachadas o Post-Azulejos",
+          "seo_title": "Cómo Alisar Paredes de Cemento, Exteriores y Más",
+          "seo_description": "Alisar una pared de cemento, una fachada exterior o una superficie tras quitar azulejos requiere técnicas específicas. Aprende cómo hacerlo correctamente."
         }
       ],
       "keywords": [
@@ -1828,11 +1834,30 @@
           "competition": 0,
           "source": "manual_csv",
           "relevanceScore": 10
+        },
+        {
+          "keyword": "quitar gotele fachada",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
+        },
+        {
+          "keyword": "alisar paredes con cemento",
+          "volume": 10,
+          "cpc": 0,
+          "competition": 0,
+          "source": "manual_csv",
+          "relevanceScore": 10
         }
       ],
-      "type": "BLOG"
+      "type": "BLOG",
+      "h1": "Guía para Alisar Paredes Difíciles: Cemento, Fachadas o Post-Azulejos",
+      "seo_title": "Cómo Alisar Paredes de Cemento, Exteriores y Más",
+      "seo_description": "Alisar una pared de cemento, una fachada exterior o una superficie tras quitar azulejos requiere técnicas específicas. Aprende cómo hacerlo correctamente."
     }
   ],
-  "generate_locations": true,
-  "one_page_mode": true
+  "generate_locations": false,
+  "one_page_mode": false
 }

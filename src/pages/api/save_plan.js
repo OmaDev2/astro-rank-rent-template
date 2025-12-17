@@ -31,3 +31,31 @@ export const POST = async ({ request }) => {
         }), { status: 500 });
     }
 }
+
+export const GET = async ({ request }) => {
+    try {
+        const filePath = path.resolve('project_plan.json');
+
+        console.log(`📂 Reading plan from: ${filePath}`);
+
+        try {
+            await fs.access(filePath);
+        } catch (e) {
+            console.error(`❌ Plan file not found at ${filePath}`);
+            return new Response(JSON.stringify({ error: 'Plan not found' }), { status: 404 });
+        }
+
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+
+        return new Response(fileContent, {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+    } catch (e) {
+        console.error("❌ Error reading plan:", e);
+        return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Vivimos en un piso antiguo del Eixample y el gotelé era una pesadilla. El equipo no solo lo quitó por completo, sino que el alisado de las paredes quedó impecable. Fueron súper cuidadosos con la protección de los suelos y el resultado final con la pintura ha rejuvenecido todo el espacio. ¡Parece otro piso! Totalmente recomendables.",
+      "author": "Marta G.",
+      "location": "Eixample, Barcelona",
+      "initials": "MG"
+    },
+    {
+      "quote": "Teníamos dudas por el polvo y las molestias, sobre todo con los niños en casa, pero nos sorprendió lo limpios y organizados que fueron. Cubrieron todos los muebles y apenas notamos el proceso. El cambio de las paredes de gotelé a lisas en nuestro piso de Gràcia ha sido increíble. Un trabajo rápido y muy profesional.",
+      "author": "Carlos Fernández",
+      "location": "Gràcia, Barcelona",
+      "initials": "CF"
+    },
+    {
+      "quote": "Desde el primer momento nos dieron confianza. El presupuesto fue claro y detallado. Han quitado el gotelé de todo el piso en Sant Andreu y el resultado es espectacular. Las paredes lisas dan mucha más luz y amplitud. Además, nos asesoraron muy bien sobre la preparación para pintar. Un servicio excelente y un trato muy cercano.",
+      "author": "Laura Puig",
+      "location": "Sant Andreu, Barcelona",
+      "initials": "LP"
+    }
+  ]
+}

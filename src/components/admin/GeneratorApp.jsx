@@ -44,6 +44,45 @@ export default function GeneratorApp() {
         }
     }, [formData.niche, formData.city]);
 
+    // ✅ FIX: Auto-sync Services to Home H2s when One Page Mode is enabled
+    useEffect(() => {
+        if (step === 'review' && formData.onePageMode && researchData?.services?.length > 0) {
+            const serviceNames = researchData.services.map(s => s.name);
+            const standardSections = [`¿Por qué elegirnos?`, `Zonas de Servicio`, `Preguntas Frecuentes`];
+
+            setResearchData(prev => ({
+                ...prev,
+                home_structure: {
+                    ...prev.home_structure,
+                    // Combine Services + Standard Sections
+                    h2s: [...serviceNames, ...standardSections]
+                }
+            }));
+        }
+    }, [formData.onePageMode, step, researchData?.services]);
+
+    // ✅ FIX: Auto-populate Home Structure if missing when entering Review Step
+    useEffect(() => {
+        if (step === 'review' && researchData && (!researchData.home_structure?.h1)) {
+            const capNiche = (formData.niche || 'Servicio').charAt(0).toUpperCase() + (formData.niche || '').slice(1);
+            const capCity = (formData.city || 'Ciudad').charAt(0).toUpperCase() + (formData.city || '').slice(1);
+
+            setResearchData(prev => ({
+                ...prev,
+                home_structure: {
+                    h1: `Empresa de ${capNiche} en ${capCity}`,
+                    h2s: [
+                        `Nuestros Servicios de ${capNiche}`,
+                        `¿Por qué elegirnos en ${capCity}?`,
+                        `Zonas de Servicio en ${capCity}`,
+                        `Presupuesto para ${capNiche}`,
+                        `Preguntas Frecuentes`
+                    ]
+                }
+            }));
+        }
+    }, [step, formData.niche, formData.city, researchData]);
+
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -260,6 +299,10 @@ export default function GeneratorApp() {
             const data = await res.json();
             if (data.error) throw new Error(data.error);
 
+            console.log("🛠️ DEBUG - API Cluster Response:", data);
+            console.log("🛠️ DEBUG - Services found:", data.services?.length);
+            console.log("🛠️ DEBUG - Blog found:", data.blog?.length);
+
             setResearchData(prev => ({
                 ...prev,
                 services: data.services || [],
@@ -286,15 +329,28 @@ export default function GeneratorApp() {
                 design_style: formData.designStyle // Pasamos el estilo de diseño
             };
 
+            console.log("📤 Enviando plan al servidor...", planToSave);
+
             const res = await fetch('/api/save_plan', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(planToSave)
             });
+
+            console.log("📥 Respuesta status:", res.status);
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`Server error ${res.status}: ${text}`);
+            }
+
             const result = await res.json();
+            console.log("📥 Respuesta JSON:", result);
+
             if (!result.success) throw new Error(result.error);
             return true;
         } catch (err) {
+            console.error("❌ Error CRÍTICO guardando plan:", err);
             alert("Error guardando el plan: " + err.message);
             return false;
         } finally {
@@ -461,9 +517,16 @@ export default function GeneratorApp() {
                     <button
                         onClick={async () => {
                             try {
-                                const res = await fetch('/project_plan.json');
+                                const res = await fetch('/api/save_plan');
                                 if (!res.ok) throw new Error('No hay un plan guardado previo.');
-                                const plan = await res.json();
+                                let plan = await res.json();
+
+                                // Migración 'on the fly' para planes antiguos
+                                if (plan.clusters && !plan.services) {
+                                    plan.services = plan.clusters;
+                                    plan.blog = plan.blog || [];
+                                }
+
                                 setResearchData(plan);
                                 setFormData({
                                     ...formData,
@@ -473,10 +536,6 @@ export default function GeneratorApp() {
                                     onePageMode: plan.one_page_mode || false,
                                     designStyle: plan.design_style || 'industrial'
                                 });
-                                // Migración 'on the fly' para planes antiguos
-                                if (plan.clusters && !plan.services) {
-                                    setResearchData(prev => ({ ...prev, services: plan.clusters, blog: [] }));
-                                }
                                 setStep('review');
                             } catch (err) {
                                 alert(err.message);
@@ -899,8 +958,23 @@ export default function GeneratorApp() {
     if (step === 'review' && researchData) {
         const topKeywords = researchData.raw_data?.top_keywords || [];
 
+
         const services = researchData.services || []; // Using new separated state
         const blog = researchData.blog || [];
+
+        console.log("🛠️ DEBUG - RENDER REVIEW:", {
+            step,
+            hasResearchData: !!researchData,
+            servicesCount: services.length,
+            blogCount: blog.length,
+            fullData: researchData
+        });
+
+        // Debug output
+        console.log('Research Data:', researchData);
+        console.log('Services:', services);
+
+
 
         return (
             <div className="max-w-7xl mx-auto space-y-6 animate-fade-in text-slate-200 p-4">
@@ -908,6 +982,11 @@ export default function GeneratorApp() {
 
                 {/* Header Actions */}
                 <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center sticky top-2 z-50 shadow-2xl">
+                    <div className="text-xs text-yellow-400 bg-black/50 p-2 rounded max-w-lg overflow-auto max-h-20">
+                        DEBUG: Services found: {services?.length || 0}.
+                        Has Plan: {researchData ? 'Yes' : 'No'}.
+                        Keys: {Object.keys(researchData || {}).join(', ')}
+                    </div>
                     <div>
                         <h2 className="text-xl font-bold text-white">Estrategia SEO Generada</h2>
                         <p className="text-xs text-slate-400">{researchData.market_analysis?.substring(0, 100)}...</p>
@@ -1262,7 +1341,7 @@ export default function GeneratorApp() {
                             <Check className="w-4 h-4 text-green-500" /> Home Page ({formData.designStyle ? formData.designStyle.charAt(0).toUpperCase() + formData.designStyle.slice(1) : 'Industrial'} Style)
                         </li>
                         <li className="flex items-center gap-2">
-                            <Check className="w-4 h-4 text-green-500" /> {researchData?.clusters?.length || 0} Páginas de Servicios
+                            <Check className="w-4 h-4 text-green-500" /> {(researchData?.services?.length || 0) + (researchData?.clusters?.length || 0)} Páginas de Servicios
                         </li>
                         {formData.generateLocations && (
                             <li className="flex items-center gap-2">

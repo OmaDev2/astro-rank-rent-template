@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "title": "Quitar Gotelé en Barcelona | Acabados Lisos y Perfectos",
+    "description": "Expertos en quitar gotelé en Barcelona y provincia. Alisamos tus paredes y techos con un acabado impecable. Garantía de limpieza. Pide presupuesto."
+  },
+  "hero_section": {
+    "h1": "Quitar Gotelé en Barcelona: Paredes Lisas que Revalorizan tu Hogar",
+    "subheadline": "Somos los artesanos del alisado de paredes en Barcelona. Acabados perfectos, sin sorpresas y con la máxima limpieza garantizada.",
+    "cta_primary": "Pedir Presupuesto Gratis",
+    "cta_secondary": "Ver nuestros acabados"
+  },
+  "intro_content": {
+    "title": "El Fin del Gotelé en tu Piso de Barcelona",
+    "paragraphs": [
+      "Conocemos los pisos de Barcelona. Desde un principal en el Eixample hasta un ático en Gràcia o una casa en Sarrià. Sabemos que ese gotelé de los 70 no le hace justicia a tu hogar. Quitarlo es el primer paso para conseguir un espacio más luminoso, moderno y con mucho más valor.",
+      "Nuestro trabajo es artesanal, de 'toda la vida' pero con las técnicas más modernas. No tapamos problemas, los solucionamos. Cada pared se trata, se alisa y se prepara para un acabado liso perfecto, duradero y listo para que disfrutes de tu casa como siempre has querido."
+    ]
+  },
+  "services_grid_intro": "Más que quitar gotelé, renovamos por completo tus espacios.",
+  "why_us_bullets": [
+    {
+      "title": "Acabado Liso Impecable",
+      "desc": "Nuestra obsesión es la perfección. Usamos técnicas de lijado y aplicación en varias capas para garantizar paredes totalmente lisas al tacto y a la vista."
+    },
+    {
+      "title": "Limpieza Total Garantizada",
+      "desc": "Protegemos cada mueble, suelo y rincón de tu casa. Al terminar, dejamos todo tan limpio o más de como lo encontramos. Sin polvo, sin molestias."
+    },
+    {
+      "title": "Presupuesto Cerrado y Rápido",
+      "desc": "Te damos un precio detallado y sin sorpresas. Lo que presupuestamos es lo que pagas. Realizamos visitas en 48h en toda la provincia de Barcelona."
+    }
+  ],
+  "features": [
+    {
+      "title": "Revaloriza tu Propiedad al Instante",
+      "description": "Unas paredes lisas modernizan cualquier espacio, aumentando el valor de mercado de tu piso o casa en Barcelona. Es la inversión en reforma más rentable."
+    },
+    {
+      "title": "Solución a Grietas y Humedades",
+      "description": "Aprovechamos el alisado para sanear tus paredes, reparando grietas estructurales, tratando humedades por condensación o el típico salitre de las zonas costeras."
+    },
+    {
+      "title": "Materiales para el Clima de Barcelona",
+      "description": "Utilizamos plaste y pinturas de alta calidad, transpirables y con tratamientos antimoho, ideales para el clima húmedo de la costa barcelonesa."
+    }
+  ],
+  "services_list": [
+    {
+      "title": "Alisado de Paredes con Gotelé o Texturados",
+      "description": "Es nuestro servicio estrella. Realizamos el proceso completo para eliminar cualquier tipo de gotelé (plástico, al temple) o estucado. Preparamos la superficie, aplicamos varias capas de plaste de renovación de alta calidad, lijamos con maquinaria con aspiración para minimizar el polvo y dejamos la pared lista para imprimación y pintura. El resultado es una superficie uniforme y perfectamente lisa."
+    },
+    {
+      "title": "Reparación de Grietas y Tratamiento de Humedades",
+      "description": "Antes de alisar, es fundamental tener una base sana. Diagnosticamos y reparamos grietas de asentamiento, fisuras y desconchones. Tratamos problemas comunes en Barcelona como la humedad por condensación en pisos antiguos o el salitre en plantas bajas, aplicando morteros y productos específicos para garantizar que no vuelvan a aparecer."
+    },
+    {
+      "title": "Alisado y Pintura de Techos",
+      "description": "A menudo los grandes olvidados. Alisar y pintar los techos elimina sombras, aumenta la sensación de altura y multiplica la luminosidad de la estancia. Nos encargamos de techos de pladur, escayola o bovedilla catalana, dejándolos en sintonía con las nuevas paredes lisas."
+    },
+    {
+      "title": "Aplicación de Pintura Plástica Profesional",
+      "description": "El broche final para un trabajo perfecto. Tras el alisado, aplicamos una capa de imprimación selladora y dos capas de pintura plástica de primeras marcas (mate, satinada o la que elijas). Te asesoramos en la elección de colores para conseguir el ambiente que buscas en tu hogar."
+    }
+  ],
+  "process": {
+    "title": "Nuestro Proceso: Eficacia y Limpieza en 4 Pasos",
+    "description": "Hemos perfeccionado nuestro método para ser rápidos, eficientes y, sobre todo, limpios. Así transformamos tus paredes sin trastocar tu vida.",
+    "steps": [
+      {
+        "title": "1. Visita y Presupuesto Detallado",
+        "description": "Nos desplazamos a tu domicilio en Barcelona o provincia para ver el estado de las paredes, medir y entender tus necesidades. En 24h recibes un presupuesto cerrado y por escrito."
+      },
+      {
+        "title": "2. Protección Rigurosa del Mobiliario",
+        "description": "El día que empezamos, nuestro primer trabajo es protegerlo todo. Cubrimos suelos, tapamos muebles, marcos de puertas y ventanas. Tu casa queda blindada contra el polvo y las manchas."
+      },
+      {
+        "title": "3. Proceso de Alisado y Lijado",
+        "description": "Aplicamos las capas de plaste necesarias para cubrir el gotelé por completo. Utilizamos lijadoras jirafa con sistema de aspiración integrado, lo que reduce el polvo en un 95%. Es la clave de un trabajo limpio."
+      },
+      {
+        "title": "4. Acabado, Pintura y Limpieza Final",
+        "description": "Una vez las paredes están perfectamente lisas, aplicamos la imprimación y la pintura. Al finalizar, retiramos todas las protecciones y realizamos una limpieza exhaustiva. Te entregamos la estancia lista para disfrutar."
+      }
+    ]
+  },
+  "local_closing": "Damos servicio en toda la provincia de Barcelona. Tanto si tu piso está en el Eixample, Gràcia, Sarrià-Sant Gervasi o Les Corts, como si vives en Sant Cugat del Vallès, Badalona, L'Hospitalet de Llobregat, Sabadell o Terrassa, nuestro equipo se desplaza para ofrecerte la mejor solución de alisado de paredes.",
+  "faq": [
+    {
+      "question": "¿Cuánto cuesta quitar el gotelé en Barcelona?",
+      "answer": "El precio varía según los metros cuadrados, la altura de los techos y el tipo de gotelé. De media, el precio por m² en Barcelona suele oscilar entre 12€ y 18€, incluyendo material y mano de obra. Lo mejor es que solicites un presupuesto gratuito y personalizado para tu caso."
+    },
+    {
+      "question": "¿Se genera mucho polvo y suciedad?",
+      "answer": "Es la mayor preocupación de nuestros clientes y nuestra mayor prioridad. Gracias al uso de lijadoras profesionales con aspiración y a un meticuloso proceso de protección de toda la estancia, minimizamos el polvo al máximo. Nos comprometemos a dejar tu casa limpia."
+    },
+    {
+      "question": "¿Cuánto tiempo se tarda en alisar un piso completo?",
+      "answer": "Para un piso estándar de unos 80-90 m², el proceso completo de alisado y pintado suele durar entre 5 y 8 días laborables. Te daremos una estimación precisa de los plazos en tu presupuesto."
+    }
+  ]
+}
