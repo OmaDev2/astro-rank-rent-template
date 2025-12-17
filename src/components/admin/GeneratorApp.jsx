@@ -84,6 +84,31 @@ export default function GeneratorApp() {
             if (data.error) throw new Error(data.error);
 
             setResearchData(data);
+
+            // AUTO-GENERATE HOME STRUCTURE IF MISSING (For Manual Mode)
+            if (!data.home_structure || !data.home_structure.h1) {
+                const capNiche = formData.niche.charAt(0).toUpperCase() + formData.niche.slice(1);
+                const capCity = formData.city.split(',')[0].trim(); // Take only City part
+
+                const defaultHome = {
+                    h1: `Empresa de ${capNiche} en ${capCity}`,
+                    h2s: [
+                        `Servicios Profesionales de ${capNiche}`,
+                        `¿Por qué contratar expertos en ${capCity}?`,
+                        `Presupuesto Gratis para ${capNiche}`,
+                        `Trabajos Realizados y Opiniones`,
+                        `Contacta con Nosotros`
+                    ],
+                    seo_title: `${capNiche} en ${capCity} | Presupuestos y Precios`,
+                    seo_description: `¿Buscas ${capNiche} en ${capCity}? Somos profesionales expertos. Garantizamos calidad, buen precio y rapidez. ¡Pide tu presupuesto sin compromiso hoy!`
+                };
+
+                setResearchData(prev => ({
+                    ...prev,
+                    home_structure: defaultHome
+                }));
+            }
+
             setStep('keywords'); // Jump directly to keywords review
         } catch (err) {
             console.error(err);
@@ -257,7 +282,8 @@ export default function GeneratorApp() {
             const planToSave = {
                 ...researchData,
                 generate_locations: formData.generateLocations, // Pasamos la config al plan
-                one_page_mode: formData.onePageMode // Pasamos el modo one page
+                one_page_mode: formData.onePageMode, // Pasamos el modo one page
+                design_style: formData.designStyle // Pasamos el estilo de diseño
             };
 
             const res = await fetch('/api/save_plan', {
@@ -444,7 +470,8 @@ export default function GeneratorApp() {
                                     niche: plan.niche,
                                     city: plan.city,
                                     generateLocations: plan.generate_locations || false,
-                                    onePageMode: plan.one_page_mode || false
+                                    onePageMode: plan.one_page_mode || false,
+                                    designStyle: plan.design_style || 'industrial'
                                 });
                                 // Migración 'on the fly' para planes antiguos
                                 if (plan.clusters && !plan.services) {
@@ -526,6 +553,33 @@ export default function GeneratorApp() {
                             </p>
                         </div>
                     ) : null}
+
+                    {/* DESIGN STYLE SELECTOR */}
+                    <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">Estilo de Diseño</label>
+                        <select
+                            className="w-full bg-slate-900 border border-slate-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-200"
+                            value={formData.designStyle || 'industrial'}
+                            onChange={e => setFormData({ ...formData, designStyle: e.target.value })}
+                        >
+                            <option value="industrial">Industrial (Profesional - Naranja)</option>
+                            <option value="corporate">Corporativo (Serio - Azul)</option>
+                            <option value="nature">Naturaleza (Jardinería - Verde)</option>
+                            <option value="urgent">Urgencia (Cerrajeros - Rojo)</option>
+                            <option value="legal">Legal (Abogados - Navy/Oro)</option>
+                            <option value="health">Salud (Clínicas - Turquesa)</option>
+                            <option value="luxury">Lujo (Reformas Premium - Negro/Oro)</option>
+                            <option value="beauty">Estética (Belleza - Rosa)</option>
+                            <option value="tech">Tech (Informática - Violeta)</option>
+                            <option value="clean_light">Clean (Limpieza - Claro/Minimal)</option>
+                            <option value="clay_paper">Arcilla y Papel (Artesano Cálido)</option>
+                            <option value="forest_stone">Bosque y Piedra (Artesano Natural)</option>
+                            <option value="classic_workshop">Taller Clásico (Artesano Premium)</option>
+                        </select>
+                        <p className="text-xs text-slate-500 mt-1">
+                            Define la paleta de colores y la tipografía global del sitio.
+                        </p>
+                    </div>
 
                     {/* Generate Locations Toggle */}
                     <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
@@ -1034,13 +1088,27 @@ export default function GeneratorApp() {
                     )}
                 </div>
 
-                {/* LOCATIONS MANAGEMENT (Only if enabled) */}
-                {formData.generateLocations && (
-                    <div className="mt-8 bg-slate-900/80 p-6 rounded-xl border border-indigo-500/30">
-                        <div className="flex justify-between items-center mb-4">
+                {/* LOCATIONS MANAGEMENT */}
+                <div className="mt-8 bg-slate-900/80 p-6 rounded-xl border border-indigo-500/30">
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-4">
                             <h3 className="text-lg font-bold text-indigo-400 flex items-center gap-2">
                                 <MapPin className="w-5 h-5" /> Estrategia de Localidades
                             </h3>
+                            <label className="flex items-center gap-2 cursor-pointer bg-slate-800 px-3 py-1 rounded-full border border-slate-600 hover:border-indigo-500 transition-colors">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.generateLocations}
+                                    onChange={(e) => setFormData({ ...formData, generateLocations: e.target.checked })}
+                                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-900 border-slate-500"
+                                />
+                                <span className="text-xs font-bold text-slate-300">
+                                    {formData.generateLocations ? 'Activado' : 'Desactivado'}
+                                </span>
+                            </label>
+                        </div>
+
+                        {formData.generateLocations && (
                             <button
                                 onClick={() => {
                                     const loc = prompt("Nombre de la localidad o barrio:");
@@ -1054,33 +1122,37 @@ export default function GeneratorApp() {
                             >
                                 <Plus className="w-4 h-4" /> Añadir Zona
                             </button>
-                        </div>
-
-                        {(!researchData.locations || researchData.locations.length === 0) ? (
-                            <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-lg text-slate-500">
-                                <p>No hay localidades definidas.</p>
-                                <p className="text-sm">Añade barrios o ciudades cercanas para generar landing pages locales.</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {researchData.locations.map((loc, idx) => (
-                                    <div key={idx} className="bg-slate-800 p-3 rounded-lg border border-slate-700 flex justify-between items-center group">
-                                        <span className="text-slate-200 font-medium">{loc}</span>
-                                        <button
-                                            onClick={() => {
-                                                const newLocations = researchData.locations.filter((_, i) => i !== idx);
-                                                setResearchData({ ...researchData, locations: newLocations });
-                                            }}
-                                            className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
                         )}
                     </div>
-                )}
+
+                    {!formData.generateLocations ? (
+                        <div className="text-center py-4 text-slate-500 text-sm">
+                            <p>Activa esta opción para generar landing pages específicas por barrio o ciudad.</p>
+                        </div>
+                    ) : (!researchData.locations || researchData.locations.length === 0) ? (
+                        <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-lg text-slate-500">
+                            <p>No hay localidades definidas.</p>
+                            <p className="text-sm">Añade barrios o ciudades cercanas para generar landing pages locales.</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {researchData.locations.map((loc, idx) => (
+                                <div key={idx} className="bg-slate-800 p-3 rounded-lg border border-slate-700 flex justify-between items-center group">
+                                    <span className="text-slate-200 font-medium">{loc}</span>
+                                    <button
+                                        onClick={() => {
+                                            const newLocations = researchData.locations.filter((_, i) => i !== idx);
+                                            setResearchData({ ...researchData, locations: newLocations });
+                                        }}
+                                        className="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 {/* CONFIRMATION MODAL */}
                 {showConfirmModal && (
@@ -1187,7 +1259,7 @@ export default function GeneratorApp() {
                     </h3>
                     <ul className="space-y-2 text-slate-300">
                         <li className="flex items-center gap-2">
-                            <Check className="w-4 h-4 text-green-500" /> Home Page (Artisan Quality)
+                            <Check className="w-4 h-4 text-green-500" /> Home Page ({formData.designStyle ? formData.designStyle.charAt(0).toUpperCase() + formData.designStyle.slice(1) : 'Industrial'} Style)
                         </li>
                         <li className="flex items-center gap-2">
                             <Check className="w-4 h-4 text-green-500" /> {researchData?.clusters?.length || 0} Páginas de Servicios

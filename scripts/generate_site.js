@@ -215,6 +215,40 @@ async function main() {
         await fs.mkdir(dir, { recursive: true });
     }
 
+    // --- APPLY DESIGN STYLE ---
+    try {
+        const designStyle = plan.design_style || 'industrial';
+        let fontPair = 'modern';
+
+        // Intelligent font mapping
+        const fontMap = {
+            'industrial': 'robust',
+            'corporate': 'modern',
+            'nature': 'friendly',
+            'urgent': 'modern',
+            'legal': 'elegant',
+            'health': 'clean', // clean isn't in config? check fallback
+            'luxury': 'elegant',
+            'beauty': 'elegant',
+            'tech': 'tech',
+            'clean_light': 'modern',
+            'clay_paper': 'artisan_warm',
+            'forest_stone': 'artisan_natural',
+            'classic_workshop': 'artisan_classic'
+        };
+
+        // Fallback checks just in case
+        fontPair = fontMap[designStyle] || 'modern';
+        if (designStyle === 'health') fontPair = 'modern'; // Fix potential issue if 'clean' font doesn't exist
+
+        const designYaml = `theme: ${designStyle}\nfontPair: ${fontPair}\n`;
+        await fs.mkdir('src/content/design', { recursive: true });
+        await fs.writeFile('src/content/design/global.yaml', designYaml);
+        console.log(`🎨 Diseño aplicado: ${designStyle} (Font: ${fontPair})`);
+    } catch (e) {
+        console.error("⚠️ Error aplicando diseño:", e.message);
+    }
+
     // 2. IDENTIFICAR CLUSTER PRINCIPAL (HOME)
     // Buscamos el cluster con mayor volumen y relevancia para ser la Home
     let mainCluster = null;
@@ -248,12 +282,11 @@ async function main() {
     // 3. GENERAR HOME
     console.log("\n🏠 Generando Home (Calidad IA)...");
 
-    // Usar H1 del plan o del main cluster
-    const homeH1 = mainCluster ? mainCluster.cluster_name : `${plan.niche} en ${cityName}`;
-    // const homeH2s = plan.home_structure?.h2s || []; // Not used in the new prompt, but kept for context
+    // Usar H1 del plan (Prioridad 1) o del main cluster (Prioridad 2)
+    const homeH1 = plan.home_structure?.h1 || (mainCluster ? mainCluster.cluster_name : `${plan.niche} en ${cityName}`);
 
     // Keywords del main cluster para enriquecer
-    // const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || []; // Not used in the new prompt, but kept for context
+    // const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || [];
 
     // Lista de servicios para contexto
     const servicesList = serviceClusters.map(c => c.cluster_name);
@@ -266,14 +299,25 @@ async function main() {
            - El contenido debe ser muy completo, cubriendo lo que normalmente iría en páginas separadas.`
         : "";
 
+    // Construir instrucción de estructura personalizada
+    let structureInstruction = "";
+    // Solo forzamos la estructura manual (H2s de servicios) si estamos en One Page Mode.
+    // En modo Multi-Page, dejamos que la IA decida la mejor estructura de navegación.
+    if (isOnePage && plan.home_structure?.h2s && plan.home_structure.h2s.length > 0) {
+        structureInstruction = `ESTRUCTURA REQUERIDA (OBLIGATORIO):
+        El usuario requiere que la página cubra los siguientes temas/secciones (adátalos a los campos del JSON como info_content, features, process, etc.):
+        - ${plan.home_structure.h2s.join('\n        - ')}`;
+    }
+
     // CARGAR PROMPT DESDE ARCHIVO
     const homePrompt = await loadPrompt('home', {
         niche: plan.niche,
         cityName: cityName,
         homeH1: homeH1,
         onePageInstruction: onePageInstruction,
+        structureInstruction: structureInstruction, // Nueva variable
         servicesList: servicesList,
-        cityContext: cityContextData // Inyeccion de contexto
+        cityContext: cityContextData
     });
 
     if (!homePrompt) return; // Exit if prompt load fails
@@ -502,25 +546,23 @@ ${related.join('\n')}
             let blogData = await generateData(blogPrompt, `Blog: ${articleTitle}`);
 
             if (blogData) {
+                const escapeYaml = (str) => str ? `"${str.replace(/"/g, '\\"')}"` : '""';
+
                 // Convertir Secciones a Markdown
                 const sectionsMd = (blogData.sections || []).map(s => `## ${s.title}\n\n${s.content}`).join('\n\n');
 
                 const finalMdx = `---
-title: "${blogData.title}"
+title: ${escapeYaml(blogData.title)}
 pubDate: "${new Date().toISOString().split('T')[0]}"
-description: "${blogData.seoDesc}"
+description: ${escapeYaml(blogData.seoDesc)}
 author: "Equipo ${plan.niche}"
 image: "/images/blog/default.jpg"
 tags: ["${plan.niche}", "${cityName}"]
 category: "Guías"
 featured: false
-blocks:
-  - discriminant: "content"
-  - discriminant: "faq"
-  - discriminant: "cta"
+intro: >-
+  ${blogData.intro ? blogData.intro.replace(/\n/g, '\n  ') : ''}
 ---
-
-${blogData.intro}
 
 ${sectionsMd}
 

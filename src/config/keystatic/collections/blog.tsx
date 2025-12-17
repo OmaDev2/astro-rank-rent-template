@@ -5,11 +5,10 @@ export const blog = collection({
     label: 'Blog',
     slugField: 'title',
     path: 'src/content/blog/*',
-    format: { contentField: 'intro' }, // Usamos intro como el 'content' principal si queremos, o mejor, usamos blocks para todo.
-    // En el script de generacion usamos "intro" + "sectionsMd".
-    // Para Keystatic, lo ideal sería que el usuario pueda editar todo.
-    // Si usamos MDX, el contenido libre va al final.
-    // Vamos a definir 'intro' como un campo de texto y 'content' como el body mdx.
+    entryLayout: 'content',
+    format: { contentField: 'content' }, // Usamos 'content' como el campo principal para el editor visual
+    // El script generador usará 'content' para el cuerpo del artículo.
+
 
     schema: {
         title: fields.slug({
@@ -60,36 +59,21 @@ export const blog = collection({
             defaultValue: false
         }),
 
-        intro: fields.mdx({
-            label: 'Introducción',
-            description: 'El primer párrafo del artículo que aparece antes del contenido principal.'
+        intro: fields.text({
+            label: 'Introducción (Extracto)',
+            description: 'Breve texto para la tarjeta del blog y meta descripción.',
+            multiline: true
         }),
 
-        blocks: fields.blocks({
-            content: {
-                label: 'Sección de Contenido (H2 + Texto)',
-                schema: fields.object({
-                    title: fields.text({ label: 'Subtítulo (H2)' }),
-                    content: fields.mdx({ label: 'Contenido' })
-                })
-            },
-            faq: {
-                label: 'Preguntas Frecuentes',
-                schema: fields.object({
-                    question: fields.text({ label: 'Pregunta' }),
-                    answer: fields.text({ label: 'Respuesta', multiline: true })
-                })
-            },
-            cta: {
-                label: 'Llamada a la Acción (CTA)',
-                schema: fields.object({
-                    text: fields.text({ label: 'Texto del Botón' }),
-                    link: fields.text({ label: 'Enlace' })
-                })
+        content: fields.mdx({
+            label: 'Contenido del Artículo',
+            description: 'Escribe aquí tu artículo completo. Soporta imágenes, encabezados y formato rico.',
+            options: {
+                image: {
+                    directory: 'public/images/blog',
+                    publicPath: '/images/blog',
+                }
             }
-        }, {
-            label: 'Bloques de Contenido',
-            description: 'Añade secciones, FAQs o CTAs al artículo.'
         }),
     },
 });

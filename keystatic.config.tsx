@@ -31,7 +31,7 @@ export default config({
 
         // Navegación organizada
         navigation: {
-            '📝 Contenido': ['services', 'locations', 'projects', 'testimonials', 'homepage'],
+            '📝 Contenido': ['services', 'locations', 'projects', 'testimonials', 'blog', 'homepage'],
             '---': [],
             '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'footer'],
         },

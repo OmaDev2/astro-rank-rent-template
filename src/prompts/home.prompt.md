@@ -5,7 +5,10 @@ TAREA: Escribir el contenido para la HOME de una web de "{{niche}}" en "{{cityNa
 CONTEXTO LOCAL (MADRID DATA):
 {{cityContext}}
 
+
 {{onePageInstruction}}
+
+{{structureInstruction}}
 
 ESTRUCTURA MENTAL (Modo IA + Chain of Thought):
 1. **Analiza el Contexto**: Usa la info de {{cityContext}}. Si hay "humedad en zona norte", menciónalo sutilmente como problema que solucionas.

@@ -343,6 +343,7 @@ const blog = defineCollection({
         tags: z.array(z.string()).optional(),
         category: z.string().optional(),
         featured: z.boolean().default(false),
+        intro: z.string().optional(), // Added intro field for entryLayout compatibility
 
         // Content blocks for rich layout if needed
         blocks: z.array(

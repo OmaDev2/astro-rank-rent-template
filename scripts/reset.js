@@ -8,6 +8,7 @@ async function resetProject() {
         'src/content/pages/home.mdx',
         'src/content/services', // Borraremos la carpeta entera y la recrearemos
         'src/content/locations', // ✅ Borramos también las zonas generadas
+        'src/content/blog', // ✅ Borramos el blog antiguo
         'project_plan.json',
         'clustering_analysis.md'
     ];

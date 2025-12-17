@@ -10,6 +10,33 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
         onUpdate({ ...cluster, name: e.target.value });
     };
 
+    // ✅ FIX: Auto-populate fields from suggestions if missing on mount
+    React.useEffect(() => {
+        if (cluster.meta_suggestions?.length > 0) {
+            const defaultMeta = cluster.meta_suggestions[0];
+            const updates = {};
+            let hasUpdates = false;
+
+            if (!cluster.h1 && defaultMeta.h1) {
+                updates.h1 = defaultMeta.h1;
+                hasUpdates = true;
+            }
+            if (!cluster.seo_title && defaultMeta.seo_title) {
+                updates.seo_title = defaultMeta.seo_title;
+                hasUpdates = true;
+            }
+            if (!cluster.seo_description && defaultMeta.seo_description) {
+                updates.seo_description = defaultMeta.seo_description;
+                hasUpdates = true;
+            }
+
+            if (hasUpdates) {
+                // Use setTimeout to avoid render-cycle conflicts
+                setTimeout(() => onUpdate({ ...cluster, ...updates }), 0);
+            }
+        }
+    }, [cluster.name]); // Run when cluster changes (or mounts)
+
     const handleMetaSelect = (e) => {
         const idx = parseInt(e.target.value);
         if (cluster.meta_suggestions && cluster.meta_suggestions[idx]) {
@@ -130,7 +157,7 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                                 <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">H1 Header</label>
                                 <input
                                     className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white font-bold text-sm focus:border-indigo-500 outline-none transition-colors"
-                                    value={cluster.h1 || ''}
+                                    value={cluster.h1 || cluster.meta_suggestions?.[0]?.h1 || ''}
                                     onChange={(e) => onUpdate({ ...cluster, h1: e.target.value })}
                                     placeholder="Título Principal de la Página"
                                 />
@@ -140,14 +167,14 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                                 <label className="text-[10px] font-bold text-blue-400 uppercase block mb-1">SEO Title (Google Preview)</label>
                                 <input
                                     className="w-full bg-transparent border-none outline-none text-sm text-blue-400 font-medium truncate placeholder-blue-900/50"
-                                    value={cluster.seo_title || ''}
+                                    value={cluster.seo_title || cluster.meta_suggestions?.[0]?.seo_title || ''}
                                     onChange={(e) => onUpdate({ ...cluster, seo_title: e.target.value })}
                                     placeholder="Título SEO Azul"
                                 />
                                 <label className="text-[10px] font-bold text-slate-500 uppercase block mt-2 mb-1">Meta Description</label>
                                 <textarea
                                     className="w-full bg-transparent border-none outline-none text-xs text-slate-400 resize-none h-12 placeholder-slate-700"
-                                    value={cluster.seo_description || ''}
+                                    value={cluster.seo_description || cluster.meta_suggestions?.[0]?.seo_description || ''}
                                     onChange={(e) => onUpdate({ ...cluster, seo_description: e.target.value })}
                                     placeholder="Descripción que aparecerá en Google..."
                                 />

@@ -25,5 +25,12 @@ const { Content } = await post.render();
     tags={post.data.tags}
     category={post.data.category}
 >
+    {
+        post.data.intro && (
+            <p class="lead text-xl text-body font-medium mb-8">
+                {post.data.intro}
+            </p>
+        )
+    }
     <Content />
 </BlogLayout>
