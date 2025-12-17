@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "title": "Quitar Gotelé en Barcelona | Acabados Lisos y Perfectos",
+    "description": "Servicio profesional para alisar paredes y quitar gotelé en Barcelona. Presupuestos cerrados, trabajo limpio y rápido. Transforma tu piso hoy."
+  },
+  "hero_section": {
+    "h1": "Quitar Gotelé en Barcelona: Paredes Lisas, Hogares Renovados",
+    "subheadline": "Devolvemos la elegancia original a los pisos de l'Eixample, Gràcia y toda la ciudad. Acabados perfectos, garantizados sin polvo.",
+    "cta_primary": "Pedir Presupuesto Gratis",
+    "cta_secondary": "Ver nuestros trabajos"
+  },
+  "intro_content": {
+    "title": "El Gotelé Tuvo su Momento. Ahora, tus Paredes Merecen un Acabado Liso.",
+    "paragraphs": [
+      "Conocemos Barcelona. Sabemos que detrás de muchas paredes con gotelé en Sarrià o Sants hay techos altos y molduras que merecen lucir. Entendemos los retos de los pisos modernistas y la humedad cerca del mar en Poblenou. No somos una simple empresa de reformas; somos artesanos especializados en devolver a las paredes de Barcelona la superficie lisa y perfecta que nunca debieron perder.",
+      "Nuestro compromiso es sencillo: un trabajo bien hecho, limpio y en los plazos acordados. Utilizamos técnicas de lijado con aspiración para minimizar el polvo y aplicamos plaste de la mejor calidad para asegurar un acabado duradero, sin marcas ni imperfecciones. Tu única preocupación será elegir el nuevo color de tus paredes."
+    ]
+  },
+  "services_grid_intro": "Transformamos tus paredes con un servicio completo y sin sorpresas:",
+  "why_us_bullets": [
+    {
+      "title": "Especialistas Locales",
+      "desc": "Conocemos las particularidades de las fincas de Barcelona, desde el Gòtic hasta Les Corts."
+    },
+    {
+      "title": "Máxima Limpieza",
+      "desc": "Protegemos tus muebles y suelos. Nuestro sistema de aspiración reduce el polvo al mínimo."
+    },
+    {
+      "title": "Presupuesto Cerrado",
+      "desc": "Sin sorpresas en la factura final. El precio que te damos es el precio que pagas."
+    }
+  ],
+  "features": [
+    {
+      "title": "Acabados Perfectos, Listos para Pintar",
+      "description": "Entregamos superficies totalmente lisas y uniformes, reparando grietas y desperfectos previos. La base ideal para una pintura de calidad."
+    },
+    {
+      "title": "Revaloriza tu Propiedad",
+      "description": "Unas paredes lisas modernizan cualquier espacio al instante, aumentando el valor de tu piso en el mercado de Barcelona, ya sea para vender o alquilar."
+    },
+    {
+      "title": "Proceso Rápido y Eficiente",
+      "description": "Hemos optimizado nuestro método de trabajo para minimizar las molestias y devolverte tu hogar renovado en el menor tiempo posible."
+    }
+  ],
+  "services_list": [
+    {
+      "title": "Alisado de Paredes con Gotelé",
+      "description": "Nuestro servicio estrella. Eliminamos por completo la textura del gotelé, sin importar si es temple o plástico, y dejamos una superficie lisa preparada para la imprimación y pintura. El proceso incluye: \n- Protección completa de suelos y mobiliario.\n- Aplicación de varias capas de plaste de renovación.\n- Lijado profesional con maquinaria de aspiración.",
+      "icon_suggestion": "PaintRoller"
+    },
+    {
+      "title": "Reparación de Grietas y Humedades",
+      "description": "Antes de alisar, solucionamos los problemas de base. Tratamos las humedades por condensación, típicas en bajos del Born o en pisos con poca ventilación, y reparamos grietas estructurales para un resultado duradero. El servicio incluye:\n- Saneamiento de la zona afectada.\n- Aplicación de masillas elásticas o fibras.\n- Tratamientos antihumedad específicos.",
+      "icon_suggestion": "ShieldAlert"
+    },
+    {
+      "title": "Pintura Decorativa sobre Liso",
+      "description": "Una vez las paredes están perfectas, aplicamos la pintura. Trabajamos con las mejores marcas para asegurar un color uniforme y resistente, ya sea un blanco nórdico para un piso en Gràcia o un color atrevido para un loft en Poblenou. El servicio incluye:\n- Asesoramiento de color y acabados (mate, satinado).\n- Aplicación de capa de imprimación selladora.\n- Dos capas de pintura plástica de alta calidad.",
+      "icon_suggestion": "Palette"
+    }
+  ],
+  "process": {
+    "title": "Nuestro Proceso: De Gotelé a Pared Lisa en 3 Pasos",
+    "description": "Un método claro y ordenado para garantizar resultados excelentes sin complicaciones.",
+    "steps": [
+      {
+        "title": "1. Visita y Presupuesto sin Compromiso",
+        "description": "Nos desplazamos a tu piso en cualquier barrio de Barcelona para medir las superficies, evaluar el estado del gotelé y darte un presupuesto cerrado y detallado. Sin coste ni compromiso."
+      },
+      {
+        "title": "2. Preparación y Alisado Profesional",
+        "description": "El día acordado, nuestro equipo protege meticulosamente todo el espacio. Procedemos a aplicar las capas necesarias de plaste de alta carga y a lijar con sistemas de aspiración para un ambiente de trabajo limpio."
+      },
+      {
+        "title": "3. Acabado Final y Limpieza",
+        "description": "Damos el último repaso para asegurar una lisura perfecta, dejamos las paredes listas para pintar y recogemos todo. Te entregamos la estancia limpia, como si no hubiéramos estado."
+      }
+    ]
+  },
+  "local_closing": "Damos servicio en toda la ciudad de Barcelona y su área metropolitana. Tanto si tu piso está en el Eixample, como en Sant Andreu, Nou Barris o la Barceloneta, nuestro equipo de especialistas está listo para transformar tus paredes. Contacta con nosotros y di adiós al gotelé para siempre.",
+  "faq": [
+    {
+      "question": "¿Cuánto se tarda en quitar el gotelé de un piso entero?",
+      "answer": "Depende de los metros cuadrados, pero para un piso estándar de unos 80m² en Barcelona, el proceso de alisado suele durar entre 4 y 6 días laborables, dejándolo listo para pintar."
+    },
+    {
+      "question": "¿Es un proceso muy sucio? ¿Tengo que taparlo todo?",
+      "answer": "Nosotros nos encargamos de todo. Cubrimos suelos, puertas, ventanas y muebles con plásticos y cartones. Además, nuestro sistema de lijado con aspiradora profesional reduce el polvo en más de un 90% comparado con los métodos tradicionales."
+    },
+    {
+      "question": "¿Qué precio tiene quitar el gotelé por metro cuadrado en Barcelona?",
+      "answer": "El precio varía según el tipo de gotelé (temple o plástico) y el estado de las paredes. Te recomendamos solicitar un presupuesto gratuito y sin compromiso para darte un precio exacto y cerrado para tu caso."
+    }
+  ]
+}

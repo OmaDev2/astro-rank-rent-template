@@ -753,58 +753,172 @@ async function generateCreativeSeedsWithGemini(niche) {
     }
 }
 
-export async function runGeminiClustering(keywords, niche, city) {
-    if (keywords.length === 0) return { services: [], blog_topics: [] };
+
+// ============================================================================
+// DEEP RESEARCH WIZARD (Wizard Mode Integration)
+// ============================================================================
+
+export async function generateDeepResearch(niche, city) {
+    if (!process.env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY missing");
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    console.log(`\n🧙 GENERATING DEEP RESEARCH for: ${niche} in ${city}...\n`);
+
+    const context = {
+        niche,
+        city,
+        mainKeywords: [],
+        longTail: [],
+        nlpPhrases: [],
+        faqs: [],
+        semanticTerms: []
+    };
+
+    // Helper for Gemini calls
+    const askGemini = async (prompt) => {
+        const res = await model.generateContent(prompt);
+        return res.response.text();
+    };
+
+    const cleanList = (text) => {
+        return text
+            .split(/,|\n/)
+            .map(s => s.trim())
+            .map(s => s.replace(/^[-\*\d\.]+\s*/, '')) // Remove bullets/numbers
+            .map(s => s.replace(/```csv|```/g, '')) // Remove markdown
+            .map(s => s.replace(/["']/g, '')) // Remove quotes
+            .filter(s => s.length > 2);
+    };
+
+    try {
+        // STEP 1: Main Keywords
+        console.log("   🔹 Step 1: Main Keywords...");
+        const res1 = await askGemini(`Actúa como experto SEO Local. Lista 10 keywords transaccionales principales para "${niche}" en "${city}". Usuarios con intención de compra. Formato: Solo lista csv, sin markdown, sin numeros.`);
+        context.mainKeywords = cleanList(res1);
+
+        // STEP 2: Long Tail
+        console.log("   🔹 Step 2: Long Tail...");
+        const res2 = await askGemini(`Experto SEO para "${niche}" en "${city}". Basado en [${context.mainKeywords.slice(0, 5).join(', ')}], dame 10 keywords long-tail muy específicas (urgencias, precios, detalles). Formato: Solo lista csv, sin markdown.`);
+        context.longTail = cleanList(res2);
+
+        // STEP 3: NLP / User Voice
+        console.log("   🔹 Step 3: NLP & User Voice...");
+        const res3 = await askGemini(`Identifica 10 frases naturales que usaría una persona real para buscar "${niche}" en "${city}". Focus: Lenguaje coloquial, problemas ("se me rompió...", "necesito..."). Formato: Solo lista csv, sin markdown.`);
+        context.nlpPhrases = cleanList(res3);
+
+        // STEP 4: FAQs (Real Questions)
+        console.log("   🔹 Step 4: FAQs...");
+        const res4 = await askGemini(`Experto atención cliente "${niche}". Lista 8 preguntas frecuentes REALES antes de contratar en "${city}". (Precio, garantía, horarios...). Formato: Lista separada por pipe (|).`);
+        context.faqs = res4.split('|').map(q => q.trim().replace(/```/g, '')).filter(q => q.length > 5);
+
+        // STEP 5: Semantic Entities
+        console.log("   🔹 Step 5: Semantics...");
+        const res5 = await askGemini(`10 términos semánticamente relacionados con "${niche}" que demuestren autoridad (herramientas, materiales, técnica). Formato: Solo lista csv, sin markdown.`);
+        context.semanticTerms = cleanList(res5);
+
+        console.log("\n✅ DEEP RESEARCH COMPLETED.");
+
+        return {
+            success: true,
+            data: context
+        };
+
+    } catch (error) {
+        console.error("❌ Error in Deep Research:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function runGeminiClustering(keywords, niche, city, richContext = null) {
+    // Si no hay keywords pero sí richContext, usamos las keywords del context
+    let processedKeywords = [...keywords];
+
+    // Si tenemos Deep Research, inyectamos sus keywords en el pool principal para que DataForSEO/Clustering las use
+    if (richContext && richContext.data) {
+        // Helpers
+        const addKws = (list, source) => {
+            list.forEach(kw => {
+                if (!processedKeywords.find(k => k.keyword === kw)) {
+                    processedKeywords.push({ keyword: kw, volume: 0, source });
+                }
+            });
+        };
+        addKws(richContext.data.mainKeywords, 'wizard_main');
+        addKws(richContext.data.longTail, 'wizard_longtail');
+        addKws(richContext.data.nlpPhrases, 'wizard_nlp');
+    }
+
+    if (processedKeywords.length === 0) return { services: [], blog_topics: [] };
+
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Upgraded to faster model
+
+    // Preparamos el contexto rico para el prompt
+    let extraAndFaqs = "";
+    if (richContext && richContext.data) {
+        extraAndFaqs = `
+        \n🔍 INFORMACIÓN DE CONTEXTO (DEEP RESEARCH):
+        - FAQs REALES DEL USUARIO: ${JSON.stringify(richContext.data.faqs)}
+        - LENGUAJE NATURAL (NLP): ${JSON.stringify(richContext.data.nlpPhrases)}
+        
+        INSTRUCCIÓN ADICIONAL:
+        1. Asigna las FAQs más relevantes a cada Cluster de Servicio en el campo "faqs".
+        2. Usa las frases NLP para enriquecer la descripción o sugerir "user_intent_keywords".
+        `;
+    }
 
     const prompt = `
     ACTÚA COMO: Experto en SEO Técnico y Estratega de Contenidos.
     
     CONTEXTO:
     Estamos creando la estructura de una web local para el nicho "${niche}" en la ciudad de "${city}".
-    
+    ${extraAndFaqs}
+
     OBJETIVO:
     Clasificar la lista de keywords en dos grupos:
     1. **SERVICIOS (Comercial)**: Páginas de venta para contratar el servicio.
     2. **BLOG (Informacional)**: Artículos educativos para resolver dudas (Top of Funnel).
 
-    LISTA DE KEYWORDS (Datos brutos):
-    ${keywords.slice(0, 150).map(k => `- KW: "${k.keyword}" | Vol: ${k.volume}`).join('\n')}
+    LISTA DE KEYWORDS (Muestra):
+    ${processedKeywords.slice(0, 150).map(k => `- KW: "${k.keyword}" | Vol: ${k.volume}`).join('\n')}
     
     INSTRUCCIONES DE AGRUPACIÓN:
     
     A) PARA "SERVICIOS" (Intención Transaccional):
-       - Agrupa keywords de contratación (ej: "empresa de...", "precio...", "servicio de...").
-       - Atomiza por tipo de trabajo (ej: "Alisado" es un servicio, "Pintura Decorativa" es otro).
-       - Slug: Incluye la ciudad.
-       - METADATA OBLIGATORIA: Genera H1 optimizado, SEO Title (max 60 chars) y SEO Description (max 155 chars, persuasiva).
+       - Agrupa keywords de contratación.
+       - Atomiza por tipo de trabajo.
+       - METADATA: H1, Title, Description.
+       - **FAQs**: Si tienes contexto de FAQs, incluye 3-5 preguntas relevantes para este servicio.
 
-    B) PARA "BLOG" (Intención Informacional - PAA):
-       - Agrupa keywords de preguntas o problemas (ej: "cómo quitar gotelé", "manchas humedad techo", "cuánto tarda secar pintura").
-       - Crea títulos de artículos atractivos.
-       - Slug: SIN la ciudad (contenido evergreen/general), salvo que sea muy local.
-       - METADATA OBLIGATORIA: Genera H1 explicativo, SEO Title y SEO Description.
+    B) PARA "BLOG" (Intención Informacional):
+       - Preguntas educativas, problemas, how-to.
+       - Contenido evergreen.
 
     FORMATO DE SALIDA (JSON ESTRICTO):
+    IMPORTANTE: "services" debe ser un ARRAY. "blog" debe ser un ARRAY.
+    IMPORTANTE: Asegura que "meta_suggestions" NO esté vacío. Rellena siempre H1, SEO Title y SEO Description.
+    IMPORTANTE: Incluye siempre "faqs" en los servicios si están disponibles en el contexto.
+
     {
         "services": [
             {
                 "name": "Nombre Servicio",
                 "slug": "servicio-ciudad",
                 "intent": "COMMERCIAL",
+                "faqs": ["¿Pregunta 1?", "¿Pregunta 2?"],
                 "meta_suggestions": [{ 
                     "h1": "Título H1 Optimizado", 
-                    "seo_title": "Título SEO | Brand",
-                    "seo_description": "Descripción atractiva para CTR..." 
+                    "seo_title": "Título SEO (Max 60ch)",
+                    "seo_description": "Descripción persuasiva (Max 155ch)" 
                 }],
                 "keywords": ["kw1", "kw2"]
             }
         ],
         "blog": [
             {
-                "name": "Título del Artículo (H1)",
+                "name": "Título Artículo",
                 "slug": "titulo-articulo",
                 "intent": "INFORMATIONAL",
                 "meta_suggestions": [{ 
@@ -812,20 +926,36 @@ export async function runGeminiClustering(keywords, niche, city) {
                     "seo_title": "Título SEO para Blog", 
                     "seo_description": "Resumen del artículo..." 
                 }],
-                "keywords": ["pregunta 1", "duda 2"]
+                "keywords": ["kw1", "kw2"]
             }
         ]
     }
     `;
 
+    let text = "";
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
-        // Robust extraction: Find the first { and last } to ignore conversational text
-        const text = response.text();
+        text = response.text();
+
+        // Limpieza robusta de JSON
         const jsonMatch = text.match(/\{[\s\S]*\}/);
-        const jsonString = jsonMatch ? jsonMatch[0] : text;
-        const data = JSON.parse(jsonString);
+
+        let json;
+        if (jsonMatch) {
+            const jsonStr = jsonMatch[0];
+            try {
+                json = JSON.parse(jsonStr);
+            } catch (e) {
+                // Fallback simple: a veces Gemini devuelve trailing commas
+                const cleaned = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+                json = JSON.parse(cleaned);
+            }
+        } else {
+            // Fallback a limpieza simple si no hay match de llaves
+            const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            json = JSON.parse(cleanText);
+        }
 
         // Función helper para enriquecer clusters
         const enrich = (list) => list.map(c => ({
@@ -837,27 +967,55 @@ export async function runGeminiClustering(keywords, niche, city) {
             })
         }));
 
-        const enrichedServices = enrich(data.services || []);
-        // Check for 'blog' or 'blog_topics' key to be safe with AI response variability
-        const enrichedBlog = enrich(data.blog || data.blog_topics || []);
+        const enrichedServices = enrich(json.services || []);
+        // Check for 'blog' or 'blog_topics' key to be safe with user response variability
+        const blogData = json.blog || json.blog_topics || [];
+        const enrichedBlog = enrich(blogData);
 
         // Devolvemos OBJETO SEPARADO en lugar de array plano
-        return {
+        const finalResult = {
             services: enrichedServices.map(c => ({ ...c, type: 'SERVICE' })),
             blog: enrichedBlog.map(c => ({ ...c, type: 'BLOG' }))
         };
 
+        if (finalResult.services) {
+            finalResult.services = finalResult.services.map(s => {
+                // FALLBACK: Inject FAQs from Rich Context if AI missed them
+                if ((!s.faqs || s.faqs.length === 0) && richContext && richContext.data && richContext.data.faqs) {
+                    s.faqs = richContext.data.faqs.slice(0, 5); // Take top 5
+                }
+
+                // FALLBACK: Generate Meta if specific sub-keywords suggestions are missing
+                if (!s.meta_suggestions || s.meta_suggestions.length === 0) {
+                    const cleanName = s.name.replace(/Servicios de /i, '');
+                    s.meta_suggestions = [{
+                        h1: s.name,
+                        seo_title: `${cleanName} en ${city} | Expertos y Garantía`,
+                        seo_description: `¿Buscas ${cleanName} en ${city}? Servicio profesional, rápido y al mejor precio. ¡Pide tu presupuesto sin compromiso hoy!`
+                    }];
+                }
+
+                return s;
+            });
+        }
+
+        return finalResult;
     } catch (error) {
-        console.error("Error en Gemini Clustering:", error);
+        console.error("❌ Error parsing Gemini response:", error);
+        console.log("Response was:", text);
         // Fallback robusto devolviendo estructura vacía pero válida
         return {
             services: [{
                 name: `Servicios de ${niche}`,
-                slug: `servicios-${niche.toLowerCase().replace(/\s+/g, '-')}`,
-                type: 'SERVICE',
-                intent: 'COMMERCIAL',
-                keywords: keywords,
-                meta_suggestions: []
+                slug: "servicios-generales",
+                intent: "COMMERCIAL",
+                keywords: keywords.map(k => k.keyword),
+                faqs: richContext?.data?.faqs || [], // Fallback here too
+                meta_suggestions: [{
+                    h1: `Empresa de ${niche} en ${city}`,
+                    seo_title: `${niche} en ${city} - Servicio Profesional`,
+                    seo_description: `Expertos en ${niche} en ${city}. Contáctanos.`
+                }]
             }],
             blog: []
         };

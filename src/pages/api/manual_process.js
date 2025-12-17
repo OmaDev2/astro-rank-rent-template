@@ -1,4 +1,5 @@
 import { parse } from 'csv-parse/sync';
+import { generateDeepResearch } from '../../../scripts/logic/keyword_researcher.js';
 
 export const POST = async ({ request }) => {
     try {
@@ -111,6 +112,20 @@ export const POST = async ({ request }) => {
             },
             clusters: []
         };
+
+        // ENRICHMENT: Run Deep Research if niche/city provided
+        if (niche && city) {
+            console.log("🧠 Manual Mode: Triggering parallel Deep Research...");
+            try {
+                const deepRes = await generateDeepResearch(niche, city);
+                if (deepRes.success) {
+                    result.rich_context = deepRes;
+                    console.log("   ✅ Deep Research Attached to Manual Data");
+                }
+            } catch (err) {
+                console.error("   ⚠️ Deep Research failed but proceeding with manual data:", err.message);
+            }
+        }
 
         return new Response(JSON.stringify(result), {
             status: 200,

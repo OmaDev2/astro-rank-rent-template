@@ -4,7 +4,7 @@ import { runGeminiClustering } from '../../../scripts/logic/keyword_researcher.j
 export const POST = async ({ request }) => {
     try {
         const body = await request.json();
-        const { keywords, niche, city } = body;
+        const { keywords, niche, city, rich_context } = body; // ✅ Recibimos rich_context
 
         if (!keywords || !Array.isArray(keywords) || keywords.length === 0) {
             return new Response(JSON.stringify({ error: 'Keywords list is required' }), {
@@ -14,8 +14,9 @@ export const POST = async ({ request }) => {
         }
 
         console.log(`🧠 API Cluster: Clustering ${keywords.length} keywords for "${niche}" in "${city}"`);
+        if (rich_context) console.log("   ✨ With Rich Deep Research Context");
 
-        const result = await runGeminiClustering(keywords, niche, city);
+        const result = await runGeminiClustering(keywords, niche, city, rich_context); // ✅ Pasamos context
 
         return new Response(JSON.stringify(result), {
             status: 200,

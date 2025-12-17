@@ -36,6 +36,7 @@ export default function GeneratorApp() {
     const [saving, setSaving] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [discoveredServices, setDiscoveredServices] = useState([]); // ✅ Nuevo estado para servicios
+    const [richContext, setRichContext] = useState(null); // ✅ Nuevo: Deep Research Context
 
     // --- FUNCIÓN DE RESET ---
     const handleReset = async () => {
@@ -152,6 +153,9 @@ export default function GeneratorApp() {
             if (data.error) throw new Error(data.error);
 
             setResearchData(data);
+            if (data.rich_context) {
+                setRichContext(data.rich_context);
+            }
 
             // AUTO-GENERATE HOME STRUCTURE IF MISSING (For Manual Mode)
             if (!data.home_structure || !data.home_structure.h1) {
@@ -205,7 +209,10 @@ export default function GeneratorApp() {
             const res = await fetch('/api/discover-services', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ niche: formData.niche.trim() })
+                body: JSON.stringify({
+                    niche: formData.niche.trim(),
+                    city: formData.city // ✅ Pass city for Deep Research
+                })
             });
 
             const data = await res.json();
@@ -216,6 +223,7 @@ export default function GeneratorApp() {
             }
 
             setDiscoveredServices(data.services || []);
+            setRichContext(data.rich_context || null); // ✅ Save Context
             setStep('services'); // ✅ Vamos al paso de validación de servicios
         } catch (err) {
             console.error('❌ Request failed:', err);
@@ -321,7 +329,8 @@ export default function GeneratorApp() {
                 body: JSON.stringify({
                     keywords: researchData.raw_data.top_keywords,
                     niche: formData.niche,
-                    city: formData.city
+                    city: formData.city,
+                    rich_context: richContext // ✅ Pass Rich Context
                 })
             });
 
@@ -355,7 +364,8 @@ export default function GeneratorApp() {
                 ...researchData,
                 generate_locations: formData.generateLocations, // Pasamos la config al plan
                 one_page_mode: formData.onePageMode, // Pasamos el modo one page
-                design_style: formData.designStyle // Pasamos el estilo de diseño
+                design_style: formData.designStyle, // Pasamos el estilo de diseño
+                rich_context: richContext // ✅ Incluimos Deep Research Context explicitamente
             };
 
             console.log("📤 Enviando plan al servidor...", planToSave);
@@ -394,7 +404,9 @@ export default function GeneratorApp() {
         const fullPlan = {
             ...researchData,
             generate_locations: formData.generateLocations,
-            one_page_mode: formData.onePageMode
+            one_page_mode: formData.onePageMode,
+            design_style: formData.designStyle,
+            rich_context: richContext // ✅ Incluimos Deep Research Context explicitamente
         };
 
         // Guardamos el plan explícitamente primero (opcional, ya que generate lo hace, pero por seguridad)
@@ -744,6 +756,28 @@ export default function GeneratorApp() {
                     <h2 className="text-2xl font-bold mb-2">Validar Servicios</h2>
                     <p className="text-slate-400">Gemini ha identificado estos servicios para tu nicho. Edita o añade los que falten.</p>
                 </div>
+
+                {richContext && (
+                    <div className="bg-indigo-900/30 border border-indigo-500/30 p-4 rounded-lg mb-6">
+                        <h3 className="text-indigo-300 font-bold flex items-center gap-2 mb-2">
+                            <Bot className="w-5 h-5" /> Hallazgos de Deep Research
+                        </h3>
+                        <div className="grid grid-cols-2 gap-4 text-sm text-slate-300">
+                            <div>
+                                <span className="block text-indigo-400 font-bold text-xs uppercase">Voz del Usuario (NLP)</span>
+                                {richContext.data.nlpPhrases.slice(0, 3).map((p, i) => (
+                                    <div key={i}>"{p}"</div>
+                                ))}
+                            </div>
+                            <div>
+                                <span className="block text-indigo-400 font-bold text-xs uppercase">Preguntas Frecuentes</span>
+                                {richContext.data.faqs.slice(0, 3).map((q, i) => (
+                                    <div key={i}>• {q}</div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

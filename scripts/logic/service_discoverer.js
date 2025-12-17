@@ -21,10 +21,26 @@ export async function discoverNicheServices(niche) {
         const response = await result.response;
         let text = response.text();
 
-        // Limpiar markdown si existe
-        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        // Limpieza robusta de JSON (Soporte para CoT/Reasoning)
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
 
-        const data = JSON.parse(text);
+        let data;
+        if (jsonMatch) {
+            const jsonStr = jsonMatch[0];
+            try {
+                // Intentamos JSON5 primero si importamos la librería, sino JSON normal con limpieza extra
+                // Como JSON5 no está importado aquí, usaremos limpieza manual si JSON.parse falla
+                data = JSON.parse(jsonStr);
+            } catch (e) {
+                // Fallback simple: a veces Gemini devuelve trailing commas
+                const cleaned = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+                data = JSON.parse(cleaned);
+            }
+        } else {
+            // Fallback a limpieza simple si no hay match de llaves
+            const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            data = JSON.parse(cleanText);
+        }
 
         return data;
 

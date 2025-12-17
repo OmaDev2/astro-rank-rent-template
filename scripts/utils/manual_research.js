@@ -23,54 +23,84 @@ async function main() {
     console.log(`   Archivo: ${file}`);
     console.log('═'.repeat(60) + '\n');
 
-    // 2. Read keywords
+    // 2. Read keywords or Generate Deep Research
     let keywords = [];
-    try {
-        // 2a. Intentar parseo robusto CSV primero si termina en .csv
-        if (file.endsWith('.csv')) {
-            console.log("   📂 Detectado archivo CSV. Usando importador robusto...");
-            keywords = importKeywordsFromCSV(file);
-        } else {
-            // 2b. Fallback para .txt o JSON puro
-            const content = await fs.readFile(file, 'utf-8');
-            try {
-                const json = JSON.parse(content);
-                if (Array.isArray(json)) {
-                    keywords = json.map(k => {
-                        if (typeof k === 'string') return { keyword: k, volume: 100 };
-                        return { ...k, volume: k.volume || 100 };
-                    });
-                }
-            } catch (e) {
-                // Fallback texto linea por linea
-                keywords = content.split('\n')
-                    .map(l => l.trim())
-                    .filter(l => l.length > 0)
-                    .map(k => ({ keyword: k, volume: 100 }));
+    let richContext = null;
+
+    if (!fileArg) {
+        console.log("   📂 No se especificó archivo (--file). Usando DEEP RESEARCH WIZARD...");
+        try {
+            const result = await import('../logic/keyword_researcher.js').then(m => m.generateDeepResearch(niche, city));
+            if (result.success) {
+                richContext = result;
+                // Convert main keywords to the format expected by clustering
+                // We use main + longtail for volume/clustering, but we have rich context too
+                // FIX: Include NLP phrases to ensure we have "Informational" fodder for the Blog
+                const allKws = [
+                    ...result.data.mainKeywords,
+                    ...result.data.longTail,
+                    ...(result.data.nlpPhrases || [])
+                ];
+                keywords = allKws.map(k => ({ keyword: k, volume: 100 }));
+                console.log(`   ✅ Generadas ${keywords.length} keywords base desde el Wizard (incluyendo User Voice).`);
+            } else {
+                throw new Error(result.error);
             }
+        } catch (e) {
+            console.error("❌ Error en Deep Research:", e);
+            process.exit(1);
         }
+    } else {
+        try {
+            // 2a. Intentar parseo robusto CSV primero si termina en .csv
+            if (file.endsWith('.csv')) {
+                console.log("   📂 Detectado archivo CSV. Usando importador robusto...");
+                keywords = importKeywordsFromCSV(file);
+            } else {
+                // 2b. Fallback para .txt o JSON puro
+                const content = await fs.readFile(file, 'utf-8');
+                try {
+                    const json = JSON.parse(content);
+                    if (Array.isArray(json)) {
+                        keywords = json.map(k => {
+                            if (typeof k === 'string') return { keyword: k, volume: 100 };
+                            return { ...k, volume: k.volume || 100 };
+                        });
+                    }
+                } catch (e) {
+                    // Fallback texto linea por linea
+                    keywords = content.split('\n')
+                        .map(l => l.trim())
+                        .filter(l => l.length > 0)
+                        .map(k => ({ keyword: k, volume: 100 }));
+                }
+            }
 
-        if (keywords.length === 0) {
-            throw new Error("No keywords found in file.");
+            if (keywords.length === 0) {
+                throw new Error("No keywords found in file.");
+            }
+        } catch (error) {
+            console.error(`❌ Error leyendo el archivo ${file}:`, error.message);
+            process.exit(1);
         }
-
-    } catch (error) {
-        console.error(`❌ Error leyendo el archivo ${file}:`, error.message);
-        console.log(`\n💡 Crea un archivo '${file}' con tus palabras clave (una por línea o JSON).`);
-        process.exit(1);
     }
 
     console.log(`✅ ${keywords.length} palabras clave cargadas.`);
 
     // 3. Cluster
     console.log('\n🧠 Ejecutando Clustering con Gemini...');
-    let clusters = [];
+    let result = { services: [], blog: [] };
     try {
-        clusters = await runGeminiClustering(keywords, niche, city);
+        result = await runGeminiClustering(keywords, niche, city, richContext); // ✅ Pasamos richContext
     } catch (error) {
         console.error("❌ Error en clustering:", error);
         process.exit(1);
     }
+
+    // Adapt legacy structure
+    const clusters = result.services || [];
+    const blog = result.blog || [];
+    console.log(`   ✅ Generados ${clusters.length} servicios y ${blog.length} artículos.`);
 
     // 4. Build Plan
     const homeStructure = {
@@ -100,12 +130,13 @@ async function main() {
     const plan = {
         niche,
         city,
-        clusters,
+        clusters, // Legacy name for services
+        blog_topics: blog, // New field
         home_structure: homeStructure,
         generate_locations: false,
         locations: [],
-        market_analysis: "Plan generado manualmente desde lista de keywords.",
-        raw_data: { top_keywords: keywords }
+        market_analysis: "Plan generado manualmente.",
+        raw_data: { top_keywords: keywords, rich_context: richContext }
     };
 
     // 5. Save

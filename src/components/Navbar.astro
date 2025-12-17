@@ -74,7 +74,7 @@ const locations = await getCollection("locations");
                                     <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 text-left">
                                         {services.map((service) => (
                                             <a
-                                                href={`/${service.slug}/`}
+                                                href={`/servicios/${service.slug}/`}
                                                 class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors border-b border-heading/5 last:border-0"
                                             >
                                                 {service.data.title}
@@ -178,7 +178,7 @@ const locations = await getCollection("locations");
                                     </p>
                                     {services.map((service) => (
                                         <a
-                                            href={`/${service.slug}/`}
+                                            href={`/servicios/${service.slug}/`}
                                             class="block text-xl text-body hover:text-primary mobile-link"
                                         >
                                             {service.data.title}

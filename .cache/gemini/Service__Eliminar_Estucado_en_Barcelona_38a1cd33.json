@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "h1": "Eliminar Estucado en Barcelona: Profesionales a tu Servicio",
+    "lead_text": "¿Cansado de esas paredes con estucado que acumulan polvo y se ven antiguas? Dejamos tus paredes lisas y modernas en tiempo récord. Somos tu equipo de confianza para quitar estucado en toda Barcelona."
+  },
+  "problem_agitation": {
+    "h2": "¿Tus paredes con estucado te dan más problemas que alegrías?",
+    "content": "Sabemos lo que es. Esas paredes con relieves se ven anticuadas, hacen que cualquier habitación parezca más pequeña y oscura, y son un imán para el polvo. Has buscado 'cómo eliminar el estucado' y has visto el lío de polvo y trabajo que supone. No tienes tiempo ni ganas de meterte en ese fregado. Solo quieres una solución para tener paredes lisas y limpias de una vez por todas, y poder eliminar el gotelé o estucado sin dramas."
+  },
+  "solution_technical": {
+    "h2": "Nuestro Proceso para Quitar Estucado de Pared: Eficaz y Limpio",
+    "content": "No nos complicamos. Protegemos tu casa como si fuera nuestra. Usamos maquinaria con aspiración para quitar el estucado de la pared minimizando el polvo al máximo. Después, aplicamos un plaste de alta calidad en varias capas y lijamos hasta que la superficie queda totalmente lisa y uniforme, lista para pintar. Es la respuesta profesional a 'cómo se quita el estucado' sin dolores de cabeza para ti."
+  },
+  "process_steps": [
+    {
+      "step_number": 1,
+      "title": "Contacto y Presupuesto Cerrado",
+      "description": "Nos llamas o nos escribes. Te pedimos fotos o hacemos una visita rápida si es necesario. Te damos un presupuesto cerrado y claro en el mismo día. Sin costes ocultos ni sorpresas."
+    },
+    {
+      "step_number": 2,
+      "title": "Preparación y Alisado Profesional",
+      "description": "El día acordado, protegemos tus muebles y suelos como si fueran nuestros. Procedemos a quitar el estucado de las paredes con la técnica más adecuada, dejando una superficie lisa y perfecta."
+    },
+    {
+      "step_number": 3,
+      "title": "Limpieza y Entrega Impecable",
+      "description": "Una vez terminado el trabajo de alisado, no nos vamos hasta que todo esté limpio y recogido. Te entregamos tus nuevas paredes lisas, listas para pintar y disfrutar."
+    }
+  ],
+  "materials_section": {
+    "title": "Herramientas y Materiales que Garantizan un Acabado Perfecto",
+    "items": [
+      "Lijadoras jirafa con aspiración integrada (para un trabajo casi sin polvo)",
+      "Masillas de renovación y alisado de primeras marcas",
+      "Raspadores y espátulas profesionales de acero",
+      "Plásticos protectores de alto gramaje para suelos y muebles",
+      "Focos de luz rasante para detectar y corregir cualquier imperfección"
+    ]
+  },
+  "meta": {
+    "title": "Quitar Estucado Barcelona | Paredes Lisas y Modernas | Presupuesto",
+    "description": "Expertos en quitar estucado de pared en Barcelona. Transformamos tus paredes anticuadas en superficies lisas y modernas. Trabajo rápido, limpio y con precio cerrado. ¡Pide tu presupuesto!"
+  },
+  "final_cta": "¿Quieres saber cuánto te costaría dejar tus paredes lisas como nuevas? Llámame ahora o envía una foto por WhatsApp y te doy un precio rápido y sin compromiso."
+}

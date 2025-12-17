@@ -173,6 +173,15 @@ async function main() {
         return;
     }
 
+    // EXTRAER CONTEXTO RICO (NLP y Pain Points)
+    const richContext = plan.rich_context?.data || {};
+    const nlpPhrases = richContext.nlpPhrases ? richContext.nlpPhrases.join(', ') : "";
+    // Check both potential keys for pain points since they might vary in API response
+    const userPainPoints = richContext.painPoints ? richContext.painPoints.join(', ') : (richContext.userPainPoints ? richContext.userPainPoints.join(', ') : "");
+    const competitorsInfo = richContext.competitors ? JSON.stringify(richContext.competitors) : "";
+
+    console.log(`🧠 Contexto Rico cargado: ${richContext.nlpPhrases?.length || 0} frases NLP`);
+
     const cityName = plan.city.split(',')[0].trim();
 
     // --- LEER CONTEXTO DE CIUDAD ---
@@ -277,20 +286,34 @@ async function main() {
         console.warn("⚠️ No hay clusters/servicios definidos en el plan.");
     }
 
+    // GENERAR MAPA DE ENLACES INTERNOS (Para SEO)
+    const linksMap = serviceClusters.map(c => {
+        const cName = c.cluster_name || c.name || 'servicio-sin-nombre';
+        const sSlug = cName
+            .toLowerCase()
+            .replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u').replace(/ñ/g, 'n')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        return {
+            keyword: cName.toLowerCase(),
+            url: `/servicios/${sSlug}`
+        };
+    });
+
     // 3. GENERAR HOME (Con estructura definida por usuario + Main Cluster)
     console.log(`\n🏠 Generando Home (Calidad IA)...`);
     // 3. GENERAR HOME
     console.log("\n🏠 Generando Home (Calidad IA)...");
 
     // Usar H1 del plan (Prioridad 1) o del main cluster (Prioridad 2)
-    const homeH1 = plan.home_structure?.h1 || (mainCluster ? mainCluster.cluster_name : `${plan.niche} en ${cityName}`);
+    const homeH1 = plan.home_structure?.h1 || (mainCluster ? (mainCluster.cluster_name || mainCluster.name) : `${plan.niche} en ${cityName}`);
 
     // Keywords del main cluster para enriquecer
     // const mainKeywords = mainCluster?.keywords?.map(k => k.keyword).slice(0, 10) || [];
 
     // Lista de servicios para contexto (Enriquezida con keywords)
     const servicesContext = serviceClusters.map(c => ({
-        name: c.cluster_name,
+        name: c.cluster_name || c.name,
         keywords: c.keywords.slice(0, 5).map(k => k.keyword).join(', ')
     }));
 
@@ -330,7 +353,9 @@ async function main() {
         onePageInstruction: onePageInstruction,
         structureInstruction: structureInstruction,
         servicesList: servicesContext.map(s => s.name).join(', '), // Mantener compatibilidad simple
-        cityContext: cityContextData
+        cityContext: cityContextData,
+        nlpPhrases: nlpPhrases,
+        userPainPoints: userPainPoints
     });
 
     if (!homePrompt) return; // Exit if prompt load fails
@@ -339,7 +364,9 @@ async function main() {
 
     if (homeData) {
         // ENLAZADO INTERNO
-        // homeData = injectInternalLinks(homeData, linksMap); // Assuming injectInternalLinks is defined elsewhere
+        if (linksMap.length > 0) {
+            homeData = injectInternalLinks(homeData, linksMap);
+        }
 
         // Generar testimonios (también con prompt externo)
         const servicesNames = servicesContext.map(s => s.name);
@@ -436,7 +463,7 @@ ${homeData.intro_content?.paragraphs?.join('\n\n') || ""}
         console.log(`\n🛠️ Generando ${serviceClusters.length} Páginas de Servicios...`);
 
         for (const cluster of serviceClusters) {
-            const serviceName = cluster.cluster_name;
+            const serviceName = cluster.cluster_name || cluster.name || 'servicio-sin-nombre';
             console.log(`   > ${serviceName}...`);
             const serviceSlug = serviceName
                 .toLowerCase()
@@ -454,7 +481,10 @@ ${homeData.intro_content?.paragraphs?.join('\n\n') || ""}
                 cityName: cityName,
                 clusterKeywords: clusterKeywords.join(', '),
                 h1: metaTags.h1,
-                cityContext: cityContextData // Inyeccion de contexto
+                cityContext: cityContextData, // Inyeccion de contexto
+                nlpPhrases: nlpPhrases,
+                userPainPoints: userPainPoints,
+                niche: plan.niche
             });
 
             if (!servicePrompt) continue;
@@ -482,36 +512,42 @@ ${homeData.intro_content?.paragraphs?.join('\n\n') || ""}
 
                 // Construir contenido MDX desde las secciones del JSON
                 const contentBody = `
-## ${data.problem_agitation?.h2 || "El Problema"}
-${data.problem_agitation?.content || ""}
+## ${serviceData.problem_agitation?.h2 || "El Problema"}
+${serviceData.problem_agitation?.content || ""}
 
-## ${data.solution_technical?.h2 || "Nuestra Solución"}
-${data.solution_technical?.content || ""}
+## ${serviceData.solution_technical?.h2 || "Nuestra Solución"}
+${serviceData.solution_technical?.content || ""}
 
 ## Proceso de Trabajo
-${(data.process_steps || []).map(s => `### ${s.step_number}. ${s.title}\n${s.description}`).join('\n\n')}
+${(serviceData.process_steps || []).map(s => `### ${s.step_number}. ${s.title}\n${s.description}`).join('\n\n')}
 
-## ${data.materials_section?.title || "Materiales"}
-${(data.materials_section?.items || []).map(i => `- ${i}`).join('\n')}
+## ${serviceData.materials_section?.title || "Materiales"}
+${(serviceData.materials_section?.items || []).map(i => `- ${i}`).join('\n')}
 
-> **${data.final_cta || "Contáctanos hoy mismo."}**
+> **${serviceData.final_cta || "Contáctanos hoy mismo."}**
 `;
 
                 const mdx = `---
-title: "${data.hero?.h1 || serviceName}"
-shortDesc: "${data.hero?.lead_text?.slice(0, 100) || "Servicio profesional"}"
+title: "${serviceData.hero?.h1 || serviceName}"
+shortDesc: "${serviceData.hero?.lead_text?.slice(0, 100) || "Servicio profesional"}"
 icon: "Hammer"
 heroImage: "/images/services/default.jpg"
 featured: true
-seoTitle: "${data.meta?.title || serviceName}"
-seoDesc: "${data.meta?.description || ""}"
+seoTitle: "${serviceData.meta?.title || serviceName}"
+seoDesc: "${serviceData.meta?.description || ""}"
 faq:
 ${faqYaml.join('\n')}
 blocks:
   - discriminant: "hero"
   - discriminant: "content"
+    value:
+      data:
+        content: |
+${contentBody.trim().replace(/^/gm, '          ')}
   - discriminant: "faq"
-  - discriminant: "cta"
+    value:
+      data:
+        title: "Preguntas Frecuentes"
 ---
 
 ${contentBody}
@@ -552,7 +588,9 @@ ${related.join('\n')}
                 articleTitle: articleTitle,
                 mainKeyword: mainKeyword,
                 keywordsString: keywordsString,
-                cityContext: cityContextData
+                cityContext: cityContextData,
+                nlpPhrases: nlpPhrases,
+                userPainPoints: userPainPoints
             });
 
             if (!blogPrompt) continue;

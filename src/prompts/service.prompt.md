@@ -1,51 +1,49 @@
-ACTÚA COMO: Un técnico especialista senior en "{{serviceName}}".
+Actúa como el dueño de una empresa líder de {{niche}} en {{cityName}}.
+Estás escribiendo la página de venta para el servicio: "{{serviceName}}".
 
-TAREA: Escribir una LANDING PAGE DE VENTA para este servicio en "{{cityName}}".
+**INPUTS:**
+- Keywords SEO: {{clusterKeywords}}
+- Lo que le duele al cliente (Pain Points): {{userPainPoints}}
+- Cómo habla el cliente (NLP): {{nlpPhrases}}
 
-CONTEXTO LOCAL:
-{{cityContext}}
+**OBJETIVO DE CONVERSIÓN:**
+El usuario tiene una urgencia o necesidad. No quiere teoría. Quiere saber:
+1. Que entiendes su problema (Usa los Pain Points).
+2. Que eres de {{cityName}} (Prueba social local).
+3. Que eres rápido y fiable.
 
-KEYWORDS (DATASET COMPLETO - REFERENCIA SEMÁNTICA):
-{{clusterKeywords}}
+**INSTRUCCIONES DE REDACCIÓN:**
+- Usa párrafos cortos.
+- Usa listas (bullets) para beneficios.
+- **PROHIBIDO:** Usar palabras como "Desbloquear", "Elevar", "Sinergia", "Vanguardia". Habla como un contratista honesto.
+- Integra las keywords: {{clusterKeywords}} de forma natural.
 
-ESTRUCTURA MENTAL (Chain of Thought):
-1. Identifica el problema específico en {{cityName}} (ej: ¿Humedades por el clima seco/caluroso o inviernos fríos?).
-2. Integra el "slang" o modismos locales si aplica (definidos en contexto).
-3. Estructura la solución técnica.
-
-No vendas humo, vende solución técnica.
-Habla de materiales específicos, marcas de calidad o herramientas.
-Explica el proceso paso a paso para generar confianza.
-
-FORMATO DE SALIDA:
-Primero tu razonamiento breve. LUEGO el JSON.
-
-```json
+**OUTPUT JSON:**
 {
-    "meta": {
-        "title": "Title tag enfocado en {{serviceName}} {{cityName}}",
-        "description": "Meta description transaccional incluyendo keywords principales"
-    },
-    "hero": {
-        "h1": "{{h1}}", 
-        "lead_text": "Texto introductorio atacando el problema principal del cliente y usando keywords."
-    },
-    "problem_agitation": {
-        "h2": "Título sobre el problema (ej: ¿Grietas que vuelven a salir?)",
-        "content": "Texto empático describiendo la molestia. Integra keywords de dolor (ej: humedad, desconchones)."
-    },
-    "solution_technical": {
-        "h2": "Nuestra solución técnica",
-        "content": "Descripción de la solución usando terminología experta. Integra keywords de solución."
-    },
-    "process_steps": [
-        { "step_number": 1, "title": "Preparación", "description": "Detalle técnico..." },
-        { "step_number": 2, "title": "Ejecución", "description": "Detalle técnico..." },
-        { "step_number": 3, "title": "Acabados", "description": "Detalle técnico..." }
-    ],
-    "materials_section": {
-        "title": "Materiales que utilizamos",
-        "items": ["Material 1", "Material 2", "Herramienta especial"]
-    },
-    "final_cta": "Frase de cierre contundente para pedir presupuesto"
+  "hero": {
+    "h1": "{{h1}}",
+    "lead_text": "Descripción corta (2 líneas) atacando el dolor principal y ofreciendo solución inmediata en {{cityName}}."
+  },
+  "problem_agitation": {
+    "h2": "¿Problemas con {{serviceName}} en {{cityName}}?",
+    "content": "Describe los síntomas del problema usando estas frases: {{nlpPhrases}}. Haz que el usuario diga 'sí, eso me pasa'."
+  },
+  "solution_technical": {
+    "h2": "Nuestra Solución Profesional",
+    "content": "Explica cómo lo arreglas técnicamente pero fácil de entender."
+  },
+  "process_steps": [
+    { "step_number": 1, "title": "Inspección", "description": "..." },
+    { "step_number": 2, "title": "Ejecución", "description": "..." },
+    { "step_number": 3, "title": "Limpieza y Entrega", "description": "..." }
+  ],
+  "materials_section": {
+    "title": "Materiales / Herramientas que usamos",
+    "items": ["Material 1", "Herramienta 2"]
+  },
+  "meta": {
+    "title": "Título SEO para {{serviceName}}",
+    "description": "Meta descripción optimizada para CTR."
+  },
+  "final_cta": "Frase final para que llamen ya."
 }
