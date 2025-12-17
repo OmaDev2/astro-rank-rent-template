@@ -1,7 +1,7 @@
 import { fields, singleton } from '@keystatic/core';
 
 export const schema = singleton({
-    label: 'Schema.org (SEO Avanzado)',
+    label: '🔍 Schema.org (SEO Avanzado)',
     path: 'src/content/schema/global',
     schema: {
         priceRange: fields.text({

@@ -1,7 +1,7 @@
 import { fields, singleton } from '@keystatic/core';
 
 export const business = singleton({
-    label: 'Información del Negocio',
+    label: '🏢 Información del Negocio',
     path: 'src/content/business/global',
     schema: {
         siteName: fields.text({ label: 'Nombre del Negocio' }),

@@ -1,7 +1,7 @@
 import { fields, singleton } from '@keystatic/core';
 
 export const navigation = singleton({
-    label: 'Navegación (Menú)',
+    label: '🧭 Navegación (Menú)',
     path: 'src/content/navigation/main',
     format: 'json',
     schema: {

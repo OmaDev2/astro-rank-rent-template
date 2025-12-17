@@ -2,7 +2,7 @@ import { collection, fields } from '@keystatic/core';
 import { FileText, Image, MousePointer2, AlertTriangle } from 'lucide-react';
 
 export const blog = collection({
-    label: 'Blog',
+    label: '📰 Blog',
     slugField: 'title',
     path: 'src/content/blog/*',
     entryLayout: 'content',

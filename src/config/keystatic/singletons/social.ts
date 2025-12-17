@@ -1,7 +1,7 @@
 import { fields, singleton } from '@keystatic/core';
 
 export const social = singleton({
-    label: 'Redes Sociales',
+    label: '🌐 Redes Sociales',
     path: 'src/content/social/global',
     schema: {
         facebook: fields.text({

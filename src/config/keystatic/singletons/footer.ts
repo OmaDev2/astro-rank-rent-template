@@ -1,7 +1,7 @@
 import { fields, singleton } from '@keystatic/core';
 
 export const footer = singleton({
-    label: 'Pie de Página (Footer)',
+    label: '🦶 Pie de Página (Footer)',
     path: 'src/content/footer/main',
     format: 'json',
     schema: {

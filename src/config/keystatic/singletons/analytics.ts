@@ -1,7 +1,7 @@
 import { fields, singleton } from '@keystatic/core';
 
 export const analytics = singleton({
-    label: 'Analytics y Tracking',
+    label: '📊 Analytics y Tracking',
     path: 'src/content/analytics/global',
     schema: {
         googleAnalyticsId: fields.text({
