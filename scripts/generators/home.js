@@ -83,44 +83,7 @@ export async function generateHome({
     }
 
     const homeMdx = `---
-hero:
-  heading: ${escapeYaml(homeData.hero_section?.h1)}
-  subheading: >-
-    ${indentYaml(homeData.hero_section?.subheadline)}
-servicesSection:
-  title: ${plan.niche.charAt(0).toUpperCase() + plan.niche.slice(1)}
-  titleHighlight: en ${cityName}
-  subtitle: >-
-    ${indentYaml(homeData.services_grid_intro || "Soluciones profesionales a medida.")}
-aboutSection:
-  title: ${escapeYaml(homeData.intro_content?.title)}
-  description: >-
-    ${indentYaml(homeData.intro_content?.paragraphs?.join('\n\n') || "")}
-  yearsExperience: "15+"
-  image: "/images/home/hero-placeholder.jpg"
-  features:
-${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f => `    - title: ${escapeYaml(f.title)}\n      description: ${escapeYaml(f.desc)}`).join('\n')}
-  buttonText: "Solicitar Visita Técnica"
-  buttonLink: "/contacto"
-features:
-${(Array.isArray(homeData.features) ? homeData.features : []).map(f => `  - title: ${escapeYaml(f.title)}\n    description: ${escapeYaml(f.description)}`).join('\n')}
-servicesList:
-${finalServicesList.map(s => `  - title: ${escapeYaml(s.title)}\n    description: ${escapeYaml(s.description)}`).join('\n')}
-process:
-  title: ${escapeYaml(homeData.process?.title || "Nuestro Proceso")}
-  description: ${escapeYaml(homeData.process?.description || "")}
-  steps:
-${(Array.isArray(homeData.process?.steps) ? homeData.process?.steps : []).map(s => `    - title: ${escapeYaml(s.title)}\n      description: ${escapeYaml(s.description)}`).join('\n')}
-testimonials:
-${(Array.isArray(testimonialsData?.testimonials) ? testimonialsData.testimonials : []).map(t => `  - quote: ${escapeYaml(t.quote)}\n    author: "${t.author}"\n    location: "${t.location}"\n    initials: "${t.initials}"`).join('\n')}
-seoContentTitle: "Expertos en ${plan.niche}"
-faq:
-${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${q.answer}`).join('\n')}
-contactSection:
-  title: "Contacta con Nosotros"
-  subtitle: >-
-    ${indentYaml(homeData.local_closing || "Presupuesto sin compromiso.")}
-paddingTop: false
+
 stickyPhone: true
 blocks:
   - discriminant: "hero"
@@ -128,24 +91,24 @@ blocks:
       heading: ${escapeYaml(homeData.hero_section?.h1)}
       headingHighlight: en ${cityName}
       subheading: >-
-        ${indentYaml(homeData.hero_section?.subheadline)}
+        ${indentYaml(homeData.hero_section?.subheadline, 8)}
 ${isOnePage ? `  - discriminant: "services_list"
     value:
       title: ${escapeYaml(homeData.servicesSection?.title || plan.niche)}
       subtitle: >-
-        ${indentYaml(homeData.servicesSection?.subtitle || "Soluciones profesionales a medida.")}
+        ${indentYaml(homeData.servicesSection?.subtitle || "Soluciones profesionales a medida.", 8)}
       items:
 ${finalServicesList.map(s => `        - title: ${escapeYaml(s.title)}\n          description: ${escapeYaml(s.description)}\n          icon: "${s.icon_suggestion || 'Hammer'}"`).join('\n')}` : `  - discriminant: "services_grid"
     value:
       title: ${escapeYaml(homeData.servicesSection?.title || plan.niche)}
       titleHighlight: en ${cityName}
       subtitle: >-
-        ${indentYaml(homeData.services_grid_intro || "Soluciones profesionales a medida.")}`}
+        ${indentYaml(homeData.services_grid_intro || "Soluciones profesionales a medida.", 8)}`}
   - discriminant: "about"
     value:
       title: ${escapeYaml(homeData.intro_content?.title)}
       description: >-
-        ${indentYaml(homeData.intro_content?.paragraphs?.join('\n\n') || "")}
+        ${indentYaml(homeData.intro_content?.paragraphs?.join('\n\n') || "", 8)}
       yearsExperience: "15+"
       features:
 ${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.desc)}`).join('\n')}
@@ -155,7 +118,7 @@ ${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f 
   - discriminant: "process"
     value:
       title: ${escapeYaml(homeData.process?.title || "Nuestro Proceso")}
-      description: ${escapeYaml(homeData.process?.description || "")}
+
       steps:
 ${(Array.isArray(homeData.process?.steps) ? homeData.process?.steps : []).map(s => `        - title: ${escapeYaml(s.title)}\n          description: ${escapeYaml(s.description)}`).join('\n')}
   - discriminant: "testimonials"
@@ -163,12 +126,12 @@ ${(Array.isArray(homeData.process?.steps) ? homeData.process?.steps : []).map(s 
 ${(Array.isArray(testimonialsData?.testimonials) ? testimonialsData.testimonials : []).map(t => `      - quote: ${escapeYaml(t.quote)}\n        author: "${t.author}"\n        location: "${t.location}"\n        initials: "${t.initials}"`).join('\n')}
   - discriminant: "faq"
     value:
-${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `      - question: ${escapeYaml(q.question)}\n        answer: >-\n          ${q.answer}`).join('\n')}
+${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `      - question: ${escapeYaml(q.question)}\n        answer: >-\n          ${indentYaml(q.answer, 10)}`).join('\n')}
   - discriminant: "contact"
     value:
       title: "Contacta con Nosotros"
       subtitle: >-
-        ${indentYaml(homeData.local_closing || "Presupuesto sin compromiso.")}
+        ${indentYaml(homeData.local_closing || "Presupuesto sin compromiso.", 8)}
   - discriminant: "cta"
     value:
       title: "¿Necesitas ayuda profesional?"

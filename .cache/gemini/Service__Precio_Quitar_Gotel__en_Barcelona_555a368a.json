@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "title": "Precio Quitar Gotelé Barcelona | Presupuesto sin Sorpresas",
+    "description": "¿Quieres saber cuánto cuesta quitar el gotelé y alisar paredes en Barcelona? Te damos un precio por m2 cerrado. Presupuestos honestos para un acabado perfecto."
+  },
+  "hero": {
+    "h1": "Precio para Quitar Gotelé en Barcelona: Claro y al Grano",
+    "lead_text": "Soy artesano, no comercial. Te doy un presupuesto cerrado para quitar el gotelé y alisar tus paredes. Sin sorpresas, sin letra pequeña. Trabajo bien hecho, a la primera.",
+    "icon_suggestion": "PaintRoller"
+  },
+  "problem_agitation": {
+    "h2": "¿Harto del gotelé que envejece tu piso en Barcelona?",
+    "content": "Seguro que piensas 'mis paredes parecen de la casa de mi abuela' o que 'el gotelé solo acumula polvo y oscurece el piso'. En Barcelona, con la humedad del Mediterráneo, un gotelé de mala calidad acaba siendo un problema. Sobre todo en pisos antiguos del Eixample o Gràcia, donde las paredes necesitan respirar."
+  },
+  "solution_technical": {
+    "h2": "Paredes Lisas que Aguantan el Clima de Aquí",
+    "content": "No todos los gotelés son iguales. Primero miro si es al temple o plástico. Luego, aplico una pasta de renovación de alta carga, a veces con fibra de vidrio, que aguanta las pequeñas dilataciones de los edificios y la humedad costera. No es la pasta para quitar gotelé más barata, pero es la que evita fisuras en dos años. El lijado final, con aspiración, deja un polvo mínimo."
+  },
+  "why_us_bullets": [
+    {
+      "title": "Experiencia Local",
+      "desc": "Conozco los edificios de Barcelona, desde Sarrià a Poblenou. Sé qué problemas dan las paredes en cada zona y cómo solucionarlos de raíz.",
+      "icon_suggestion": "MapPin"
+    },
+    {
+      "title": "Garantía por Escrito",
+      "desc": "Mi trabajo está garantizado. Si aparece una fisura por un mal alisado, vuelvo y la arreglo sin coste. Tu tranquilidad es mi mejor publicidad.",
+      "icon_suggestion": "ShieldCheck"
+    },
+    {
+      "title": "Presupuesto Cerrado",
+      "desc": "El precio de quitar el gotelé que te doy es el que pagas. Mido los metros, valoro el estado de la pared y te doy un coste final. Sin sustos.",
+      "icon_suggestion": "FileText"
+    }
+  ],
+  "process_steps": [
+    {
+      "step_number": 1,
+      "title": "Visita y presupuesto claro",
+      "description": "Voy a tu piso, mido las paredes, veo el tipo de gotelé y te doy en persona un presupuesto detallado y cerrado. Sin compromiso."
+    },
+    {
+      "step_number": 2,
+      "title": "Protección y alisado",
+      "description": "Cubrimos todo tu mobiliario y suelos con cuidado. Empezamos el proceso de rascado o cubrimiento y aplicamos las capas de plaste necesarias."
+    },
+    {
+      "step_number": 3,
+      "title": "Lijado, imprimación y fin",
+      "description": "Lijamos las paredes con máquinas especiales con aspirador para generar el mínimo polvo. Damos una capa de imprimación y dejamos todo listo para pintar."
+    }
+  ],
+  "materials_section": {
+    "title": "No me la juego con los materiales",
+    "items": [
+      "Plastes de renovación con fibra de vidrio",
+      "Lijadoras orbitales con aspiración",
+      "Imprimación selladora anti-humedad",
+      "Pinturas de alta calidad si lo necesitas"
+    ]
+  },
+  "final_cta": "Deja de buscar 'quitar gotelé paredes precio' y habla con un profesional. Llámame y te daré un presupuesto honesto para tu piso en Barcelona."
+}

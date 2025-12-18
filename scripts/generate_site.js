@@ -12,6 +12,7 @@ import { generateHome } from './generators/home.js';
 import { generateServices } from './generators/services.js';
 import { generateBlog } from './generators/blog.js';
 import { generateLocations } from './generators/locations.js';
+import { generateNavigation } from './generators/navigation.js';
 
 dotenv.config();
 
@@ -195,6 +196,7 @@ async function main() {
     await generateServices(generatorContext);
     await generateBlog(generatorContext);
     await generateLocations(generatorContext);
+    await generateNavigation(generatorContext);
 
     console.log("\n✅ PROCESO COMPLETADO CON ÉXITO.");
 }

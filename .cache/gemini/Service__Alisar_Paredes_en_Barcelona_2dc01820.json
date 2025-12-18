@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "Alisar Paredes en Barcelona | Presupuesto Sin Compromiso",
+    "description": "Expertos en alisado de paredes en Barcelona. Acabados perfectos y sin polvo. Pide tu presupuesto online y conoce el precio por m2. ¡Adiós gotelé!"
+  },
+  "hero": {
+    "h1": "Alisado de Paredes en Barcelona: El Adiós Definitivo al Gotelé",
+    "lead_text": "Dejamos tus paredes lisas como un espejo, sin polvo y sin chapuzas. Un trabajo bien hecho, para que te olvides del gotelé para siempre.",
+    "icon_suggestion": "Brush"
+  },
+  "problem_agitation": {
+    "h2": "¿Harto del Gotelé? Entendemos tu Lucha en Barcelona",
+    "content": "Te suena eso de '¿alguien en Barcelona que quite gotelé, pero bien hecho, eh?'. Lo escuchamos a diario. Ves ese trozo que saltó al intentar quitarlo tú mismo y te entra el pánico. O peor, el miedo a que te dejen la casa hecha un desastre, que es lo más importante.\n\nLa humedad de Barcelona, sobre todo cerca del mar desde Poblenou a la Barceloneta, no perdona un mal plastecido. Buscas un presupuesto, claro, pero sobre todo buscas un profesional que sepa lo que hace y te dé tranquilidad. Estás en el sitio correcto."
+  },
+  "solution_technical": {
+    "h2": "Nuestro Método: Paredes Lisas que Duran de Verdad",
+    "content": "Aquí no hay trucos, solo oficio y buen material. Primero, protegemos tu piso como si fuera nuestro, mueble por mueble. Después, aplicamos las capas de plaste de renovación que hagan falta, usando masillas de alta adherencia y flexibilidad, especiales para aguantar sin fisuras.\n\nEl lijado es la clave. Lo hacemos con máquinas jirafa con aspiración industrial para minimizar el polvo al máximo. El resultado es una superficie perfectamente lisa y uniforme, lista para pintar y durar años."
+  },
+  "why_us_bullets": [
+    {
+      "title": "Experiencia Local",
+      "desc": "Conocemos las fincas del Eixample y las casas de Gràcia. Sabemos cómo tratar cada pared según su época y su estado. No es lo mismo un piso en Sarrià que uno en Sants.",
+      "icon_suggestion": "MapPin"
+    },
+    {
+      "title": "Limpieza Garantizada",
+      "desc": "Tu mayor miedo es el desastre. Nuestro compromiso es dejar tu casa limpia y ordenada al final de cada jornada. Sin excusas.",
+      "icon_suggestion": "Sparkles"
+    },
+    {
+      "title": "Presupuesto Cerrado",
+      "desc": "Te damos un presupuesto para alisar paredes claro y sin compromiso. El precio por m2 que acordamos es el que pagas, sin sorpresas de última hora.",
+      "icon_suggestion": "FileText"
+    }
+  ],
+  "process_steps": [
+    {
+      "step_number": 1,
+      "title": "Protección y Preparación",
+      "description": "Tapamos suelos, muebles y marcos con cuidado milimétrico. Saneamos la pared, rascando las partes sueltas para asegurar un agarre perfecto."
+    },
+    {
+      "step_number": 2,
+      "title": "Aplicación y Alisado",
+      "description": "Damos las manos de plaste necesarias, respetando los tiempos de secado entre capa y capa. Es la única forma de que no salgan grietas."
+    },
+    {
+      "step_number": 3,
+      "title": "Lijado Fino y Acabado",
+      "description": "Lijamos la superficie con maquinaria profesional y la dejamos lista para la imprimación y la pintura. Revisamos cada centímetro contigo antes de irnos."
+    }
+  ],
+  "materials_section": {
+    "title": "No Escatimamos en Material",
+    "items": [
+      "Plastes de renovación de alta carga",
+      "Lijadoras orbitales con aspirador",
+      "Imprimación selladora de calidad"
+    ]
+  },
+  "final_cta": "Deja de pelearte con el gotelé. Pide tu presupuesto para alisar paredes en Barcelona y respira tranquilo. Llámanos o rellena el formulario."
+}

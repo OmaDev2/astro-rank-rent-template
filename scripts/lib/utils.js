@@ -29,7 +29,7 @@ export const escapeYaml = (str) => str ? `"${str.replace(/"/g, '\\"')}"` : '""';
 /**
  * Indents strings for multi-line YAML values.
  */
-export const indentYaml = (str) => str ? str.replace(/\n/g, '\n    ') : '';
+export const indentYaml = (str, spaces = 4) => str ? str.replace(/\n/g, '\n' + ' '.repeat(spaces)) : '';
 
 /**
  * Generic prompt loader.

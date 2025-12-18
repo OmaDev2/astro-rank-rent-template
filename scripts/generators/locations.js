@@ -27,8 +27,8 @@ export async function generateLocations({
     cityContextData,
     generateData
 }) {
-    if (!plan.generate_locations) {
-        console.log(`\n🌍 Saltando generación de zonas (Desactivado en configuración).`);
+    if (!plan.generate_locations || !plan.locations || plan.locations.length === 0) {
+        console.log(`\n🌍 Saltando generación de zonas (Desactivado o sin datos en configuración).`);
         return;
     }
 

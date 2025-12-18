@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "Alisar Paredes Barcelona | Expertos en Quitar Gotelé",
+    "description": "¿Cansado del gotelé? Alisamos las paredes de tu piso en Barcelona con un acabado perfecto y duradero. Presupuestos cerrados. ¡Llama ahora!"
+  },
+  "hero": {
+    "h1": "Alisamos Tus Paredes en Barcelona",
+    "lead_text": "Se acabó el sufrir por un gotelé que se cae a cachos. Somos los artesanos que buscas en Barcelona para dejar tus paredes lisas de verdad, sin chapuzas ni sorpresas.",
+    "icon_suggestion": "PaintRoller"
+  },
+  "problem_agitation": {
+    "h2": "¿Harto de las paredes con gotelé en tu piso de Barcelona?",
+    "content": "Sabemos lo que piensas: 'Estoy hasta el gorro del gotelé, ¿quién me lo quita en Barcelona a buen precio?'. Lees foros buscando a 'alguien fiable' porque ya has tenido malas experiencias con manitas que no cumplen. Ves cómo se te rompen trozos de pared al intentarlo tú mismo y te preguntas '¿cuánto cuesta quitar el gotelé en un piso pequeño en Barcelona?'. Quieres unas paredes 'lisitas, lisitas' sin morir en el intento, sobre todo en pisos antiguos del Eixample o Gràcia donde las paredes tienen su historia. Nosotros te entendemos."
+  },
+  "solution_technical": {
+    "h2": "Mi método: Paredes Lisas que Aguantan",
+    "content": "No hay un único secreto, es hacer las cosas bien. Primero, protegemos tu casa como si fuera la nuestra. Luego, según el tipo de gotelé, lo humedecemos y retiramos o lo cubrimos directamente. Usamos emplastes de renovación de alta calidad, que son más elásticos y aguantan mejor las pequeñas dilataciones de los edificios de Barcelona, evitando fisuras. Damos las capas que hagan falta, lijando entre ellas con máquinas con aspiración para no llenártelo todo de polvo. El resultado es una pared que no solo parece lisa, sino que lo está. Fuerte y preparada para pintar."
+  },
+  "why_us_bullets": [
+    {
+      "title": "Artesanos de Barcelona",
+      "desc": "Conocemos los pisos de la ciudad, desde Sants a Sant Andreu. Sabemos cómo tratar las paredes que sufren la humedad del mar y las de interior. Somos de aquí.",
+      "icon_suggestion": "MapPin"
+    },
+    {
+      "title": "Garantía de Palabra",
+      "desc": "Mi trabajo es mi firma. Si algo no queda perfecto, vuelvo y lo arreglo sin excusas. Tu tranquilidad es lo primero.",
+      "icon_suggestion": "ShieldCheck"
+    },
+    {
+      "title": "Presupuesto Claro y Justo",
+      "desc": "Te doy un precio cerrado antes de empezar. Sin sorpresas ni extras de última hora. Lo que acordamos es lo que pagas.",
+      "icon_suggestion": "Wallet"
+    }
+  ],
+  "process_steps": [
+    {
+      "step_number": 1,
+      "title": "Visita y Presupuesto Cerrado",
+      "description": "Voy a tu casa, veo las paredes, mido y te doy un presupuesto detallado y sin compromiso. Te explico el proceso para tu caso concreto."
+    },
+    {
+      "step_number": 2,
+      "title": "Protección y Alisado a Conciencia",
+      "description": "El día que empezamos, tapamos todo. Suelos, muebles, puertas... Después, nos ponemos manos a la obra con el emplaste, capa a capa, hasta conseguir la base perfecta."
+    },
+    {
+      "step_number": 3,
+      "title": "Lijado Final y Limpieza",
+      "description": "El toque final es un lijado fino para un acabado impecable. Dejamos la pared lista para pintar y recogemos todo, dejándolo tan limpio como lo encontramos."
+    }
+  ],
+  "materials_section": {
+    "title": "Solo trabajamos con material de primera",
+    "items": [
+      "Emplastes de renovación flexibles",
+      "Lijadoras orbitales con aspiración",
+      "Imprimaciones selladoras de alta adherencia"
+    ]
+  },
+  "final_cta": "Ese gotelé no se va a quitar solo. Llámame, cuéntame tu caso y te doy un presupuesto sin compromiso para alisar las paredes de tu casa en Barcelona."
+}

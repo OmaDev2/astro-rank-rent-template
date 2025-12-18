@@ -2,18 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import { Shield } from "lucide-react";
-import { getEntry } from "astro:content";
+import { getSettings } from "../lib/settings";
 
 // Fetch Global Settings
-const business = await getEntry("business", "global");
-const { siteName, city, niche, email, address, nif } = business?.data || {
-    siteName: "Nombre Negocio",
-    city: "Ciudad",
-    niche: "Servicio",
-    email: "email@ejemplo.com",
-    address: "Dirección Ejemplo",
-    nif: "00000000X",
-};
+const { siteName, city, niche, email, address, nif, siteUrl } =
+    await getSettings();
 ---
 
 <Layout
@@ -106,11 +99,9 @@ const { siteName, city, niche, email, address, nif } = business?.data || {
                             </ul>
                             <p class="text-body leading-relaxed mt-4">
                                 <strong class="text-primary">Importante:</strong
-                                >
-                                Los datos proporcionados serán compartidos con profesionales
-                                del sector de {niche.toLowerCase()}
-                                para que puedan contactar con el usuario y ofrecer
-                                sus servicios.
+                                > Los datos proporcionados serán compartidos con profesionales
+                                del sector de {niche.toLowerCase()} para que puedan
+                                contactar con el usuario y ofrecer sus servicios.
                             </p>
                         </section>
 
@@ -152,8 +143,7 @@ const { siteName, city, niche, email, address, nif } = business?.data || {
                                 La base legal para el tratamiento de sus datos
                                 es el <strong class="text-heading"
                                     >consentimiento del interesado</strong
-                                >
-                                (art. 6.1.a RGPD), otorgado mediante el envío del
+                                > (art. 6.1.a RGPD), otorgado mediante el envío del
                                 formulario de contacto.
                             </p>
                         </section>
@@ -176,8 +166,8 @@ const { siteName, city, niche, email, address, nif } = business?.data || {
                                     <li>
                                         Profesionales del sector de {
                                             niche.toLowerCase()
-                                        } en {city}
-                                        que puedan prestar el servicio solicitado
+                                        } en {city} que puedan prestar el servicio
+                                        solicitado
                                     </li>
                                     <li>
                                         Proveedores de servicios tecnológicos
@@ -303,6 +293,5 @@ const { siteName, city, niche, email, address, nif } = business?.data || {
             </div>
         </div>
     </section>
-
     <Footer />
 </Layout>

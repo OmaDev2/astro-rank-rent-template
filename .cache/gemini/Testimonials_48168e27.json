@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Tenía pánico de quitar el gotelé de mi piso en el Eixample, pensaba que sería un caos de polvo y que las paredes quedarían fatal. Pero el equipo fue increíblemente profesional. Protegieron todos los muebles y el suelo a la perfección. El alisado de las paredes es impecable, parecen de obra nueva. El resultado final con la pintura ha rejuvenecido todo el salón. ¡100% recomendables!",
+      "author": "Marta Puig",
+      "location": "Eixample, Barcelona",
+      "initials": "MP"
+    },
+    {
+      "quote": "Vivimos en un piso pequeño en Gràcia y necesitábamos un trabajo rápido y limpio. Contactamos con ellos y cumplieron con creces. El lijado con aspiración apenas generó polvo, algo que nos preocupaba mucho. Nos asesoraron con el color y ahora la habitación parece el doble de grande y luminosa. El cambio de tener las paredes lisas es brutal. Un trabajo muy eficiente.",
+      "author": "Javier Soler",
+      "location": "Gràcia, Barcelona",
+      "initials": "JS"
+    },
+    {
+      "quote": "Estábamos reformando nuestro loft en Poblenou y el gotelé era lo que más desentonaba. No solo lo quitaron, sino que repararon varias grietas que ni sabíamos que estaban ahí. La atención al detalle en los marcos de las puertas y enchufes fue máxima. Ahora las paredes están perfectamente lisas y el acabado es súper moderno. Ha sido la mejor inversión de la reforma.",
+      "author": "Carla Fernández",
+      "location": "Poblenou, Barcelona",
+      "initials": "CF"
+    }
+  ]
+}

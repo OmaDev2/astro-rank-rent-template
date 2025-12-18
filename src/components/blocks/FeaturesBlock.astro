@@ -1,13 +1,29 @@
 ---
 import DynamicIcon from "../DynamicIcon.astro";
 import { spin } from "../../utils/spintax";
+interface FeatureItem {
+    title: string;
+    desc?: string;
+    description?: string;
+    icon: string;
+}
+
+interface Props {
+    locationName?: string;
+    city?: string;
+    title?: string;
+    subtitle?: string;
+    items?: FeatureItem[];
+}
+
 const {
-    locationName: rawLocationName,
-    city: rawCity,
-    title: rawTitle,
-    subtitle: rawSubtitle,
-    items,
+    locationName: rawLocationName = "",
+    city: rawCity = "",
+    title: rawTitle = "",
+    subtitle: rawSubtitle = "",
+    items = [],
 } = Astro.props;
+
 const locationName = spin(rawLocationName);
 const city = spin(rawCity);
 
@@ -18,7 +34,7 @@ const subtitle = rawSubtitle
     ? spin(rawSubtitle)
     : `Conocemos perfectamente la zona de ${locationName} y sus necesidades específicas.`;
 
-const defaultItems = [
+const defaultItems: FeatureItem[] = [
     {
         title: "Cobertura Local",
         desc: `Llegamos rápido a ${locationName}. Conocemos todas las calles y códigos postales.`,
@@ -41,7 +57,7 @@ const defaultItems = [
     },
 ];
 
-const featuresToDisplay = items && items.length > 0 ? items : defaultItems;
+const featuresToDisplay = items.length > 0 ? items : defaultItems;
 ---
 
 <section class="py-20 bg-secondary border-t border-heading/10">
@@ -70,7 +86,7 @@ const featuresToDisplay = items && items.length > 0 ? items : defaultItems;
                             {spin(item.title)}
                         </h3>
                         <p class="text-body text-sm">
-                            {spin(item.desc || item.description)}
+                            {spin(item.desc || item.description || "")}
                         </p>
                     </div>
                 ))

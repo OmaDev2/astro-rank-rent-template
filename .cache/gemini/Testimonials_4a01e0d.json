@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "quote": "Teníamos un gotelé terrible de los años 80 en nuestro piso de Gràcia y no sabíamos por dónde empezar. Encontramos su servicio de 'Alisar Paredes en Barcelona' y fue la mejor decisión. El equipo fue súper profesional, protegieron todos los muebles y el resultado es increíble. Las paredes parecen nuevas, lisas y luminosas. ¡Adiós cuevas oscuras!",
+      "author": "Marta Puig",
+      "location": "Gràcia, Barcelona",
+      "initials": "MP"
+    },
+    {
+      "quote": "Contraté el servicio para quitar el gotelé de mi apartamento en el Eixample antes de ponerlo en alquiler. La diferencia es abismal. No solo se ve mucho más moderno y amplio, sino que creo que ha revalorizado la propiedad. Cumplieron los plazos y el presupuesto a la perfección. Muy recomendables.",
+      "author": "Javier Soler",
+      "location": "Eixample, Barcelona",
+      "initials": "JS"
+    },
+    {
+      "quote": "Lo que más nos preocupaba era el polvo y la suciedad, con dos niños pequeños en casa. El equipo fue excepcionalmente limpio y cuidadoso. El proceso de alisar las paredes fue más rápido de lo que esperábamos y el acabado es impecable. Nuestro salón en Les Corts parece otro. Un trabajo de 10.",
+      "author": "Carlos y Elena Vidal",
+      "location": "Les Corts, Barcelona",
+      "initials": "CV"
+    }
+  ]
+}

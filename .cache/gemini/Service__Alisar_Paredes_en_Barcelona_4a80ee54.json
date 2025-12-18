@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "title": "Alisar Paredes Gotelé en Barcelona | Acabados Perfectos",
+    "description": "Expertos en alisar paredes de gotelé en Barcelona. Acabados lisos garantizados, sin polvo y con presupuesto cerrado. Llámanos y renueva tu piso."
+  },
+  "hero": {
+    "h1": "Alisar Paredes en Barcelona",
+    "lead_text": "¿Cansado del gotelé en tu piso? Dejamos tus paredes lisas como un espejo. Un trabajo bien hecho, a la primera y sin sorpresas en el precio.",
+    "icon_suggestion": "PaintRoller"
+  },
+  "problem_agitation": {
+    "h2": "¿Por qué alisar paredes en Barcelona es un trabajo para expertos?",
+    "content": "Sabemos lo que piensas. El gotelé acumula polvo, roba luz y ha pasado de moda. Y en Barcelona, con la humedad del mar, los yesos antiguos de muchos pisos en el Eixample o Ciutat Vella se degradan y cualquier arreglo mal hecho acaba en grietas.\n\nNo te la juegues con una capa de masilla barata que solo tapa el problema un tiempo. Un mal alisado significa doble gasto y el doble de molestias."
+  },
+  "solution_technical": {
+    "h2": "Nuestro método: Paredes lisas que duran años",
+    "content": "No hay atajos para un trabajo bien hecho. Primero, protegemos cada rincón de tu casa como si fuera la nuestra. Después, según el estado del gotelé, lo rascamos o aplicamos directamente un plaste de renovación fibrado, de alta carga, que crea una base sólida y estable.\n\nAplicamos las capas que hagan falta, con su lijado y secado correspondiente, usando máquinas con aspiración para minimizar el polvo. El resultado es una pared perfectamente lisa, sellada y lista para pintar, que aguantará el paso del tiempo."
+  },
+  "why_us_bullets": [
+    {
+      "title": "Artesanos de Barcelona",
+      "desc": "Conocemos los edificios de la ciudad, desde Gràcia a Poblenou. Sabemos cómo trabajar las paredes de cada época y cada barrio.",
+      "icon_suggestion": "MapPin"
+    },
+    {
+      "title": "Garantía por escrito",
+      "desc": "Confiamos tanto en nuestro trabajo que te damos una garantía sobre el acabado. Si sale una fisura por nuestra aplicación, la reparamos sin coste.",
+      "icon_suggestion": "ShieldCheck"
+    },
+    {
+      "title": "Presupuesto Cerrado",
+      "desc": "Te damos un precio detallado y sin letra pequeña. Lo que acordamos es lo que pagas al final. Sin sorpresas de última hora.",
+      "icon_suggestion": "FileText"
+    }
+  ],
+  "process_steps": [
+    {
+      "step_number": 1,
+      "title": "Visita y presupuesto claro",
+      "description": "Vamos a tu piso, vemos el trabajo que hay que hacer y te damos un presupuesto cerrado en menos de 24 horas. Sin compromiso."
+    },
+    {
+      "step_number": 2,
+      "title": "Protección y alisado",
+      "description": "Tapamos todo a conciencia: suelos, muebles, puertas. Empezamos el proceso de alisado, aplicando las capas necesarias con profesionalidad."
+    },
+    {
+      "step_number": 3,
+      "title": "Lijado, imprimación y limpieza",
+      "description": "Dejamos la superficie perfecta con un lijado fino. Aplicamos una imprimación selladora y lo dejamos todo recogido y limpio."
+    }
+  ],
+  "materials_section": {
+    "title": "No escatimamos en material",
+    "items": [
+      "Plastes de renovación fibrados",
+      "Lijadoras orbitales con aspiración",
+      "Imprimaciones selladoras de alta adherencia",
+      "Cintas y protectores de calidad"
+    ]
+  },
+  "final_cta": "Deja de imaginar tus paredes lisas. Llámanos, pide tu presupuesto sin compromiso y empecemos a renovar tu casa en Barcelona."
+}

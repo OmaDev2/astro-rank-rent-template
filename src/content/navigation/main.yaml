@@ -1,0 +1,13 @@
+menuItems:
+  - label: "Inicio"
+    url: "/"
+    type: link
+  - label: "Servicios"
+    
+    type: services_dropdown
+  - label: "Blog"
+    url: "/blog/"
+    type: link
+  - label: "Contacto"
+    url: "/contacto/"
+    type: link

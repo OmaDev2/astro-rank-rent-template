@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "Quitar Gotelé Barcelona: Presupuesto para Alisar Paredes",
+    "description": "Cansado del gotelé? Pide tu presupuesto para quitar gotelé y alisar paredes en Barcelona. Precios cerrados, trabajo limpio y profesional. ¡Llámanos!"
+  },
+  "hero": {
+    "h1": "Quitar Gotelé en Barcelona: Presupuesto Rápido y sin Sorpresas",
+    "lead_text": "Sabemos que estás harto del gotelé. Te damos un precio cerrado para alisar tus paredes. Trabajo limpio, rápido y con garantía. Somos de aquí, de Barcelona.",
+    "icon_suggestion": "PaintRoller"
+  },
+  "problem_agitation": {
+    "h2": "¿Harto de las paredes con gotelé en tu piso de Barcelona?",
+    "content": "¿Estás hasta las narices del gotelé y buscas a alguien en Barcelona que trabaje rápido y bien? Lo hemos oído mil veces.\n\nVemos a diario cómo el gotelé se cae a cachos, sobre todo en pisos con años de Ciutat Vella o con la humedad cerca del mar en Poblenou. No eres el único que busca un profesional de verdad, no un 'manitas' que sea un desastre.\n\nQuieres saber 'cuánto suele costar quitar gotelé en Barcelona' y necesitas un precio razonable, sin chapuzas. Entendemos tu urgencia y tu necesidad de un trabajo bien hecho."
+  },
+  "solution_technical": {
+    "h2": "Nuestro Proceso para Dejar tus Paredes Lisas como un Espejo",
+    "content": "Primero, lo primero: protegemos tus muebles y suelos como si fueran nuestros. Aquí no se mancha nada.\n\nAplicamos varias capas de masilla de renovación de alta calidad, no cualquier plaste. Esto es clave para que la pared aguante el clima de Barcelona y no salgan grietas.\n\nEl lijado final lo hacemos con maquinaria con aspiración para minimizar el polvo. El resultado es una pared perfectamente lisa, lista para pintar a tu gusto."
+  },
+  "why_us_bullets": [
+    {
+      "title": "Rapidez Local",
+      "desc": "Estamos en Barcelona y nos movemos por toda la ciudad. Conocemos cada barrio, desde Sants a Sant Andreu, y llegamos rápido.",
+      "icon_suggestion": "Clock"
+    },
+    {
+      "title": "Garantía de Oficio",
+      "desc": "Somos profesionales con años de experiencia, no una subcontrata. Te garantizamos por escrito que el acabado será perfecto y duradero.",
+      "icon_suggestion": "Shield"
+    },
+    {
+      "title": "Precio Cerrado",
+      "desc": "El presupuesto para quitar gotelé que te damos incluye materiales y mano de obra. Sin sorpresas ni costes ocultos al final del trabajo.",
+      "icon_suggestion": "FileText"
+    }
+  ],
+  "process_steps": [
+    {
+      "step_number": 1,
+      "title": "Contacto y Presupuesto Gratuito",
+      "description": "Nos llamas o escribes. Visitamos tu piso en Barcelona para ver las paredes, medir y darte un presupuesto cerrado y gratuito en menos de 24 horas."
+    },
+    {
+      "step_number": 2,
+      "title": "Protección y Alisado",
+      "description": "Fijamos una fecha. Protegemos todo, rascamos las partes sueltas si es necesario y aplicamos las capas de plaste profesional hasta dejar la superficie lisa."
+    },
+    {
+      "step_number": 3,
+      "title": "Lijado, Limpieza y Acabado",
+      "description": "Lijamos las paredes con máquina para un acabado impecable, minimizando el polvo. Lo dejamos todo limpio y listo para que disfrutes de tu nuevo hogar."
+    }
+  ],
+  "materials_section": {
+    "title": "Solo Trabajamos con Materiales de Primera",
+    "items": [
+      "Plastes de renovación fibrados (anti-fisuras)",
+      "Lijadoras orbitales con aspiración ('jirafas')",
+      "Imprimación selladora para un agarre perfecto"
+    ]
+  },
+  "final_cta": "No dejes que el gotelé arruine tus paredes un día más. Pide tu presupuesto para alisar paredes en Barcelona ahora. Es gratis y sin compromiso."
+}

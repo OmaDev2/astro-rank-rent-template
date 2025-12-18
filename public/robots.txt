@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://herrerozaragoza.com/sitemap-index.xml

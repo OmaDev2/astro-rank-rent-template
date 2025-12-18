@@ -1,10 +1,9 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { loadPrompt, escapeYaml } from '../lib/utils.js';
+import { loadPrompt, escapeYaml, indentYaml } from '../lib/utils.js';
 import { injectInternalLinks } from '../content_processor.js';
-import { slugify } from '../../src/utils/slugify.js'; // Note: assuming slugify is available in JS as well or we use a local one.
-// Since we are in Node, let's use a local slugify or the one from src if it was JS.
-// Actually, I'll use a local one to avoid import issues.
+// Local slugify to avoid module resolution issues
+
 
 function localSlugify(text) {
   return text.toString().toLowerCase()
@@ -89,26 +88,25 @@ heroImage: "/images/services/default.jpg"
 featured: true
 seoTitle: ${escapeYaml(serviceData.meta?.title || serviceName)}
 seoDesc: ${escapeYaml(serviceData.meta?.description || "")}
-faq:
-${faqs.map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${indentYaml(q.answer)}`).join('\n')}
+
 blocks:
   - discriminant: "hero"
     value:
       title: ${escapeYaml(serviceData.hero?.h1 || serviceName)}
       subtitle: >-
-        ${indentYaml(serviceData.hero?.lead_text || "")}
+        ${indentYaml(serviceData.hero?.lead_text || "", 8)}
   - discriminant: "features"
     value:
       title: ${escapeYaml(serviceData.solution_technical?.h2 || "Por qué elegirnos")}
       items:
-${(serviceData.why_us_bullets || []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.desc)}\n          icon: "${f.icon_suggestion || 'CheckCircle'}"`).join('\n')}
+${(serviceData.why_us_bullets || []).map(f => `        - title: ${escapeYaml(f.title)}\n          desc: ${escapeYaml(f.desc)}\n          icon: "${f.icon_suggestion || 'CheckCircle'}"`).join('\n')}
   - discriminant: "content"
     value: {}
   - discriminant: "faq"
     value:
       title: "Preguntas Frecuentes en ${cityName}"
       faqs:
-${faqs.map(q => `        - question: ${escapeYaml(q.question)}\n          answer: >-\n            ${indentYaml(q.answer)}`).join('\n')}
+${faqs.map(q => `        - question: ${escapeYaml(q.question)}\n          answer: >-\n            ${indentYaml(q.answer, 12)}`).join('\n')}
   - discriminant: "cta"
     value:
       title: "¿Necesitas ${serviceName.toLowerCase()} en ${cityName}?"

@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "title": "Quitar Gotelé en Barcelona | Presupuesto Rápido y Sin Obras",
+    "description": "¿Harto del gotelé? Alisamos tus paredes en Barcelona con un acabado perfecto. Profesionales rápidos, limpios y a un precio razonable. Pide tu presupuesto."
+  },
+  "hero_section": {
+    "h1": "Adiós Gotelé, Hola Paredes Lisas en Barcelona",
+    "subheadline": "Transformamos tu piso con un alisado de paredes profesional. Rápido, sin sorpresas y con la limpieza como prioridad.",
+    "cta_primary": "Pedir Presupuesto Gratis",
+    "cta_secondary": "Ver nuestros acabados"
+  },
+  "intro_content": {
+    "title": "Sabemos que buscas a alguien en Barcelona que lo haga bien y a la primera",
+    "paragraphs": [
+      "Llevamos años recorriendo l'Eixample, Gràcia y Sarrià solucionando un problema común: el gotelé anticuado. Entendemos las particularidades de los pisos de Barcelona, desde la humedad cerca del mar que puede estropear un mal trabajo, hasta la necesidad de ser extremadamente cuidadosos en fincas antiguas. No somos una empresa de reformas más, somos los especialistas en alisado de paredes que tus vecinos recomendarían.",
+      "Nuestro compromiso es sencillo: un acabado perfecto que sirva de lienzo para tu hogar. Utilizamos técnicas depuradas para garantizar que el trabajo sea rápido, el polvo se mantenga al mínimo y el resultado final sea una pared completamente lisa, lista para pintar y durar años. Por eso garantizamos cada metro cuadrado que alisamos."
+    ]
+  },
+  "services_grid_intro": "Dejar tus paredes lisas es más que quitar un acabado antiguo, es ganar luz y modernidad.",
+  "why_us_bullets": [
+    {
+      "title": "Presupuestos Cerrados",
+      "desc": "Te preguntas '¿cuánto suele costar?' Con nosotros, el precio que te damos es el que pagas. Sin extras ni sorpresas.",
+      "icon_suggestion": "FileText"
+    },
+    {
+      "title": "Limpieza Garantizada",
+      "desc": "Sabemos que el polvo es tu mayor miedo. Protegemos todo y dejamos tu casa impecable al terminar.",
+      "icon_suggestion": "Sparkles"
+    },
+    {
+      "title": "Acabado Profesional",
+      "desc": "No somos 'manitas'. Somos especialistas en alisado. La diferencia se nota en cada esquina y en la durabilidad.",
+      "icon_suggestion": "Award"
+    }
+  ],
+  "features": [
+    {
+      "title": "Técnica de Alisado Eficiente",
+      "description": "Nuestro método minimiza el tiempo de obra en tu piso, para que recuperes tu espacio lo antes posible.",
+      "icon_suggestion": "Gauge"
+    },
+    {
+      "title": "Materiales de Primera Calidad",
+      "description": "Usamos solo las mejores masillas y plásticos, asegurando un acabado liso que resiste el paso del tiempo y la humedad de Barcelona.",
+      "icon_suggestion": "ShieldCheck"
+    },
+    {
+      "title": "Asesoramiento de Color",
+      "description": "Una vez lisas, te ayudamos a elegir el color perfecto para que tus paredes nuevas ganen en luminosidad y amplitud.",
+      "icon_suggestion": "Palette"
+    }
+  ],
+  "services_list": [],
+  "process": {
+    "title": "Nuestro Proceso: De Gotelé a Pared Lisa en 3 Pasos",
+    "description": "Un método claro y ordenado para que sepas qué esperar en todo momento.",
+    "steps": [
+      {
+        "title": "1. Visita y Presupuesto Detallado",
+        "description": "Vamos a tu piso en Barcelona, evaluamos el estado del gotelé, medimos y te entregamos un presupuesto cerrado y sin compromiso. Todo claro desde el principio."
+      },
+      {
+        "title": "2. Protección y Alisado",
+        "description": "El día acordado, nuestro equipo protege meticulosamente muebles, suelos y puertas. Luego, aplicamos nuestra técnica de alisado, capa por capa, hasta conseguir una superficie perfecta."
+      },
+      {
+        "title": "3. Lijado, Limpieza y Entrega",
+        "description": "Realizamos el lijado final con maquinaria con aspiración para reducir el polvo al máximo. Limpiamos toda la zona de trabajo y te entregamos tus nuevas paredes, listas para disfrutar."
+      }
+    ]
+  },
+  "local_closing": "Tanto si estás reformando un piso en Poblenou, modernizando tu casa en Les Corts o cansado del gotelé en Sant Andreu, nuestro equipo se desplaza por toda Barcelona y alrededores para ofrecerte la mejor solución en alisado de paredes. Ponte en contacto y hablemos de tu proyecto.",
+  "faq": [
+    {
+      "question": "¿Cuánto cuesta quitar el gotelé de un piso en Barcelona?",
+      "answer": "El precio varía según los metros cuadrados y el tipo de gotelé (al temple o plástico). Para darte un precio razonable y exacto, preferimos visitar tu piso y ofrecerte un presupuesto cerrado y gratuito. Así evitamos sorpresas."
+    },
+    {
+      "question": "Estoy harto del gotelé, ¿cuánto tiempo tardáis en quitarlo?",
+      "answer": "Depende del tamaño del piso, pero somos muy eficientes. Para una habitación estándar, el proceso completo de alisado y preparación para pintura puede llevar entre 2 y 4 días. Para un piso completo, lo planificamos para minimizar las molestias."
+    },
+    {
+      "question": "Se me está cayendo el gotelé a cachos, ¿se puede arreglar o hay que quitarlo todo?",
+      "answer": "Si el gotelé se está desprendiendo, suele ser síntoma de un problema mayor como humedad o mala adherencia. Lo más recomendable es quitarlo por completo para sanear la pared y asegurar un acabado duradero. Un parche rara vez es una buena solución a largo plazo."
+    },
+    {
+      "question": "¿Hacéis mucho polvo y suciedad?",
+      "answer": "Este es el principal miedo de nuestros clientes. Por eso, nuestro protocolo es muy estricto: cubrimos y sellamos todo antes de empezar y usamos lijadoras con sistema de aspiración. Al terminar, realizamos una limpieza a fondo. Nuestro objetivo es que solo notes el cambio en tus paredes, no en el resto de la casa."
+    }
+  ]
+}

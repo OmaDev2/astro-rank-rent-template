@@ -16,7 +16,7 @@ export async function generateBlog({
     userPainPoints,
     generateData
 }) {
-    const blogPosts = plan.blog || [];
+    const blogPosts = plan.blog_topics || [];
     if (blogPosts.length === 0) {
         console.log(`\n📰 No hay artículos de blog planificados.`);
         return;

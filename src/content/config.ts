@@ -44,14 +44,27 @@ const services = defineCollection({
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
-                z.object({ discriminant: z.literal('hero') }),
-                z.object({ discriminant: z.literal('features') }),
-                z.object({ discriminant: z.literal('content') }),
-                z.object({ discriminant: z.literal('faq') }),
-                z.object({ discriminant: z.literal('cta') }),
+                z.object({ discriminant: z.literal('hero'), value: z.any() }),
+                z.object({ discriminant: z.literal('features'), value: z.any() }),
+                z.object({ discriminant: z.literal('content'), value: z.any() }),
+                z.object({
+                    discriminant: z.literal('faq'),
+                    value: z.object({
+                        title: z.string().optional(),
+                        faqs: z.array(z.object({
+                            question: z.string(),
+                            answer: z.string(),
+                        }))
+                    })
+                }),
+                z.object({ discriminant: z.literal('cta'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper servicios antiguos sin este campo
-    }),
+        faq: z.array(z.object({
+            question: z.string(),
+            answer: z.string(),
+        })).optional(),
+    }).passthrough(),
 });
 
 const projects = defineCollection({
@@ -194,7 +207,19 @@ const pages = defineCollection({
         // Campos Adicionales
         seoContentTitle: z.string().optional(),
         stickyPhone: z.boolean().optional().default(true),
-    }),
+
+        // Legacy/Generator Fields
+        hero: z.any().optional(),
+        servicesSection: z.any().optional(),
+        aboutSection: z.any().optional(),
+        features: z.any().optional(),
+        servicesList: z.any().optional(),
+        process: z.any().optional(),
+        testimonials: z.any().optional(),
+        faq: z.any().optional(),
+        contactSection: z.any().optional(),
+        paddingTop: z.boolean().optional(),
+    }).passthrough(),
 });
 
 

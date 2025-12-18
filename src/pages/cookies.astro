@@ -2,14 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import { Cookie } from "lucide-react";
-import { getEntry } from "astro:content";
+import { getSettings } from "../lib/settings";
 
 // Fetch Global Settings
-const business = await getEntry("business", "global");
-const { siteName, email } = business?.data || {
-    siteName: "Herrero Zaragoza",
-    email: "info@ejemplo.com",
-};
+const { siteName, email } = await getSettings();
 ---
 
 <Layout
@@ -215,8 +211,8 @@ const { siteName, email } = business?.data || {
                                     <strong class="text-primary"
                                         >Importante:</strong
                                     > Si bloquea o elimina las cookies, es posible
-                                    que algunas funcionalidades del sitio web no
-                                    funcionen correctamente.
+                                    que algunas funcionalidades del sitio web no funcionen
+                                    correctamente.
                                 </p>
                             </div>
                         </section>
