@@ -22,8 +22,8 @@ import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 
 interface Props {
     blocks: Block[];
-    locationName: string;
-    locationType: "residencial" | "industrial" | "centro";
+    locationName?: string;
+    locationType?: "residencial" | "industrial" | "centro";
     zipCodes?: string[];
     heroImage?: string;
     phone?: string;

@@ -78,10 +78,15 @@ export const POST = async ({ request }) => {
         if (format === 'json') {
             // Limpieza básica de JSON si Gemini devuelve markdown blocks
             text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            return new Response(text, { status: 200, headers: { "Content-Type": "application/json" } });
+            try {
+                const jsonContent = JSON.parse(text);
+                return new Response(JSON.stringify({ content: jsonContent }), { status: 200, headers: { "Content-Type": "application/json" } });
+            } catch (err) {
+                return new Response(JSON.stringify({ content: text, warning: "JSON malformed" }), { status: 200, headers: { "Content-Type": "application/json" } });
+            }
         } else {
             text = text.replace(/^"|"$/g, '');
-            return new Response(JSON.stringify({ text }), { status: 200, headers: { "Content-Type": "application/json" } });
+            return new Response(JSON.stringify({ content: text }), { status: 200, headers: { "Content-Type": "application/json" } });
         }
 
     } catch (e) {

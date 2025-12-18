@@ -126,6 +126,7 @@ blocks:
   - discriminant: "hero"
     value:
       heading: ${escapeYaml(homeData.hero_section?.h1)}
+      headingHighlight: en ${cityName}
       subheading: >-
         ${indentYaml(homeData.hero_section?.subheadline)}
 ${isOnePage ? `  - discriminant: "services_list"
@@ -134,7 +135,7 @@ ${isOnePage ? `  - discriminant: "services_list"
       subtitle: >-
         ${indentYaml(homeData.servicesSection?.subtitle || "Soluciones profesionales a medida.")}
       items:
-${finalServicesList.map(s => `        - title: ${escapeYaml(s.title)}\n          description: ${escapeYaml(s.description)}`).join('\n')}` : `  - discriminant: "services"
+${finalServicesList.map(s => `        - title: ${escapeYaml(s.title)}\n          description: ${escapeYaml(s.description)}\n          icon: "${s.icon_suggestion || 'Hammer'}"`).join('\n')}` : `  - discriminant: "services_grid"
     value:
       title: ${escapeYaml(homeData.servicesSection?.title || plan.niche)}
       titleHighlight: en ${cityName}
@@ -145,12 +146,12 @@ ${finalServicesList.map(s => `        - title: ${escapeYaml(s.title)}\n         
       title: ${escapeYaml(homeData.intro_content?.title)}
       description: >-
         ${indentYaml(homeData.intro_content?.paragraphs?.join('\n\n') || "")}
+      yearsExperience: "15+"
+      features:
+${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.desc)}`).join('\n')}
   - discriminant: "features"
     value:
-      title: "Por qué elegir ${escapeYaml(plan.siteName || plan.niche)}"
-      subtitle: "Compromiso con la calidad y la satisfacción del cliente."
-      items:
-${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.desc)}`).join('\n')}
+${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f => `      - title: ${escapeYaml(f.title)}\n        description: ${escapeYaml(f.desc)}\n        icon: "${f.icon_suggestion || 'CheckCircle'}"`).join('\n')}
   - discriminant: "process"
     value:
       title: ${escapeYaml(homeData.process?.title || "Nuestro Proceso")}
@@ -159,12 +160,10 @@ ${(Array.isArray(homeData.why_us_bullets) ? homeData.why_us_bullets : []).map(f 
 ${(Array.isArray(homeData.process?.steps) ? homeData.process?.steps : []).map(s => `        - title: ${escapeYaml(s.title)}\n          description: ${escapeYaml(s.description)}`).join('\n')}
   - discriminant: "testimonials"
     value:
-      items:
-${(Array.isArray(testimonialsData?.testimonials) ? testimonialsData.testimonials : []).map(t => `        - quote: ${escapeYaml(t.quote)}\n          author: "${t.author}"\n          location: "${t.location}"\n          initials: "${t.initials}"`).join('\n')}
+${(Array.isArray(testimonialsData?.testimonials) ? testimonialsData.testimonials : []).map(t => `      - quote: ${escapeYaml(t.quote)}\n        author: "${t.author}"\n        location: "${t.location}"\n        initials: "${t.initials}"`).join('\n')}
   - discriminant: "faq"
     value:
-      items:
-${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `        - question: ${escapeYaml(q.question)}\n          answer: >-\n            ${q.answer}`).join('\n')}
+${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `      - question: ${escapeYaml(q.question)}\n        answer: >-\n          ${q.answer}`).join('\n')}
   - discriminant: "contact"
     value:
       title: "Contacta con Nosotros"
@@ -173,7 +172,7 @@ ${(Array.isArray(homeData.faq) ? homeData.faq : []).map(q => `        - question
   - discriminant: "cta"
     value:
       title: "¿Necesitas ayuda profesional?"
-      subtitle: "Llámanos ahora y obtén un presupuesto gratuito."
+      buttonText: "PEDIR PRESUPUESTO"
   - discriminant: "content"
     value:
       title: "Expertos en ${plan.niche}"

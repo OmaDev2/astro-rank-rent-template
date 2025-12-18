@@ -82,32 +82,33 @@ ${(serviceData.materials_section?.items || []).map(i => `- ${i}`).join('\n')}
 `;
 
       const mdx = `---
-title: "${serviceData.hero?.h1 || serviceName}"
-shortDesc: "${serviceData.hero?.lead_text?.slice(0, 100) || "Servicio profesional"}"
-icon: "Hammer"
+title: ${escapeYaml(serviceData.hero?.h1 || serviceName)}
+shortDesc: ${escapeYaml(serviceData.hero?.lead_text?.slice(0, 160) || "Servicio profesional")}
+icon: "${serviceData.hero?.icon_suggestion || 'Hammer'}"
 heroImage: "/images/services/default.jpg"
 featured: true
-seoTitle: "${serviceData.meta?.title || serviceName}"
-seoDesc: "${serviceData.meta?.description || ""}"
+seoTitle: ${escapeYaml(serviceData.meta?.title || serviceName)}
+seoDesc: ${escapeYaml(serviceData.meta?.description || "")}
 faq:
-${faqYaml.join('\n')}
+${faqs.map(q => `  - question: ${escapeYaml(q.question)}\n    answer: >-\n      ${indentYaml(q.answer)}`).join('\n')}
 blocks:
   - discriminant: "hero"
     value:
-      title: "${escapeYaml(serviceData.hero?.h1 || serviceName)}"
-      subtitle: "${escapeYaml(serviceData.hero?.lead_text || "")}"
+      title: ${escapeYaml(serviceData.hero?.h1 || serviceName)}
+      subtitle: >-
+        ${indentYaml(serviceData.hero?.lead_text || "")}
   - discriminant: "features"
     value:
-      title: "${escapeYaml(serviceData.solution_technical?.h2 || "Por qué elegirnos")}"
+      title: ${escapeYaml(serviceData.solution_technical?.h2 || "Por qué elegirnos")}
       items:
-${(serviceData.why_us_bullets || []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.desc)}`).join('\n')}
+${(serviceData.why_us_bullets || []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.desc)}\n          icon: "${f.icon_suggestion || 'CheckCircle'}"`).join('\n')}
   - discriminant: "content"
     value: {}
   - discriminant: "faq"
     value:
       title: "Preguntas Frecuentes en ${cityName}"
       faqs:
-${faqs.map(q => `        - question: "${escapeYaml(q.question)}"\n          answer: >-\n            ${indentYaml(q.answer)}`).join('\n')}
+${faqs.map(q => `        - question: ${escapeYaml(q.question)}\n          answer: >-\n            ${indentYaml(q.answer)}`).join('\n')}
   - discriminant: "cta"
     value:
       title: "¿Necesitas ${serviceName.toLowerCase()} en ${cityName}?"

@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { loadPrompt } from '../lib/utils.js';
+import { loadPrompt, escapeYaml } from '../lib/utils.js';
 
 function localSlugify(text) {
     return text.toString().toLowerCase()
@@ -95,10 +95,22 @@ seoTitle: "${data.seoTitle}"
 seoDesc: "${data.seoDesc}"
 blocks:
   - discriminant: "hero"
+    value:
+      title: ${escapeYaml(data.hero?.title || data.name)}
+      subtitle: ${escapeYaml(data.hero?.subtitle || "")}
   - discriminant: "features"
+    value:
+      items:
+${(data.features || []).map(f => `        - title: ${escapeYaml(f.title)}\n          description: ${escapeYaml(f.description)}\n          icon: "${f.icon || 'MapPin'}"`).join('\n')}
   - discriminant: "map"
+    value:
+      query: "${data.name}, ${cityName}"
   - discriminant: "content"
+    value:
+      title: "Servicio local en ${data.name}"
   - discriminant: "cta"
+    value:
+      title: "¿Vives en ${data.name}?"
 ---
 ${data.content}`;
 

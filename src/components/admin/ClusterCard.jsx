@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Trash2, Plus, MoveRight, ChevronDown, ChevronUp, Bot, FileText } from 'lucide-react';
 
-export default function ClusterCard({ cluster, index, allClusters, onUpdate, onDelete }) {
+export default function ClusterCard({ cluster, index, allClusters, onUpdate, onDelete, onRegenerateMeta }) {
     const [isExpanded, setIsExpanded] = useState(true);
     const [newKeyword, setNewKeyword] = useState('');
     const [selectedKeywords, setSelectedKeywords] = useState(new Set());
@@ -136,9 +136,18 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                         {/* Suggestions */}
                         {cluster.meta_suggestions && cluster.meta_suggestions.length > 0 && (
                             <div className="bg-slate-900 p-3 rounded-lg border border-slate-700">
-                                <label className="text-xs font-bold text-indigo-400 uppercase block mb-2 flex items-center gap-2">
-                                    <Bot className="w-3 h-3" /> Sugerencias IA
-                                </label>
+                                <div className="flex justify-between items-center mb-2">
+                                    <label className="text-xs font-bold text-indigo-400 uppercase flex items-center gap-2">
+                                        <Bot className="w-3 h-3" /> Sugerencias IA
+                                    </label>
+                                    <button
+                                        onClick={onRegenerateMeta}
+                                        className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/30 hover:bg-indigo-500/40 transition-colors"
+                                        title="Regenerar sugerencias basadas en las keywords actuales"
+                                    >
+                                        REGENERAR
+                                    </button>
+                                </div>
                                 <select
                                     className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-500"
                                     value={cluster.selected_suggestion || 0}

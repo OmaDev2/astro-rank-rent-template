@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import GeneratorApp from "../../components/admin/GeneratorApp.jsx";
+import AIContentAssistant from "../../components/admin/AIContentAssistant.jsx";
 // Protegemos la ruta para que no se indexe ni se suba a producción pública fácilmente
 if (import.meta.env.PROD) {
     // return Astro.redirect('/'); // Descomentar para proteger en prod
@@ -26,6 +27,10 @@ if (import.meta.env.PROD) {
             </header>
 
             <GeneratorApp client:only="react" />
+
+            <div class="mt-12 pt-12 border-t border-slate-800">
+                <AIContentAssistant client:only="react" />
+            </div>
         </div>
     </div>
 </Layout>

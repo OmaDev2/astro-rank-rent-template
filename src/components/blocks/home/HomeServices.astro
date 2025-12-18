@@ -1,5 +1,6 @@
 ---
-import { ArrowRight } from "lucide-react";
+import { ChevronRight, ArrowRight } from "lucide-react";
+import DynamicIcon from "../../DynamicIcon.astro";
 const {
     servicesSection,
     featuredServices,
@@ -60,6 +61,16 @@ const {
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
                         <div class="relative h-full flex flex-col justify-end p-8">
+                            <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <DynamicIcon
+                                    name={
+                                        service.data.icon ||
+                                        service.data.icon_suggestion ||
+                                        "CheckCircle"
+                                    }
+                                    className="w-6 h-6"
+                                />
+                            </div>
                             <h3 class="text-2xl font-heading font-bold text-heading mb-3">
                                 {service.data.title}
                             </h3>
@@ -68,7 +79,7 @@ const {
                             </p>
                             <div class="inline-flex items-center text-primary font-bold group-hover:text-accent">
                                 Leer más{" "}
-                                <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                                <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                             </div>
                         </div>
                     </a>

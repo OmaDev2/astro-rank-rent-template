@@ -508,6 +508,41 @@ export default function GeneratorApp() {
         }
     };
 
+    const handleRegenerateMeta = async (clusterIndex, type = 'SERVICE') => {
+        const cluster = type === 'SERVICE' ? researchData.services[clusterIndex] : researchData.blog[clusterIndex];
+        setSaving(true);
+        try {
+            const res = await fetch('/api/research', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'regenerate_meta',
+                    niche: formData.niche,
+                    city: formData.city,
+                    cluster_name: cluster.name,
+                    keywords: (cluster.keywords || []).map(k => k.keyword)
+                })
+            });
+            const result = await res.json();
+            if (result.success && result.data.meta_suggestions) {
+                const newData = { ...researchData };
+                if (type === 'SERVICE') {
+                    newData.services[clusterIndex].meta_suggestions = result.data.meta_suggestions;
+                    // Apply the first one as default if user hasn't edited much
+                    newData.services[clusterIndex].h1 = result.data.meta_suggestions[0].h1;
+                } else {
+                    newData.blog[clusterIndex].meta_suggestions = result.data.meta_suggestions;
+                    newData.blog[clusterIndex].h1 = result.data.meta_suggestions[0].h1;
+                }
+                setResearchData(newData);
+            }
+        } catch (err) {
+            console.error("Error regenerating meta:", err);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const Stepper = ({ currentStep }) => {
         const steps = [
             { id: 1, name: 'Location', key: 'input' },
@@ -657,7 +692,7 @@ export default function GeneratorApp() {
                             </div>
                             <textarea
                                 className="w-full h-64 bg-slate-900 border border-slate-700 rounded-lg py-4 px-4 focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-mono placeholder-slate-600"
-                                placeholder={`Ejemplo CSV:\nkeyword;volumen\nquitar gotele;500\nalisar paredes;300\n...`}
+                                placeholder={`Ejemplo CSV:\nkeyword;volumen\nalisar paredes;300\n...`}
                                 value={manualInput}
                                 onChange={e => setManualInput(e.target.value)}
                                 required
@@ -1090,15 +1125,16 @@ export default function GeneratorApp() {
                 </div>
 
                 {/* HOMEPAGE STRATEGY */}
-                <div className="bg-slate-900/80 p-6 rounded-xl border border-indigo-500/30">
-                    <h3 className="text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2">
-                        <Globe className="w-5 h-5" /> Estrategia Homepage
+                <div className="bg-slate-800/80 rounded-xl p-6 border border-slate-700 shadow-xl mb-8">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-6">
+                        <FileText className="w-5 h-5 text-indigo-400" /> Configuración de la Home
                     </h3>
-                    <div className="space-y-4">
+
+                    <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                            <label className="text-xs font-bold text-slate-500 uppercase block mb-1">H1 Principal</label>
+                            <label className="text-xs font-bold text-slate-500 uppercase block mb-1">H1 Principal (Home)</label>
                             <input
-                                className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white font-bold"
+                                className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white font-bold focus:border-indigo-500 outline-none"
                                 value={researchData.home_structure?.h1 || ''}
                                 onChange={(e) => {
                                     setResearchData({
@@ -1109,46 +1145,180 @@ export default function GeneratorApp() {
                             />
                         </div>
                         <div>
-                            <label className="text-xs font-bold text-slate-500 uppercase block mb-1">H2s (Secciones)</label>
-                            {researchData.home_structure?.h2s?.map((h2, idx) => (
-                                <div key={idx} className="flex gap-2 mb-2">
-                                    <input
-                                        className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-slate-300 text-sm"
-                                        value={h2}
-                                        onChange={(e) => {
-                                            const newH2s = [...researchData.home_structure.h2s];
-                                            newH2s[idx] = e.target.value;
-                                            setResearchData({
-                                                ...researchData,
-                                                home_structure: { ...researchData.home_structure, h2s: newH2s }
-                                            });
-                                        }}
-                                    />
+                            <label className="text-xs font-bold text-slate-500 uppercase block mb-1">H2s (Secciones de la Home)</label>
+                            <div className="space-y-2">
+                                {researchData.home_structure?.h2s?.map((h2, idx) => (
+                                    <div key={idx} className="flex gap-2">
+                                        <input
+                                            className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-slate-300 text-sm focus:border-indigo-500 outline-none"
+                                            value={h2}
+                                            onChange={(e) => {
+                                                const newH2s = [...researchData.home_structure.h2s];
+                                                newH2s[idx] = e.target.value;
+                                                setResearchData({
+                                                    ...researchData,
+                                                    home_structure: { ...researchData.home_structure, h2s: newH2s }
+                                                });
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => {
+                                                const newH2s = researchData.home_structure.h2s.filter((_, i) => i !== idx);
+                                                setResearchData({
+                                                    ...researchData,
+                                                    home_structure: { ...researchData.home_structure, h2s: newH2s }
+                                                });
+                                            }}
+                                            className="text-slate-500 hover:text-red-400 transition-colors"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={() => {
+                                        const newH2s = [...(researchData.home_structure?.h2s || []), "Nueva Sección"];
+                                        setResearchData({
+                                            ...researchData,
+                                            home_structure: { ...researchData.home_structure, h2s: newH2s }
+                                        });
+                                    }}
+                                    className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 mt-1 transition-colors"
+                                >
+                                    <Plus className="w-3 h-3" /> AÑADIR SECCIÓN
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 🧠 STRATEGY & CONTEXT EDITOR */}
+                <div className="bg-slate-800/80 rounded-xl p-6 border border-slate-700 shadow-xl mb-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                            <Zap className="w-5 h-5 text-yellow-400" /> Estrategia de Contenido & Contexto IA
+                        </h3>
+                        <span className="text-[10px] bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-2 py-0.5 rounded-full font-bold">
+                            MODO MEJORA MANUAL
+                        </span>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {/* Pain Points */}
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-xs font-bold text-slate-500 uppercase block mb-2 flex justify-between">
+                                    Pain Points (Dolores del Cliente)
+                                    <span className="text-indigo-400">¿Qué les preocupa?</span>
+                                </label>
+                                <div className="space-y-2">
+                                    {(richContext?.data?.painPoints || []).map((point, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-slate-300 text-xs focus:border-indigo-500 outline-none"
+                                                value={point}
+                                                onChange={(e) => {
+                                                    const newPoints = [...richContext.data.painPoints];
+                                                    newPoints[idx] = e.target.value;
+                                                    setRichContext({ ...richContext, data: { ...richContext.data, painPoints: newPoints } });
+                                                }}
+                                            />
+                                            <button onClick={() => {
+                                                const newPoints = richContext.data.painPoints.filter((_, i) => i !== idx);
+                                                setRichContext({ ...richContext, data: { ...richContext.data, painPoints: newPoints } });
+                                            }} className="text-slate-600 hover:text-red-400"><X className="w-3 h-3" /></button>
+                                        </div>
+                                    ))}
                                     <button
                                         onClick={() => {
-                                            const newH2s = researchData.home_structure.h2s.filter((_, i) => i !== idx);
-                                            setResearchData({
-                                                ...researchData,
-                                                home_structure: { ...researchData.home_structure, h2s: newH2s }
-                                            });
+                                            const newPoints = [...(richContext?.data?.painPoints || []), "Nuevo Pain Point"];
+                                            setRichContext({ ...richContext, data: { ...richContext.data, painPoints: newPoints } });
                                         }}
-                                        className="text-red-500 hover:text-red-400"
+                                        className="text-[10px] font-bold text-slate-500 hover:text-white flex items-center gap-1"
                                     >
-                                        <X className="w-4 h-4" />
+                                        <Plus className="w-3 h-3" /> AÑADIR PAIN POINT
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* NLP / User Intent */}
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-xs font-bold text-slate-500 uppercase block mb-2 flex justify-between">
+                                    NLP Phrases (Cómo hablan ellos)
+                                    <span className="text-green-400">Jerga real</span>
+                                </label>
+                                <div className="space-y-2">
+                                    {(richContext?.data?.nlpPhrases || []).map((phrase, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                className="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-slate-300 text-xs focus:border-green-500 outline-none font-mono"
+                                                value={phrase}
+                                                onChange={(e) => {
+                                                    const newPhrases = [...richContext.data.nlpPhrases];
+                                                    newPhrases[idx] = e.target.value;
+                                                    setRichContext({ ...richContext, data: { ...richContext.data, nlpPhrases: newPhrases } });
+                                                }}
+                                            />
+                                            <button onClick={() => {
+                                                const newPhrases = richContext.data.nlpPhrases.filter((_, i) => i !== idx);
+                                                setRichContext({ ...richContext, data: { ...richContext.data, nlpPhrases: newPhrases } });
+                                            }} className="text-slate-600 hover:text-red-400"><X className="w-3 h-3" /></button>
+                                        </div>
+                                    ))}
+                                    <button
+                                        onClick={() => {
+                                            const newPhrases = [...(richContext?.data?.nlpPhrases || []), "Nueva Frase NLP"];
+                                            setRichContext({ ...richContext, data: { ...richContext.data, nlpPhrases: newPhrases } });
+                                        }}
+                                        className="text-[10px] font-bold text-slate-500 hover:text-white flex items-center gap-1"
+                                    >
+                                        <Plus className="w-3 h-3" /> AÑADIR FRASE NLP
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-8 border-t border-slate-700/50 pt-6">
+                        <label className="text-xs font-bold text-slate-500 uppercase block mb-4">FAQs Base (Globales)</label>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            {(richContext?.data?.faq || []).map((faq, idx) => (
+                                <div key={idx} className="bg-slate-900/50 p-3 rounded border border-slate-700 space-y-2 group relative">
+                                    <input
+                                        className="w-full bg-transparent border-none text-white font-bold text-xs outline-none"
+                                        value={faq.question}
+                                        onChange={(e) => {
+                                            const newFaqs = [...richContext.data.faq];
+                                            newFaqs[idx].question = e.target.value;
+                                            setRichContext({ ...richContext, data: { ...richContext.data, faq: newFaqs } });
+                                        }}
+                                    />
+                                    <textarea
+                                        className="w-full bg-transparent border-none text-slate-400 text-[11px] outline-none h-16 resize-none"
+                                        value={faq.answer}
+                                        onChange={(e) => {
+                                            const newFaqs = [...richContext.data.faq];
+                                            newFaqs[idx].answer = e.target.value;
+                                            setRichContext({ ...richContext, data: { ...richContext.data, faq: newFaqs } });
+                                        }}
+                                    />
+                                    <button onClick={() => {
+                                        const newFaqs = richContext.data.faq.filter((_, i) => i !== idx);
+                                        setRichContext({ ...richContext, data: { ...richContext.data, faq: newFaqs } });
+                                    }} className="absolute top-2 right-2 text-slate-700 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><X className="w-4 h-4" /></button>
                                 </div>
                             ))}
                             <button
                                 onClick={() => {
-                                    const newH2s = [...(researchData.home_structure?.h2s || []), "Nuevo H2"];
-                                    setResearchData({
-                                        ...researchData,
-                                        home_structure: { ...researchData.home_structure, h2s: newH2s }
-                                    });
+                                    const newFaqs = [...(richContext?.data?.faq || []), { question: "Nueva Pregunta", answer: "Nueva Respuesta" }];
+                                    setRichContext({ ...richContext, data: { ...richContext.data, faq: newFaqs } });
                                 }}
-                                className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 mt-2"
+                                className="border border-dashed border-slate-700 rounded-lg p-4 text-slate-500 hover:text-indigo-400 hover:border-indigo-500/50 flex flex-col items-center justify-center gap-2 group transition-all"
                             >
-                                <Plus className="w-3 h-3" /> Añadir H2
+                                <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                                <span className="text-[10px] font-bold uppercase">Añadir FAQ Global</span>
                             </button>
                         </div>
                     </div>
@@ -1190,6 +1360,7 @@ export default function GeneratorApp() {
                                 setResearchData({ ...researchData, services: newServices });
                             }}
                             onDelete={(idxToDelete) => handleDeleteService(idxToDelete)}
+                            onRegenerateMeta={() => handleRegenerateMeta(i, 'SERVICE')}
                         />
                     ))}
                     {services.length === 0 && (
@@ -1235,6 +1406,7 @@ export default function GeneratorApp() {
                                 setResearchData({ ...researchData, blog: newBlog });
                             }}
                             onDelete={(idxToDelete) => handleDeleteBlog(idxToDelete)}
+                            onRegenerateMeta={() => handleRegenerateMeta(i, 'BLOG')}
                         />
                     ))}
                     {blog.length === 0 && (

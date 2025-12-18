@@ -1,5 +1,5 @@
 ---
-import { MapPin, Clock, Shield, Award } from "lucide-react";
+import DynamicIcon from "../DynamicIcon.astro";
 import { spin } from "../../utils/spintax";
 const {
     locationName: rawLocationName,
@@ -61,22 +61,10 @@ const featuresToDisplay = items && items.length > 0 ? items : defaultItems;
                 featuresToDisplay.map((item) => (
                     <div class="bg-surface/50 p-6 rounded-xl border border-heading/10 hover:border-primary/50 transition-all group">
                         <div class="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors">
-                            {item.icon === "MapPin" && (
-                                <MapPin className="w-7 h-7 text-primary" />
-                            )}
-                            {item.icon === "Clock" && (
-                                <Clock className="w-7 h-7 text-primary" />
-                            )}
-                            {item.icon === "Shield" && (
-                                <Shield className="w-7 h-7 text-primary" />
-                            )}
-                            {item.icon === "Award" && (
-                                <Award className="w-7 h-7 text-primary" />
-                            )}
-                            {/* Fallback for custom lucide icons if needed, but keeping it simple for now */}
-                            {!["MapPin", "Clock", "Shield", "Award"].includes(
-                                item.icon,
-                            ) && <Award className="w-7 h-7 text-primary" />}
+                            <DynamicIcon
+                                name={item.icon}
+                                className="w-7 h-7 text-primary"
+                            />
                         </div>
                         <h3 class="text-xl font-bold text-heading mb-3">
                             {spin(item.title)}

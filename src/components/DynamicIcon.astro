@@ -1,0 +1,18 @@
+---
+import * as Icons from "lucide-react";
+
+interface Props {
+    name: string;
+    className?: string;
+}
+
+const { name, className = "w-6 h-6" } = Astro.props;
+
+// Normalizar nombre (ej: "Hammer" o "hammer" -> "Hammer")
+const iconName = name
+    ? name.charAt(0).toUpperCase() + name.slice(1)
+    : "CheckCircle";
+const Icon = (Icons as any)[iconName] || Icons.CheckCircle;
+---
+
+<Icon className={className} />

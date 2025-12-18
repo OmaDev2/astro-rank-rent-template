@@ -1,5 +1,6 @@
 ---
 import { CheckCircle } from "lucide-react";
+import DynamicIcon from "../../DynamicIcon.astro";
 
 const { title, subtitle, services, bgClass = "bg-secondary" } = Astro.props;
 
@@ -58,7 +59,14 @@ if (!services || services.length === 0) return null;
                             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
                             <div class="mb-6 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <CheckCircle className="w-6 h-6" />
+                                <DynamicIcon
+                                    name={
+                                        service.icon ||
+                                        service.icon_suggestion ||
+                                        "CheckCircle"
+                                    }
+                                    className="w-6 h-6"
+                                />
                             </div>
 
                             <h3 class="text-2xl font-heading font-bold text-heading mb-4 group-hover:text-primary transition-colors">
