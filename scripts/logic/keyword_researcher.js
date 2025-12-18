@@ -934,9 +934,12 @@ export async function runGeminiClustering(keywords, niche, city, richContext = n
 
     let text = "";
     try {
+        console.log("🤖 Asking Gemini for Clustering...");
         const result = await model.generateContent(prompt);
         const response = await result.response;
         text = response.text();
+        console.log("🤖 Gemini Raw Response Length:", text.length);
+        console.log("🤖 Gemini Raw Response Preview:", text.substring(0, 500) + "...");
 
         // Limpieza robusta de JSON
         const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -946,15 +949,25 @@ export async function runGeminiClustering(keywords, niche, city, richContext = n
             const jsonStr = jsonMatch[0];
             try {
                 json = JSON.parse(jsonStr);
+                console.log("✅ JSON Parsed successfully via Regex Match");
             } catch (e) {
+                console.warn("⚠️ JSON Parse Error (First Attempt):", e.message);
                 // Fallback simple: a veces Gemini devuelve trailing commas
                 const cleaned = jsonStr.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
-                json = JSON.parse(cleaned);
+                try {
+                    json = JSON.parse(cleaned);
+                    console.log("✅ JSON Parsed via Cleaning");
+                } catch (e2) {
+                    console.error("❌ JSON Parse Serious Error:", e2);
+                    throw e2; // Trigger catch block below
+                }
             }
         } else {
+            console.warn("⚠️ No JSON block found via Regex. Attempting aggressive clean.");
             // Fallback a limpieza simple si no hay match de llaves
             const cleanText = text.replace(/```json/g, '').replace(/```/g, '').trim();
             json = JSON.parse(cleanText);
+            console.log("✅ JSON Parsed via Aggressive Clean");
         }
 
         // Función helper para enriquecer clusters
@@ -999,17 +1012,19 @@ export async function runGeminiClustering(keywords, niche, city, richContext = n
             });
         }
 
+        console.log("✅ Clustering Processing Complete. Returning data.");
         return finalResult;
     } catch (error) {
-        console.error("❌ Error parsing Gemini response:", error);
-        console.log("Response was:", text);
+        console.error("❌ Error running/parsing Gemini response:", error);
+        console.error("❌ RAW RESPONSE WAS:", text);
+
         // Fallback robusto devolviendo estructura vacía pero válida
         return {
             services: [{
                 name: `Servicios de ${niche}`,
                 slug: "servicios-generales",
                 intent: "COMMERCIAL",
-                keywords: keywords.map(k => k.keyword),
+                keywords: keywords.map(k => ({ keyword: k.keyword, volume: k.volume || 0, source: 'fallback' })),
                 faqs: richContext?.data?.faqs || [], // Fallback here too
                 meta_suggestions: [{
                     h1: `Empresa de ${niche} en ${city}`,

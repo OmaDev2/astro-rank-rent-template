@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X, FileText, Upload, Send, Play, ChevronDown, ChevronUp, RefreshCw, RotateCcw
+    Search, MapPin, Check, Loader2, Database, Globe, AlertTriangle, ArrowLeftRight, ChevronRight, Settings, List, Eye, Cloud, Bot, Trash2, Save, Plus, X, FileText, Upload, Send, Play, ChevronDown, ChevronUp, RefreshCw, RotateCcw, Zap
 } from 'lucide-react';
 import LocationAutocomplete from './LocationAutocomplete';
 import KeywordReviewTable from './KeywordReviewTable';
@@ -21,9 +21,14 @@ export default function GeneratorApp() {
         onePageMode: false, // NUEVO: Toggle para sitios de una sola página (Micro-Nicho)
         designStyle: 'industrial' // NUEVO: Estilo de diseño
     });
+
+
     const [manualMode, setManualMode] = useState(false);
     const [manualInput, setManualInput] = useState('');
     const [researchData, setResearchData] = useState(null);
+
+
+
     const [selectedCompetitors, setSelectedCompetitors] = useState(new Set());
     const [extractionOptions, setExtractionOptions] = useState({
         top10Only: true,  // ✅ Default to Top 10 Only (Phase 1 recommendation)
@@ -40,6 +45,7 @@ export default function GeneratorApp() {
 
     // --- FUNCIÓN DE RESET ---
     const handleReset = async () => {
+
         if (!confirm('⚠️ ¿Estás seguro de que quieres BORRAR TODO el proyecto? \n\nEsta acción eliminará:\n- Home Page\n- Todos los servicios\n- Blog y Zonas\n- El plan actual\n\nNo se puede deshacer.')) {
             return;
         }
@@ -343,7 +349,12 @@ export default function GeneratorApp() {
 
             setResearchData(prev => ({
                 ...prev,
-                services: data.services || [],
+                services: data.services?.map(s => ({
+                    ...s,
+                    keywords: Array.isArray(s.keywords)
+                        ? s.keywords.map(k => typeof k === 'string' ? { keyword: k, volume: 0, source: 'sanitized' } : k)
+                        : []
+                })) || [],
                 blog: data.blog || [],
                 clusters: [], // Deprecated but kept to avoid undefined errors if referenced elsewhere
                 home_structure: { h1: '', h2s: [] } // Inicializar estructura
@@ -1335,35 +1346,39 @@ export default function GeneratorApp() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
-                    {services.map((cluster, i) => (
-                        <ClusterCard
-                            key={`service-${i}`}
-                            index={i}
-                            cluster={{
-                                ...cluster,
-                                onMoveKeyword: (keywordToMove, fromClusterIdx, toClusterIdx) => {
-                                    if (confirm(`¿Mover "${keywordToMove.keyword}" al servicio "${services[toClusterIdx].name}"?`)) {
-                                        const newServices = [...researchData.services];
-                                        // Remove from source
-                                        newServices[fromClusterIdx].keywords = newServices[fromClusterIdx].keywords.filter(k => k.keyword !== keywordToMove.keyword);
-                                        // Add to target
-                                        if (!newServices[toClusterIdx].keywords) newServices[toClusterIdx].keywords = [];
-                                        newServices[toClusterIdx].keywords.push(keywordToMove);
-                                        setResearchData({ ...researchData, services: newServices });
+                    {(services || []).map((cluster, i) => (
+                        cluster ? (
+                            <ClusterCard
+                                key={`service-${i}`}
+                                index={i}
+                                cluster={{
+                                    ...cluster,
+                                    onMoveKeyword: (keywordToMove, fromClusterIdx, toClusterIdx) => {
+                                        if (confirm(`¿Mover "${keywordToMove.keyword}" al servicio "${services[toClusterIdx].name}"?`)) {
+                                            const newServices = [...researchData.services];
+                                            // Remove from source
+                                            if (newServices[fromClusterIdx]?.keywords) {
+                                                newServices[fromClusterIdx].keywords = newServices[fromClusterIdx].keywords.filter(k => k.keyword !== keywordToMove.keyword);
+                                            }
+                                            // Add to target
+                                            if (!newServices[toClusterIdx].keywords) newServices[toClusterIdx].keywords = [];
+                                            newServices[toClusterIdx].keywords.push(keywordToMove);
+                                            setResearchData({ ...researchData, services: newServices });
+                                        }
                                     }
-                                }
-                            }}
-                            allClusters={services}
-                            onUpdate={(updatedCluster) => {
-                                const newServices = [...researchData.services];
-                                newServices[i] = updatedCluster;
-                                setResearchData({ ...researchData, services: newServices });
-                            }}
-                            onDelete={(idxToDelete) => handleDeleteService(idxToDelete)}
-                            onRegenerateMeta={() => handleRegenerateMeta(i, 'SERVICE')}
-                        />
+                                }}
+                                allClusters={services || []}
+                                onUpdate={(updatedCluster) => {
+                                    const newServices = [...researchData.services];
+                                    newServices[i] = updatedCluster;
+                                    setResearchData({ ...researchData, services: newServices });
+                                }}
+                                onDelete={(idxToDelete) => handleDeleteService(idxToDelete)}
+                                onRegenerateMeta={() => handleRegenerateMeta(i, 'SERVICE')}
+                            />
+                        ) : null
                     ))}
-                    {services.length === 0 && (
+                    {(!services || services.length === 0) && (
                         <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-xl bg-slate-800/50">
                             <p className="text-slate-500">No hay servicios definidos.</p>
                         </div>
@@ -1373,7 +1388,7 @@ export default function GeneratorApp() {
                 {/* BLOG GRID */}
                 <div className="flex justify-between items-center mt-12 pt-8 border-t border-slate-700">
                     <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-green-400" /> Blog & Contenido Informacional ({blog.length})
+                        <FileText className="w-5 h-5 text-green-400" /> Blog & Contenido Informacional ({blog?.length || 0})
                     </h3>
                     <button onClick={handleAddBlog} className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg hover:shadow-green-500/20 transition-all">
                         <Plus className="w-4 h-4" /> Añadir Artículo
@@ -1381,35 +1396,39 @@ export default function GeneratorApp() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
-                    {blog.map((cluster, i) => (
-                        <ClusterCard
-                            key={`blog-${i}`}
-                            index={i}
-                            cluster={{
-                                ...cluster,
-                                onMoveKeyword: (keywordToMove, fromClusterIdx, toClusterIdx) => {
-                                    if (confirm(`¿Mover "${keywordToMove.keyword}" al artículo "${blog[toClusterIdx].name}"?`)) {
-                                        const newBlog = [...researchData.blog];
-                                        // Remove from source
-                                        newBlog[fromClusterIdx].keywords = newBlog[fromClusterIdx].keywords.filter(k => k.keyword !== keywordToMove.keyword);
-                                        // Add to target
-                                        if (!newBlog[toClusterIdx].keywords) newBlog[toClusterIdx].keywords = [];
-                                        newBlog[toClusterIdx].keywords.push(keywordToMove);
-                                        setResearchData({ ...researchData, blog: newBlog });
+                    {(blog || []).map((cluster, i) => (
+                        cluster ? (
+                            <ClusterCard
+                                key={`blog-${i}`}
+                                index={i}
+                                cluster={{
+                                    ...cluster,
+                                    onMoveKeyword: (keywordToMove, fromClusterIdx, toClusterIdx) => {
+                                        if (confirm(`¿Mover "${keywordToMove.keyword}" al artículo "${blog[toClusterIdx].name}"?`)) {
+                                            const newBlog = [...researchData.blog];
+                                            // Remove from source
+                                            if (newBlog[fromClusterIdx]?.keywords) {
+                                                newBlog[fromClusterIdx].keywords = newBlog[fromClusterIdx].keywords.filter(k => k.keyword !== keywordToMove.keyword);
+                                            }
+                                            // Add to target
+                                            if (!newBlog[toClusterIdx].keywords) newBlog[toClusterIdx].keywords = [];
+                                            newBlog[toClusterIdx].keywords.push(keywordToMove);
+                                            setResearchData({ ...researchData, blog: newBlog });
+                                        }
                                     }
-                                }
-                            }}
-                            allClusters={blog}
-                            onUpdate={(updatedCluster) => {
-                                const newBlog = [...researchData.blog];
-                                newBlog[i] = updatedCluster;
-                                setResearchData({ ...researchData, blog: newBlog });
-                            }}
-                            onDelete={(idxToDelete) => handleDeleteBlog(idxToDelete)}
-                            onRegenerateMeta={() => handleRegenerateMeta(i, 'BLOG')}
-                        />
+                                }}
+                                allClusters={blog || []}
+                                onUpdate={(updatedCluster) => {
+                                    const newBlog = [...researchData.blog];
+                                    newBlog[i] = updatedCluster;
+                                    setResearchData({ ...researchData, blog: newBlog });
+                                }}
+                                onDelete={(idxToDelete) => handleDeleteBlog(idxToDelete)}
+                                onRegenerateMeta={() => handleRegenerateMeta(i, 'BLOG')}
+                            />
+                        ) : null
                     ))}
-                    {blog.length === 0 && (
+                    {(!blog || blog.length === 0) && (
                         <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-xl bg-slate-800/50">
                             <p className="text-slate-500">No hay artículos de blog definidos.</p>
                         </div>

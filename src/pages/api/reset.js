@@ -10,8 +10,16 @@ export const POST = async ({ request }) => {
         'src/content/services',
         'src/content/locations',
         'src/content/blog',
+        'src/content/business',
+        'src/content/social',
+        'src/content/footer',
+        'src/content/navigation',
+        'src/content/design',
+        'src/content/testimonials',
+        'src/content/projects',
         'project_plan.json',
-        'clustering_analysis.md'
+        'clustering_analysis.md',
+        'src/data/city_data.json'
     ];
 
     const deletedItems = [];

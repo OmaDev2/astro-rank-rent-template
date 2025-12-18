@@ -12,20 +12,20 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
 
     // ✅ FIX: Auto-populate fields from suggestions if missing on mount
     React.useEffect(() => {
-        if (cluster.meta_suggestions?.length > 0) {
+        if (cluster?.meta_suggestions?.length > 0) {
             const defaultMeta = cluster.meta_suggestions[0];
             const updates = {};
             let hasUpdates = false;
 
-            if (!cluster.h1 && defaultMeta.h1) {
+            if (!cluster.h1 && defaultMeta?.h1) {
                 updates.h1 = defaultMeta.h1;
                 hasUpdates = true;
             }
-            if (!cluster.seo_title && defaultMeta.seo_title) {
+            if (!cluster.seo_title && defaultMeta?.seo_title) {
                 updates.seo_title = defaultMeta.seo_title;
                 hasUpdates = true;
             }
-            if (!cluster.seo_description && defaultMeta.seo_description) {
+            if (!cluster.seo_description && defaultMeta?.seo_description) {
                 updates.seo_description = defaultMeta.seo_description;
                 hasUpdates = true;
             }
@@ -35,11 +35,11 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                 setTimeout(() => onUpdate({ ...cluster, ...updates }), 0);
             }
         }
-    }, [cluster.name]); // Run when cluster changes (or mounts)
+    }, [cluster?.name]); // Run when cluster changes (or mounts)
 
     const handleMetaSelect = (e) => {
         const idx = parseInt(e.target.value);
-        if (cluster.meta_suggestions && cluster.meta_suggestions[idx]) {
+        if (cluster?.meta_suggestions && cluster.meta_suggestions[idx]) {
             const suggestion = cluster.meta_suggestions[idx];
             onUpdate({
                 ...cluster,
@@ -53,7 +53,7 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
 
     const handleAddKeyword = () => {
         if (!newKeyword.trim()) return;
-        const updatedKeywords = [...(cluster.keywords || []), {
+        const updatedKeywords = [...(cluster?.keywords || []), {
             keyword: newKeyword.trim(),
             volume: 0,
             source: 'manual'
@@ -64,7 +64,7 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
 
     const handleDeleteSelectedKeywords = () => {
         if (confirm(`¿Eliminar ${selectedKeywords.size} keywords de este cluster?`)) {
-            const updatedKeywords = cluster.keywords.filter((_, idx) => !selectedKeywords.has(idx));
+            const updatedKeywords = (cluster?.keywords || []).filter((_, idx) => !selectedKeywords.has(idx));
             onUpdate({ ...cluster, keywords: updatedKeywords });
             setSelectedKeywords(new Set());
         }
@@ -85,6 +85,8 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
         return 'text-slate-400';
     };
 
+    if (!cluster) return null; // Safety check
+
     return (
         <div className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-xl transition-all hover:border-slate-600 group">
 
@@ -96,12 +98,12 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                             CLUSTER {index + 1}
                         </span>
                         <span className="text-xs text-slate-500 font-mono">
-                            Vol: <span className="text-green-400 font-bold">{cluster.volume}</span>
+                            Vol: <span className="text-green-400 font-bold">{cluster.volume || 0}</span>
                         </span>
                     </div>
                     <input
                         className="bg-transparent text-lg font-bold text-white border-none outline-none focus:ring-0 p-0 w-full placeholder-slate-600"
-                        value={cluster.name}
+                        value={cluster.name || ''}
                         onChange={handleNameChange}
                         placeholder="Nombre del Cluster"
                     />
@@ -218,7 +220,7 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
 
                             {/* Table Body */}
                             <div className="overflow-y-auto max-h-[240px] scrollbar-thin scrollbar-thumb-slate-700">
-                                {cluster.keywords?.map((k, idx) => (
+                                {(cluster.keywords || []).map((k, idx) => (
                                     <div key={idx} className="grid grid-cols-12 p-2 text-xs border-b border-slate-800 hover:bg-slate-800/50 group/row items-center">
                                         <div className="col-span-1 text-center">
                                             <input
@@ -233,11 +235,11 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                                                 className="rounded border-slate-600 bg-slate-800 text-indigo-500 focus:ring-0"
                                             />
                                         </div>
-                                        <div className="col-span-6 font-medium text-slate-300 truncate pr-2" title={k.keyword}>
-                                            {k.keyword}
+                                        <div className="col-span-6 font-medium text-slate-300 truncate pr-2" title={k?.keyword || ''}>
+                                            {k?.keyword || '...'}
                                         </div>
                                         <div className="col-span-2 text-right font-mono text-slate-400">
-                                            {k.volume || '-'}
+                                            {k?.volume || '-'}
                                         </div>
                                         <div className="col-span-3 text-center">
                                             <select
@@ -246,10 +248,6 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                                                 onChange={(e) => {
                                                     const targetIdx = parseInt(e.target.value);
                                                     if (targetIdx !== index) {
-                                                        // Call parent move handler
-                                                        // We communicate this via a special prop passed down or handle it here if we had access to logic
-                                                        // Since we need to modify OTHER clusters, we should probably lift this logic up...
-                                                        // OR, we assume the parent passed a `onMoveKeyword` function.
                                                         if (cluster.onMoveKeyword) {
                                                             cluster.onMoveKeyword(k, index, targetIdx);
                                                         }
@@ -257,8 +255,8 @@ export default function ClusterCard({ cluster, index, allClusters, onUpdate, onD
                                                 }}
                                             >
                                                 <option value={index}>--</option>
-                                                {allClusters.map((c, cidx) => (
-                                                    cidx !== index && <option key={cidx} value={cidx}>→ {c.name.substring(0, 10)}..</option>
+                                                {(allClusters || []).map((c, cidx) => (
+                                                    cidx !== index && <option key={cidx} value={cidx}>→ {c?.name?.substring(0, 10)}..</option>
                                                 ))}
                                             </select>
                                         </div>
