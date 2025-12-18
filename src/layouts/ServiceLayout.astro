@@ -5,11 +5,7 @@ import FinalCTA from "../components/FinalCTA.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import { CheckCircle, ArrowRight, Shield } from "lucide-react";
-
-// Imports de Bloques (Reutilizamos los mismos)
-import HeroBlock from "../components/blocks/HeroBlock.astro";
-import FeaturesBlock from "../components/blocks/FeaturesBlock.astro";
-
+import BlockRenderer from "../components/BlockRenderer.astro";
 import type { Service, Location, Block, FAQItem } from "../types";
 
 interface Props {
@@ -32,7 +28,7 @@ interface Props {
     allServices: Service[];
     allLocations: Location[];
     testimonials: any[];
-    blocks?: Block[]; // <--- Nuevo
+    blocks?: Block[];
 
     pageTitle: string;
     pageDescription: string;
@@ -71,134 +67,26 @@ const defaultBlocks: Block[] = [
 ];
 
 const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
-
-// Preparar props para el HeroBlock
-const heroProps = {
-    title: title, // Pasamos el título completo y optimizado del MDX
-    locationName: city,
-    niche: title, // Mantenemos por compatibilidad con el formulario
-    heroImage: heroImage,
-    phone: phone,
-    zipCodes: [],
-};
 ---
 
 <Layout title={pageTitle} description={pageDescription} schema={schema}>
-    {
-        finalBlocks.map((block) => {
-            switch (block.discriminant) {
-                case "hero":
-                    return <HeroBlock {...heroProps} />;
-
-                case "features":
-                    return <FeaturesBlock locationName={city} city={city} />;
-
-                case "cta":
-                    return <FinalCTA />;
-
-                case "faq":
-                    return (
-                        faq &&
-                        faq.length > 0 && (
-                            <section class="py-20 bg-surface/30">
-                                <div class="container mx-auto px-4 max-w-4xl">
-                                    <FaqAccordion
-                                        title={`Preguntas Frecuentes sobre ${title}`}
-                                        items={faq}
-                                    />
-                                </div>
-                            </section>
-                        )
-                    );
-
-                case "content":
-                    return (
-                        <section class="py-20 bg-secondary">
-                            <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
-                                {/* COLUMNA IZQUIERDA: CONTENIDO */}
-                                <div class="lg:col-span-2 space-y-12">
-                                    {/* Caja de Urgencia */}
-                                    <div class="bg-green-800/20 border border-green-700/50 p-6 rounded-xl flex flex-col sm:flex-row items-center gap-6">
-                                        <div class="bg-green-600 p-4 rounded-full shrink-0 animate-pulse">
-                                            <Shield className="w-8 h-8 text-white" />
-                                        </div>
-                                        <div>
-                                            <h3 class="text-xl font-bold text-heading mb-2">
-                                                ¿Necesitas {title} urgente?
-                                            </h3>
-                                            <p class="text-body mb-4">
-                                                Llámanos ahora mismo. Atendemos
-                                                en {city}.
-                                            </p>
-                                            <a
-                                                href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                                                class="text-green-600 font-bold text-2xl hover:text-green-500 transition-colors"
-                                            >
-                                                {phone}
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    {/* Contenido MDX */}
-                                    <div class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-heading prose-li:text-body max-w-none">
-                                        <Content components={mdxComponents} />
-                                    </div>
-                                </div>
-
-                                {/* SIDEBAR */}
-                                <div class="hidden lg:block space-y-8 relative">
-                                    <div class="bg-surface rounded-xl border border-heading/10 overflow-hidden">
-                                        <div class="bg-surface/50 p-4 border-b border-heading/10">
-                                            <h4 class="font-bold text-heading uppercase text-sm tracking-wider">
-                                                Más Servicios
-                                            </h4>
-                                        </div>
-                                        <div class="p-2">
-                                            <ul class="space-y-1">
-                                                {allServices
-                                                    .filter(
-                                                        (s) => s.slug !== slug,
-                                                    )
-                                                    .map((service) => (
-                                                        <li>
-                                                            <a
-                                                                href={`/servicios/${service.slug}`}
-                                                                class="block p-3 rounded hover:bg-surface/50 text-body hover:text-primary transition-colors flex justify-between group"
-                                                            >
-                                                                {
-                                                                    service.data
-                                                                        .title
-                                                                }
-                                                                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                            </a>
-                                                        </li>
-                                                    ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    {/* Banner Oferta */}
-                                    <div class="bg-gradient-to-br from-primary to-accent rounded-xl p-8 text-center shadow-xl relative overflow-hidden">
-                                        <div class="text-white font-bold text-2xl mb-2">
-                                            PRESUPUESTO
-                                        </div>
-                                        <div class="text-white/90 mb-6">
-                                            Gratis y sin compromiso
-                                        </div>
-                                        <a
-                                            href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                                            class="inline-block w-full py-3 bg-white text-primary font-bold rounded hover:bg-surface transition-colors shadow-lg"
-                                        >
-                                            LLAMAR
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    );
-            }
-        })
-    }
+    <BlockRenderer
+        blocks={finalBlocks}
+        locationName={city}
+        locationType="residencial"
+        heroImage={heroImage}
+        phone={phone}
+        siteName={siteName}
+        niche={niche}
+        title={title}
+        city={city}
+        content={Content}
+        mdxComponents={mdxComponents}
+        services={allServices}
+        faq={faq}
+        allLocations={allLocations}
+        whatsapp={whatsapp}
+    />
 
     <WhatsAppButton />
     <Footer />

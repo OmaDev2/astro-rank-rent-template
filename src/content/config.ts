@@ -40,10 +40,6 @@ const services = defineCollection({
         icon: z.string(),
         shortDesc: z.string(),
         featured: z.boolean().default(false),
-        faq: z.array(z.object({
-            question: z.string(),
-            answer: z.string(),
-        })).optional(),
 
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(

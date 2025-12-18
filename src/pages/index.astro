@@ -4,21 +4,8 @@ import Footer from "../components/Footer.astro";
 import { getCollection, getEntry } from "astro:content";
 import type { WithContext, LocalBusiness } from "schema-dts";
 
-// Imports de Componentes Generales
 import WhatsAppButton from "../components/WhatsAppButton.astro";
-import FinalCTA from "../components/FinalCTA.astro";
-import LocationsSection from "../components/LocationsSection.astro";
-import FaqAccordion from "../components/FaqAccordion.astro";
-import Testimonials from "../components/Testimonials.astro";
-
-// Imports de Bloques Específicos de Home
-import HomeHero from "../components/blocks/home/HomeHero.astro";
-import HomeServices from "../components/blocks/home/HomeServices.astro";
-import HomeAbout from "../components/blocks/home/HomeAbout.astro";
-import HomeFeatures from "../components/blocks/home/HomeFeatures.astro";
-import HomeContact from "../components/blocks/home/HomeContact.astro";
-import HomeProcess from "../components/blocks/home/HomeProcess.astro";
-import HomeServicesOnePage from "../components/blocks/home/HomeServicesOnePage.astro";
+import BlockRenderer from "../components/BlockRenderer.astro";
 
 // 1. Fetch Data
 const featuredServices = await getCollection(
@@ -27,7 +14,7 @@ const featuredServices = await getCollection(
 );
 const testimonialsCollection = await getCollection("testimonials");
 const home = await getEntry("pages", "home");
-const homeData = home?.data || {};
+const homeData = (home?.data || {}) as any;
 
 // Prioritize testimonials from Home Singleton, fallback to Collection
 const rawTestimonials =
@@ -116,143 +103,14 @@ const schema: WithContext<LocalBusiness> = {
 	title={`${homeData.hero?.heading || config.niche + " en " + config.city} | ${config.siteName}`}
 	schema={schema}
 >
-	{
-		finalBlocks.map((block: any, index: number) => {
-			// Alternar fondos: Par = Secondary (Oscuro), Impar = Surface (Claro/Contraste)
-			// El Hero (index 0) suele tener su propia imagen, pero mantenemos la lógica para consistencia
-			const bgClass = index % 2 === 0 ? "bg-secondary" : "bg-surface";
-
-			switch (block.discriminant) {
-				case "hero":
-					return <HomeHero hero={block.value} config={config} />;
-
-				case "services_grid":
-					return (
-						<HomeServices
-							servicesSection={block.value}
-							featuredServices={featuredServices}
-							city={config.city}
-							bgClass={bgClass}
-						/>
-					);
-
-				case "services_list":
-					return (
-						<HomeServicesOnePage
-							title={
-								block.value?.title ||
-								homeData.servicesSection?.title
-							}
-							subtitle={
-								block.value?.subtitle ||
-								homeData.servicesSection?.subtitle
-							}
-							services={
-								block.value?.items || homeData.servicesList
-							}
-							bgClass={bgClass}
-						/>
-					);
-
-				case "about":
-					return (
-						<HomeAbout
-							aboutSection={block.value}
-							bgClass={bgClass}
-						/>
-					);
-
-				case "features":
-					return (
-						<HomeFeatures
-							features={block.value}
-							city={config.city}
-							bgClass={bgClass}
-						/>
-					);
-
-				case "contact":
-					return (
-						<HomeContact
-							config={config}
-							bgClass={bgClass}
-							contactSection={block.value}
-						/>
-					);
-
-				case "process":
-					return block.value ? (
-						<HomeProcess process={block.value} bgClass={bgClass} />
-					) : null;
-
-				case "testimonials":
-					return (
-						<Testimonials
-							testimonials={
-								block.value
-									? block.value.map((t: any) => ({
-											name: t.author,
-											text: t.quote,
-											location: t.location,
-											initials: t.initials,
-											rating: 5,
-										}))
-									: testimonials
-							}
-							bgClass={bgClass}
-						/>
-					);
-
-				case "content":
-					return (
-						<section class={`py-20 ${bgClass}`}>
-							<div class="container mx-auto px-4 max-w-4xl">
-								<h2 class="text-3xl font-heading font-bold text-heading mb-8">
-									{block.value?.title ||
-										homeData.seoContentTitle}
-								</h2>
-								<div class="prose prose-invert prose-lg text-body">
-									<SeoContentRendered />
-								</div>
-							</div>
-						</section>
-					);
-
-				case "faq":
-					const faqs = block.value;
-					return faqs && faqs.length > 0 ? (
-						<div class={`py-20 ${bgClass}`}>
-							<div class="container mx-auto px-4 max-w-4xl">
-								<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
-									Preguntas Frecuentes
-								</h2>
-								<FaqAccordion items={faqs} />
-							</div>
-						</div>
-					) : null;
-
-				case "locations":
-					return (
-						<LocationsSection
-							bgClass={bgClass}
-							locationsSection={block.value}
-						/>
-					);
-
-				case "cta":
-					return (
-						<FinalCTA
-							bgClass={bgClass}
-							title={block.value?.title}
-							buttonText={block.value?.buttonText}
-						/>
-					);
-
-				default:
-					return null;
-			}
-		})
-	}
+	<BlockRenderer
+		blocks={finalBlocks}
+		isHome={true}
+		config={config}
+		city={config.city}
+		services={featuredServices}
+		content={SeoContentRendered}
+	/>
 
 	<WhatsAppButton stickyPhone={homeData.stickyPhone} />
 	<Footer />

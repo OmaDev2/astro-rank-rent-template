@@ -26,7 +26,7 @@ export interface Location {
     };
 }
 
-export type BlockDiscriminant = 'hero' | 'features' | 'map' | 'content' | 'cta' | 'faq' | 'services' | 'services_list' | 'about' | 'process' | 'testimonials' | 'locations' | 'contact';
+export type BlockDiscriminant = 'hero' | 'features' | 'map' | 'content' | 'cta' | 'faq' | 'services' | 'services_grid' | 'services_list' | 'about' | 'process' | 'testimonials' | 'locations' | 'contact';
 
 export interface Block {
     discriminant: BlockDiscriminant;

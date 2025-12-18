@@ -18,6 +18,11 @@ export const services = collection({
                 description: 'Se genera automático.'
             }
         }),
+        heroImage: fields.image({
+            label: 'Imagen Principal (Cards)',
+            directory: 'public/images/services',
+            publicPath: '/images/services',
+        }),
 
         // Metadatos globales (no cambian de posición)
         seoTitle: fields.text({ label: 'SEO Title (Meta)' }),
