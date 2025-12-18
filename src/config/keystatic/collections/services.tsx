@@ -1,5 +1,5 @@
 import { collection, fields } from '@keystatic/core';
-import { MousePointer2, AlertTriangle, Phone, Building, Image } from 'lucide-react';
+import { MousePointer2, AlertTriangle, Phone, Building, Image, Layout, Star, HelpCircle, ArrowRight } from 'lucide-react';
 
 export const services = collection({
     label: '🛠️ Servicios',
@@ -10,69 +10,101 @@ export const services = collection({
     schema: {
         title: fields.slug({
             name: {
-                label: 'Título Principal (H1)',
+                label: 'Título Interno / Identificador',
                 validation: { length: { min: 1 } }
             },
             slug: {
                 label: 'URL / Slug',
-                description: 'Se genera automático. Haz clic en el candado para editarlo manualmente.'
+                description: 'Se genera automático.'
             }
         }),
 
-        heroImage: fields.image({
-            label: 'Imagen Destacada (Hero)',
-            description: 'Imagen principal que aparece en el hero del servicio. Recomendado: 1920x1080px',
-            directory: 'public/images/services',
-            publicPath: '/images/services',
-            validation: { isRequired: false }
-        }),
-
+        // Metadatos globales (no cambian de posición)
         seoTitle: fields.text({ label: 'SEO Title (Meta)' }),
         seoDesc: fields.text({ label: 'SEO Description', multiline: true }),
         icon: fields.text({ label: 'Icono (Lucide)' }),
-        shortDesc: fields.text({ label: 'Descripción Corta', multiline: true }),
+        shortDesc: fields.text({ label: 'Descripción Corta (Cards)', multiline: true }),
         featured: fields.checkbox({ label: 'Destacado en Home', defaultValue: false }),
 
-        faq: fields.array(
-            fields.object({
-                question: fields.text({ label: 'Pregunta' }),
-                answer: fields.text({ label: 'Respuesta', multiline: true }),
-            }),
-            {
-                label: 'Preguntas Frecuentes',
-                itemLabel: (props) => props.fields.question.value || 'Pregunta',
-            }
-        ),
-
+        // CONSTRUCTOR DE BLOQUES MEJORADO
         blocks: fields.blocks({
             hero: {
                 label: 'Hero (Portada)',
-                schema: fields.empty()
+                schema: fields.object({
+                    title: fields.text({ label: 'Título H1 (Sobreescribir)' }),
+                    subtitle: fields.text({ label: 'Subtítulo / Lead', multiline: true }),
+                    heroImage: fields.image({
+                        label: 'Imagen Hero',
+                        directory: 'public/images/services',
+                        publicPath: '/images/services',
+                    }),
+                })
             },
             features: {
-                label: 'Características (Por qué elegirnos)',
-                schema: fields.empty()
+                label: 'Características (Beneficios)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título Sección' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    items: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Característica' }),
+                            desc: fields.text({ label: 'Detalle', multiline: true }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                        }),
+                        {
+                            label: 'Lista de Beneficios',
+                            itemLabel: (props) => props.fields.title.value || 'Beneficio',
+                        }
+                    )
+                })
             },
             content: {
-                label: 'Contenido Principal + Sidebar',
-                schema: fields.empty()
+                label: 'Contenido y MDX',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título del bloque de texto' }),
+                    showSidebar: fields.checkbox({ label: 'Mostrar Sidebar de Contacto', defaultValue: true }),
+                })
             },
             faq: {
                 label: 'Preguntas Frecuentes',
-                schema: fields.empty()
+                schema: fields.object({
+                    title: fields.text({ label: 'Título Sección FAQ' }),
+                    faqs: fields.array(
+                        fields.object({
+                            question: fields.text({ label: 'Pregunta' }),
+                            answer: fields.text({ label: 'Respuesta', multiline: true }),
+                        }),
+                        {
+                            label: 'Preguntas',
+                            itemLabel: (props) => props.fields.question.value || 'Pregunta',
+                        }
+                    )
+                })
             },
             cta: {
-                label: 'Llamada a la Acción (CTA Final)',
-                schema: fields.empty()
+                label: 'Llamada a la Acción (CTA)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título del CTA' }),
+                    subtitle: fields.text({ label: 'Texto descriptivo' }),
+                    buttonText: fields.text({ label: 'Texto del Botón' }),
+                    buttonLink: fields.text({ label: 'Enlace (ej: /contacto)' }),
+                })
             },
+            locations_grid: {
+                label: 'Cuadrícula de Zonas',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    description: fields.text({ label: 'Descripción', multiline: true }),
+                })
+            }
         }, {
-            label: 'Constructor de Página (Orden de Secciones)',
-            description: 'Define qué secciones mostrar y en qué orden aparecerán en la página del servicio'
+            label: 'Constructor Visual',
+            description: 'Añade y ordena los bloques que compondrán la página.'
         }),
 
         content: fields.mdx({
-            label: 'Contenido (Texto SEO)',
-            description: 'Contenido principal que se mostrará cuando agregues el bloque "Contenido Principal + Sidebar"',
+            label: 'Cuerpo del Texto (MDX)',
+            description: 'Utilizado por el bloque "Contenido y MDX"',
             options: {
                 image: {
                     directory: 'public/images/services',
@@ -81,132 +113,43 @@ export const services = collection({
             },
             components: {
                 CtaBlock: {
-                    label: 'Botón de Llamada a la Acción (CTA)',
+                    label: 'Botón CTA',
                     kind: 'block',
-                    icon: <MousePointer2 />, // Lucide Component
+                    icon: <MousePointer2 />,
                     schema: {
-                        text: fields.text({
-                            label: 'Texto del botón',
-                            validation: { length: { min: 1 } },
-                        }),
-                        url: fields.text({ label: 'URL de Destino (ej: /contacto o https://wa.me/34600000000)' }),
+                        text: fields.text({ label: 'Texto' }),
+                        url: fields.text({ label: 'URL' }),
                         type: fields.select({
-                            label: 'Estilo',
+                            label: 'Color',
                             options: [
-                                { label: 'Primario (Color Principal)', value: 'primary' },
-                                { label: 'Secundario (Borde)', value: 'secondary' },
-                                { label: 'WhatsApp (Verde)', value: 'whatsapp' },
+                                { label: 'Principal', value: 'primary' },
+                                { label: 'Secundario', value: 'secondary' },
+                                { label: 'WhatsApp', value: 'whatsapp' },
                             ],
                             defaultValue: 'primary',
                         }),
-                        alignment: fields.select({
-                            label: 'Alineación',
-                            options: [
-                                { label: 'Izquierda', value: 'left' },
-                                { label: 'Centro', value: 'center' },
-                                { label: 'Derecha', value: 'right' },
-                            ],
-                            defaultValue: 'center',
-                        }),
-                        size: fields.select({
-                            label: 'Tamaño',
-                            options: [
-                                { label: 'Pequeño', value: 'small' },
-                                { label: 'Mediano', value: 'medium' },
-                                { label: 'Grande', value: 'large' },
-                            ],
-                            defaultValue: 'large',
-                        }),
-                        isFullWidth: fields.checkbox({
-                            label: 'Ancho Completo (Full Width)',
-                            defaultValue: false,
-                        }),
                     },
                 },
-
                 AlertBlock: {
-                    label: 'Caja de Alerta / Aviso',
+                    label: 'Alerta',
                     kind: 'block',
                     icon: <AlertTriangle />,
                     schema: {
-                        title: fields.text({ label: 'Título de la Alerta' }),
-                        content: fields.text({
-                            label: 'Contenido',
-                            multiline: true,
-                        }),
+                        title: fields.text({ label: 'Título' }),
+                        content: fields.text({ label: 'Contenido', multiline: true }),
                         type: fields.select({
-                            label: 'Tipo de Alerta',
+                            label: 'Nivel',
                             options: [
-                                { label: 'Información (Azul)', value: 'info' },
-                                { label: 'Advertencia (Amarillo)', value: 'warning' },
-                                { label: 'Éxito (Verde)', value: 'success' },
-                                { label: 'Peligro (Rojo)', value: 'error' },
+                                { label: 'Info', value: 'info' },
+                                { label: 'Warning', value: 'warning' },
+                                { label: 'Error', value: 'error' },
                             ],
                             defaultValue: 'info',
                         }),
                     },
                 },
-
-                PhoneBlock: {
-                    label: '📞 Teléfono Dinámico',
-                    kind: 'block',
-                    icon: <Phone />,
-                    schema: {},
-                },
-
-                BusinessNameBlock: {
-                    label: '🏢 Nombre del Negocio',
-                    kind: 'block',
-                    icon: <Building />,
-                    schema: {},
-                },
-
-                CustomImageBlock: {
-                    label: 'Imagen con Estilo',
-                    kind: 'block',
-                    icon: <Image />,
-                    schema: {
-                        image: fields.image({
-                            label: 'Imagen',
-                            directory: 'public/images/content',
-                            publicPath: '/images/content',
-                        }),
-                        alt: fields.text({ label: 'Texto Alternativo (SEO)' }),
-                        caption: fields.text({ label: 'Pie de Foto (Opcional)' }),
-                        objectFit: fields.select({
-                            label: 'Ajuste de Imagen (Object Fit)',
-                            options: [
-                                { label: 'Cubrir (Cover)', value: 'cover' },
-                                { label: 'Contener (Contain)', value: 'contain' },
-                                { label: 'Estirar (Fill)', value: 'fill' },
-                            ],
-                            defaultValue: 'cover',
-                        }),
-                        borderRadius: fields.select({
-                            label: 'Bordes Redondeados',
-                            options: [
-                                { label: 'Ninguno', value: 'none' },
-                                { label: 'Pequeño', value: 'sm' },
-                                { label: 'Mediano', value: 'md' },
-                                { label: 'Grande', value: 'lg' },
-                                { label: 'Extra Grande', value: 'xl' },
-                                { label: 'Completo (Círculo)', value: 'full' },
-                            ],
-                            defaultValue: 'xl',
-                        }),
-                        shadow: fields.select({
-                            label: 'Sombra',
-                            options: [
-                                { label: 'Ninguna', value: 'none' },
-                                { label: 'Pequeña', value: 'sm' },
-                                { label: 'Mediana', value: 'md' },
-                                { label: 'Grande', value: 'lg' },
-                                { label: 'Extra Grande', value: 'xl' },
-                            ],
-                            defaultValue: 'lg',
-                        }),
-                    },
-                },
+                PhoneBlock: { label: '📞 Teléfono Situacional', kind: 'block', icon: <Phone />, schema: {} },
+                BusinessNameBlock: { label: '🏢 Nombre Local', kind: 'block', icon: <Building />, schema: {} },
             }
         }),
     },

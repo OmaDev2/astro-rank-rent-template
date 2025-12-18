@@ -1,0 +1,62 @@
+---
+import { Home, ChevronRight } from "lucide-react";
+
+interface Props {
+    locationName?: string;
+    locationType?: string;
+    serviceName?: string;
+    isLocation?: boolean;
+    isService?: boolean;
+}
+
+const { locationName, locationType, serviceName, isLocation, isService } =
+    Astro.props;
+---
+
+<div class="absolute top-0 left-0 w-full z-30 pt-6 px-6 pointer-events-none">
+    <div class="container mx-auto pointer-events-auto">
+        <nav
+            class="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-white/80 bg-black/20 backdrop-blur-md py-2 px-4 rounded-full border border-white/10 hover:bg-black/40 transition-all shadow-lg"
+        >
+            <a
+                href="/"
+                class="hover:text-primary transition-colors flex items-center gap-1 group"
+            >
+                <Home className="w-3 h-3" />
+                <span class="hidden sm:inline">Inicio</span>
+            </a>
+
+            {
+                isLocation && (
+                    <>
+                        <ChevronRight className="w-3 h-3 opacity-50" />
+                        <a
+                            href="/zonas/"
+                            class="hover:text-primary transition-colors"
+                        >
+                            Zonas
+                        </a>
+                        <ChevronRight className="w-3 h-3 opacity-50" />
+                        <span class="text-white">{locationName}</span>
+                    </>
+                )
+            }
+
+            {
+                isService && (
+                    <>
+                        <ChevronRight className="w-3 h-3 opacity-50" />
+                        <a
+                            href="/servicios/"
+                            class="hover:text-primary transition-colors"
+                        >
+                            Servicios
+                        </a>
+                        <ChevronRight className="w-3 h-3 opacity-50" />
+                        <span class="text-white">{serviceName}</span>
+                    </>
+                )
+            }
+        </nav>
+    </div>
+</div>

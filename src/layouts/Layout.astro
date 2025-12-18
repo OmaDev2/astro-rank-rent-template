@@ -67,7 +67,10 @@ const defaultDescription = `${settings.niche} en ${settings.city}. Expertos prof
         {/* --- CARGA DINÁMICA DE FUENTES DE GOOGLE --- */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href={activeFont.googleFontsUrl} rel="stylesheet" />
+        <link
+            href={`${activeFont.googleFontsUrl}&display=swap`}
+            rel="stylesheet"
+        />
 
         <SeoHead
             title={title}

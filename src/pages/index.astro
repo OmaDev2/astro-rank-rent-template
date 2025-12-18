@@ -124,12 +124,12 @@ const schema: WithContext<LocalBusiness> = {
 
 			switch (block.discriminant) {
 				case "hero":
-					return <HomeHero hero={homeData.hero} config={config} />;
+					return <HomeHero hero={block.value} config={config} />;
 
-				case "services":
+				case "services_grid":
 					return (
 						<HomeServices
-							servicesSection={homeData.servicesSection}
+							servicesSection={block.value}
 							featuredServices={featuredServices}
 							city={config.city}
 							bgClass={bgClass}
@@ -139,9 +139,17 @@ const schema: WithContext<LocalBusiness> = {
 				case "services_list":
 					return (
 						<HomeServicesOnePage
-							title={homeData.servicesSection?.title}
-							subtitle={homeData.servicesSection?.subtitle}
-							services={homeData.servicesList}
+							title={
+								block.value?.title ||
+								homeData.servicesSection?.title
+							}
+							subtitle={
+								block.value?.subtitle ||
+								homeData.servicesSection?.subtitle
+							}
+							services={
+								block.value?.items || homeData.servicesList
+							}
 							bgClass={bgClass}
 						/>
 					);
@@ -149,7 +157,7 @@ const schema: WithContext<LocalBusiness> = {
 				case "about":
 					return (
 						<HomeAbout
-							aboutSection={homeData.aboutSection}
+							aboutSection={block.value}
 							bgClass={bgClass}
 						/>
 					);
@@ -157,7 +165,7 @@ const schema: WithContext<LocalBusiness> = {
 				case "features":
 					return (
 						<HomeFeatures
-							features={homeData.features}
+							features={block.value}
 							city={config.city}
 							bgClass={bgClass}
 						/>
@@ -168,48 +176,57 @@ const schema: WithContext<LocalBusiness> = {
 						<HomeContact
 							config={config}
 							bgClass={bgClass}
-							contactSection={homeData.contactSection}
+							contactSection={block.value}
 						/>
 					);
 
 				case "process":
-					return homeData.process ? (
-						<HomeProcess
-							process={homeData.process}
-							bgClass={bgClass}
-						/>
+					return block.value ? (
+						<HomeProcess process={block.value} bgClass={bgClass} />
 					) : null;
 
 				case "testimonials":
 					return (
 						<Testimonials
-							testimonials={testimonials}
+							testimonials={
+								block.value
+									? block.value.map((t: any) => ({
+											name: t.author,
+											text: t.quote,
+											location: t.location,
+											initials: t.initials,
+											rating: 5,
+										}))
+									: testimonials
+							}
 							bgClass={bgClass}
 						/>
 					);
 
 				case "content":
-					return homeData.seoContentTitle ? (
+					return (
 						<section class={`py-20 ${bgClass}`}>
 							<div class="container mx-auto px-4 max-w-4xl">
 								<h2 class="text-3xl font-heading font-bold text-heading mb-8">
-									{homeData.seoContentTitle}
+									{block.value?.title ||
+										homeData.seoContentTitle}
 								</h2>
 								<div class="prose prose-invert prose-lg text-body">
 									<SeoContentRendered />
 								</div>
 							</div>
 						</section>
-					) : null;
+					);
 
 				case "faq":
-					return homeData.faq && homeData.faq.length > 0 ? (
+					const faqs = block.value;
+					return faqs && faqs.length > 0 ? (
 						<div class={`py-20 ${bgClass}`}>
 							<div class="container mx-auto px-4 max-w-4xl">
 								<h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
 									Preguntas Frecuentes
 								</h2>
-								<FaqAccordion items={homeData.faq} />
+								<FaqAccordion items={faqs} />
 							</div>
 						</div>
 					) : null;
@@ -218,12 +235,18 @@ const schema: WithContext<LocalBusiness> = {
 					return (
 						<LocationsSection
 							bgClass={bgClass}
-							locationsSection={homeData.locationsSection}
+							locationsSection={block.value}
 						/>
 					);
 
 				case "cta":
-					return <FinalCTA bgClass={bgClass} />;
+					return (
+						<FinalCTA
+							bgClass={bgClass}
+							title={block.value?.title}
+							buttonText={block.value?.buttonText}
+						/>
+					);
 
 				default:
 					return null;

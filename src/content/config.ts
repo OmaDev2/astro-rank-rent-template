@@ -177,108 +177,27 @@ const schema = defineCollection({
 
 const pages = defineCollection({
     schema: z.object({
-        // Hero Section
-        hero: z.object({
-            heading: z.string().optional(),
-            headingHighlight: z.string().optional(),
-            subheading: z.string().optional(),
-            backgroundImage: z.string().optional(),
-        }).optional(),
-
-        // Services Section
-        servicesSection: z.object({
-            title: z.string().optional(),
-            titleHighlight: z.string().optional(),
-            subtitle: z.string().optional(),
-        }).optional(),
-
-        // About Section
-        aboutSection: z.object({
-            title: z.string().optional(),
-            image: z.string().optional(),
-            yearsExperience: z.string().optional(),
-            description: z.string().optional(),
-            features: z.array(z.object({
-                title: z.string(),
-                description: z.string(),
-            })).optional(),
-            buttonText: z.string().optional(),
-            buttonLink: z.string().optional(),
-        }).optional(),
-
-        // Features Section
-        features: z.array(z.object({
-            title: z.string(),
-            description: z.string(),
-            icon: z.string().optional(),
-        })).optional(),
-
-        // SEO Content
-        seoContentTitle: z.string().optional(),
-
-        // FAQ
-        faq: z.array(z.object({
-            question: z.string(),
-            answer: z.string(),
-        })).optional(),
-
-        // Testimonials (Home Singleton)
-        testimonials: z.array(z.object({
-            quote: z.string(),
-            author: z.string(),
-            location: z.string().optional(),
-            initials: z.string().optional(),
-        })).optional(),
-
-        // Process Section
-        process: z.object({
-            title: z.string().optional(),
-            description: z.string().optional(),
-            steps: z.array(z.object({
-                title: z.string(),
-                description: z.string(),
-            })),
-        }).optional(),
-
-        // Contact Section (Home)
-        contactSection: z.object({
-            title: z.string().optional(),
-            subtitle: z.string().optional(),
-        }).optional(),
-
-        // Locations Section (Home)
-        locationsSection: z.object({
-            title: z.string().optional(),
-            subtitle: z.string().optional(),
-        }).optional(),
-
-        // Services List (One Page Mode)
-        servicesList: z.array(z.object({
-            title: z.string(),
-            description: z.string(),
-            image: z.string().optional(),
-        })).optional(),
-
-        // Options
-        stickyPhone: z.boolean().optional().default(true),
-
-        // --- PAGE BUILDER: Define el orden de las secciones ---
+        // --- PAGE BUILDER: Nuevo Modelo de Datos ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
-                z.object({ discriminant: z.literal('hero') }),
-                z.object({ discriminant: z.literal('services') }),
-                z.object({ discriminant: z.literal('services_list') }), // Nuevo bloque
-                z.object({ discriminant: z.literal('about') }),
-                z.object({ discriminant: z.literal('features') }),
-                z.object({ discriminant: z.literal('process') }),
-                z.object({ discriminant: z.literal('contact') }),
-                z.object({ discriminant: z.literal('testimonials') }),
-                z.object({ discriminant: z.literal('content') }),
-                z.object({ discriminant: z.literal('faq') }),
-                z.object({ discriminant: z.literal('locations') }),
-                z.object({ discriminant: z.literal('cta') }),
+                z.object({ discriminant: z.literal('hero'), value: z.any() }),
+                z.object({ discriminant: z.literal('services_grid'), value: z.any() }),
+                z.object({ discriminant: z.literal('services_list'), value: z.any() }),
+                z.object({ discriminant: z.literal('about'), value: z.any() }),
+                z.object({ discriminant: z.literal('features'), value: z.any() }),
+                z.object({ discriminant: z.literal('process'), value: z.any() }),
+                z.object({ discriminant: z.literal('contact'), value: z.any() }),
+                z.object({ discriminant: z.literal('testimonials'), value: z.any() }),
+                z.object({ discriminant: z.literal('content'), value: z.any() }),
+                z.object({ discriminant: z.literal('faq'), value: z.any() }),
+                z.object({ discriminant: z.literal('locations'), value: z.any() }),
+                z.object({ discriminant: z.literal('cta'), value: z.any() }),
             ])
-        ).optional(), // Opcional para no romper la homepage existente
+        ).optional(),
+
+        // Campos Adicionales
+        seoContentTitle: z.string().optional(),
+        stickyPhone: z.boolean().optional().default(true),
     }),
 });
 

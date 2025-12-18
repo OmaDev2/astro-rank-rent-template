@@ -10,7 +10,9 @@ const { hero, config } = Astro.props;
 // Si es una imagen subida por el usuario (CMS), usamos la ruta string normal.
 const isDefaultImage =
     !hero?.backgroundImage ||
-    hero.backgroundImage === "/images/home/hero-placeholder.jpg";
+    hero.backgroundImage === "/images/home/hero-placeholder.jpg" ||
+    hero.backgroundImage === "";
+
 const heroBgImage =
     hero?.backgroundImage || "/images/home/hero-placeholder.jpg";
 ---

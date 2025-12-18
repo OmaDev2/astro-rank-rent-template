@@ -8,7 +8,8 @@ if (!aboutSection) return null;
 
 const isDefaultImage =
     !aboutSection.image ||
-    aboutSection.image === "/images/home/about-placeholder.jpg";
+    aboutSection.image === "/images/home/about-placeholder.jpg" ||
+    aboutSection.image === "";
 const aboutImage = aboutSection.image || "/images/home/about-placeholder.jpg";
 ---
 

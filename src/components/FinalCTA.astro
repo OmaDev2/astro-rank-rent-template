@@ -3,12 +3,25 @@ import { Phone, ArrowRight } from "lucide-react";
 import { getEntry } from "astro:content";
 
 const business = await getEntry("business", "global");
-const data = business?.data || {};
-const phone = data.phone || "600 000 000";
-const niche = data.niche || "Profesional";
-const ctaText = data.ctaText || "PEDIR PRESUPUESTO";
+const businessData = (business?.data as any) || {};
+const phone = businessData.phone || "600 000 000";
+const niche = businessData.niche || "Profesional";
+const defaultCtaText = businessData.ctaText || "PEDIR PRESUPUESTO";
 
-const { bgClass } = Astro.props;
+const {
+    bgClass,
+    title: rawTitle,
+    subtitle: rawSubtitle,
+    buttonText: rawButtonText,
+    buttonLink,
+} = Astro.props;
+
+const title = rawTitle || "¿Tienes un proyecto en mente?";
+const subtitle =
+    rawSubtitle ||
+    "No te quedes con dudas. Nuestros técnicos te asesoran gratis y te dan precio cerrado hoy mismo.";
+const ctaText = rawButtonText || defaultCtaText;
+const link = buttonLink || `tel:${(phone || "").replace(/\s/g, "")}`;
 ---
 
 <section
@@ -27,18 +40,17 @@ const { bgClass } = Astro.props;
         <h2
             class="text-3xl md:text-5xl font-heading font-bold mb-6 tracking-tight shadow-black/10 drop-shadow-lg"
         >
-            ¿Tienes un proyecto en mente?
+            {title}
         </h2>
 
         <p
             class="text-lg md:text-xl mb-10 text-white/90 max-w-2xl mx-auto font-light leading-relaxed"
         >
-            No te quedes con dudas. Nuestros técnicos te asesoran gratis y te
-            dan precio cerrado hoy mismo.
+            {subtitle}
         </p>
 
         <a
-            href={`tel:${(phone || "").replace(/\s/g, "")}`}
+            href={link}
             class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary rounded-xl transition-all hover:bg-slate-50 hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-black/20 group"
         >
             <Phone className="w-5 h-5 mr-3 group-hover:animate-pulse" />

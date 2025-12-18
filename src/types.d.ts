@@ -30,6 +30,7 @@ export type BlockDiscriminant = 'hero' | 'features' | 'map' | 'content' | 'cta' 
 
 export interface Block {
     discriminant: BlockDiscriminant;
+    value?: any;
 }
 
 export interface FAQItem {

@@ -6,207 +6,152 @@ export const homepage = singleton({
     format: { contentField: 'content' },
     entryLayout: 'content',
     schema: {
-        // --- HERO SECTION ---
-        hero: fields.object({
-            heading: fields.text({ label: 'Hero: Título Principal (Parte Blanca)' }),
-            headingHighlight: fields.text({ label: 'Hero: Título Destacado (Parte Color)' }),
-            subheading: fields.text({ label: 'Hero: Subtítulo', multiline: true }),
-            backgroundImage: fields.image({
-                label: 'Imagen de Fondo',
-                directory: 'public/images/home',
-                publicPath: '/images/home',
-                validation: { isRequired: false }
-            }),
-        }, { label: 'Hero Section' }),
-
-        // --- SECCIÓN SERVICIOS ---
-        servicesSection: fields.object({
-            title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
-            titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
-            subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
-        }, { label: 'Sección Servicios' }),
-
-        // --- LISTA DE SERVICIOS (ONE PAGE MODE) ---
-        servicesList: fields.array(
-            fields.object({
-                title: fields.text({ label: 'Título del Servicio' }),
-                description: fields.text({ label: 'Descripción', multiline: true }),
-                image: fields.image({
-                    label: 'Imagen de Fondo (Opcional)',
-                    description: 'Si se añade, se mostrará como tarjeta con fondo. Si no, usará el estilo de icono.',
-                    directory: 'public/images/services',
-                    publicPath: '/images/services',
-                    validation: { isRequired: false }
-                }),
-            }),
-            {
-                label: 'Lista de Servicios (Modo One Page)',
-                itemLabel: (props) => props.fields.title.value || 'Servicio',
-            }
-        ),
-
-        // --- SECCIÓN SOBRE NOSOTROS (NUEVA) ---
-        aboutSection: fields.object({
-            title: fields.text({ label: 'Título Principal' }),
-            image: fields.image({
-                label: 'Imagen Principal',
-                directory: 'public/images/home',
-                publicPath: '/images/home',
-            }),
-            yearsExperience: fields.text({ label: 'Años de Experiencia (Badge)' }),
-            description: fields.text({
-                label: 'Descripción (Markdown soportado)',
-                multiline: true,
-            }),
-            features: fields.array(
-                fields.object({
-                    title: fields.text({ label: 'Título Característica' }),
-                    description: fields.text({ label: 'Descripción Característica' }),
-                }),
-                { label: 'Lista de Características' }
-            ),
-            buttonText: fields.text({ label: 'Texto Botón' }),
-            buttonLink: fields.text({ label: 'Enlace Botón' }),
-        }, { label: 'Sección Sobre Nosotros' }),
-
-        // --- POR QUÉ ELEGIRNOS ---
-        features: fields.array(
-            fields.object({
-                title: fields.text({ label: 'Título' }),
-                description: fields.text({ label: 'Descripción', multiline: true }),
-                icon: fields.text({ label: 'Icono (Lucide name)' }),
-            }),
-            {
-                label: 'Beneficios / Por qué elegirnos',
-                itemLabel: (props) => props.fields.title.value || 'Beneficio',
-            }
-        ),
-
-        // --- TESTIMONIOS ---
-        testimonials: fields.array(
-            fields.object({
-                quote: fields.text({
-                    label: 'Testimonio',
-                    multiline: true
-                }),
-                author: fields.text({ label: 'Nombre del Cliente' }),
-                location: fields.text({ label: 'Ubicación (Barrio/Ciudad)' }),
-                initials: fields.text({
-                    label: 'Iniciales',
-                    description: 'Ej: JP para Juan Pérez'
-                }),
-            }),
-            {
-                label: 'Testimonios de Clientes',
-                description: 'Reseñas y opiniones de clientes satisfechos',
-                itemLabel: (props) => props.fields.author.value || 'Testimonio',
-            }
-        ),
-
-        // --- SEO CONTENT ---
-        seoContentTitle: fields.text({ label: 'Título Sección SEO (Texto Final)' }),
-        content: fields.mdx({ label: 'Contenido SEO (Texto Final)' }),
-
-        // --- FAQ ---
-        faq: fields.array(
-            fields.object({
-                question: fields.text({ label: 'Pregunta' }),
-                answer: fields.text({ label: 'Respuesta', multiline: true }),
-            }),
-            {
-                label: 'Preguntas Frecuentes (Home)',
-                itemLabel: (props) => props.fields.question.value || 'Pregunta',
-            }
-        ),
-
-        // --- PROCESO DE TRABAJO ---
-        process: fields.object({
-            title: fields.text({ label: 'Título Sección' }),
-            description: fields.text({ label: 'Descripción', multiline: true }),
-            steps: fields.array(
-                fields.object({
-                    title: fields.text({ label: 'Título del Paso' }),
-                    description: fields.text({ label: 'Descripción', multiline: true }),
-                }),
-                {
-                    label: 'Pasos del Proceso',
-                    itemLabel: (props) => props.fields.title.value || 'Paso',
-                }
-            ),
-        }, { label: 'Sección Proceso de Trabajo' }),
-
-        // --- SECCIÓN CONTACTO (HOME) ---
-        contactSection: fields.object({
-            title: fields.text({ label: 'Título Sección' }),
-            subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
-        }, { label: 'Sección Contacto (Home)' }),
-
-        // --- SECCIÓN ZONAS (HOME) ---
-        locationsSection: fields.object({
-            title: fields.text({ label: 'Título Sección' }),
-            subtitle: fields.text({ label: 'Subtítulo / Descripción', multiline: true }),
-        }, { label: 'Sección Zonas (Home)' }),
-
-        // --- OPCIONES EXTRA ---
-        stickyPhone: fields.checkbox({
-            label: '📞 Mostrar Botón de Llamada Flotante (Móvil)',
-            description: 'Añade un botón de "Llamar Ahora" fijo en la parte inferior para móviles (ideal urgencias).',
-            defaultValue: true
-        }),
-
-        // --- NUEVO: PAGE BUILDER PARA HOMEPAGE ---
+        // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
         blocks: fields.blocks({
             hero: {
                 label: 'Hero Principal',
-                schema: fields.empty()
+                schema: fields.object({
+                    heading: fields.text({ label: 'Título Principal (Parte Blanca)' }),
+                    headingHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
+                    subheading: fields.text({ label: 'Subtítulo', multiline: true }),
+                    backgroundImage: fields.image({
+                        label: 'Imagen de Fondo',
+                        directory: 'public/images/home',
+                        publicPath: '/images/home',
+                    }),
+                })
             },
-            services: {
-                label: 'Grilla de Servicios',
-                schema: fields.empty()
+            services_grid: {
+                label: 'Grilla de Servicios Automática',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
+                    titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
+                    subtitle: fields.text({ label: 'Resumen', multiline: true }),
+                })
             },
             services_list: {
-                label: 'Lista de Servicios (One Page)',
-                schema: fields.empty()
+                label: 'Lista de Servicios (Manual/OnePage)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    items: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Nombre Servicio' }),
+                            description: fields.text({ label: 'Descripción', multiline: true }),
+                            image: fields.image({
+                                label: 'Imagen (Opcional)',
+                                directory: 'public/images/services',
+                                publicPath: '/images/services',
+                            }),
+                        }),
+                        { label: 'Servicios Manuales', itemLabel: p => p.fields.title.value || 'Servicio' }
+                    )
+                })
             },
             about: {
                 label: 'Sección Sobre Nosotros',
-                schema: fields.empty()
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    description: fields.text({ label: 'Biografía / Historia', multiline: true }),
+                    yearsExperience: fields.text({ label: 'Años (Badge)' }),
+                    image: fields.image({
+                        label: 'Imagen Principal',
+                        directory: 'public/images/home',
+                        publicPath: '/images/home',
+                    }),
+                    features: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Título' }),
+                            description: fields.text({ label: 'Detalle' }),
+                        }),
+                        { label: 'Puntos Clave' }
+                    ),
+                    buttonText: fields.text({ label: 'Texto del Botón' }),
+                    buttonLink: fields.text({ label: 'Enlace del Botón' }),
+                })
             },
             features: {
-                label: 'Características (Iconos)',
-                schema: fields.empty()
-            },
-            contact: {
-                label: 'Sección Contacto/Presupuesto',
-                schema: fields.empty()
+                label: 'Características / Beneficios',
+                schema: fields.array(
+                    fields.object({
+                        title: fields.text({ label: 'Título' }),
+                        description: fields.text({ label: 'Descripción', multiline: true }),
+                        icon: fields.text({ label: 'Icono (Lucide name)' }),
+                    }),
+                    { label: 'Beneficios', itemLabel: p => p.fields.title.value || 'Beneficio' }
+                )
             },
             testimonials: {
                 label: 'Carrusel de Testimonios',
-                schema: fields.empty()
-            },
-            content: {
-                label: 'Contenido SEO (Texto)',
-                schema: fields.empty()
-            },
-            faq: {
-                label: 'Preguntas Frecuentes',
-                schema: fields.empty()
+                schema: fields.array(
+                    fields.object({
+                        quote: fields.text({ label: 'Testimonio', multiline: true }),
+                        author: fields.text({ label: 'Nombre' }),
+                        location: fields.text({ label: 'Ubicación' }),
+                        initials: fields.text({ label: 'Iniciales' }),
+                    }),
+                    { label: 'Opiniones', itemLabel: p => p.fields.author.value || 'Reseña' }
+                )
             },
             process: {
                 label: 'Proceso de Trabajo',
-                schema: fields.empty()
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    steps: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Paso' }),
+                            description: fields.text({ label: 'Descripción', multiline: true }),
+                        }),
+                        { label: 'Pasos', itemLabel: p => p.fields.title.value || 'Paso' }
+                    )
+                })
+            },
+            faq: {
+                label: 'Preguntas Frecuentes',
+                schema: fields.array(
+                    fields.object({
+                        question: fields.text({ label: 'Pregunta' }),
+                        answer: fields.text({ label: 'Respuesta', multiline: true }),
+                    }),
+                    { label: 'FAQs', itemLabel: p => p.fields.question.value || 'Pregunta' }
+                )
             },
             locations: {
-                label: 'Listado de Zonas',
-                schema: fields.empty()
+                label: 'Mapas / Zonas',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Descripción' }),
+                })
             },
             cta: {
-                label: 'CTA Final',
-                schema: fields.empty()
+                label: 'Llamada a la Acción (CTA)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    buttonText: fields.text({ label: 'Botón' }),
+                })
             },
+            contact: {
+                label: 'Sección de Contacto (Formulario)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                })
+            },
+            content: {
+                label: 'Bloque de Texto SEO (Usa el contenido de abajo)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título del Bloque' }),
+                })
+            }
         }, {
-            label: 'Constructor de Página (Orden de Secciones)',
-            description: 'Define qué secciones mostrar y en qué orden aparecerán en la página de inicio'
+            label: 'Constructor de Portada',
+            description: 'Diseña la estructura de tu página de inicio arrastrando y configurando bloques.'
         }),
+
+        // Contenido MDX para el bloque de texto
+        content: fields.mdx({ label: 'Contenido Adicional (Opcional)' }),
+
+        // Campos adicionales para SEO y UI
+        seoContentTitle: fields.text({ label: 'Título del Bloque Seo (Opcional)' }),
+        stickyPhone: fields.checkbox({ label: 'Mostrar Botón de WhatsApp flotante', defaultValue: true }),
     }
 });

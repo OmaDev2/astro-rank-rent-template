@@ -54,15 +54,25 @@ const phoneHref = (phone || "").replace(/\s/g, "");
 >
     {/* --- 1. FONDO E IMAGEN --- */}
     <div class="absolute inset-0 w-full h-full select-none">
-        <Image
-            src={selectedImage}
-            alt={`${niche} en ${locationName}`}
-            class="w-full h-full object-cover opacity-20 lg:opacity-30 scale-105 group-hover:scale-110 transition-transform duration-[2s]"
-            loading="eager"
-            width={1920}
-            height={1080}
-            inferSize={typeof selectedImage === "string"}
-        />
+        {
+            isOptimized ? (
+                <Image
+                    src={selectedImage}
+                    alt={`${niche} en ${locationName}`}
+                    class="w-full h-full object-cover opacity-20 lg:opacity-30 scale-105 group-hover:scale-110 transition-transform duration-[2s]"
+                    loading="eager"
+                    width={1920}
+                    height={1080}
+                />
+            ) : (
+                <img
+                    src={selectedImage}
+                    alt={`${niche} en ${locationName}`}
+                    class="w-full h-full object-cover opacity-20 lg:opacity-30 scale-105 group-hover:scale-110 transition-transform duration-[2s]"
+                    loading="eager"
+                />
+            )
+        }
         {/* Gradiente estilo "Cine" para oscurecer y dar foco */}
         <div
             class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/95 to-secondary/70"
