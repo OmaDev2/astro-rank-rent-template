@@ -5,6 +5,7 @@ export const locations = collection({
     label: '📍 Zonas de Servicio',
     slugField: 'name',
     path: 'src/content/locations/*',
+    previewUrl: '/zona/{slug}',
     format: { contentField: 'content' },
     entryLayout: 'content',
     schema: {

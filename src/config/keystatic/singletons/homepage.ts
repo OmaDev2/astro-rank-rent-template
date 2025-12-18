@@ -3,6 +3,7 @@ import { singleton, fields } from '@keystatic/core';
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
     path: 'src/content/pages/home',
+    previewUrl: '/',
     format: { contentField: 'content' },
     entryLayout: 'content',
     schema: {

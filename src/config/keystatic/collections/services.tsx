@@ -5,6 +5,7 @@ export const services = collection({
     label: '🛠️ Servicios',
     slugField: 'title',
     path: 'src/content/services/*',
+    previewUrl: '/servicios/{slug}',
     format: { contentField: 'content' },
     entryLayout: 'content',
     schema: {

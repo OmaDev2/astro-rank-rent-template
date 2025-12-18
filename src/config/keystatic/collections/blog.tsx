@@ -5,6 +5,7 @@ export const blog = collection({
     label: '📰 Blog',
     slugField: 'title',
     path: 'src/content/blog/*',
+    previewUrl: '/blog/{slug}',
     entryLayout: 'content',
     format: { contentField: 'content' }, // Usamos 'content' como el campo principal para el editor visual
     // El script generador usará 'content' para el cuerpo del artículo.
