@@ -1,15 +1,15 @@
 ---
-import ServiceLayout from "../layouts/ServiceLayout.astro";
+import ServiceLayout from "../../layouts/ServiceLayout.astro";
 import { getCollection, getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 import type { WithContext, Service, FAQPage, BreadcrumbList } from "schema-dts";
 
 // Importar componentes MDX
-import CtaBlock from "../components/mdx/CtaBlock.astro";
-import AlertBlock from "../components/mdx/AlertBlock.astro";
-import PhoneBlock from "../components/mdx/PhoneBlock.astro";
-import BusinessNameBlock from "../components/mdx/BusinessNameBlock.astro";
-import CustomImageBlock from "../components/mdx/CustomImageBlock.astro";
+import CtaBlock from "../../components/mdx/CtaBlock.astro";
+import AlertBlock from "../../components/mdx/AlertBlock.astro";
+import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
+import BusinessNameBlock from "../../components/mdx/BusinessNameBlock.astro";
+import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
 
 export const prerender = true;
 
