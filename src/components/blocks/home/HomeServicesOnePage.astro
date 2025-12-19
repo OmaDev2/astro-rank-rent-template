@@ -39,9 +39,11 @@ if (!services || services.length === 0) return null;
                     service.image ? (
                         // Card con Imagen de Fondo (Estilo tipo Page)
                         <div class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]">
-                            <div
-                                class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                style={`background-image: url('${service.image}')`}
+                            <img
+                                src={service.image}
+                                alt={service.title}
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                loading="lazy"
                             />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
                                 <h3 class="text-2xl font-heading font-bold text-white mb-3 shadow-black drop-shadow-sm">

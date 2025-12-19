@@ -52,6 +52,8 @@ const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
                             src={logo}
                             alt={`${siteName} Logo`}
                             class="h-20 w-auto object-contain transition-all duration-300"
+                            height="80"
+                            fetchpriority="high"
                         />
                     ) : (
                         <span class="text-2xl font-heading font-bold text-primary">

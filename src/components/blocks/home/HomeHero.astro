@@ -34,6 +34,8 @@ const heroBgImage =
                     src={heroBgImage}
                     alt={`${config.niche} en ${config.city}`}
                     class="w-full h-full object-cover"
+                    fetchpriority="high"
+                    loading="eager"
                 />
             )
         }

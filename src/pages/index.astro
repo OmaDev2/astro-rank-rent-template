@@ -8,11 +8,8 @@ import WhatsAppButton from "../components/WhatsAppButton.astro";
 import BlockRenderer from "../components/BlockRenderer.astro";
 
 // 1. Fetch Data
-const featuredServices = await getCollection(
-	"services",
-	({ data }) => data.featured === true,
-);
 const allServices = await getCollection("services");
+const featuredServices = allServices.filter((s) => s.data.featured === true);
 const testimonialsCollection = await getCollection("testimonials");
 const home = await getEntry("pages", "home");
 const homeData = (home?.data || {}) as any;

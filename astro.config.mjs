@@ -55,7 +55,7 @@ export default defineConfig({
   ],
 
   // ✅ MODO SERVER: SSR completo necesario para Keystatic CMS
-  output: 'server',
+  output: 'static',
   adapter: netlify(),
 
   vite: {

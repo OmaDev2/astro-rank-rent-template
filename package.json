@@ -8,6 +8,7 @@
         "build": "astro build",
         "preview": "astro preview",
         "astro": "astro",
+        "optimize-images": "node scripts/optimize-images.mjs",
         "reset": "node scripts/utils/reset.js",
         "export": "node scripts/utils/export_client.js",
         "manual": "node scripts/utils/manual_research.js",

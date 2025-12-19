@@ -1,0 +1,10 @@
+# REDIRECTS CONFIGURATION
+# ========================
+# This file is currently empty because your project is configured for Server-Side Rendering (SSR).
+# 
+# WARNING: A catch-all rule like "/* /index.html 200" is for Single Page Applications (SPA) only.
+# Adding it here would BREAK your site because the homepage is dynamically rendered on the server,
+# so there is no static "index.html" to serve for all routes.
+#
+# If you eventually switch to 'output: static' in astro.config.mjs, you can uncomment the line below:
+# /*  /index.html  200

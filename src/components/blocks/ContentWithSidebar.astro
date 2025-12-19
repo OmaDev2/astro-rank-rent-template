@@ -1,0 +1,226 @@
+---
+import { Shield, ArrowRight, CheckCircle } from "lucide-react";
+import type { Service, Location } from "../../types";
+
+interface Props {
+    title?: string;
+    niche?: string;
+    locationName?: string;
+    city?: string;
+    phone?: string;
+    whatsapp?: string;
+    urgencyStyle?: "none" | "success" | "urgent" | "primary" | "accent";
+    content?: any;
+    mdxComponents?: any;
+    services?: Service[];
+    allLocations?: Location[];
+    currentSlug?: string;
+    bgClass?: string;
+}
+
+const {
+    title,
+    niche,
+    locationName,
+    city,
+    phone,
+    whatsapp,
+    urgencyStyle = "none",
+    content: Content,
+    mdxComponents,
+    services,
+    allLocations,
+    currentSlug,
+    bgClass = "bg-secondary",
+} = Astro.props;
+
+const urgencyMap = {
+    none: "",
+    success: "bg-green-800/10 border-green-700/30 text-green-600",
+    urgent: "bg-red-950/10 border-red-900/30 text-red-500",
+    primary: "bg-primary/5 border-primary/20 text-primary",
+    accent: "bg-accent/5 border-accent/20 text-accent",
+};
+
+const iconBgMap = {
+    none: "bg-primary",
+    success: "bg-green-600",
+    urgent: "bg-red-700",
+    primary: "bg-primary",
+    accent: "bg-accent",
+};
+
+const currentUrgencyClass = urgencyMap[urgencyStyle] || "";
+const currentIconBgClass = iconBgMap[urgencyStyle] || "bg-primary";
+---
+
+<section class={`py-20 ${bgClass}`}>
+    <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
+        {/* CONTENIDO PRINCIPAL */}
+        <div class="lg:col-span-2 space-y-12">
+            {/* Caja de Urgencia Dinámica */}
+            {
+                urgencyStyle !== "none" && (
+                    <div
+                        class={`border p-6 rounded-xl flex flex-col sm:flex-row items-center gap-6 ${currentUrgencyClass}`}
+                    >
+                        <div
+                            class={`p-4 rounded-full shrink-0 animate-pulse text-white ${currentIconBgClass}`}
+                        >
+                            <Shield className="w-8 h-8" />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-heading mb-2">
+                                ¿Necesitas {title || niche} urgente?
+                            </h3>
+                            <p class="text-body mb-4">
+                                Llámanos ahora mismo. Atendemos en{" "}
+                                {locationName || city}.
+                            </p>
+                            <a
+                                href={`tel:${(phone || "").replace(/\s/g, "")}`}
+                                class="font-bold text-2xl hover:opacity-80 transition-opacity"
+                            >
+                                {phone}
+                            </a>
+                        </div>
+                    </div>
+                )
+            }
+
+            <div
+                class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary prose-li:text-body max-w-none"
+            >
+                {Content && <Content components={mdxComponents} />}
+            </div>
+
+            {/* SERVICIOS EN LA ZONA (Solo si no es home y hay servicios) */}
+            {
+                services && services.length > 0 && (
+                    <div>
+                        <h2 class="text-3xl font-heading font-bold text-heading mb-8">
+                            Servicios de {niche} en {locationName}
+                        </h2>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            {services.map((service) => (
+                                <a
+                                    href={`/${service.slug}`}
+                                    class="group relative p-6 rounded-2xl bg-surface border border-heading/5 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 overflow-hidden"
+                                >
+                                    <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                    <div class="relative flex items-center justify-between mb-4">
+                                        <h3 class="text-lg font-bold text-heading group-hover:text-primary transition-colors pr-8">
+                                            {service.data.title}
+                                        </h3>
+                                        <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                            <ArrowRight className="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                    <p class="relative text-body text-sm line-clamp-2 leading-relaxed opacity-80 group-hover:opacity-100">
+                                        {service.data.shortDesc}{" "}
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+        </div>
+
+        {/* SIDEBAR CON GLASSMORFISMO Y DISEÑO PREMIUM */}
+        <div class="space-y-8">
+            <div class="p-8 rounded-2xl sticky top-24 glass-card">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl pointer-events-none"
+                >
+                </div>
+
+                <h3
+                    class="relative text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4"
+                >
+                    Contacto Directo
+                </h3>
+                <ul class="relative space-y-4 mb-8">
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="p-1 rounded-full bg-primary/20 text-primary mt-0.5"
+                        >
+                            <CheckCircle className="w-4 h-4" />
+                        </div>
+                        <span class="text-body font-medium text-sm">
+                            Presupuesto 100% Gratuito
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div
+                            class="p-1 rounded-full bg-primary/20 text-primary mt-0.5"
+                        >
+                            <CheckCircle className="w-4 h-4" />
+                        </div>
+                        <span class="text-body font-medium text-sm">
+                            Disponibilidad Inmediata en {locationName}
+                        </span>
+                    </li>
+                </ul>
+
+                <div class="relative flex flex-col gap-3">
+                    <a
+                        href={`tel:${phone?.replace(/\s/g, "")}`}
+                        class="flex flex-col items-center justify-center w-full py-4 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 rounded-xl transition-all transform hover:-translate-y-1"
+                    >
+                        <span
+                            class="text-[10px] uppercase tracking-widest opacity-90 mb-1"
+                        >
+                            Hablar con un Experto
+                        </span>
+                        <span class="text-2xl font-bold tracking-tight">
+                            {phone}
+                        </span>
+                    </a>
+                    <a
+                        href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone?.replace(/\s/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center justify-center w-full py-3 bg-brand-whatsapp hover:bg-brand-whatsapp-dark text-white shadow-lg shadow-green-500/20 rounded-xl font-bold transition-all transform hover:-translate-y-1 gap-2"
+                    >
+                        <span>WhatsApp Directo</span>
+                    </a>
+                </div>
+            </div>
+
+            {/* OTRAS ZONAS (Solo si hay zonas) */}
+            {
+                allLocations && allLocations.length > 0 && (
+                    <div class="rounded-2xl border border-heading/5 overflow-hidden shadow-sm bg-surface">
+                        <div class="bg-surface-variant/30 p-4 border-b border-heading/5">
+                            <h4 class="font-bold text-heading uppercase text-xs tracking-widest opacity-70">
+                                Explorar Otras Zonas
+                            </h4>
+                        </div>
+                        <div class="p-2">
+                            <ul class="space-y-1">
+                                {allLocations
+                                    .filter((loc) => loc.slug !== currentSlug)
+                                    .slice(0, 6)
+                                    .map((location) => (
+                                        <li>
+                                            <a
+                                                href={`/zona/${location.slug}`}
+                                                class="block p-3 rounded-lg hover:bg-primary/5 text-body hover:text-primary transition-all text-sm flex justify-between items-center group"
+                                            >
+                                                <span class="font-medium">
+                                                    {location.data.name}
+                                                </span>
+                                                <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                                            </a>
+                                        </li>
+                                    ))}
+                            </ul>
+                        </div>
+                    </div>
+                )
+            }
+        </div>
+    </div>
+</section>
