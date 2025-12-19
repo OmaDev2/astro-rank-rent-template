@@ -20,11 +20,14 @@ const description =
 const disclaimer =
     footerData.disclaimer ||
     `⚠️ Configura este texto legal en el CMS (Footer > Disclaimer)`;
-const footerLinks = footerData.footerLinks || [
-    { label: "Aviso Legal", url: "/aviso-legal/" },
-    { label: "Privacidad", url: "/privacidad/" },
-    { label: "Cookies", url: "/cookies/" },
-];
+const footerLinks =
+    footerData.footerLinks && footerData.footerLinks.length > 0
+        ? footerData.footerLinks
+        : [
+              { label: "Aviso Legal", url: "/aviso-legal/" },
+              { label: "Privacidad", url: "/privacidad/" },
+              { label: "Cookies", url: "/cookies/" },
+          ];
 ---
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
@@ -32,9 +35,9 @@ const footerLinks = footerData.footerLinks || [
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* COLUMNA 1: INFO NEGOCIO */}
             <div>
-                <h3 class="text-2xl font-heading font-bold text-heading mb-4">
+                <div class="text-2xl font-heading font-bold text-heading mb-4">
                     {siteName}
-                </h3>
+                </div>
                 <p class="text-body text-sm leading-relaxed mb-6">
                     {description}
                 </p>
@@ -74,11 +77,11 @@ const footerLinks = footerData.footerLinks || [
 
             {/* COLUMNA 2: CONTACTO */}
             <div>
-                <h4
+                <div
                     class="text-heading font-bold mb-4 uppercase tracking-wider text-sm"
                 >
                     Contacto
-                </h4>
+                </div>
                 <ul class="space-y-3 text-body text-sm">
                     <li class="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-primary" />

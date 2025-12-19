@@ -1,0 +1,77 @@
+{
+  "hero": {
+    "title": "Transformando los Pisos de Barcelona",
+    "description": "Somos la empresa de referencia en Barcelona especializada exclusivamente en quitar gotelé y alisar paredes. Más de una década convirtiendo pisos antiguos en hogares modernos, luminosos y limpios."
+  },
+  "mainImage": {
+    "experienceBadge": "+15 Años"
+  },
+  "history": {
+    "subtitle": "Nuestra Historia desde 2010",
+    "title": "De Pintores Tradicionales a Especialistas en Alisado",
+    "stats": [
+      {
+        "value": "250+",
+        "label": "Pisos Alisados"
+      },
+      {
+        "value": "100%",
+        "label": "Clientes Satisfechos"
+      },
+      {
+        "value": "0",
+        "label": "Reclamaciones de Garantía"
+      },
+      {
+        "value": "15",
+        "label": "Años de Experiencia"
+      }
+    ]
+  },
+  "values": {
+    "title": "Nuestros Pilares Fundamentales",
+    "description": "No somos una empresa de reformas generalista. Somos artesanos de la pared lisa y nos regimos por tres normas inquebrantables.",
+    "items": [
+      {
+        "icon": "Shield",
+        "title": "Limpieza Obsesiva",
+        "description": "Entendemos que es tu casa, no una obra. Usamos aspiración HEPA y protegemos hasta el último enchufe."
+      },
+      {
+        "icon": "Shield",
+        "title": "Honestidad en el Precio",
+        "description": "Odiamos los \"extras\" sorpresa tanto como tú. El precio que firmamos es el precio que pagas."
+      },
+      {
+        "icon": "Shield",
+        "title": "Excelencia Técnica",
+        "description": "No buscamos \"tapar\" el gotelé. Buscamos una planimetría perfecta (Nivel Q4) que parezca un espejo."
+      }
+    ]
+  },
+  "whyChooseUs": {
+    "title": "Por qué confiar en nosotros y no en una brigada generalista?",
+    "items": [
+      {
+        "title": "Conocimiento Local",
+        "description": "Sabemos distinguir un gotelé al temple de los años 70 de uno plástico de los 90 con solo tocarlo. Eso nos ahorra tiempo y a ti dinero"
+      },
+      {
+        "title": "Maquinaria Propia",
+        "description": "No alquilamos máquinas baratas. Tenemos equipos industriales propios de Festool y Graco que garantizan el mejor acabado"
+      },
+      {
+        "title": "Garantía Real",
+        "description": "Al ser una empresa establecida y local, nuestra garantía de 2 años es real. Si nos necesitas, sabemos dónde estamos."
+      }
+    ]
+  },
+  "team": {
+    "title": "Equipo Profesional",
+    "description": "En este sector es común la subcontratación y la rotación de personal. Nosotros no funcionamos así. Nuestro equipo base lleva trabajando junto más de 8 años. Son profesionales formados específicamente en técnicas de alisado y masillado fino. Saben trabajar en silencio, respetan tu privacidad y dejan todo impecable al salir. Cuando nos contratas, sabes exactamente quién entrará en tu casa."
+  },
+  "seo": {
+    "title": "Sobre Nosotros | Expertos en Quitar Gotelé Barcelona - Desde 2010",
+    "description": "Conoce a la empresa líder en quitar gotelé y alisar paredes en Barcelona. Más de 15 años de experiencia, sistema sin polvo garantizado y precios cerrados. Descubre nuestra historia."
+  }
+}

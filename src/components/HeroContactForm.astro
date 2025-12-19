@@ -131,9 +131,13 @@ const labelClasses =
                                         {field.placeholder ||
                                             "Selecciona una opción"}
                                     </option>
-                                    {field.selectOptions?.map((option) => (
-                                        <option value={option}>{option}</option>
-                                    ))}
+                                    {field.selectOptions?.map(
+                                        (option: string) => (
+                                            <option value={option}>
+                                                {option}
+                                            </option>
+                                        ),
+                                    )}
                                 </select>
                                 {/* Icono de flecha para el select */}
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-body">

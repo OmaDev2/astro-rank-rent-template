@@ -100,6 +100,7 @@ export const homepage = singleton({
                 label: 'Lista de Servicios (Manual/OnePage)',
                 schema: fields.object({
                     title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
                     items: fields.array(
                         fields.object({
                             title: fields.text({ label: 'Nombre Servicio' }),
@@ -109,6 +110,7 @@ export const homepage = singleton({
                                 directory: 'public/images/services',
                                 publicPath: '/images/services',
                             }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
                         }),
                         { label: 'Servicios Manuales', itemLabel: p => p.fields.title.value || 'Servicio' }
                     )

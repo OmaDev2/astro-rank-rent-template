@@ -8,7 +8,9 @@ import { analytics } from './src/config/keystatic/singletons/analytics';
 import { schema } from './src/config/keystatic/singletons/schema';
 import { navigation } from './src/config/keystatic/singletons/navigation';
 import { footer } from './src/config/keystatic/singletons/footer';
+import { legalNotice, privacyPolicy, cookiesPolicy } from './src/config/keystatic/singletons/legal';
 import { homepage } from './src/config/keystatic/singletons/homepage';
+import { about } from './src/config/keystatic/singletons/about';
 
 // Collections
 import { services } from './src/config/keystatic/collections/services';
@@ -31,9 +33,9 @@ export default config({
 
         // Navegación organizada
         navigation: {
-            '📝 Contenido': ['homepage', 'services', 'locations', 'projects', 'testimonials', 'blog'],
+            '📝 Contenido': ['homepage', 'about', 'services', 'locations', 'projects', 'testimonials', 'blog'],
             '---': [],
-            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'footer'],
+            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'footer', 'legalNotice', 'privacyPolicy', 'cookiesPolicy'],
         },
     },
 
@@ -46,7 +48,11 @@ export default config({
         schema,
         navigation,
         footer,
+        legalNotice,
+        privacyPolicy,
+        cookiesPolicy,
         homepage,
+        about,
     },
 
     // --- COLECCIONES ---

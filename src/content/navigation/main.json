@@ -1,0 +1,23 @@
+{
+  "menuItems": [
+    {
+      "label": "Inicio",
+      "url": "/",
+      "type": "link"
+    },
+    {
+      "label": "Zonas",
+      "type": "locations_dropdown"
+    },
+    {
+      "label": "Contacto",
+      "url": "/contacto/",
+      "type": "link"
+    },
+    {
+      "label": "Nosotros ",
+      "url": "/nosotros ",
+      "type": "link"
+    }
+  ]
+}

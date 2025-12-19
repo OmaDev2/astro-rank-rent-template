@@ -4,8 +4,14 @@ import Footer from "../components/Footer.astro";
 import { Scale } from "lucide-react";
 import { getSettings } from "../lib/settings";
 
+import { getEntry } from "astro:content";
+
 // Fetch Global Settings
 const { siteName, city, niche, email, address, nif } = await getSettings();
+
+// Fetch Legal Content from CMS
+const legacyEntry = await getEntry("legal", "aviso-legal");
+const { Content } = legacyEntry ? await legacyEntry.render() : { Content: null };
 ---
 
 <Layout
@@ -42,6 +48,11 @@ const { siteName, city, niche, email, address, nif } = await getSettings();
                     <div
                         class="bg-surface/50 border border-heading/10 rounded-xl p-8 space-y-6"
                     >
+                    {
+                        Content ? (
+                            <Content />
+                        ) : (
+                            // FALLBACK CONTENT (if no CMS entry exists)
                         <section>
                             <h2 class="text-2xl font-bold text-heading mb-4">
                                 1. Datos Identificativos
@@ -283,6 +294,8 @@ const { siteName, city, niche, email, address, nif } = await getSettings();
                                 Email: {email}
                             </p>
                         </section>
+                        )
+                    }
                     </div>
                 </div>
             </div>

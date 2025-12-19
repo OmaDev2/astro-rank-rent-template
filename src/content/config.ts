@@ -205,7 +205,19 @@ const pages = defineCollection({
             z.discriminatedUnion('discriminant', [
                 z.object({ discriminant: z.literal('hero'), value: z.any() }),
                 z.object({ discriminant: z.literal('services_grid'), value: z.any() }),
-                z.object({ discriminant: z.literal('services_list'), value: z.any() }),
+                z.object({
+                    discriminant: z.literal('services_list'),
+                    value: z.object({
+                        title: z.string().optional(),
+                        subtitle: z.string().optional(),
+                        items: z.array(z.object({
+                            title: z.string(),
+                            description: z.string(),
+                            image: z.string().optional(),
+                            icon: z.string().optional(),
+                        })).optional()
+                    })
+                }),
                 z.object({ discriminant: z.literal('about'), value: z.any() }),
                 z.object({ discriminant: z.literal('features'), value: z.any() }),
                 z.object({ discriminant: z.literal('process'), value: z.any() }),
@@ -318,6 +330,59 @@ const blog = defineCollection({
 });
 
 
+const about = defineCollection({
+    type: 'data',
+    schema: z.object({
+        hero: z.object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            image: z.string().optional(),
+        }).optional(),
+        mainImage: z.object({
+            image: z.string().optional(),
+            experienceBadge: z.string().optional(),
+        }).optional(),
+        history: z.object({
+            subtitle: z.string().optional(),
+            title: z.string().optional(),
+            content: z.string().optional(),
+            stats: z.array(z.object({
+                value: z.string(),
+                label: z.string(),
+            })).optional(),
+        }).optional(),
+        values: z.object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            items: z.array(z.object({
+                icon: z.string(),
+                title: z.string(),
+                description: z.string(),
+            })).optional(),
+        }).optional(),
+        whyChooseUs: z.object({
+            title: z.string().optional(),
+            items: z.array(z.object({
+                title: z.string(),
+                description: z.string(),
+            })).optional(),
+        }).optional(),
+        team: z.object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+        }).optional(),
+        seo: z.object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+        }).optional(),
+    }).passthrough(),
+});
+
+const legal = defineCollection({
+    type: 'content',
+    schema: z.object({}),
+});
+
 export const collections = {
     locations,
     services,
@@ -333,6 +398,8 @@ export const collections = {
     form,
     footer,
     blog,
+    legal,
+    about,
 
 };
 

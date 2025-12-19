@@ -18,8 +18,115 @@ import type { WithContext, AboutPage } from "schema-dts";
 // Fetch Global Settings
 import { getSettings } from "@/lib/settings";
 const settings = await getSettings();
-
 const { siteName, city, niche } = settings;
+
+// Fetch About Content
+const aboutEntry = await getEntry("about", "index");
+const aboutData = aboutEntry?.data;
+
+// Default Values (Fallback)
+const defaults = {
+    hero: {
+        title: "Sobre Nosotros",
+        description: `${niche} profesionales en ${city} comprometidos con la calidad, la seguridad y la satisfacción del cliente.`,
+        image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop",
+    },
+    mainImage: {
+        image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop",
+        experienceBadge: "+15 Años",
+    },
+    history: {
+        subtitle: "Nuestra Historia",
+        title: `${niche} Profesional desde 2010`,
+        content: `Desde nuestros inicios, nos hemos dedicado a ofrecer servicios de ${niche.toLowerCase()} de la más alta calidad en ${city} y provincia. Lo que comenzó como un pequeño taller familiar ha crecido hasta convertirse en una referencia en el sector. Nuestro compromiso es simple pero firme: ofrecer trabajos que combinen seguridad, durabilidad y diseño. Cada proyecto, grande o pequeño, recibe la misma atención al detalle y profesionalidad.`,
+        stats: [
+            { value: "500+", label: "Proyectos" },
+            { value: "100%", label: "Satisfacción" },
+            { value: "15+", label: "Años" },
+        ],
+    },
+    values: {
+        title: "Nuestros Valores",
+        description: "Los principios que guían nuestro trabajo cada día",
+        items: [
+            {
+                icon: "Shield",
+                title: "Calidad",
+                description:
+                    "Materiales certificados y técnicas profesionales.",
+            },
+            {
+                icon: "Heart",
+                title: "Compromiso",
+                description: "Superamos las expectativas en cada proyecto.",
+            },
+            {
+                icon: "Clock",
+                title: "Puntualidad",
+                description: "Respetamos los plazos y urgencias.",
+            },
+            {
+                icon: "Target",
+                title: "Transparencia",
+                description: "Presupuestos claros sin sorpresas.",
+            },
+        ],
+    },
+    whyChooseUs: {
+        title: "¿Por Qué Elegirnos?",
+        items: [
+            {
+                title: `Taller Propio en ${city}`,
+                description:
+                    "Fabricamos sin intermediarios para controlar la calidad.",
+            },
+            {
+                title: "Experiencia Demostrable",
+                description:
+                    "Años perfeccionando nuestras técnicas y conociendo el sector.",
+            },
+            {
+                title: "Garantía por Escrito",
+                description:
+                    "Todos nuestros trabajos incluyen garantía y factura reglamentaria.",
+            },
+            {
+                title: "Atención Personalizada",
+                description:
+                    "Nos tomamos el tiempo necesario para entender tus necesidades.",
+            },
+        ],
+    },
+    team: {
+        title: "Equipo Profesional",
+        description: `Nuestro equipo está formado por técnicos certificados y con años de experiencia en el sector del ${niche.toLowerCase()}. Nos mantenemos actualizados con las últimas técnicas y normativas para ofrecer siempre el mejor servicio en ${city}.`,
+    },
+    seo: {
+        title: `Sobre Nosotros | ${siteName}`,
+        description: `${niche} profesionales en ${city} desde 2010. Conoce nuestra historia, valores y compromiso con la calidad.`,
+    },
+};
+
+// Merge data
+const hero = aboutData?.hero || defaults.hero;
+const mainImage = aboutData?.mainImage || defaults.mainImage;
+const history = aboutData?.history || defaults.history;
+const values = aboutData?.values || defaults.values;
+const whyChooseUs = aboutData?.whyChooseUs || defaults.whyChooseUs;
+const team = aboutData?.team || defaults.team;
+const seo = aboutData?.seo || defaults.seo;
+
+// Icon Map
+const iconMap: Record<string, any> = {
+    Shield,
+    Heart,
+    Clock,
+    Target,
+    Users,
+    Wrench,
+    Award,
+    CheckCircle,
+};
 
 // Import Schema Helpers
 import { generateLocalBusinessSchema } from "@/lib/seo";
@@ -32,7 +139,7 @@ const localBusinessSchema = generateLocalBusinessSchema(
         phone: settings.phone,
         coordinates: settings.coordinates,
         businessType: settings.businessType,
-        description: `Conoce la historia y valores de ${siteName}. Especialistas en ${niche}.`,
+        description: seo.description || defaults.seo.description,
         areaServed: settings.areaServed,
         serviceRadius: settings.serviceRadius,
     },
@@ -43,20 +150,22 @@ const localBusinessSchema = generateLocalBusinessSchema(
 const schema: WithContext<AboutPage> = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    name: `Sobre Nosotros - ${siteName}`,
-    description: `Conoce la historia y valores de ${siteName}. Más de 15 años ofreciendo servicios de ${niche} profesional en ${city}.`,
+    name: seo.title || `Sobre Nosotros - ${siteName}`,
+    description: seo.description || defaults.seo.description,
     mainEntity: localBusinessSchema as any,
 };
 ---
 
 <Layout
-    title={`Sobre Nosotros | ${siteName}`}
-    description={`${niche} profesionales en ${city} desde 2010. Conoce nuestra historia, valores y compromiso con la calidad.`}
+    title={seo.title || defaults.seo.title}
+    description={seo.description || defaults.seo.description}
     schema={schema}
 >
+    <!-- HERO SECTION -->
     <section class="relative py-20 bg-secondary overflow-hidden">
         <div
-            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"
+            class="absolute inset-0 bg-cover bg-center opacity-20"
+            style={`background-image: url('${hero.image || defaults.hero.image}')`}
         >
         </div>
         <div
@@ -69,163 +178,127 @@ const schema: WithContext<AboutPage> = {
                 <h1
                     class="text-5xl lg:text-6xl font-heading font-bold text-heading mb-6"
                 >
-                    Sobre <span class="text-primary">Nosotros</span>
+                    {hero.title || defaults.hero.title}
                 </h1>
                 <p class="text-xl text-body leading-relaxed">
-                    {niche} profesionales en {city} comprometidos con la calidad,
-                    la seguridad y la satisfacción del cliente.
+                    {hero.description || defaults.hero.description}
                 </p>
             </div>
         </div>
     </section>
 
+    <!-- HISTORY & STATS SECTION -->
     <section class="py-20 bg-surface/30">
         <div class="container mx-auto px-4">
             <div
                 class="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
             >
+                <!-- Image Column -->
                 <div class="relative">
                     <div
                         class="aspect-[4/3] rounded-2xl overflow-hidden border border-heading/10 shadow-2xl"
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=2070&auto=format&fit=crop"
-                            alt={`Taller de ${niche} ${city}`}
+                            src={mainImage.image || defaults.mainImage.image}
+                            alt={`Sobre nosotros - ${siteName}`}
                             class="w-full h-full object-cover"
                         />
                     </div>
-                    <div
-                        class="absolute -bottom-6 -right-6 bg-primary text-white p-6 rounded-xl shadow-2xl"
-                    >
-                        <div class="text-center">
-                            <div class="text-4xl font-heading font-bold">
-                                +15
+                    {
+                        mainImage.experienceBadge && (
+                            <div class="absolute -bottom-6 -right-6 bg-primary text-white p-6 rounded-xl shadow-2xl">
+                                <div class="text-center">
+                                    <div class="text-xl font-heading font-bold uppercase tracking-wider">
+                                        {mainImage.experienceBadge}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-sm uppercase tracking-wider">
-                                Años
-                            </div>
-                        </div>
-                    </div>
+                        )
+                    }
                 </div>
 
+                <!-- Text Column -->
                 <div>
                     <div class="flex items-center gap-3 mb-6">
                         <div class="h-1 w-12 bg-primary"></div>
                         <span
                             class="text-primary font-bold uppercase tracking-wider text-sm"
-                            >Nuestra Historia</span
                         >
+                            {history.subtitle || defaults.history.subtitle}
+                        </span>
                     </div>
                     <h2
                         class="text-4xl font-heading font-bold text-heading mb-6"
                     >
-                        {niche} Profesional desde 2010
+                        {history.title || defaults.history.title}
                     </h2>
 
-                    <p class="text-body mb-6 leading-relaxed text-lg">
-                        Desde nuestros inicios, nos hemos dedicado a ofrecer
-                        servicios de {niche.toLowerCase()} de la más alta calidad
-                        en {city} y provincia. Lo que comenzó como un pequeño taller
-                        familiar ha crecido hasta convertirse en una referencia en
-                        el sector.
-                    </p>
-
-                    <p class="text-body mb-8 leading-relaxed">
-                        Nuestro compromiso es simple pero firme: <strong
-                            class="text-heading"
-                            >ofrecer trabajos que combinen seguridad,
-                            durabilidad y diseño</strong
-                        >. Cada proyecto, grande o pequeño, recibe la misma
-                        atención al detalle y profesionalidad.
-                    </p>
-
-                    <div class="grid grid-cols-3 gap-6">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-primary mb-1">
-                                500+
-                            </div>
-                            <div class="text-xs text-body/70 uppercase">
-                                Proyectos
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-primary mb-1">
-                                100%
-                            </div>
-                            <div class="text-xs text-body/70 uppercase">
-                                Satisfacción
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-primary mb-1">
-                                15+
-                            </div>
-                            <div class="text-xs text-body/70 uppercase">
-                                Años
-                            </div>
-                        </div>
+                    <div
+                        class="text-body mb-8 leading-relaxed text-lg whitespace-pre-line"
+                    >
+                        {history.content || defaults.history.content}
                     </div>
+
+                    {
+                        history.stats && (
+                            <div class="grid grid-cols-3 gap-6">
+                                {history.stats.map((stat) => (
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-primary mb-1">
+                                            {stat.value}
+                                        </div>
+                                        <div class="text-xs text-body/70 uppercase">
+                                            {stat.label}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- VALUES SECTION -->
     <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-heading font-bold text-heading mb-4">
-                    Nuestros Valores
+                    {values.title || defaults.values.title}
                 </h2>
                 <div class="w-24 h-1 bg-primary mx-auto mb-4"></div>
                 <p class="text-body max-w-2xl mx-auto">
-                    Los principios que guían nuestro trabajo cada día
+                    {values.description || defaults.values.description}
                 </p>
             </div>
 
             <div
                 class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
             >
-                {/* Array de valores para iterar y no repetir código */}
                 {
-                    [
-                        {
-                            icon: Shield,
-                            title: "Calidad",
-                            desc: "Materiales certificados y técnicas profesionales.",
-                        },
-                        {
-                            icon: Heart,
-                            title: "Compromiso",
-                            desc: "Superamos las expectativas en cada proyecto.",
-                        },
-                        {
-                            icon: Clock,
-                            title: "Puntualidad",
-                            desc: "Respetamos los plazos y urgencias.",
-                        },
-                        {
-                            icon: Target,
-                            title: "Transparencia",
-                            desc: "Presupuestos claros sin sorpresas.",
-                        },
-                    ].map((item) => (
-                        <div class="p-6 bg-surface/50 border border-heading/10 rounded-xl hover:border-primary/50 transition-all group">
-                            <div class="w-14 h-14 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <item.icon className="w-7 h-7 text-primary" />
+                    (values.items || defaults.values.items).map((item) => {
+                        const Icon = iconMap[item.icon] || Shield;
+                        return (
+                            <div class="p-6 bg-surface/50 border border-heading/10 rounded-xl hover:border-primary/50 transition-all group">
+                                <div class="w-14 h-14 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <Icon className="w-7 h-7 text-primary" />
+                                </div>
+                                <h3 class="text-xl font-bold text-heading mb-3">
+                                    {item.title}
+                                </h3>
+                                <p class="text-body text-sm leading-relaxed">
+                                    {item.description}
+                                </p>
                             </div>
-                            <h3 class="text-xl font-bold text-heading mb-3">
-                                {item.title}
-                            </h3>
-                            <p class="text-body text-sm leading-relaxed">
-                                {item.desc}
-                            </p>
-                        </div>
-                    ))
+                        );
+                    })
                 }
             </div>
         </div>
     </section>
 
+    <!-- WHY CHOOSE US -->
     <section class="py-20 bg-surface/30">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
@@ -233,51 +306,37 @@ const schema: WithContext<AboutPage> = {
                     <h2
                         class="text-4xl font-heading font-bold text-heading mb-4"
                     >
-                        ¿Por Qué Elegirnos?
+                        {whyChooseUs.title || defaults.whyChooseUs.title}
                     </h2>
                     <div class="w-24 h-1 bg-primary mx-auto"></div>
                 </div>
 
                 <div class="space-y-6">
                     {
-                        [
-                            {
-                                title: `Taller Propio en ${city}`,
-                                desc: "Fabricamos sin intermediarios para controlar la calidad.",
-                            },
-                            {
-                                title: "Experiencia Demostrable",
-                                desc: "Años perfeccionando nuestras técnicas y conociendo el sector.",
-                            },
-                            {
-                                title: "Garantía por Escrito",
-                                desc: "Todos nuestros trabajos incluyen garantía y factura reglamentaria.",
-                            },
-                            {
-                                title: "Atención Personalizada",
-                                desc: "Nos tomamos el tiempo necesario para entender tus necesidades.",
-                            },
-                        ].map((item) => (
-                            <div class="flex items-start gap-4 p-6 bg-surface border border-heading/10 shadow-sm rounded-lg hover:border-primary/50 transition-colors">
-                                <div class="shrink-0">
-                                    <CheckCircle className="w-6 h-6 text-primary mt-1" />
+                        (whyChooseUs.items || defaults.whyChooseUs.items).map(
+                            (item) => (
+                                <div class="flex items-start gap-4 p-6 bg-surface border border-heading/10 shadow-sm rounded-lg hover:border-primary/50 transition-colors">
+                                    <div class="shrink-0">
+                                        <CheckCircle className="w-6 h-6 text-primary mt-1" />
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-heading mb-2">
+                                            {item.title}
+                                        </h3>
+                                        <p class="text-body leading-relaxed">
+                                            {item.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-heading mb-2">
-                                        {item.title}
-                                    </h3>
-                                    <p class="text-body leading-relaxed">
-                                        {item.desc}
-                                    </p>
-                                </div>
-                            </div>
-                        ))
+                            ),
+                        )
                     }
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- TEAM SECTION -->
     <section class="py-20 bg-secondary border-t border-heading/5">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
@@ -287,13 +346,10 @@ const schema: WithContext<AboutPage> = {
                     <Users className="w-10 h-10 text-primary" />
                 </div>
                 <h2 class="text-4xl font-heading font-bold text-heading mb-6">
-                    Equipo Profesional
+                    {team.title || defaults.team.title}
                 </h2>
                 <p class="text-body text-lg leading-relaxed mb-8">
-                    Nuestro equipo está formado por técnicos certificados y con
-                    años de experiencia en el sector del {niche.toLowerCase()}.
-                    Nos mantenemos actualizados con las últimas técnicas y
-                    normativas para ofrecer siempre el mejor servicio en {city}.
+                    {team.description || defaults.team.description}
                 </p>
             </div>
         </div>

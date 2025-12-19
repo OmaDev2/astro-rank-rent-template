@@ -236,7 +236,7 @@ const {
                                         {value.subtitle}
                                     </p>
                                 )}
-                                <FaqAccordion items={faqItems} />
+                                <FaqAccordion items={faqItems} title="" />
                             </div>
                         </div>
                     ) : null;
@@ -487,6 +487,7 @@ const {
                     <PricingBlock
                         title={value?.title}
                         subtitle={value?.subtitle}
+                        note={value?.note}
                         plans={value?.plans}
                         bgClass={bgClass}
                     />

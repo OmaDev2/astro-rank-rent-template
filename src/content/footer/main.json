@@ -1,5 +1,17 @@
 {
-  "description": "hola",
-  "footerLinks": [],
-  "disclaimer": "Este sitio actúa como intermediario"
+  "footerLinks": [
+    {
+      "label": "Aviso Legal",
+      "url": "/aviso-legal/"
+    },
+    {
+      "label": "Privacidad",
+      "url": "/privacidad/"
+    },
+    {
+      "label": "Cookies",
+      "url": "/cookies/"
+    }
+  ],
+  "disclaimer": "Quitar gotelé en Barcelona opera como una plataforma de marketing y generación de contactos. Los servicios son prestados por profesionales independientes ajenos a esta web. No asumimos responsabilidad por los trabajos realizados ni por la relación contractual final entre cliente y profesional."
 }
