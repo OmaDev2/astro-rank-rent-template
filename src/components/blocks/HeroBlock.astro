@@ -60,7 +60,6 @@ const phoneHref = (phone || "").replace(/\s/g, "");
                     src={selectedImage}
                     alt={`${niche} en ${locationName}`}
                     class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
-                    style="opacity: var(--hero-opacity)"
                     loading="eager"
                     width={1920}
                     height={1080}
@@ -70,7 +69,6 @@ const phoneHref = (phone || "").replace(/\s/g, "");
                     src={selectedImage}
                     alt={`${niche} en ${locationName}`}
                     class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
-                    style="opacity: var(--hero-opacity)"
                     loading="eager"
                 />
             )
@@ -78,10 +76,12 @@ const phoneHref = (phone || "").replace(/\s/g, "");
         {/* Gradiente estilo "Cine" para oscurecer y dar foco */}
         <div
             class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent"
+            style="opacity: var(--hero-opacity)"
         >
         </div>
         <div
             class="absolute inset-0 bg-gradient-to-t from-secondary via-transparent to-transparent"
+            style="opacity: var(--hero-opacity)"
         >
         </div>
     </div>
@@ -108,7 +108,7 @@ const phoneHref = (phone || "").replace(/\s/g, "");
 
                 {/* Título Principal */}
                 <h1
-                    class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-black text-white leading-[1.1] drop-shadow-2xl"
+                    class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-black text-heading leading-[1.1] drop-shadow-2xl"
                 >
                     {
                         title ? (
@@ -128,7 +128,7 @@ const phoneHref = (phone || "").replace(/\s/g, "");
 
                 {/* Descripción */}
                 <p
-                    class="text-lg text-white/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light border-l-2 border-primary/30 pl-4 lg:pl-6"
+                    class="text-lg text-heading/90 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-bold border-l-2 border-primary/30 pl-4 lg:pl-6 readable-hero-text"
                 >
                     {heroSubtitle}
                     <span class="hidden sm:inline"
@@ -164,8 +164,8 @@ const phoneHref = (phone || "").replace(/\s/g, "");
                     </a>
 
                     <a
-                        href="#formulario"
-                        class="inline-flex items-center justify-center px-10 py-6 text-lg font-bold text-white bg-white/10 border-2 border-white/20 hover:bg-white/20 rounded-2xl backdrop-blur-2xl transition-all hover:-translate-y-1 hover:border-primary/50 group"
+                        href="/contacto"
+                        class="inline-flex items-center justify-center px-10 py-6 text-lg font-bold text-heading bg-white/10 border-2 border-white/20 hover:bg-white/20 rounded-2xl backdrop-blur-2xl transition-all hover:-translate-y-1 hover:border-primary/50 group"
                     >
                         <span class="mr-3">Pedir Presupuesto</span>
                         <ArrowRight

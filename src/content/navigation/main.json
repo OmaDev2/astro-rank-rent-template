@@ -1,23 +1,27 @@
 {
-  "menuItems": [
-    {
-      "label": "Inicio",
-      "url": "/",
-      "type": "link"
-    },
-    {
-      "label": "Zonas",
-      "type": "locations_dropdown"
-    },
-    {
-      "label": "Contacto",
-      "url": "/contacto/",
-      "type": "link"
-    },
-    {
-      "label": "Nosotros ",
-      "url": "/nosotros ",
-      "type": "link"
-    }
-  ]
+    "menuItems": [
+        {
+            "label": "Inicio",
+            "url": "/",
+            "type": "link"
+        },
+        {
+            "label": "Servicios",
+            "type": "services_dropdown"
+        },
+        {
+            "label": "Zonas",
+            "type": "locations_dropdown"
+        },
+        {
+            "label": "Nosotros",
+            "url": "/nosotros",
+            "type": "link"
+        },
+        {
+            "label": "Contacto",
+            "url": "/contacto",
+            "type": "link"
+        }
+    ]
 }

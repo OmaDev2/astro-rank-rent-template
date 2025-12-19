@@ -12,4 +12,9 @@
     .glass-nav {
         @apply bg-black/20 backdrop-blur-md border border-white/10 shadow-lg;
     }
+
+    /* Helper para legibilidad de texto sobre imágenes */
+    .readable-hero-text {
+        text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+    }
 }

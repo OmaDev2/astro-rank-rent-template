@@ -43,12 +43,11 @@ if (!services || services.length === 0) return null;
                                 class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                                 style={`background-image: url('${service.image}')`}
                             />
-                            <div class="absolute inset-0 bg-gradient-to-t from-secondary/95 via-secondary/60 to-transparent" />
-                            <div class="relative h-full flex flex-col justify-end p-8">
-                                <h3 class="text-2xl font-heading font-bold text-white mb-3 shadow-black drop-shadow-md">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
+                                <h3 class="text-2xl font-heading font-bold text-white mb-3 shadow-black drop-shadow-sm">
                                     {service.title}
                                 </h3>
-                                <p class="text-gray-200 mb-2 line-clamp-3 text-sm">
+                                <p class="text-white/80 mb-2 line-clamp-3 text-sm">
                                     {service.description}
                                 </p>
                             </div>

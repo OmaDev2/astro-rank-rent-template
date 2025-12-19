@@ -1,4 +1,4 @@
 themeSettings: >-
-  {"theme":"tech","colors":{"primary":"#7c3aed","secondary":"#0f172a","surface":"#1e293b","accent":"#a78bfa","textMain":"#ffffff","textMuted":"#94a3b8"}}
-heroOverlayOpacity: 1
+  {"theme":"clean_light","colors":{"primary":"#2563eb","secondary":"#f8fafc","surface":"#ffffff","accent":"#3b82f6","textMain":"#0f172a","textMuted":"#475569"}}
+heroOverlayOpacity: 0.85
 fontPair: modern

@@ -94,12 +94,16 @@ const phoneUrl = `tel:${business?.data?.phone?.replace(/\s/g, "") || ""}`;
         left: 24px;
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        background: linear-gradient(
+            135deg,
+            rgb(var(--color-primary)) 0%,
+            rgb(var(--color-accent)) 100%
+        );
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        box-shadow: 0 4px 12px rgb(var(--color-primary) / 0.4);
         z-index: 1000;
         transition: all 0.3s ease;
         cursor: pointer;
