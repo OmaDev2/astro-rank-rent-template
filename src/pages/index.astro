@@ -102,6 +102,8 @@ const schema: WithContext<LocalBusiness> = {
 <Layout
 	title={`${homeData.hero?.heading || config.niche + " en " + config.city} | ${config.siteName}`}
 	schema={schema}
+	stickyPhone={homeData.stickyPhone}
+	whatsappFloat={homeData.whatsappFloat}
 >
 	<BlockRenderer
 		blocks={finalBlocks}
@@ -112,6 +114,5 @@ const schema: WithContext<LocalBusiness> = {
 		content={SeoContentRendered}
 	/>
 
-	<WhatsAppButton stickyPhone={homeData.stickyPhone} />
 	<Footer />
 </Layout>

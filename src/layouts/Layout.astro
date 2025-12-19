@@ -83,9 +83,18 @@ interface Props {
     description?: string;
     schema?: WithContext<Thing> | WithContext<Thing>[];
     noindex?: boolean;
+    stickyPhone?: boolean;
+    whatsappFloat?: boolean;
 }
 
-const { title, description, schema, noindex = false } = Astro.props;
+const {
+    title,
+    description,
+    schema,
+    noindex = false,
+    stickyPhone = true,
+    whatsappFloat = true,
+} = Astro.props;
 
 // Generar descripción por defecto si no viene en props
 const defaultDescription = `${settings.niche} en ${settings.city}. Expertos profesionales, servicio rápido y presupuesto sin compromiso en ${settings.siteName}.`;
@@ -191,7 +200,10 @@ const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
             <slot />
         </main>
 
-        <WhatsAppButton />
+        <WhatsAppButton
+            stickyPhone={stickyPhone}
+            whatsappFloat={whatsappFloat}
+        />
         <CookieBanner />
     </body>
 </html>

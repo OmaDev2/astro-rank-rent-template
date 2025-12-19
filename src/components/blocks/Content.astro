@@ -1,4 +1,6 @@
 ---
+import { marked } from "marked";
+
 interface Props {
     title?: string;
     sections?: {
@@ -8,38 +10,160 @@ interface Props {
     bgClass?: string;
 }
 
-const { title, sections, bgClass = "bg-surface" } = Astro.props;
+const { title, sections, bgClass = "bg-secondary" } = Astro.props;
 ---
 
-<section class={`py-20 ${bgClass}`}>
-    <div class="container mx-auto px-4 max-w-4xl">
+<section class={`py-16 md:py-24 ${bgClass}`}>
+    <div class="container mx-auto px-4 max-w-5xl">
         {
             title && (
-                <h2 class="text-3xl md:text-4xl font-heading font-bold text-heading mb-12 text-center">
-                    {title}
-                </h2>
+                <div class="text-center mb-16 md:mb-20">
+                    <h2 class="text-3xl md:text-5xl font-heading font-bold text-heading mb-4 tracking-tight">
+                        {title}
+                    </h2>
+                    <div class="w-20 h-1 bg-primary mx-auto rounded-full" />
+                </div>
             )
         }
 
-        <div class="space-y-16">
+        <div class="space-y-16 md:space-y-20">
             {
-                sections?.map((section: any) => (
-                    <div class="group">
-                        <h3 class="text-2xl font-heading font-bold text-heading mb-6 border-l-4 border-primary pl-4 group-hover:border-accent transition-colors">
-                            {section.heading || section.title}
-                        </h3>
-                        <div
-                            class="prose prose-lg max-w-none 
-                        prose-headings:text-heading 
-                        prose-p:text-body prose-p:leading-relaxed
-                        prose-strong:text-primary prose-strong:font-bold
-                        prose-ul:text-body prose-li:marker:text-primary
-                        prose-table:text-body prose-th:text-heading prose-td:border-heading/10"
-                            set:html={section.content}
-                        />
-                    </div>
+                sections?.map((section: any, index: number) => (
+                    <article class="reveal-on-scroll bg-surface rounded-2xl shadow-sm hover:shadow-md transition-all duration-500 overflow-hidden">
+                        {/* Barra superior decorativa con gradiente del tema */}
+                        <div class="h-1.5 bg-gradient-to-r from-primary via-accent to-primary opacity-80" />
+
+                        <div class="p-6 md:p-10">
+                            {/* Header de la sección */}
+                            <div class="flex items-start gap-4 mb-8">
+                                {/* Badge numérico con colores del tema */}
+                                <div class="hidden md:flex w-12 h-12 bg-primary/10 rounded-xl items-center justify-center flex-shrink-0 border-2 border-primary/20">
+                                    <span class="text-xl font-bold text-primary">
+                                        {index + 1}
+                                    </span>
+                                </div>
+
+                                {/* Título */}
+                                <h3 class="text-2xl md:text-3xl font-heading font-bold text-heading flex-1 leading-tight">
+                                    {section.heading || section.title}
+                                </h3>
+                            </div>
+
+                            {/* Contenido - ADAPTADO A TU SISTEMA DE COLORES */}
+                            {section.content && (
+                                <div
+                                    class="prose prose-lg max-w-none
+                                
+                                prose-headings:font-heading prose-headings:font-bold prose-headings:text-heading 
+                                prose-headings:mt-8 prose-headings:mb-4
+                                prose-h3:text-2xl prose-h3:border-b prose-h3:border-heading/10 prose-h3:pb-3
+                                prose-h4:text-xl prose-h4:text-heading/90
+                                
+                                prose-p:text-body prose-p:leading-relaxed prose-p:mb-6 
+                                prose-p:text-base md:prose-p:text-lg
+                                
+                                prose-strong:text-heading prose-strong:font-bold
+                                prose-em:text-heading/90 prose-em:italic
+                                
+                                prose-ul:my-6 prose-ul:space-y-2
+                                prose-ol:my-6 prose-ol:space-y-2
+                                prose-li:text-body prose-li:leading-relaxed
+                                prose-li:marker:text-primary prose-li:marker:font-bold
+                                
+                                prose-table:border-collapse prose-table:w-full prose-table:my-8 
+                                prose-table:shadow-sm prose-table:rounded-lg prose-table:overflow-hidden
+                                prose-table:bg-surface
+                                
+                                prose-thead:bg-primary/10
+                                prose-th:font-bold prose-th:text-heading 
+                                prose-th:px-6 prose-th:py-4 prose-th:text-left 
+                                prose-th:border-b-2 prose-th:border-primary/40
+                                
+                                prose-td:px-6 prose-td:py-4 
+                                prose-td:border-b prose-td:border-heading/10 
+                                prose-td:text-body
+                                
+                                prose-tr:transition-colors 
+                                prose-tr:hover:bg-primary/5
+                                
+                                prose-a:text-primary prose-a:font-medium 
+                                prose-a:no-underline prose-a:border-b-2 prose-a:border-primary/30 
+                                hover:prose-a:border-accent hover:prose-a:text-accent 
+                                prose-a:transition-all prose-a:duration-300
+                                
+                                prose-blockquote:border-l-4 prose-blockquote:border-primary 
+                                prose-blockquote:bg-primary/5 
+                                prose-blockquote:pl-6 prose-blockquote:py-4 
+                                prose-blockquote:my-8 prose-blockquote:rounded-r-lg
+                                prose-blockquote:text-body prose-blockquote:italic
+                                
+                                prose-code:bg-heading/5 prose-code:text-primary 
+                                prose-code:px-2 prose-code:py-1 
+                                prose-code:rounded prose-code:text-sm 
+                                prose-code:font-mono prose-code:border prose-code:border-heading/10
+                                
+                                prose-code:bg-heading/5 prose-code:text-primary 
+                                prose-code:px-2 prose-code:py-1 
+                                prose-code:rounded prose-code:text-sm 
+                                prose-code:font-mono prose-code:border prose-code:border-heading/10
+                                
+                                prose-pre:bg-heading/95 prose-pre:text-surface 
+                                prose-pre:p-6 prose-pre:rounded-xl 
+                                prose-pre:overflow-x-auto prose-pre:shadow-lg
+                                
+                                prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8
+                                prose-img:border prose-img:border-heading/10
+                                
+                                prose-hr:border-heading/20 prose-hr:my-12"
+                                    set:html={marked.parse(section.content)}
+                                />
+                            )}
+                        </div>
+                    </article>
                 ))
             }
         </div>
+
+        {/* CTA final - ADAPTADO A TU SISTEMA */}
+        <div class="mt-16 pt-12 border-t border-heading/10 text-center">
+            <p class="text-body mb-6 text-lg font-medium">
+                ¿Tienes más preguntas sobre quitar el gotelé?
+            </p>
+            <a
+                href="#contacto"
+                class="inline-flex items-center gap-3 bg-primary text-surface px-8 py-4 rounded-xl font-heading font-bold hover:bg-accent transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+                <span>Solicitar Presupuesto Gratis</span>
+                <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </a>
+        </div>
     </div>
 </section>
+
+<style>
+    /* Animación reveal opcional */
+    .reveal-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .reveal-on-scroll:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .reveal-on-scroll:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+</style>

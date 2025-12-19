@@ -20,6 +20,18 @@ export const homepage = singleton({
                         directory: 'public/images/home',
                         publicPath: '/images/home',
                     }),
+                    ctaPrimary: fields.object({
+                        text: fields.text({ label: 'Texto Botón Primario' }),
+                        link: fields.text({ label: 'Enlace Botón Primario' }),
+                    }),
+                    ctaSecondary: fields.object({
+                        text: fields.text({ label: 'Texto Botón Secundario' }),
+                        link: fields.text({ label: 'Enlace Botón Secundario' }),
+                    }),
+                    features: fields.array(fields.text({ label: 'Característica' }), {
+                        label: 'Características (Checks)',
+                        itemLabel: p => p.value || 'Opción'
+                    }),
                 })
             },
             services_grid: {
@@ -28,6 +40,20 @@ export const homepage = singleton({
                     title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
                     titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
                     subtitle: fields.text({ label: 'Resumen', multiline: true }),
+                    services: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Nombre' }),
+                            description: fields.text({ label: 'Descripción', multiline: true }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            price: fields.text({ label: 'Precio (Ej: Desde 12€/m²)' }),
+                            isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
+                            features: fields.array(fields.text({ label: 'Característica' }), {
+                                label: 'Características',
+                                itemLabel: p => p.value || 'Opción'
+                            }),
+                        }),
+                        { label: 'Servicios de la Grilla', itemLabel: p => p.fields.title.value || 'Servicio' }
+                    )
                 })
             },
             services_list: {
@@ -52,8 +78,10 @@ export const homepage = singleton({
                 label: 'Sección Sobre Nosotros',
                 schema: fields.object({
                     title: fields.text({ label: 'Título' }),
+                    titleHighlight: fields.text({ label: 'Título Destacado' }),
                     description: fields.text({ label: 'Biografía / Historia', multiline: true }),
                     yearsExperience: fields.text({ label: 'Años (Badge)' }),
+                    projectsCompleted: fields.text({ label: 'Pisos/Proyectos Completados' }),
                     image: fields.image({
                         label: 'Imagen Principal',
                         directory: 'public/images/home',
@@ -63,58 +91,80 @@ export const homepage = singleton({
                         fields.object({
                             title: fields.text({ label: 'Título' }),
                             description: fields.text({ label: 'Detalle' }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
                         }),
-                        { label: 'Puntos Clave' }
+                        { label: 'Puntos Clave', itemLabel: p => p.fields.title.value || 'Punto' }
                     ),
                     buttonText: fields.text({ label: 'Texto del Botón' }),
                     buttonLink: fields.text({ label: 'Enlace del Botón' }),
                 })
             },
             features: {
-                label: 'Características / Beneficios',
-                schema: fields.array(
-                    fields.object({
-                        title: fields.text({ label: 'Título' }),
-                        description: fields.text({ label: 'Descripción', multiline: true }),
-                        icon: fields.text({ label: 'Icono (Lucide name)' }),
-                    }),
-                    { label: 'Beneficios', itemLabel: p => p.fields.title.value || 'Beneficio' }
-                )
+                label: 'Características Destacadas (Íconos)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    features: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Título' }),
+                            description: fields.text({ label: 'Detalle' }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                        }),
+                        { label: 'Ventajas', itemLabel: p => p.fields.title.value || 'Ventaja' }
+                    ),
+                })
             },
             testimonials: {
                 label: 'Carrusel de Testimonios',
-                schema: fields.array(
-                    fields.object({
-                        quote: fields.text({ label: 'Testimonio', multiline: true }),
-                        author: fields.text({ label: 'Nombre' }),
-                        location: fields.text({ label: 'Ubicación' }),
-                        initials: fields.text({ label: 'Iniciales' }),
-                    }),
-                    { label: 'Opiniones', itemLabel: p => p.fields.author.value || 'Reseña' }
-                )
-            },
-            process: {
-                label: 'Proceso de Trabajo',
                 schema: fields.object({
                     title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    testimonials: fields.array(
+                        fields.object({
+                            quote: fields.text({ label: 'Testimonio', multiline: true }),
+                            author: fields.text({ label: 'Cliente' }),
+                            initials: fields.text({ label: 'Iniciales (Ej: MP)' }),
+                            location: fields.text({ label: 'Ubicación' }),
+                            date: fields.text({ label: 'Fecha' }),
+                            rating: fields.integer({ label: 'Estrellas (1-5)', defaultValue: 5 }),
+                            service: fields.text({ label: 'Servicio Contratado' }),
+                            size: fields.text({ label: 'Tamaño Piso' }),
+                            verified: fields.checkbox({ label: 'Perfil Verificado', defaultValue: true }),
+                        }),
+                        { label: 'Opiniones', itemLabel: p => p.fields.author.value || 'Testimonio' }
+                    ),
+                })
+            },
+            process: {
+                label: 'Proceso de Trabajo / Metodología',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
                     steps: fields.array(
                         fields.object({
-                            title: fields.text({ label: 'Paso' }),
-                            description: fields.text({ label: 'Descripción', multiline: true }),
+                            title: fields.text({ label: 'Título' }),
+                            description: fields.text({ label: 'Detalle', multiline: true }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            duration: fields.text({ label: 'Duración (Opcional)' }),
                         }),
                         { label: 'Pasos', itemLabel: p => p.fields.title.value || 'Paso' }
-                    )
+                    ),
+                    note: fields.text({ label: 'Nota Informativa', multiline: true }),
                 })
             },
             faq: {
-                label: 'Preguntas Frecuentes',
-                schema: fields.array(
-                    fields.object({
-                        question: fields.text({ label: 'Pregunta' }),
-                        answer: fields.text({ label: 'Respuesta', multiline: true }),
-                    }),
-                    { label: 'FAQs', itemLabel: p => p.fields.question.value || 'Pregunta' }
-                )
+                label: 'Preguntas Frecuentes (FAQ)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    questions: fields.array(
+                        fields.object({
+                            question: fields.text({ label: 'Pregunta' }),
+                            answer: fields.text({ label: 'Respuesta', multiline: true }),
+                            category: fields.text({ label: 'Categoría (Opcional)' }),
+                        }),
+                        { label: 'Preguntas', itemLabel: p => p.fields.question.value || 'Faq' }
+                    ),
+                })
             },
             locations: {
                 label: 'Mapas / Zonas',
@@ -126,15 +176,27 @@ export const homepage = singleton({
             cta: {
                 label: 'Llamada a la Acción (CTA)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    buttonText: fields.text({ label: 'Botón' }),
+                    title: fields.text({ label: 'Título Principal' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    buttonText: fields.text({ label: 'Texto del Botón' }),
+                    buttonLink: fields.text({ label: 'Enlace del Botón' }),
+                    features: fields.array(fields.text({ label: 'Ventaja (Check)' }), {
+                        label: 'Ventajas Rápidas',
+                        itemLabel: p => p.value || 'Opción'
+                    }),
                 })
             },
             contact: {
-                label: 'Sección de Contacto (Formulario)',
+                label: 'Sección de Contacto (SEO)',
                 schema: fields.object({
                     title: fields.text({ label: 'Título' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    description: fields.text({ label: 'Descripción / Zonas', multiline: true }),
+                    phone: fields.text({ label: 'Teléfono' }),
+                    whatsapp: fields.text({ label: 'WhatsApp' }),
+                    email: fields.text({ label: 'Email' }),
+                    schedule: fields.text({ label: 'Horarios', multiline: true }),
+                    responseTime: fields.text({ label: 'Tiempo de Respuesta' }),
                 })
             },
             content: {
@@ -156,32 +218,33 @@ export const homepage = singleton({
             service_areas: {
                 label: 'Zonas de Servicio',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título Principal' }),
+                    title: fields.text({ label: 'Título' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
                     areas: fields.object({
                         barcelona: fields.object({
-                            title: fields.text({ label: 'Título Barcelona' }),
-                            description: fields.text({ label: 'Descripción Barcelona' }),
+                            title: fields.text({ label: 'Título Principal' }),
+                            description: fields.text({ label: 'Descripción', multiline: true }),
                             districts: fields.array(
                                 fields.object({
-                                    name: fields.text({ label: 'Nombre Distrito' }),
-                                    description: fields.text({ label: 'Descripción', multiline: true }),
+                                    name: fields.text({ label: 'Barrio/Distrito' }),
+                                    description: fields.text({ label: 'Detalle (Opcional)', multiline: true }),
                                     icon: fields.text({ label: 'Icono (Lucide)' }),
-                                    popular: fields.checkbox({ label: '¿Es zona popular?', defaultValue: false }),
+                                    popular: fields.checkbox({ label: '¿Es zona destacada?', defaultValue: false }),
                                 }),
-                                { label: 'Distritos', itemLabel: (p) => p.fields.name.value || 'Distrito' }
+                                { label: 'Barrios', itemLabel: p => p.fields.name.value || 'Distrito' }
                             ),
                         }),
                         metropolitan: fields.object({
-                            title: fields.text({ label: 'Título Área Metropolitana' }),
-                            description: fields.text({ label: 'Descripción Área Metropolitana' }),
+                            title: fields.text({ label: 'Título Principal' }),
+                            description: fields.text({ label: 'Descripción', multiline: true }),
+                            note: fields.text({ label: 'Nota / Suplementos (Opcional)' }),
                             cities: fields.array(
                                 fields.object({
-                                    name: fields.text({ label: 'Nombre Ciudad' }),
-                                    supplement: fields.text({ label: 'Suplemento/Precio' }),
+                                    name: fields.text({ label: 'Municipio' }),
+                                    supplement: fields.text({ label: 'Extra (Ej: +30€)' }),
                                     icon: fields.text({ label: 'Icono (Lucide)' }),
                                 }),
-                                { label: 'Ciudades', itemLabel: (p) => p.fields.name.value || 'Ciudad' }
+                                { label: 'Municipios', itemLabel: p => p.fields.name.value || 'Ciudad' }
                             ),
                         }),
                     }),
@@ -190,37 +253,50 @@ export const homepage = singleton({
             pricing: {
                 label: 'Tabla de Precios',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
+                    title: fields.text({ label: 'Título Principal' }),
+                    titleHighlight: fields.text({ label: 'Título Destacado' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
                     plans: fields.array(
                         fields.object({
-                            name: fields.text({ label: 'Nombre del Plan' }),
-                            price: fields.text({ label: 'Precio (Ej: 99€)' }),
-                            description: fields.text({ label: 'Descripción Corta' }),
-                            isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
+                            title: fields.text({ label: 'Nombre Plan' }),
+                            price: fields.text({ label: 'Precio (Cifra)' }),
+                            priceUnit: fields.text({ label: 'Sufijo (Ej: €/m²)' }),
+                            description: fields.text({ label: 'Descripción' }),
+                            isPopular: fields.checkbox({ label: '¿Es el más popular?', defaultValue: false }),
+                            badge: fields.text({ label: 'Badge (Ej: Más Popular)' }),
                             features: fields.array(fields.text({ label: 'Característica' }), {
-                                label: 'Características',
-                                itemLabel: p => p.value || 'Característica'
+                                label: 'Características Incluidas',
+                                itemLabel: p => p.value || 'Opción'
                             }),
-                            buttonText: fields.text({ label: 'Texto del Botón', defaultValue: 'Solicitar Ahora' }),
-                            buttonLink: fields.text({ label: 'Enlace (Opcional)', defaultValue: '#contacto' }),
+                            examples: fields.array(
+                                fields.object({
+                                    title: fields.text({ label: 'Ejemplo (Piso 70m²)' }),
+                                    price: fields.text({ label: 'Precio Total' }),
+                                }),
+                                { label: 'Ejemplos de Precios', itemLabel: p => p.fields.title.value || 'Ejemplo' }
+                            ),
+                            buttonText: fields.text({ label: 'Texto Botón' }),
+                            buttonLink: fields.text({ label: 'Enlace Botón' }),
                         }),
-                        { label: 'Planes', itemLabel: p => p.fields.name.value || 'Plan' }
-                    )
+                        { label: 'Planes de Precios', itemLabel: (p) => p.fields.title.value || 'Plan' }
+                    ),
+                    note: fields.text({ label: 'Nota / Suplementos', multiline: true }),
                 })
             },
             stats: {
-                label: 'Números / Estadísticas',
+                label: 'Contador de Estadísticas',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título Sección (Opcional)' }),
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo' }),
                     stats: fields.array(
                         fields.object({
-                            label: fields.text({ label: 'Etiqueta (Ej: Clientes)' }),
-                            value: fields.text({ label: 'Valor (Ej: 500)' }),
+                            label: fields.text({ label: 'Nombre' }),
+                            value: fields.text({ label: 'Cifra' }),
                             suffix: fields.text({ label: 'Sufijo (Ej: +)' }),
+                            icon: fields.text({ label: 'Icono (Lucide)' }),
                         }),
-                        { label: 'Estadísticas', itemLabel: p => `${p.fields.value.value}${p.fields.suffix.value} ${p.fields.label.value}` }
-                    )
+                        { label: 'Métricas', itemLabel: p => p.fields.label.value || 'Métrica' }
+                    ),
                 })
             },
             logos: {
@@ -269,6 +345,7 @@ export const homepage = singleton({
 
         // Campos adicionales para SEO y UI
         seoContentTitle: fields.text({ label: 'Título del Bloque Seo (Opcional)' }),
-        stickyPhone: fields.checkbox({ label: 'Mostrar Botón de WhatsApp flotante', defaultValue: true }),
+        stickyPhone: fields.checkbox({ label: 'Mostrar Teléfono Sticky', defaultValue: true }),
+        whatsappFloat: fields.checkbox({ label: 'Mostrar WhatsApp Flotante', defaultValue: true }),
     }
 });
