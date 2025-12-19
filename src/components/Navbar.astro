@@ -1,5 +1,6 @@
 ---
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
+import { Image } from "astro:assets";
 import { getCollection, getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 
@@ -19,6 +20,14 @@ const menuItems = navConfig?.data?.menuItems || [
 // 3. Recuperamos listas para los desplegables
 const services = await getCollection("services");
 const locations = await getCollection("locations");
+
+// 4. Lógica de Logo
+const logoPath = logo?.replace("@assets", "/src/assets");
+const images = import.meta.glob(
+    "/src/assets/images/**/*.{jpeg,jpg,png,gif,webp,svg}",
+) as Record<string, () => Promise<{ default: ImageMetadata }>>; // Type assertion moved to script
+
+const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
 ---
 
 <header
@@ -26,14 +35,23 @@ const locations = await getCollection("locations");
     class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent"
 >
     <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between h-20">
+        <div class="flex items-center justify-between h-24">
             <a href="/" class="flex items-center gap-2 shrink-0">
                 {
-                    logo ? (
+                    dynamicLogoSrc ? (
+                        <Image
+                            src={dynamicLogoSrc()}
+                            alt={`${siteName} Logo`}
+                            class="h-20 w-auto object-contain transition-all duration-300"
+                            loading="eager"
+                            width={160}
+                            height={80}
+                        />
+                    ) : logo ? (
                         <img
                             src={logo}
                             alt={`${siteName} Logo`}
-                            class="h-12 w-auto object-contain"
+                            class="h-20 w-auto object-contain transition-all duration-300"
                         />
                     ) : (
                         <span class="text-2xl font-heading font-bold text-primary">
@@ -222,7 +240,7 @@ const locations = await getCollection("locations");
                     "backdrop-blur-md",
                     "border-heading/10",
                     "shadow-lg",
-                    "h-16",
+                    "h-24",
                 );
                 navbar?.classList.remove("border-transparent");
             } else {
@@ -231,7 +249,7 @@ const locations = await getCollection("locations");
                     "backdrop-blur-md",
                     "border-heading/10",
                     "shadow-lg",
-                    "h-16",
+                    "h-24",
                 );
                 navbar?.classList.add("border-transparent");
             }

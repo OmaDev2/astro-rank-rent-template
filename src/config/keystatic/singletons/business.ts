@@ -10,8 +10,8 @@ export const business = singleton({
         logo: fields.image({
             label: 'Logo del Negocio',
             description: 'Recomendado: PNG transparente, mínimo 200x200px',
-            directory: 'public/images',
-            publicPath: '/images',
+            directory: 'src/assets/images',
+            publicPath: '@assets/images',
         }),
 
         siteUrl: fields.text({

@@ -1,6 +1,6 @@
 siteName: 'Quitar Gotelé  Barcelona '
 niche: 'Quitar Gotelé '
-logo: /images/logo.png
+logo: '@assets/images/logo.png'
 siteUrl: https://quitargotelebarcelona.es
 businessType: HousePainter
 city: 'Barcelona '
