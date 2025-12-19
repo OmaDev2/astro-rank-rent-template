@@ -3,7 +3,10 @@ import type {
     LocalBusiness,
     AggregateRating,
     BreadcrumbList,
-    ListItem
+    ListItem,
+    FAQPage,
+    Question,
+    Answer
 } from "schema-dts";
 
 /**
@@ -15,7 +18,7 @@ export function getAggregateRating(testimonials: any[]): AggregateRating | undef
     const count = testimonials.length;
     // Si los testimonios tienen rating numérico, calcular media. 
     // Si no, asumimos 5 estrellas por defecto como en el schema original de Keystatic.
-    const totalRating = testimonials.reduce((acc, t) => acc + (t.data.rating || 5), 0);
+    const totalRating = testimonials.reduce((acc, t) => acc + (t.data?.rating || t.rating || 5), 0);
     const average = (totalRating / count).toFixed(1);
 
     return {
@@ -24,6 +27,26 @@ export function getAggregateRating(testimonials: any[]): AggregateRating | undef
         reviewCount: count,
         bestRating: "5",
         worstRating: "1"
+    };
+}
+
+/**
+ * Genera el FAQ Schema
+ */
+export function generateFAQSchema(faqs: { question: string; answer: string }[]): WithContext<FAQPage> | null {
+    if (!faqs || faqs.length === 0) return null;
+
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map(faq => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer
+            }
+        }))
     };
 }
 
@@ -46,14 +69,15 @@ export function generateBreadcrumbsList(items: { name: string; item?: string }[]
 }
 
 interface LocalBusinessSettings {
-    siteName: string;
-    phone: string;
-    city: string;
+    siteName?: string;
+    phone?: string;
+    city?: string;
     address?: string;
     coordinates?: { lat?: string; lng?: string };
     image?: string;
     priceRange?: string;
     businessType?: string;
+    description?: string;
 }
 
 /**
@@ -69,13 +93,14 @@ export function generateLocalBusinessSchema(
     const schema: WithContext<LocalBusiness> = {
         "@context": "https://schema.org",
         "@type": (settings.businessType as any) || "LocalBusiness",
-        name: settings.siteName,
+        name: settings.siteName || "Negocio",
         image: settings.image,
         telephone: settings.phone,
         url: url,
+        description: settings.description,
         address: {
             "@type": "PostalAddress",
-            addressLocality: settings.city,
+            addressLocality: settings.city || "Ciudad",
             addressCountry: "ES",
             streetAddress: settings.address
         },

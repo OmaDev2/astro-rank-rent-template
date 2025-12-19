@@ -51,8 +51,11 @@ const testimonials = await getCollection(
 );
 
 // 5. Schema SEO
-// 5. Schema SEO
-import { getAggregateRating, generateBreadcrumbsList } from "@/lib/seo";
+import {
+    getAggregateRating,
+    generateBreadcrumbsList,
+    generateFAQSchema,
+} from "@/lib/seo";
 
 const aggregateRating = getAggregateRating(testimonials);
 
@@ -70,10 +73,16 @@ const serviceSchema: WithContext<Service> = {
             "@type": "PostalAddress",
             addressLocality: settings.city,
             addressCountry: "ES",
+            streetAddress: settings.address,
         },
         ...(aggregateRating && { aggregateRating }),
         ...(settings.coordinates && {
             hasMap: `https://www.google.com/maps?q=${settings.coordinates.lat},${settings.coordinates.lng}`,
+            geo: {
+                "@type": "GeoCoordinates",
+                latitude: settings.coordinates.lat,
+                longitude: settings.coordinates.lng,
+            },
         }),
     },
     areaServed: {
@@ -91,28 +100,13 @@ const breadcrumbsPoints = [
 
 const breadcrumbsSchema = generateBreadcrumbsList(breadcrumbsPoints);
 
-const faqSchema: WithContext<FAQPage> | null =
-    data.faq && data.faq.length > 0
-        ? {
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: data.faq.map((item) => ({
-                  "@type": "Question",
-                  name: item.question,
-                  acceptedAnswer: {
-                      "@type": "Answer",
-                      text: item.answer,
-                  },
-              })),
-          }
-        : null;
+const faqSchema = generateFAQSchema(data.faq || []);
 
-const schema: (
-    | WithContext<Service>
-    | WithContext<BreadcrumbList>
-    | WithContext<FAQPage>
-)[] = [serviceSchema, breadcrumbsSchema];
-if (faqSchema) schema.push(faqSchema);
+const schema = [
+    serviceSchema,
+    breadcrumbsSchema,
+    ...(faqSchema ? [faqSchema] : []),
+] as any;
 
 // 6. SEO: Título y descripción
 const pageTitle =

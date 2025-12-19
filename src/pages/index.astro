@@ -83,20 +83,33 @@ const finalBlocks =
 		: defaultBlocks;
 
 // 4. Schema SEO
-const schema: WithContext<LocalBusiness> = {
-	"@context": "https://schema.org",
-	"@type": (config.businessType as any) || "LocalBusiness",
-	name: config.siteName,
-	image: config.logo || `${config.siteUrl}/images/home/logo.png`,
-	description: `${config.niche} en ${config.city}. Servicio profesional.`,
-	telephone: config.phone,
-	address: {
-		"@type": "PostalAddress",
-		addressLocality: config.city,
-		addressCountry: "ES",
+import { generateLocalBusinessSchema, generateFAQSchema } from "@/lib/seo";
+
+const localBusinessSchema = generateLocalBusinessSchema(
+	{
+		siteName: config.siteName,
+		phone: config.phone,
+		city: config.city,
+		address: config.address,
+		coordinates: config.coordinates,
+		image: config.logo || `${config.siteUrl}/images/home/logo.png`,
+		businessType: config.businessType,
+		description: `${config.niche} en ${config.city}. Servicio profesional.`,
 	},
-	priceRange: "$$",
-};
+	testimonialsCollection,
+	Astro.url.href,
+);
+
+const homepageFaqs =
+	homeData.faq ||
+	homeData.blocks?.find((b: any) => b.discriminant === "faq")?.value
+		?.questions ||
+	[];
+const faqSchema = generateFAQSchema(homepageFaqs);
+
+const schema = faqSchema
+	? ([localBusinessSchema, faqSchema] as any)
+	: localBusinessSchema;
 ---
 
 <Layout
