@@ -3,10 +3,12 @@ import { Star } from "lucide-react";
 
 interface Props {
     testimonials: any[];
+    title?: string;
+    subtitle?: string;
     bgClass?: string;
 }
 
-const { testimonials, bgClass = "bg-surface" } = Astro.props;
+const { testimonials, title, subtitle, bgClass = "bg-surface" } = Astro.props;
 
 // Determine card background based on section background
 const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
@@ -14,18 +16,22 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
 
 {
     testimonials && testimonials.length > 0 && (
-        <section
-            class={`py-20 ${bgClass} relative overflow-hidden border-t border-heading/5`}
-        >
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-heading font-bold text-heading mb-4">
-                        Lo que dicen nuestros clientes
+        <section id="testimonials" class={`py-24 ${bgClass} overflow-hidden`}>
+            <div class="container mx-auto px-4 relative">
+                {/* Section Header */}
+                <div class="max-w-3xl mx-auto text-center mb-20">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold mb-6">
+                        <Star className="w-4 h-4 fill-primary" />
+                        <span>Testimonios Reales</span>
+                    </div>
+
+                    <h2 class="text-4xl md:text-5xl font-heading font-bold text-heading mb-6 tracking-tight">
+                        {title || "Lo que dicen nuestros clientes"}
                     </h2>
-                    <div class="w-24 h-1 bg-primary mx-auto mb-4" />
-                    <p class="text-body text-lg max-w-2xl mx-auto">
-                        La satisfacción de nuestros clientes es nuestra mejor
-                        garantía.
+
+                    <p class="text-body text-lg leading-relaxed">
+                        {subtitle ||
+                            "La satisfacción de nuestros clientes es nuestra mejor garantía en cada proyecto de alisado."}
                     </p>
                 </div>
 

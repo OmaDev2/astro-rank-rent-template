@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import defaultHeroImage from "../../../assets/images/hero-home.png"; // Importamos la imagen generada
-import { Phone } from "lucide-react";
+import { Phone, CheckCircle } from "lucide-react";
 
 const { hero, config } = Astro.props;
 
@@ -77,21 +77,43 @@ const heroBgImage =
                         `⚠️ Configura este subtítulo en el CMS (Página de Inicio > Hero)`
                 }
             </p>
+            {
+                hero?.features && hero.features.length > 0 && (
+                    <ul class="grid sm:grid-cols-2 gap-y-3 gap-x-6 mb-10">
+                        {hero.features.map((feature: string) => (
+                            <li class="flex items-center gap-2 text-body/90 text-sm">
+                                <CheckCircle className="w-4 h-4 text-primary shrink-0" />
+                                <span>{feature}</span>
+                            </li>
+                        ))}
+                    </ul>
+                )
+            }
+
             <div class="flex flex-col sm:flex-row gap-4">
                 <a
-                    href="#presupuesto"
+                    href={hero?.ctaPrimary?.link || "#presupuesto"}
                     class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
                 >
                     <Phone className="w-5 h-5 mr-2" />
-                    {config.ctaText || "Pedir Presupuesto"}
+                    {
+                        hero?.ctaPrimary?.text ||
+                            config.ctaText ||
+                            "Pedir Presupuesto"
+                    }
                 </a>
                 <a
-                    href={`https://wa.me/${config.whatsapp || (config.phone || "").replace(/\s/g, "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={hero?.ctaSecondary?.link ||
+                        `https://wa.me/${config.whatsapp || (config.phone || "").replace(/\s/g, "")}`}
+                    target={hero?.ctaSecondary?.link?.startsWith("http")
+                        ? "_blank"
+                        : undefined}
+                    rel={hero?.ctaSecondary?.link?.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined}
                     class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border border-heading/20 rounded hover:bg-surface transition-colors"
                 >
-                    WhatsApp
+                    {hero?.ctaSecondary?.text || "WhatsApp"}
                 </a>
             </div>
         </div>

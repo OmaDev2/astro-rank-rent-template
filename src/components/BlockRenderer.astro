@@ -24,6 +24,8 @@ import StatsBlock from "./blocks/StatsBlock.astro";
 import LogosBlock from "./blocks/LogosBlock.astro";
 import BeforeAfterBlock from "./blocks/BeforeAfterBlock.astro";
 import PriceFromBlock from "./blocks/PriceFromBlock.astro";
+import ContentBlock from "./blocks/Content.astro";
+import ServiceAreas from "./blocks/ServiceAreas.astro";
 
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 
@@ -111,6 +113,7 @@ const {
                     <HomeServices
                         servicesSection={value}
                         featuredServices={services}
+                        customServices={value?.services}
                         city={city}
                         bgClass={bgClass}
                     />
@@ -130,10 +133,13 @@ const {
                 return <HomeAbout aboutSection={value} bgClass={bgClass} />;
 
             case "features":
+                const featuresData =
+                    value?.features || value?.items || value || [];
                 if (isHome) {
                     return (
                         <HomeFeatures
-                            features={value}
+                            features={featuresData}
+                            title={value?.title}
                             city={city}
                             bgClass={bgClass}
                         />
@@ -145,7 +151,7 @@ const {
                         city={city}
                         title={value?.title}
                         subtitle={value?.subtitle}
-                        items={value?.items}
+                        items={featuresData}
                     />
                 );
 
@@ -155,16 +161,19 @@ const {
                 ) : null;
 
             case "testimonials":
+                const testimonialsArray = value?.testimonials || value || [];
                 return (
                     <Testimonials
+                        title={value?.title}
+                        subtitle={value?.subtitle}
                         testimonials={
-                            value
-                                ? value.map((t: any) => ({
-                                      name: t.author,
-                                      text: t.quote,
+                            Array.isArray(testimonialsArray)
+                                ? testimonialsArray.map((t: any) => ({
+                                      name: t.author || t.name,
+                                      text: t.quote || t.text,
                                       location: t.location,
                                       initials: t.initials,
-                                      rating: 5,
+                                      rating: t.rating || 5,
                                   }))
                                 : []
                         }
@@ -210,14 +219,19 @@ const {
                 );
 
             case "faq":
-                const faqItems = value?.faqs || value || []; // Handle both formats
+                const faqItems = value?.faqs || value?.questions || value || []; // Handle both formats
                 if (isHome) {
                     return faqItems && faqItems.length > 0 ? (
                         <div class={`py-20 ${bgClass}`}>
                             <div class="container mx-auto px-4 max-w-4xl">
-                                <h2 class="text-3xl font-heading font-bold text-heading mb-8 text-center">
-                                    Preguntas Frecuentes
+                                <h2 class="text-3xl font-heading font-bold text-heading mb-4 text-center">
+                                    {value?.title || "Preguntas Frecuentes"}
                                 </h2>
+                                {value?.subtitle && (
+                                    <p class="text-body text-center mb-12 max-w-2xl mx-auto">
+                                        {value.subtitle}
+                                    </p>
+                                )}
                                 <FaqAccordion items={faqItems} />
                             </div>
                         </div>
@@ -238,6 +252,15 @@ const {
                 );
 
             case "content":
+                if (value?.sections && value.sections.length > 0) {
+                    return (
+                        <ContentBlock
+                            title={value?.title}
+                            sections={value?.sections}
+                            bgClass={bgClass}
+                        />
+                    );
+                }
                 if (isHome) {
                     return (
                         <section class={`py-20 ${bgClass}`}>
@@ -422,6 +445,16 @@ const {
                         </div>
                     </section>
                 );
+            case "service_areas":
+                return (
+                    <ServiceAreas
+                        title={value?.title}
+                        subtitle={value?.subtitle}
+                        areas={value?.areas}
+                        bgClass={bgClass}
+                    />
+                );
+
             case "pricing":
                 return (
                     <PricingBlock

@@ -3,10 +3,13 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 import DynamicIcon from "../../DynamicIcon.astro";
 const {
     servicesSection,
-    featuredServices,
+    featuredServices = [],
+    customServices = null,
     city,
     bgClass = "bg-secondary",
 } = Astro.props;
+
+const servicesToDisplay = customServices || featuredServices;
 ---
 
 <section id="servicios" class={`py-20 ${bgClass} border-b border-heading/10`}>
@@ -50,40 +53,56 @@ const {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {
-                featuredServices.map((service: any) => (
-                    <a
-                        href={`/servicios/${service.slug}/`}
-                        class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
-                    >
-                        <div
-                            class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style={`background-image: url('${service.data.heroImage || `/images/services/${service.slug}-1.png`}')`}
-                        />
-                        <div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
-                        <div class="relative h-full flex flex-col justify-end p-8">
-                            <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
-                                <DynamicIcon
-                                    name={
-                                        service.data.icon ||
-                                        service.data.icon_suggestion ||
-                                        "CheckCircle"
-                                    }
-                                    className="w-6 h-6"
-                                />
+                servicesToDisplay.map((service: any) => {
+                    // Normalizar datos si vienen de colección o de objeto directo del bloque
+                    const isCollection = !!service.data;
+                    const data = isCollection ? service.data : service;
+                    const slug = isCollection
+                        ? service.slug
+                        : service.slug ||
+                          service.name?.toLowerCase().replace(/\s+/g, "-");
+                    const title = data.title || data.name;
+                    const description = data.shortDesc || data.description;
+                    const image =
+                        data.heroImage ||
+                        data.image ||
+                        `/images/services/${slug}-1.png`;
+
+                    return (
+                        <a
+                            href={`/servicios/${slug}/`}
+                            class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
+                        >
+                            <div
+                                class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style={`background-image: url('${image}')`}
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/50 to-transparent" />
+                            <div class="relative h-full flex flex-col justify-end p-8">
+                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+                                    <DynamicIcon
+                                        name={
+                                            data.icon ||
+                                            data.icon_suggestion ||
+                                            "CheckCircle"
+                                        }
+                                        className="w-6 h-6"
+                                    />
+                                </div>
+                                <h3 class="text-2xl font-heading font-bold text-heading mb-3">
+                                    {title}
+                                </h3>
+                                <p class="text-body mb-6 line-clamp-2 text-sm">
+                                    {description}
+                                </p>
+                                <div class="inline-flex items-center text-primary font-bold group-hover:text-accent">
+                                    Leer más{" "}
+                                    <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                                </div>
                             </div>
-                            <h3 class="text-2xl font-heading font-bold text-heading mb-3">
-                                {service.data.title}
-                            </h3>
-                            <p class="text-body mb-6 line-clamp-2 text-sm">
-                                {service.data.shortDesc}
-                            </p>
-                            <div class="inline-flex items-center text-primary font-bold group-hover:text-accent">
-                                Leer más{" "}
-                                <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                            </div>
-                        </div>
-                    </a>
-                ))
+                        </a>
+                    );
+                })
             }
         </div>
     </div>

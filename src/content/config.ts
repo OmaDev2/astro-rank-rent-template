@@ -30,6 +30,7 @@ const locations = defineCollection({
                 z.object({ discriminant: z.literal('stats'), value: z.any() }),
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
+                z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper zonas antiguas sin este campo
     }),
@@ -67,6 +68,7 @@ const services = defineCollection({
                 z.object({ discriminant: z.literal('stats'), value: z.any() }),
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
+                z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper servicios antiguos sin este campo
         faq: z.array(z.object({
@@ -216,6 +218,7 @@ const pages = defineCollection({
                 z.object({ discriminant: z.literal('stats'), value: z.any() }),
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
+                z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
             ])
         ).optional(),
 

@@ -1,0 +1,162 @@
+---
+import {
+    Building2,
+    Home,
+    Crown,
+    Sparkles,
+    Building,
+    Mountain,
+    Castle,
+    TreePine,
+    MapPin,
+} from "lucide-react";
+
+interface Props {
+    title: string;
+    subtitle?: string;
+    areas: {
+        barcelona: {
+            title: string;
+            description: string;
+            districts: {
+                name: string;
+                description?: string;
+                icon?: string;
+                popular?: boolean;
+            }[];
+        };
+        metropolitan: {
+            title: string;
+            description: string;
+            cities: {
+                name: string;
+                supplement?: string;
+                icon?: string;
+            }[];
+        };
+    };
+    bgClass?: string;
+}
+
+const { title, subtitle, areas, bgClass = "bg-secondary" } = Astro.props;
+
+const iconMap: Record<string, any> = {
+    Building2,
+    Home,
+    Crown,
+    Sparkles,
+    Building,
+    Mountain,
+    Castle,
+    TreePine,
+    MapPin,
+};
+---
+
+<section class={`py-20 ${bgClass}`}>
+    <div class="container mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2
+                class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4"
+            >
+                {title}
+            </h2>
+            {subtitle && <p class="text-lg text-body opacity-90">{subtitle}</p>}
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12">
+            {/* BARCELONA DISTRICTS */}
+            {
+                areas?.barcelona && (
+                    <div class="space-y-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Building2 className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-heading">
+                                    {areas.barcelona.title}
+                                </h3>
+                                <p class="text-sm text-body opacity-80">
+                                    {areas.barcelona.description}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            {areas.barcelona.districts?.map((district) => {
+                                const Icon =
+                                    iconMap[district.icon || ""] || Home;
+                                return (
+                                    <div class="p-5 rounded-2xl bg-surface border border-heading/5 hover:border-primary/30 transition-all group relative overflow-hidden">
+                                        {district.popular && (
+                                            <span class="absolute top-2 right-2 px-2 py-0.5 bg-accent text-[10px] font-bold text-secondary rounded-full uppercase tracking-tighter">
+                                                Popular
+                                            </span>
+                                        )}
+                                        <div class="flex items-start gap-4">
+                                            <div class="p-2 rounded-lg bg-secondary group-hover:bg-primary transition-colors text-white mt-1">
+                                                <Icon className="w-4 h-4" />
+                                            </div>
+                                            <div class="flex-1">
+                                                <h4 class="font-bold text-heading mb-1 group-hover:text-primary transition-colors">
+                                                    {district.name}
+                                                </h4>
+                                                {district.description && (
+                                                    <p class="text-xs text-body leading-relaxed opacity-80">
+                                                        {district.description}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )
+            }
+
+            {/* METROPOLITAN CITIES */}
+            {
+                areas?.metropolitan && (
+                    <div class="space-y-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent">
+                                <MapPin className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-heading">
+                                    {areas.metropolitan.title}
+                                </h3>
+                                <p class="text-sm text-body opacity-80">
+                                    {areas.metropolitan.description}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="bg-surface/50 rounded-3xl p-6 border border-heading/5">
+                            <div class="grid sm:grid-cols-2 gap-2">
+                                {areas.metropolitan.cities?.map((city) => (
+                                    <div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface transition-colors group">
+                                        <div class="flex items-center gap-3">
+                                            <MapPin className="w-4 h-4 text-primary opacity-40 group-hover:opacity-100" />
+                                            <span class="text-sm font-medium text-heading">
+                                                {city.name}
+                                            </span>
+                                        </div>
+                                        <span
+                                            class={`text-[10px] font-bold px-2 py-0.5 rounded-full ${city.supplement === "Gratis" ? "bg-green-500/10 text-green-500" : "bg-primary/10 text-primary"}`}
+                                        >
+                                            {city.supplement}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div>
+    </div>
+</section>

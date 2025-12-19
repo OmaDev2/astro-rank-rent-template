@@ -138,9 +138,53 @@ export const homepage = singleton({
                 })
             },
             content: {
-                label: 'Bloque de Texto SEO (Usa el contenido de abajo)',
+                label: 'Bloque de Texto SEO / Contenido Estructurado',
                 schema: fields.object({
                     title: fields.text({ label: 'Título del Bloque' }),
+                    sections: fields.array(
+                        fields.object({
+                            heading: fields.text({ label: 'Encabezado' }),
+                            content: fields.mdx({
+                                label: 'Contenido',
+                                extension: 'mdx',
+                            }),
+                        }),
+                        { label: 'Secciones de Contenido', itemLabel: (p) => p.fields.heading.value || 'Sección' }
+                    ),
+                })
+            },
+            service_areas: {
+                label: 'Zonas de Servicio',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título Principal' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    areas: fields.object({
+                        barcelona: fields.object({
+                            title: fields.text({ label: 'Título Barcelona' }),
+                            description: fields.text({ label: 'Descripción Barcelona' }),
+                            districts: fields.array(
+                                fields.object({
+                                    name: fields.text({ label: 'Nombre Distrito' }),
+                                    description: fields.text({ label: 'Descripción', multiline: true }),
+                                    icon: fields.text({ label: 'Icono (Lucide)' }),
+                                    popular: fields.checkbox({ label: '¿Es zona popular?', defaultValue: false }),
+                                }),
+                                { label: 'Distritos', itemLabel: (p) => p.fields.name.value || 'Distrito' }
+                            ),
+                        }),
+                        metropolitan: fields.object({
+                            title: fields.text({ label: 'Título Área Metropolitana' }),
+                            description: fields.text({ label: 'Descripción Área Metropolitana' }),
+                            cities: fields.array(
+                                fields.object({
+                                    name: fields.text({ label: 'Nombre Ciudad' }),
+                                    supplement: fields.text({ label: 'Suplemento/Precio' }),
+                                    icon: fields.text({ label: 'Icono (Lucide)' }),
+                                }),
+                                { label: 'Ciudades', itemLabel: (p) => p.fields.name.value || 'Ciudad' }
+                            ),
+                        }),
+                    }),
                 })
             },
             pricing: {

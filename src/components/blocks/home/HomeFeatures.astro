@@ -1,6 +1,6 @@
 ---
 import * as LucideIcons from "lucide-react";
-const { features, city, bgClass = "bg-secondary" } = Astro.props;
+const { features, title, city, bgClass = "bg-secondary" } = Astro.props;
 const getIcon = (name: string) =>
     (LucideIcons as any)[name] || LucideIcons.CheckCircle;
 if (!features || features.length === 0) return null;
@@ -14,11 +14,11 @@ const cardBgClass =
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
             <h2 class="text-4xl font-heading font-bold text-heading mb-4">
-                ¿Por qué elegirnos en {city}?
+                {title || `¿Por qué elegirnos en ${city}?`}
             </h2>
             <div class="w-24 h-1 bg-primary mx-auto mb-4"></div>
         </div>
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {
                 features.map((feature: any) => {
                     const IconComponent = getIcon(
@@ -33,7 +33,7 @@ const cardBgClass =
                                 <IconComponent className="w-8 h-8 text-white" />
                             </div>
                             <h3 class="text-2xl font-heading font-bold text-heading mb-4">
-                                {feature.title}
+                                {feature.title || feature.name}
                             </h3>
                             <p class="text-body leading-relaxed">
                                 {feature.description}
