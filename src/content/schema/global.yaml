@@ -1,4 +1,4 @@
-priceRange: '€€'
+priceRange: €€
 openingHours:
   - dayOfWeek:
       - Monday
@@ -11,12 +11,20 @@ openingHours:
   - dayOfWeek:
       - Saturday
     opens: '10:00'
-    closes: '14:00'
+    closes: '12:00'
 areaServed:
-  - MADRID
+  - Sabadell
+  - Barcelona
+  - Hospitalet del Llobregat
+  - Badalona
+  - Terrassa
+  - Mataró
+serviceRadius: 60
 paymentAccepted:
   - Cash
   - Credit Card
   - Debit Card
-foundingDate: ''
-slogan: ''
+  - Bank Transfer
+  - Bizum
+foundingDate: '2015'
+slogan: xpertos en alisar tu hogar, apasionados por el acabado perfecto."

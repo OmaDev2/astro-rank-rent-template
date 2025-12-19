@@ -35,24 +35,64 @@ export const homepage = singleton({
                 })
             },
             services_grid: {
-                label: 'Grilla de Servicios Automática',
+                label: 'Grilla de Servicios (Enlaces a Páginas)',
                 schema: fields.object({
                     title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
                     titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
                     subtitle: fields.text({ label: 'Resumen', multiline: true }),
                     services: fields.array(
-                        fields.object({
-                            title: fields.text({ label: 'Nombre' }),
-                            description: fields.text({ label: 'Descripción', multiline: true }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
-                            price: fields.text({ label: 'Precio (Ej: Desde 12€/m²)' }),
-                            isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
-                            features: fields.array(fields.text({ label: 'Característica' }), {
-                                label: 'Características',
-                                itemLabel: p => p.value || 'Opción'
+                        fields.conditional(
+                            fields.select({
+                                label: 'Modo de Configuración',
+                                options: [
+                                    { label: 'Manual (Escribir todo)', value: 'manual' },
+                                    { label: 'Automático (Seleccionar Servicio)', value: 'auto' },
+                                ],
+                                defaultValue: 'manual',
                             }),
-                        }),
-                        { label: 'Servicios de la Grilla', itemLabel: p => p.fields.title.value || 'Servicio' }
+                            {
+                                manual: fields.object({
+                                    title: fields.text({ label: 'Nombre' }),
+                                    description: fields.text({ label: 'Descripción', multiline: true }),
+                                    icon: fields.text({ label: 'Icono (Lucide)' }),
+                                    price: fields.text({ label: 'Precio (Ej: Desde 12€/m²)' }),
+                                    link: fields.text({ label: 'Enlace a Página (Ej: /servicios/alisar)' }),
+                                    isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
+                                    image: fields.image({
+                                        label: 'Imagen Card',
+                                        directory: 'public/images/services',
+                                        publicPath: '/images/services',
+                                    }),
+                                    features: fields.array(fields.text({ label: 'Característica' }), {
+                                        label: 'Características',
+                                        itemLabel: p => p.value || 'Opción'
+                                    }),
+                                }),
+                                auto: fields.object({
+                                    service: fields.relationship({
+                                        label: 'Seleccionar Servicio',
+                                        collection: 'services',
+                                    }),
+                                    overrideTitle: fields.text({ label: 'Sobrescribir Título (Opcional)' }),
+                                    overridePrice: fields.text({ label: 'Mostrar Precio (Opcional)' }),
+                                    isPopular: fields.checkbox({ label: '¿Destacar?', defaultValue: false }),
+                                }),
+                            }
+                        ),
+                        {
+                            label: 'Servicios de la Grilla',
+                            itemLabel: (props) => {
+                                const mode = props?.discriminant;
+                                if (mode === 'manual') {
+                                    return props?.value?.fields?.title?.value || 'Servicio Manual';
+                                }
+                                if (mode === 'auto') {
+                                    const serviceName = props?.value?.fields?.service?.value;
+                                    return serviceName ? `🔗 ${serviceName}` : 'Servicio Auto';
+                                }
+                                return 'Configurar Servicio';
+                            },
+                        }
                     )
                 })
             },
@@ -206,9 +246,9 @@ export const homepage = singleton({
                     sections: fields.array(
                         fields.object({
                             heading: fields.text({ label: 'Encabezado' }),
-                            content: fields.mdx({
-                                label: 'Contenido',
-                                extension: 'mdx',
+                            content: fields.text({
+                                label: 'Contenido (Markdown)',
+                                multiline: true,
                             }),
                         }),
                         { label: 'Secciones de Contenido', itemLabel: (p) => p.fields.heading.value || 'Sección' }
@@ -251,7 +291,7 @@ export const homepage = singleton({
                 })
             },
             pricing: {
-                label: 'Tabla de Precios',
+                label: 'Tabla de Precios (Planes)',
                 schema: fields.object({
                     title: fields.text({ label: 'Título Principal' }),
                     titleHighlight: fields.text({ label: 'Título Destacado' }),

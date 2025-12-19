@@ -5,6 +5,7 @@ const {
     servicesSection,
     featuredServices = [],
     customServices = null,
+    allServices = [],
     city,
     bgClass = "bg-secondary",
 } = Astro.props;
@@ -53,14 +54,63 @@ const servicesToDisplay = customServices || featuredServices;
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {
-                servicesToDisplay.map((service: any) => {
-                    // Normalizar datos si vienen de colección o de objeto directo del bloque
-                    const isCollection = !!service.data;
-                    const data = isCollection ? service.data : service;
-                    const slug = isCollection
-                        ? service.slug
-                        : service.slug ||
-                          service.name?.toLowerCase().replace(/\s+/g, "-");
+                servicesToDisplay.map((item: any) => {
+                    let data, slug, link;
+
+                    // 1. Caso Híbrido: Discriminant (Keystatic Conditional)
+                    if (item.discriminant) {
+                        if (item.discriminant === "manual") {
+                            data = item.value;
+                            slug = data.title
+                                ?.toLowerCase()
+                                .replace(/\s+/g, "-");
+                            link = data.link || `/servicios/${slug}/`;
+                        } else if (item.discriminant === "auto") {
+                            const serviceSlug = item.value.service;
+                            const foundService = allServices.find(
+                                (s: any) => s.slug === serviceSlug,
+                            );
+
+                            if (foundService) {
+                                data = {
+                                    ...foundService.data,
+                                    title:
+                                        item.value.overrideTitle ||
+                                        foundService.data.title,
+                                    price:
+                                        item.value.overridePrice ||
+                                        foundService.data.price,
+                                    isPopular: item.value.isPopular || false,
+                                };
+                                slug = foundService.slug;
+                                link = `/${slug}`;
+                            } else {
+                                // Fallback si no se encuentra el servicio (aunque no debería pasar)
+                                data = {
+                                    title: "Servicio no encontrado",
+                                    description: "Revisar configuración en CMS",
+                                    icon: "AlertCircle",
+                                };
+                                slug = "#";
+                                link = "#";
+                            }
+                        }
+                    }
+                    // 2. Caso Colección Directa (Featured Services o Fallback antiguo)
+                    else if (item.data) {
+                        data = item.data;
+                        slug = item.slug;
+                        link = `/${slug}`;
+                    }
+                    // 3. Caso Manual Antiguo (si hubiera datos legacy sin discriminant)
+                    else {
+                        data = item;
+                        slug =
+                            item.slug ||
+                            item.name?.toLowerCase().replace(/\s+/g, "-");
+                        link = item.link || `/servicios/${slug}/`;
+                    }
+
                     const title = data.title || data.name;
                     const description = data.shortDesc || data.description;
                     const image =
@@ -70,7 +120,7 @@ const servicesToDisplay = customServices || featuredServices;
 
                     return (
                         <a
-                            href={`/servicios/${slug}/`}
+                            href={link}
                             class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
                         >
                             <div

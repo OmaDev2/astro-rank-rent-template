@@ -14,6 +14,7 @@ interface Props {
     title?: string;
     subtitle?: string;
     items?: FeatureItem[];
+    bgClass?: string;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
     title: rawTitle = "",
     subtitle: rawSubtitle = "",
     items = [],
+    bgClass = "bg-secondary",
 } = Astro.props;
 
 const locationName = spin(rawLocationName);
@@ -60,7 +62,7 @@ const defaultItems: FeatureItem[] = [
 const featuresToDisplay = items.length > 0 ? items : defaultItems;
 ---
 
-<section class="py-20 bg-secondary border-t border-heading/10">
+<section class={`py-20 ${bgClass} border-t border-heading/5`}>
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
             <h2 class="text-4xl font-heading font-bold text-heading mb-4">

@@ -191,6 +191,7 @@ const schema = defineCollection({
             closes: z.string(),
         })).optional(),
         areaServed: z.array(z.string()).optional(),
+        serviceRadius: z.number().optional().default(0),
         paymentAccepted: z.array(z.string()).optional(),
         foundingDate: z.string().optional(),
         slogan: z.string().optional(),

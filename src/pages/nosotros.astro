@@ -16,18 +16,36 @@ import {
 import type { WithContext, AboutPage } from "schema-dts";
 
 // Fetch Global Settings
-const business = await getEntry("business", "global");
-const { siteName, city, niche } = business?.data || {
-    siteName: "Nombre Negocio",
-    city: "Ciudad",
-    niche: "Servicio Profesional",
-};
+import { getSettings } from "@/lib/settings";
+const settings = await getSettings();
+
+const { siteName, city, niche } = settings;
+
+// Import Schema Helpers
+import { generateLocalBusinessSchema } from "@/lib/seo";
+
+const localBusinessSchema = generateLocalBusinessSchema(
+    {
+        siteName,
+        city,
+        address: settings.address,
+        phone: settings.phone,
+        coordinates: settings.coordinates,
+        businessType: settings.businessType,
+        description: `Conoce la historia y valores de ${siteName}. Especialistas en ${niche}.`,
+        areaServed: settings.areaServed,
+        serviceRadius: settings.serviceRadius,
+    },
+    [],
+    Astro.url.href,
+);
 
 const schema: WithContext<AboutPage> = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
     name: `Sobre Nosotros - ${siteName}`,
     description: `Conoce la historia y valores de ${siteName}. Más de 15 años ofreciendo servicios de ${niche} profesional en ${city}.`,
+    mainEntity: localBusinessSchema as any,
 };
 ---
 

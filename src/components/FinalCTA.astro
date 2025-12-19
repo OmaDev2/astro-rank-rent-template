@@ -25,8 +25,15 @@ const link = buttonLink || `tel:${(phone || "").replace(/\s/g, "")}`;
 ---
 
 <section
-    class="relative py-16 bg-gradient-to-br from-primary to-accent text-white overflow-hidden"
+    class="relative py-24 bg-gradient-to-br from-primary via-primary/90 to-accent text-white overflow-hidden"
 >
+    {/* Fondo con Patrón */}
+    <div
+        class="absolute inset-0 bg-[url('/bg-pattern.svg')] opacity-5 pointer-events-none"
+    >
+    </div>
+
+    {/* Elementos Decorativos de Cristal */}
     <div
         class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none"
     >
@@ -38,30 +45,43 @@ const link = buttonLink || `tel:${(phone || "").replace(/\s/g, "")}`;
 
     <div class="container mx-auto px-4 text-center relative z-10">
         <h2
-            class="text-3xl md:text-5xl font-heading font-bold mb-6 tracking-tight shadow-black/10 drop-shadow-lg"
+            class="text-4xl md:text-6xl font-heading font-black mb-6 tracking-tight drop-shadow-2xl"
         >
             {title}
         </h2>
 
         <p
-            class="text-lg md:text-xl mb-10 text-white/90 max-w-2xl mx-auto font-light leading-relaxed"
+            class="text-xl md:text-2xl mb-12 text-white/90 max-w-3xl mx-auto font-light leading-relaxed"
         >
             {subtitle}
         </p>
 
-        <a
-            href={link}
-            class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-white text-primary rounded-xl transition-all hover:bg-slate-50 hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-black/20 group"
+        <div
+            class="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
-            <Phone className="w-5 h-5 mr-3 group-hover:animate-pulse" />
-            <span>{ctaText}</span>
-            <ArrowRight
-                className="w-5 h-5 ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-            />
-        </a>
+            <a
+                href={link}
+                class="group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold bg-white text-primary rounded-2xl transition-all hover:scale-105 shadow-2xl hover:shadow-white/20 overflow-hidden"
+            >
+                <div
+                    class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:animate-shine-fast"
+                >
+                </div>
+                <Phone className="w-6 h-6 mr-3 group-hover:animate-pulse" />
+                <span>{ctaText}</span>
+            </a>
 
-        <p class="mt-6 text-sm text-white/70">
-            * Sin compromiso. Atención inmediata.
+            <div class="text-white/80 font-medium italic">
+                O llámanos directamente al <span
+                    class="text-white font-bold not-italic">{phone}</span
+                >
+            </div>
+        </div>
+
+        <p
+            class="mt-14 text-sm text-white/50 tracking-[0.2em] uppercase font-bold"
+        >
+            ⚡ Respuesta inmediata · Presupuesto gratuito · Sin compromiso
         </p>
     </div>
 </section>

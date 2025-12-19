@@ -52,6 +52,7 @@ const allLocations = await getCollection("locations");
 import {
     generateLocalBusinessSchema,
     generateBreadcrumbsList,
+    generateFAQSchema,
 } from "@/lib/seo";
 
 // Recopilar testimonios (idealmente filtraríamos por zona si tuviéramos esa data,
@@ -66,10 +67,15 @@ const localSchema = generateLocalBusinessSchema(
         siteName: `${settings.niche} en ${data.name} | ${settings.siteName}`,
         phone: settings.phone,
         city: data.name, // Ciudad específica de la zona
-        address: settings.address,
+        address: undefined, // Usamos undefined para que use la ciudad como dirección en zonas locales
         coordinates: data.coordinates,
         image: data.heroImage,
         businessType: settings.businessType,
+        areaServed: data.name, // Dinámico para SEO local
+        openingHours: settings.openingHours,
+        paymentAccepted: settings.paymentAccepted,
+        slogan: settings.slogan,
+        knowsAbout: allServices.map((s) => s.data.title),
     },
     testimonials,
     Astro.url.href,
@@ -82,7 +88,13 @@ const breadcrumbsPoints = [
 ];
 
 const breadcrumbsSchema = generateBreadcrumbsList(breadcrumbsPoints);
-const finalSchema = [localSchema, breadcrumbsSchema];
+const faqSchema = generateFAQSchema(data.faq || []);
+
+const finalSchema = [
+    localSchema,
+    breadcrumbsSchema,
+    ...(faqSchema ? [faqSchema] : []),
+];
 
 // 7. SEO: Título y descripción
 const pageTitle =

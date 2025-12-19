@@ -6,30 +6,37 @@ import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import type { WithContext, ContactPage } from "schema-dts";
 
 // Fetch Global Settings
-const business = await getEntry("business", "global");
+import { getSettings } from "@/lib/settings";
+const settings = await getSettings();
+
 const { siteName, phone, email, address, city, niche, schedule, coordinates } =
-    business?.data || {
-        siteName: "Herrero Zaragoza",
-        phone: "600 000 000",
-        email: "info@example.com",
-        address: "Calle Ejemplo, 123",
-        city: "Zaragoza",
-        niche: "Herrería",
-        schedule: "Lunes a Viernes 9:00 - 18:00",
-        coordinates: { lat: "", lng: "" },
-    };
+    settings;
+
+// Import Schema Helpers
+import { generateLocalBusinessSchema } from "@/lib/seo";
+
+const localBusinessSchema = generateLocalBusinessSchema(
+    {
+        siteName,
+        phone,
+        city,
+        address,
+        coordinates,
+        businessType: settings.businessType,
+        description: `Información de contacto de ${siteName}, especialistas en ${niche}.`,
+        areaServed: settings.areaServed,
+        serviceRadius: settings.serviceRadius,
+    },
+    [],
+    Astro.url.href,
+);
 
 const schema: WithContext<ContactPage> = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     name: `Contacto ${siteName}`,
     description: `Contacte con ${siteName} para solicitar presupuesto de ${niche}.`,
-    mainEntity: {
-        "@type": "LocalBusiness", // Mejor que Locksmith genérico
-        name: siteName,
-        telephone: phone,
-        email: email,
-    },
+    mainEntity: localBusinessSchema as any,
 };
 ---
 

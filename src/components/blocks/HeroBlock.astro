@@ -139,27 +139,37 @@ const phoneHref = (phone || "").replace(/\s/g, "");
 
                 {/* Botones de Acción */}
                 <div
-                    class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4"
+                    class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start pt-6"
                 >
                     <a
                         href={`tel:${phoneHref}`}
-                        class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-primary rounded-xl overflow-hidden shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all hover:-translate-y-1"
+                        class="group relative inline-flex items-center justify-center px-10 py-6 text-xl font-black text-white bg-primary rounded-2xl overflow-hidden shadow-2xl shadow-primary/40 hover:shadow-primary/60 transition-all hover:-translate-y-1"
                     >
                         <div
                             class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine-fast"
                         >
                         </div>
-                        <Phone className="w-5 h-5 mr-3 animate-pulse" />
-                        <span>Llamar: {phone}</span>
+                        <Phone
+                            className="w-7 h-7 mr-4 animate-pulse shrink-0"
+                        />
+                        <div class="flex flex-col items-start leading-tight">
+                            <span
+                                class="text-[11px] uppercase tracking-[0.2em] opacity-80 font-black mb-0.5"
+                                >Llamar Ahora</span
+                            >
+                            <span class="text-2xl tracking-tighter"
+                                >{phone}</span
+                            >
+                        </div>
                     </a>
 
                     <a
                         href="#formulario"
-                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl backdrop-blur-md transition-all hover:-translate-y-1"
+                        class="inline-flex items-center justify-center px-10 py-6 text-lg font-bold text-white bg-white/10 border-2 border-white/20 hover:bg-white/20 rounded-2xl backdrop-blur-2xl transition-all hover:-translate-y-1 hover:border-primary/50 group"
                     >
-                        <span class="mr-2">Pedir Presupuesto</span>
+                        <span class="mr-3">Pedir Presupuesto</span>
                         <ArrowRight
-                            className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                            className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300"
                         />
                     </a>
                 </div>

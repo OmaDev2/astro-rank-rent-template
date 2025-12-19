@@ -49,6 +49,7 @@ export async function getSettings() {
         priceRange: schema?.data?.priceRange || '',
         openingHours: schema?.data?.openingHours || [],
         areaServed: schema?.data?.areaServed || [],
+        serviceRadius: schema?.data?.serviceRadius || 0,
         paymentAccepted: schema?.data?.paymentAccepted || [],
         foundingDate: schema?.data?.foundingDate || '',
         slogan: schema?.data?.slogan || '',

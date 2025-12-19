@@ -12,6 +12,7 @@ const featuredServices = await getCollection(
 	"services",
 	({ data }) => data.featured === true,
 );
+const allServices = await getCollection("services");
 const testimonialsCollection = await getCollection("testimonials");
 const home = await getEntry("pages", "home");
 const homeData = (home?.data || {}) as any;
@@ -47,21 +48,8 @@ try {
 }
 
 // 2. Global Settings
-const business = await getEntry("business", "global");
-const config = business?.data || {
-	siteName: "Nombre Negocio",
-	phone: "000 000 000",
-	city: "Ciudad",
-	niche: "Servicio",
-	whatsapp: "",
-	businessType: "LocalBusiness",
-	logo: "",
-	siteUrl: "",
-	address: "",
-	coordinates: { lat: "", lng: "" },
-	email: "",
-	ctaText: "Pedir Presupuesto",
-};
+import { getSettings } from "@/lib/settings";
+const config = await getSettings();
 
 // 3. Page Builder Logic
 const defaultBlocks = [
@@ -83,7 +71,11 @@ const finalBlocks =
 		: defaultBlocks;
 
 // 4. Schema SEO
-import { generateLocalBusinessSchema, generateFAQSchema } from "@/lib/seo";
+import {
+	generateLocalBusinessSchema,
+	generateFAQSchema,
+	generateBreadcrumbsList,
+} from "@/lib/seo";
 
 const localBusinessSchema = generateLocalBusinessSchema(
 	{
@@ -95,6 +87,12 @@ const localBusinessSchema = generateLocalBusinessSchema(
 		image: config.logo || `${config.siteUrl}/images/home/logo.png`,
 		businessType: config.businessType,
 		description: `${config.niche} en ${config.city}. Servicio profesional.`,
+		areaServed: config.areaServed, // Lista global de localidades
+		serviceRadius: config.serviceRadius, // Radio global
+		openingHours: config.openingHours,
+		paymentAccepted: config.paymentAccepted,
+		slogan: config.slogan,
+		knowsAbout: featuredServices.map((s) => s.data.title),
 	},
 	testimonialsCollection,
 	Astro.url.href,
@@ -107,9 +105,15 @@ const homepageFaqs =
 	[];
 const faqSchema = generateFAQSchema(homepageFaqs);
 
-const schema = faqSchema
-	? ([localBusinessSchema, faqSchema] as any)
-	: localBusinessSchema;
+const breadcrumbsSchema = generateBreadcrumbsList([
+	{ name: "Inicio", item: Astro.site?.href || Astro.url.origin },
+]);
+
+const schema = [
+	localBusinessSchema,
+	breadcrumbsSchema,
+	...(faqSchema ? [faqSchema] : []),
+] as any;
 ---
 
 <Layout
@@ -124,6 +128,7 @@ const schema = faqSchema
 		config={config}
 		city={config.city}
 		services={featuredServices}
+		allServices={allServices}
 		content={SeoContentRendered}
 	/>
 

@@ -55,6 +55,8 @@ import {
     getAggregateRating,
     generateBreadcrumbsList,
     generateFAQSchema,
+    formatAreaServed,
+    generateLocalBusinessSchema,
 } from "@/lib/seo";
 
 const aggregateRating = getAggregateRating(testimonials);
@@ -64,28 +66,28 @@ const serviceSchema: WithContext<Service> = {
     "@type": "Service",
     name: data.title,
     description: data.seoDesc,
-    provider: {
-        "@type": (settings.businessType as any) || "LocalBusiness",
-        name: settings.siteName,
-        telephone: settings.phone,
-        image: data.heroImage,
-        address: {
-            "@type": "PostalAddress",
-            addressLocality: settings.city,
-            addressCountry: "ES",
-            streetAddress: settings.address,
+    provider: generateLocalBusinessSchema(
+        {
+            siteName: settings.siteName,
+            phone: settings.phone,
+            city: settings.city,
+            address: settings.address,
+            coordinates: settings.coordinates,
+            image: data.heroImage,
+            businessType: settings.businessType,
+            openingHours: settings.openingHours,
+            paymentAccepted: settings.paymentAccepted,
+            slogan: settings.slogan,
+            knowsAbout: [data.title],
         },
-        ...(aggregateRating && { aggregateRating }),
-        ...(settings.coordinates && {
-            hasMap: `https://www.google.com/maps?q=${settings.coordinates.lat},${settings.coordinates.lng}`,
-            geo: {
-                "@type": "GeoCoordinates",
-                latitude: settings.coordinates.lat,
-                longitude: settings.coordinates.lng,
-            },
-        }),
-    },
-    areaServed: {
+        testimonials,
+        Astro.url.href,
+    ) as any,
+    areaServed: formatAreaServed(
+        settings.areaServed,
+        settings.serviceRadius,
+        settings.coordinates,
+    ) || {
         "@type": "City",
         name: settings.city,
     },

@@ -50,11 +50,17 @@ export const schema = singleton({
         areaServed: fields.array(
             fields.text({ label: 'Ciudad/Zona' }),
             {
-                label: 'Áreas de Servicio',
-                description: 'Ciudades o zonas donde ofreces servicio (para Schema.org)',
+                label: 'Áreas de Servicio (Lista)',
+                description: 'Ciudades o zonas donde ofreces servicio. Mejor para SEO por ciudad.',
                 itemLabel: (props) => props.value || 'Nueva área',
             }
         ),
+
+        serviceRadius: fields.integer({
+            label: 'Radio de Servicio (km)',
+            description: 'Define un radio en km alrededor de tus coordenadas. Opción B para Schema.org.',
+            defaultValue: 0,
+        }),
 
         paymentAccepted: fields.multiselect({
             label: 'Métodos de Pago Aceptados',

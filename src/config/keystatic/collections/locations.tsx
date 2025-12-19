@@ -73,7 +73,19 @@ export const locations = collection({
             },
             content: {
                 label: 'Contenido Principal + Sidebar',
-                schema: fields.empty()
+                schema: fields.object({
+                    urgencyBoxStyle: fields.select({
+                        label: 'Estilo de Caja de Urgencia',
+                        options: [
+                            { label: 'Ninguno', value: 'none' },
+                            { label: 'Éxito (Verde)', value: 'success' },
+                            { label: 'Urgente (Rojo)', value: 'urgent' },
+                            { label: 'Tema Principal', value: 'primary' },
+                            { label: 'Tema Acento', value: 'accent' },
+                        ],
+                        defaultValue: 'none',
+                    }),
+                })
             },
             cta: {
                 label: 'Llamada a la Acción (CTA Final)',
