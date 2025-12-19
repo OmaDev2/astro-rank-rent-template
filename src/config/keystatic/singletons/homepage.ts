@@ -142,6 +142,78 @@ export const homepage = singleton({
                 schema: fields.object({
                     title: fields.text({ label: 'Título del Bloque' }),
                 })
+            },
+            pricing: {
+                label: 'Tabla de Precios',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    plans: fields.array(
+                        fields.object({
+                            name: fields.text({ label: 'Nombre del Plan' }),
+                            price: fields.text({ label: 'Precio (Ej: 99€)' }),
+                            description: fields.text({ label: 'Descripción Corta' }),
+                            isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
+                            features: fields.array(fields.text({ label: 'Característica' }), {
+                                label: 'Características',
+                                itemLabel: p => p.value || 'Característica'
+                            }),
+                            buttonText: fields.text({ label: 'Texto del Botón', defaultValue: 'Solicitar Ahora' }),
+                            buttonLink: fields.text({ label: 'Enlace (Opcional)', defaultValue: '#contacto' }),
+                        }),
+                        { label: 'Planes', itemLabel: p => p.fields.name.value || 'Plan' }
+                    )
+                })
+            },
+            stats: {
+                label: 'Números / Estadísticas',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título Sección (Opcional)' }),
+                    stats: fields.array(
+                        fields.object({
+                            label: fields.text({ label: 'Etiqueta (Ej: Clientes)' }),
+                            value: fields.text({ label: 'Valor (Ej: 500)' }),
+                            suffix: fields.text({ label: 'Sufijo (Ej: +)' }),
+                        }),
+                        { label: 'Estadísticas', itemLabel: p => `${p.fields.value.value}${p.fields.suffix.value} ${p.fields.label.value}` }
+                    )
+                })
+            },
+            logos: {
+                label: 'Logos de Confianza / Partners',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título (Opcional)' }),
+                    logos: fields.array(
+                        fields.object({
+                            alt: fields.text({ label: 'Nombre Empresa' }),
+                            image: fields.image({
+                                label: 'Logo',
+                                directory: 'public/images/logos',
+                                publicPath: '/images/logos',
+                            }),
+                        }),
+                        { label: 'Logos', itemLabel: p => p.fields.alt.value || 'Logo' }
+                    )
+                })
+            },
+            before_after: {
+                label: 'Antes y Después (Comparativa)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    beforeImage: fields.image({
+                        label: 'Imagen Antes',
+                        directory: 'public/images/comparativas',
+                        publicPath: '/images/comparativas',
+                    }),
+                    afterImage: fields.image({
+                        label: 'Imagen Después',
+                        directory: 'public/images/comparativas',
+                        publicPath: '/images/comparativas',
+                    }),
+                    beforeLabel: fields.text({ label: 'Etiqueta Antes', defaultValue: 'Antes' }),
+                    afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
+                })
             }
         }, {
             label: 'Constructor de Portada',

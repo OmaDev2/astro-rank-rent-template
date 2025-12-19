@@ -26,14 +26,16 @@ const heroBgImage =
                 <Image
                     src={defaultHeroImage}
                     alt={`${config.niche} en ${config.city}`}
-                    class="w-full h-full object-cover opacity-40"
+                    class="w-full h-full object-cover"
+                    style="opacity: var(--hero-opacity)"
                     loading="eager"
                 />
             ) : (
                 <img
                     src={heroBgImage}
                     alt={`${config.niche} en ${config.city}`}
-                    class="w-full h-full object-cover opacity-40"
+                    class="w-full h-full object-cover"
+                    style="opacity: var(--hero-opacity)"
                 />
             )
         }

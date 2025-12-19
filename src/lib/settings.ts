@@ -32,8 +32,9 @@ export async function getSettings() {
         ctaText: business?.data?.ctaText || 'PEDIR PRESUPUESTO',
 
         // Design
-        theme: design?.data?.theme || 'industrial',
+        themeSettings: design?.data?.themeSettings, // NEW: Full JSON object/string
         fontPair: design?.data?.fontPair || 'modern',
+        heroOverlayOpacity: design?.data?.heroOverlayOpacity, // Passed to Layout
 
         // Social
         facebook: social?.data?.facebook || '',

@@ -26,6 +26,10 @@ const locations = defineCollection({
                 z.object({ discriminant: z.literal('map') }),
                 z.object({ discriminant: z.literal('content') }),
                 z.object({ discriminant: z.literal('cta') }),
+                z.object({ discriminant: z.literal('pricing'), value: z.any() }),
+                z.object({ discriminant: z.literal('stats'), value: z.any() }),
+                z.object({ discriminant: z.literal('logos'), value: z.any() }),
+                z.object({ discriminant: z.literal('before_after'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper zonas antiguas sin este campo
     }),
@@ -58,6 +62,11 @@ const services = defineCollection({
                     })
                 }),
                 z.object({ discriminant: z.literal('cta'), value: z.any() }),
+                z.object({ discriminant: z.literal('price_from'), value: z.any() }),
+                z.object({ discriminant: z.literal('pricing'), value: z.any() }),
+                z.object({ discriminant: z.literal('stats'), value: z.any() }),
+                z.object({ discriminant: z.literal('logos'), value: z.any() }),
+                z.object({ discriminant: z.literal('before_after'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper servicios antiguos sin este campo
         faq: z.array(z.object({
@@ -135,6 +144,7 @@ const business = defineCollection({
 const design = defineCollection({
     type: 'data',
     schema: z.object({
+        themeSettings: z.string().optional(), // NEW: JSON string with theme + colors
         theme: z.enum([
             'industrial', 'corporate', 'nature', 'urgent',
             'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light',
@@ -145,6 +155,7 @@ const design = defineCollection({
             'modern', 'robust', 'elegant', 'friendly', 'tech',
             'artisan_warm', 'artisan_natural', 'artisan_classic'
         ]).optional().default('modern'),
+        heroOverlayOpacity: z.number().optional().default(0.6), // NEW: Opacity control
     }),
 });
 
@@ -201,6 +212,10 @@ const pages = defineCollection({
                 z.object({ discriminant: z.literal('faq'), value: z.any() }),
                 z.object({ discriminant: z.literal('locations'), value: z.any() }),
                 z.object({ discriminant: z.literal('cta'), value: z.any() }),
+                z.object({ discriminant: z.literal('pricing'), value: z.any() }),
+                z.object({ discriminant: z.literal('stats'), value: z.any() }),
+                z.object({ discriminant: z.literal('logos'), value: z.any() }),
+                z.object({ discriminant: z.literal('before_after'), value: z.any() }),
             ])
         ).optional(),
 

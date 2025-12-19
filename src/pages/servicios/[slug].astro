@@ -1,6 +1,6 @@
 ---
 import ServiceLayout from "../../layouts/ServiceLayout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 import type { WithContext, Service, FAQPage, BreadcrumbList } from "schema-dts";
 
@@ -23,6 +23,9 @@ export async function getStaticPaths() {
 }
 
 // 2. Obtener datos del servicio actual
+interface Props {
+    entry: CollectionEntry<"services">;
+}
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const data = entry.data;

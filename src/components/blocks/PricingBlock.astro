@@ -1,0 +1,105 @@
+---
+import { Check } from "lucide-react";
+
+interface PricingPlan {
+    name: string;
+    price: string;
+    description: string;
+    features: string[];
+    isPopular?: boolean;
+    buttonText?: string;
+    buttonLink?: string;
+}
+
+interface Props {
+    title?: string;
+    subtitle?: string;
+    plans: PricingPlan[];
+    bgClass?: string;
+}
+
+const {
+    title = "Nuestros Precios",
+    subtitle = "Soluciones transparentes adaptadas a tus necesidades.",
+    plans = [],
+    bgClass = "bg-secondary",
+} = Astro.props;
+---
+
+<section class={`py-24 ${bgClass} overflow-hidden`}>
+    <div class="container mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2
+                class="text-4xl md:text-5xl font-heading font-bold text-heading mb-6 tracking-tight"
+            >
+                {title}
+            </h2>
+            <p class="text-xl text-body font-light">
+                {subtitle}
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {
+                plans.map((plan) => (
+                    <div
+                        class={`relative p-8 rounded-3xl border transition-all duration-500 hover:-translate-y-2 flex flex-col ${
+                            plan.isPopular
+                                ? "bg-surface border-primary shadow-2xl shadow-primary/10 ring-2 ring-primary/20 scale-105 z-10"
+                                : "bg-surface border-heading/5 hover:border-primary/30"
+                        }`}
+                    >
+                        {plan.isPopular && (
+                            <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                                Más Popular
+                            </div>
+                        )}
+
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-heading mb-2">
+                                {plan.name}
+                            </h3>
+                            <div class="flex items-baseline gap-1 mb-4">
+                                <span class="text-4xl font-bold text-primary">
+                                    {plan.price}
+                                </span>
+                                {plan.price.includes("€") && (
+                                    <span class="text-body/60 text-sm">
+                                        / total
+                                    </span>
+                                )}
+                            </div>
+                            <p class="text-body text-sm leading-relaxed">
+                                {plan.description}
+                            </p>
+                        </div>
+
+                        <ul class="space-y-4 mb-10 flex-grow">
+                            {plan.features.map((feature) => (
+                                <li class="flex items-start gap-3">
+                                    <div class="mt-1 p-0.5 rounded-full bg-primary/10 text-primary">
+                                        <Check className="w-4 h-4" />
+                                    </div>
+                                    <span class="text-body text-sm font-medium">
+                                        {feature}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <a
+                            href={plan.buttonLink || "#contacto"}
+                            class={`w-full py-4 rounded-xl text-center font-bold transition-all duration-300 ${
+                                plan.isPopular
+                                    ? "bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90"
+                                    : "bg-surface-variant text-heading border border-heading/10 hover:border-primary/50 hover:bg-primary/5"
+                            }`}
+                        >
+                            {plan.buttonText || "Solicitar Ahora"}
+                        </a>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

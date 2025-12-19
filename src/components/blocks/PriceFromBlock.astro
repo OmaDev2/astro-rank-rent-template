@@ -1,0 +1,116 @@
+---
+import { ArrowRight, Tag } from "lucide-react";
+
+interface Props {
+    price?: string;
+    unit?: string;
+    title?: string;
+    subtitle?: string;
+    buttonText?: string;
+    buttonLink?: string;
+    isOffer?: boolean;
+    bgClass?: string;
+}
+
+const {
+    price,
+    unit = "/m2",
+    title,
+    subtitle,
+    buttonText = "Pedir Presupuesto",
+    buttonLink = "#contacto",
+    isOffer = true,
+    bgClass = "bg-surface",
+} = Astro.props;
+---
+
+<section class={`py-12 ${bgClass}`}>
+    <div class="container mx-auto px-4 max-w-4xl">
+        <div class="relative overflow-hidden rounded-3xl shadow-xl">
+            {/* Background with Gradient */}
+            <div class="absolute inset-0 bg-secondary"></div>
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"
+            >
+            </div>
+
+            {/* Decorative Circles */}
+            <div
+                class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl"
+            >
+            </div>
+            <div
+                class="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
+            >
+            </div>
+
+            <div
+                class="relative p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
+            >
+                {/* Left: Content */}
+                <div class="space-y-4 max-w-lg">
+                    {
+                        isOffer && (
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-wider">
+                                <Tag className="w-3 h-3" />
+                                <span>Oferta Especial</span>
+                            </div>
+                        )
+                    }
+
+                    <h2
+                        class="text-3xl md:text-4xl font-heading font-bold text-heading"
+                    >
+                        {title || "Precio Profesional"}
+                    </h2>
+
+                    {subtitle && <p class="text-body/80 text-lg">{subtitle}</p>}
+
+                    <div class="pt-2">
+                        <a
+                            href={buttonLink}
+                            class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-lg shadow-lg shadow-primary/20 transition-all hover:-translate-y-1"
+                        >
+                            <span>{buttonText}</span>
+                            <ArrowRight className="w-5 h-5" />
+                        </a>
+                    </div>
+                </div>
+
+                {/* Right: Price */}
+                <div class="relative shrink-0">
+                    <div
+                        class="p-6 md:p-8 rounded-2xl bg-surface/50 backdrop-blur-sm border border-white/10 shadow-inner"
+                    >
+                        <div class="flex flex-col items-center">
+                            <span
+                                class="text-body/60 text-sm font-medium uppercase tracking-widest mb-1"
+                            >
+                                Desde
+                            </span>
+                            <div
+                                class="flex items-baseline justify-center gap-1"
+                            >
+                                <span
+                                    class="text-5xl md:text-6xl font-black text-primary tracking-tight"
+                                >
+                                    {price}€
+                                </span>
+                                <span
+                                    class="text-xl md:text-2xl text-body/60 font-medium"
+                                >
+                                    {unit}
+                                </span>
+                            </div>
+                            <p
+                                class="text-xs text-body/40 mt-2 max-w-[150px] text-center mx-auto"
+                            >
+                                *Precio estimado. Consulte condiciones.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

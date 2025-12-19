@@ -1,0 +1,80 @@
+---
+interface Props {
+    title?: string;
+    subtitle?: string;
+    beforeImage: string;
+    afterImage: string;
+    beforeLabel?: string;
+    afterLabel?: string;
+    bgClass?: string;
+}
+
+const {
+    title = "Resultados Reales",
+    subtitle = "La calidad que nos diferencia en cada proyecto.",
+    beforeImage,
+    afterImage,
+    beforeLabel = "Antes",
+    afterLabel = "Después",
+    bgClass = "bg-surface",
+} = Astro.props;
+---
+
+<section class={`py-24 ${bgClass}`}>
+    <div class="container mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-4xl font-heading font-bold text-heading mb-6">
+                {title}
+            </h2>
+            <p class="text-xl text-body font-light">
+                {subtitle}
+            </p>
+        </div>
+
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-4 relative">
+                {/* BEFORE */}
+                <div
+                    class="relative group overflow-hidden rounded-3xl aspect-[4/3] shadow-xl"
+                >
+                    <img
+                        src={beforeImage ||
+                            "https://images.unsplash.com/photo-1581094794329-c8112c4e5190?q=80&w=2070&auto=format&fit=crop"}
+                        alt="Antes del servicio"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div
+                        class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"
+                    >
+                    </div>
+                    <div
+                        class="absolute bottom-6 left-6 bg-secondary/80 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-widest"
+                    >
+                        {beforeLabel}
+                    </div>
+                </div>
+
+                {/* AFTER */}
+                <div
+                    class="relative group overflow-hidden rounded-3xl aspect-[4/3] shadow-2xl ring-4 ring-primary/20"
+                >
+                    <img
+                        src={afterImage ||
+                            "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop"}
+                        alt="Después del servicio"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                    </div>
+                    <div
+                        class="absolute bottom-6 right-6 bg-primary text-white text-xs font-bold px-4 py-2 rounded-lg uppercase tracking-widest shadow-lg"
+                    >
+                        {afterLabel}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

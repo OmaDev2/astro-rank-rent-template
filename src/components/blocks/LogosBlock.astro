@@ -1,0 +1,57 @@
+---
+interface Logo {
+    alt: string;
+    image: string;
+}
+
+interface Props {
+    title?: string;
+    logos: Logo[];
+    bgClass?: string;
+}
+
+const {
+    title = "Empresas que confían en nosotros",
+    logos = [],
+    bgClass = "bg-secondary",
+} = Astro.props;
+---
+
+<section class={`py-12 ${bgClass} border-y border-white/5`}>
+    <div class="container mx-auto px-4">
+        {
+            title && (
+                <p class="text-center text-body/50 text-xs font-bold uppercase tracking-[0.2em] mb-10">
+                    {title}
+                </p>
+            )
+        }
+
+        <div
+            class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 hover:opacity-100 transition-opacity duration-700 grayscale hover:grayscale-0"
+        >
+            {
+                logos.map((logo) => (
+                    <div class="h-8 md:h-12 w-auto flex items-center justify-center">
+                        <img
+                            src={logo.image}
+                            alt={logo.alt}
+                            class="max-h-full max-w-full object-contain filter brightness-0 invert"
+                        />
+                    </div>
+                ))
+            }
+            {/* Fallback placeholders if logos array is empty for demo */}
+            {
+                logos.length === 0 && (
+                    <div class="flex flex-wrap justify-center items-center gap-12 text-white/20 font-heading font-black text-2xl italic">
+                        <span>LOGO_PLACEHOLDER</span>
+                        <span>TRUST_BADGE</span>
+                        <span>CERTIFIED_PRO</span>
+                        <span>PARTNER_X</span>
+                    </div>
+                )
+            }
+        </div>
+    </div>
+</section>

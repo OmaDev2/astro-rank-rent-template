@@ -18,6 +18,13 @@ import HomeContact from "./blocks/home/HomeContact.astro";
 import HomeProcess from "./blocks/home/HomeProcess.astro";
 import HomeServicesOnePage from "./blocks/home/HomeServicesOnePage.astro";
 
+// New Modular Blocks
+import PricingBlock from "./blocks/PricingBlock.astro";
+import StatsBlock from "./blocks/StatsBlock.astro";
+import LogosBlock from "./blocks/LogosBlock.astro";
+import BeforeAfterBlock from "./blocks/BeforeAfterBlock.astro";
+import PriceFromBlock from "./blocks/PriceFromBlock.astro";
+
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 
 interface Props {
@@ -415,6 +422,61 @@ const {
                         </div>
                     </section>
                 );
+            case "pricing":
+                return (
+                    <PricingBlock
+                        title={value?.title}
+                        subtitle={value?.subtitle}
+                        plans={value?.plans}
+                        bgClass={bgClass}
+                    />
+                );
+
+            case "stats":
+                return (
+                    <StatsBlock
+                        title={value?.title}
+                        stats={value?.stats}
+                        bgClass={bgClass}
+                    />
+                );
+
+            case "logos":
+                return (
+                    <LogosBlock
+                        title={value?.title}
+                        logos={value?.logos}
+                        bgClass={bgClass}
+                    />
+                );
+
+            case "before_after":
+                return (
+                    <BeforeAfterBlock
+                        title={value?.title}
+                        subtitle={value?.subtitle}
+                        beforeImage={value?.beforeImage}
+                        afterImage={value?.afterImage}
+                        beforeLabel={value?.beforeLabel}
+                        afterLabel={value?.afterLabel}
+                        bgClass={bgClass}
+                    />
+                );
+
+            case "price_from":
+                return (
+                    <PriceFromBlock
+                        price={value?.price}
+                        unit={value?.unit}
+                        title={value?.title}
+                        subtitle={value?.subtitle}
+                        buttonText={value?.buttonText}
+                        buttonLink={value?.buttonLink}
+                        isOffer={value?.isOffer}
+                        bgClass={bgClass}
+                    />
+                );
+
             default:
                 return null;
         }

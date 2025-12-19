@@ -1,0 +1,49 @@
+---
+interface Stat {
+    label: string;
+    value: string;
+    suffix?: string;
+    icon?: string;
+}
+
+interface Props {
+    title?: string;
+    stats: Stat[];
+    bgClass?: string;
+}
+
+const { title, stats = [], bgClass = "bg-surface" } = Astro.props;
+---
+
+<section class={`py-20 ${bgClass}`}>
+    <div class="container mx-auto px-4">
+        {
+            title && (
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-heading">
+                        {title}
+                    </h2>
+                </div>
+            )
+        }
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            {
+                stats.map((stat, index) => (
+                    <div class="text-center group">
+                        <div class="inline-block mb-4 p-4 rounded-2xl bg-primary/5 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 transform group-hover:rotate-6">
+                            <span class="text-4xl font-black">
+                                {stat.value}
+                                {stat.suffix}
+                            </span>
+                        </div>
+                        <p class="text-heading font-bold text-lg uppercase tracking-wider">
+                            {stat.label}
+                        </p>
+                        <div class="mt-2 w-10 h-1 bg-primary/20 mx-auto group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
