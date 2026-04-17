@@ -1,9 +1,8 @@
 import { fontPairs } from '../../config/fonts';
 
-// NOTA: Importamos directamente el YAML del diseño. 
-// Vite (procesador de Keystatic) lo convertirá en un objeto JS automáticamente.
+// Importamos el YAML como string bruto para evitar problemas de compatibilidad con plugins de Vite
 // @ts-ignore
-import designData from '../../content/design/global.yaml';
+import designYaml from '../../content/design/global.yaml?raw';
 
 export type PreviewTheme = {
     primary: string;
@@ -32,30 +31,51 @@ export function getPreviewTheme(): PreviewTheme {
     let fontPairId = 'modern';
 
     try {
-        if (designData) {
-            // Parsear settings del tema
-            if (designData.themeSettings) {
-                const settings = typeof designData.themeSettings === 'string' 
-                    ? JSON.parse(designData.themeSettings) 
-                    : designData.themeSettings;
-                
-                themeId = settings.theme || themeId;
-                if (settings.colors) {
-                    colors = {
-                        primary: settings.colors.primary || colors.primary,
-                        secondary: settings.colors.secondary || colors.secondary,
-                        surface: settings.colors.surface || colors.surface,
-                        accent: settings.colors.accent || colors.accent,
-                        textMain: settings.colors.textMain || colors.textMain,
-                        textMuted: settings.colors.textMuted || colors.textMuted,
-                    };
+        if (designYaml) {
+            const lines = designYaml.split('\n');
+            
+            // Extractor robusto para themeSettings (manejando >-)
+            let themeSettingsRaw = '';
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].includes('themeSettings:')) {
+                    const inline = lines[i].split('themeSettings:')[1].trim();
+                    if (inline && inline !== '>-') {
+                        themeSettingsRaw = inline;
+                    } else if (lines[i+1]) {
+                        themeSettingsRaw = lines[i+1].trim();
+                    }
+                    break;
                 }
             }
-            // Parsear tipografía
-            fontPairId = designData.fontPair || fontPairId;
+
+            if (themeSettingsRaw) {
+                // Limpiar posibles comillas del YAML antes de parsear JSON
+                const cleanJson = themeSettingsRaw.replace(/^['"]|['"]$/g, '');
+                try {
+                    const settings = JSON.parse(cleanJson);
+                    if (settings.colors) {
+                        colors = {
+                            primary: settings.colors.primary || colors.primary,
+                            secondary: settings.colors.secondary || colors.secondary,
+                            surface: settings.colors.surface || colors.surface,
+                            accent: settings.colors.accent || colors.accent,
+                            textMain: settings.colors.textMain || colors.textMain,
+                            textMuted: settings.colors.textMuted || colors.textMuted,
+                        };
+                    }
+                } catch(e) {}
+            }
+
+            // Extractor para fontPair
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].includes('fontPair:')) {
+                    fontPairId = lines[i].split('fontPair:')[1].trim().replace(/^['"]|['"]$/g, '');
+                    break;
+                }
+            }
         }
     } catch (e) {
-        console.error("Error cargando tema para preview:", e);
+        console.error("Error procesando tema para preview:", e);
     }
 
     const fontPair = fontPairs[fontPairId as keyof typeof fontPairs] || fontPairs.modern;

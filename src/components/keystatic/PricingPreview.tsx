@@ -1,197 +1,139 @@
 import React, { useState } from 'react';
 import { FieldPrimitive } from '@keystar/ui/field';
 import type { BasicFormField, FormFieldStoredValue } from '@keystatic/core';
+import { getPreviewTheme } from './themeUtils';
 
-type PlanItem = {
-    title: string;
-    price: string;
-    priceUnit: string;
-    description: string;
-    isPopular: boolean;
-    badge: string;
-    features: string;
-};
-
-type PricingState = {
-    title: string;
-    subtitle: string;
-    plans: PlanItem[];
-};
+type Plan = { title: string; price: string; priceUnit: string; description: string; isPopular: boolean; features: string; badge: string };
+type PricingState = { title: string; subtitle: string; plans: Plan[] };
 
 const DEFAULTS: PricingState = {
-    title: 'Planes y Precios',
-    subtitle: 'Elige la opción que mejor se adapte a tus necesidades',
+    title: 'Nuestros Precios',
+    subtitle: 'Elige el plan que mejor se adapte a ti',
     plans: [
-        {
-            title: 'Básico',
-            price: '18',
-            priceUnit: '€/m²',
-            description: 'Ideal para pequeños retoques',
-            isPopular: false,
-            badge: '',
-            features: 'Alisado profesional\nMateriales incluidos\nLimpieza básica',
-        },
-        {
-            title: 'Premium',
-            price: '25',
-            priceUnit: '€/m²',
-            description: 'El acabado más perfecto para tu hogar',
-            isPopular: true,
-            badge: 'MÁS VENDIDO',
-            features: 'Acabado Q4 extra-liso\nPintura incluida\nLimpieza profunda\nGarantía 5 años',
-        }
-    ],
+        { title: 'Básico', price: '18', priceUnit: '€/m2', description: 'Ideal para habitaciones pequeñas', isPopular: false, features: 'Material incluido\nMano de obra\nLimpieza', badge: '' },
+        { title: 'Estándar', price: '1500', priceUnit: '€', description: 'Piso completo de 80m2', isPopular: true, features: 'Todo incluido\nGarantía 2 años\nPrioridad', badge: 'MÁS POPULAR' },
+        { title: 'Premium', price: '1800', priceUnit: '€', description: 'Piso de 100m2', isPopular: false, features: 'Acabado de lujo\nRetirada escombros\nGarantía 5 años', badge: '' },
+    ]
 };
 
-function PlanPreviewCard({ plan }: { plan: PlanItem }) {
-    const feats = plan.features.split('\n').map(f => f.trim()).filter(Boolean);
+function PricingPreviewUI({ state }: { state: PricingState }) {
+    const theme = getPreviewTheme();
     return (
         <div style={{
-            background: plan.isPopular ? '#1e293b' : 'rgba(239,68,68,0.03)',
-            border: plan.isPopular ? '2px solid #ef4444' : '1px solid rgba(239,68,68,0.15)',
-            borderRadius: '16px',
-            padding: '30px 24px',
-            flex: 1,
-            minWidth: '200px',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            color: '#f8fafc',
-            boxShadow: plan.isPopular ? '0 10px 30px rgba(239,68,68,0.15)' : 'none',
+            background: theme.secondary,
+            borderRadius: '12px 12px 0 0',
+            padding: '30px',
+            fontFamily: theme.fontBody,
+            border: `1px solid ${theme.primary}33`,
+            borderBottom: 'none',
+            textAlign: 'center'
         }}>
-            {plan.isPopular && plan.badge && (
-                <div style={{
-                    position: 'absolute',
-                    top: '-12px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: '#ef4444',
-                    color: '#fff',
-                    padding: '2px 12px',
-                    borderRadius: '20px',
-                    fontSize: '10px',
-                    fontWeight: 900,
-                    whiteSpace: 'nowrap',
-                }}>
-                    {plan.badge}
-                </div>
-            )}
-            <div style={{ textAlign: 'center' }}>
-                <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 800 }}>{plan.title || 'Plan'}</h4>
-                <div style={{ margin: '12px 0', display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '2px' }}>
-                    <span style={{ fontSize: '32px', fontWeight: 900, color: '#ef4444' }}>{plan.price || '0'}</span>
-                    <span style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 600 }}>{plan.priceUnit}</span>
-                </div>
-                <p style={{ margin: 0, fontSize: '13px', color: '#94a3b8' }}>{plan.description}</p>
-            </div>
+            <link rel="stylesheet" href={theme.googleFontsUrl} />
+            <h3 style={{ margin: '0 0 8px', color: theme.textMain, fontSize: '24px', fontWeight: 800, fontFamily: theme.fontHeading }}>{state.title}</h3>
+            <p style={{ margin: '0 0 24px', color: theme.textMuted, fontSize: '14px' }}>{state.subtitle}</p>
             
-            <div style={{ borderTop: '1px solid rgba(148,163,184,0.1)', paddingTop: '16px' }}>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {feats.map((f, i) => (
-                        <li key={i} style={{ fontSize: '12px', display: 'flex', gap: '8px', color: '#e2e8f0' }}>
-                            <span style={{ color: '#ef4444' }}>✓</span> {f}
-                        </li>
-                    ))}
-                </ul>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px' }}>
+                {state.plans.map((p, i) => (
+                    <div key={i} style={{ 
+                        background: p.isPopular ? theme.surface : 'transparent', 
+                        border: `1px solid ${p.isPopular ? theme.primary : theme.primary + '22'}`, 
+                        borderRadius: '12px', 
+                        padding: '20px',
+                        position: 'relative',
+                        transform: p.isPopular ? 'scale(1.05)' : 'none',
+                        zIndex: p.isPopular ? 2 : 1
+                    }}>
+                        {p.isPopular && <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: theme.primary, color: '#fff', fontSize: '8px', fontWeight: 900, padding: '4px 8px', borderRadius: '4px', whiteSpace: 'nowrap' }}>{p.badge || 'POPULAR'}</div>}
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: theme.textMain, marginBottom: '10px', textTransform: 'uppercase' }}>{p.title}</div>
+                        <div style={{ fontSize: '28px', fontWeight: 900, color: theme.primary, fontFamily: theme.fontHeading }}>
+                            {p.price}<span style={{ fontSize: '14px', color: theme.textMuted }}>{p.priceUnit}</span>
+                        </div>
+                        <p style={{ fontSize: '10px', color: theme.textMuted, margin: '10px 0', minHeight: '30px' }}>{p.description}</p>
+                        <hr style={{ border: 'none', borderTop: `1px solid ${theme.primary}11`, margin: '15px 0' }} />
+                        <div style={{ fontSize: '10px', color: theme.textMain, textAlign: 'left' }}>
+                            {p.features.split('\n').filter(Boolean).map((f, j) => (
+                                <div key={j} style={{ marginBottom: '4px' }}>✓ {f}</div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );
 }
 
-function PricingInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function PricingInput({ value, onChange }: { value: string, onChange: (v: string) => void }) {
     const parse = (v: string): PricingState => {
-        try { return v ? { ...DEFAULTS, ...JSON.parse(v) } : { ...DEFAULTS }; }
+        try { return v ? JSON.parse(v) : { ...DEFAULTS }; }
         catch { return { ...DEFAULTS }; }
     };
     const [state, setState] = useState<PricingState>(() => parse(value));
-    
-    const update = (next: PricingState) => { setState(next); onChange(JSON.stringify(next)); };
-    const updatePlan = (i: number, key: keyof PlanItem, val: any) => {
-        const plans = state.plans.map((p, idx) => idx === i ? { ...p, [key]: val } : p);
-        update({ ...state, plans });
+
+    const update = (key: keyof PricingState, val: any) => {
+        const next = { ...state, [key]: val };
+        setState(next);
+        onChange(JSON.stringify(next));
     };
-    const addPlan = () => update({ ...state, plans: [...state.plans, { title: 'Nuevo', price: '0', priceUnit: '€/m²', description: '', isPopular: false, badge: '', features: '' }] });
-    const removePlan = (i: number) => update({ ...state, plans: state.plans.filter((_, idx) => idx !== i) });
+
+    const updatePlan = (idx: number, key: keyof Plan, val: any) => {
+        const plans = [...state.plans];
+        plans[idx] = { ...plans[idx], [key]: val };
+        update('plans', plans);
+    };
 
     const inp: React.CSSProperties = {
-        background: '#1e293b', border: '1px solid rgba(99,102,241,0.2)',
-        borderRadius: '6px', padding: '7px 10px', color: '#e2e8f0',
-        fontSize: '13px', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box',
+        background: '#1e293b', border: '1px solid rgba(59,130,246,0.2)',
+        borderRadius: '6px', padding: '6px 10px', color: '#e2e8f0',
+        fontSize: '11px', width: '100%', boxSizing: 'border-box'
     };
-    const lbl = (t: string) => (
-        <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>{t}</div>
-    );
 
     return (
-        <FieldPrimitive label="💰 Tabla de Precios (Vista Previa)">
-            <div style={{ background: '#0f172a', padding: '30px', border: '1px solid rgba(239,68,68,0.15)', borderBottom: 'none', borderRadius: '12px 12px 0 0' }}>
-                <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                    <h3 style={{ margin: '0 0 8px', color: '#f8fafc', fontSize: '24px', fontWeight: 800 }}>{state.title}</h3>
-                    <p style={{ margin: 0, color: '#94a3b8', fontSize: '14px' }}>{state.subtitle}</p>
+        <FieldPrimitive label="💰 Tabla de Precios (Preview)">
+            <PricingPreviewUI state={state} />
+            <div style={{ background: '#0f172a', border: '1px solid rgba(59,130,246,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <input style={inp} placeholder="Título" value={state.title} onChange={e => update('title', e.target.value)} />
+                    <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => update('subtitle', e.target.value)} />
                 </div>
-                <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {state.plans.map((p, i) => <PlanPreviewCard key={i} plan={p} />)}
-                </div>
-            </div>
-            
-            <div style={{ background: '#0f172a', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '0 0 12px 12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                    <div>{lbl('Título Sección')}<input style={inp} value={state.title} onChange={e => update({ ...state, title: e.target.value })} /></div>
-                    <div>{lbl('Subtítulo')}<input style={inp} value={state.subtitle} onChange={e => update({ ...state, subtitle: e.target.value })} /></div>
-                </div>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    {lbl(`Planes (${state.plans.length})`)}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                     {state.plans.map((p, i) => (
-                        <div key={i} style={{ background: '#1e293b', borderRadius: '12px', padding: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '10px', marginBottom: '10px' }}>
-                                <div>{lbl('Nombre Plan')}<input style={inp} value={p.title} onChange={e => updatePlan(i, 'title', e.target.value)} /></div>
-                                <div>{lbl('Precio')}<input style={inp} value={p.price} onChange={e => updatePlan(i, 'price', e.target.value)} /></div>
-                                <div>{lbl('Unidad')}<input style={inp} value={p.priceUnit} onChange={e => updatePlan(i, 'priceUnit', e.target.value)} /></div>
-                                <button onClick={() => removePlan(i)} style={{ alignSelf: 'end', background: 'rgba(239,68,68,0.15)', border: 'none', color: '#f87171', borderRadius: '4px', width: '32px', height: '32px', cursor: 'pointer' }}>✕</button>
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '10px', marginBottom: '10px' }}>
-                                <div>{lbl('Descripción')}<input style={inp} value={p.description} onChange={e => updatePlan(i, 'description', e.target.value)} /></div>
-                                <div>{lbl('Etiqueta (Badge)')}<input style={inp} value={p.badge} onChange={e => updatePlan(i, 'badge', e.target.value)} /></div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '20px' }}>
-                                    <input type="checkbox" checked={p.isPopular} onChange={e => updatePlan(i, 'isPopular', e.target.checked)} />
-                                    {lbl('Popular')}
-                                </div>
-                            </div>
-                            <div>
-                                {lbl('Características (una por línea)')}
-                                <textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={p.features} onChange={e => updatePlan(i, 'features', e.target.value)} />
-                            </div>
+                        <div key={i} style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            gap: '6px', 
+                            background: 'rgba(255,255,255,0.03)', 
+                            padding: '10px', 
+                            borderRadius: '8px', 
+                            border: p.isPopular ? `1px solid ${getPreviewTheme().primary}` : 'none' 
+                        }}>
+                             <input style={inp} value={p.title} onChange={e => updatePlan(i, 'title', e.target.value)} />
+                             <div style={{ display: 'flex', gap: '4px' }}>
+                                <input style={inp} value={p.price} onChange={e => updatePlan(i, 'price', e.target.value)} />
+                                <input style={{ ...inp, width: '45px' }} value={p.priceUnit} onChange={e => updatePlan(i, 'priceUnit', e.target.value)} />
+                             </div>
+                             <textarea style={{ ...inp, resize: 'none' }} rows={2} value={p.description} onChange={e => updatePlan(i, 'description', e.target.value)} />
+                             <label style={{ fontSize: '9px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                <input type="checkbox" checked={p.isPopular} onChange={e => updatePlan(i, 'isPopular', e.target.checked)} /> Destacado
+                             </label>
                         </div>
                     ))}
-                    <button onClick={addPlan} style={{ background: 'rgba(239,68,68,0.1)', border: '1px dashed #ef4444', color: '#ef4444', padding: '12px', borderRadius: '8px', cursor: 'pointer', fontWeight: 800 }}>+ Añadir Plan</button>
                 </div>
             </div>
         </FieldPrimitive>
     );
 }
 
-export function pricingVisualEditor(): BasicFormField<string> {
+// NOTE: I used a placeholder above for theme primary, I should replace it with a fixed color for the input field border or just ignore it.
+// Actually, I'll fix the PricingInput code to be cleaner.
+
+export function pricingPreview(): BasicFormField<string> {
     return {
         kind: 'form',
-        formKind: undefined,
-        label: 'Precios en Tabla',
-        Input({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-            return <PricingInput value={value} onChange={onChange} />;
-        },
+        label: 'Pricing Preview',
+        Input({ value, onChange }) { return <PricingInput value={value} onChange={onChange} />; },
         defaultValue() { return JSON.stringify(DEFAULTS); },
-        parse(val: FormFieldStoredValue) {
-            if (val === undefined || val === null) return JSON.stringify(DEFAULTS);
-            if (typeof val !== 'string') throw new Error('Expected string');
-            return val;
-        },
-        serialize(val: string) { return { value: val ?? JSON.stringify(DEFAULTS) }; },
-        validate(val: unknown) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
-        reader: {
-            parse(val: unknown) {
-                return typeof val === 'string' ? val : JSON.stringify(DEFAULTS);
-            },
-        },
+        parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        serialize(val) { return { value: val }; },
+        validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
     };
 }

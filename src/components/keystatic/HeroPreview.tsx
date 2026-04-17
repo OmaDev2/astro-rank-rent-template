@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FieldPrimitive } from '@keystar/ui/field';
 import type { BasicFormField, FormFieldStoredValue } from '@keystatic/core';
+import { getPreviewTheme } from './themeUtils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type HeroState = {
@@ -14,8 +15,8 @@ type HeroState = {
 };
 
 const DEFAULTS: HeroState = {
-    heading: 'Tu Servicio Profesional',
-    headingHighlight: 'en tu Ciudad',
+    heading: 'Tu Título Principal',
+    headingHighlight: 'Destacado',
     subheading: '⚠️ Escribe aquí tu subtítulo para ver la previsualización del Hero.',
     ctaPrimaryText: 'Pedir Presupuesto',
     ctaSecondaryText: 'WhatsApp',
@@ -23,195 +24,90 @@ const DEFAULTS: HeroState = {
     bgColor: '#0a0a0a',
 };
 
-// ─── Preview Component ─────────────────────────────────────────────────────────
+// ─── Component ──────────────────────────────────────────────────────────────
 function HeroPreviewUI({ state }: { state: HeroState }) {
     const theme = getPreviewTheme();
-    const feats = state.features.split('\n').map(f => f.trim()).filter(Boolean);
+    const feats = state.features.split('\n').map(f => f.trim()).filter(Boolean).slice(0, 6);
     
     return (
-            <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    backgroundImage:
-                        'linear-gradient(rgba(239,68,68,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(239,68,68,0.04) 1px, transparent 1px)',
-                    backgroundSize: '30px 30px',
-                    pointerEvents: 'none',
-                }}
-            />
-
-            {/* Corner badge */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 12,
-                    right: 12,
-                    background: 'rgba(239,68,68,0.12)',
-                    border: '1px solid rgba(239,68,68,0.3)',
-                    borderRadius: '6px',
-                    padding: '3px 10px',
-                    fontSize: '10px',
-                    color: '#f87171',
-                    fontWeight: 700,
-                    letterSpacing: '0.08em',
+        <div style={{
+            background: theme.secondary,
+            borderRadius: '12px 12px 0 0',
+            padding: '40px',
+            fontFamily: theme.fontBody,
+            border: `1px solid ${theme.primary}33`,
+            borderBottom: 'none',
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: '320px',
+            display: 'flex',
+            alignItems: 'center'
+        }}>
+            {/* Inject Theme Fonts */}
+            <link rel="stylesheet" href={theme.googleFontsUrl} />
+            
+            {/* Background Texture */}
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
+            
+            <div style={{ position: 'relative', zIndex: 2, maxWidth: '90%' }}>
+                <h2 style={{ 
+                    margin: 0, 
+                    color: theme.textMain, 
+                    fontSize: '36px', 
+                    fontWeight: 900, 
+                    lineHeight: 1,
+                    fontFamily: theme.fontHeading,
                     textTransform: 'uppercase',
-                }}
-            >
-                Vista Previa Hero
-            </div>
-
-            {/* Content */}
-            <div style={{ position: 'relative', zIndex: 2, maxWidth: '600px' }}>
-                {/* H1 */}
-                <h2
-                    style={{
-                        fontSize: 'clamp(28px, 4vw, 52px)',
-                        fontWeight: 800,
-                        lineHeight: 1.1,
-                        marginBottom: '16px',
-                        color: '#f8fafc',
-                        margin: '0 0 16px',
-                    }}
-                >
-                    {state.heading || DEFAULTS.heading}{' '}
-                    <br />
-                    <span
-                        style={{
-                            background: 'linear-gradient(135deg, #ef4444, #f97316)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text',
-                        }}
-                    >
-                        {state.headingHighlight || DEFAULTS.headingHighlight}
+                    letterSpacing: '-0.02em'
+                }}>
+                    {state.heading} <br/>
+                    <span style={{ 
+                        background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                    }}>
+                        {state.headingHighlight}
                     </span>
                 </h2>
-
-                {/* Subheading */}
-                <p
-                    style={{
-                        fontSize: '15px',
-                        color: 'rgba(248,250,252,0.88)',
-                        marginBottom: '20px',
-                        fontWeight: 600,
-                        paddingLeft: '14px',
-                        borderLeft: '3px solid #ef4444',
-                        lineHeight: 1.55,
-                        margin: '0 0 20px',
-                    }}
-                >
-                    {state.subheading || DEFAULTS.subheading}
+                <p style={{ margin: '16px 0 24px', color: theme.textMuted, fontSize: '15px', lineHeight: 1.6, maxWidth: '500px' }}>
+                    {state.subheading}
                 </p>
-
-                {/* Features checklist */}
-                {featureList.length > 0 && (
-                    <ul
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(2, 1fr)',
-                            gap: '6px 20px',
-                            marginBottom: '24px',
-                            padding: 0,
-                            listStyle: 'none',
-                        }}
-                    >
-                        {featureList.map((feat, i) => (
-                            <li
-                                key={i}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '7px',
-                                    fontSize: '13px',
-                                    fontWeight: 700,
-                                    color: '#f8fafc',
-                                }}
-                            >
-                                <span
-                                    style={{
-                                        width: '16px',
-                                        height: '16px',
-                                        background: 'rgba(239,68,68,0.2)',
-                                        border: '1.5px solid rgba(239,68,68,0.5)',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0,
-                                        fontSize: '9px',
-                                        color: '#ef4444',
-                                    }}
-                                >
-                                    ✓
-                                </span>
-                                {feat}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-
-                {/* CTA Buttons */}
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <span
-                        style={{
-                            padding: '11px 24px',
-                            background: '#ef4444',
-                            color: '#fff',
-                            borderRadius: '8px',
-                            fontWeight: 700,
-                            fontSize: '14px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            boxShadow: '0 4px 20px rgba(239,68,68,0.35)',
-                        }}
-                    >
-                        📞 {state.ctaPrimaryText || DEFAULTS.ctaPrimaryText}
+                
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+                    <span style={{ background: theme.primary, color: '#fff', padding: '12px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 800, boxShadow: `0 4px 15px ${theme.primary}44`, display: 'inline-block' }}>
+                        {state.ctaPrimaryText}
                     </span>
-                    <span
-                        style={{
-                            padding: '11px 24px',
-                            border: '1.5px solid rgba(248,250,252,0.25)',
-                            color: '#f8fafc',
-                            borderRadius: '8px',
-                            fontWeight: 700,
-                            fontSize: '14px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                        }}
-                    >
-                        💬 {state.ctaSecondaryText || DEFAULTS.ctaSecondaryText}
-                    </span>
+                    {state.ctaSecondaryText && (
+                        <span style={{ border: `1px solid ${theme.textMuted}66`, color: theme.textMain, padding: '12px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 700, display: 'inline-block' }}>
+                            {state.ctaSecondaryText}
+                        </span>
+                    )}
                 </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                    {feats.map((f, i) => (
+                        <div key={i} style={{ fontSize: '11px', color: theme.textMuted, display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <span style={{ color: theme.primary, fontSize: '14px' }}>✓</span> {f}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            
+            <div style={{ position: 'absolute', top: 12, right: 20, fontSize: '9px', color: theme.primary, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', background: `${theme.primary}11`, padding: '4px 10px', borderRadius: '4px' }}>
+                Vista Previa Hero
             </div>
         </div>
     );
 }
 
-// ─── Input widget ──────────────────────────────────────────────────────────────
-function HeroPreviewInput({
-    value,
-    onChange,
-}: {
-    value: string;
-    onChange: (v: string) => void;
-}) {
+// ─── Form Input ───────────────────────────────────────────────────────────
+function HeroInput({ value, onChange }: { value: string, onChange: (v: string) => void }) {
     const parse = (v: string): HeroState => {
-        try {
-            return v ? { ...DEFAULTS, ...JSON.parse(v) } : { ...DEFAULTS };
-        } catch {
-            return { ...DEFAULTS };
-        }
+        try { return v ? JSON.parse(v) : { ...DEFAULTS }; }
+        catch { return { ...DEFAULTS }; }
     };
-
     const [state, setState] = useState<HeroState>(() => parse(value));
-
-    // Sync if parent resets
-    useEffect(() => {
-        setState(parse(value));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     const update = (key: keyof HeroState, val: string) => {
         const next = { ...state, [key]: val };
@@ -219,163 +115,38 @@ function HeroPreviewInput({
         onChange(JSON.stringify(next));
     };
 
-    const inputStyle: React.CSSProperties = {
-        width: '100%',
-        background: '#1e293b',
-        border: '1px solid rgba(99,102,241,0.25)',
-        borderRadius: '8px',
-        padding: '8px 12px',
-        color: '#e2e8f0',
-        fontSize: '14px',
-        fontFamily: 'inherit',
-        boxSizing: 'border-box',
-        outline: 'none',
-        lineHeight: 1.5,
+    const inp: React.CSSProperties = {
+        background: '#1e293b', border: '1px solid rgba(99,102,241,0.2)',
+        borderRadius: '6px', padding: '8px 12px', color: '#e2e8f0',
+        fontSize: '13px', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box'
     };
-
-    const label = (text: string) => (
-        <div style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-            {text}
-        </div>
+    const lbl = (t: string) => (
+        <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '5px' }}>{t}</div>
     );
 
     return (
-        <FieldPrimitive label="🎨 Vista Previa del Hero (Edición Rápida)">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0px', fontFamily: 'inherit' }}>
-
-                {/* Info banner */}
-                <div style={{
-                    background: 'rgba(99,102,241,0.08)',
-                    border: '1px solid rgba(99,102,241,0.2)',
-                    borderRadius: '10px 10px 0 0',
-                    padding: '10px 16px',
-                    fontSize: '13px',
-                    color: '#94a3b8',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                }}>
-                    <span>✏️</span>
-                    <span>
-                        Edita los textos aquí y verás el resultado <strong style={{ color: '#a5b4fc' }}>en tiempo real</strong>.
-                        Cuando termines, pulsa <strong style={{ color: '#a5b4fc' }}>Save</strong> para guardar todos los cambios.
-                    </span>
-                </div>
-
-                {/* Main 2-col layout */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 420px',
-                    gap: '0',
-                    border: '1px solid rgba(99,102,241,0.15)',
-                    borderTop: 'none',
-                    borderRadius: '0 0 12px 12px',
-                    overflow: 'hidden',
-                }}>
-                    {/* LEFT: Live Preview */}
-                    <div style={{ padding: '0' }}>
-                        <HeroPreviewUI state={state} />
-                    </div>
-
-                    {/* RIGHT: Controls */}
-                    <div style={{
-                        background: '#0f172a',
-                        padding: '20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '14px',
-                        borderLeft: '1px solid rgba(99,102,241,0.12)',
-                        overflowY: 'auto',
-                        maxHeight: '520px',
-                    }}>
-                        <div>
-                            {label('Título (parte blanca)')}
-                            <input type="text" value={state.heading} onChange={e => update('heading', e.target.value)}
-                                style={inputStyle} placeholder="Ej: Reformas Profesionales" />
-                        </div>
-
-                        <div>
-                            {label('Parte roja (gradiente)')}
-                            <input type="text" value={state.headingHighlight} onChange={e => update('headingHighlight', e.target.value)}
-                                style={inputStyle} placeholder="Ej: en Madrid" />
-                        </div>
-
-                        <div>
-                            {label('Subtítulo')}
-                            <input type="text" value={state.subheading} onChange={e => update('subheading', e.target.value)}
-                                style={inputStyle} placeholder="Frase corta de apoyo" />
-                        </div>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                            <div>
-                                {label('Botón 1')}
-                                <input type="text" value={state.ctaPrimaryText} onChange={e => update('ctaPrimaryText', e.target.value)}
-                                    style={inputStyle} placeholder="Pedir Presupuesto" />
-                            </div>
-                            <div>
-                                {label('Botón 2')}
-                                <input type="text" value={state.ctaSecondaryText} onChange={e => update('ctaSecondaryText', e.target.value)}
-                                    style={inputStyle} placeholder="WhatsApp" />
-                            </div>
-                        </div>
-
-                        <div>
-                            {label('✓ Checks (uno por línea, máx. 6)')}
-                            <textarea rows={5} value={state.features} onChange={e => update('features', e.target.value)}
-                                style={{ ...inputStyle, resize: 'vertical' }}
-                                placeholder={'Servicio Rápido\nGarantía Total\nPresupuesto Gratis\nAtención 24h'} />
-                        </div>
-
-                        <div>
-                            {label('Color fondo base')}
-                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                <input type="color" value={state.bgColor || '#0a0a0a'}
-                                    onChange={e => update('bgColor', e.target.value)}
-                                    style={{ width: '42px', height: '38px', borderRadius: '6px', border: 'none', cursor: 'pointer', padding: 0 }} />
-                                <span style={{ fontSize: '13px', color: '#64748b', fontFamily: 'monospace' }}>
-                                    {state.bgColor || '#0a0a0a'}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div style={{ paddingTop: '4px', borderTop: '1px solid rgba(99,102,241,0.1)', fontSize: '11px', color: '#475569', lineHeight: 1.6 }}>
-                            💡 Recuerda también configurar la <strong style={{ color: '#6366f1' }}>imagen de fondo</strong> y el <strong style={{ color: '#6366f1' }}>enlace de los botones</strong> en el bloque <em>Hero Principal</em> del Constructor de abajo.
-                        </div>
-                    </div>
-                </div>
+        <FieldPrimitive label="🚀 Hero Principal (Vista Previa)">
+            <HeroPreviewUI state={state} />
+            <div style={{ background: '#0f172a', border: '1px solid rgba(99,102,241,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div>{lbl('Título Base')}<input style={inp} value={state.heading} onChange={e => update('heading', e.target.value)} /></div>
+                <div>{lbl('Texto Destacado')}<input style={inp} value={state.headingHighlight} onChange={e => update('headingHighlight', e.target.value)} /></div>
+                <div style={{ gridColumn: '1 / -1' }}>{lbl('Subtítulo')}<input style={inp} value={state.subheading} onChange={e => update('subheading', e.target.value)} /></div>
+                <div>{lbl('Texto Botón 1')}<input style={inp} value={state.ctaPrimaryText} onChange={e => update('ctaPrimaryText', e.target.value)} /></div>
+                <div>{lbl('Texto Botón 2')}<input style={inp} value={state.ctaSecondaryText} onChange={e => update('ctaSecondaryText', e.target.value)} /></div>
+                <div style={{ gridColumn: '1 / -1' }}>{lbl('✓ Características (una por línea)')}<textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={state.features} onChange={e => update('features', e.target.value)} /></div>
             </div>
         </FieldPrimitive>
     );
 }
 
-// ─── Keystatic Field ───────────────────────────────────────────────────────────
 export function heroPreview(): BasicFormField<string> {
     return {
         kind: 'form',
-        formKind: undefined,
-        label: 'Vista Previa Hero',
-        Input({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-            return <HeroPreviewInput value={value} onChange={onChange} />;
-        },
-        defaultValue() {
-            return JSON.stringify(DEFAULTS);
-        },
-        parse(val: FormFieldStoredValue) {
-            if (val === undefined || val === null) return JSON.stringify(DEFAULTS);
-            if (typeof val !== 'string') throw new Error('Expected string');
-            return val;
-        },
-        serialize(val: string) {
-            return { value: val ?? JSON.stringify(DEFAULTS) };
-        },
-        validate(val: unknown) {
-            return typeof val === 'string' ? val : JSON.stringify(DEFAULTS);
-        },
-        reader: {
-            parse(val: unknown) {
-                if (typeof val === 'string') return val;
-                return JSON.stringify(DEFAULTS);
-            },
-        },
+        label: 'Hero Preview',
+        Input({ value, onChange }) { return <HeroInput value={value} onChange={onChange} />; },
+        defaultValue() { return JSON.stringify(DEFAULTS); },
+        parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        serialize(val) { return { value: val }; },
+        validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
     };
 }

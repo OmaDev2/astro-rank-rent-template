@@ -2,9 +2,9 @@ import { singleton, fields } from '@keystatic/core';
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
 import { heroPreview } from '../../../components/keystatic/HeroPreview';
-import { statsVisualEditor } from '../../../components/keystatic/StatsPreview';
-import { ctaVisualEditor } from '../../../components/keystatic/CtaPreview';
-import { pricingVisualEditor } from '../../../components/keystatic/PricingPreview';
+import { statsPreview } from '../../../components/keystatic/StatsPreview';
+import { ctaPreview } from '../../../components/keystatic/CtaPreview';
+import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
@@ -15,9 +15,9 @@ export const homepage = singleton({
     schema: {
         // ─── EDITORES VISUALES (arriba del Constructor) ──────────────────────────
         _heroPreview: heroPreview(),
-        _statsPreview: statsVisualEditor(),
-        _ctaPreview: ctaVisualEditor(),
-        _pricingPreview: pricingVisualEditor(),
+        _statsPreview: statsPreview(),
+        _ctaPreview: ctaPreview(),
+        _pricingPreview: pricingPreview(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
         blocks: fields.blocks({
