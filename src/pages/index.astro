@@ -111,6 +111,16 @@ const schema = [
 	breadcrumbsSchema,
 	...(faqSchema ? [faqSchema] : []),
 ] as any;
+
+// Parse hero preview override if set from the visual editor
+let heroPreviewOverride: any = null;
+if (homeData._heroPreview) {
+    try {
+        heroPreviewOverride = JSON.parse(homeData._heroPreview);
+    } catch (_) {
+        heroPreviewOverride = null;
+    }
+}
 ---
 
 <Layout
@@ -127,6 +137,7 @@ const schema = [
 		services={featuredServices}
 		allServices={allServices}
 		content={SeoContentRendered}
+		heroPreviewOverride={heroPreviewOverride}
 	/>
 
 	<Footer />

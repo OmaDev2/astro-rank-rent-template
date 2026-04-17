@@ -52,6 +52,7 @@ interface Props {
     whatsapp?: string;
     isHome?: boolean;
     config?: any; // Global settings
+    heroPreviewOverride?: any; // Data from _heroPreview visual field
 }
 
 const {
@@ -76,6 +77,7 @@ const {
     whatsapp,
     isHome,
     config,
+    heroPreviewOverride,
 } = Astro.props;
 ---
 
@@ -88,7 +90,26 @@ const {
         switch (discriminant) {
             case "hero":
                 if (isHome) {
-                    return <HomeHero hero={value} config={config} />;
+                    // Text content comes from _heroPreview visual editor.
+                    // backgroundImage and button links come from the hero block.
+                    const heroMerged = {
+                        backgroundImage: value?.backgroundImage,
+                        heading:          heroPreviewOverride?.heading          || value?.heading,
+                        headingHighlight: heroPreviewOverride?.headingHighlight || value?.headingHighlight,
+                        subheading:       heroPreviewOverride?.subheading       || value?.subheading,
+                        ctaPrimary: {
+                            text: heroPreviewOverride?.ctaPrimaryText    || value?.ctaPrimary?.text,
+                            link: value?.ctaPrimaryLink || value?.ctaPrimary?.link || '#presupuesto',
+                        },
+                        ctaSecondary: {
+                            text: heroPreviewOverride?.ctaSecondaryText  || value?.ctaSecondary?.text,
+                            link: value?.ctaSecondaryLink || value?.ctaSecondary?.link || '',
+                        },
+                        features: heroPreviewOverride?.features
+                            ? heroPreviewOverride.features.split('\n').map((f: string) => f.trim()).filter(Boolean)
+                            : (value?.features || []),
+                    };
+                    return <HomeHero hero={heroMerged} config={config} />;
                 }
                 return (
                     <div class="relative group">

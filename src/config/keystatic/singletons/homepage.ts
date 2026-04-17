@@ -1,38 +1,38 @@
 import { singleton, fields } from '@keystatic/core';
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
+import { heroPreview } from '../../../components/keystatic/HeroPreview';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
     path: 'src/content/pages/home',
     previewUrl: '/',
     format: { contentField: 'content' },
-    entryLayout: 'content',
+    entryLayout: 'form',
     schema: {
+        // ─── PREVISUALIZACIÓN VISUAL DEL HERO ─────────────────────────────────
+        _heroPreview: heroPreview(),
+
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
         blocks: fields.blocks({
             hero: {
-                label: 'Hero Principal',
+                label: '🖼️ Hero — Imagen y Enlace de Botones',
                 schema: fields.object({
-                    heading: fields.text({ label: 'Título Principal (Parte Blanca)' }),
-                    headingHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
-                    subheading: fields.text({ label: 'Subtítulo', multiline: true }),
                     backgroundImage: fields.image({
-                        label: 'Imagen de Fondo',
+                        label: 'Imagen de Fondo del Hero',
+                        description: 'El texto del Hero (título, subtítulo, botones, checks) se edita arriba en la "Vista Previa del Hero".',
                         directory: 'public/images/home',
                         publicPath: '/images/home',
                     }),
-                    ctaPrimary: fields.object({
-                        text: fields.text({ label: 'Texto Botón Primario' }),
-                        link: fields.text({ label: 'Enlace Botón Primario' }),
+                    ctaPrimaryLink: fields.text({
+                        label: '🔗 Enlace Botón Principal',
+                        description: 'Ej: tel:+34600123456  o  #presupuesto',
+                        defaultValue: '#presupuesto',
                     }),
-                    ctaSecondary: fields.object({
-                        text: fields.text({ label: 'Texto Botón Secundario' }),
-                        link: fields.text({ label: 'Enlace Botón Secundario' }),
-                    }),
-                    features: fields.array(fields.text({ label: 'Característica' }), {
-                        label: 'Características (Checks)',
-                        itemLabel: p => p.value || 'Opción'
+                    ctaSecondaryLink: fields.text({
+                        label: '🔗 Enlace Botón Secundario (WhatsApp)',
+                        description: 'Ej: https://wa.me/34600123456',
+                        defaultValue: '',
                     }),
                 })
             },
