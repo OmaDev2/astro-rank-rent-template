@@ -58,6 +58,7 @@ interface Props {
     featuresPreviewOverride?: any; // Data from _featuresPreview visual field
     testimonialsPreviewOverride?: any; // Data from _testimonialsPreview visual field
     processPreviewOverride?: any; // Data from _processPreview visual field
+    aboutPreviewOverride?: any; // Data from _aboutPreview visual field
     pricingPreviewOverride?: any; // Data from _pricingPreview visual field
 }
 
@@ -89,6 +90,7 @@ const {
     featuresPreviewOverride,
     testimonialsPreviewOverride,
     processPreviewOverride,
+    aboutPreviewOverride,
     pricingPreviewOverride,
 } = Astro.props;
 ---
@@ -167,16 +169,33 @@ const {
                 );
 
             case "about":
-                return <HomeAbout aboutSection={value} bgClass={bgClass} />;
+                const finalAboutData = aboutPreviewOverride || value;
+                return finalAboutData ? (
+                    <HomeAbout
+                        title={finalAboutData.title}
+                        titleHighlight={finalAboutData.titleHighlight}
+                        description={finalAboutData.description}
+                        yearsExperience={finalAboutData.yearsExperience}
+                        projectsCompleted={finalAboutData.projectsCompleted}
+                        image={finalAboutData.image}
+                        features={finalAboutData.features}
+                        buttonText={finalAboutData.buttonText}
+                        buttonLink={finalAboutData.buttonLink}
+                        titleTag={finalAboutData.titleTag}
+                        bgClass={bgClass}
+                    />
+                ) : null;
 
             case "features":
                 const finalFeatures = featuresPreviewOverride?.features || value?.features || value?.items || value || [];
                 const finalTitle = featuresPreviewOverride?.title || value?.title;
+                const finalSubtitle = featuresPreviewOverride?.subtitle || value?.subtitle;
                 if (isHome) {
                     return (
                         <HomeFeatures
                             features={finalFeatures}
                             title={finalTitle}
+                            titleTag={featuresPreviewOverride?.titleTag}
                             city={city}
                             bgClass={bgClass}
                         />
@@ -186,9 +205,9 @@ const {
                     <FeaturesBlock
                         locationName={locationName}
                         city={city}
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        items={featuresData}
+                        title={finalTitle}
+                        subtitle={finalSubtitle}
+                        items={finalFeatures}
                         bgClass={bgClass}
                     />
                 );
@@ -207,6 +226,7 @@ const {
                     <Testimonials
                         title={finalTestiTitle}
                         subtitle={finalTestiSubtitle}
+                        titleTag={testimonialsPreviewOverride?.titleTag}
                         testimonials={
                             Array.isArray(finalTestimonials)
                                 ? finalTestimonials.map((t: any) => ({
@@ -385,6 +405,7 @@ const {
                         title={statsData?.title}
                         subtitle={statsData?.subtitle}
                         stats={statsData?.stats}
+                        titleTag={statsData?.titleTag}
                         bgClass={bgClass}
                     />
                 );
@@ -410,6 +431,8 @@ const {
                         bgClass={bgClass}
                     />
                 );
+
+
 
             case "price_from":
                 return (

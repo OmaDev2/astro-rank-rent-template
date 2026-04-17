@@ -8,11 +8,14 @@ interface Stat {
 
 interface Props {
     title?: string;
+    subtitle?: string;
     stats: Stat[];
     bgClass?: string;
+    titleTag?: string;
 }
 
-const { title, stats = [], bgClass = "bg-surface" } = Astro.props;
+const { title, subtitle, stats = [], bgClass = "bg-surface", titleTag = "h2" } = Astro.props;
+const TitleTag = titleTag;
 ---
 
 <section class={`py-20 ${bgClass}`}>
@@ -20,9 +23,10 @@ const { title, stats = [], bgClass = "bg-surface" } = Astro.props;
         {
             title && (
                 <div class="text-center max-w-2xl mx-auto mb-16">
-                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-heading">
+                    <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading">
                         {title}
-                    </h2>
+                    </TitleTag>
+                    {subtitle && <p class="mt-4 text-body text-lg">{subtitle}</p>}
                 </div>
             )
         }

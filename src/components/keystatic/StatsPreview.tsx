@@ -6,7 +6,7 @@ import { IconPickerUI } from './IconPicker';
 import * as LucideIcons from 'lucide-react';
 
 type StatItem = { label: string; value: string; suffix: string; icon: string };
-type StatsState = { title: string; subtitle: string; stats: StatItem[] };
+type StatsState = { title: string; subtitle: string; stats: StatItem[]; titleTag: 'h1' | 'h2' | 'h3' };
 
 const DEFAULTS: StatsState = {
     title: 'Nuestros Logros',
@@ -15,7 +15,8 @@ const DEFAULTS: StatsState = {
         { label: 'Años Experience', value: '15', suffix: '+', icon: 'Award' },
         { label: 'Proyectos', value: '500', suffix: '+', icon: 'CheckCircle' },
         { label: 'Valoración', value: '4.9', suffix: '/5', icon: 'Star' },
-    ]
+    ],
+    titleTag: 'h2'
 };
 
 // Helper para renderizar el icono de Lucide si existe
@@ -38,6 +39,9 @@ function StatsPreviewUI({ state }: { state: StatsState }) {
             textAlign: 'center'
         }}>
             <link rel="stylesheet" href={theme.googleFontsUrl} />
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                <span style={{ fontSize: '10px', fontWeight: 900, background: theme.primary, color: '#white', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>{state.titleTag}</span>
+            </div>
             <h3 style={{ 
                 margin: '0 0 8px', 
                 color: theme.textMain, 
@@ -103,26 +107,42 @@ function StatsInput({ value, onChange }: { value: string, onChange: (v: string) 
 
     return (
         <FieldPrimitive label="📊 Estadísticas (Vista Previa)">
-            <StatsPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(239, 68, 68, 0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                    <input style={inp} placeholder="Título" value={state.title} onChange={e => updateField('title', e.target.value)} />
-                    <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => updateField('subtitle', e.target.value)} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
-                    {state.stats.map((s, i) => (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <IconPickerUI 
-                                value={s.icon} 
-                                onChange={v => updateStat(i, 'icon', v)}
-                            />
-                            <input style={inp} placeholder="Etiqueta" value={s.label} onChange={e => updateField('label' as any, e.target.value)} />
-                            <div style={{ display: 'flex', gap: '6px' }}>
-                                <input style={inp} placeholder="Valor" value={s.value} onChange={e => updateStat(i, 'value', e.target.value)} />
-                                <input style={{ ...inp, width: '60px' }} placeholder="Sufijo" value={s.suffix} onChange={e => updateStat(i, 'suffix', e.target.value)} />
-                            </div>
+            <div>
+                <StatsPreviewUI state={state} />
+                <div style={{ background: '#0f172a', border: '1px solid rgba(239, 68, 68, 0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                        <div>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Título</div>
+                            <input style={inp} placeholder="Título" value={state.title} onChange={e => updateField('title', e.target.value)} />
                         </div>
-                    ))}
+                        <div>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Subtítulo</div>
+                            <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => updateField('subtitle', e.target.value)} />
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Etiqueta SEO (H2 recom.)</div>
+                            <select style={{ ...inp, cursor: 'pointer', appearance: 'none' }} value={state.titleTag} onChange={e => updateField('titleTag' as any, e.target.value)}>
+                                <option value="h1">H1 (Principal)</option>
+                                <option value="h2">H2 (Secundario)</option>
+                                <option value="h3">H3 (Terciario)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                        {state.stats.map((s, i) => (
+                            <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <IconPickerUI 
+                                    value={s.icon} 
+                                    onChange={v => updateStat(i, 'icon', v)}
+                                />
+                                <input style={inp} placeholder="Etiqueta" value={s.label} onChange={e => updateField('label' as any, e.target.value)} />
+                                <div style={{ display: 'flex', gap: '6px' }}>
+                                    <input style={inp} placeholder="Valor" value={s.value} onChange={e => updateStat(i, 'value', e.target.value)} />
+                                    <input style={{ ...inp, width: '60px' }} placeholder="Sufijo" value={s.suffix} onChange={e => updateStat(i, 'suffix', e.target.value)} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </FieldPrimitive>
@@ -138,5 +158,8 @@ export function statsPreview(): BasicFormField<string> {
         parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
         serialize(val) { return { value: val }; },
         validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        reader: {
+            parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        },
     };
 }

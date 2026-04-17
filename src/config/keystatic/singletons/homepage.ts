@@ -7,6 +7,7 @@ import { ctaPreview } from '../../../components/keystatic/CtaPreview';
 import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
 import { testimonialsPreview } from '../../../components/keystatic/TestimonialsPreview';
 import { processPreview } from '../../../components/keystatic/ProcessPreview';
+import { aboutPreview } from '../../../components/keystatic/AboutPreview';
 import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
 export const homepage = singleton({
@@ -16,6 +17,21 @@ export const homepage = singleton({
     format: { contentField: 'content' },
     entryLayout: 'form',
     schema: {
+        // --- 🎯 SEO y METADATOS DE LA PÁGINA ---
+        seoTitle: fields.text({
+            label: 'Meta Título (SEO)',
+            description: 'Título que aparece en Google y la pestaña. Si se deja vacío, se usará el H1 del Hero.',
+        }),
+        seoDescription: fields.text({
+            label: 'Meta Descripción (SEO)',
+            description: 'Resumen para Google (150-160 caracteres).',
+            multiline: true,
+        }),
+        canonicalUrl: fields.text({
+            label: 'URL Canonica (Opcional)',
+            description: 'URL preferida para evitar contenido duplicado.',
+        }),
+
         // ─── EDITORES VISUALES (arriba del Constructor) ──────────────────────────
         _heroPreview: heroPreview(),
         _statsPreview: statsPreview(),
@@ -23,6 +39,7 @@ export const homepage = singleton({
         _featuresPreview: featuresPreview(),
         _testimonialsPreview: testimonialsPreview(),
         _processPreview: processPreview(),
+        _aboutPreview: aboutPreview(),
         _pricingPreview: pricingPreview(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
@@ -131,28 +148,9 @@ export const homepage = singleton({
                 })
             },
             about: {
-                label: 'Sección Sobre Nosotros',
+                label: '🏢 Sobre Nosotros (Referencia)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    titleHighlight: fields.text({ label: 'Título Destacado' }),
-                    description: fields.text({ label: 'Biografía / Historia', multiline: true }),
-                    yearsExperience: fields.text({ label: 'Años (Badge)' }),
-                    projectsCompleted: fields.text({ label: 'Pisos/Proyectos Completados' }),
-                    image: fields.image({
-                        label: 'Imagen Principal',
-                        directory: 'public/images/home',
-                        publicPath: '/images/home',
-                    }),
-                    features: fields.array(
-                        fields.object({
-                            title: fields.text({ label: 'Título' }),
-                            description: fields.text({ label: 'Detalle' }),
-                            icon: IconPicker({ label: 'Icono (Lucide)' }),
-                        }),
-                        { label: 'Puntos Clave', itemLabel: p => p.fields.title.value || 'Punto' }
-                    ),
-                    buttonText: fields.text({ label: 'Texto del Botón' }),
-                    buttonLink: fields.text({ label: 'Enlace del Botón' }),
+                    _note: fields.text({ label: 'ℹ️ Edita tu historia arriba en “🏢 Sobre Nosotros”', defaultValue: '' }),
                 })
             },
             features: {

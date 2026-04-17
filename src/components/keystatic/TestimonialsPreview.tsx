@@ -15,7 +15,7 @@ type TestimonialItem = {
     size: string; 
     verified: boolean;
 };
-type TestimonialsState = { title: string; subtitle: string; testimonials: TestimonialItem[] };
+type TestimonialsState = { title: string; subtitle: string; testimonials: TestimonialItem[]; titleTag: 'h1' | 'h2' | 'h3' };
 
 const DEFAULTS: TestimonialsState = {
     title: 'Lo Que Dicen Nuestros Clientes',
@@ -32,7 +32,8 @@ const DEFAULTS: TestimonialsState = {
             size: '80m2', 
             verified: true 
         },
-    ]
+    ],
+    titleTag: 'h2'
 };
 
 // Componente de Estrellas
@@ -67,6 +68,9 @@ function TestimonialsPreviewUI({ state }: { state: TestimonialsState }) {
             <link rel="stylesheet" href={theme.googleFontsUrl} />
             
             <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 900, background: theme.primary, color: '#white', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>{state.titleTag}</span>
+                </div>
                 <h3 style={{ 
                     margin: '0 0 8px', 
                     color: theme.textMain, 
@@ -195,33 +199,43 @@ function TestimonialsInput({ value, onChange }: { value: string, onChange: (v: s
 
     return (
         <FieldPrimitive label="⭐ Testimonios y Reseñas (Vista Previa)">
-            <TestimonialsPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(239,68,68,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                    <div>{lbl('Título Principal')}<input style={inp} value={state.title} onChange={e => update('title', e.target.value)} /></div>
-                    <div>{lbl('Subtítulo')}<input style={inp} value={state.subtitle} onChange={e => update('subtitle', e.target.value)} /></div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {state.testimonials.map((t, i) => (
-                        <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 60px 100px auto', gap: '10px', marginBottom: '12px' }}>
-                                <div>{lbl('Cliente')}<input style={inp} value={t.author} onChange={e => updateItem(i, 'author', e.target.value)} /></div>
-                                <div>{lbl('Inic.')}<input style={inp} value={t.initials} onChange={e => updateItem(i, 'initials', e.target.value)} /></div>
-                                <div>{lbl('Estrellas')}<input type="number" min="1" max="5" style={inp} value={t.rating} onChange={e => updateItem(i, 'rating', parseInt(e.target.value))} /></div>
-                                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                                    <button onClick={() => removeItem(i)} style={{ background: '#ef444422', border: '1px solid #ef444444', color: '#ef4444', borderRadius: '6px', height: '35px', padding: '0 12px', cursor: 'pointer' }}>×</button>
-                                </div>
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-                                <div>{lbl('Ubicación')}<input style={inp} value={t.location} onChange={e => updateItem(i, 'location', e.target.value)} /></div>
-                                <div>{lbl('Servicio')}<input style={inp} value={t.service} onChange={e => updateItem(i, 'service', e.target.value)} /></div>
-                                <div>{lbl('Metros m2')}<input style={inp} value={t.size} onChange={e => updateItem(i, 'size', e.target.value)} /></div>
-                            </div>
-                            <div>{lbl('Testimonio')}<textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={t.quote} onChange={e => updateItem(i, 'quote', e.target.value)} /></div>
+            <div>
+                <TestimonialsPreviewUI state={state} />
+                <div style={{ background: '#0f172a', border: '1px solid rgba(239,68,68,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 150px', gap: '16px', marginBottom: '24px' }}>
+                        <div>{lbl('Título Principal')}<input style={inp} value={state.title} onChange={e => update('title', e.target.value)} /></div>
+                        <div>{lbl('Subtítulo')}<input style={inp} value={state.subtitle} onChange={e => update('subtitle', e.target.value)} /></div>
+                        <div>
+                            {lbl('Etiqueta SEO (H2 recom.)')}
+                            <select style={{ ...inp, cursor: 'pointer', appearance: 'none' }} value={state.titleTag} onChange={e => update('titleTag', e.target.value as any)}>
+                                <option value="h1">H1 (Principal)</option>
+                                <option value="h2">H2 (Secundario)</option>
+                                <option value="h3">H3 (Terciario)</option>
+                            </select>
                         </div>
-                    ))}
-                    <button onClick={addItem} style={{ background: '#10b98122', border: '1px solid #10b98144', color: '#10b981', borderRadius: '8px', padding: '12px', cursor: 'pointer', fontWeight: 800, fontSize: '13px' }}>+ Añadir Nueva Reseña</button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {state.testimonials.map((t, i) => (
+                            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 60px 100px auto', gap: '10px', marginBottom: '12px' }}>
+                                    <div>{lbl('Cliente')}<input style={inp} value={t.author} onChange={e => updateItem(i, 'author', e.target.value)} /></div>
+                                    <div>{lbl('Inic.')}<input style={inp} value={t.initials} onChange={e => updateItem(i, 'initials', e.target.value)} /></div>
+                                    <div>{lbl('Estrellas')}<input type="number" min="1" max="5" style={inp} value={t.rating} onChange={e => updateItem(i, 'rating', parseInt(e.target.value))} /></div>
+                                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                                        <button onClick={() => removeItem(i)} style={{ background: '#ef444422', border: '1px solid #ef444444', color: '#ef4444', borderRadius: '6px', height: '35px', padding: '0 12px', cursor: 'pointer' }}>×</button>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '12px' }}>
+                                    <div>{lbl('Ubicación')}<input style={inp} value={t.location} onChange={e => updateItem(i, 'location', e.target.value)} /></div>
+                                    <div>{lbl('Servicio')}<input style={inp} value={t.service} onChange={e => updateItem(i, 'service', e.target.value)} /></div>
+                                    <div>{lbl('Metros m2')}<input style={inp} value={t.size} onChange={e => updateItem(i, 'size', e.target.value)} /></div>
+                                </div>
+                                <div>{lbl('Testimonio')}<textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={t.quote} onChange={e => updateItem(i, 'quote', e.target.value)} /></div>
+                            </div>
+                        ))}
+                        <button onClick={addItem} style={{ background: '#10b98122', border: '1px solid #10b98144', color: '#10b981', borderRadius: '8px', padding: '12px', cursor: 'pointer', fontWeight: 800, fontSize: '13px' }}>+ Añadir Nueva Reseña</button>
+                    </div>
                 </div>
             </div>
         </FieldPrimitive>
@@ -237,5 +251,8 @@ export function testimonialsPreview(): BasicFormField<string> {
         parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
         serialize(val) { return { value: val }; },
         validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        reader: {
+            parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        },
     };
 }

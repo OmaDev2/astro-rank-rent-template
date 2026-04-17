@@ -8,14 +8,18 @@ if (!features || features.length === 0) return null;
 // Determine card background based on section background
 const cardBgClass =
     bgClass === "bg-secondary" ? "bg-surface/50" : "bg-secondary/50";
+
+// SEO Heading Tag
+const { titleTag = "h2" } = Astro.props;
+const TitleTag = titleTag;
 ---
 
 <section class={`py-20 ${bgClass} border-y border-heading/10`}>
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-heading font-bold text-heading mb-4">
+            <TitleTag class="text-4xl font-heading font-bold text-heading mb-4">
                 {title || `¿Por qué elegirnos en ${city}?`}
-            </h2>
+            </TitleTag>
             <div class="w-24 h-1 bg-primary mx-auto mb-4"></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

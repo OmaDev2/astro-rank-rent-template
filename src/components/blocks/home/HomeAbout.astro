@@ -11,6 +11,8 @@ const isDefaultImage =
     aboutSection.image === "/images/home/about-placeholder.jpg" ||
     aboutSection.image === "";
 const aboutImage = aboutSection.image || "/images/home/about-placeholder.jpg";
+// SEO Heading Tag
+const TitleTag = aboutSection?.titleTag || "h2";
 ---
 
 <section class={`py-20 ${bgClass} border-b border-heading/10`}>
@@ -58,14 +60,21 @@ const aboutImage = aboutSection.image || "/images/home/about-placeholder.jpg";
                 }
             </div>
             <div>
-                <h2
+                <TitleTag
                     class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-8"
                 >
                     {
                         aboutSection.title ||
                             "⚠️ Configura el Título en CMS (Home > Sobre Nosotros)"
                     }
-                </h2>
+                    {
+                        aboutSection.titleHighlight && (
+                            <span class="text-primary block lg:inline ml-0 lg:ml-2">
+                                {aboutSection.titleHighlight}
+                            </span>
+                        )
+                    }
+                </TitleTag>
                 <div class="prose prose-invert prose-lg text-body mb-8">
                     {
                         aboutSection.description &&

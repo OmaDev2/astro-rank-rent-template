@@ -15,6 +15,8 @@ const isDefaultImage =
 
 const heroBgImage =
     hero?.backgroundImage || "/images/home/hero-placeholder.jpg";
+// SEO Heading Tag
+const TitleTag = hero?.titleTag || "h1";
 ---
 
 <section
@@ -47,7 +49,7 @@ const heroBgImage =
     </div>
     <div class="container mx-auto px-4 relative z-10">
         <div class="max-w-3xl">
-            <h1
+            <TitleTag
                 class="text-5xl lg:text-7xl font-heading font-bold text-heading mb-6 leading-tight"
             >
                 {
@@ -69,7 +71,7 @@ const heroBgImage =
                         </>
                     )
                 }
-            </h1>
+            </TitleTag>
             <p
                 class="text-xl text-heading/90 mb-8 font-bold border-l-4 border-primary pl-4 max-w-2xl readable-hero-text"
             >

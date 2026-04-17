@@ -12,6 +12,7 @@ type HeroState = {
     ctaSecondaryText: string;
     features: string;
     bgColor: string;
+    titleTag: 'h1' | 'h2' | 'h3';
 };
 
 const DEFAULTS: HeroState = {
@@ -22,6 +23,7 @@ const DEFAULTS: HeroState = {
     ctaSecondaryText: 'WhatsApp',
     features: 'Servicio Rápido\nGarantía Total\nPresupuesto Gratis',
     bgColor: '#0a0a0a',
+    titleTag: 'h1',
 };
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -50,6 +52,9 @@ function HeroPreviewUI({ state }: { state: HeroState }) {
             <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
             
             <div style={{ position: 'relative', zIndex: 2, maxWidth: '90%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 900, background: theme.primary, color: '#white', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>{state.titleTag}</span>
+                </div>
                 <h2 style={{ 
                     margin: 0, 
                     color: theme.textMain, 
@@ -120,20 +125,33 @@ function HeroInput({ value, onChange }: { value: string, onChange: (v: string) =
         borderRadius: '6px', padding: '8px 12px', color: '#e2e8f0',
         fontSize: '13px', fontFamily: 'inherit', width: '100%', boxSizing: 'border-box'
     };
+    const sel: React.CSSProperties = {
+        ...inp, cursor: 'pointer', appearance: 'none'
+    };
     const lbl = (t: string) => (
         <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '5px' }}>{t}</div>
     );
 
     return (
         <FieldPrimitive label="🚀 Hero Principal (Vista Previa)">
-            <HeroPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(99,102,241,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div>{lbl('Título Base')}<input style={inp} value={state.heading} onChange={e => update('heading', e.target.value)} /></div>
-                <div>{lbl('Texto Destacado')}<input style={inp} value={state.headingHighlight} onChange={e => update('headingHighlight', e.target.value)} /></div>
-                <div style={{ gridColumn: '1 / -1' }}>{lbl('Subtítulo')}<input style={inp} value={state.subheading} onChange={e => update('subheading', e.target.value)} /></div>
-                <div>{lbl('Texto Botón 1')}<input style={inp} value={state.ctaPrimaryText} onChange={e => update('ctaPrimaryText', e.target.value)} /></div>
-                <div>{lbl('Texto Botón 2')}<input style={inp} value={state.ctaSecondaryText} onChange={e => update('ctaSecondaryText', e.target.value)} /></div>
-                <div style={{ gridColumn: '1 / -1' }}>{lbl('✓ Características (una por línea)')}<textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={state.features} onChange={e => update('features', e.target.value)} /></div>
+            <div>
+                <HeroPreviewUI state={state} />
+                <div style={{ background: '#0f172a', border: '1px solid rgba(99,102,241,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div>{lbl('Título Base')}<input style={inp} value={state.heading} onChange={e => update('heading', e.target.value)} /></div>
+                    <div>{lbl('Texto Destacado')}<input style={inp} value={state.headingHighlight} onChange={e => update('headingHighlight', e.target.value)} /></div>
+                    <div>{lbl('Subtítulo')}<input style={inp} value={state.subheading} onChange={e => update('subheading', e.target.value)} /></div>
+                    <div>
+                        {lbl('Etiqueta SEO (H1 recom.)')}
+                        <select style={sel} value={state.titleTag} onChange={e => update('titleTag', e.target.value as any)}>
+                            <option value="h1">H1 (Principal)</option>
+                            <option value="h2">H2 (Secundario)</option>
+                            <option value="h3">H3 (Terciario)</option>
+                        </select>
+                    </div>
+                    <div>{lbl('Texto Botón 1')}<input style={inp} value={state.ctaPrimaryText} onChange={e => update('ctaPrimaryText', e.target.value)} /></div>
+                    <div>{lbl('Texto Botón 2')}<input style={inp} value={state.ctaSecondaryText} onChange={e => update('ctaSecondaryText', e.target.value)} /></div>
+                    <div style={{ gridColumn: '1 / -1' }}>{lbl('✓ Características (una por línea)')}<textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={state.features} onChange={e => update('features', e.target.value)} /></div>
+                </div>
             </div>
         </FieldPrimitive>
     );
@@ -148,5 +166,8 @@ export function heroPreview(): BasicFormField<string> {
         parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
         serialize(val) { return { value: val }; },
         validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        reader: {
+            parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        },
     };
 }

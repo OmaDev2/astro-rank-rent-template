@@ -6,7 +6,7 @@ import { IconPickerUI } from './IconPicker';
 import * as LucideIcons from 'lucide-react';
 
 type StepItem = { title: string; description: string; icon: string; duration: string };
-type ProcessState = { title: string; subtitle: string; steps: StepItem[] };
+type ProcessState = { title: string; subtitle: string; steps: StepItem[]; titleTag: 'h1' | 'h2' | 'h3' };
 
 const DEFAULTS: ProcessState = {
     title: 'Nuestro Método Profesional',
@@ -15,7 +15,8 @@ const DEFAULTS: ProcessState = {
         { title: '1. Visita y Presupuesto', description: 'Evaluamos tu piso sin compromiso.', icon: 'ClipboardCheck', duration: '30-45 min' },
         { title: '2. Protección Total', description: 'Protegemos suelos y muebles minuciosamente.', icon: 'Shield', duration: '2-3 horas' },
         { title: '3. Lijado y Alisado', description: 'Eliminamos el gotelé con aspiración industrial.', icon: 'Wind', duration: '1-2 días' },
-    ]
+    ],
+    titleTag: 'h2'
 };
 
 // Helper para renderizar el icono de Lucide si existe
@@ -40,6 +41,9 @@ function ProcessPreviewUI({ state }: { state: ProcessState }) {
             <link rel="stylesheet" href={theme.googleFontsUrl} />
             
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 900, background: theme.primary, color: '#white', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>{state.titleTag}</span>
+                </div>
                 <h3 style={{ 
                     margin: '0 0 12px', 
                     color: theme.textMain, 
@@ -172,33 +176,43 @@ function ProcessInput({ value, onChange }: { value: string, onChange: (v: string
 
     return (
         <FieldPrimitive label="👷 Método Paso a Paso (Vista Previa)">
-            <ProcessPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(239,68,68,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                    <div>{lbl('Título Sección')}<input style={inp} value={state.title} onChange={e => update('title', e.target.value)} /></div>
-                    <div>{lbl('Subtítulo')}<input style={inp} value={state.subtitle} onChange={e => update('subtitle', e.target.value)} /></div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {state.steps.map((s, i) => (
-                        <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 150px auto', gap: '10px', marginBottom: '12px' }}>
-                                <div>{lbl(`Paso ${i+1}: Título`)}<input style={inp} value={s.title} onChange={e => updateStep(i, 'title', e.target.value)} /></div>
-                                <div>{lbl('Duración Est.')}<input style={inp} value={s.duration} onChange={e => updateStep(i, 'duration', e.target.value)} /></div>
-                                <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                                    <button onClick={() => removeStep(i)} style={{ background: '#ef444422', border: '1px solid #ef444444', color: '#ef4444', borderRadius: '6px', height: '38px', padding: '0 12px', cursor: 'pointer' }}>×</button>
-                                </div>
-                            </div>
-                            
-                            <div style={{ marginBottom: '12px' }}>
-                                {lbl('Icono del Paso')}
-                                <IconPickerUI value={s.icon} onChange={v => updateStep(i, 'icon', v)} />
-                            </div>
-
-                            <div>{lbl('Explicación detallada')}<textarea style={{ ...inp, resize: 'vertical' }} rows={2} value={s.description} onChange={e => updateStep(i, 'description', e.target.value)} /></div>
+            <div>
+                <ProcessPreviewUI state={state} />
+                <div style={{ background: '#0f172a', border: '1px solid rgba(239,68,68,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(200px, 1fr) minmax(200px, 1.2fr) 150px', gap: '16px', marginBottom: '24px' }}>
+                        <div>{lbl('Título Sección')}<input style={inp} value={state.title} onChange={e => update('title', e.target.value)} /></div>
+                        <div>{lbl('Subtítulo')}<input style={inp} value={state.subtitle} onChange={e => update('subtitle', e.target.value)} /></div>
+                        <div>
+                            {lbl('Etiqueta SEO (H2 recom.)')}
+                            <select style={{ ...inp, cursor: 'pointer', appearance: 'none' }} value={state.titleTag} onChange={e => update('titleTag', e.target.value as any)}>
+                                <option value="h1">H1 (Principal)</option>
+                                <option value="h2">H2 (Secundario)</option>
+                                <option value="h3">H3 (Terciario)</option>
+                            </select>
                         </div>
-                    ))}
-                    <button onClick={addStep} style={{ background: '#10b98122', border: '1px solid #10b98144', color: '#10b981', borderRadius: '8px', padding: '12px', cursor: 'pointer', fontWeight: 800, fontSize: '13px' }}>+ Añadir Nuevo Paso al Proceso</button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {state.steps.map((s, i) => (
+                            <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 150px auto', gap: '10px', marginBottom: '12px' }}>
+                                    <div>{lbl(`Paso ${i+1}: Título`)}<input style={inp} value={s.title} onChange={e => updateStep(i, 'title', e.target.value)} /></div>
+                                    <div>{lbl('Duración Est.')}<input style={inp} value={s.duration} onChange={e => updateStep(i, 'duration', e.target.value)} /></div>
+                                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                                        <button onClick={() => removeStep(i)} style={{ background: '#ef444422', border: '1px solid #ef444444', color: '#ef4444', borderRadius: '6px', height: '38px', padding: '0 12px', cursor: 'pointer' }}>×</button>
+                                    </div>
+                                </div>
+                                
+                                <div style={{ marginBottom: '12px' }}>
+                                    {lbl('Icono del Paso')}
+                                    <IconPickerUI value={s.icon} onChange={v => updateStep(i, 'icon', v)} />
+                                </div>
+
+                                <div>{lbl('Explicación detallada')}<textarea style={{ ...inp, resize: 'vertical' }} rows={2} value={s.description} onChange={e => updateStep(i, 'description', e.target.value)} /></div>
+                            </div>
+                        ))}
+                        <button onClick={addStep} style={{ background: '#10b98122', border: '1px solid #10b98144', color: '#10b981', borderRadius: '8px', padding: '12px', cursor: 'pointer', fontWeight: 800, fontSize: '13px' }}>+ Añadir Nuevo Paso al Proceso</button>
+                    </div>
                 </div>
             </div>
         </FieldPrimitive>
@@ -214,5 +228,8 @@ export function processPreview(): BasicFormField<string> {
         parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
         serialize(val) { return { value: val }; },
         validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        reader: {
+            parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        },
     };
 }

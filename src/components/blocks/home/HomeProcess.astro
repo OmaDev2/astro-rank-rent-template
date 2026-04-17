@@ -12,6 +12,7 @@ interface Props {
 }
 
 const { process, bgClass = "bg-surface" } = Astro.props;
+const TitleTag = (process as any)?.titleTag || "h2";
 
 // Determine card background based on section background for contrast
 const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
@@ -23,9 +24,9 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
             <div class="container mx-auto px-4">
                 <div class="text-center mb-16 max-w-3xl mx-auto">
                     {process.title && (
-                        <h2 class="text-4xl font-heading font-bold text-heading mb-4">
+                        <TitleTag class="text-4xl font-heading font-bold text-heading mb-4">
                             {process.title}
-                        </h2>
+                        </TitleTag>
                     )}
                     <div class="w-24 h-1 bg-primary mx-auto mb-6" />
                     {process.description && (

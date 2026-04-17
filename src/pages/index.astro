@@ -124,11 +124,23 @@ const ctaPreviewOverride = parsePreview(homeData._ctaPreview);
 const featuresPreviewOverride = parsePreview(homeData._featuresPreview);
 const testimonialsPreviewOverride = parsePreview(homeData._testimonialsPreview);
 const processPreviewOverride = parsePreview(homeData._processPreview);
+const aboutPreviewOverride = parsePreview(homeData._aboutPreview);
 const pricingPreviewOverride = parsePreview(homeData._pricingPreview);
+// SEO manually set in Keystatic
+const seoTitle = homeData.seoTitle;
+const seoDescription = homeData.seoDescription;
+
+// Smart Title Fallback
+const finalTitle = seoTitle || 
+    (heroPreviewOverride?.heading ? `${heroPreviewOverride.heading} ${heroPreviewOverride.headingHighlight || ''}`.trim() : null) || 
+    `${config.niche} en ${config.city}`;
+
+const displayTitle = `${finalTitle} | ${config.siteName}`;
 ---
 
 <Layout
-	title={`${homeData.hero?.heading || config.niche + " en " + config.city} | ${config.siteName}`}
+	title={displayTitle}
+	description={seoDescription}
 	schema={schema}
 	stickyPhone={homeData.stickyPhone}
 	whatsappFloat={homeData.whatsappFloat}
@@ -147,6 +159,7 @@ const pricingPreviewOverride = parsePreview(homeData._pricingPreview);
 		featuresPreviewOverride={featuresPreviewOverride}
 		testimonialsPreviewOverride={testimonialsPreviewOverride}
 		processPreviewOverride={processPreviewOverride}
+		aboutPreviewOverride={aboutPreviewOverride}
 		pricingPreviewOverride={pricingPreviewOverride}
 	/>
 

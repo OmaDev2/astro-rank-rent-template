@@ -6,9 +6,11 @@ interface Props {
     title?: string;
     subtitle?: string;
     bgClass?: string;
+    titleTag?: string;
 }
 
-const { testimonials, title, subtitle, bgClass = "bg-surface" } = Astro.props;
+const { testimonials, title, subtitle, bgClass = "bg-surface", titleTag = "h2" } = Astro.props;
+const TitleTag = titleTag;
 
 // Determine card background based on section background
 const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
@@ -25,9 +27,9 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
                         <span>Testimonios Reales</span>
                     </div>
 
-                    <h2 class="text-4xl md:text-5xl font-heading font-bold text-heading mb-6 tracking-tight">
+                    <TitleTag class="text-4xl md:text-5xl font-heading font-bold text-heading mb-6 tracking-tight">
                         {title || "Lo que dicen nuestros clientes"}
-                    </h2>
+                    </TitleTag>
 
                     <p class="text-body text-lg leading-relaxed">
                         {subtitle ||
