@@ -4,8 +4,11 @@ import HeroContactForm from "../../HeroContactForm.astro";
 const { config, bgClass = "bg-secondary", contactSection } = Astro.props;
 
 // Overrides for contact info
-const phone = contactSection?.phone || config.phone;
-const whatsapp = contactSection?.whatsapp || config.whatsapp;
+const blockPhone = contactSection?.phone;
+const blockWhatsapp = contactSection?.whatsapp;
+
+const phone = (blockPhone && !blockPhone.includes("XXX")) ? blockPhone : config.phone;
+const whatsapp = (blockWhatsapp && !blockWhatsapp.includes("XXX")) ? blockWhatsapp : config.whatsapp;
 const email = contactSection?.email || config.email;
 const schedule = contactSection?.schedule || config.schedule;
 const responseTime = contactSection?.responseTime;

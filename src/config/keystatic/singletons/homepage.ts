@@ -200,10 +200,23 @@ export const homepage = singleton({
                     title: fields.text({ label: 'Título' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
                     description: fields.text({ label: 'Descripción / Zonas', multiline: true }),
-                    phone: fields.text({ label: 'Teléfono' }),
-                    whatsapp: fields.text({ label: 'WhatsApp' }),
-                    email: fields.text({ label: 'Email' }),
-                    schedule: fields.text({ label: 'Horarios', multiline: true }),
+                    phone: fields.text({ 
+                        label: 'Teléfono',
+                        description: 'Si se deja vacío (o con XXX), se usará el teléfono global de Mi Negocio.' 
+                    }),
+                    whatsapp: fields.text({ 
+                        label: 'WhatsApp',
+                        description: 'Si se deja vacío (o con XXX), se usará el WhatsApp global de Mi Negocio.' 
+                    }),
+                    email: fields.text({ 
+                        label: 'Email',
+                        description: 'Si se deja vacío, se usará el email global de Mi Negocio.' 
+                    }),
+                    schedule: fields.text({ 
+                        label: 'Horarios', 
+                        multiline: true,
+                        description: 'Si se deja vacío, se usará el horario global de Mi Negocio.' 
+                    }),
                     responseTime: fields.text({ label: 'Tiempo de Respuesta' }),
                 })
             },
