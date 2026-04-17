@@ -1,5 +1,6 @@
 ---
 import { Home, ChevronRight } from "lucide-react";
+import { generateBreadcrumbsList } from "../lib/seo";
 
 interface Props {
     locationName?: string;
@@ -11,6 +12,27 @@ interface Props {
 
 const { locationName, locationType, serviceName, isLocation, isService } =
     Astro.props;
+
+const siteUrl = Astro.site?.href?.replace(/\/$/, "") || "";
+
+// Construir items del breadcrumb para JSON-LD
+const breadcrumbItems: { name: string; item?: string }[] = [
+    { name: "Inicio", item: `${siteUrl}/` },
+];
+
+if (isLocation) {
+    breadcrumbItems.push({ name: "Zonas", item: `${siteUrl}/zonas/` });
+    if (locationName) {
+        breadcrumbItems.push({ name: locationName });
+    }
+} else if (isService) {
+    breadcrumbItems.push({ name: "Servicios", item: `${siteUrl}/servicios/` });
+    if (serviceName) {
+        breadcrumbItems.push({ name: serviceName });
+    }
+}
+
+const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 ---
 
 <div class="absolute top-0 left-0 w-full z-30 pt-6 px-6 pointer-events-none">
@@ -60,3 +82,5 @@ const { locationName, locationType, serviceName, isLocation, isService } =
         </nav>
     </div>
 </div>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

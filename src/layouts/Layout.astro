@@ -4,6 +4,9 @@ import Navbar from "../components/Navbar.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import SearchConsoleVerification from "../components/SearchConsoleVerification.astro";
+import ClickTracker from "../components/ClickTracker.astro";
+import CallbackModal from "../components/CallbackModal.astro";
+import { generateWebSiteSchema } from "../lib/seo";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
 
@@ -99,6 +102,13 @@ const {
 // Generar descripción por defecto si no viene en props
 const defaultDescription = `${settings.niche} en ${settings.city}. Expertos profesionales, servicio rápido y presupuesto sin compromiso en ${settings.siteName}.`;
 
+// WebSite schema (grafo base presente en todas las páginas)
+const siteUrl = Astro.site?.href?.replace(/\/$/, "") || settings.siteUrl || "";
+const webSiteSchema = generateWebSiteSchema(settings.siteName, siteUrl);
+const allSchemas = schema
+    ? (Array.isArray(schema) ? [webSiteSchema, ...schema] : [webSiteSchema, schema])
+    : [webSiteSchema];
+
 // Hero Opacity (Default 0.6)
 const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
 ---
@@ -140,7 +150,7 @@ const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
         <SeoHead
             title={title}
             description={description || defaultDescription}
-            schema={schema}
+            schema={allSchemas}
             noindex={noindex}
         />
 
@@ -205,5 +215,7 @@ const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
             whatsappFloat={whatsappFloat}
         />
         <CookieBanner />
+        <CallbackModal />
+        <ClickTracker />
     </body>
 </html>

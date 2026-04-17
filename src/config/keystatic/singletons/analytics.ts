@@ -16,5 +16,9 @@ export const analytics = singleton({
             label: 'Google Search Console - Código de Verificación',
             description: 'Código meta tag de verificación (solo el contenido, sin <meta>). Ej: abc123def456...',
         }),
+        n8nWebhookUrl: fields.text({
+            label: 'n8n Webhook URL (Click Tracking)',
+            description: 'URL del webhook n8n para tracking de clics en teléfono y WhatsApp. Ej: https://tu-n8n.com/webhook/tracking-clicks',
+        }),
     },
 });

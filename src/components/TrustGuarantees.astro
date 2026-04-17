@@ -1,0 +1,93 @@
+---
+interface Guarantee {
+  icon: string; // SVG path string
+  title: string;
+  desc: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  guarantees?: Guarantee[];
+}
+
+const defaultGuarantees: Guarantee[] = [
+  {
+    icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+    title: "Garantía en el Trabajo",
+    desc: "Todos nuestros trabajos incluyen garantía. Si hay algún problema, volvemos sin coste adicional.",
+  },
+  {
+    icon: "M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z",
+    title: "Presupuesto Sin Compromiso",
+    desc: "Te enviamos presupuesto detallado gratis. Sin letras pequeñas ni sorpresas en el precio final.",
+  },
+  {
+    icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+    title: "Respuesta Rápida",
+    desc: "Atendemos tu consulta en menos de 1 hora. Urgencias con disponibilidad prioritaria.",
+  },
+  {
+    icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
+    title: "Profesionales Cualificados",
+    desc: "Personal con formación certificada y años de experiencia en el sector.",
+  },
+  {
+    icon: "M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3",
+    title: "Precio Justo",
+    desc: "Precios competitivos sin intermediarios. Cobramos lo que vale el trabajo, nada más.",
+  },
+  {
+    icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
+    title: "Todo en Regla",
+    desc: "Factura oficial, seguro de responsabilidad civil y cumplimiento normativo garantizado.",
+  },
+];
+
+const {
+  title = "Por Qué Elegirnos",
+  subtitle = "Nos comprometemos con cada cliente. Estas son nuestras garantías.",
+  guarantees = defaultGuarantees,
+} = Astro.props;
+---
+
+<section class="py-16 bg-[rgb(var(--color-surface))]/50 border-t border-white/5">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl md:text-3xl font-bold text-[rgb(var(--color-text-heading))] mb-3">
+        {title}
+      </h2>
+      <p class="text-[rgb(var(--color-text-body))]/70 max-w-xl mx-auto">
+        {subtitle}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {
+        guarantees.map((g) => (
+          <div class="flex gap-4 items-start">
+            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-[rgb(var(--color-primary))]/10 flex items-center justify-center border border-[rgb(var(--color-primary))]/20">
+              <svg
+                class="w-6 h-6 text-[rgb(var(--color-primary))]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d={g.icon} />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-[rgb(var(--color-text-heading))] font-bold mb-1">
+                {g.title}
+              </h3>
+              <p class="text-[rgb(var(--color-text-body))]/70 text-sm leading-relaxed">
+                {g.desc}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

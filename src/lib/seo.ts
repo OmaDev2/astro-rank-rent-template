@@ -5,8 +5,7 @@ import type {
     BreadcrumbList,
     ListItem,
     FAQPage,
-    Question,
-    Answer
+    WebSite,
 } from "schema-dts";
 
 /**
@@ -192,5 +191,32 @@ export function generateLocalBusinessSchema(
         );
     }
 
+    // @id para conectar el grafo
+    (schema as any)["@id"] = `${url}/#business`;
+
     return schema;
+}
+
+// ─── WebSite schema (conectado al grafo mediante @id) ─────────────────────────
+
+export function generateWebSiteSchema(siteName: string, siteUrl: string): WithContext<WebSite> {
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        name: siteName,
+        url: siteUrl,
+        inLanguage: "es-ES",
+        publisher: {
+            "@id": `${siteUrl}/#business`,
+        } as any,
+        potentialAction: {
+            "@type": "SearchAction",
+            target: {
+                "@type": "EntryPoint",
+                urlTemplate: `${siteUrl}/?s={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+        } as any,
+    };
 }

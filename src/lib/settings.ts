@@ -44,6 +44,7 @@ export async function getSettings() {
         googleAnalyticsId: analytics?.data?.googleAnalyticsId || '',
         gtmId: analytics?.data?.gtmId || '',
         searchConsoleVerification: analytics?.data?.searchConsoleVerification || '',
+        n8nWebhookUrl: analytics?.data?.n8nWebhookUrl || '',
 
         // Schema.org
         priceRange: schema?.data?.priceRange || '',

@@ -80,6 +80,15 @@ const link = buttonLink || `tel:${(phone || "").replace(/\s/g, "")}`;
                 />
                 <span>Pedir Presupuesto</span>
             </a>
+
+            <button
+                type="button"
+                data-callback-trigger
+                class="group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold bg-white/10 backdrop-blur-md text-white border-2 border-white/20 rounded-2xl transition-all hover:scale-105 hover:bg-white/20 w-full sm:w-auto"
+            >
+                <Phone className="w-6 h-6 mr-3" />
+                <span>Te Llamamos</span>
+            </button>
         </div>
 
         <p

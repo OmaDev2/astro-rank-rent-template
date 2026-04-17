@@ -48,6 +48,10 @@ const defaultOgImage = `/images/og-${settings.niche?.toLowerCase().replace(/\s/g
 
 {
   schema && (
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    Array.isArray(schema)
+      ? schema.map((s) => (
+          <script is:inline type="application/ld+json" set:html={JSON.stringify(s)} />
+        ))
+      : <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
   )
 }
