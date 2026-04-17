@@ -306,7 +306,7 @@ const footer = defineCollection({
 const blog = defineCollection({
     schema: z.object({
         title: z.string(),
-        pubDate: z.string().optional(), // ISO date string
+        pubDate: z.union([z.string(), z.date()]).optional(), // Accepts YAML Date or string
         description: z.string().optional(),
         author: z.string().optional(),
         image: z.string().optional(),
@@ -385,6 +385,7 @@ const legal = defineCollection({
 const quickstart = defineCollection({
     type: 'data',
     schema: z.object({
+        _spintax: z.string().optional(), // UI-only helper, not used at runtime
         siteName: z.string().optional(),
         niche: z.string().optional(),
         city: z.string().optional(),

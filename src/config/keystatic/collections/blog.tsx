@@ -1,5 +1,5 @@
 import { collection, fields } from '@keystatic/core';
-import { FileText, Image, MousePointer2, AlertTriangle } from 'lucide-react';
+import { mdxComponentsConfig } from '../mdx-components';
 
 export const blog = collection({
     label: '📰 Blog',
@@ -74,7 +74,8 @@ export const blog = collection({
                     directory: 'public/images/blog',
                     publicPath: '/images/blog',
                 }
-            }
+            },
+            components: mdxComponentsConfig
         }),
     },
 });

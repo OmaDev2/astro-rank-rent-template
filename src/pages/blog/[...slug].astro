@@ -2,6 +2,21 @@
 import { getCollection } from "astro:content";
 import BlogLayout from "../../layouts/BlogLayout.astro";
 
+// Importar componentes MDX
+import CtaBlock from "../../components/mdx/CtaBlock.astro";
+import AlertBlock from "../../components/mdx/AlertBlock.astro";
+import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
+import BusinessNameBlock from "../../components/mdx/BusinessNameBlock.astro";
+import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
+
+const mdxComponents = {
+    CtaBlock,
+    AlertBlock,
+    PhoneBlock,
+    BusinessNameBlock,
+    CustomImageBlock,
+};
+
 export const prerender = true;
 
 export async function getStaticPaths() {
@@ -32,5 +47,5 @@ const { Content } = await post.render();
             </p>
         )
     }
-    <Content />
+    <Content components={mdxComponents} />
 </BlogLayout>

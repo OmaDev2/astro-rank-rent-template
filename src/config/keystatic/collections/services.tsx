@@ -1,6 +1,7 @@
 import { collection, fields } from '@keystatic/core';
-import { MousePointer2, AlertTriangle, Phone, Building, Image, Layout, Star, HelpCircle, ArrowRight } from 'lucide-react';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
+import { IconPicker } from '../../../components/keystatic/IconPicker';
+import { mdxComponentsConfig } from '../mdx-components';
 
 export const services = collection({
     label: '🛠️ Servicios',
@@ -30,7 +31,7 @@ export const services = collection({
         seo: SeoPreview({
             label: 'SEO Google Preview',
         }),
-        icon: fields.text({ label: 'Icono (Lucide)' }),
+        icon: IconPicker({ label: 'Icono Principal (Lucide)' }),
         shortDesc: fields.text({ label: 'Descripción Corta (Cards)', multiline: true }),
         featured: fields.checkbox({ label: 'Destacado en Home', defaultValue: false }),
 
@@ -57,7 +58,7 @@ export const services = collection({
                         fields.object({
                             title: fields.text({ label: 'Característica' }),
                             desc: fields.text({ label: 'Detalle', multiline: true }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
                         }),
                         {
                             label: 'Lista de Beneficios',
@@ -215,46 +216,7 @@ export const services = collection({
                     publicPath: '/images/services',
                 }
             },
-            components: {
-                CtaBlock: {
-                    label: 'Botón CTA',
-                    kind: 'block',
-                    icon: <MousePointer2 />,
-                    schema: {
-                        text: fields.text({ label: 'Texto' }),
-                        url: fields.text({ label: 'URL' }),
-                        type: fields.select({
-                            label: 'Color',
-                            options: [
-                                { label: 'Principal', value: 'primary' },
-                                { label: 'Secundario', value: 'secondary' },
-                                { label: 'WhatsApp', value: 'whatsapp' },
-                            ],
-                            defaultValue: 'primary',
-                        }),
-                    },
-                },
-                AlertBlock: {
-                    label: 'Alerta',
-                    kind: 'block',
-                    icon: <AlertTriangle />,
-                    schema: {
-                        title: fields.text({ label: 'Título' }),
-                        content: fields.text({ label: 'Contenido', multiline: true }),
-                        type: fields.select({
-                            label: 'Nivel',
-                            options: [
-                                { label: 'Info', value: 'info' },
-                                { label: 'Warning', value: 'warning' },
-                                { label: 'Error', value: 'error' },
-                            ],
-                            defaultValue: 'info',
-                        }),
-                    },
-                },
-                PhoneBlock: { label: '📞 Teléfono Situacional', kind: 'block', icon: <Phone />, schema: {} },
-                BusinessNameBlock: { label: '🏢 Nombre Local', kind: 'block', icon: <Building />, schema: {} },
-            }
+            components: mdxComponentsConfig
         }),
     },
 });

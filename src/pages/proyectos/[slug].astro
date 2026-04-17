@@ -7,6 +7,22 @@ import { getCollection, getEntry } from "astro:content";
 import { MapPin, Calendar, Wrench, ArrowLeft } from "lucide-react";
 import type { WithContext, CreativeWork } from "schema-dts";
 import { getSettings } from "../../lib/settings";
+import { getSettings } from "../../lib/settings";
+
+// Importar componentes MDX
+import CtaBlock from "../../components/mdx/CtaBlock.astro";
+import AlertBlock from "../../components/mdx/AlertBlock.astro";
+import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
+import BusinessNameBlock from "../../components/mdx/BusinessNameBlock.astro";
+import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
+
+const mdxComponents = {
+    CtaBlock,
+    AlertBlock,
+    PhoneBlock,
+    BusinessNameBlock,
+    CustomImageBlock,
+};
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -144,7 +160,7 @@ const formattedDate = project.data.date
                     prose-p:text-body prose-p:leading-relaxed
                     prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-heading prose-img:rounded-xl prose-img:shadow-lg">
-                    <Content />
+                    <Content components={mdxComponents} />
                 </div>
             </div>
         </section>

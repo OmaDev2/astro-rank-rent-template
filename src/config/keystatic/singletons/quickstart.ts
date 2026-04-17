@@ -1,10 +1,14 @@
 import { fields, singleton } from '@keystatic/core';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
+import { spintaxSimulator } from '../../../components/keystatic/SpintaxPreview';
 
 export const quickstart = singleton({
     label: '🚀 Inicio Rápido',
     path: 'src/content/quickstart/global',
     schema: {
+
+        // ── 0. HERRAMIENTAS ───────────────────────────────────────────────────
+        _spintax: spintaxSimulator(),
 
         // ── 1. NEGOCIO ────────────────────────────────────────────────────────
         siteName: fields.text({

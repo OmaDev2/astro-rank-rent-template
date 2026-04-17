@@ -1,4 +1,6 @@
 import { singleton, fields } from '@keystatic/core';
+import { IconPicker } from '../../../components/keystatic/IconPicker';
+import { mdxComponentsConfig } from '../mdx-components';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
@@ -54,7 +56,7 @@ export const homepage = singleton({
                                 manual: fields.object({
                                     title: fields.text({ label: 'Nombre' }),
                                     description: fields.text({ label: 'Descripción', multiline: true }),
-                                    icon: fields.text({ label: 'Icono (Lucide)' }),
+                                    icon: IconPicker({ label: 'Icono (Lucide)' }),
                                     price: fields.text({ label: 'Precio (Ej: Desde 12€/m²)' }),
                                     link: fields.text({ label: 'Enlace a Página (Ej: /servicios/alisar)' }),
                                     isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
@@ -110,7 +112,7 @@ export const homepage = singleton({
                                 directory: 'public/images/services',
                                 publicPath: '/images/services',
                             }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
                         }),
                         { label: 'Servicios Manuales', itemLabel: p => p.fields.title.value || 'Servicio' }
                     )
@@ -133,7 +135,7 @@ export const homepage = singleton({
                         fields.object({
                             title: fields.text({ label: 'Título' }),
                             description: fields.text({ label: 'Detalle' }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
                         }),
                         { label: 'Puntos Clave', itemLabel: p => p.fields.title.value || 'Punto' }
                     ),
@@ -149,7 +151,7 @@ export const homepage = singleton({
                         fields.object({
                             title: fields.text({ label: 'Título' }),
                             description: fields.text({ label: 'Detalle' }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
                         }),
                         { label: 'Ventajas', itemLabel: p => p.fields.title.value || 'Ventaja' }
                     ),
@@ -185,7 +187,7 @@ export const homepage = singleton({
                         fields.object({
                             title: fields.text({ label: 'Título' }),
                             description: fields.text({ label: 'Detalle', multiline: true }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
                             duration: fields.text({ label: 'Duración (Opcional)' }),
                         }),
                         { label: 'Pasos', itemLabel: p => p.fields.title.value || 'Paso' }
@@ -270,7 +272,7 @@ export const homepage = singleton({
                                 fields.object({
                                     name: fields.text({ label: 'Barrio/Distrito' }),
                                     description: fields.text({ label: 'Detalle (Opcional)', multiline: true }),
-                                    icon: fields.text({ label: 'Icono (Lucide)' }),
+                                    icon: IconPicker({ label: 'Icono (Lucide)' }),
                                     popular: fields.checkbox({ label: '¿Es zona destacada?', defaultValue: false }),
                                 }),
                                 { label: 'Barrios', itemLabel: p => p.fields.name.value || 'Distrito' }
@@ -284,7 +286,7 @@ export const homepage = singleton({
                                 fields.object({
                                     name: fields.text({ label: 'Municipio' }),
                                     supplement: fields.text({ label: 'Extra (Ej: +30€)' }),
-                                    icon: fields.text({ label: 'Icono (Lucide)' }),
+                                    icon: IconPicker({ label: 'Icono (Lucide)' }),
                                 }),
                                 { label: 'Municipios', itemLabel: p => p.fields.name.value || 'Ciudad' }
                             ),
@@ -335,7 +337,7 @@ export const homepage = singleton({
                             label: fields.text({ label: 'Nombre' }),
                             value: fields.text({ label: 'Cifra' }),
                             suffix: fields.text({ label: 'Sufijo (Ej: +)' }),
-                            icon: fields.text({ label: 'Icono (Lucide)' }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
                         }),
                         { label: 'Métricas', itemLabel: p => p.fields.label.value || 'Métrica' }
                     ),
@@ -383,7 +385,10 @@ export const homepage = singleton({
         }),
 
         // Contenido MDX para el bloque de texto
-        content: fields.mdx({ label: 'Contenido Adicional (Opcional)' }),
+        content: fields.mdx({
+            label: 'Contenido Adicional (Opcional)',
+            components: mdxComponentsConfig
+        }),
 
         // Campos adicionales para SEO y UI
         seoContentTitle: fields.text({ label: 'Título del Bloque Seo (Opcional)' }),

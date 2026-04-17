@@ -1,5 +1,6 @@
 import { collection, fields } from '@keystatic/core';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
+import { mdxComponentsConfig } from '../mdx-components';
 
 export const projects = collection({
     label: '💼 Portafolio / Proyectos',
@@ -60,6 +61,7 @@ export const projects = collection({
                     publicPath: '/images/projects',
                 },
             },
+            components: mdxComponentsConfig
         }),
     },
 });

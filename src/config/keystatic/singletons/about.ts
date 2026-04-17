@@ -1,4 +1,6 @@
 import { fields, singleton } from '@keystatic/core';
+import { IconPicker } from '../../../components/keystatic/IconPicker';
+import { mdxComponentsConfig } from '../mdx-components';
 
 export const about = singleton({
     label: '👥 Sobre Nosotros',
@@ -34,7 +36,8 @@ export const about = singleton({
                 label: 'Contenido de Historia',
                 options: {
                     image: false,
-                }
+                },
+                components: mdxComponentsConfig
             }),
             stats: fields.array(
                 fields.object({
@@ -54,19 +57,7 @@ export const about = singleton({
             description: fields.text({ label: 'Descripción Valores', defaultValue: 'Los principios que guían nuestro trabajo cada día' }),
             items: fields.array(
                 fields.object({
-                    icon: fields.select({
-                        label: 'Icono',
-                        options: [
-                            { label: 'Escudo (Calidad)', value: 'Shield' },
-                            { label: 'Corazón (Compromiso)', value: 'Heart' },
-                            { label: 'Reloj (Puntualidad)', value: 'Clock' },
-                            { label: 'Diana (Transparencia)', value: 'Target' },
-                            { label: 'Usuarios (Equipo)', value: 'Users' },
-                            { label: 'Herramienta (Técnica)', value: 'Wrench' },
-                            { label: 'Premio (Excelencia)', value: 'Award' },
-                        ],
-                        defaultValue: 'Shield'
-                    }),
+                    icon: IconPicker({ label: 'Icono', defaultValue: 'Shield' }),
                     title: fields.text({ label: 'Título' }),
                     description: fields.text({ label: 'Descripción', multiline: true }),
                 }),
