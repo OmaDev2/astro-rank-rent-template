@@ -1,23 +1,25 @@
 export const themes = {
     industrial: {
         label: 'Industrial (Naranja/Gris)',
+        heroOverlay: '15 23 42',    // = secondary
         colors: {
-            primary: '217 119 6',   // Amber 600
-            secondary: '15 23 42',  // Slate 900 (Main BG)
-            surface: '30 41 59',    // Slate 800 (Cards)
-            accent: '234 179 8',    // Yellow 500
+            primary: '217 119 6',
+            secondary: '15 23 42',
+            surface: '30 41 59',
+            accent: '234 179 8',
             textMain: '255 255 255',
-            textMuted: '148 163 184', // Slate 400
+            textMuted: '148 163 184',
         },
         gradient: 'linear-gradient(135deg, rgb(217 119 6) 0%, rgb(30 41 59) 100%)'
     },
     corporate: {
         label: 'Corporativo (Azul/Oscuro)',
+        heroOverlay: '15 23 42',
         colors: {
-            primary: '37 99 235',   // Blue 600
-            secondary: '15 23 42',  // Slate 900
-            surface: '30 41 59',    // Slate 800
-            accent: '96 165 250',   // Blue 400
+            primary: '37 99 235',
+            secondary: '15 23 42',
+            surface: '30 41 59',
+            accent: '96 165 250',
             textMain: '255 255 255',
             textMuted: '148 163 184',
         },
@@ -25,133 +27,145 @@ export const themes = {
     },
     nature: {
         label: 'Naturaleza (Verde/Tierra)',
+        heroOverlay: '20 83 45',
         colors: {
-            primary: '22 163 74',   // Green 600
-            secondary: '20 83 45',  // Green 900
-            surface: '22 101 52',   // Green 800
-            accent: '74 222 128',   // Green 400
+            primary: '22 163 74',
+            secondary: '20 83 45',
+            surface: '22 101 52',
+            accent: '74 222 128',
             textMain: '255 255 255',
-            textMuted: '187 247 208', // Green 100
+            textMuted: '187 247 208',
         },
         gradient: 'linear-gradient(to bottom, rgb(22 163 74), rgb(20 83 45))'
     },
     urgent: {
         label: 'Urgencia (Rojo/Negro)',
+        heroOverlay: '24 24 27',
         colors: {
-            primary: '220 38 38',   // Red 600
-            secondary: '24 24 27',  // Zinc 950
-            surface: '39 39 42',    // Zinc 800
-            accent: '239 68 68',    // Red 500
+            primary: '220 38 38',
+            secondary: '24 24 27',
+            surface: '39 39 42',
+            accent: '239 68 68',
             textMain: '255 255 255',
-            textMuted: '161 161 170', // Zinc 400
+            textMuted: '161 161 170',
         },
         gradient: 'linear-gradient(45deg, rgb(220 38 38) 0%, rgb(185 28 28) 100%)'
     },
     legal: {
         label: 'Legal (Navy/Oro)',
+        heroOverlay: '23 37 84',
         colors: {
-            primary: '202 138 4',   // Yellow 600
-            secondary: '23 37 84',  // Blue 950
-            surface: '30 58 138',   // Blue 900
-            accent: '234 179 8',    // Yellow 500
+            primary: '202 138 4',
+            secondary: '23 37 84',
+            surface: '30 58 138',
+            accent: '234 179 8',
             textMain: '255 255 255',
-            textMuted: '191 219 254', // Blue 200
+            textMuted: '191 219 254',
         },
         gradient: 'linear-gradient(to right, rgb(30 58 138), rgb(23, 37, 84))'
     },
     health: {
         label: 'Salud (Turquesa)',
+        heroOverlay: '17 24 39',
         colors: {
-            primary: '13 148 136',  // Teal 600
-            secondary: '17 24 39',  // Gray 900
-            surface: '31 41 55',    // Gray 800
-            accent: '45 212 191',   // Teal 400
+            primary: '13 148 136',
+            secondary: '17 24 39',
+            surface: '31 41 55',
+            accent: '45 212 191',
             textMain: '255 255 255',
-            textMuted: '156 163 175', // Gray 400
+            textMuted: '156 163 175',
         },
         gradient: 'linear-gradient(to bottom right, rgb(13 148 136), rgb(17 24 39))'
     },
     luxury: {
         label: 'Lujo (Negro/Oro)',
+        heroOverlay: '0 0 0',
         colors: {
-            primary: '217 119 6',   // Amber 600
-            secondary: '0 0 0',     // Black
-            surface: '24 24 27',    // Zinc 900
-            accent: '251 191 36',   // Amber 400
+            primary: '217 119 6',
+            secondary: '0 0 0',
+            surface: '24 24 27',
+            accent: '251 191 36',
             textMain: '255 255 255',
-            textMuted: '161 161 170', // Zinc 400
+            textMuted: '161 161 170',
         },
         gradient: 'linear-gradient(135deg, rgb(0 0 0) 0%, rgb(60 60 60) 100%)'
     },
     beauty: {
         label: 'Estética (Rosa)',
+        heroOverlay: '80 7 36',
         colors: {
-            primary: '219 39 119',  // Pink 600
-            secondary: '80 7 36',   // Rose 950
-            surface: '131 24 67',   // Rose 900
-            accent: '244 114 182',  // Pink 400
+            primary: '219 39 119',
+            secondary: '80 7 36',
+            surface: '131 24 67',
+            accent: '244 114 182',
             textMain: '255 255 255',
-            textMuted: '253 164 175', // Rose 200
+            textMuted: '253 164 175',
         },
         gradient: 'linear-gradient(to right, rgb(219 39 119), rgb(131 24 67))'
     },
     tech: {
         label: 'Tech (Violeta)',
+        heroOverlay: '15 23 42',
         colors: {
-            primary: '124 58 237',  // Violet 600
-            secondary: '15 23 42',  // Slate 900
-            surface: '30 41 59',    // Slate 800
-            accent: '167 139 250',  // Violet 400
+            primary: '124 58 237',
+            secondary: '15 23 42',
+            surface: '30 41 59',
+            accent: '167 139 250',
             textMain: '255 255 255',
-            textMuted: '148 163 184', // Slate 400
+            textMuted: '148 163 184',
         },
         gradient: 'linear-gradient(to right, rgb(79 70 229), rgb(124 58 237))'
     },
+    // Temas claros: heroOverlay usa BLANCO — texto oscuro sobre área blanca semitransparente
     clean_light: {
         label: 'Clean (Claro/Minimal)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '37 99 235',    // Blue 600
-            secondary: '248 250 252', // Slate 50 (Fondo BLANCO/Gris muy pálido)
-            surface: '255 255 255',   // White
-            accent: '59 130 246',    // Blue 500
-            textMain: '15 23 42',    // Slate 900 (Casi negro)
-            textMuted: '71 85 105',  // Slate 600 (Gris medio)
+            primary: '37 99 235',
+            secondary: '248 250 252',
+            surface: '255 255 255',
+            accent: '59 130 246',
+            textMain: '15 23 42',
+            textMuted: '71 85 105',
         },
-        gradient: 'linear-gradient(to right, rgb(255 255 255), rgb(241 245 249))'
+        gradient: 'linear-gradient(to right, rgb(37 99 235), rgb(30 64 175))'
     },
     clay_paper: {
         label: 'Arcilla y Papel (Artesano Cálido)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '180 83 9',      // Orange 800 (Terracota)
-            secondary: '254 252 232', // Yellow 50 (Crema/Pergamino)
-            surface: '255 255 255',   // White (Papel)
-            accent: '217 119 6',      // Amber 600 (Arcilla clara)
-            textMain: '78 29 29',     // Brown 900 (Café oscuro)
-            textMuted: '120 53 15',   // Orange 900 (Marrón medio)
+            primary: '180 83 9',
+            secondary: '254 252 232',
+            surface: '255 255 255',
+            accent: '217 119 6',
+            textMain: '78 29 29',
+            textMuted: '120 53 15',
         },
-        gradient: 'linear-gradient(135deg, rgb(254 252 232) 0%, rgb(254 243 199) 100%)'
+        gradient: 'linear-gradient(135deg, rgb(180 83 9) 0%, rgb(120 53 15) 100%)'
     },
     forest_stone: {
         label: 'Bosque y Piedra (Artesano Natural)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '77 124 15',     // Lime 800 (Verde Oliva)
-            secondary: '241 245 249', // Slate 50 (Gris Piedra muy suave)
-            surface: '248 250 252',   // Slate 50 (Superficie clara)
-            accent: '161 98 7',       // Yellow 800 (Madera/Ocre)
-            textMain: '30 41 59',     // Slate 800 (Gris oscuro)
-            textMuted: '71 85 105',   // Slate 600 (Gris medio)
+            primary: '77 124 15',
+            secondary: '241 245 249',
+            surface: '248 250 252',
+            accent: '161 98 7',
+            textMain: '30 41 59',
+            textMuted: '71 85 105',
         },
-        gradient: 'linear-gradient(to bottom right, rgb(241 245 249), rgb(226 232 240))'
+        gradient: 'linear-gradient(135deg, rgb(77 124 15) 0%, rgb(30 41 59) 100%)'
     },
     classic_workshop: {
         label: 'Taller Clásico (Artesano Premium)',
+        heroOverlay: '23 37 84',
         colors: {
-            primary: '180 83 9',      // Orange 800 (Bronce/Dorado viejo)
-            secondary: '23 37 84',    // Blue 950 (Azul Marino profundo)
-            surface: '30 41 59',      // Slate 800 (Madera oscura)
-            accent: '234 179 8',      // Yellow 500 (Oro)
-            textMain: '255 255 255',  // White
-            textMuted: '203 213 225', // Slate 300 (Gris claro)
+            primary: '180 83 9',
+            secondary: '23 37 84',
+            surface: '30 41 59',
+            accent: '234 179 8',
+            textMain: '255 255 255',
+            textMuted: '203 213 225',
         },
         gradient: 'linear-gradient(135deg, rgb(23 37 84) 0%, rgb(30 41 59) 100%)'
     },
@@ -160,86 +174,93 @@ export const themes = {
 
     sky_white: {
         label: '☀️ Cielo Blanco (Claro/Azul)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '37 99 235',     // Blue 600
-            secondary: '255 255 255', // White
-            surface: '240 249 255',   // Sky 50
-            accent: '56 189 248',     // Sky 400
-            textMain: '15 23 42',     // Slate 900
-            textMuted: '100 116 139', // Slate 500
+            primary: '37 99 235',
+            secondary: '255 255 255',
+            surface: '240 249 255',
+            accent: '56 189 248',
+            textMain: '15 23 42',
+            textMuted: '100 116 139',
         },
-        gradient: 'linear-gradient(to right, rgb(240 249 255), rgb(224 242 254))'
+        gradient: 'linear-gradient(to right, rgb(37 99 235), rgb(29 78 216))'
     },
     sand_terra: {
         label: '🏺 Arena y Terracota (Cálido Claro)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '234 88 12',     // Orange 600 (Terracota)
-            secondary: '255 247 237', // Orange 50 (Arena)
-            surface: '255 255 255',   // White
-            accent: '245 158 11',     // Amber 500
-            textMain: '28 25 23',     // Stone 900
-            textMuted: '87 83 78',    // Stone 600
+            primary: '234 88 12',
+            secondary: '255 247 237',
+            surface: '255 255 255',
+            accent: '245 158 11',
+            textMain: '28 25 23',
+            textMuted: '87 83 78',
         },
-        gradient: 'linear-gradient(135deg, rgb(255 247 237) 0%, rgb(254 243 199) 100%)'
+        gradient: 'linear-gradient(135deg, rgb(234 88 12) 0%, rgb(180 83 9) 100%)'
     },
     mint_fresh: {
         label: '🌿 Menta Fresco (Salud/Bienestar Claro)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '5 150 105',     // Emerald 600
-            secondary: '236 253 245', // Emerald 50
-            surface: '255 255 255',   // White
-            accent: '45 212 191',     // Teal 400
-            textMain: '17 24 39',     // Gray 900
-            textMuted: '107 114 128', // Gray 500
+            primary:   '4 120 87',
+            secondary: '240 253 250',
+            surface:   '255 255 255',
+            accent:    '13 148 136',
+            textMain:  '15 23 42',
+            textMuted: '71 85 105',
         },
-        gradient: 'linear-gradient(to bottom right, rgb(236 253 245), rgb(209 250 229))'
+        gradient: 'linear-gradient(135deg, rgb(4 120 87) 0%, rgb(13 148 136) 100%)'
     },
     slate_modern: {
         label: '🔷 Pizarra Moderno (Minimalista Claro)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '249 115 22',    // Orange 500
-            secondary: '241 245 249', // Slate 100
-            surface: '255 255 255',   // White
-            accent: '251 191 36',     // Amber 400
-            textMain: '15 23 42',     // Slate 900
-            textMuted: '71 85 105',   // Slate 600
+            primary: '249 115 22',
+            secondary: '241 245 249',
+            surface: '255 255 255',
+            accent: '251 191 36',
+            textMain: '15 23 42',
+            textMuted: '71 85 105',
         },
-        gradient: 'linear-gradient(to right, rgb(241 245 249), rgb(248 250 252))'
+        gradient: 'linear-gradient(135deg, rgb(249 115 22) 0%, rgb(217 119 6) 100%)'
     },
     lavender_soft: {
         label: '💜 Lavanda Suave (Estética Claro)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '124 58 237',    // Violet 600
-            secondary: '245 243 255', // Violet 50
-            surface: '255 255 255',   // White
-            accent: '192 132 252',    // Purple 400
-            textMain: '15 23 42',     // Slate 900
-            textMuted: '71 85 105',   // Slate 600
+            primary: '124 58 237',
+            secondary: '245 243 255',
+            surface: '255 255 255',
+            accent: '192 132 252',
+            textMain: '15 23 42',
+            textMuted: '71 85 105',
         },
-        gradient: 'linear-gradient(135deg, rgb(245 243 255) 0%, rgb(237 233 254) 100%)'
+        gradient: 'linear-gradient(135deg, rgb(124 58 237) 0%, rgb(109 40 217) 100%)'
     },
     rose_clean: {
         label: '🌸 Rosa Clean (Moda/Belleza Claro)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '225 29 72',     // Rose 600
-            secondary: '255 241 242', // Rose 50
-            surface: '255 255 255',   // White
-            accent: '251 113 133',    // Rose 400
-            textMain: '17 24 39',     // Gray 900
-            textMuted: '107 114 128', // Gray 500
+            primary: '225 29 72',
+            secondary: '255 241 242',
+            surface: '255 255 255',
+            accent: '251 113 133',
+            textMain: '17 24 39',
+            textMuted: '107 114 128',
         },
-        gradient: 'linear-gradient(to right, rgb(255 241 242), rgb(254 226 226))'
+        gradient: 'linear-gradient(135deg, rgb(225 29 72) 0%, rgb(190 18 60) 100%)'
     },
     navy_gold_light: {
         label: '⚓ Navy y Oro (Legal/Corporativo Claro)',
+        heroOverlay: '255 255 255',
         colors: {
-            primary: '29 78 216',     // Blue 700
-            secondary: '239 246 255', // Blue 50
-            surface: '255 255 255',   // White
-            accent: '202 138 4',      // Yellow 600
-            textMain: '15 23 42',     // Slate 900
-            textMuted: '71 85 105',   // Slate 600
+            primary: '29 78 216',
+            secondary: '239 246 255',
+            surface: '255 255 255',
+            accent: '202 138 4',
+            textMain: '15 23 42',
+            textMuted: '71 85 105',
         },
-        gradient: 'linear-gradient(to right, rgb(239 246 255), rgb(219 234 254))'
+        gradient: 'linear-gradient(135deg, rgb(29 78 216) 0%, rgb(23 37 84) 100%)'
     },
 };

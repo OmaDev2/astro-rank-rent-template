@@ -78,6 +78,9 @@ const gradient =
     activeTheme?.gradient ||
     `linear-gradient(135deg, rgb(${colors.primary}) 0%, rgb(${colors.secondary}) 100%)`;
 
+// Hero overlay: temas claros usan un color oscuro en lugar de secondary
+const heroOverlay = (activeTheme as any)?.heroOverlay || colors.secondary;
+
 // 4. Lógica de Fuentes (Tipografía)
 // Si settings.fontPair no existe (porque no has actualizado settings.ts), usa 'modern' por defecto
 const activeFont =
@@ -174,6 +177,7 @@ const heroProcessed = isHome
         "--color-text-body": colors.textMuted,
         "--theme-gradient": gradient,
         "--hero-opacity": heroOpacity,
+        "--hero-overlay": heroOverlay,
 
         // --- VARIABLES DE FUENTE ---
         "--font-heading": activeFont.fontHeading,

@@ -77,15 +77,10 @@ const phoneHref = (phone || "").replace(/\s/g, "");
                 />
             )
         }
-        {/* Gradiente estilo "Cine" para oscurecer y dar foco */}
+        {/* Gradiente estilo "Cine" — usa --hero-overlay para que los temas claros no laven la imagen */}
         <div
-            class="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/80 to-transparent"
-            style="opacity: var(--hero-opacity)"
-        >
-        </div>
-        <div
-            class="absolute inset-0 bg-gradient-to-t from-secondary via-transparent to-transparent"
-            style="opacity: var(--hero-opacity)"
+            class="absolute inset-0"
+            style="background: linear-gradient(to right, rgb(var(--hero-overlay)) 0%, rgb(var(--hero-overlay) / 0.8) 45%, rgb(var(--hero-overlay) / 0.3) 70%, transparent 100%); opacity: var(--hero-opacity);"
         >
         </div>
     </div>

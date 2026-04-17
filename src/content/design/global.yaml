@@ -1,5 +1,5 @@
 themeSettings: >-
-  {"theme":"mint_fresh","colors":{"primary":"#059669","secondary":"#ecfdf5","surface":"#ffffff","accent":"#2dd4bf","textMain":"#111827","textMuted":"#6b7280"}}
+  {"theme":"slate_modern","colors":{"primary":"#f97316","secondary":"#f1f5f9","surface":"#ffffff","accent":"#fbbf24","textMain":"#0f172a","textMuted":"#475569"}}
 fontPair: artisan_warm
 typographyScale: '{"heading":"xs","body":"xl"}'
 borderRadius: sharp

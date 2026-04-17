@@ -67,6 +67,7 @@ const services = defineCollection({
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
                 z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
+                z.object({ discriminant: z.literal('process'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper servicios antiguos sin este campo
         faq: z.array(z.object({
