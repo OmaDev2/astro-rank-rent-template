@@ -4,7 +4,7 @@ import type { BasicFormField, FormFieldStoredValue } from '@keystatic/core';
 import { getPreviewTheme } from './themeUtils';
 
 type Plan = { title: string; price: string; priceUnit: string; description: string; isPopular: boolean; features: string; badge: string };
-type PricingState = { title: string; subtitle: string; plans: Plan[] };
+type PricingState = { title: string; subtitle: string; plans: Plan[]; titleTag: 'h1' | 'h2' | 'h3' };
 
 const DEFAULTS: PricingState = {
     title: 'Nuestros Precios',
@@ -13,7 +13,8 @@ const DEFAULTS: PricingState = {
         { title: 'Básico', price: '18', priceUnit: '€/m2', description: 'Ideal para habitaciones pequeñas', isPopular: false, features: 'Material incluido\nMano de obra\nLimpieza', badge: '' },
         { title: 'Estándar', price: '1500', priceUnit: '€', description: 'Piso completo de 80m2', isPopular: true, features: 'Todo incluido\nGarantía 2 años\nPrioridad', badge: 'MÁS POPULAR' },
         { title: 'Premium', price: '1800', priceUnit: '€', description: 'Piso de 100m2', isPopular: false, features: 'Acabado de lujo\nRetirada escombros\nGarantía 5 años', badge: '' },
-    ]
+    ],
+    titleTag: 'h2'
 };
 
 function PricingPreviewUI({ state }: { state: PricingState }) {
@@ -29,6 +30,9 @@ function PricingPreviewUI({ state }: { state: PricingState }) {
             textAlign: 'center'
         }}>
             <link rel="stylesheet" href={theme.googleFontsUrl} />
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                <span style={{ fontSize: '10px', fontWeight: 900, background: theme.primary, color: '#white', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>{state.titleTag}</span>
+            </div>
             <h3 style={{ margin: '0 0 8px', color: theme.textMain, fontSize: '24px', fontWeight: 800, fontFamily: theme.fontHeading }}>{state.title}</h3>
             <p style={{ margin: '0 0 24px', color: theme.textMuted, fontSize: '14px' }}>{state.subtitle}</p>
             
@@ -89,42 +93,55 @@ function PricingInput({ value, onChange }: { value: string, onChange: (v: string
 
     return (
         <FieldPrimitive label="💰 Tabla de Precios (Preview)">
-            <PricingPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(59,130,246,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <input style={inp} placeholder="Título" value={state.title} onChange={e => update('title', e.target.value)} />
-                    <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => update('subtitle', e.target.value)} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    {state.plans.map((p, i) => (
-                        <div key={i} style={{ 
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            gap: '6px', 
-                            background: 'rgba(255,255,255,0.03)', 
-                            padding: '10px', 
-                            borderRadius: '8px', 
-                            border: p.isPopular ? `1px solid ${getPreviewTheme().primary}` : 'none' 
-                        }}>
-                             <input style={inp} value={p.title} onChange={e => updatePlan(i, 'title', e.target.value)} />
-                             <div style={{ display: 'flex', gap: '4px' }}>
-                                <input style={inp} value={p.price} onChange={e => updatePlan(i, 'price', e.target.value)} />
-                                <input style={{ ...inp, width: '45px' }} value={p.priceUnit} onChange={e => updatePlan(i, 'priceUnit', e.target.value)} />
-                             </div>
-                             <textarea style={{ ...inp, resize: 'none' }} rows={2} value={p.description} onChange={e => updatePlan(i, 'description', e.target.value)} />
-                             <label style={{ fontSize: '9px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                <input type="checkbox" checked={p.isPopular} onChange={e => updatePlan(i, 'isPopular', e.target.checked)} /> Destacado
-                             </label>
+            <div>
+                <PricingPreviewUI state={state} />
+                <div style={{ background: '#0f172a', border: '1px solid rgba(59,130,246,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                        <div>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Título</div>
+                            <input style={inp} placeholder="Título" value={state.title} onChange={e => update('title', e.target.value)} />
                         </div>
-                    ))}
+                        <div>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Subtítulo</div>
+                            <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => update('subtitle', e.target.value)} />
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Etiqueta SEO (H2 recom.)</div>
+                            <select style={{ ...inp, cursor: 'pointer', appearance: 'none' }} value={state.titleTag} onChange={e => update('titleTag', e.target.value as any)}>
+                                <option value="h1">H1</option>
+                                <option value="h2">H2</option>
+                                <option value="h3">H3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                        {state.plans.map((p, i) => (
+                            <div key={i} style={{ 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                gap: '6px', 
+                                background: 'rgba(255,255,255,0.03)', 
+                                padding: '10px', 
+                                borderRadius: '8px', 
+                                border: p.isPopular ? `1px solid ${getPreviewTheme().primary}` : 'none' 
+                            }}>
+                                <input style={inp} value={p.title} onChange={e => updatePlan(i, 'title', e.target.value)} />
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <input style={inp} value={p.price} onChange={e => updatePlan(i, 'price', e.target.value)} />
+                                    <input style={{ ...inp, width: '45px' }} value={p.priceUnit} onChange={e => updatePlan(i, 'priceUnit', e.target.value)} />
+                                </div>
+                                <textarea style={{ ...inp, resize: 'none' }} rows={2} value={p.description} onChange={e => updatePlan(i, 'description', e.target.value)} />
+                                <label style={{ fontSize: '9px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    <input type="checkbox" checked={p.isPopular} onChange={e => updatePlan(i, 'isPopular', e.target.checked)} /> Destacado
+                                </label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </FieldPrimitive>
     );
 }
-
-// NOTE: I used a placeholder above for theme primary, I should replace it with a fixed color for the input field border or just ignore it.
-// Actually, I'll fix the PricingInput code to be cleaner.
 
 export function pricingPreview(): BasicFormField<string> {
     return {
@@ -135,5 +152,8 @@ export function pricingPreview(): BasicFormField<string> {
         parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
         serialize(val) { return { value: val }; },
         validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        reader: {
+            parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        },
     };
 }

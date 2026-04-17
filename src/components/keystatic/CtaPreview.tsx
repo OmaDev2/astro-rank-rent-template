@@ -3,7 +3,7 @@ import { FieldPrimitive } from '@keystar/ui/field';
 import type { BasicFormField, FormFieldStoredValue } from '@keystatic/core';
 import { getPreviewTheme } from './themeUtils';
 
-type CtaState = { title: string; subtitle: string; buttonText: string; buttonLink: string; features: string; style: 'red' | 'dark' | 'gradient' };
+type CtaState = { title: string; subtitle: string; buttonText: string; buttonLink: string; features: string; style: 'red' | 'dark' | 'gradient'; titleTag: 'h1' | 'h2' | 'h3' };
 
 const DEFAULTS: CtaState = {
     title: '¿Listo para empezar?',
@@ -11,7 +11,8 @@ const DEFAULTS: CtaState = {
     buttonText: 'Pedir Presupuesto',
     buttonLink: '#contacto',
     features: 'Rápido\nSeguro\nProfesional',
-    style: 'red'
+    style: 'red',
+    titleTag: 'h2'
 };
 
 function CtaPreviewUI({ state }: { state: CtaState }) {
@@ -31,6 +32,9 @@ function CtaPreviewUI({ state }: { state: CtaState }) {
             borderBottom: 'none'
         }}>
             <link rel="stylesheet" href={theme.googleFontsUrl} />
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                <span style={{ fontSize: '10px', fontWeight: 900, background: theme.primary, color: '#white', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>{state.titleTag}</span>
+            </div>
             <div style={{ 
                 background: bg, 
                 borderRadius: '12px', 
@@ -86,17 +90,26 @@ function CtaInput({ value, onChange }: { value: string, onChange: (v: string) =>
 
     return (
         <FieldPrimitive label="🎯 Llamada a la Acción (Preview)">
-            <CtaPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(239,68,68,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <input style={{...inp, gridColumn: '1/-1'}} placeholder="Título" value={state.title} onChange={e => update('title', e.target.value)} />
-                <input style={{...inp, gridColumn: '1/-1'}} placeholder="Subtítulo" value={state.subtitle} onChange={e => update('subtitle', e.target.value)} />
-                <input style={inp} placeholder="Texto Botón" value={state.buttonText} onChange={e => update('buttonText', e.target.value)} />
-                <select style={inp} value={state.style} onChange={e => update('style', e.target.value as any)}>
-                    <option value="red">Estilo Primario</option>
-                    <option value="dark">Estilo Oscuro</option>
-                    <option value="gradient">Estilo Gradiente</option>
-                </select>
-                <textarea style={{...inp, gridColumn: '1/-1'}} placeholder="Features (una por línea)" rows={2} value={state.features} onChange={e => update('features', e.target.value)} />
+            <div>
+                <CtaPreviewUI state={state} />
+                <div style={{ background: '#0f172a', border: '1px solid rgba(239,68,68,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <input style={{...inp, gridColumn: '1/-1'}} placeholder="Título" value={state.title} onChange={e => update('title', e.target.value)} />
+                    <input style={{...inp, gridColumn: '1/-1'}} placeholder="Subtítulo" value={state.subtitle} onChange={e => update('subtitle', e.target.value)} />
+                    <input style={inp} placeholder="Texto Botón" value={state.buttonText} onChange={e => update('buttonText', e.target.value)} />
+                    <div>
+                        <select style={inp} value={state.titleTag} onChange={e => update('titleTag', e.target.value as any)}>
+                            <option value="h1">Tag H1</option>
+                            <option value="h2">Tag H2</option>
+                            <option value="h3">Tag H3</option>
+                        </select>
+                    </div>
+                    <select style={inp} value={state.style} onChange={e => update('style', e.target.value as any)}>
+                        <option value="red">Estilo Primario</option>
+                        <option value="dark">Estilo Oscuro</option>
+                        <option value="gradient">Estilo Gradiente</option>
+                    </select>
+                    <textarea style={{...inp, gridColumn: '1/-1'}} placeholder="Features (una por línea)" rows={2} value={state.features} onChange={e => update('features', e.target.value)} />
+                </div>
             </div>
         </FieldPrimitive>
     );
@@ -111,5 +124,8 @@ export function ctaPreview(): BasicFormField<string> {
         parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
         serialize(val) { return { value: val }; },
         validate(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        reader: {
+            parse(val) { return typeof val === 'string' ? val : JSON.stringify(DEFAULTS); },
+        },
     };
 }

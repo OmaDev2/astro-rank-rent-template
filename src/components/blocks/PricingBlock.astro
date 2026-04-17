@@ -22,6 +22,7 @@ interface PricingPlan {
 interface Props {
     title?: string;
     subtitle?: string;
+    titleTag?: "h1" | "h2" | "h3";
     note?: string;
     plans: PricingPlan[];
     bgClass?: string;
@@ -30,20 +31,23 @@ interface Props {
 const {
     title = "Nuestros Precios",
     subtitle = "Soluciones transparentes adaptadas a tus necesidades.",
+    titleTag = "h2",
     note,
     plans = [],
     bgClass = "bg-secondary",
 } = Astro.props;
+
+const TitleTag = titleTag;
 ---
 
 <section class={`py-24 ${bgClass} overflow-hidden`}>
     <div class="container mx-auto px-4">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2
+            <TitleTag
                 class="text-4xl md:text-5xl font-heading font-bold text-heading mb-6 tracking-tight"
             >
                 {title}
-            </h2>
+            </TitleTag>
             <p class="text-xl text-body font-light">
                 {subtitle}
             </p>

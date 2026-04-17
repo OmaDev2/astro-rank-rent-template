@@ -9,6 +9,7 @@ import { testimonialsPreview } from '../../../components/keystatic/TestimonialsP
 import { processPreview } from '../../../components/keystatic/ProcessPreview';
 import { aboutPreview } from '../../../components/keystatic/AboutPreview';
 import { pricingPreview } from '../../../components/keystatic/PricingPreview';
+import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
@@ -18,14 +19,8 @@ export const homepage = singleton({
     entryLayout: 'form',
     schema: {
         // --- 🎯 SEO y METADATOS DE LA PÁGINA ---
-        seoTitle: fields.text({
-            label: 'Meta Título (SEO)',
-            description: 'Título que aparece en Google y la pestaña. Si se deja vacío, se usará el H1 del Hero.',
-        }),
-        seoDescription: fields.text({
-            label: 'Meta Descripción (SEO)',
-            description: 'Resumen para Google (150-160 caracteres).',
-            multiline: true,
+        seoControls: SeoPreview({
+            label: 'Configuración SEO Visual',
         }),
         canonicalUrl: fields.text({
             label: 'URL Canonica (Opcional)',

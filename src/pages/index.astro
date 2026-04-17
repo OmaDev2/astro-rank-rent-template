@@ -127,8 +127,9 @@ const processPreviewOverride = parsePreview(homeData._processPreview);
 const aboutPreviewOverride = parsePreview(homeData._aboutPreview);
 const pricingPreviewOverride = parsePreview(homeData._pricingPreview);
 // SEO manually set in Keystatic
-const seoTitle = homeData.seoTitle;
-const seoDescription = homeData.seoDescription;
+const seoPreviewData = parsePreview(homeData.seoControls);
+const seoTitle = seoPreviewData?.title || homeData.seoTitle;
+const seoDescription = seoPreviewData?.description || homeData.seoDescription;
 
 // Smart Title Fallback
 const finalTitle = seoTitle || 

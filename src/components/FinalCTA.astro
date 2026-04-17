@@ -12,6 +12,7 @@ const {
     bgClass,
     title: rawTitle,
     subtitle: rawSubtitle,
+    titleTag = "h2",
     buttonText: rawButtonText,
     buttonLink,
 } = Astro.props;
@@ -22,6 +23,8 @@ const subtitle =
     "No te quedes con dudas. Nuestros técnicos te asesoran gratis y te dan precio cerrado hoy mismo.";
 const ctaText = rawButtonText || defaultCtaText;
 const link = buttonLink || `tel:${(phone || "").replace(/\s/g, "")}`;
+
+const TitleTag = titleTag;
 ---
 
 <section
@@ -44,11 +47,11 @@ const link = buttonLink || `tel:${(phone || "").replace(/\s/g, "")}`;
     </div>
 
     <div class="container mx-auto px-4 text-center relative z-10">
-        <h2
+        <TitleTag
             class="text-4xl md:text-6xl font-heading font-black mb-6 tracking-tight drop-shadow-2xl text-white"
         >
             {title}
-        </h2>
+        </TitleTag>
 
         <p
             class="text-xl md:text-2xl mb-12 text-white/90 max-w-3xl mx-auto font-light leading-relaxed"
