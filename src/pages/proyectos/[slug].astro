@@ -1,0 +1,155 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import FinalCTA from "../../components/FinalCTA.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { getCollection, getEntry } from "astro:content";
+import { MapPin, Calendar, Wrench, ArrowLeft } from "lucide-react";
+import type { WithContext, CreativeWork } from "schema-dts";
+import { getSettings } from "../../lib/settings";
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+    return projects.map((project) => ({
+        params: { slug: project.slug },
+        props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+const settings = await getSettings();
+
+const title = project.data.seoTitle || project.data.title;
+const description =
+    project.data.seoDesc ||
+    `Proyecto de ${project.data.serviceType || settings.niche} en ${project.data.locationTag || settings.city}. Descubre el trabajo realizado por ${settings.siteName}.`;
+
+const siteUrl = Astro.site?.href?.replace(/\/$/, "") || settings.siteUrl || "";
+
+const projectSchema: WithContext<CreativeWork> = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": `${siteUrl}/proyectos/${project.slug}/#project`,
+    name: project.data.title,
+    description,
+    ...(project.data.image && { image: `${siteUrl}${project.data.image}` }),
+    ...(project.data.date && { dateCreated: project.data.date }),
+    locationCreated: {
+        "@type": "Place",
+        name: project.data.locationTag || settings.city,
+        address: {
+            "@type": "PostalAddress",
+            addressLocality: project.data.locationTag || settings.city,
+            addressCountry: "ES",
+        },
+    },
+    creator: {
+        "@id": `${siteUrl}/#business`,
+    } as any,
+};
+
+// Formatear fecha
+const formattedDate = project.data.date
+    ? new Date(project.data.date).toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "long",
+      })
+    : null;
+---
+
+<Layout title={`${title} | ${settings.siteName}`} description={description} schema={projectSchema}>
+    <!-- Breadcrumbs -->
+    <div class="relative bg-secondary pt-20">
+        <Breadcrumbs isService={true} serviceName={project.data.title} />
+    </div>
+
+    <!-- Hero -->
+    <section class="bg-secondary border-b border-heading/5 pb-0">
+        <div class="container mx-auto px-4 pt-8 pb-0">
+            <!-- Back link -->
+            <a
+                href="/proyectos"
+                class="inline-flex items-center gap-2 text-sm text-body/60 hover:text-primary transition-colors mb-6"
+            >
+                <ArrowLeft className="w-4 h-4" />
+                Volver a Proyectos
+            </a>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <!-- Info -->
+                <div class="pb-12">
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        {project.data.locationTag && (
+                            <span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                                <MapPin className="w-3 h-3" />
+                                {project.data.locationTag}
+                            </span>
+                        )}
+                        {project.data.serviceType && (
+                            <span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-body/70 bg-surface px-3 py-1 rounded-full border border-heading/10">
+                                <Wrench className="w-3 h-3" />
+                                {project.data.serviceType}
+                            </span>
+                        )}
+                        {formattedDate && (
+                            <span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-body/70 bg-surface px-3 py-1 rounded-full border border-heading/10">
+                                <Calendar className="w-3 h-3" />
+                                {formattedDate}
+                            </span>
+                        )}
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl font-heading font-bold text-heading mb-6 leading-tight">
+                        {project.data.title}
+                    </h1>
+
+                    <p class="text-body/70 text-lg leading-relaxed mb-8">
+                        {description}
+                    </p>
+
+                    <a
+                        href={`tel:${settings.phone.replace(/\s/g, "")}`}
+                        class="inline-flex items-center gap-2 bg-primary text-white font-bold px-8 py-4 rounded-xl hover:opacity-90 transition-opacity shadow-lg"
+                    >
+                        Solicitar presupuesto similar
+                    </a>
+                </div>
+
+                <!-- Image -->
+                {project.data.image && (
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-surface">
+                        <img
+                            src={project.data.image}
+                            alt={project.data.title}
+                            class="w-full h-full object-cover"
+                            loading="eager"
+                        />
+                    </div>
+                )}
+            </div>
+        </div>
+    </section>
+
+    <!-- Content MDX -->
+    {project.body && project.body.trim() !== "" && (
+        <section class="py-16 bg-secondary">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <div class="prose prose-lg prose-invert max-w-none
+                    prose-headings:font-heading prose-headings:text-heading
+                    prose-p:text-body prose-p:leading-relaxed
+                    prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-heading prose-img:rounded-xl prose-img:shadow-lg">
+                    <Content />
+                </div>
+            </div>
+        </section>
+    )}
+
+    <FinalCTA
+        title={`¿Necesitas un trabajo similar en ${project.data.locationTag || settings.city}?`}
+        subtitle={`Contacta ahora y recibe tu presupuesto gratuito sin compromiso.`}
+    />
+    <Footer />
+</Layout>

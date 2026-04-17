@@ -1,4 +1,6 @@
 themeSettings: >-
-  {"theme":"industrial","colors":{"primary":"#d97706","secondary":"#0f172a","surface":"#1e293b","accent":"#eab308","textMain":"#ffffff","textMuted":"#94a3b8"}}
-heroOverlayOpacity: 0.85
-fontPair: modern
+  {"theme":"slate_modern","colors":{"primary":"#f97316","secondary":"#f1f5f9","surface":"#ffffff","accent":"#fbbf24","textMain":"#0f172a","textMuted":"#475569"}}
+fontPair: tech
+borderRadius: smooth
+buttonStyle: solid
+heroOverlayOpacity: 0.5

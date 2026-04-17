@@ -144,7 +144,7 @@ const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
             <div class="flex items-center gap-4 shrink-0">
                 <a
                     href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                    class="hidden md:flex items-center gap-2 bg-primary hover:bg-accent text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 whitespace-nowrap"
+                    class="btn-cta hidden md:flex items-center gap-2 bg-primary hover:bg-accent text-white px-5 py-2.5 rounded font-bold transition-all shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 whitespace-nowrap"
                 >
                     <Phone className="w-4 h-4" />
                     <span>{phone}</span>

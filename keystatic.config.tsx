@@ -3,9 +3,6 @@ import { config } from '@keystatic/core';
 // Singletons
 import { business } from './src/config/keystatic/singletons/business';
 import { design } from './src/config/keystatic/singletons/design';
-import { social } from './src/config/keystatic/singletons/social';
-import { analytics } from './src/config/keystatic/singletons/analytics';
-import { schema } from './src/config/keystatic/singletons/schema';
 import { navigation } from './src/config/keystatic/singletons/navigation';
 import { footer } from './src/config/keystatic/singletons/footer';
 import { legalNotice, privacyPolicy, cookiesPolicy } from './src/config/keystatic/singletons/legal';
@@ -24,28 +21,22 @@ export default config({
         kind: 'local',
     },
 
-    // --- INTERFAZ DE USUARIO ---
     ui: {
-        // Marca personalizada
         brand: {
-            name: 'Rank & Rent Template',
+            name: 'Rank & Rent CMS',
         },
-
-        // Navegación organizada
         navigation: {
-            '📝 Contenido': ['homepage', 'about', 'services', 'locations', 'projects', 'testimonials', 'blog'],
+            '⚙️ Configuración': ['business', 'design'],
             '---': [],
-            '⚙️ Configuración': ['business', 'design', 'social', 'analytics', 'schema', 'navigation', 'footer', 'legalNotice', 'privacyPolicy', 'cookiesPolicy'],
+            '📝 Contenido': ['homepage', 'about', 'services', 'locations', 'projects', 'testimonials', 'blog'],
+            '----': [],
+            '📄 Páginas Legales': ['navigation', 'footer', 'legalNotice', 'privacyPolicy', 'cookiesPolicy'],
         },
     },
 
-    // --- SINGLETONS (Configuración Global) ---
     singletons: {
         business,
         design,
-        social,
-        analytics,
-        schema,
         navigation,
         footer,
         legalNotice,
@@ -55,7 +46,6 @@ export default config({
         about,
     },
 
-    // --- COLECCIONES ---
     collections: {
         services,
         locations,

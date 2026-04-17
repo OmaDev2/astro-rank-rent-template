@@ -1,15 +1,59 @@
-siteName: 'Quitar Gotelé  Barcelona '
-niche: 'Quitar Gotelé '
+siteName: 'Quitar Gotelé Barcelona'
+niche: 'Quitar Gotelé'
+businessType: HousePainter
 logo: '@assets/images/logo.png'
 siteUrl: https://quitargotelebarcelona.es
-businessType: HousePainter
-city: 'Barcelona '
-address: 'Barcelona '
-coordinates:
-  lat: '41.3851'
-  lng: '2.1734'
+ctaText: Quiero mis paredes Lisas Ya!
+
 phone: '644371602'
 whatsapp: '34644371602'
 email: quitar@bcn.com
+city: Barcelona
+address: Barcelona
+coordinates:
+  lat: '41.3851'
+  lng: '2.1734'
 schedule: Lun-Vie 9:00-18:00, Sáb 10:00-14:00
-ctaText: Quiero mis paredes Lisas Ya!
+nif: ''
+
+seoTitle: ''
+seoDescription: ''
+slogan: Expertos en alisar tu hogar, apasionados por el acabado perfecto.
+foundingDate: '2010'
+
+facebook: https://facebook.com
+instagram: https://instagram.com
+
+googleAnalyticsId: ''
+gtmId: ''
+searchConsoleVerification: ''
+n8nWebhookUrl: ''
+
+areaServed:
+  - Sabadell
+  - Barcelona
+  - Hospitalet del Llobregat
+  - Badalona
+  - Terrassa
+  - Mataró
+serviceRadius: 60
+priceRange: €€
+paymentAccepted:
+  - Cash
+  - Credit Card
+  - Debit Card
+  - Bank Transfer
+  - Bizum
+openingHours:
+  - dayOfWeek:
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+    opens: '09:00'
+    closes: '18:00'
+  - dayOfWeek:
+      - Saturday
+    opens: '10:00'
+    closes: '12:00'

@@ -114,6 +114,28 @@ const allSchemas = schema
 // Hero Opacity (Default 0.6)
 const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
 
+// Border Radius
+const radiusMap: Record<string, string> = {
+    sharp:   '0px',
+    subtle:  '6px',
+    rounded: '0.75rem',
+    smooth:  '1.25rem',
+    pill:    '1.25rem',
+};
+const btnRadiusMap: Record<string, string> = {
+    sharp:   '0px',
+    subtle:  '6px',
+    rounded: '0.75rem',
+    smooth:  '1.25rem',
+    pill:    '9999px',
+};
+const radiusKey = settings.borderRadius || 'rounded';
+const radiusCard = radiusMap[radiusKey] ?? '0.75rem';
+const radiusBtn  = btnRadiusMap[radiusKey] ?? '0.75rem';
+
+// Button Style
+const buttonStyle = settings.buttonStyle || 'solid';
+
 // Preload hero image en home para optimizar LCP
 const isHome = Astro.url.pathname === "/";
 const heroProcessed = isHome
@@ -125,6 +147,7 @@ const heroProcessed = isHome
 <html
     lang="es"
     class="scroll-smooth"
+    data-btn-style={buttonStyle}
     style={{
         // --- VARIABLES DE COLOR ---
         "--color-primary": colors.primary,
@@ -136,9 +159,13 @@ const heroProcessed = isHome
         "--theme-gradient": gradient,
         "--hero-opacity": heroOpacity,
 
-        // --- VARIABLES DE FUENTE (NUEVO) ---
+        // --- VARIABLES DE FUENTE ---
         "--font-heading": activeFont.fontHeading,
         "--font-body": activeFont.fontBody,
+
+        // --- VARIABLES DE FORMA ---
+        "--radius": radiusCard,
+        "--radius-btn": radiusBtn,
     }}
 >
     <head>

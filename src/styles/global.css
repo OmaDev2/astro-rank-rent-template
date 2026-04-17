@@ -13,8 +13,42 @@
         @apply bg-black/20 backdrop-blur-md border border-white/10 shadow-lg;
     }
 
-    /* Helper para legibilidad de texto sobre imágenes */
     .readable-hero-text {
         text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
     }
 }
+
+/* ---- BOTÓN CTA PRINCIPAL ----
+   Fuera de @layer para ganar a las utilidades de Tailwind (bg-*, text-*, etc.) */
+.btn-cta {
+    border-radius: var(--radius-btn, 0.75rem) !important;
+}
+
+html[data-btn-style="solid"] .btn-cta {
+    background: rgb(var(--color-primary)) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+html[data-btn-style="outline"] .btn-cta {
+    background: transparent !important;
+    color: rgb(var(--color-primary)) !important;
+    border: 2px solid rgb(var(--color-primary)) !important;
+    box-shadow: none !important;
+}
+html[data-btn-style="outline"] .btn-cta:hover {
+    background: rgb(var(--color-primary) / 0.08) !important;
+}
+
+html[data-btn-style="gradient"] .btn-cta {
+    background: var(--theme-gradient) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+/* ---- RADIO DE ESQUINAS ----
+   Fuera de @layer para tener mayor prioridad que las utilidades de Tailwind.
+   No toca rounded-full (avatares/blobs decorativos). */
+.rounded-xl  { border-radius: var(--radius, 0.75rem) !important; }
+.rounded-2xl { border-radius: var(--radius, 0.75rem) !important; }
+.rounded-lg  { border-radius: calc(var(--radius, 0.75rem) * 0.65) !important; }

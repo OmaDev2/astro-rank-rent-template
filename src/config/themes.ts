@@ -154,5 +154,92 @@ export const themes = {
             textMuted: '203 213 225', // Slate 300 (Gris claro)
         },
         gradient: 'linear-gradient(135deg, rgb(23 37 84) 0%, rgb(30 41 59) 100%)'
-    }
+    },
+
+    // ---- TEMAS CLAROS ----
+
+    sky_white: {
+        label: '☀️ Cielo Blanco (Claro/Azul)',
+        colors: {
+            primary: '37 99 235',     // Blue 600
+            secondary: '255 255 255', // White
+            surface: '240 249 255',   // Sky 50
+            accent: '56 189 248',     // Sky 400
+            textMain: '15 23 42',     // Slate 900
+            textMuted: '100 116 139', // Slate 500
+        },
+        gradient: 'linear-gradient(to right, rgb(240 249 255), rgb(224 242 254))'
+    },
+    sand_terra: {
+        label: '🏺 Arena y Terracota (Cálido Claro)',
+        colors: {
+            primary: '234 88 12',     // Orange 600 (Terracota)
+            secondary: '255 247 237', // Orange 50 (Arena)
+            surface: '255 255 255',   // White
+            accent: '245 158 11',     // Amber 500
+            textMain: '28 25 23',     // Stone 900
+            textMuted: '87 83 78',    // Stone 600
+        },
+        gradient: 'linear-gradient(135deg, rgb(255 247 237) 0%, rgb(254 243 199) 100%)'
+    },
+    mint_fresh: {
+        label: '🌿 Menta Fresco (Salud/Bienestar Claro)',
+        colors: {
+            primary: '5 150 105',     // Emerald 600
+            secondary: '236 253 245', // Emerald 50
+            surface: '255 255 255',   // White
+            accent: '45 212 191',     // Teal 400
+            textMain: '17 24 39',     // Gray 900
+            textMuted: '107 114 128', // Gray 500
+        },
+        gradient: 'linear-gradient(to bottom right, rgb(236 253 245), rgb(209 250 229))'
+    },
+    slate_modern: {
+        label: '🔷 Pizarra Moderno (Minimalista Claro)',
+        colors: {
+            primary: '249 115 22',    // Orange 500
+            secondary: '241 245 249', // Slate 100
+            surface: '255 255 255',   // White
+            accent: '251 191 36',     // Amber 400
+            textMain: '15 23 42',     // Slate 900
+            textMuted: '71 85 105',   // Slate 600
+        },
+        gradient: 'linear-gradient(to right, rgb(241 245 249), rgb(248 250 252))'
+    },
+    lavender_soft: {
+        label: '💜 Lavanda Suave (Estética Claro)',
+        colors: {
+            primary: '124 58 237',    // Violet 600
+            secondary: '245 243 255', // Violet 50
+            surface: '255 255 255',   // White
+            accent: '192 132 252',    // Purple 400
+            textMain: '15 23 42',     // Slate 900
+            textMuted: '71 85 105',   // Slate 600
+        },
+        gradient: 'linear-gradient(135deg, rgb(245 243 255) 0%, rgb(237 233 254) 100%)'
+    },
+    rose_clean: {
+        label: '🌸 Rosa Clean (Moda/Belleza Claro)',
+        colors: {
+            primary: '225 29 72',     // Rose 600
+            secondary: '255 241 242', // Rose 50
+            surface: '255 255 255',   // White
+            accent: '251 113 133',    // Rose 400
+            textMain: '17 24 39',     // Gray 900
+            textMuted: '107 114 128', // Gray 500
+        },
+        gradient: 'linear-gradient(to right, rgb(255 241 242), rgb(254 226 226))'
+    },
+    navy_gold_light: {
+        label: '⚓ Navy y Oro (Legal/Corporativo Claro)',
+        colors: {
+            primary: '29 78 216',     // Blue 700
+            secondary: '239 246 255', // Blue 50
+            surface: '255 255 255',   // White
+            accent: '202 138 4',      // Yellow 600
+            textMain: '15 23 42',     // Slate 900
+            textMuted: '71 85 105',   // Slate 600
+        },
+        gradient: 'linear-gradient(to right, rgb(239 246 255), rgb(219 234 254))'
+    },
 };

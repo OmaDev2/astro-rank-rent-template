@@ -1,58 +1,68 @@
 import { getEntry } from 'astro:content';
 
 /**
- * Helper para obtener toda la configuración del sitio de forma unificada
- * Combina los datos de business, design, social, analytics y schema
+ * Obtiene la configuración completa del sitio.
+ * Fuente única: business (todo) + design (tema y fuentes).
  */
 export async function getSettings() {
-    const business = await getEntry('business', 'global');
-    const design = await getEntry('design', 'global');
-    const social = await getEntry('social', 'global');
-    const analytics = await getEntry('analytics', 'global');
-    const schema = await getEntry('schema', 'global');
+    const [business, design] = await Promise.all([
+        getEntry('business', 'global'),
+        getEntry('design', 'global'),
+    ]);
+
+    const b = business?.data as any;
+    const d = design?.data as any;
 
     return {
-        // Business info (Datos Dummy por defecto para evitar errores)
-        siteName: business?.data?.siteName || 'Mi Negocio Local',
-        niche: business?.data?.niche || 'Servicio Profesional',
-        logo: business?.data?.logo || '',
-        siteUrl: business?.data?.siteUrl || 'https://ejemplo.com',
-        businessType: business?.data?.businessType || 'LocalBusiness',
-        city: business?.data?.city || 'Tu Ciudad',
-        address: business?.data?.address || 'Calle Principal 123',
+        // ── Negocio ──────────────────────────────────────────────────────────
+        siteName:     b?.siteName     || 'Mi Negocio Local',
+        niche:        b?.niche        || 'Servicio Profesional',
+        logo:         b?.logo         || '',
+        siteUrl:      b?.siteUrl      || 'https://localhost:4321',
+        businessType: b?.businessType || 'LocalBusiness',
+        ctaText:      b?.ctaText      || 'Pedir Presupuesto',
+
+        // ── Contacto ─────────────────────────────────────────────────────────
+        city:     b?.city     || 'Tu Ciudad',
+        address:  b?.address  || '',
         coordinates: {
-            lat: business?.data?.coordinates?.lat || '40.4168',
-            lng: business?.data?.coordinates?.lng || '-3.7038'
+            lat: b?.coordinates?.lat || '40.4168',
+            lng: b?.coordinates?.lng || '-3.7038',
         },
-        phone: business?.data?.phone || '600 000 000',
-        whatsapp: business?.data?.whatsapp || '600 000 000',
-        email: business?.data?.email || 'contacto@ejemplo.com',
-        schedule: business?.data?.schedule || 'Lunes a Viernes: 9:00 - 18:00',
-        nif: business?.data?.nif || 'B12345678',
-        ctaText: business?.data?.ctaText || 'PEDIR PRESUPUESTO',
+        phone:    b?.phone    || '600 000 000',
+        whatsapp: b?.whatsapp || '34600000000',
+        email:    b?.email    || 'contacto@ejemplo.com',
+        schedule: b?.schedule || 'Lunes a Viernes: 9:00 - 18:00',
+        nif:      b?.nif      || '',
 
-        // Design
-        themeSettings: design?.data?.themeSettings, // NEW: Full JSON object/string
-        fontPair: design?.data?.fontPair || 'modern',
-        heroOverlayOpacity: design?.data?.heroOverlayOpacity, // Passed to Layout
+        // ── SEO ───────────────────────────────────────────────────────────────
+        seoTitle:       b?.seoTitle       || '',
+        seoDescription: b?.seoDescription || '',
+        slogan:         b?.slogan         || '',
+        foundingDate:   b?.foundingDate   || '',
 
-        // Social
-        facebook: social?.data?.facebook || '',
-        instagram: social?.data?.instagram || '',
+        // ── Social ────────────────────────────────────────────────────────────
+        facebook:  b?.facebook  || '',
+        instagram: b?.instagram || '',
 
-        // Analytics
-        googleAnalyticsId: analytics?.data?.googleAnalyticsId || '',
-        gtmId: analytics?.data?.gtmId || '',
-        searchConsoleVerification: analytics?.data?.searchConsoleVerification || '',
-        n8nWebhookUrl: analytics?.data?.n8nWebhookUrl || '',
+        // ── Analytics ─────────────────────────────────────────────────────────
+        googleAnalyticsId:         b?.googleAnalyticsId         || '',
+        gtmId:                     b?.gtmId                     || '',
+        searchConsoleVerification: b?.searchConsoleVerification || '',
+        n8nWebhookUrl:             b?.n8nWebhookUrl             || '',
 
-        // Schema.org
-        priceRange: schema?.data?.priceRange || '',
-        openingHours: schema?.data?.openingHours || [],
-        areaServed: schema?.data?.areaServed || [],
-        serviceRadius: schema?.data?.serviceRadius || 0,
-        paymentAccepted: schema?.data?.paymentAccepted || [],
-        foundingDate: schema?.data?.foundingDate || '',
-        slogan: schema?.data?.slogan || '',
+        // ── Schema.org ────────────────────────────────────────────────────────
+        priceRange:      b?.priceRange      || '',
+        openingHours:    b?.openingHours    || [],
+        areaServed:      b?.areaServed      || [],
+        serviceRadius:   b?.serviceRadius   || 0,
+        paymentAccepted: b?.paymentAccepted || [],
+
+        // ── Diseño (solo desde design singleton) ─────────────────────────────
+        themeSettings:      d?.themeSettings,
+        fontPair:           d?.fontPair           || 'modern',
+        borderRadius:       d?.borderRadius       || 'rounded',
+        buttonStyle:        d?.buttonStyle        || 'solid',
+        heroOverlayOpacity: d?.heroOverlayOpacity ?? 0.6,
     };
 }

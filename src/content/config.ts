@@ -81,64 +81,62 @@ const services = defineCollection({
 const projects = defineCollection({
     schema: z.object({
         title: z.string(),
-        image: z.string(),
-        locationTag: z.string(),
-    }),
+        image: z.string().optional(),
+        locationTag: z.string().optional(),
+        serviceType: z.string().optional(),
+        date: z.string().optional(),
+        featured: z.boolean().default(false),
+        seoTitle: z.string().optional(),
+        seoDesc: z.string().optional(),
+    }).passthrough(),
 });
 
-// Business Information
+// Business — configuración completa del negocio (único punto de verdad)
 const business = defineCollection({
     type: 'data',
     schema: z.object({
+        // Básico
         siteName: z.string().optional(),
         niche: z.string().optional(),
+        businessType: z.string().optional().default('LocalBusiness'),
         logo: z.string().optional(),
         siteUrl: z.string().optional(),
-        businessType: z.enum([
-            'LocalBusiness',
-            'Locksmith',
-            'Plumber',
-            'Electrician',
-            'LegalService',
-            'TravelAgency',
-            'AutoRental',
-            'ProfessionalService',
-            'InsuranceAgency',
-            'BarberShop',
-            'RealEstateAgent',
-            'SportsActivityLocation',
-            'Dentist',
-            'MedicalBusiness',
-            'AccountingService',
-            'GeneralContractor',
-            'PetStore',
-            'HealthAndBeautyBusiness',
-            'Pharmacy',
-            'Florist',
-            'HomeAndConstructionBusiness',
-            'JewelryStore',
-            'MovingCompany',
-            'HousePainter',
-            'HairSalon',
-            'Restaurant',
-            'AutoRepair',
-            'RoofingContractor',
-            'TaxiService',
-            'Store',
-            'VeterinaryCare'
-        ]).default('LocalBusiness'),
+        ctaText: z.string().optional(),
+        // Contacto
+        phone: z.string().optional(),
+        whatsapp: z.string().optional(),
+        email: z.string().optional(),
         city: z.string().optional(),
         address: z.string().optional(),
         coordinates: z.object({
             lat: z.string().optional(),
             lng: z.string().optional(),
         }).optional(),
-        phone: z.string().optional(),
-        whatsapp: z.string().optional(),
-        email: z.string().optional(),
         schedule: z.string().optional(),
         nif: z.string().optional(),
-        ctaText: z.string().optional(),
+        // SEO
+        seoTitle: z.string().optional(),
+        seoDescription: z.string().optional(),
+        slogan: z.string().optional(),
+        foundingDate: z.string().optional(),
+        // Social
+        facebook: z.string().optional(),
+        instagram: z.string().optional(),
+        // Analytics
+        googleAnalyticsId: z.string().optional(),
+        gtmId: z.string().optional(),
+        searchConsoleVerification: z.string().optional(),
+        n8nWebhookUrl: z.string().optional(),
+        // Schema.org
+        areaServed: z.array(z.string()).optional(),
+        serviceRadius: z.number().optional().default(0),
+        priceRange: z.string().optional(),
+        paymentAccepted: z.array(z.string()).optional(),
+        openingHours: z.array(z.object({
+            dayOfWeek: z.array(z.string()),
+            opens: z.string(),
+            closes: z.string(),
+        })).optional(),
     }),
 });
 
@@ -150,14 +148,18 @@ const design = defineCollection({
         theme: z.enum([
             'industrial', 'corporate', 'nature', 'urgent',
             'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light',
-            'clay_paper', 'forest_stone', 'classic_workshop'
+            'clay_paper', 'forest_stone', 'classic_workshop',
+            'sky_white', 'sand_terra', 'mint_fresh', 'slate_modern',
+            'lavender_soft', 'rose_clean', 'navy_gold_light',
         ]).optional().default('industrial'),
 
         fontPair: z.enum([
             'modern', 'robust', 'elegant', 'friendly', 'tech',
             'artisan_warm', 'artisan_natural', 'artisan_classic'
         ]).optional().default('modern'),
-        heroOverlayOpacity: z.number().optional().default(0.6), // NEW: Opacity control
+        borderRadius: z.enum(['sharp', 'subtle', 'rounded', 'smooth', 'pill']).optional().default('rounded'),
+        buttonStyle: z.enum(['solid', 'outline', 'gradient']).optional().default('solid'),
+        heroOverlayOpacity: z.number().optional().default(0.6),
     }),
 });
 
@@ -383,7 +385,33 @@ const legal = defineCollection({
     schema: z.object({}),
 });
 
+// Inicio Rápido — configuración esencial en un solo formulario
+const quickstart = defineCollection({
+    type: 'data',
+    schema: z.object({
+        siteName: z.string().optional(),
+        niche: z.string().optional(),
+        city: z.string().optional(),
+        phone: z.string().optional(),
+        whatsapp: z.string().optional(),
+        email: z.string().optional(),
+        siteUrl: z.string().optional(),
+        logo: z.string().optional(),
+        ctaText: z.string().optional(),
+        businessType: z.string().optional(),
+        seoTitle: z.string().optional(),
+        seoDescription: z.string().optional(),
+        fontPair: z.string().optional(),
+        googleAnalyticsId: z.string().optional(),
+        gtmId: z.string().optional(),
+        n8nWebhookUrl: z.string().optional(),
+        facebook: z.string().optional(),
+        instagram: z.string().optional(),
+    }),
+});
+
 export const collections = {
+    quickstart,
     locations,
     services,
     projects,
@@ -400,7 +428,6 @@ export const collections = {
     blog,
     legal,
     about,
-
 };
 
 // Force reload
