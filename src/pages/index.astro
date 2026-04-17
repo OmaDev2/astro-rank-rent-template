@@ -112,15 +112,16 @@ const schema = [
 	...(faqSchema ? [faqSchema] : []),
 ] as any;
 
-// Parse hero preview override if set from the visual editor
-let heroPreviewOverride: any = null;
-if (homeData._heroPreview) {
-    try {
-        heroPreviewOverride = JSON.parse(homeData._heroPreview);
-    } catch (_) {
-        heroPreviewOverride = null;
-    }
-}
+// Parse visual editor overrides if set
+const parsePreview = (json: string) => {
+    try { return json ? JSON.parse(json) : null; }
+    catch (_) { return null; }
+};
+
+const heroPreviewOverride = parsePreview(homeData._heroPreview);
+const statsPreviewOverride = parsePreview(homeData._statsPreview);
+const ctaPreviewOverride = parsePreview(homeData._ctaPreview);
+const pricingPreviewOverride = parsePreview(homeData._pricingPreview);
 ---
 
 <Layout
@@ -138,6 +139,9 @@ if (homeData._heroPreview) {
 		allServices={allServices}
 		content={SeoContentRendered}
 		heroPreviewOverride={heroPreviewOverride}
+		statsPreviewOverride={statsPreviewOverride}
+		ctaPreviewOverride={ctaPreviewOverride}
+		pricingPreviewOverride={pricingPreviewOverride}
 	/>
 
 	<Footer />

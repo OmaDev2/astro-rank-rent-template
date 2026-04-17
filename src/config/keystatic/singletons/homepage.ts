@@ -4,6 +4,7 @@ import { mdxComponentsConfig } from '../mdx-components';
 import { heroPreview } from '../../../components/keystatic/HeroPreview';
 import { statsVisualEditor } from '../../../components/keystatic/StatsPreview';
 import { ctaVisualEditor } from '../../../components/keystatic/CtaPreview';
+import { pricingVisualEditor } from '../../../components/keystatic/PricingPreview';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
@@ -16,6 +17,7 @@ export const homepage = singleton({
         _heroPreview: heroPreview(),
         _statsPreview: statsVisualEditor(),
         _ctaPreview: ctaVisualEditor(),
+        _pricingPreview: pricingVisualEditor(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
         blocks: fields.blocks({
@@ -292,36 +294,9 @@ export const homepage = singleton({
                 })
             },
             pricing: {
-                label: 'Tabla de Precios (Planes)',
+                label: '💰 Tabla de Precios (Planes)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título Principal' }),
-                    titleHighlight: fields.text({ label: 'Título Destacado' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    plans: fields.array(
-                        fields.object({
-                            title: fields.text({ label: 'Nombre Plan' }),
-                            price: fields.text({ label: 'Precio (Cifra)' }),
-                            priceUnit: fields.text({ label: 'Sufijo (Ej: €/m²)' }),
-                            description: fields.text({ label: 'Descripción' }),
-                            isPopular: fields.checkbox({ label: '¿Es el más popular?', defaultValue: false }),
-                            badge: fields.text({ label: 'Badge (Ej: Más Popular)' }),
-                            features: fields.array(fields.text({ label: 'Característica' }), {
-                                label: 'Características Incluidas',
-                                itemLabel: p => p.value || 'Opción'
-                            }),
-                            examples: fields.array(
-                                fields.object({
-                                    title: fields.text({ label: 'Ejemplo (Piso 70m²)' }),
-                                    price: fields.text({ label: 'Precio Total' }),
-                                }),
-                                { label: 'Ejemplos de Precios', itemLabel: p => p.fields.title.value || 'Ejemplo' }
-                            ),
-                            buttonText: fields.text({ label: 'Texto Botón' }),
-                            buttonLink: fields.text({ label: 'Enlace Botón' }),
-                        }),
-                        { label: 'Planes de Precios', itemLabel: (p) => p.fields.title.value || 'Plan' }
-                    ),
-                    note: fields.text({ label: 'Nota / Suplementos', multiline: true }),
+                    _note: fields.text({ label: 'ℹ️ Edita los planes arriba en “💰 Tabla de Precios”', defaultValue: '' }),
                 })
             },
             stats: {

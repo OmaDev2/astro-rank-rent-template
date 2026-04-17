@@ -55,6 +55,7 @@ interface Props {
     heroPreviewOverride?: any; // Data from _heroPreview visual field
     statsPreviewOverride?: any; // Data from _statsPreview visual field
     ctaPreviewOverride?: any; // Data from _ctaPreview visual field
+    pricingPreviewOverride?: any; // Data from _pricingPreview visual field
 }
 
 const {
@@ -82,6 +83,7 @@ const {
     heroPreviewOverride,
     statsPreviewOverride,
     ctaPreviewOverride,
+    pricingPreviewOverride,
 } = Astro.props;
 ---
 
@@ -337,12 +339,25 @@ const {
                 );
 
             case "pricing":
+                // Use visual editor override if available
+                const pricingData = pricingPreviewOverride
+                    ? {
+                          title: pricingPreviewOverride.title,
+                          subtitle: pricingPreviewOverride.subtitle,
+                          plans: pricingPreviewOverride.plans?.map((p: any) => ({
+                              ...p,
+                              features: p.features
+                                  ? p.features.split("\n").map((f: string) => f.trim()).filter(Boolean)
+                                  : []
+                          })),
+                      }
+                    : value;
                 return (
                     <PricingBlock
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        note={value?.note}
-                        plans={value?.plans}
+                        title={pricingData?.title}
+                        subtitle={pricingData?.subtitle}
+                        note={pricingData?.note}
+                        plans={pricingData?.plans}
                         bgClass={bgClass}
                     />
                 );

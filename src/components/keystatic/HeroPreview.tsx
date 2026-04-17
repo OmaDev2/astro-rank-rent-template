@@ -25,39 +25,10 @@ const DEFAULTS: HeroState = {
 
 // ─── Preview Component ─────────────────────────────────────────────────────────
 function HeroPreviewUI({ state }: { state: HeroState }) {
-    const featureList = state.features
-        .split('\n')
-        .map((f) => f.trim())
-        .filter(Boolean)
-        .slice(0, 6);
-
+    const theme = getPreviewTheme();
+    const feats = state.features.split('\n').map(f => f.trim()).filter(Boolean);
+    
     return (
-        <div
-            style={{
-                position: 'relative',
-                minHeight: '380px',
-                background: state.bgColor || '#0a0a0a',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                padding: '40px 48px',
-                fontFamily: 'Inter, system-ui, sans-serif',
-                border: '1px solid rgba(239,68,68,0.18)',
-            }}
-        >
-            {/* Gradient overlay — simulates the left dark fade */}
-            <div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background:
-                        'linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.75) 55%, transparent 100%)',
-                    pointerEvents: 'none',
-                }}
-            />
-
-            {/* Grid texture */}
             <div
                 style={{
                     position: 'absolute',
