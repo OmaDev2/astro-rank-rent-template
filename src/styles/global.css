@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---- ESCALADO DE TIPOGRAFÍA ---- */
+html {
+    font-size: var(--body-font-size, 16px) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    zoom: var(--heading-scale, 1);
+}
+
 @layer base {}
 
 @layer components {

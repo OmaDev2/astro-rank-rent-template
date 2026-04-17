@@ -136,6 +136,20 @@ const radiusBtn  = btnRadiusMap[radiusKey] ?? '0.75rem';
 // Button Style
 const buttonStyle = settings.buttonStyle || 'solid';
 
+// Typography Scale
+let typoHeadingScale = 1.0;
+let typoBodyPx = 16;
+try {
+    const typoState = settings.typographyScale ? JSON.parse(settings.typographyScale) : { heading: "md", body: "md" };
+    const headingScales: Record<string, number> = { xs: 0.82, sm: 0.92, md: 1.0, lg: 1.12, xl: 1.28 };
+    const bodySizes: Record<string, number> = { xs: 14, sm: 15, md: 16, lg: 17, xl: 18 };
+    
+    typoHeadingScale = headingScales[typoState.heading] ?? 1.0;
+    typoBodyPx = bodySizes[typoState.body] ?? 16;
+} catch (e) {
+    console.error("Error parsing typography scale settings", e);
+}
+
 // Preload hero image en home para optimizar LCP
 const isHome = Astro.url.pathname === "/";
 const heroProcessed = isHome
@@ -166,6 +180,10 @@ const heroProcessed = isHome
         // --- VARIABLES DE FORMA ---
         "--radius": radiusCard,
         "--radius-btn": radiusBtn,
+
+        // --- VARIABLES DE ESCALA ---
+        "--heading-scale": typoHeadingScale,
+        "--body-font-size": `${typoBodyPx}px`,
     }}
 >
     <head>

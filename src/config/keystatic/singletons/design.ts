@@ -2,6 +2,7 @@ import { ThemeManager } from "../../../components/keystatic/ThemeManager";
 import { FontPicker } from "../../../components/keystatic/FontPicker";
 import { RadiusPicker } from "../../../components/keystatic/RadiusPicker";
 import { ButtonStylePicker } from "../../../components/keystatic/ButtonStylePicker";
+import { TypographyScalePicker } from "../../../components/keystatic/TypographyScalePicker";
 import { fields, singleton } from '@keystatic/core';
 
 export const design = singleton({
@@ -17,6 +18,12 @@ export const design = singleton({
             label: 'Tipografía (Fuentes)',
             description: 'Elige la pareja de fuentes. La previsualización muestra el aspecto real.',
         }),
+
+        typographyScale: TypographyScalePicker({
+            label: 'Escala Tipográfica',
+            description: 'Ajusta el tamaño global de los encabezados y textos.',
+        }),
+
 
         borderRadius: RadiusPicker({
             label: 'Esquinas',
