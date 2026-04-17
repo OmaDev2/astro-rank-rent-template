@@ -5,6 +5,7 @@ import { heroPreview } from '../../../components/keystatic/HeroPreview';
 import { statsPreview } from '../../../components/keystatic/StatsPreview';
 import { ctaPreview } from '../../../components/keystatic/CtaPreview';
 import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
+import { testimonialsPreview } from '../../../components/keystatic/TestimonialsPreview';
 import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
 export const homepage = singleton({
@@ -19,6 +20,7 @@ export const homepage = singleton({
         _statsPreview: statsPreview(),
         _ctaPreview: ctaPreview(),
         _featuresPreview: featuresPreview(),
+        _testimonialsPreview: testimonialsPreview(),
         _pricingPreview: pricingPreview(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
@@ -158,24 +160,9 @@ export const homepage = singleton({
                 })
             },
             testimonials: {
-                label: 'Carrusel de Testimonios',
+                label: '⭐ Opiniones de Clientes (Testimonios)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    testimonials: fields.array(
-                        fields.object({
-                            quote: fields.text({ label: 'Testimonio', multiline: true }),
-                            author: fields.text({ label: 'Cliente' }),
-                            initials: fields.text({ label: 'Iniciales (Ej: MP)' }),
-                            location: fields.text({ label: 'Ubicación' }),
-                            date: fields.text({ label: 'Fecha' }),
-                            rating: fields.integer({ label: 'Estrellas (1-5)', defaultValue: 5 }),
-                            service: fields.text({ label: 'Servicio Contratado' }),
-                            size: fields.text({ label: 'Tamaño Piso' }),
-                            verified: fields.checkbox({ label: 'Perfil Verificado', defaultValue: true }),
-                        }),
-                        { label: 'Opiniones', itemLabel: p => p.fields.author.value || 'Testimonio' }
-                    ),
+                    _note: fields.text({ label: 'ℹ️ Edita las opiniones arriba en “⭐ Testimonios / Opiniones”', defaultValue: '' }),
                 })
             },
             process: {

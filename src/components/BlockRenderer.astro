@@ -56,6 +56,7 @@ interface Props {
     statsPreviewOverride?: any; // Data from _statsPreview visual field
     ctaPreviewOverride?: any; // Data from _ctaPreview visual field
     featuresPreviewOverride?: any; // Data from _featuresPreview visual field
+    testimonialsPreviewOverride?: any; // Data from _testimonialsPreview visual field
     pricingPreviewOverride?: any; // Data from _pricingPreview visual field
 }
 
@@ -85,6 +86,7 @@ const {
     statsPreviewOverride,
     ctaPreviewOverride,
     featuresPreviewOverride,
+    testimonialsPreviewOverride,
     pricingPreviewOverride,
 } = Astro.props;
 ---
@@ -195,14 +197,16 @@ const {
                 ) : null;
 
             case "testimonials":
-                const testimonialsArray = value?.testimonials || value || [];
+                const finalTestimonials = testimonialsPreviewOverride?.testimonials || value?.testimonials || value || [];
+                const finalTestiTitle = testimonialsPreviewOverride?.title || value?.title;
+                const finalTestiSubtitle = testimonialsPreviewOverride?.subtitle || value?.subtitle;
                 return (
                     <Testimonials
-                        title={value?.title}
-                        subtitle={value?.subtitle}
+                        title={finalTestiTitle}
+                        subtitle={finalTestiSubtitle}
                         testimonials={
-                            Array.isArray(testimonialsArray)
-                                ? testimonialsArray.map((t: any) => ({
+                            Array.isArray(finalTestimonials)
+                                ? finalTestimonials.map((t: any) => ({
                                       name: t.author || t.name,
                                       text: t.quote || t.text,
                                       location: t.location,
