@@ -90,6 +90,7 @@ interface Props {
     noindex?: boolean;
     stickyPhone?: boolean;
     whatsappFloat?: boolean;
+    canonicalUrl?: string;
 }
 
 const {
@@ -99,6 +100,7 @@ const {
     noindex = false,
     stickyPhone = true,
     whatsappFloat = true,
+    canonicalUrl,
 } = Astro.props;
 
 // Generar descripción por defecto si no viene en props
@@ -215,6 +217,7 @@ const heroProcessed = isHome
             description={description || defaultDescription}
             schema={allSchemas}
             noindex={noindex}
+            canonical={canonicalUrl}
         />
 
         <SearchConsoleVerification />

@@ -3,6 +3,14 @@ import { Phone, MapPin, MessageCircle } from "lucide-react";
 import HeroContactForm from "../../HeroContactForm.astro";
 const { config, bgClass = "bg-secondary", contactSection } = Astro.props;
 
+// Overrides for contact info
+const phone = contactSection?.phone || config.phone;
+const whatsapp = contactSection?.whatsapp || config.whatsapp;
+const email = contactSection?.email || config.email;
+const schedule = contactSection?.schedule || config.schedule;
+const responseTime = contactSection?.responseTime;
+const description = contactSection?.description;
+
 // Determine inner container background based on section background
 const containerBgClass =
     bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
@@ -15,7 +23,7 @@ const containerBgClass =
     </div>
     <div class="container mx-auto px-4 relative z-10">
         <div
-            class={`max-w-4xl mx-auto ${containerBgClass} rounded-2xl border border-heading/10 shadow-2xl overflow-hidden flex flex-col md:flex-row`}
+            class={`max-w-5xl mx-auto ${containerBgClass} rounded-2xl border border-heading/10 shadow-2xl overflow-hidden flex flex-col md:flex-row`}
         >
             <div class="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
                 <h2 class="text-3xl font-heading font-bold text-heading mb-4">
@@ -23,76 +31,118 @@ const containerBgClass =
                 </h2>
                 <p class="text-body mb-8">
                     {
-                        contactSection?.subtitle ||
+                        description || contactSection?.subtitle ||
                             "Cuéntanos tu proyecto. Te respondemos con una valoración gratuita y sin compromiso."
                     }
                 </p>
-                <div class="space-y-8">
+                <div class="space-y-6">
+                    {/* TELÉFONO */}
                     <div class="flex items-start group">
                         <div
-                            class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm"
+                            class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm"
                         >
-                            <Phone className="w-6 h-6" />
+                            <Phone className="w-5 h-5" />
                         </div>
                         <div>
                             <div
-                                class="text-sm text-body/60 uppercase tracking-wider font-bold mb-1"
+                                class="text-xs text-body/60 uppercase tracking-wider font-bold mb-1"
                             >
                                 Llámanos ahora
                             </div>
                             <a
-                                href={`tel:${(config.phone || "").replace(/\s/g, "")}`}
-                                class="text-2xl font-heading font-bold text-heading hover:text-primary transition-colors"
+                                href={`tel:${(phone || "").replace(/\s/g, "")}`}
+                                class="text-xl font-heading font-bold text-heading hover:text-primary transition-colors"
                             >
-                                {config.phone || "Teléfono no disponible"}
+                                {phone || "Teléfono no disponible"}
                             </a>
                         </div>
                     </div>
 
+                    {/* WHATSAPP */}
                     {
-                        config.whatsapp && (
+                        (whatsapp || config.whatsapp) && (
                             <div class="flex items-start group">
-                                <div class="w-12 h-12 rounded-xl bg-brand-whatsapp/10 flex items-center justify-center text-brand-whatsapp mr-6 group-hover:bg-brand-whatsapp group-hover:text-white transition-all duration-300 shadow-sm">
-                                    <MessageCircle className="w-6 h-6" />
+                                <div class="w-10 h-10 rounded-xl bg-brand-whatsapp/10 flex items-center justify-center text-brand-whatsapp mr-4 group-hover:bg-brand-whatsapp group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <MessageCircle className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div class="text-sm text-body/60 uppercase tracking-wider font-bold mb-1">
+                                    <div class="text-xs text-body/60 uppercase tracking-wider font-bold mb-1">
                                         WhatsApp
                                     </div>
                                     <a
-                                        href={`https://wa.me/${(config.whatsapp || "").replace(/\D/g, "")}`}
+                                        href={`https://wa.me/${(whatsapp || config.whatsapp || "").replace(/\D/g, "")}`}
                                         target="_blank"
-                                        class="text-2xl font-heading font-bold text-heading hover:text-brand-whatsapp transition-colors"
+                                        class="text-xl font-heading font-bold text-heading hover:text-brand-whatsapp transition-colors"
                                     >
-                                        {config.whatsapp}
+                                        {whatsapp || config.whatsapp}
                                     </a>
                                 </div>
                             </div>
                         )
                     }
 
-                    <div class="flex items-start group">
-                        <div
-                            class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm"
-                        >
-                            <MapPin className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <div
-                                class="text-sm text-body/60 uppercase tracking-wider font-bold mb-1"
-                            >
-                                Trabajamos en
+                    {/* EMAIL (Si existe) */}
+                    { (email) && (
+                        <div class="flex items-start group">
+                            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent mr-4 group-hover:bg-accent group-hover:text-white transition-all duration-300 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                             </div>
-                            <div
-                                class="text-xl font-heading font-bold text-heading"
-                            >
-                                {config.city}
-                                <span class="text-body font-normal text-base"
-                                    >y alrededores</span
+                            <div>
+                                <div class="text-xs text-body/60 uppercase tracking-wider font-bold mb-1">
+                                    Email
+                                </div>
+                                <a
+                                    href={`mailto:${email}`}
+                                    class="text-xl font-heading font-bold text-heading hover:text-accent transition-colors underline decoration-accent/20 underline-offset-4"
                                 >
+                                    {email}
+                                </a>
                             </div>
                         </div>
-                    </div>
+                    )}
+
+                    {/* HORARIO (Si existe) */}
+                    { (schedule) && (
+                        <div class="flex items-start group">
+                            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-4 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-xs text-body/60 uppercase tracking-wider font-bold mb-1">
+                                    Horario de atención
+                                </div>
+                                <div class="text-lg font-bold text-heading whitespace-pre-line">
+                                    {schedule}
+                                </div>
+                                { responseTime && <span class="text-xs text-primary font-medium mt-1 block">⚡ {responseTime}</span> }
+                            </div>
+                        </div>
+                    )}
+
+                    {!schedule && (
+                         <div class="flex items-start group">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm"
+                            >
+                                <MapPin className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <div
+                                    class="text-xs text-body/60 uppercase tracking-wider font-bold mb-1"
+                                >
+                                    Trabajamos en
+                                </div>
+                                <div
+                                    class="text-xl font-heading font-bold text-heading"
+                                >
+                                    {config.city}
+                                    <span class="text-body font-normal text-base"
+                                        > y alrededores</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
             <div
@@ -100,7 +150,7 @@ const containerBgClass =
             >
                 <HeroContactForm
                     title="Solicitar Valoración"
-                    subtitle="Rellena el formulario y te contactamos."
+                    subtitle="Rellena el formulario y te contactamos en menos de 2h."
                 />
             </div>
         </div>

@@ -12,12 +12,13 @@ interface Props {
   image?: string;
   schema?: WithContext<Thing> | WithContext<Thing>[];
   noindex?: boolean;
+  canonical?: string;
 }
 
-const { title, description, image, schema, noindex = false } = Astro.props;
+const { title, description, image, schema, noindex = false, canonical } = Astro.props;
 
 // Generate canonical URL
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site).href;
 
 // Derivar imagen de OG dinámica basada en el nicho si no hay imagen específica
 const defaultOgImage = `/images/og-${settings.niche?.toLowerCase().replace(/\s/g, "-") || "default"}.png`;
