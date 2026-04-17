@@ -4,6 +4,7 @@ import { mdxComponentsConfig } from '../mdx-components';
 import { heroPreview } from '../../../components/keystatic/HeroPreview';
 import { statsPreview } from '../../../components/keystatic/StatsPreview';
 import { ctaPreview } from '../../../components/keystatic/CtaPreview';
+import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
 import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
 export const homepage = singleton({
@@ -17,6 +18,7 @@ export const homepage = singleton({
         _heroPreview: heroPreview(),
         _statsPreview: statsPreview(),
         _ctaPreview: ctaPreview(),
+        _featuresPreview: featuresPreview(),
         _pricingPreview: pricingPreview(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
@@ -150,17 +152,9 @@ export const homepage = singleton({
                 })
             },
             features: {
-                label: 'Características Destacadas (Íconos)',
+                label: '💎 Por Qué Elegirnos (Ventajas)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    features: fields.array(
-                        fields.object({
-                            title: fields.text({ label: 'Título' }),
-                            description: fields.text({ label: 'Detalle' }),
-                            icon: IconPicker({ label: 'Icono (Lucide)' }),
-                        }),
-                        { label: 'Ventajas', itemLabel: p => p.fields.title.value || 'Ventaja' }
-                    ),
+                    _note: fields.text({ label: 'ℹ️ Edita las ventajas arriba en “💎 Ventajas / Por Qué Elegirnos”', defaultValue: '' }),
                 })
             },
             testimonials: {

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { FieldPrimitive } from '@keystar/ui/field';
-import type { BasicFormField, FormFieldStoredValue } from '@keystatic/core';
+import type { BasicFormField } from '@keystatic/core';
 import { getPreviewTheme } from './themeUtils';
+import { IconPickerUI } from './IconPicker';
+import * as LucideIcons from 'lucide-react';
 
 type StatItem = { label: string; value: string; suffix: string; icon: string };
 type StatsState = { title: string; subtitle: string; stats: StatItem[] };
@@ -10,10 +12,17 @@ const DEFAULTS: StatsState = {
     title: 'Nuestros Logros',
     subtitle: 'Expertos profesionales a tu servicio',
     stats: [
-        { label: 'Años Experience', value: '15', suffix: '+', icon: '🏆' },
-        { label: 'Proyectos', value: '500', suffix: '+', icon: '🏠' },
-        { label: 'Valoración', value: '4.9', suffix: '/5', icon: '⭐' },
+        { label: 'Años Experience', value: '15', suffix: '+', icon: 'Award' },
+        { label: 'Proyectos', value: '500', suffix: '+', icon: 'CheckCircle' },
+        { label: 'Valoración', value: '4.9', suffix: '/5', icon: 'Star' },
     ]
+};
+
+// Helper para renderizar el icono de Lucide si existe
+const IconRenderer = ({ name, color, size = 24 }: { name: string, color: string, size?: number }) => {
+    const Icon = (LucideIcons as any)[name];
+    if (Icon) return <Icon color={color} size={size} strokeWidth={2} />;
+    return <div style={{ width: size, height: size, background: `${color}11`, borderRadius: '4px' }} />;
 };
 
 function StatsPreviewUI({ state }: { state: StatsState }) {
@@ -46,9 +55,11 @@ function StatsPreviewUI({ state }: { state: StatsState }) {
                         borderRadius: '10px', 
                         padding: '15px' 
                     }}>
-                        <div style={{ fontSize: '24px', marginBottom: '8px' }}>{s.icon}</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+                            <IconRenderer name={s.icon} color={theme.primary} size={32} />
+                        </div>
                         <div style={{ 
-                            fontSize: '20px', 
+                            fontSize: '22px', 
                             fontWeight: 900, 
                             color: theme.primary,
                             fontFamily: theme.fontHeading
@@ -85,29 +96,30 @@ function StatsInput({ value, onChange }: { value: string, onChange: (v: string) 
     };
 
     const inp: React.CSSProperties = {
-        background: '#1e293b', border: '1px solid rgba(16,185,129,0.2)',
-        borderRadius: '6px', padding: '6px 10px', color: '#e2e8f0',
-        fontSize: '12px', width: '100%', boxSizing: 'border-box'
+        background: '#1e293b', border: '1px solid rgba(239, 68, 68, 0.2)',
+        borderRadius: '6px', padding: '10px', color: '#e2e8f0',
+        fontSize: '13px', width: '100%', boxSizing: 'border-box'
     };
 
     return (
         <FieldPrimitive label="📊 Estadísticas (Vista Previa)">
             <StatsPreviewUI state={state} />
-            <div style={{ background: '#0f172a', border: '1px solid rgba(16,185,129,0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ background: '#0f172a', border: '1px solid rgba(239, 68, 68, 0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <input style={inp} placeholder="Título" value={state.title} onChange={e => updateField('title', e.target.value)} />
                     <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => updateField('subtitle', e.target.value)} />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                     {state.stats.map((s, i) => (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '5px', background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '6px' }}>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <input style={{ ...inp, width: '35px' }} value={s.icon} onChange={e => updateStat(i, 'icon', e.target.value)} />
-                                <input style={inp} value={s.label} onChange={e => updateStat(i, 'label', e.target.value)} />
-                            </div>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <input style={inp} value={s.value} onChange={e => updateStat(i, 'value', e.target.value)} />
-                                <input style={{ ...inp, width: '45px' }} value={s.suffix} onChange={e => updateStat(i, 'suffix', e.target.value)} />
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <IconPickerUI 
+                                value={s.icon} 
+                                onChange={v => updateStat(i, 'icon', v)}
+                            />
+                            <input style={inp} placeholder="Etiqueta" value={s.label} onChange={e => updateField('label' as any, e.target.value)} />
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                                <input style={inp} placeholder="Valor" value={s.value} onChange={e => updateStat(i, 'value', e.target.value)} />
+                                <input style={{ ...inp, width: '60px' }} placeholder="Sufijo" value={s.suffix} onChange={e => updateStat(i, 'suffix', e.target.value)} />
                             </div>
                         </div>
                     ))}

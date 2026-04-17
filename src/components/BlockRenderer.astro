@@ -55,6 +55,7 @@ interface Props {
     heroPreviewOverride?: any; // Data from _heroPreview visual field
     statsPreviewOverride?: any; // Data from _statsPreview visual field
     ctaPreviewOverride?: any; // Data from _ctaPreview visual field
+    featuresPreviewOverride?: any; // Data from _featuresPreview visual field
     pricingPreviewOverride?: any; // Data from _pricingPreview visual field
 }
 
@@ -83,6 +84,7 @@ const {
     heroPreviewOverride,
     statsPreviewOverride,
     ctaPreviewOverride,
+    featuresPreviewOverride,
     pricingPreviewOverride,
 } = Astro.props;
 ---
@@ -164,13 +166,13 @@ const {
                 return <HomeAbout aboutSection={value} bgClass={bgClass} />;
 
             case "features":
-                const featuresData =
-                    value?.features || value?.items || value || [];
+                const finalFeatures = featuresPreviewOverride?.features || value?.features || value?.items || value || [];
+                const finalTitle = featuresPreviewOverride?.title || value?.title;
                 if (isHome) {
                     return (
                         <HomeFeatures
-                            features={featuresData}
-                            title={value?.title}
+                            features={finalFeatures}
+                            title={finalTitle}
                             city={city}
                             bgClass={bgClass}
                         />
