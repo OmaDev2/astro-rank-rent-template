@@ -9,6 +9,8 @@ import CallbackModal from "../components/CallbackModal.astro";
 import { generateWebSiteSchema } from "../lib/seo";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
+import heroImageSrc from "../assets/images/hero-home.png";
+import { getImage } from "astro:assets";
 
 // 1. Imports de configuración
 import { getSettings } from "../lib/settings";
@@ -111,6 +113,12 @@ const allSchemas = schema
 
 // Hero Opacity (Default 0.6)
 const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
+
+// Preload hero image en home para optimizar LCP
+const isHome = Astro.url.pathname === "/";
+const heroProcessed = isHome
+    ? await getImage({ src: heroImageSrc, format: "webp", quality: 80 })
+    : null;
 ---
 
 <!doctype html>
@@ -135,6 +143,16 @@ const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
 >
     <head>
         <meta charset="UTF-8" />
+        {heroProcessed && (
+            <link
+                rel="preload"
+                as="image"
+                href={heroProcessed.src}
+                type="image/webp"
+                fetchpriority="high"
+                imagesizes="100vw"
+            />
+        )}
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />

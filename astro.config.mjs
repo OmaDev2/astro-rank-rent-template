@@ -40,11 +40,35 @@ export default defineConfig({
     mdx(),
     tailwind(),
     sitemap({
-      // Excluir páginas legales del sitemap
       filter: (page) =>
         !page.includes('/aviso-legal') &&
         !page.includes('/privacidad') &&
-        !page.includes('/cookies')
+        !page.includes('/cookies') &&
+        !page.includes('/gracias') &&
+        !page.includes('/404') &&
+        !page.includes('/keystatic') &&
+        !page.includes('/admin'),
+      serialize(item) {
+        const lastmod = new Date().toISOString().split('T')[0];
+        // Home
+        if (item.url === siteUrl + '/' || item.url === siteUrl) {
+          return { ...item, changefreq: 'weekly', priority: 1.0, lastmod };
+        }
+        // Páginas de zona (rank & rent: alta prioridad local)
+        if (item.url.includes('/zona/') || item.url.includes('/zonas')) {
+          return { ...item, changefreq: 'monthly', priority: 0.6, lastmod };
+        }
+        // Servicios
+        if (item.url.includes('/servicios')) {
+          return { ...item, changefreq: 'monthly', priority: 0.8, lastmod };
+        }
+        // Blog
+        if (item.url.includes('/blog')) {
+          return { ...item, changefreq: 'weekly', priority: 0.7, lastmod };
+        }
+        // Proyectos, nosotros, contacto
+        return { ...item, changefreq: 'monthly', priority: 0.5, lastmod };
+      },
     }),
     robotsTxt(),
     partytown({

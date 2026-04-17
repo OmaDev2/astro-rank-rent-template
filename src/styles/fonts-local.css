@@ -1,0 +1,61 @@
+/**
+ * FUENTES SELF-HOSTED (GDPR-compliant, sin peticiones a Google)
+ *
+ * Instrucciones:
+ * 1. Elige tu par de fuentes en Keystatic → Diseño → Par de fuentes
+ * 2. Mira los paquetes necesarios en src/config/fonts.ts → campo `fontsource`
+ * 3. Instálalos: npm install @fontsource/xxx @fontsource/yyy
+ * 4. Descomenta las importaciones de tu par y borra las demás
+ * 5. En Layout.astro, sustituye el <link> de Google Fonts por:
+ *    import "../styles/fonts-local.css";
+ *    Y elimina los <link rel="preconnect"> de Google Fonts del <head>
+ *
+ * ─────────────────────────────────────────────────────
+ * Par: modern (Oswald + Inter)
+ * ─────────────────────────────────────────────────────
+ */
+
+/* @import "@fontsource/oswald/400.css"; */
+/* @import "@fontsource/oswald/700.css"; */
+/* @import "@fontsource/inter/400.css"; */
+/* @import "@fontsource/inter/600.css"; */
+
+/**
+ * ─────────────────────────────────────────────────────
+ * Par: robust (Barlow Condensed + Roboto)
+ * ─────────────────────────────────────────────────────
+ */
+/* @import "@fontsource/barlow-condensed/500.css"; */
+/* @import "@fontsource/barlow-condensed/700.css"; */
+/* @import "@fontsource/roboto/400.css"; */
+/* @import "@fontsource/roboto/500.css"; */
+
+/**
+ * ─────────────────────────────────────────────────────
+ * Par: elegant (Playfair Display + Lato)
+ * ─────────────────────────────────────────────────────
+ */
+/* @import "@fontsource/playfair-display/500.css"; */
+/* @import "@fontsource/playfair-display/700.css"; */
+/* @import "@fontsource/lato/400.css"; */
+/* @import "@fontsource/lato/700.css"; */
+
+/**
+ * ─────────────────────────────────────────────────────
+ * Par: friendly (Nunito + Open Sans)
+ * ─────────────────────────────────────────────────────
+ */
+/* @import "@fontsource/nunito/600.css"; */
+/* @import "@fontsource/nunito/800.css"; */
+/* @import "@fontsource/open-sans/400.css"; */
+/* @import "@fontsource/open-sans/600.css"; */
+
+/**
+ * ─────────────────────────────────────────────────────
+ * Par: tech (Chakra Petch + Exo 2)
+ * ─────────────────────────────────────────────────────
+ */
+/* @import "@fontsource/chakra-petch/500.css"; */
+/* @import "@fontsource/chakra-petch/700.css"; */
+/* @import "@fontsource/exo-2/400.css"; */
+/* @import "@fontsource/exo-2/600.css"; */

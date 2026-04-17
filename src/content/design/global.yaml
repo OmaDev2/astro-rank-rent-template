@@ -1,4 +1,4 @@
 themeSettings: >-
-  {"theme":"clean_light","colors":{"primary":"#2563eb","secondary":"#f8fafc","surface":"#ffffff","accent":"#3b82f6","textMain":"#0f172a","textMuted":"#475569"}}
+  {"theme":"industrial","colors":{"primary":"#d97706","secondary":"#0f172a","surface":"#1e293b","accent":"#eab308","textMain":"#ffffff","textMuted":"#94a3b8"}}
 heroOverlayOpacity: 0.85
 fontPair: modern
