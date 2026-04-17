@@ -6,6 +6,7 @@ import { statsPreview } from '../../../components/keystatic/StatsPreview';
 import { ctaPreview } from '../../../components/keystatic/CtaPreview';
 import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
 import { testimonialsPreview } from '../../../components/keystatic/TestimonialsPreview';
+import { processPreview } from '../../../components/keystatic/ProcessPreview';
 import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
 export const homepage = singleton({
@@ -21,6 +22,7 @@ export const homepage = singleton({
         _ctaPreview: ctaPreview(),
         _featuresPreview: featuresPreview(),
         _testimonialsPreview: testimonialsPreview(),
+        _processPreview: processPreview(),
         _pricingPreview: pricingPreview(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
@@ -166,20 +168,9 @@ export const homepage = singleton({
                 })
             },
             process: {
-                label: 'Proceso de Trabajo / Metodología',
+                label: '👷 Método Paso a Paso (Proceso)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    steps: fields.array(
-                        fields.object({
-                            title: fields.text({ label: 'Título' }),
-                            description: fields.text({ label: 'Detalle', multiline: true }),
-                            icon: IconPicker({ label: 'Icono (Lucide)' }),
-                            duration: fields.text({ label: 'Duración (Opcional)' }),
-                        }),
-                        { label: 'Pasos', itemLabel: p => p.fields.title.value || 'Paso' }
-                    ),
-                    note: fields.text({ label: 'Nota Informativa', multiline: true }),
+                    _note: fields.text({ label: 'ℹ️ Edita el proceso arriba en “👷 Método / Proceso de Trabajo”', defaultValue: '' }),
                 })
             },
             faq: {

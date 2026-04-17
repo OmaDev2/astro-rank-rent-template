@@ -57,6 +57,7 @@ interface Props {
     ctaPreviewOverride?: any; // Data from _ctaPreview visual field
     featuresPreviewOverride?: any; // Data from _featuresPreview visual field
     testimonialsPreviewOverride?: any; // Data from _testimonialsPreview visual field
+    processPreviewOverride?: any; // Data from _processPreview visual field
     pricingPreviewOverride?: any; // Data from _pricingPreview visual field
 }
 
@@ -87,6 +88,7 @@ const {
     ctaPreviewOverride,
     featuresPreviewOverride,
     testimonialsPreviewOverride,
+    processPreviewOverride,
     pricingPreviewOverride,
 } = Astro.props;
 ---
@@ -192,8 +194,9 @@ const {
                 );
 
             case "process":
-                return value ? (
-                    <HomeProcess process={value} bgClass={bgClass} />
+                const finalProcess = processPreviewOverride || value;
+                return finalProcess ? (
+                    <HomeProcess process={finalProcess} bgClass={bgClass} />
                 ) : null;
 
             case "testimonials":
