@@ -31,6 +31,14 @@ const residenciales = locations.filter(
 const industriales = locations.filter((loc) => loc.data.type === "industrial");
 const centros = locations.filter((loc) => loc.data.type === "centro");
 
+const getSeoDesc = (seoStr: string | undefined, defaultDesc: string) => {
+    try {
+        return JSON.parse(seoStr || '{}').description || defaultDesc;
+    } catch {
+        return defaultDesc;
+    }
+};
+
 const schema: WithContext<CollectionPage> = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -181,8 +189,7 @@ const schema: WithContext<CollectionPage> = {
                                             {location.data.name}
                                         </h3>
                                         <p class="text-text/60 text-sm line-clamp-2 mb-6">
-                                            {location.data.seoDesc ||
-                                                `Servicio urgente en ${location.data.name}.`}
+                                            {getSeoDesc(location.data.seo, `Servicio urgente en ${location.data.name}.`)}
                                         </p>
                                     </div>
                                     <div class="border-t border-white/5 pt-4">
@@ -240,8 +247,7 @@ const schema: WithContext<CollectionPage> = {
                                             {location.data.name}
                                         </h3>
                                         <p class="text-text/60 text-sm line-clamp-2 mb-6">
-                                            {location.data.seoDesc ||
-                                                `Soluciones industriales en ${location.data.name}.`}
+                                            {getSeoDesc(location.data.seo, `Soluciones industriales en ${location.data.name}.`)}
                                         </p>
                                     </div>
                                     <div class="border-t border-white/5 pt-4">
@@ -299,8 +305,7 @@ const schema: WithContext<CollectionPage> = {
                                             {location.data.name}
                                         </h3>
                                         <p class="text-text/60 text-sm line-clamp-2 mb-6">
-                                            {location.data.seoDesc ||
-                                                `Servicio rápido en ${location.data.name}.`}
+                                            {getSeoDesc(location.data.seo, `Servicio rápido en ${location.data.name}.`)}
                                         </p>
                                     </div>
                                     <div class="border-t border-white/5 pt-4">

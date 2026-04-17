@@ -1,4 +1,5 @@
 import { fields, singleton } from '@keystatic/core';
+import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 
 export const business = singleton({
     label: '🏢 Mi Negocio',
@@ -111,17 +112,9 @@ export const business = singleton({
         }),
 
         // ── 3. SEO ────────────────────────────────────────────────────────────
-        seoTitle: fields.text({
-            label: 'Título SEO Principal *',
-            description: '⚠️ Entre 50 y 60 caracteres. Aparece en Google como título del enlace. Ej: Fontanero en Madrid | Urgencias 24h | Sin Esperas',
-            validation: { length: { min: 10, max: 60 } },
-        }),
-
-        seoDescription: fields.text({
-            label: 'Descripción SEO Principal *',
-            description: '⚠️ Entre 120 y 160 caracteres. Es el texto que ve el usuario en Google bajo el título. Incluye ciudad, servicio y llamada a la acción.',
-            multiline: true,
-            validation: { length: { min: 50, max: 160 } },
+        seo: SeoPreview({
+            label: '🔍 SEO Google Preview',
+            description: 'Ajusta tu título y descripción y mira cómo quedan en los resultados de búsqueda.',
         }),
 
         slogan: fields.text({

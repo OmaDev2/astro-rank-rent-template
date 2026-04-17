@@ -5,8 +5,7 @@ const locations = defineCollection({
     schema: z.object({
         name: z.string(),
         type: z.enum(['residencial', 'industrial', 'centro']),
-        seoTitle: z.string(),
-        seoDesc: z.string(),
+        seo: z.string().optional(),
         heroImage: z.string().optional(),
         coordinates: z.object({
             lat: z.string().optional(),
@@ -40,8 +39,7 @@ const services = defineCollection({
     schema: z.object({
         title: z.string(),
         heroImage: z.string().optional(),
-        seoTitle: z.string().optional(),
-        seoDesc: z.string().optional(),
+        seo: z.string().optional(),
         icon: z.string(),
         shortDesc: z.string(),
         featured: z.boolean().default(false),
@@ -86,8 +84,7 @@ const projects = defineCollection({
         serviceType: z.string().optional(),
         date: z.string().optional(),
         featured: z.boolean().default(false),
-        seoTitle: z.string().optional(),
-        seoDesc: z.string().optional(),
+        seo: z.string().optional(),
     }).passthrough(),
 });
 
@@ -115,8 +112,7 @@ const business = defineCollection({
         schedule: z.string().optional(),
         nif: z.string().optional(),
         // SEO
-        seoTitle: z.string().optional(),
-        seoDescription: z.string().optional(),
+        seo: z.string().optional(),
         slogan: z.string().optional(),
         foundingDate: z.string().optional(),
         // Social
@@ -399,8 +395,7 @@ const quickstart = defineCollection({
         logo: z.string().optional(),
         ctaText: z.string().optional(),
         businessType: z.string().optional(),
-        seoTitle: z.string().optional(),
-        seoDescription: z.string().optional(),
+        seo: z.string().optional(),
         fontPair: z.string().optional(),
         googleAnalyticsId: z.string().optional(),
         gtmId: z.string().optional(),

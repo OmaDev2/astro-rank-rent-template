@@ -61,11 +61,15 @@ import {
 
 const aggregateRating = getAggregateRating(testimonials);
 
+// 6. SEO: Título y descripción (Moved up for schema usage)
+let parsedSeo = { title: "", description: "" };
+try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
+
 const serviceSchema: WithContext<Service> = {
     "@context": "https://schema.org",
     "@type": "Service",
     name: data.title,
-    description: data.seoDesc,
+    description: parsedSeo.description || `Servicio de ${data.title}`,
     provider: generateLocalBusinessSchema(
         {
             siteName: settings.siteName,
@@ -110,10 +114,11 @@ const schema = [
     ...(faqSchema ? [faqSchema] : []),
 ] as any;
 
-// 6. SEO: Título y descripción
+// SEO vars ya parseadas arriba
+
 const pageTitle =
-    data.seoTitle || `${data.title} en ${settings.city} | ${settings.siteName}`;
-const pageDescription = data.seoDesc || data.shortDesc;
+    parsedSeo.title || `${data.title} en ${settings.city} | ${settings.siteName}`;
+const pageDescription = parsedSeo.description || data.shortDesc;
 ---
 
 <ServiceLayout

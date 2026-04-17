@@ -13,6 +13,14 @@ export async function getSettings() {
     const b = business?.data as any;
     const d = design?.data as any;
 
+    let seoTitle = '';
+    let seoDescription = '';
+    try {
+        const seoData = b?.seo ? JSON.parse(b.seo) : {};
+        seoTitle = seoData.title || '';
+        seoDescription = seoData.description || '';
+    } catch(e) {}
+
     return {
         // ── Negocio ──────────────────────────────────────────────────────────
         siteName:     b?.siteName     || 'Mi Negocio Local',
@@ -36,8 +44,8 @@ export async function getSettings() {
         nif:      b?.nif      || '',
 
         // ── SEO ───────────────────────────────────────────────────────────────
-        seoTitle:       b?.seoTitle       || '',
-        seoDescription: b?.seoDescription || '',
+        seoTitle:       seoTitle,
+        seoDescription: seoDescription,
         slogan:         b?.slogan         || '',
         foundingDate:   b?.foundingDate   || '',
 

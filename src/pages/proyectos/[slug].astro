@@ -20,9 +20,12 @@ const { project } = Astro.props;
 const { Content } = await project.render();
 const settings = await getSettings();
 
-const title = project.data.seoTitle || project.data.title;
+let parsedSeo = { title: "", description: "" };
+try { parsedSeo = project.data.seo ? JSON.parse(project.data.seo) : {}; } catch(e) {}
+
+const title = parsedSeo.title || project.data.title;
 const description =
-    project.data.seoDesc ||
+    parsedSeo.description ||
     `Proyecto de ${project.data.serviceType || settings.niche} en ${project.data.locationTag || settings.city}. Descubre el trabajo realizado por ${settings.siteName}.`;
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, "") || settings.siteUrl || "";

@@ -1,5 +1,6 @@
 import { collection, fields } from '@keystatic/core';
 import { MousePointer2, AlertTriangle, Phone, Building, Image } from 'lucide-react';
+import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 
 export const locations = collection({
     label: '📍 Zonas de Servicio',
@@ -22,8 +23,10 @@ export const locations = collection({
             ],
             defaultValue: 'residencial',
         }),
-        seoTitle: fields.text({ label: 'Meta Title' }),
-        seoDesc: fields.text({ label: 'Meta Description', multiline: true }),
+        seo: SeoPreview({
+            label: 'SEO Google Preview',
+            description: 'Ajusta tu título y descripción SEO con previsualización en vivo.',
+        }),
 
         heroImage: fields.image({
             label: 'Imagen Hero de la Zona',

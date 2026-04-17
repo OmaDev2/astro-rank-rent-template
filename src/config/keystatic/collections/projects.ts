@@ -1,4 +1,5 @@
 import { collection, fields } from '@keystatic/core';
+import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 
 export const projects = collection({
     label: '💼 Portafolio / Proyectos',
@@ -45,17 +46,9 @@ export const projects = collection({
             defaultValue: false,
         }),
 
-        seoTitle: fields.text({
-            label: 'Título SEO',
-            description: 'Máx. 60 caracteres. Si lo dejas vacío se usa el título del proyecto.',
-            validation: { length: { max: 60 } },
-        }),
-
-        seoDesc: fields.text({
-            label: 'Descripción SEO',
-            description: 'Máx. 160 caracteres. Describe el trabajo realizado y la zona.',
-            multiline: true,
-            validation: { length: { max: 160 } },
+        seo: SeoPreview({
+            label: 'SEO Google Preview',
+            description: 'Previsualiza cómo se verá este proyecto en los resultados de búsqueda.',
         }),
 
         content: fields.mdx({

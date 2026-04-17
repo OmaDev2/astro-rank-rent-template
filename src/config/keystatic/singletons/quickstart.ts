@@ -1,4 +1,5 @@
 import { fields, singleton } from '@keystatic/core';
+import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 
 export const quickstart = singleton({
     label: '🚀 Inicio Rápido',
@@ -84,17 +85,9 @@ export const quickstart = singleton({
         }),
 
         // ── 2. SEO BÁSICO ─────────────────────────────────────────────────────
-        seoTitle: fields.text({
-            label: '🔍 Título SEO (Meta Title) *',
-            description: '⚠️ Máx. 60 caracteres. Aparece en Google. Ej: Fontanero en Madrid | Urgencias 24h | Sin Esperas',
-            validation: { length: { min: 10, max: 60 } },
-        }),
-
-        seoDescription: fields.text({
-            label: '📝 Descripción SEO (Meta Description) *',
-            description: '⚠️ Máx. 160 caracteres. Es el texto que ve el usuario en Google bajo el título. Incluye ciudad, servicio y llamada a la acción.',
-            multiline: true,
-            validation: { length: { min: 50, max: 160 } },
+        seo: SeoPreview({
+            label: '🔍 SEO Google Preview',
+            description: 'Ajusta tu título y descripción SEO con previsualización en vivo.',
         }),
 
         // ── 3. DISEÑO ─────────────────────────────────────────────────────────

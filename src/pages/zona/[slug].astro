@@ -97,10 +97,13 @@ const finalSchema = [
 ];
 
 // 7. SEO: Título y descripción
+let parsedSeo = { title: "", description: "" };
+try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
+
 const pageTitle =
-    data.seoTitle || `${settings.niche} en ${data.name} | ${settings.siteName}`;
+    parsedSeo.title || `${settings.niche} en ${data.name} | ${settings.siteName}`;
 const pageDescription =
-    data.seoDesc ||
+    parsedSeo.description ||
     `Servicio profesional de ${settings.niche.toLowerCase()} en ${data.name}. Presupuesto gratis.`;
 ---
 

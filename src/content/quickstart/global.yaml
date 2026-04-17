@@ -8,8 +8,7 @@ siteUrl: ''
 logo: ''
 ctaText: Pedir Presupuesto
 businessType: LocalBusiness
-seoTitle: ''
-seoDescription: ''
+seo: "{\"title\":\"\",\"description\":\"\"}"
 fontPair: modern
 googleAnalyticsId: ''
 gtmId: ''

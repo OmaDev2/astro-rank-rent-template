@@ -1,5 +1,6 @@
 import { collection, fields } from '@keystatic/core';
 import { MousePointer2, AlertTriangle, Phone, Building, Image, Layout, Star, HelpCircle, ArrowRight } from 'lucide-react';
+import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 
 export const services = collection({
     label: '🛠️ Servicios',
@@ -26,8 +27,9 @@ export const services = collection({
         }),
 
         // Metadatos globales (no cambian de posición)
-        seoTitle: fields.text({ label: 'SEO Title (Meta)' }),
-        seoDesc: fields.text({ label: 'SEO Description', multiline: true }),
+        seo: SeoPreview({
+            label: 'SEO Google Preview',
+        }),
         icon: fields.text({ label: 'Icono (Lucide)' }),
         shortDesc: fields.text({ label: 'Descripción Corta (Cards)', multiline: true }),
         featured: fields.checkbox({ label: 'Destacado en Home', defaultValue: false }),
