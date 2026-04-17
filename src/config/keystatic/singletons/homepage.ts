@@ -37,25 +37,22 @@ export const homepage = singleton({
         _aboutPreview: aboutPreview(),
         _pricingPreview: pricingPreview(),
 
-        // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
+        // --- CONSTRUCTOR DE BLOQUES ---
         blocks: fields.blocks({
             hero: {
                 label: '🖼️ Hero — Imagen y Enlace de Botones',
                 schema: fields.object({
                     backgroundImage: fields.image({
                         label: 'Imagen de Fondo del Hero',
-                        description: 'El texto del Hero (título, subtítulo, botones, checks) se edita arriba en la "Vista Previa del Hero".',
                         directory: 'public/images/home',
                         publicPath: '/images/home',
                     }),
                     ctaPrimaryLink: fields.text({
                         label: '🔗 Enlace Botón Principal',
-                        description: 'Ej: tel:+34600123456  o  #presupuesto',
                         defaultValue: '#presupuesto',
                     }),
                     ctaSecondaryLink: fields.text({
                         label: '🔗 Enlace Botón Secundario (WhatsApp)',
-                        description: 'Ej: https://wa.me/34600123456',
                         defaultValue: '',
                     }),
                 })
@@ -82,8 +79,8 @@ export const homepage = singleton({
                                     description: fields.text({ label: 'Descripción', multiline: true }),
                                     icon: IconPicker({ label: 'Icono (Lucide)' }),
                                     price: fields.text({ label: 'Precio (Ej: Desde 12€/m²)' }),
-                                    link: fields.text({ label: 'Enlace a Página (Ej: /servicios/alisar)' }),
-                                    isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
+                                    link: fields.text({ label: 'Enlace a Página' }),
+                                    isPopular: fields.checkbox({ label: '¿Destacar?', defaultValue: false }),
                                     image: fields.image({
                                         label: 'Imagen Card',
                                         directory: 'public/images/services',
@@ -91,7 +88,6 @@ export const homepage = singleton({
                                     }),
                                     features: fields.array(fields.text({ label: 'Característica' }), {
                                         label: 'Características',
-                                        itemLabel: p => p.value || 'Opción'
                                     }),
                                 }),
                                 auto: fields.object({
@@ -107,17 +103,7 @@ export const homepage = singleton({
                         ),
                         {
                             label: 'Servicios de la Grilla',
-                            itemLabel: (props) => {
-                                const mode = props?.discriminant;
-                                if (mode === 'manual') {
-                                    return props?.value?.fields?.title?.value || 'Servicio Manual';
-                                }
-                                if (mode === 'auto') {
-                                    const serviceName = props?.value?.fields?.service?.value;
-                                    return serviceName ? `🔗 ${serviceName}` : 'Servicio Auto';
-                                }
-                                return 'Configurar Servicio';
-                            },
+                            itemLabel: (props) => props?.discriminant === 'manual' ? props?.value?.fields?.title?.value : props?.value?.fields?.service?.value || 'Servicio',
                         }
                     )
                 })
