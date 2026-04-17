@@ -53,6 +53,8 @@ interface Props {
     isHome?: boolean;
     config?: any; // Global settings
     heroPreviewOverride?: any; // Data from _heroPreview visual field
+    statsPreviewOverride?: any; // Data from _statsPreview visual field
+    ctaPreviewOverride?: any; // Data from _ctaPreview visual field
 }
 
 const {
@@ -78,6 +80,8 @@ const {
     isHome,
     config,
     heroPreviewOverride,
+    statsPreviewOverride,
+    ctaPreviewOverride,
 } = Astro.props;
 ---
 
@@ -344,10 +348,19 @@ const {
                 );
 
             case "stats":
+                // Use visual editor override if available
+                const statsData = statsPreviewOverride
+                    ? {
+                          title: statsPreviewOverride.title,
+                          subtitle: statsPreviewOverride.subtitle,
+                          stats: statsPreviewOverride.stats,
+                      }
+                    : value;
                 return (
                     <StatsBlock
-                        title={value?.title}
-                        stats={value?.stats}
+                        title={statsData?.title}
+                        subtitle={statsData?.subtitle}
+                        stats={statsData?.stats}
                         bgClass={bgClass}
                     />
                 );

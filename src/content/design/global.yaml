@@ -1,6 +1,7 @@
 themeSettings: >-
-  {"theme":"slate_modern","colors":{"primary":"#f97316","secondary":"#f1f5f9","surface":"#ffffff","accent":"#fbbf24","textMain":"#0f172a","textMuted":"#475569"}}
-fontPair: tech
+  {"theme":"nature","colors":{"primary":"#16a34a","secondary":"#14532d","surface":"#166534","accent":"#4ade80","textMain":"#ffffff","textMuted":"#bbf7d0"}}
+fontPair: elegant
+typographyScale: '{"heading":"md","body":"md"}'
 borderRadius: smooth
 buttonStyle: solid
 heroOverlayOpacity: 0.5

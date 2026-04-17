@@ -2,6 +2,8 @@ import { singleton, fields } from '@keystatic/core';
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
 import { heroPreview } from '../../../components/keystatic/HeroPreview';
+import { statsVisualEditor } from '../../../components/keystatic/StatsPreview';
+import { ctaVisualEditor } from '../../../components/keystatic/CtaPreview';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
@@ -10,8 +12,10 @@ export const homepage = singleton({
     format: { contentField: 'content' },
     entryLayout: 'form',
     schema: {
-        // ─── PREVISUALIZACIÓN VISUAL DEL HERO ─────────────────────────────────
+        // ─── EDITORES VISUALES (arriba del Constructor) ──────────────────────────
         _heroPreview: heroPreview(),
+        _statsPreview: statsVisualEditor(),
+        _ctaPreview: ctaVisualEditor(),
 
         // --- CONSTRUCTOR DE BLOQUES (NUEVO MODELO DE DATOS) ---
         blocks: fields.blocks({
@@ -218,16 +222,9 @@ export const homepage = singleton({
                 })
             },
             cta: {
-                label: 'Llamada a la Acción (CTA)',
+                label: '🎯 Llamada a la Acción (CTA)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título Principal' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    buttonText: fields.text({ label: 'Texto del Botón' }),
-                    buttonLink: fields.text({ label: 'Enlace del Botón' }),
-                    features: fields.array(fields.text({ label: 'Ventaja (Check)' }), {
-                        label: 'Ventajas Rápidas',
-                        itemLabel: p => p.value || 'Opción'
-                    }),
+                    _note: fields.text({ label: 'ℹ️ Edita el CTA arriba en “🎯 Llamada a la Acción CTA”', defaultValue: '' }),
                 })
             },
             contact: {
@@ -328,19 +325,9 @@ export const homepage = singleton({
                 })
             },
             stats: {
-                label: 'Contador de Estadísticas',
+                label: '📊 Contador de Estadísticas',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo' }),
-                    stats: fields.array(
-                        fields.object({
-                            label: fields.text({ label: 'Nombre' }),
-                            value: fields.text({ label: 'Cifra' }),
-                            suffix: fields.text({ label: 'Sufijo (Ej: +)' }),
-                            icon: IconPicker({ label: 'Icono (Lucide)' }),
-                        }),
-                        { label: 'Métricas', itemLabel: p => p.fields.label.value || 'Métrica' }
-                    ),
+                    _note: fields.text({ label: 'ℹ️ Edita los contadores arriba en “📊 Estadísticas / Contadores”', defaultValue: '' }),
                 })
             },
             logos: {
