@@ -1,7 +1,7 @@
 themeSettings: >-
-  {"theme":"clay_paper","colors":{"primary":"#b45309","secondary":"#fefce8","surface":"#ffffff","accent":"#d97706","textMain":"#4e1d1d","textMuted":"#78350f"}}
-fontPair: elegant
-typographyScale: '{"heading":"md","body":"md"}'
-borderRadius: smooth
-buttonStyle: solid
-heroOverlayOpacity: 0.5
+  {"theme":"mint_fresh","colors":{"primary":"#059669","secondary":"#ecfdf5","surface":"#ffffff","accent":"#2dd4bf","textMain":"#111827","textMuted":"#6b7280"}}
+fontPair: artisan_warm
+typographyScale: '{"heading":"xs","body":"xl"}'
+borderRadius: sharp
+buttonStyle: gradient
+heroOverlayOpacity: 0.9
