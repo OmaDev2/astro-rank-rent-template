@@ -1,10 +1,14 @@
 import { fields, singleton } from '@keystatic/core';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
+import { spintaxSimulator } from '../../../components/keystatic/SpintaxPreview';
 
 export const business = singleton({
     label: '🏢 Mi Negocio',
     path: 'src/content/business/global',
+    format: { data: 'yaml' },
     schema: {
+        // ── 0. HERRAMIENTAS ───────────────────────────────────────────────────
+        _spintax: spintaxSimulator(),
 
         // ── 1. INFORMACIÓN BÁSICA ─────────────────────────────────────────────
         siteName: fields.text({

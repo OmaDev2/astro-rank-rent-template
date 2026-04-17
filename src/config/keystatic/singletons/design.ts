@@ -8,6 +8,7 @@ import { fields, singleton } from '@keystatic/core';
 export const design = singleton({
     label: '🎨 Diseño y Tema',
     path: 'src/content/design/global',
+    format: { data: 'yaml' },
     schema: {
         themeSettings: ThemeManager({
             label: 'Colores del Tema',
