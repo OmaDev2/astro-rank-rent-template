@@ -17,7 +17,9 @@ const DEFAULTS: CtaState = {
 
 function CtaPreviewUI({ state }: { state: CtaState }) {
     const theme = getPreviewTheme();
-    const feats = state.features.split('\n').filter(Boolean);
+    const feats = Array.isArray(state.features) 
+        ? state.features 
+        : (typeof state.features === 'string' ? state.features.split('\n').filter(Boolean) : []);
     
     const bg = state.style === 'red' ? theme.primary : state.style === 'gradient' ? `linear-gradient(135deg, ${theme.primary}, ${theme.accent})` : theme.surface;
     const text = (state.style === 'red' || state.style === 'gradient') ? '#fff' : theme.textMain;

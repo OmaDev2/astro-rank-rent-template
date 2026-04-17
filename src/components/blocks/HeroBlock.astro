@@ -41,9 +41,13 @@ if (!heroImage || heroImage === "/images/services/default.jpg") {
             : "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop");
 }
 
-const heroSubtitle = isIndustrial
+const heroSubtitle = props.subheading || props.subtitle || (isIndustrial
     ? `Servicios profesionales de ${(niche || "reformas").toLowerCase()} para empresas y naves.`
-    : `Soluciones de ${(niche || "reformas").toLowerCase()} para particulares y comunidades.`;
+    : `Soluciones de ${(niche || "reformas").toLowerCase()} para particulares y comunidades.`);
+
+// Nuevos campos dinámicos del esquema unificado
+const heading = spin(props.heading);
+const headingHighlight = spin(props.headingHighlight);
 
 // Limpieza de teléfono para el href
 const phoneHref = (phone || "").replace(/\s/g, "");
@@ -106,12 +110,20 @@ const phoneHref = (phone || "").replace(/\s/g, "");
                     Disponible en {locationName}
                 </div>
 
-                {/* Título Principal */}
                 <h1
                     class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-black text-heading leading-[1.1] drop-shadow-2xl"
                 >
                     {
-                        title ? (
+                        heading ? (
+                            <>
+                                {heading}
+                                {headingHighlight && (
+                                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary bg-[length:200%_auto] animate-shine mt-2">
+                                        {headingHighlight}
+                                    </span>
+                                )}
+                            </>
+                        ) : title ? (
                             <span set:html={title} />
                         ) : (
                             <>

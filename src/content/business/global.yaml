@@ -1,31 +1,30 @@
 _spintax: ''
-siteName: Quitar Gotelé Barcelona
-niche: Quitar Gotelé
-businessType: HousePainter
-logo: '@assets/images/logo.png'
-siteUrl: https://quitargotelebarcelona.es
-ctaText: 'Quiero mis paredes Lisas '
+siteName: 'Carpintería de Aluminio en Málaga'
+niche: Aluminio a Medida
+businessType: HomeAndConstructionBusiness
+logo: ''
+siteUrl: https://aluminio-malaga.com
+ctaText: 'Pedir Presupuesto Gratis'
 phone: '644371602'
 whatsapp: '34644371602'
-email: quitar@bcn.com
-city: Barcelona
-address: Barcelona
+email: hola@aluminio-malaga.com
+city: Málaga
+address: Málaga, España
 coordinates:
   lat: '41.3851'
   lng: '2.1734'
 schedule: Lun-Vie 9:00-18:00, Sáb 10:00-14:00
-seo: '{"title":"","description":""}'
+seo: '{"title":"fff","description":""}'
 slogan: Expertos en alisar tu hogar, apasionados por el acabado perfecto.
 foundingDate: '2010'
 facebook: https://facebook.com
 instagram: https://instagram.com
 areaServed:
-  - Sabadell
-  - Barcelona
-  - Hospitalet del Llobregat
-  - Badalona
-  - Terrassa
-  - Mataró
+  - Málaga Capital
+  - Torremolinos
+  - Benalmádena
+  - Fuengirola
+  - Marbella
 serviceRadius: 60
 priceRange: €€
 paymentAccepted:

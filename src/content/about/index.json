@@ -1,26 +1,26 @@
 {
   "hero": {
-    "title": "Transformando los Pisos de Barcelona",
-    "description": "Somos la empresa de referencia en Barcelona especializada exclusivamente en quitar gotelé y alisar paredes. Más de una década convirtiendo pisos antiguos en hogares modernos, luminosos y limpios."
+    "title": "Especialistas en Carpintería de Aluminio en Málaga",
+    "description": "Somos el referente en Málaga para la fabricación e instalación de cerramientos, ventanas y soluciones de aluminio a medida. Transformamos tu hogar con materiales de alta calidad y un servicio impecable."
   },
   "mainImage": {
     "experienceBadge": "+15 Años"
   },
   "history": {
-    "subtitle": "Nuestra Historia desde 2010",
-    "title": "De Pintores Tradicionales a Especialistas en Alisado",
+    "subtitle": "Nuestra Trayectoria desde 2010",
+    "title": "De Taller Familiar a Expertos en Cerramientos",
     "stats": [
       {
-        "value": "250+",
-        "label": "Pisos Alisados"
+        "value": "500+",
+        "label": "Proyectos Realizados"
       },
       {
         "value": "100%",
-        "label": "Clientes Satisfechos"
+        "label": "Garantía de Calidad"
       },
       {
         "value": "0",
-        "label": "Reclamaciones de Garantía"
+        "label": "Retrasos en Plazos"
       },
       {
         "value": "15",
@@ -29,49 +29,49 @@
     ]
   },
   "values": {
-    "title": "Nuestros Pilares Fundamentales",
-    "description": "No somos una empresa de reformas generalista. Somos artesanos de la pared lisa y nos regimos por tres normas inquebrantables.",
+    "title": "Nuestros Compromisos",
+    "description": "En nuestra carpintería de aluminio, nos regimos por estándares de excelencia técnica y atención al detalle para asegurar la durabilidad de cada instalación.",
     "items": [
       {
         "icon": "Shield",
-        "title": "Limpieza Obsesiva",
-        "description": "Entendemos que es tu casa, no una obra. Usamos aspiración HEPA y protegemos hasta el último enchufe."
+        "title": "Presupuestos Cerrados",
+        "description": "Sin sorpresas ni costes ocultos. El presupuesto que aceptes será el precio final de tu instalación."
       },
       {
         "icon": "Shield",
-        "title": "Honestidad en el Precio",
-        "description": "Odiamos los \"extras\" sorpresa tanto como tú. El precio que firmamos es el precio que pagas."
+        "title": "Calidad Certificada",
+        "description": "Solo trabajamos con los mejores perfiles y vidrios del mercado, garantizando el aislamiento térmico y acústico."
       },
       {
         "icon": "Shield",
-        "title": "Excelencia Técnica",
-        "description": "No buscamos \"tapar\" el gotelé. Buscamos una planimetría perfecta (Nivel Q4) que parezca un espejo."
+        "title": "Instalación Limpia",
+        "description": "Respetamos tu vivienda. Nuestros montadores propios dejan todo impecable al finalizar el trabajo."
       }
     ]
   },
   "whyChooseUs": {
-    "title": "Por qué confiar en nosotros y no en una brigada generalista?",
+    "title": "¿Por qué elegirnos para tu hogar en la Costa del Sol?",
     "items": [
       {
-        "title": "Conocimiento Local",
-        "description": "Sabemos distinguir un gotelé al temple de los años 70 de uno plástico de los 90 con solo tocarlo. Eso nos ahorra tiempo y a ti dinero"
+        "title": "Conocimiento del Clima",
+        "description": "Entendemos cómo el salitre y el sol de Málaga afectan a los materiales. Seleccionamos el tratamiento adecuado para cada zona."
       },
       {
-        "title": "Maquinaria Propia",
-        "description": "No alquilamos máquinas baratas. Tenemos equipos industriales propios de Festool y Graco que garantizan el mejor acabado"
+        "title": "Taller Propio",
+        "description": "Fabricamos a medida en nuestras instalaciones, lo que nos permite ofrecer los mejores plazos y precios competitivos."
       },
       {
         "title": "Garantía Real",
-        "description": "Al ser una empresa establecida y local, nuestra garantía de 2 años es real. Si nos necesitas, sabemos dónde estamos."
+        "description": "Somos una empresa local establecida. Nuestra garantía de 2 a 10 años es una promesa que cumplimos siempre."
       }
     ]
   },
   "team": {
-    "title": "Equipo Profesional",
-    "description": "En este sector es común la subcontratación y la rotación de personal. Nosotros no funcionamos así. Nuestro equipo base lleva trabajando junto más de 8 años. Son profesionales formados específicamente en técnicas de alisado y masillado fino. Saben trabajar en silencio, respetan tu privacidad y dejan todo impecable al salir. Cuando nos contratas, sabes exactamente quién entrará en tu casa."
+    "title": "Equipo de Maestros Aluminiistas",
+    "description": "Contamos con un equipo de instaladores oficiales con amplia experiencia en carpintería técnica. No subcontratamos: nuestro personal está formado en las últimas técnicas de sellado y montaje de sistemas de rotura de puente térmico para asegurar el máximo rendimiento de tus nuevas ventanas."
   },
   "seo": {
-    "title": "Sobre Nosotros | Expertos en Quitar Gotelé Barcelona - Desde 2010",
-    "description": "Conoce a la empresa líder en quitar gotelé y alisar paredes en Barcelona. Más de 15 años de experiencia, sistema sin polvo garantizado y precios cerrados. Descubre nuestra historia."
+    "title": "Sobre Nosotros | Carpintería de Aluminio en Málaga - Expertos desde 2010",
+    "description": "Conoce a la empresa líder en fabricación e instalación de ventanas y cerramientos de aluminio en Málaga. +15 años de experiencia, taller propio y garantía certificada."
   }
 }

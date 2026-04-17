@@ -29,7 +29,9 @@ const DEFAULTS: HeroState = {
 // ─── Component ──────────────────────────────────────────────────────────────
 function HeroPreviewUI({ state }: { state: HeroState }) {
     const theme = getPreviewTheme();
-    const feats = state.features.split('\n').map(f => f.trim()).filter(Boolean).slice(0, 6);
+    const feats = Array.isArray(state.features) 
+        ? state.features 
+        : (typeof state.features === 'string' ? state.features.split('\n').map(f => f.trim()).filter(Boolean).slice(0, 6) : []);
     
     return (
         <div style={{

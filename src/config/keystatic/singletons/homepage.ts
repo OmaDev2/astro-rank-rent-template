@@ -27,21 +27,12 @@ export const homepage = singleton({
             description: 'URL preferida para evitar contenido duplicado.',
         }),
 
-        // ─── EDITORES VISUALES (arriba del Constructor) ──────────────────────────
-        _heroPreview: heroPreview(),
-        _statsPreview: statsPreview(),
-        _ctaPreview: ctaPreview(),
-        _featuresPreview: featuresPreview(),
-        _testimonialsPreview: testimonialsPreview(),
-        _processPreview: processPreview(),
-        _aboutPreview: aboutPreview(),
-        _pricingPreview: pricingPreview(),
-
-        // --- CONSTRUCTOR DE BLOQUES ---
+        // --- CONSTRUCTOR DE BLOQUES (UNIFICADO Y COLAPSABLE) ---
         blocks: fields.blocks({
             hero: {
-                label: '🖼️ Hero — Imagen y Enlace de Botones',
+                label: '🖼️ Hero — Cabecera Principal',
                 schema: fields.object({
+                    content: heroPreview(),
                     backgroundImage: fields.image({
                         label: 'Imagen de Fondo del Hero',
                         directory: 'public/images/home',
@@ -58,7 +49,7 @@ export const homepage = singleton({
                 })
             },
             services_grid: {
-                label: 'Grilla de Servicios (Enlaces a Páginas)',
+                label: 'Grilla de Servicios (Links)',
                 schema: fields.object({
                     title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
                     titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
@@ -129,27 +120,27 @@ export const homepage = singleton({
                 })
             },
             about: {
-                label: '🏢 Sobre Nosotros (Referencia)',
+                label: '🏢 Sobre Nosotros (Historia)',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita tu historia arriba en “🏢 Sobre Nosotros”', defaultValue: '' }),
+                    content: aboutPreview(),
                 })
             },
             features: {
                 label: '💎 Por Qué Elegirnos (Ventajas)',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita las ventajas arriba en “💎 Ventajas / Por Qué Elegirnos”', defaultValue: '' }),
+                    content: featuresPreview(),
                 })
             },
             testimonials: {
                 label: '⭐ Opiniones de Clientes (Testimonios)',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita las opiniones arriba en “⭐ Testimonios / Opiniones”', defaultValue: '' }),
+                    content: testimonialsPreview(),
                 })
             },
             process: {
                 label: '👷 Método Paso a Paso (Proceso)',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita el proceso arriba en “👷 Método / Proceso de Trabajo”', defaultValue: '' }),
+                    content: processPreview(),
                 })
             },
             faq: {
@@ -177,7 +168,7 @@ export const homepage = singleton({
             cta: {
                 label: '🎯 Llamada a la Acción (CTA)',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita el CTA arriba en “🎯 Llamada a la Acción CTA”', defaultValue: '' }),
+                    content: ctaPreview(),
                 })
             },
             contact: {
@@ -223,50 +214,48 @@ export const homepage = singleton({
                 })
             },
             service_areas: {
-                label: 'Zonas de Servicio',
+                label: 'Zonas de Servicio (Dual)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
+                    title: fields.text({ label: 'Título Sección (Ej: Dónde trabajamos)' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    areas: fields.object({
-                        barcelona: fields.object({
-                            title: fields.text({ label: 'Título Principal' }),
-                            description: fields.text({ label: 'Descripción', multiline: true }),
-                            districts: fields.array(
-                                fields.object({
-                                    name: fields.text({ label: 'Barrio/Distrito' }),
-                                    description: fields.text({ label: 'Detalle (Opcional)', multiline: true }),
-                                    icon: IconPicker({ label: 'Icono (Lucide)' }),
-                                    popular: fields.checkbox({ label: '¿Es zona destacada?', defaultValue: false }),
-                                }),
-                                { label: 'Barrios', itemLabel: p => p.fields.name.value || 'Distrito' }
-                            ),
-                        }),
-                        metropolitan: fields.object({
-                            title: fields.text({ label: 'Título Principal' }),
-                            description: fields.text({ label: 'Descripción', multiline: true }),
-                            note: fields.text({ label: 'Nota / Suplementos (Opcional)' }),
-                            cities: fields.array(
-                                fields.object({
-                                    name: fields.text({ label: 'Municipio' }),
-                                    supplement: fields.text({ label: 'Extra (Ej: +30€)' }),
-                                    icon: IconPicker({ label: 'Icono (Lucide)' }),
-                                }),
-                                { label: 'Municipios', itemLabel: p => p.fields.name.value || 'Ciudad' }
-                            ),
-                        }),
+                    group1: fields.object({
+                        title: fields.text({ label: 'Título del Grupo 1 (Ej: Málaga Capital)' }),
+                        description: fields.text({ label: 'Descripción', multiline: true }),
+                        items: fields.array(
+                            fields.object({
+                                name: fields.text({ label: 'Nombre' }),
+                                description: fields.text({ label: 'Detalle (Opcional)', multiline: true }),
+                                icon: IconPicker({ label: 'Icono (Lucide)' }),
+                                popular: fields.checkbox({ label: '¿Destacar?', defaultValue: false }),
+                            }),
+                            { label: 'Elementos Grupo 1', itemLabel: p => p.fields.name.value || 'Zona' }
+                        ),
+                    }),
+                    group2: fields.object({
+                        title: fields.text({ label: 'Título del Grupo 2 (Ej: Costa del Sol)' }),
+                        description: fields.text({ label: 'Descripción', multiline: true }),
+                        note: fields.text({ label: 'Nota / Suplementos (Opcional)' }),
+                        items: fields.array(
+                            fields.object({
+                                name: fields.text({ label: 'Nombre' }),
+                                supplement: fields.text({ label: 'Extra (Ej: +30€)' }),
+                                icon: IconPicker({ label: 'Icono (Lucide)' }),
+                            }),
+                            { label: 'Elementos Grupo 2', itemLabel: p => p.fields.name.value || 'Zona' }
+                        ),
                     }),
                 })
             },
             pricing: {
                 label: '💰 Tabla de Precios (Planes)',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita los planes arriba en “💰 Tabla de Precios”', defaultValue: '' }),
+                    content: pricingPreview(),
                 })
             },
             stats: {
                 label: '📊 Contador de Estadísticas',
                 schema: fields.object({
-                    _note: fields.text({ label: 'ℹ️ Edita los contadores arriba en “📊 Estadísticas / Contadores”', defaultValue: '' }),
+                    content: statsPreview(),
                 })
             },
             logos: {

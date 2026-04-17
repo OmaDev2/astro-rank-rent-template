@@ -55,7 +55,7 @@ function PricingPreviewUI({ state }: { state: PricingState }) {
                         <p style={{ fontSize: '10px', color: theme.textMuted, margin: '10px 0', minHeight: '30px' }}>{p.description}</p>
                         <hr style={{ border: 'none', borderTop: `1px solid ${theme.primary}11`, margin: '15px 0' }} />
                         <div style={{ fontSize: '10px', color: theme.textMain, textAlign: 'left' }}>
-                            {p.features.split('\n').filter(Boolean).map((f, j) => (
+                            {(Array.isArray(p.features) ? p.features : (typeof p.features === 'string' ? p.features.split('\n').filter(Boolean) : [])).map((f: any, j: number) => (
                                 <div key={j} style={{ marginBottom: '4px' }}>✓ {f}</div>
                             ))}
                         </div>

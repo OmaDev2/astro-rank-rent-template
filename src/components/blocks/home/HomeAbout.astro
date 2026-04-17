@@ -77,21 +77,22 @@ const TitleTag = aboutSection?.titleTag || "h2";
                 </TitleTag>
                 <div class="prose prose-invert prose-lg text-body mb-8">
                     {
-                        aboutSection.description &&
-                            aboutSection.description
-                                .split("\n")
-                                .map(
-                                    (p: string) =>
-                                        p.trim() && (
-                                            <p
-                                                class="mb-4"
-                                                set:html={p.replace(
-                                                    /\*\*(.*?)\*\*/g,
-                                                    '<strong class="text-heading">$1</strong>',
-                                                )}
-                                            />
-                                        ),
-                                )
+                        aboutSection.description && (
+                            typeof aboutSection.description === 'string' 
+                            ? aboutSection.description.split("\n")
+                            : []
+                        ).map(
+                            (p: string) =>
+                                p.trim() && (
+                                    <p
+                                        class="mb-4"
+                                        set:html={p.replace(
+                                            /\*\*(.*?)\*\*/g,
+                                            '<strong class="text-heading">$1</strong>',
+                                        )}
+                                    />
+                                ),
+                        )
                     }
                 </div>
                 {

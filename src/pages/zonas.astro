@@ -39,97 +39,52 @@ const getSeoDesc = (seoStr: string | undefined, defaultDesc: string) => {
     }
 };
 
+// 3. Page Builder Data
+const zonasPage = await getEntry("pages", "zonas");
+const zonasPageData = zonasPage?.data || {};
+
+const parsePreview = (json: string) => {
+    try { return json ? JSON.parse(json) : null; }
+    catch (_) { return null; }
+};
+
+const seoPreviewData = parsePreview(zonasPageData.seoControls as string);
+const seoTitle = seoPreviewData?.title || `Zonas de Servicio y Cobertura | ${siteName}`;
+const seoDescription = seoPreviewData?.description || `¿Buscas ${niche} en ${city}? Cubrimos toda la ciudad y provincia. Encuentra tu zona, barrio o código postal aquí. Respuesta rápida garantizada.`;
+
+const defaultBlocks = [
+    { discriminant: "hero" }
+];
+
+const finalBlocks = zonasPageData.blocks && zonasPageData.blocks.length > 0
+    ? zonasPageData.blocks
+    : defaultBlocks;
+
+import BlockRenderer from "../components/BlockRenderer.astro";
+
 const schema: WithContext<CollectionPage> = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `Áreas de Servicio - ${siteName}`,
-    description: `Ofrecemos servicios de ${niche} en ${city} y todas las áreas circundantes. Consulta nuestras zonas de cobertura garantizada.`,
+    name: seoTitle,
+    description: seoDescription,
 };
 ---
 
 <Layout
-    title={`Zonas de Servicio y Cobertura | ${siteName}`}
-    description={`¿Buscas ${niche} en ${city}? Cubrimos toda la ciudad y provincia. Encuentra tu zona, barrio o código postal aquí. Respuesta rápida garantizada.`}
+    title={seoTitle}
+    description={seoDescription}
     schema={schema}
 >
-    {/* --- HERO SECTION REFINADA --- */}
-    <section
-        class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-secondary"
-    >
-        <div class="absolute inset-0 z-0">
-            <div
-                class="absolute inset-0 bg-gradient-to-b from-secondary/40 via-secondary/90 to-secondary z-10"
-            >
-            </div>
-            <img
-                src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2070&auto=format&fit=crop"
-                alt={`Mapa de cobertura de ${siteName} en ${city}`}
-                class="w-full h-full object-cover opacity-20 mix-blend-overlay grayscale contrast-125"
-            />
-            {/* Grid Pattern Overlay */}
-            <div
-                class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"
-            >
-            </div>
-        </div>
-
-        <div class="container mx-auto px-4 relative z-20 text-center max-w-4xl">
-            <div
-                class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 mb-8 animate-fade-in-up hover:bg-white/10 transition-colors"
-            >
-                <div class="w-2 h-2 rounded-full bg-primary animate-pulse">
-                </div>
-                <span
-                    class="text-xs font-bold tracking-[0.25em] text-white/90 uppercase"
-                    >Cobertura Activa en {city}</span
-                >
-            </div>
-
-            <h1
-                class="text-5xl md:text-7xl lg:text-8xl font-black text-heading mb-8 tracking-tighter leading-none uppercase animate-fade-in-up delay-100"
-            >
-                Llegamos <br />
-                <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary"
-                >
-                    Donde Estés
-                </span>
-            </h1>
-
-            <p
-                class="text-lg md:text-2xl text-text/80 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200 mb-10 text-balance"
-            >
-                Nuestra red de técnicos expertos en <span
-                    class="text-heading font-medium">{niche}</span
-                > cubre estratégicamente todo <span
-                    class="text-heading font-medium">{city}</span
-                > para garantizar tiempos de respuesta récord.
-            </p>
-
-            <div
-                class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300"
-            >
-                <a
-                    href="#zonas-list"
-                    class="px-8 py-4 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-all flex items-center gap-2 group shadow-lg shadow-primary/20"
-                >
-                    <Search
-                        className="w-5 h-5 group-hover:scale-110 transition-transform"
-                    />
-                    Buscar mi Zona
-                </a>
-                <a
-                    href={`tel:${phone.replace(/\s/g, "")}`}
-                    class="px-8 py-4 bg-white/5 text-heading font-bold rounded-lg hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2 group"
-                >
-                    <Phone
-                        className="w-5 h-5 group-hover:scale-110 transition-transform"
-                    />
-                    Llamar ahora
-                </a>
-            </div>
-        </div>
-    </section>
+    {/* --- NEW MODULAR PAGE BUILDER --- */}
+    <BlockRenderer
+        blocks={finalBlocks}
+        config={settings}
+        city={city}
+        locationName={city}
+        niche={niche}
+        phone={phone}
+        whatsapp={whatsapp}
+    />
 
     {/* --- ZONAS LIST --- */}
     <section

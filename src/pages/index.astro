@@ -14,26 +14,6 @@ const testimonialsCollection = await getCollection("testimonials");
 const home = await getEntry("pages", "home");
 const homeData = (home?.data || {}) as any;
 
-// Prioritize testimonials from Home Singleton, fallback to Collection
-const rawTestimonials =
-	homeData.testimonials && homeData.testimonials.length > 0
-		? homeData.testimonials.map((t: any) => ({
-				name: t.author,
-				text: t.quote,
-				location: t.location,
-				initials: t.initials,
-				rating: 5, // Default rating for home singleton testimonials
-			}))
-		: testimonialsCollection.map((t) => ({
-				name: t.data.name,
-				text: t.data.text,
-				location: "", // Collection doesn't have location in schema currently?
-				initials: t.data.initials,
-				rating: t.data.rating,
-			}));
-
-const testimonials = rawTestimonials;
-
 // Render contenido SEO
 let SeoContentRendered;
 try {
@@ -118,22 +98,18 @@ const parsePreview = (json: string) => {
     catch (_) { return null; }
 };
 
-const heroPreviewOverride = parsePreview(homeData._heroPreview);
-const statsPreviewOverride = parsePreview(homeData._statsPreview);
-const ctaPreviewOverride = parsePreview(homeData._ctaPreview);
-const featuresPreviewOverride = parsePreview(homeData._featuresPreview);
-const testimonialsPreviewOverride = parsePreview(homeData._testimonialsPreview);
-const processPreviewOverride = parsePreview(homeData._processPreview);
-const aboutPreviewOverride = parsePreview(homeData._aboutPreview);
-const pricingPreviewOverride = parsePreview(homeData._pricingPreview);
 // SEO manually set in Keystatic
 const seoPreviewData = parsePreview(homeData.seoControls);
 const seoTitle = seoPreviewData?.title || homeData.seoTitle;
 const seoDescription = seoPreviewData?.description || homeData.seoDescription;
 
+// Find Hero Data for Title Fallback if SEO is empty
+const heroBlock = homeData.blocks?.find((b: any) => b.discriminant === "hero");
+const heroContent = heroBlock ? parsePreview(heroBlock.value?.content) : null;
+
 // Smart Title Fallback
 const finalTitle = seoTitle || 
-    (heroPreviewOverride?.heading ? `${heroPreviewOverride.heading} ${heroPreviewOverride.headingHighlight || ''}`.trim() : null) || 
+    (heroContent?.heading ? `${heroContent.heading} ${heroContent.headingHighlight || ''}`.trim() : null) || 
     `${config.niche} en ${config.city}`;
 
 const displayTitle = `${finalTitle} | ${config.siteName}`;
@@ -155,14 +131,6 @@ const displayTitle = `${finalTitle} | ${config.siteName}`;
 		services={featuredServices}
 		allServices={allServices}
 		content={SeoContentRendered}
-		heroPreviewOverride={heroPreviewOverride}
-		statsPreviewOverride={statsPreviewOverride}
-		ctaPreviewOverride={ctaPreviewOverride}
-		featuresPreviewOverride={featuresPreviewOverride}
-		testimonialsPreviewOverride={testimonialsPreviewOverride}
-		processPreviewOverride={processPreviewOverride}
-		aboutPreviewOverride={aboutPreviewOverride}
-		pricingPreviewOverride={pricingPreviewOverride}
 	/>
 
 	<Footer />

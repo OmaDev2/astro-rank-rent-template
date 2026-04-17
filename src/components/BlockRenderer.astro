@@ -52,14 +52,6 @@ interface Props {
     whatsapp?: string;
     isHome?: boolean;
     config?: any; // Global settings
-    heroPreviewOverride?: any; // Data from _heroPreview visual field
-    statsPreviewOverride?: any; // Data from _statsPreview visual field
-    ctaPreviewOverride?: any; // Data from _ctaPreview visual field
-    featuresPreviewOverride?: any; // Data from _featuresPreview visual field
-    testimonialsPreviewOverride?: any; // Data from _testimonialsPreview visual field
-    processPreviewOverride?: any; // Data from _processPreview visual field
-    aboutPreviewOverride?: any; // Data from _aboutPreview visual field
-    pricingPreviewOverride?: any; // Data from _pricingPreview visual field
 }
 
 const {
@@ -84,44 +76,42 @@ const {
     whatsapp,
     isHome,
     config,
-    heroPreviewOverride,
-    statsPreviewOverride,
-    ctaPreviewOverride,
-    featuresPreviewOverride,
-    testimonialsPreviewOverride,
-    processPreviewOverride,
-    aboutPreviewOverride,
-    pricingPreviewOverride,
 } = Astro.props;
 ---
 
 {
     blocks.map((block, index) => {
-        const { discriminant, value } = block;
+        const { discriminant, value } = block as any;
+        const parseJson = (v: any) => { 
+            if (typeof v === 'object' && v !== null) return v;
+            try { return v ? JSON.parse(v) : null; } catch { return null; } 
+        };
+        
         // Alternar fondos: Par = Secondary (Oscuro), Impar = Surface (Claro/Contraste)
         const bgClass = index % 2 === 0 ? "bg-secondary" : "bg-surface";
 
         switch (discriminant) {
             case "hero":
+                const heroContent = parseJson(value?.content);
                 if (isHome) {
-                    // Text content comes from _heroPreview visual editor.
-                    // backgroundImage and button links come from the hero block.
                     const heroMerged = {
                         backgroundImage: value?.backgroundImage,
-                        heading:          heroPreviewOverride?.heading          || value?.heading,
-                        headingHighlight: heroPreviewOverride?.headingHighlight || value?.headingHighlight,
-                        subheading:       heroPreviewOverride?.subheading       || value?.subheading,
+                        heading:          heroContent?.heading          || value?.heading,
+                        headingHighlight: heroContent?.headingHighlight || value?.headingHighlight,
+                        subheading:       heroContent?.subheading       || value?.subheading,
                         ctaPrimary: {
-                            text: heroPreviewOverride?.ctaPrimaryText    || value?.ctaPrimary?.text,
+                            text: heroContent?.ctaPrimaryText    || value?.ctaPrimary?.text,
                             link: value?.ctaPrimaryLink || value?.ctaPrimary?.link || '#presupuesto',
                         },
                         ctaSecondary: {
-                            text: heroPreviewOverride?.ctaSecondaryText  || value?.ctaSecondary?.text,
+                            text: heroContent?.ctaSecondaryText  || value?.ctaSecondary?.text,
                             link: value?.ctaSecondaryLink || value?.ctaSecondary?.link || '',
                         },
-                        features: heroPreviewOverride?.features
-                            ? heroPreviewOverride.features.split('\n').map((f: string) => f.trim()).filter(Boolean)
-                            : (value?.features || []),
+                        features: Array.isArray(heroContent?.features)
+                            ? heroContent.features
+                            : (typeof heroContent?.features === 'string'
+                                ? heroContent.features.split('\n').map((f: string) => f.trim()).filter(Boolean)
+                                : (value?.features || [])),
                     };
                     return <HomeHero hero={heroMerged} config={config} />;
                 }
@@ -140,8 +130,13 @@ const {
                             phone={phone}
                             siteName={siteName}
                             niche={niche}
-                            title={value?.title || title}
-                            subtitle={value?.subtitle}
+                            title={heroContent?.title || value?.title || title}
+                            subtitle={heroContent?.subtitle || value?.subtitle}
+                            heading={heroContent?.heading}
+                            headingHighlight={heroContent?.headingHighlight}
+                            subheading={heroContent?.subheading}
+                            ctaPrimaryText={heroContent?.ctaPrimaryText}
+                            ctaSecondaryText={heroContent?.ctaSecondaryText}
                         />
                     </div>
                 );
@@ -169,7 +164,8 @@ const {
                 );
 
             case "about":
-                const finalAboutData = aboutPreviewOverride || value;
+                const aboutContent = parseJson(value?.content);
+                const finalAboutData = aboutContent || value;
                 return finalAboutData ? (
                     <HomeAbout
                         title={finalAboutData.title}
@@ -187,15 +183,16 @@ const {
                 ) : null;
 
             case "features":
-                const finalFeatures = featuresPreviewOverride?.features || value?.features || value?.items || value || [];
-                const finalTitle = featuresPreviewOverride?.title || value?.title;
-                const finalSubtitle = featuresPreviewOverride?.subtitle || value?.subtitle;
+                const featuresContent = parseJson(value?.content);
+                const finalFeatures = featuresContent?.features || value?.features || value?.items || value || [];
+                const finalTitle = featuresContent?.title || value?.title;
+                const finalSubtitle = featuresContent?.subtitle || value?.subtitle;
                 if (isHome) {
                     return (
                         <HomeFeatures
                             features={finalFeatures}
                             title={finalTitle}
-                            titleTag={featuresPreviewOverride?.titleTag}
+                            titleTag={featuresContent?.titleTag}
                             city={city}
                             bgClass={bgClass}
                         />
@@ -213,20 +210,22 @@ const {
                 );
 
             case "process":
-                const finalProcess = processPreviewOverride || value;
+                const processContent = parseJson(value?.content);
+                const finalProcess = processContent || value;
                 return finalProcess ? (
                     <HomeProcess process={finalProcess} bgClass={bgClass} />
                 ) : null;
 
             case "testimonials":
-                const finalTestimonials = testimonialsPreviewOverride?.testimonials || value?.testimonials || value || [];
-                const finalTestiTitle = testimonialsPreviewOverride?.title || value?.title;
-                const finalTestiSubtitle = testimonialsPreviewOverride?.subtitle || value?.subtitle;
+                const testimonialsContent = parseJson(value?.content);
+                const finalTestimonials = testimonialsContent?.testimonials || value?.testimonials || value || [];
+                const finalTestiTitle = testimonialsContent?.title || value?.title;
+                const finalTestiSubtitle = testimonialsContent?.subtitle || value?.subtitle;
                 return (
                     <Testimonials
                         title={finalTestiTitle}
                         subtitle={finalTestiSubtitle}
-                        titleTag={testimonialsPreviewOverride?.titleTag}
+                        titleTag={testimonialsContent?.titleTag}
                         testimonials={
                             Array.isArray(finalTestimonials)
                                 ? finalTestimonials.map((t: any) => ({
@@ -252,12 +251,14 @@ const {
                 );
 
             case "cta":
+                const ctaContent = parseJson(value?.content);
+                const finalCta = ctaContent || value;
                 return (
                     <FinalCTA
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        buttonText={value?.buttonText}
-                        buttonLink={value?.buttonLink}
+                        title={finalCta?.title}
+                        subtitle={finalCta?.subtitle}
+                        buttonText={finalCta?.buttonText}
+                        buttonLink={finalCta?.buttonLink}
                         bgClass={bgClass}
                     />
                 );
@@ -362,22 +363,25 @@ const {
                     <ServiceAreas
                         title={value?.title}
                         subtitle={value?.subtitle}
-                        areas={value?.areas}
+                        group1={value?.group1}
+                        group2={value?.group2}
                         bgClass={bgClass}
                     />
                 );
 
             case "pricing":
-                // Use visual editor override if available
-                const pricingData = pricingPreviewOverride
+                const pricingContent = parseJson(value?.content);
+                const pricingData = pricingContent
                     ? {
-                          title: pricingPreviewOverride.title,
-                          subtitle: pricingPreviewOverride.subtitle,
-                          plans: pricingPreviewOverride.plans?.map((p: any) => ({
+                          title: pricingContent.title,
+                          subtitle: pricingContent.subtitle,
+                          plans: pricingContent.plans?.map((p: any) => ({
                               ...p,
-                              features: p.features
-                                  ? p.features.split("\n").map((f: string) => f.trim()).filter(Boolean)
-                                  : []
+                              features: Array.isArray(p.features)
+                                  ? p.features
+                                  : (typeof p.features === 'string'
+                                      ? p.features.split("\n").map((f: string) => f.trim()).filter(Boolean)
+                                      : [])
                           })),
                       }
                     : value;
@@ -393,12 +397,12 @@ const {
                 );
 
             case "stats":
-                // Use visual editor override if available
-                const statsData = statsPreviewOverride
+                const statsContent = parseJson(value?.content);
+                const statsData = statsContent
                     ? {
-                          title: statsPreviewOverride.title,
-                          subtitle: statsPreviewOverride.subtitle,
-                          stats: statsPreviewOverride.stats,
+                          title: statsContent.title,
+                          subtitle: statsContent.subtitle,
+                          stats: statsContent.stats,
                       }
                     : value;
                 return (

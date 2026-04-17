@@ -1,7 +1,13 @@
 import { collection, fields } from '@keystatic/core';
-import { SeoPreview } from '../../../components/keystatic/SeoPreview';
-import { IconPicker } from '../../../components/keystatic/IconPicker';
+import { SeoPreview } from '@/components/keystatic/SeoPreview';
+import { IconPicker } from '@/components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
+import { heroPreview } from '@/components/keystatic/HeroPreview';
+import { featuresPreview } from '@/components/keystatic/FeaturesPreview';
+import { statsPreview } from '@/components/keystatic/StatsPreview';
+import { ctaPreview } from '@/components/keystatic/CtaPreview';
+import { pricingPreview } from '@/components/keystatic/PricingPreview';
+import { processPreview } from '@/components/keystatic/ProcessPreview';
 
 export const services = collection({
     label: '🛠️ Servicios',
@@ -38,55 +44,50 @@ export const services = collection({
         // CONSTRUCTOR DE BLOQUES MEJORADO
         blocks: fields.blocks({
             hero: {
-                label: 'Hero (Portada)',
+                label: '🖼️ Hero (Portada)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título H1 (Sobreescribir)' }),
-                    subtitle: fields.text({ label: 'Subtítulo / Lead', multiline: true }),
-                    heroImage: fields.image({
-                        label: 'Imagen Hero',
-                        directory: 'public/images/services',
-                        publicPath: '/images/services',
-                    }),
+                    content: heroPreview(),
                 })
             },
             features: {
-                label: 'Características (Beneficios)',
+                label: '💎 Características (Beneficios)',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título Sección' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    items: fields.array(
-                        fields.object({
-                            title: fields.text({ label: 'Característica' }),
-                            desc: fields.text({ label: 'Detalle', multiline: true }),
-                            icon: IconPicker({ label: 'Icono (Lucide)' }),
-                        }),
-                        {
-                            label: 'Lista de Beneficios',
-                            itemLabel: (props) => props.fields.title.value || 'Beneficio',
-                        }
-                    )
+                    content: featuresPreview(),
+                })
+            },
+            process: {
+                label: '👷 Método de Trabajo (Proceso)',
+                schema: fields.object({
+                    content: processPreview(),
+                })
+            },
+            stats: {
+                label: '📊 Números / Estadísticas',
+                schema: fields.object({
+                    content: statsPreview(),
+                })
+            },
+            cta: {
+                label: '🎯 Llamada a la Acción (CTA)',
+                schema: fields.object({
+                    content: ctaPreview(),
+                })
+            },
+            pricing: {
+                label: '💰 Tabla de Precios',
+                schema: fields.object({
+                    content: pricingPreview(),
                 })
             },
             content: {
-                label: 'Contenido y MDX',
+                label: '📝 Bloque de Texto y MDX',
                 schema: fields.object({
                     title: fields.text({ label: 'Título del bloque de texto' }),
                     showSidebar: fields.checkbox({ label: 'Mostrar Sidebar de Contacto', defaultValue: true }),
-                    urgencyBoxStyle: fields.select({
-                        label: 'Estilo de Caja de Urgencia',
-                        options: [
-                            { label: 'Ninguno', value: 'none' },
-                            { label: 'Éxito (Verde)', value: 'success' },
-                            { label: 'Urgente (Rojo)', value: 'urgent' },
-                            { label: 'Tema Principal', value: 'primary' },
-                            { label: 'Tema Acento', value: 'accent' },
-                        ],
-                        defaultValue: 'none',
-                    }),
                 })
             },
             faq: {
-                label: 'Preguntas Frecuentes',
+                label: '❓ Preguntas Frecuentes',
                 schema: fields.object({
                     title: fields.text({ label: 'Título Sección FAQ' }),
                     faqs: fields.array(
@@ -100,111 +101,10 @@ export const services = collection({
                         }
                     )
                 })
-            },
-            cta: {
-                label: 'Llamada a la Acción (CTA)',
-                schema: fields.object({
-                    title: fields.text({ label: 'Título del CTA' }),
-                    subtitle: fields.text({ label: 'Texto descriptivo' }),
-                    buttonText: fields.text({ label: 'Texto del Botón' }),
-                    buttonLink: fields.text({ label: 'Enlace (ej: /contacto)' }),
-                })
-            },
-            locations_grid: {
-                label: 'Cuadrícula de Zonas',
-                schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    description: fields.text({ label: 'Descripción', multiline: true }),
-                })
-            },
-            price_from: {
-                label: '🏷️ Precio Desde',
-                schema: fields.object({
-                    price: fields.text({ label: 'Precio (Ej: 18)', validation: { length: { min: 1 } } }),
-                    unit: fields.text({ label: 'Unidad (Ej: /m2)', defaultValue: '/m2' }),
-                    title: fields.text({ label: 'Título Grande (Ej: Hormigón Impreso)' }),
-                    subtitle: fields.text({ label: 'Subtítulo Pequeño (Ej: Precio Profesional)' }),
-                    buttonText: fields.text({ label: 'Texto Botón', defaultValue: 'Pedir Presupuesto' }),
-                    buttonLink: fields.text({ label: 'Enlace Botón', defaultValue: '#contacto' }),
-                    isOffer: fields.checkbox({ label: '¿Es una oferta?', defaultValue: true }),
-                })
-            },
-            pricing: {
-                label: 'Tabla de Precios',
-                schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    plans: fields.array(
-                        fields.object({
-                            name: fields.text({ label: 'Nombre del Plan' }),
-                            price: fields.text({ label: 'Precio (Ej: 99€)' }),
-                            description: fields.text({ label: 'Descripción Corta' }),
-                            isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
-                            features: fields.array(fields.text({ label: 'Característica' }), {
-                                label: 'Características',
-                                itemLabel: p => p.value || 'Característica'
-                            }),
-                            buttonText: fields.text({ label: 'Texto del Botón', defaultValue: 'Solicitar Ahora' }),
-                            buttonLink: fields.text({ label: 'Enlace (Opcional)', defaultValue: '#contacto' }),
-                        }),
-                        { label: 'Planes', itemLabel: p => p.fields.name.value || 'Plan' }
-                    )
-                })
-            },
-            stats: {
-                label: 'Números / Estadísticas',
-                schema: fields.object({
-                    title: fields.text({ label: 'Título Sección (Opcional)' }),
-                    stats: fields.array(
-                        fields.object({
-                            label: fields.text({ label: 'Etiqueta (Ej: Clientes)' }),
-                            value: fields.text({ label: 'Valor (Ej: 500)' }),
-                            suffix: fields.text({ label: 'Sufijo (Ej: +)' }),
-                        }),
-                        { label: 'Estadísticas', itemLabel: p => `${p.fields.value.value}${p.fields.suffix.value} ${p.fields.label.value}` }
-                    )
-                })
-            },
-            logos: {
-                label: 'Logos de Confianza / Partners',
-                schema: fields.object({
-                    title: fields.text({ label: 'Título (Opcional)' }),
-                    logos: fields.array(
-                        fields.object({
-                            alt: fields.text({ label: 'Nombre Empresa' }),
-                            image: fields.image({
-                                label: 'Logo',
-                                directory: 'public/images/logos',
-                                publicPath: '/images/logos',
-                            }),
-                        }),
-                        { label: 'Logos', itemLabel: p => p.fields.alt.value || 'Logo' }
-                    )
-                })
-            },
-            before_after: {
-                label: 'Antes y Después (Comparativa)',
-                schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    beforeImage: fields.image({
-                        label: 'Imagen Antes',
-                        directory: 'public/images/comparativas',
-                        publicPath: '/images/comparativas',
-                    }),
-                    afterImage: fields.image({
-                        label: 'Imagen Después',
-                        directory: 'public/images/comparativas',
-                        publicPath: '/images/comparativas',
-                    }),
-                    beforeLabel: fields.text({ label: 'Etiqueta Antes', defaultValue: 'Antes' }),
-                    afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
-                })
             }
         }, {
-            label: 'Constructor Visual',
-            description: 'Añade y ordena los bloques que compondrán la página.'
+            label: 'Constructor Visual de Página',
+            description: 'Añade y ordena los bloques que compondrán la página de este servicio.'
         }),
 
         content: fields.mdx({

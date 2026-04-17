@@ -1,6 +1,14 @@
 import { collection, fields } from '@keystatic/core';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
 import { mdxComponentsConfig } from '../mdx-components';
+import { heroPreview } from '../../../components/keystatic/HeroPreview';
+import { statsPreview } from '../../../components/keystatic/StatsPreview';
+import { ctaPreview } from '../../../components/keystatic/CtaPreview';
+import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
+import { testimonialsPreview } from '../../../components/keystatic/TestimonialsPreview';
+import { processPreview } from '../../../components/keystatic/ProcessPreview';
+import { aboutPreview } from '../../../components/keystatic/AboutPreview';
+import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
 export const locations = collection({
     label: '📍 Zonas de Servicio',
@@ -63,19 +71,23 @@ export const locations = collection({
 
         blocks: fields.blocks({
             hero: {
-                label: 'Hero (Portada)',
-                schema: fields.empty()
+                label: '🖼️ Hero (Portada)',
+                schema: fields.object({
+                    content: heroPreview(),
+                })
             },
             features: {
-                label: 'Características (Por qué elegirnos)',
-                schema: fields.empty()
+                label: '💎 Características (Por qué elegirnos)',
+                schema: fields.object({
+                    content: featuresPreview(),
+                })
             },
             map: {
-                label: 'Mapa de Ubicación',
+                label: '📍 Mapa de Ubicación',
                 schema: fields.empty()
             },
             content: {
-                label: 'Contenido Principal + Sidebar',
+                label: '📝 Contenido Principal + Sidebar',
                 schema: fields.object({
                     urgencyBoxStyle: fields.select({
                         label: 'Estilo de Caja de Urgencia',
@@ -91,47 +103,25 @@ export const locations = collection({
                 })
             },
             cta: {
-                label: 'Llamada a la Acción (CTA Final)',
-                schema: fields.empty()
+                label: '🎯 Llamada a la Acción (CTA Final)',
+                schema: fields.object({
+                    content: ctaPreview(),
+                })
             },
             pricing: {
-                label: 'Tabla de Precios',
+                label: '💰 Tabla de Precios',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título' }),
-                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
-                    plans: fields.array(
-                        fields.object({
-                            name: fields.text({ label: 'Nombre del Plan' }),
-                            price: fields.text({ label: 'Precio (Ej: 99€)' }),
-                            description: fields.text({ label: 'Descripción Corta' }),
-                            isPopular: fields.checkbox({ label: '¿Es el plan más popular?', defaultValue: false }),
-                            features: fields.array(fields.text({ label: 'Característica' }), {
-                                label: 'Características',
-                                itemLabel: p => p.value || 'Característica'
-                            }),
-                            buttonText: fields.text({ label: 'Texto del Botón', defaultValue: 'Solicitar Ahora' }),
-                            buttonLink: fields.text({ label: 'Enlace (Opcional)', defaultValue: '#contacto' }),
-                        }),
-                        { label: 'Planes', itemLabel: p => p.fields.name.value || 'Plan' }
-                    )
+                    content: pricingPreview(),
                 })
             },
             stats: {
-                label: 'Números / Estadísticas',
+                label: '📊 Números / Estadísticas',
                 schema: fields.object({
-                    title: fields.text({ label: 'Título Sección (Opcional)' }),
-                    stats: fields.array(
-                        fields.object({
-                            label: fields.text({ label: 'Etiqueta (Ej: Clientes)' }),
-                            value: fields.text({ label: 'Valor (Ej: 500)' }),
-                            suffix: fields.text({ label: 'Sufijo (Ej: +)' }),
-                        }),
-                        { label: 'Estadísticas', itemLabel: p => `${p.fields.value.value}${p.fields.suffix.value} ${p.fields.label.value}` }
-                    )
+                    content: statsPreview(),
                 })
             },
             logos: {
-                label: 'Logos de Confianza / Partners',
+                label: '🤝 Logos de Confianza / Partners',
                 schema: fields.object({
                     title: fields.text({ label: 'Título (Opcional)' }),
                     logos: fields.array(
@@ -148,7 +138,7 @@ export const locations = collection({
                 })
             },
             before_after: {
-                label: 'Antes y Después (Comparativa)',
+                label: '🔄 Antes y Después (Comparativa)',
                 schema: fields.object({
                     title: fields.text({ label: 'Título' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),

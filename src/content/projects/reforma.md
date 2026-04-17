@@ -1,6 +1,6 @@
 ---
 title: "Reforma Integral"
 image: "/src/assets/images/placeholder.jpg"
-locationTag: "Barcelona"
+locationTag: "Málaga"
 ---
 Descripción del proyecto realizado...
