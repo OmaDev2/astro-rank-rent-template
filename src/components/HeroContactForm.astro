@@ -44,6 +44,7 @@ interface Props {
     subtitle?: string;
     variant?: "default" | "clean";
     theme?: "dark" | "light";
+    compact?: boolean;
 }
 
 // Props que vienen del Layout (pueden sobreescribir la config global si se pasan)
@@ -52,6 +53,7 @@ const {
     subtitle: propSubtitle,
     variant = "default",
     theme = "dark",
+    compact = false,
 } = Astro.props;
 
 const finalTitle = propTitle || title;
@@ -60,7 +62,7 @@ const finalSubtitle = propSubtitle || subtitle;
 // Estilos
 const containerClasses =
     variant === "default"
-        ? "bg-secondary/80 backdrop-blur-md rounded-xl shadow-2xl p-8 border border-heading/10"
+        ? `backdrop-blur-md rounded-xl shadow-2xl border border-heading/10 ${compact ? "bg-secondary/80 p-5" : "bg-secondary/80 p-8"}`
         : "";
 
 const inputClasses =
@@ -75,14 +77,14 @@ const labelClasses =
 ---
 
 <div class={containerClasses}>
-    <div class="mb-6">
+    <div class={compact ? "mb-4" : "mb-6"}>
         <h3
-            class={`text-2xl font-heading font-bold mb-2 ${theme === "dark" ? "text-heading" : "text-slate-900"}`}
+            class={`font-heading font-bold mb-1 ${compact ? "text-xl" : "text-2xl"} ${theme === "dark" ? "text-heading" : "text-slate-900"}`}
         >
             {finalTitle}
         </h3>
         <p
-            class={`text-sm ${theme === "dark" ? "text-body" : "text-slate-500"}`}
+            class={`${compact ? "text-xs" : "text-sm"} ${theme === "dark" ? "text-body" : "text-slate-500"}`}
         >
             {finalSubtitle}
         </p>

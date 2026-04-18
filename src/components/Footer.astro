@@ -6,7 +6,7 @@ import { getSettings } from "@/lib/settings";
 
 // 1. Recuperar configuración unificada
 const settings = await getSettings();
-const { siteName, phone, email, address, city, niche, facebook, instagram } =
+const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle } =
     settings;
 
 // 2. Recuperar configuración específica del Footer
@@ -32,9 +32,10 @@ const footerLinks =
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
     <div class="container mx-auto px-4">
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-            {/* COLUMNA 1: INFO NEGOCIO */}
-            <div>
+        {footerStyle !== 'simple' && (
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                {/* COLUMNA 1: INFO NEGOCIO */}
+                <div>
                 <div class="text-2xl font-heading font-bold text-heading mb-4">
                     {siteName}
                 </div>
@@ -117,6 +118,7 @@ const footerLinks =
                 <ServiceAreas />
             </div>
         </div>
+        )}
 
         {/* BARRA INFERIOR (LINKS LEGALES) */}
         <div

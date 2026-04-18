@@ -41,6 +41,10 @@ export const blog = collection({
             publicPath: '/images/blog',
             validation: { isRequired: false }
         }),
+        imageAlt: fields.text({
+            label: 'Texto Alt de la Imagen (Opcional)',
+            description: 'Fundamental para mejorar la accesibilidad y SEO del post.',
+        }),
 
         category: fields.text({
             label: 'Categoría',

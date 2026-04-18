@@ -172,6 +172,14 @@ const spacingMap: Record<string, string> = {
 };
 const sectionPy = spacingMap[settings.sectionSpacing || 'normal'] ?? spacingMap.normal;
 
+// Animation + Navbar style
+const animationStyle = settings.animationStyle || 'subtle';
+const navbarStyle    = settings.navbarStyle    || 'glass';
+const sectionDivider = settings.sectionDivider || 'none';
+const bgTexture      = settings.bgTexture      || 'none';
+const heroStyle      = settings.heroStyle      || 'image';
+const headingStyle   = settings.headingStyle   || 'normal';
+
 // Preload hero image en home para optimizar LCP
 const isHome = Astro.url.pathname === "/";
 const heroProcessed = isHome
@@ -184,6 +192,11 @@ const heroProcessed = isHome
     lang="es"
     class="scroll-smooth"
     data-btn-style={buttonStyle}
+    data-anim={animationStyle}
+    data-navbar={navbarStyle}
+    data-divider={sectionDivider}
+    data-texture={bgTexture}
+    data-heading-style={headingStyle}
     style={{
         // --- VARIABLES DE COLOR ---
         "--color-primary": colors.primary,
@@ -228,6 +241,8 @@ const heroProcessed = isHome
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
+        {settings.themeColor && <meta name="theme-color" content={settings.themeColor} />}
+        {settings.customCss && <style set:html={settings.customCss}></style>}
 
         {/* --- CARGA DINÁMICA DE FUENTES DE GOOGLE --- */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -308,5 +323,28 @@ const heroProcessed = isHome
         <CookieBanner />
         <CallbackModal />
         <ClickTracker />
+
+        {/* Scroll animations — respects data-anim attribute */}
+        <script is:inline>
+            (function () {
+                var mode = document.documentElement.dataset.anim || 'subtle';
+                if (mode === 'none') return;
+                var sections = document.querySelectorAll('main > * > section, main > section');
+                if (!sections.length) sections = document.querySelectorAll('section');
+                var observer = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('anim-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.08 });
+                sections.forEach(function (el, i) {
+                    if (i === 0) return; // hero siempre visible
+                    el.classList.add('anim-ready');
+                    observer.observe(el);
+                });
+            })();
+        </script>
     </body>
 </html>

@@ -19,9 +19,11 @@ const locationName = spin(props.locationName);
 const niche = spin(props.niche);
 const zipCodes = props.zipCodes;
 const heroImage = props.heroImage;
+const heroImageAlt = props.heroImageAlt;
 const phone = props.phone;
 const title = spin(props.title);
 const isIndustrial = Astro.props.locationType === "industrial";
+const heroStyle: string = props.heroStyle || "image";
 
 // Lógica de Selección de Imagen (Mantenida intacta)
 let selectedImage = null;
@@ -53,6 +55,8 @@ const headingHighlight = spin(props.headingHighlight);
 const phoneHref = (phone || "").replace(/\s/g, "");
 ---
 
+{/* ── Variantes image / centered / split_photo / minimal: layout estándar ── */}
+{(heroStyle === "image" || heroStyle === "centered" || heroStyle === "split_photo" || heroStyle === "minimal") && (
 <section
     class="relative min-h-[90vh] lg:min-h-[800px] flex items-center bg-secondary overflow-hidden group"
 >
@@ -62,7 +66,7 @@ const phoneHref = (phone || "").replace(/\s/g, "");
             isOptimized ? (
                 <Image
                     src={selectedImage}
-                    alt={`${niche} en ${locationName}`}
+                    alt={heroImageAlt || `${niche} en ${locationName}`}
                     class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
                     loading="eager"
                     width={1920}
@@ -71,7 +75,7 @@ const phoneHref = (phone || "").replace(/\s/g, "");
             ) : (
                 <img
                     src={selectedImage}
-                    alt={`${niche} en ${locationName}`}
+                    alt={heroImageAlt || `${niche} en ${locationName}`}
                     class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
                     loading="eager"
                 />
@@ -194,3 +198,70 @@ const phoneHref = (phone || "").replace(/\s/g, "");
         </div>
     </div>
 </section>
+)}
+
+{/* ── split_form: imagen fondo + formulario derecha ── */}
+{heroStyle === "split_form" && (
+<section class="relative min-h-[85vh] flex items-center bg-secondary overflow-hidden pt-24">
+    <div class="absolute inset-0 w-full h-full select-none">
+        {isOptimized ? (
+            <Image src={selectedImage} alt={heroImageAlt || `${niche} en ${locationName}`}
+                class="w-full h-full object-cover" loading="eager" width={1920} height={1080} />
+        ) : (
+            <img src={selectedImage} alt={heroImageAlt || `${niche} en ${locationName}`}
+                class="w-full h-full object-cover" loading="eager" />
+        )}
+        <div class="absolute inset-0"
+            style="background: linear-gradient(to right, rgb(var(--hero-overlay)) 0%, rgb(var(--hero-overlay) / 0.92) 55%, rgb(var(--hero-overlay) / 0.8) 100%); opacity: var(--hero-opacity);">
+        </div>
+    </div>
+    <div class="container mx-auto px-4 py-10 relative z-10">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-8 space-y-5">
+                <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Disponible en {locationName}
+                </div>
+                <h1 class="text-4xl lg:text-6xl font-heading font-black text-heading leading-tight drop-shadow-xl">
+                    {heading || props.title || `${niche} en ${locationName}`}
+                    {headingHighlight && <span class="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mt-1">{headingHighlight}</span>}
+                </h1>
+                <p class="text-lg text-heading/90 font-bold border-l-2 border-primary/40 pl-4">{heroSubtitle}</p>
+                <a href={`tel:${phoneHref}`} class="btn-cta inline-flex items-center gap-3 px-8 py-4 text-lg font-bold bg-primary text-white rounded shadow-lg">
+                    <Phone className="w-5 h-5" />{phone}
+                </a>
+            </div>
+            <div class="lg:col-span-4">
+                <HeroContactForm variant="default" theme="dark" compact={true} />
+            </div>
+        </div>
+    </div>
+</section>
+)}
+
+{/* ── split_form_clean: fondo sólido + formulario derecha ── */}
+{heroStyle === "split_form_clean" && (
+<section class="relative min-h-[85vh] flex items-center bg-secondary overflow-hidden pt-24">
+    <div class="container mx-auto px-4 py-10 relative z-10">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-8 space-y-5">
+                <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Disponible en {locationName}
+                </div>
+                <h1 class="text-4xl lg:text-6xl font-heading font-black text-heading leading-tight">
+                    {heading || props.title || `${niche} en ${locationName}`}
+                    {headingHighlight && <span class="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mt-1">{headingHighlight}</span>}
+                </h1>
+                <p class="text-lg text-body leading-relaxed border-l-2 border-primary/40 pl-4">{heroSubtitle}</p>
+                <a href={`tel:${phoneHref}`} class="btn-cta inline-flex items-center gap-3 px-8 py-4 text-lg font-bold bg-primary text-white rounded shadow-lg">
+                    <Phone className="w-5 h-5" />{phone}
+                </a>
+            </div>
+            <div class="lg:col-span-4">
+                <HeroContactForm variant="default" theme="dark" compact={true} />
+            </div>
+        </div>
+    </div>
+</section>
+)}

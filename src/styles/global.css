@@ -94,3 +94,141 @@ section.py-16, section.py-20, section.py-24, section.py-28, section.py-32 {
     padding-top:    var(--section-py, 5rem) !important;
     padding-bottom: var(--section-py, 5rem) !important;
 }
+
+/* ---- ANIMACIONES DE SCROLL ----
+   .anim-ready: estado inicial oculto (el JS lo añade antes del observe).
+   .anim-visible: estado final (el observer lo añade al entrar en viewport).
+   none → sin efecto, subtle → solo fade, full → fade + slide. */
+.anim-ready {
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+html[data-anim="subtle"] .anim-ready {
+    transform: translateY(6px);
+    transition-duration: 0.45s;
+}
+html[data-anim="full"] .anim-ready {
+    transform: translateY(28px);
+    transition-duration: 0.65s;
+}
+.anim-ready.anim-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* ---- NAVBAR SÓLIDO ----
+   El estilo glass lo gestiona el script de Navbar.astro.
+   El sólido y el minimal se fuerzan via CSS para no depender del scroll. */
+html[data-navbar="solid"] #navbar {
+    background: rgb(var(--color-secondary) / 0.97) !important;
+    border-bottom-color: rgb(var(--color-text-heading) / 0.08) !important;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.15) !important;
+}
+html[data-navbar="minimal"] #navbar {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+/* ---- TRATAMIENTO DE HEADINGS ----
+   Fuera de @layer para ganar a todas las utilidades de Tailwind. */
+
+/* uppercase: todo en mayúsculas + tracking amplio */
+html[data-heading-style="uppercase"] h1,
+html[data-heading-style="uppercase"] h2,
+html[data-heading-style="uppercase"] h3 {
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+
+/* underline: línea de acento de color bajo h2 y h3 */
+html[data-heading-style="underline"] h2,
+html[data-heading-style="underline"] h3 {
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+html[data-heading-style="underline"] h2::after,
+html[data-heading-style="underline"] h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    height: 3px;
+    background: rgb(var(--color-primary));
+    border-radius: 2px;
+}
+
+/* italic: el highlight (span con gradiente de texto) va en cursiva */
+html[data-heading-style="italic"] .text-transparent {
+    font-style: italic !important;
+}
+html[data-heading-style="italic"] h1 span,
+html[data-heading-style="italic"] h2 span {
+    font-style: italic !important;
+}
+
+/* ---- SEPARADORES DE SECCIÓN ----
+   section + section = cualquier sección que siga a otra (excluye el hero).
+   El shape recorta la parte superior, el padding compensa el espacio perdido,
+   el margin-top negativo elimina el hueco entre secciones. */
+
+html[data-divider="diagonal"] section + section {
+    clip-path: polygon(0 2.5rem, 100% 0, 100% 100%, 0 100%);
+    padding-top: calc(var(--section-py, 5rem) + 2.5rem) !important;
+    margin-top: -2.5rem;
+    position: relative;
+}
+
+html[data-divider="wave"] section + section {
+    clip-path: polygon(
+        0% 3rem,
+        6.25% 1.5rem, 12.5% 0.5rem, 18.75% 0.2rem, 25% 0.8rem,
+        31.25% 1.8rem, 37.5% 3rem, 43.75% 4rem, 50% 4.5rem,
+        56.25% 4rem, 62.5% 3rem, 68.75% 1.8rem, 75% 0.8rem,
+        81.25% 0.2rem, 87.5% 0.5rem, 93.75% 1.5rem, 100% 3rem,
+        100% 100%, 0% 100%
+    );
+    padding-top: calc(var(--section-py, 5rem) + 4.5rem) !important;
+    margin-top: -4.5rem;
+    position: relative;
+}
+
+html[data-divider="curve"] section + section {
+    border-radius: 2.5rem 2.5rem 0 0;
+    overflow: hidden;
+    margin-top: -2.5rem;
+    padding-top: calc(var(--section-py, 5rem) + 2.5rem) !important;
+    position: relative;
+}
+
+/* ---- TEXTURA DE FONDO ----
+   Pseudo-elemento fixed sobre todo el contenido.
+   z-index alto + pointer-events:none para no interferir con clics. */
+
+html[data-texture]:not([data-texture="none"]) body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+html[data-texture="dots"] body::before {
+    background-image: radial-gradient(rgb(var(--color-text-heading) / 0.07) 1.2px, transparent 1.2px);
+    background-size: 18px 18px;
+}
+
+html[data-texture="grid"] body::before {
+    background-image:
+        linear-gradient(rgb(var(--color-text-heading) / 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(var(--color-text-heading) / 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+}
+
+html[data-texture="noise"] body::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 0.04;
+}

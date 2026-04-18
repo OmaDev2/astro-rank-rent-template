@@ -3,7 +3,9 @@ interface Props {
     title?: string;
     subtitle?: string;
     beforeImage: string;
+    beforeAlt?: string;
     afterImage: string;
+    afterAlt?: string;
     beforeLabel?: string;
     afterLabel?: string;
     bgClass?: string;
@@ -13,7 +15,9 @@ const {
     title = "Resultados Reales",
     subtitle = "La calidad que nos diferencia en cada proyecto.",
     beforeImage,
+    beforeAlt,
     afterImage,
+    afterAlt,
     beforeLabel = "Antes",
     afterLabel = "Después",
     bgClass = "bg-surface",
@@ -40,7 +44,7 @@ const {
                     <img
                         src={beforeImage ||
                             "https://images.unsplash.com/photo-1581094794329-c8112c4e5190?q=80&w=2070&auto=format&fit=crop"}
-                        alt="Antes del servicio"
+                        alt={beforeAlt || `Resultado antes de ${title}`}
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div
@@ -61,7 +65,7 @@ const {
                     <img
                         src={afterImage ||
                             "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop"}
-                        alt="Después del servicio"
+                        alt={afterAlt || `Resultado después de ${title}`}
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div

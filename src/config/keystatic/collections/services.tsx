@@ -32,6 +32,10 @@ export const services = collection({
             directory: 'public/images/services',
             publicPath: '/images/services',
         }),
+        heroImageAlt: fields.text({
+            label: 'Texto Alt Imagen Hero (Opcional)',
+            description: 'Deja vacío para SEO automático.',
+        }),
 
         // Metadatos globales (no cambian de posición)
         seo: SeoPreview({

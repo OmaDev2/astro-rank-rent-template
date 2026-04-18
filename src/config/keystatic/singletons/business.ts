@@ -59,6 +59,10 @@ export const business = singleton({
             directory: 'src/assets/images',
             publicPath: '@assets/images',
         }),
+        logoAlt: fields.text({
+            label: 'Texto Alt Logo',
+            description: 'Deja vacío para usar "[Nombre de Negocio] Logo"',
+        }),
 
         siteUrl: fields.text({
             label: 'URL del Sitio *',

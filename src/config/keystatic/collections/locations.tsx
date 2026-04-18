@@ -43,6 +43,10 @@ export const locations = collection({
             publicPath: '/images/locations',
             validation: { isRequired: false }
         }),
+        heroImageAlt: fields.text({
+            label: 'Texto Alt de Imagen Hero (Opcional)',
+            description: 'Deja vacío para generar un Alt automático ideal para el SEO local.',
+        }),
 
         coordinates: fields.object({
             lat: fields.text({ label: 'Latitud', description: 'Ej: 41.6488' }),
@@ -147,11 +151,13 @@ export const locations = collection({
                         directory: 'public/images/comparativas',
                         publicPath: '/images/comparativas',
                     }),
+                    beforeAlt: fields.text({ label: 'Texto Alt Antes (Opcional)' }),
                     afterImage: fields.image({
                         label: 'Imagen Después',
                         directory: 'public/images/comparativas',
                         publicPath: '/images/comparativas',
                     }),
+                    afterAlt: fields.text({ label: 'Texto Alt Después (Opcional)' }),
                     beforeLabel: fields.text({ label: 'Etiqueta Antes', defaultValue: 'Antes' }),
                     afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
                 })

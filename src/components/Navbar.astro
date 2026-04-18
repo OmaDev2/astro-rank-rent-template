@@ -234,15 +234,18 @@ const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
 
     <script>
         const navbar = document.getElementById("navbar");
+        const navStyle = document.documentElement.dataset.navbar || 'glass';
 
         const updateNavbar = () => {
+            // solid & minimal: CSS handles it, no scroll toggling needed
+            if (navStyle !== 'glass') return;
+
             if (window.scrollY > 20) {
                 navbar?.classList.add(
                     "bg-secondary/90",
                     "backdrop-blur-md",
                     "border-heading/10",
                     "shadow-lg",
-                    "h-24",
                 );
                 navbar?.classList.remove("border-transparent");
             } else {
@@ -251,13 +254,13 @@ const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
                     "backdrop-blur-md",
                     "border-heading/10",
                     "shadow-lg",
-                    "h-24",
                 );
                 navbar?.classList.add("border-transparent");
             }
         };
 
         window.addEventListener("scroll", updateNavbar);
+        updateNavbar();
 
         const menuToggle = document.getElementById("menu-toggle");
         const menuClose = document.getElementById("menu-close");

@@ -67,13 +67,26 @@ export async function getSettings() {
         paymentAccepted: b?.paymentAccepted || [],
 
         // ── Diseño (solo desde design singleton) ─────────────────────────────
-        themeSettings:      d?.themeSettings,
-        fontPair:           d?.fontPair           || 'modern',
-        borderRadius:       d?.borderRadius       || 'rounded',
-        buttonStyle:        d?.buttonStyle        || 'solid',
-        typographyScale:    d?.typographyScale    || '',
-        heroOverlayOpacity: d?.heroOverlayOpacity ?? 0.6,
-        shadowStyle:        d?.shadowStyle        || 'elevated',
-        sectionSpacing:     d?.sectionSpacing     || 'normal',
+        // ── Diseño (Mapeado de grupos anidados de design.ts) ────────────────
+        themeSettings:      d?.identity?.themeSettings || d?.themeSettings,
+        fontPair:           d?.identity?.fontPair      || d?.fontPair           || 'modern',
+        typographyScale:    d?.identity?.typographyScale || d?.typographyScale  || '',
+
+        navbarStyle:        d?.layout?.navbarStyle     || d?.navbarStyle        || 'glass',
+        footerStyle:        d?.layout?.footerStyle     || d?.footerStyle        || 'full',
+        heroStyle:          d?.layout?.heroStyle       || d?.heroStyle          || 'image',
+        headingStyle:       d?.layout?.headingStyle    || d?.headingStyle       || 'normal',
+        sectionSpacing:     d?.layout?.sectionSpacing  || d?.sectionSpacing     || 'normal',
+
+        borderRadius:       d?.effects?.borderRadius   || d?.borderRadius       || 'rounded',
+        buttonStyle:        d?.effects?.buttonStyle    || d?.buttonStyle        || 'solid',
+        shadowStyle:        d?.effects?.shadowStyle    || d?.shadowStyle        || 'elevated',
+        heroOverlayOpacity: d?.effects?.heroOverlayOpacity ?? d?.heroOverlayOpacity ?? 0.6,
+        animationStyle:     d?.effects?.animationStyle || d?.animationStyle     || 'subtle',
+        sectionDivider:     d?.effects?.sectionDivider || d?.sectionDivider     || 'none',
+        bgTexture:          d?.effects?.bgTexture      || d?.bgTexture          || 'none',
+
+        themeColor:         d?.advanced?.themeColor    || d?.themeColor         || '',
+        customCss:          d?.advanced?.customCss     || d?.customCss          || '',
     };
 }

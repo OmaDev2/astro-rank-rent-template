@@ -77,6 +77,24 @@ const {
     isHome,
     config,
 } = Astro.props;
+
+// Bloques con fondo fijo (no participan en la alternancia).
+const FIXED_BG: Record<string, string> = {
+    hero:    'bg-secondary',
+    about:   'bg-surface',
+    contact: 'bg-secondary',
+    cta:     'bg-secondary',
+};
+
+// Cada bloque alternante toma el color OPUESTO al último bloque alternante,
+// sin importar cuántos bloques fijos haya entre medias.
+// Así el orden de bloques en el CMS siempre produce fondos alternados correctos.
+let _prevAlt = 'bg-surface'; // el primero recibirá bg-secondary
+const blockBgClasses = (blocks as any[]).map(b => {
+    if (b.discriminant in FIXED_BG) return FIXED_BG[b.discriminant];
+    _prevAlt = _prevAlt === 'bg-secondary' ? 'bg-surface' : 'bg-secondary';
+    return _prevAlt;
+});
 ---
 
 {
@@ -87,8 +105,7 @@ const {
             try { return v ? JSON.parse(v) : null; } catch { return null; } 
         };
         
-        // Alternar fondos: Par = Secondary (Oscuro), Impar = Surface (Claro/Contraste)
-        const bgClass = index % 2 === 0 ? "bg-secondary" : "bg-surface";
+        const bgClass = blockBgClasses[index];
 
         switch (discriminant) {
             case "hero":
@@ -122,6 +139,7 @@ const {
                             locationType={locationType}
                             zipCodes={zipCodes}
                             heroImage={value?.heroImage || heroImage}
+                            heroImageAlt={value?.heroImageAlt}
                             phone={phone}
                             siteName={siteName}
                             niche={niche}
@@ -132,6 +150,7 @@ const {
                             subheading={heroContent?.subheading}
                             ctaPrimaryText={heroContent?.ctaPrimaryText}
                             ctaSecondaryText={heroContent?.ctaSecondaryText}
+                            heroStyle={config?.heroStyle || 'image'}
                         />
                         <Breadcrumbs
                             locationName={locationName}
@@ -429,7 +448,9 @@ const {
                         title={value?.title}
                         subtitle={value?.subtitle}
                         beforeImage={value?.beforeImage}
+                        beforeAlt={value?.beforeAlt}
                         afterImage={value?.afterImage}
+                        afterAlt={value?.afterAlt}
                         beforeLabel={value?.beforeLabel}
                         afterLabel={value?.afterLabel}
                         bgClass={bgClass}

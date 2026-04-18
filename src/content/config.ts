@@ -160,6 +160,12 @@ const design = defineCollection({
         heroOverlayOpacity: z.number().optional().default(0.6),
         shadowStyle: z.enum(['flat', 'subtle', 'elevated', 'floating']).optional().default('elevated'),
         sectionSpacing: z.enum(['compact', 'normal', 'spacious']).optional().default('normal'),
+        animationStyle: z.enum(['none', 'subtle', 'full']).optional().default('subtle'),
+        navbarStyle: z.enum(['glass', 'solid', 'minimal']).optional().default('glass'),
+        sectionDivider: z.enum(['none', 'diagonal', 'wave', 'curve']).optional().default('none'),
+        bgTexture: z.enum(['none', 'dots', 'grid', 'noise']).optional().default('none'),
+        heroStyle: z.enum(['image', 'split_photo', 'split_form', 'split_form_clean', 'centered', 'minimal']).optional().default('image'),
+        headingStyle: z.enum(['normal', 'uppercase', 'underline', 'italic']).optional().default('normal'),
     }),
 });
 

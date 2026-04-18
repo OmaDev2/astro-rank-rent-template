@@ -24,6 +24,10 @@ export const projects = collection({
             directory: 'public/images/projects',
             publicPath: '/images/projects',
         }),
+        imageAlt: fields.text({
+            label: 'Texto Alt Imagen (Opcional)',
+            description: 'Deja vacío para usar el título del proyecto automáticamente.',
+        }),
 
         locationTag: fields.text({
             label: 'Zona / Ciudad',

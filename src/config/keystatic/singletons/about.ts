@@ -16,6 +16,7 @@ export const about = singleton({
                 directory: 'public/images/about',
                 publicPath: '/images/about/'
             }),
+            heroBgImageAlt: fields.text({ label: 'Texto Alt Imagen Fondo (Opcional)', description: 'Deja vacío para SEO automático' }),
         }, { label: 'Hero Principal' }),
 
         // Main Image & Stats Label
@@ -25,6 +26,7 @@ export const about = singleton({
                 directory: 'public/images/about',
                 publicPath: '/images/about/'
             }),
+            mainImageAlt: fields.text({ label: 'Texto Alt Imagen Principal (Opcional)', description: 'Deja vacío para SEO automático' }),
             experienceBadge: fields.text({ label: 'Etiqueta de Experiencia (ej: +15 Años)', defaultValue: '+15 Años' }),
         }, { label: 'Imagen Destacada' }),
 

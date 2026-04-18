@@ -1,9 +1,22 @@
-themeSettings: >-
-  {"theme":"sky_white","colors":{"primary":"#2563eb","secondary":"#ffffff","surface":"#f0f9ff","accent":"#38bdf8","textMain":"#0f172a","textMuted":"#64748b"}}
-fontPair: artisan_warm
-typographyScale: '{"heading":"xs","body":"xl"}'
-borderRadius: sharp
-buttonStyle: gradient
-heroOverlayOpacity: 0.75
-shadowStyle: floating
-sectionSpacing: spacious
+identity:
+  themeSettings: >-
+    {"theme":"urgent","colors":{"primary":"#dc2626","secondary":"#18181b","surface":"#27272a","accent":"#ef4444","textMain":"#ffffff","textMuted":"#a1a1aa"}}
+  fontPair: artisan_warm
+  typographyScale: '{"heading":"xs","body":"xl"}'
+layout:
+  navbarStyle: minimal
+  footerStyle: full
+  heroStyle: split_form
+  headingStyle: normal
+  sectionSpacing: spacious
+effects:
+  borderRadius: sharp
+  buttonStyle: solid
+  shadowStyle: floating
+  heroOverlayOpacity: 0.75
+  animationStyle: full
+  sectionDivider: diagonal
+  bgTexture: noise
+advanced:
+  themeColor: ''
+  customCss: ''

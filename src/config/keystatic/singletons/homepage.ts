@@ -38,6 +38,7 @@ export const homepage = singleton({
                         directory: 'public/images/home',
                         publicPath: '/images/home',
                     }),
+                    backgroundImageAlt: fields.text({ label: 'Texto Alt de Fondo Hero (Opcional)', description: 'Deja vacío si es meramente decorativo.' }),
                     ctaPrimaryLink: fields.text({
                         label: '🔗 Enlace Botón Principal',
                         defaultValue: '#presupuesto',
@@ -73,10 +74,11 @@ export const homepage = singleton({
                                     link: fields.text({ label: 'Enlace a Página' }),
                                     isPopular: fields.checkbox({ label: '¿Destacar?', defaultValue: false }),
                                     image: fields.image({
-                                        label: 'Imagen Card',
+                                        label: 'Imagen (Opcional)',
                                         directory: 'public/images/services',
                                         publicPath: '/images/services',
                                     }),
+                                    imageAlt: fields.text({ label: 'Alt Imagen (Opcional)' }),
                                     features: fields.array(fields.text({ label: 'Característica' }), {
                                         label: 'Características',
                                     }),
@@ -285,11 +287,13 @@ export const homepage = singleton({
                         directory: 'public/images/comparativas',
                         publicPath: '/images/comparativas',
                     }),
+                    beforeAlt: fields.text({ label: 'Texto Alt Antes (Opcional)' }),
                     afterImage: fields.image({
                         label: 'Imagen Después',
                         directory: 'public/images/comparativas',
                         publicPath: '/images/comparativas',
                     }),
+                    afterAlt: fields.text({ label: 'Texto Alt Después (Opcional)' }),
                     beforeLabel: fields.text({ label: 'Etiqueta Antes', defaultValue: 'Antes' }),
                     afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
                 })
