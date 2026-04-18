@@ -3,6 +3,8 @@ import { FontPicker } from "../../../components/keystatic/FontPicker";
 import { RadiusPicker } from "../../../components/keystatic/RadiusPicker";
 import { ButtonStylePicker } from "../../../components/keystatic/ButtonStylePicker";
 import { TypographyScalePicker } from "../../../components/keystatic/TypographyScalePicker";
+import { ShadowPicker } from "../../../components/keystatic/ShadowPicker";
+import { SpacingPicker } from "../../../components/keystatic/SpacingPicker";
 import { fields, singleton } from '@keystatic/core';
 
 export const design = singleton({
@@ -41,6 +43,16 @@ export const design = singleton({
             description: '0.0 (Transparente) a 1.0 (Totalmente negro). Recomendado: 0.6',
             validation: { min: 0, max: 1 },
             defaultValue: 0.6,
+        }),
+
+        shadowStyle: ShadowPicker({
+            label: 'Sombras / Elevación',
+            description: 'Profundidad visual de tarjetas y elementos elevados.',
+        }),
+
+        sectionSpacing: SpacingPicker({
+            label: 'Espaciado entre Secciones',
+            description: 'Controla el padding vertical de todas las secciones de la página.',
         }),
     },
 });

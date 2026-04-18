@@ -1,7 +1,9 @@
 themeSettings: >-
-  {"theme":"slate_modern","colors":{"primary":"#f97316","secondary":"#f1f5f9","surface":"#ffffff","accent":"#fbbf24","textMain":"#0f172a","textMuted":"#475569"}}
+  {"theme":"sky_white","colors":{"primary":"#2563eb","secondary":"#ffffff","surface":"#f0f9ff","accent":"#38bdf8","textMain":"#0f172a","textMuted":"#64748b"}}
 fontPair: artisan_warm
 typographyScale: '{"heading":"xs","body":"xl"}'
 borderRadius: sharp
 buttonStyle: gradient
-heroOverlayOpacity: 0.9
+heroOverlayOpacity: 0.75
+shadowStyle: floating
+sectionSpacing: spacious

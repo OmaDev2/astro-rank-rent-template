@@ -154,9 +154,12 @@ const design = defineCollection({
             'modern', 'robust', 'elegant', 'friendly', 'tech',
             'artisan_warm', 'artisan_natural', 'artisan_classic'
         ]).optional().default('modern'),
+        typographyScale: z.string().optional(),
         borderRadius: z.enum(['sharp', 'subtle', 'rounded', 'smooth', 'pill']).optional().default('rounded'),
         buttonStyle: z.enum(['solid', 'outline', 'gradient']).optional().default('solid'),
         heroOverlayOpacity: z.number().optional().default(0.6),
+        shadowStyle: z.enum(['flat', 'subtle', 'elevated', 'floating']).optional().default('elevated'),
+        sectionSpacing: z.enum(['compact', 'normal', 'spacious']).optional().default('normal'),
     }),
 });
 

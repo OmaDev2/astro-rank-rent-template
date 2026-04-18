@@ -17,12 +17,12 @@ export interface Location {
     data: {
         name: string;
         type: 'residencial' | 'industrial' | 'centro';
-        seoTitle: string;
-        seoDesc: string;
+        seo?: string;
         heroImage?: string;
         coordinates?: { lat?: string; lng?: string };
         zipCodes: string[];
         faq?: Array<{ question: string; answer: string }>;
+        blocks?: Array<{ discriminant: string; value?: any }>;
     };
 }
 

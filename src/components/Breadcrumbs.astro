@@ -10,8 +10,7 @@ interface Props {
     isService?: boolean;
 }
 
-const { locationName, locationType, serviceName, isLocation, isService } =
-    Astro.props;
+const { locationName, serviceName, isLocation, isService } = Astro.props;
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, "") || "";
 
@@ -35,10 +34,10 @@ if (isLocation) {
 const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 ---
 
-<div class="absolute top-0 left-0 w-full z-30 pt-6 px-6 pointer-events-none">
-    <div class="container mx-auto pointer-events-auto">
+<div class="w-full bg-surface/60 border-b border-heading/10 px-6">
+    <div class="container mx-auto">
         <nav
-            class="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-white/80 bg-black/20 backdrop-blur-md py-2 px-4 rounded-full border border-white/10 hover:bg-black/40 transition-all shadow-lg"
+            class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-body py-3"
         >
             <a
                 href="/"
@@ -59,7 +58,7 @@ const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
                             Zonas
                         </a>
                         <ChevronRight className="w-3 h-3 opacity-50" />
-                        <span class="text-white">{locationName}</span>
+                        <span class="text-heading font-bold">{locationName}</span>
                     </>
                 )
             }
@@ -75,7 +74,7 @@ const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
                             Servicios
                         </a>
                         <ChevronRight className="w-3 h-3 opacity-50" />
-                        <span class="text-white">{serviceName}</span>
+                        <span class="text-heading font-bold">{serviceName}</span>
                     </>
                 )
             }

@@ -116,12 +116,7 @@ const {
                     return <HomeHero hero={heroMerged} config={config} />;
                 }
                 return (
-                    <div class="relative group">
-                        <Breadcrumbs
-                            locationName={locationName}
-                            isLocation={true}
-                        />
-
+                    <>
                         <HeroBlock
                             locationName={locationName}
                             locationType={locationType}
@@ -138,7 +133,11 @@ const {
                             ctaPrimaryText={heroContent?.ctaPrimaryText}
                             ctaSecondaryText={heroContent?.ctaSecondaryText}
                         />
-                    </div>
+                        <Breadcrumbs
+                            locationName={locationName}
+                            isLocation={true}
+                        />
+                    </>
                 );
 
             case "services_grid":

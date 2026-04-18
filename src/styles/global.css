@@ -2,13 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- ESCALADO DE TIPOGRAFÍA ---- */
+/* ---- TIPOGRAFÍA UNIFICADA ----
+   Tamaños base para cada nivel de heading + escala global desde el CMS.
+   Fuera de @layer para ganar a las clases text-* de Tailwind.
+   line-height específico para que 2+ líneas respiren bien. */
+
 html {
     font-size: var(--body-font-size, 16px) !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    zoom: var(--heading-scale, 1);
+h1 {
+    font-size: calc(clamp(2.25rem, 5vw, 4rem) * var(--heading-scale, 1)) !important;
+    line-height: 1.15 !important;
+}
+h2 {
+    font-size: calc(clamp(1.75rem, 3.5vw, 2.75rem) * var(--heading-scale, 1)) !important;
+    line-height: 1.28 !important;
+}
+h3 {
+    font-size: calc(clamp(1.25rem, 2.5vw, 1.875rem) * var(--heading-scale, 1)) !important;
+    line-height: 1.35 !important;
+}
+h4, h5, h6 {
+    font-size: calc(clamp(1.1rem, 2vw, 1.375rem) * var(--heading-scale, 1)) !important;
+    line-height: 1.4 !important;
 }
 
 @layer base {}
@@ -61,3 +78,19 @@ html[data-btn-style="gradient"] .btn-cta {
 .rounded-xl  { border-radius: var(--radius, 0.75rem) !important; }
 .rounded-2xl { border-radius: var(--radius, 0.75rem) !important; }
 .rounded-lg  { border-radius: calc(var(--radius, 0.75rem) * 0.65) !important; }
+
+/* ---- SOMBRAS ----
+   Override las clases shadow-* de Tailwind con el preset del CMS. */
+.shadow-sm  { box-shadow: var(--shadow-card, 0 2px 8px -1px rgb(0 0 0 / 0.10)) !important; }
+.shadow     { box-shadow: var(--shadow-card, 0 10px 24px -4px rgb(0 0 0 / 0.18)) !important; }
+.shadow-md  { box-shadow: var(--shadow-card, 0 10px 24px -4px rgb(0 0 0 / 0.18)) !important; }
+.shadow-lg  { box-shadow: var(--shadow-card, 0 10px 24px -4px rgb(0 0 0 / 0.18)) !important; }
+.shadow-xl  { box-shadow: var(--shadow-card, 0 10px 24px -4px rgb(0 0 0 / 0.18)) !important; }
+.shadow-2xl { box-shadow: var(--shadow-card, 0 10px 24px -4px rgb(0 0 0 / 0.18)) !important; }
+
+/* ---- ESPACIADO DE SECCIONES ----
+   Padding vertical uniforme en todas las secciones via var(--section-py). */
+section.py-16, section.py-20, section.py-24, section.py-28, section.py-32 {
+    padding-top:    var(--section-py, 5rem) !important;
+    padding-bottom: var(--section-py, 5rem) !important;
+}

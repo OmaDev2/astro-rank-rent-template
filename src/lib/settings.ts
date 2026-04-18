@@ -71,6 +71,9 @@ export async function getSettings() {
         fontPair:           d?.fontPair           || 'modern',
         borderRadius:       d?.borderRadius       || 'rounded',
         buttonStyle:        d?.buttonStyle        || 'solid',
+        typographyScale:    d?.typographyScale    || '',
         heroOverlayOpacity: d?.heroOverlayOpacity ?? 0.6,
+        shadowStyle:        d?.shadowStyle        || 'elevated',
+        sectionSpacing:     d?.sectionSpacing     || 'normal',
     };
 }

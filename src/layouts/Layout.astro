@@ -155,6 +155,23 @@ try {
     console.error("Error parsing typography scale settings", e);
 }
 
+// Shadow presets
+const shadowMap: Record<string, string> = {
+    flat:     'none',
+    subtle:   '0 2px 8px -1px rgb(0 0 0 / 0.10)',
+    elevated: '0 10px 24px -4px rgb(0 0 0 / 0.18), 0 4px 8px -2px rgb(0 0 0 / 0.10)',
+    floating: '0 24px 48px -8px rgb(0 0 0 / 0.30), 0 8px 16px -4px rgb(0 0 0 / 0.15)',
+};
+const shadowValue = shadowMap[settings.shadowStyle || 'elevated'] ?? shadowMap.elevated;
+
+// Section spacing presets
+const spacingMap: Record<string, string> = {
+    compact:  '3rem',
+    normal:   '5rem',
+    spacious: '8rem',
+};
+const sectionPy = spacingMap[settings.sectionSpacing || 'normal'] ?? spacingMap.normal;
+
 // Preload hero image en home para optimizar LCP
 const isHome = Astro.url.pathname === "/";
 const heroProcessed = isHome
@@ -190,6 +207,10 @@ const heroProcessed = isHome
         // --- VARIABLES DE ESCALA ---
         "--heading-scale": typoHeadingScale,
         "--body-font-size": `${typoBodyPx}px`,
+
+        // --- VARIABLES DE SOMBRA Y ESPACIADO ---
+        "--shadow-card": shadowValue,
+        "--section-py": sectionPy,
     }}
 >
     <head>
