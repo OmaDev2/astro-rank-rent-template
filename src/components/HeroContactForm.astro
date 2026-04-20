@@ -3,7 +3,6 @@ import { getEntry } from "astro:content";
 
 // 1. Recuperar Configuración
 const formConfig = await getEntry("form", "main");
-const business = await getEntry("business", "global");
 
 // Datos por defecto (Fallback si no hay config o está cargando)
 const {

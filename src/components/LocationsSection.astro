@@ -1,10 +1,10 @@
 ---
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { MapPin, ArrowRight } from "lucide-react";
+import { getSettings } from "@/lib/settings";
 
 const locations = await getCollection("locations");
-const business = await getEntry("business", "global");
-const { city } = business?.data || { city: "Zaragoza" };
+const { city } = await getSettings();
 
 // Zonas destacadas por defecto si no hay locations
 const staticZones = [
@@ -37,7 +37,7 @@ const cardBgClass =
             {
                 locations.map((loc) => (
                     <a
-                        href={`/zona/${loc.slug}`}
+                        href={`/zona/${loc.slug}/`}
                         class={`group flex items-center p-4 ${cardBgClass} rounded-lg border border-heading/10 hover:border-primary transition-all hover:shadow-lg hover:shadow-primary/20`}
                     >
                         <div class="p-3 bg-surface rounded-full text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-colors">

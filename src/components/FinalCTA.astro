@@ -1,12 +1,11 @@
 ---
 import { Phone, ArrowRight } from "lucide-react";
-import { getEntry } from "astro:content";
+import { getSettings } from "@/lib/settings";
 
-const business = await getEntry("business", "global");
-const businessData = (business?.data as any) || {};
-const phone = businessData.phone || "600 000 000";
-const niche = businessData.niche || "Profesional";
-const defaultCtaText = businessData.ctaText || "PEDIR PRESUPUESTO";
+const settings = await getSettings();
+const phone = settings.phone || "600 000 000";
+const niche = settings.niche || "Profesional";
+const defaultCtaText = "PEDIR PRESUPUESTO";
 
 const {
     bgClass,
