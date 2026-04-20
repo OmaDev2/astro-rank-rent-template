@@ -1,7 +1,9 @@
 {
-    "name": "Juan Pérez",
-    "initials": "JP",
+    "name": "María López",
+    "initials": "ML",
     "rating": 5,
-    "text": "Excelente servicio, muy recomendados.",
-    "featured": true
+    "text": "Llamé por una fuga urgente y llegaron en menos de 40 minutos. Resolvieron el problema en el acto y el precio fue exactamente el presupuestado. Muy recomendables.",
+    "featured": true,
+    "service": "Reparación de Urgencia",
+    "location": "Madrid Centro"
 }

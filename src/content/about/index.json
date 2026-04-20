@@ -1,77 +1,49 @@
 {
   "hero": {
-    "title": "Especialistas en Carpintería de Aluminio en Málaga",
-    "description": "Somos el referente en Málaga para la fabricación e instalación de cerramientos, ventanas y soluciones de aluminio a medida. Transformamos tu hogar con materiales de alta calidad y un servicio impecable."
+    "title": "Fontaneros Profesionales en Madrid desde 2012",
+    "description": "Somos el fontanero de confianza de miles de familias y negocios en Madrid. Más de 10 años resolviendo instalaciones, averías y urgencias con garantía total y precio cerrado."
   },
   "mainImage": {
-    "experienceBadge": "+15 Años"
+    "experienceBadge": "+10 Años"
   },
   "history": {
-    "subtitle": "Nuestra Trayectoria desde 2010",
-    "title": "De Taller Familiar a Expertos en Cerramientos",
+    "subtitle": "Nuestra Trayectoria desde 2012",
+    "title": "De Fontanero Autónomo a Equipo de Confianza en Madrid",
     "stats": [
-      {
-        "value": "500+",
-        "label": "Proyectos Realizados"
-      },
-      {
-        "value": "100%",
-        "label": "Garantía de Calidad"
-      },
-      {
-        "value": "0",
-        "label": "Retrasos en Plazos"
-      },
-      {
-        "value": "15",
-        "label": "Años de Experiencia"
-      }
+      { "value": "3.000+", "label": "Trabajos Realizados" },
+      { "value": "98%", "label": "Clientes Satisfechos" },
+      { "value": "45 min", "label": "Tiempo Medio de Llegada" },
+      { "value": "10", "label": "Años de Experiencia" }
     ]
   },
   "values": {
     "title": "Nuestros Compromisos",
-    "description": "En nuestra carpintería de aluminio, nos regimos por estándares de excelencia técnica y atención al detalle para asegurar la durabilidad de cada instalación.",
+    "description": "En Fontanería García nos regimos por tres principios que nunca negociamos: rapidez, transparencia y calidad en los materiales.",
     "items": [
       {
-        "icon": "Shield",
-        "title": "Presupuestos Cerrados",
-        "description": "Sin sorpresas ni costes ocultos. El presupuesto que aceptes será el precio final de tu instalación."
+        "icon": "Clock",
+        "title": "Respuesta Rápida",
+        "description": "En urgencias llegamos en menos de 1 hora. Para trabajos planificados, disponibilidad en menos de 48 horas en toda la zona de Madrid."
       },
       {
-        "icon": "Shield",
-        "title": "Calidad Certificada",
-        "description": "Solo trabajamos con los mejores perfiles y vidrios del mercado, garantizando el aislamiento térmico y acústico."
+        "icon": "Calculator",
+        "title": "Precio Cerrado",
+        "description": "Te damos presupuesto antes de empezar. El precio que aceptas es el precio final, sin sorpresas al terminar."
       },
       {
-        "icon": "Shield",
-        "title": "Instalación Limpia",
-        "description": "Respetamos tu vivienda. Nuestros montadores propios dejan todo impecable al finalizar el trabajo."
+        "icon": "ShieldCheck",
+        "title": "Garantía por Escrito",
+        "description": "Todos nuestros trabajos incluyen garantía de 2 años en mano de obra y materiales. Lo ponemos por escrito siempre."
+      },
+      {
+        "icon": "Award",
+        "title": "Empresa Registrada",
+        "description": "Somos empresa legalmente constituida con todos los seguros en regla. Emitimos factura y tenemos habilitación para trabajar con gas."
       }
     ]
-  },
-  "whyChooseUs": {
-    "title": "¿Por qué elegirnos para tu hogar en la Costa del Sol?",
-    "items": [
-      {
-        "title": "Conocimiento del Clima",
-        "description": "Entendemos cómo el salitre y el sol de Málaga afectan a los materiales. Seleccionamos el tratamiento adecuado para cada zona."
-      },
-      {
-        "title": "Taller Propio",
-        "description": "Fabricamos a medida en nuestras instalaciones, lo que nos permite ofrecer los mejores plazos y precios competitivos."
-      },
-      {
-        "title": "Garantía Real",
-        "description": "Somos una empresa local establecida. Nuestra garantía de 2 a 10 años es una promesa que cumplimos siempre."
-      }
-    ]
-  },
-  "team": {
-    "title": "Equipo de Maestros Aluminiistas",
-    "description": "Contamos con un equipo de instaladores oficiales con amplia experiencia en carpintería técnica. No subcontratamos: nuestro personal está formado en las últimas técnicas de sellado y montaje de sistemas de rotura de puente térmico para asegurar el máximo rendimiento de tus nuevas ventanas."
   },
   "seo": {
-    "title": "Sobre Nosotros | Carpintería de Aluminio en Málaga - Expertos desde 2010",
-    "description": "Conoce a la empresa líder en fabricación e instalación de ventanas y cerramientos de aluminio en Málaga. +15 años de experiencia, taller propio y garantía certificada."
+    "title": "Sobre Nosotros | Fontanería García Madrid",
+    "description": "Conoce al equipo de Fontanería García. Fontaneros profesionales en Madrid con más de 10 años de experiencia y garantía total en todos los trabajos."
   }
 }

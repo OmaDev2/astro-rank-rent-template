@@ -1,31 +1,32 @@
 _spintax: ''
-siteName: 'Carpintería de Aluminio en Málaga'
-niche: Aluminio a Medida
-businessType: HomeAndConstructionBusiness
+siteName: Fontanería García
+niche: Fontanería
+businessType: Plumber
 logo: ''
-siteUrl: https://aluminio-malaga.com
-ctaText: 'Pedir Presupuesto Gratis'
-phone: '644371602'
-whatsapp: '34644371602'
-email: hola@aluminio-malaga.com
-city: Málaga
-address: Málaga, España
+siteUrl: https://fontaneria-garcia.es
+ctaText: Pedir Presupuesto Gratis
+phone: 600 000 000
+whatsapp: '34600000000'
+email: info@fontaneria-garcia.es
+city: Madrid
+address: Calle Mayor 10, Madrid
 coordinates:
-  lat: '41.3851'
-  lng: '2.1734'
-schedule: Lun-Vie 9:00-18:00, Sáb 10:00-14:00
-seo: '{"title":"fff","description":""}'
-slogan: Expertos en alisar tu hogar, apasionados por el acabado perfecto.
-foundingDate: '2010'
-facebook: https://facebook.com
-instagram: https://instagram.com
+  lat: '40.4168'
+  lng: '-3.7038'
+schedule: Lun-Vie 8:00-20:00 · Urgencias 24h
+seo: '{"title":"","description":""}'
+slogan: Tu fontanero de confianza en Madrid, siempre disponible.
+foundingDate: '2012'
+facebook: https://facebook.com/fontaneria-garcia
+instagram: https://instagram.com/fontaneria_garcia
 areaServed:
-  - Málaga Capital
-  - Torremolinos
-  - Benalmádena
-  - Fuengirola
-  - Marbella
-serviceRadius: 60
+  - Madrid Centro
+  - Vallecas
+  - Carabanchel
+  - Salamanca
+  - Retiro
+  - Chamberí
+serviceRadius: 25
 priceRange: €€
 paymentAccepted:
   - Cash
@@ -40,9 +41,9 @@ openingHours:
       - Wednesday
       - Thursday
       - Friday
-    opens: '09:00'
-    closes: '18:00'
+    opens: '08:00'
+    closes: '20:00'
   - dayOfWeek:
       - Saturday
-    opens: '10:00'
-    closes: '12:00'
+    opens: '09:00'
+    closes: '14:00'
