@@ -27,8 +27,8 @@ export default defineConfig({
   // 🌐 Dominio final del sitio
   site: siteUrl,
 
-  // 🔗 Trailing slash: siempre con barra al final (bueno para SEO)
-  trailingSlash: 'ignore',
+  // 🔗 Trailing slash: siempre con barra al final — URLs canónicas consistentes
+  trailingSlash: 'always',
 
   image: {
     domains: ["images.unsplash.com"],
@@ -47,30 +47,66 @@ export default defineConfig({
         !page.includes('/gracias') &&
         !page.includes('/404') &&
         !page.includes('/keystatic') &&
-        !page.includes('/admin'),
+        !page.includes('/_keystatic') &&
+        !page.includes('/admin') &&
+        !page.includes('/api'),
       serialize(item) {
         const lastmod = new Date().toISOString().split('T')[0];
-        // Home
+        // Home — máxima prioridad
         if (item.url === siteUrl + '/' || item.url === siteUrl) {
           return { ...item, changefreq: 'weekly', priority: 1.0, lastmod };
         }
-        // Páginas de zona (rank & rent: alta prioridad local)
-        if (item.url.includes('/zona/') || item.url.includes('/zonas')) {
-          return { ...item, changefreq: 'monthly', priority: 0.6, lastmod };
+        // Zonas individuales — money pages del rank & rent
+        if (item.url.includes('/zona/')) {
+          return { ...item, changefreq: 'monthly', priority: 0.9, lastmod };
         }
-        // Servicios
-        if (item.url.includes('/servicios')) {
+        // Hub de zonas
+        if (item.url.includes('/zonas')) {
+          return { ...item, changefreq: 'monthly', priority: 0.7, lastmod };
+        }
+        // Servicios individuales
+        if (item.url.match(/\/servicios\/[^/]+/)) {
           return { ...item, changefreq: 'monthly', priority: 0.8, lastmod };
         }
-        // Blog
-        if (item.url.includes('/blog')) {
+        // Hub de servicios
+        if (item.url.includes('/servicios')) {
+          return { ...item, changefreq: 'monthly', priority: 0.7, lastmod };
+        }
+        // Blog posts
+        if (item.url.match(/\/blog\/[^/]+/)) {
           return { ...item, changefreq: 'weekly', priority: 0.7, lastmod };
         }
-        // Proyectos, nosotros, contacto
+        // Blog index
+        if (item.url.includes('/blog')) {
+          return { ...item, changefreq: 'weekly', priority: 0.6, lastmod };
+        }
+        // Nosotros, contacto, proyectos
         return { ...item, changefreq: 'monthly', priority: 0.5, lastmod };
       },
     }),
-    robotsTxt(),
+    robotsTxt({
+      policy: [
+        {
+          userAgent: '*',
+          allow: '/',
+          disallow: [
+            '/keystatic/',
+            '/_keystatic/',
+            '/admin/',
+            '/api/',
+            '/gracias/',
+          ],
+        },
+        // Bloquear bots de IA (protección de contenido)
+        { userAgent: 'GPTBot',        disallow: '/' },
+        { userAgent: 'ChatGPT-User',  disallow: '/' },
+        { userAgent: 'CCBot',         disallow: '/' },
+        { userAgent: 'anthropic-ai',  disallow: '/' },
+        { userAgent: 'Claude-Web',    disallow: '/' },
+        { userAgent: 'Bytespider',    disallow: '/' },
+      ],
+      sitemap: true,
+    }),
     partytown({
       config: {
         forward: ["dataLayer.push"],

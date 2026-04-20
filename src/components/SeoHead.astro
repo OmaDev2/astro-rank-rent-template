@@ -20,8 +20,22 @@ const { title, description, image, schema, noindex = false, canonical } = Astro.
 // Generate canonical URL
 const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site).href;
 
-// Derivar imagen de OG dinámica basada en el nicho si no hay imagen específica
-const defaultOgImage = `/images/og-${settings.niche?.toLowerCase().replace(/\s/g, "-") || "default"}.png`;
+// OG image: prioridad → prop explícita → dinámica por ruta → fallback por nicho
+const _niche = settings.niche?.toLowerCase().replace(/\s/g, "-") || "default";
+const _path = Astro.url.pathname.replace(/\/$/, '');
+
+let ogImage = image;
+if (!ogImage) {
+    const zonaMatch = _path.match(/^\/zona\/([^/]+)$/);
+    const servicioMatch = _path.match(/^\/servicios\/([^/]+)$/);
+    if (zonaMatch) {
+        ogImage = `/og/zona/${zonaMatch[1]}.png`;
+    } else if (servicioMatch) {
+        ogImage = `/og/servicio/${servicioMatch[1]}.png`;
+    } else {
+        ogImage = `/images/og-${_niche}.png`;
+    }
+}
 ---
 
 <SEO
@@ -32,7 +46,7 @@ const defaultOgImage = `/images/og-${settings.niche?.toLowerCase().replace(/\s/g
     basic: {
       title,
       type: "website",
-      image: image || defaultOgImage,
+      image: ogImage,
       url: canonicalURL,
     },
     optional: {

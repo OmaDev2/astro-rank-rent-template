@@ -1,107 +1,124 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
-import { Home, Phone, ArrowRight } from "lucide-react";
-import { getEntry, getCollection } from "astro:content";
+import { Home, Phone, ArrowRight, MapPin, Wrench } from "lucide-react";
+import { getSettings } from "@/lib/settings";
+import { getCollection } from "astro:content";
 
-// Fetch Global Settings
-const business = await getEntry("business", "global");
-const { siteName, phone, niche } = business?.data || {
-    siteName: "Nombre Negocio",
-    phone: "600 000 000",
-    niche: "Servicio",
-};
+const settings = await getSettings();
+const { siteName, phone, niche } = settings;
 
-// Recuperamos servicios reales para sugerir (evita enlaces rotos)
-const services = await getCollection("services");
-const suggestedServices = services.slice(0, 4); // Mostramos los 4 primeros
+const allServices = await getCollection("services");
+const allLocations = await getCollection("locations");
+
+// Mostrar hasta 6 servicios y 8 zonas — suficiente para recuperar crawl
+const suggestedServices = allServices.slice(0, 6);
+const suggestedLocations = allLocations.slice(0, 8);
 ---
 
 <Layout
-    title={`Página No Encontrada | ${siteName}`}
-    description="La página que buscas no existe"
+    title={`Página no encontrada | ${siteName}`}
+    description="La página que buscas no existe. Encuentra lo que necesitas desde aquí."
     noindex={true}
 >
-    <section
-        class="min-h-screen flex items-center justify-center bg-secondary py-20"
-    >
+    <section class="min-h-screen flex items-center justify-center bg-secondary py-20 pt-32">
         <div class="container mx-auto px-4">
-            <div class="max-w-2xl mx-auto text-center">
-                <div class="mb-8">
-                    <h1
-                        class="text-[150px] lg:text-[200px] font-heading font-bold text-primary leading-none opacity-20 select-none"
-                    >
+            <div class="max-w-3xl mx-auto text-center">
+
+                {/* Número 404 decorativo */}
+                <div class="mb-2">
+                    <span class="text-[160px] font-heading font-black text-primary/10 leading-none select-none block">
                         404
-                    </h1>
+                    </span>
                 </div>
 
-                <div class="mb-12 -mt-20 relative z-10">
-                    <h2
-                        class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-4"
-                    >
-                        Página No Encontrada
-                    </h2>
-                    <p
-                        class="text-xl text-body leading-relaxed max-w-lg mx-auto"
-                    >
-                        Lo sentimos, la página que buscas no existe, ha sido
-                        movida o la dirección es incorrecta.
+                <div class="mb-10 -mt-8 relative z-10">
+                    <h1 class="text-3xl lg:text-4xl font-heading font-bold text-heading mb-3">
+                        Página no encontrada
+                    </h1>
+                    <p class="text-lg text-body max-w-md mx-auto">
+                        La dirección no existe o ha cambiado. Usa los enlaces de abajo para encontrar lo que necesitas.
                     </p>
                 </div>
 
-                <div
-                    class="flex flex-col sm:flex-row gap-4 justify-center mb-16 relative z-10"
-                >
-                    <a
-                        href="/"
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-primary hover:bg-accent text-white rounded-lg transition-all shadow-lg hover:shadow-primary/40 transform hover:-translate-y-0.5"
-                    >
-                        <Home className="w-5 h-5 mr-2" />
-                        Volver al Inicio
+                {/* CTAs principales */}
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-14 relative z-10">
+                    <a href="/"
+                        class="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold bg-primary hover:bg-accent text-white rounded-xl transition-all shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5">
+                        <Home className="w-5 h-5" />
+                        Ir al inicio
                     </a>
-
-                    <a
-                        href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                        class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-heading border-2 border-primary hover:bg-primary hover:text-white rounded-lg transition-all transform hover:-translate-y-0.5"
-                    >
-                        <Phone className="w-5 h-5 mr-2" />
-                        Llamar Ahora
+                    <a href={`tel:${phone.replace(/\s/g, '')}`}
+                        class="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-heading border-2 border-primary hover:bg-primary hover:text-white rounded-xl transition-all hover:-translate-y-0.5">
+                        <Phone className="w-5 h-5" />
+                        {phone}
                     </a>
                 </div>
 
-                {
-                    suggestedServices.length > 0 && (
-                        <div class="bg-surface/50 border border-heading/10 rounded-xl p-8 backdrop-blur-sm">
-                            <h3 class="text-xl font-bold text-heading mb-6">
-                                ¿Buscabas alguno de nuestros servicios de{" "}
-                                {niche}?
-                            </h3>
-                            <div class="grid sm:grid-cols-2 gap-4">
-                                {suggestedServices.map((service) => (
-                                    <a
-                                        href={`/${service.slug}`}
-                                        class="flex items-center justify-between p-4 bg-surface border border-heading/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
-                                    >
-                                        <span class="text-body group-hover:text-primary transition-colors font-medium">
-                                            {service.data.title}
-                                        </span>
-                                        <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
-                                    </a>
-                                ))}
+                {/* Grid servicios + zonas */}
+                <div class="grid md:grid-cols-2 gap-8 text-left">
 
-                                <a
-                                    href="/contacto/"
-                                    class="flex items-center justify-between p-4 bg-surface border border-heading/5 rounded-lg hover:border-primary/50 transition-colors group text-left"
-                                >
-                                    <span class="text-body group-hover:text-primary transition-colors font-medium">
-                                        Contactar con Soporte
-                                    </span>
-                                    <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                    {/* Servicios */}
+                    {suggestedServices.length > 0 && (
+                        <div class="bg-surface/60 border border-heading/10 rounded-2xl p-6">
+                            <div class="flex items-center gap-2 mb-5">
+                                <Wrench className="w-4 h-4 text-primary" />
+                                <h2 class="text-sm font-bold text-heading uppercase tracking-wider">
+                                    Nuestros Servicios
+                                </h2>
+                            </div>
+                            <ul class="space-y-2">
+                                {suggestedServices.map((service) => (
+                                    <li>
+                                        <a href={`/servicios/${service.slug}/`}
+                                            class="flex items-center justify-between p-3 rounded-lg hover:bg-secondary border border-transparent hover:border-primary/20 transition-all group">
+                                            <span class="text-sm text-body group-hover:text-primary transition-colors font-medium">
+                                                {service.data.title}
+                                            </span>
+                                            <ArrowRight className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div class="mt-4 pt-4 border-t border-heading/10">
+                                <a href="/servicios/" class="text-xs font-bold text-primary hover:text-accent transition-colors inline-flex items-center gap-1">
+                                    Ver todos los servicios <ArrowRight className="w-3 h-3" />
                                 </a>
                             </div>
                         </div>
-                    )
-                }
+                    )}
+
+                    {/* Zonas */}
+                    {suggestedLocations.length > 0 && (
+                        <div class="bg-surface/60 border border-heading/10 rounded-2xl p-6">
+                            <div class="flex items-center gap-2 mb-5">
+                                <MapPin className="w-4 h-4 text-primary" />
+                                <h2 class="text-sm font-bold text-heading uppercase tracking-wider">
+                                    Zonas de Servicio
+                                </h2>
+                            </div>
+                            <ul class="grid grid-cols-2 gap-1">
+                                {suggestedLocations.map((loc) => (
+                                    <li>
+                                        <a href={`/zona/${loc.slug}/`}
+                                            class="flex items-center gap-1.5 p-2 rounded-lg hover:bg-secondary border border-transparent hover:border-primary/20 transition-all group">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-primary/30 group-hover:bg-primary transition-colors shrink-0" />
+                                            <span class="text-sm text-body group-hover:text-primary transition-colors truncate">
+                                                {loc.data.name}
+                                            </span>
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div class="mt-4 pt-4 border-t border-heading/10">
+                                <a href="/zonas/" class="text-xs font-bold text-primary hover:text-accent transition-colors inline-flex items-center gap-1">
+                                    Ver todas las zonas <ArrowRight className="w-3 h-3" />
+                                </a>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
             </div>
         </div>
     </section>
