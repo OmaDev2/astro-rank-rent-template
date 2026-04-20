@@ -21,13 +21,32 @@ export const projects = collection({
         image: fields.image({
             label: 'Imagen Principal *',
             description: 'Foto del resultado final. Recomendado: 1200×800px, formato WebP o JPG.',
-            directory: 'public/images/projects',
-            publicPath: '/images/projects',
+            directory: 'src/assets/images/projects',
+            publicPath: '../../assets/images/projects',
         }),
         imageAlt: fields.text({
             label: 'Texto Alt Imagen (Opcional)',
             description: 'Deja vacío para usar el título del proyecto automáticamente.',
         }),
+
+        gallery: fields.array(
+            fields.object({
+                image: fields.image({
+                    label: 'Imagen',
+                    directory: 'src/assets/images/projects',
+                    publicPath: '../../assets/images/projects',
+                }),
+                alt: fields.text({
+                    label: 'Texto descriptivo (Alt)',
+                    description: 'Importante para SEO y accesibilidad.',
+                }),
+            }),
+            {
+                label: 'Galería de Imágenes',
+                description: 'Sube fotos adicionales del proyecto para mostrar el proceso o detalles.',
+                itemLabel: (props) => props.fields.alt.value || 'Imagen de galería',
+            }
+        ),
 
         locationTag: fields.text({
             label: 'Zona / Ciudad',
@@ -61,8 +80,8 @@ export const projects = collection({
             description: 'Detalla el trabajo realizado: qué se hizo, materiales usados, duración, resultado.',
             options: {
                 image: {
-                    directory: 'public/images/projects',
-                    publicPath: '/images/projects',
+                    directory: 'src/assets/images/projects',
+                    publicPath: '../../assets/images/projects',
                 },
             },
             components: mdxComponentsConfig

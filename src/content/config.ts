@@ -80,9 +80,13 @@ const services = defineCollection({
 });
 
 const projects = defineCollection({
-    schema: z.object({
+    schema: ({ image }) => z.object({
         title: z.string(),
-        image: z.string().optional(),
+        image: image().optional(),
+        gallery: z.array(z.object({
+            image: image(),
+            alt: z.string()
+        })).optional(),
         locationTag: z.string().optional(),
         serviceType: z.string().optional(),
         date: z.string().optional(),

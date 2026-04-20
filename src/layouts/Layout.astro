@@ -251,7 +251,7 @@ const heroProcessed = isHome
             : <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         }
         <meta name="generator" content={Astro.generator} />
-        {settings.themeColor && <meta name="theme-color" content={settings.themeColor} />}
+        <meta name="theme-color" content={settings.themeColor || `rgb(${colors.primary})`} />
         {settings.customCss && <style set:html={settings.customCss}></style>}
 
         {/* --- CARGA DINÁMICA DE FUENTES DE GOOGLE --- */}

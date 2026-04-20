@@ -1,10 +1,10 @@
 identity:
   themeSettings: >-
-    {"theme":"clean_light","colors":{"primary":"#2563eb","secondary":"#f8fafc","surface":"#ffffff","accent":"#3b82f6","textMain":"#0f172a","textMuted":"#475569"}}
+    {"theme":"clay_paper","colors":{"primary":"#b45309","secondary":"#fefce8","surface":"#ffffff","accent":"#d97706","textMain":"#4e1d1d","textMuted":"#78350f"}}
   fontPair: modern
-  typographyScale: '{"heading":"lg","body":"xl"}'
+  typographyScale: '{"heading":"sm","body":"xl"}'
 layout:
-  navbarStyle: solid
+  navbarStyle: glass
   footerStyle: full
   heroStyle: split_form
   headingStyle: normal
