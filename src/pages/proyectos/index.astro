@@ -2,17 +2,15 @@
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
 import FinalCTA from "../../components/FinalCTA.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { MapPin, Wrench, ArrowRight } from "lucide-react";
-import type { WithContext, CollectionPage } from "schema-dts";
+import { getSettings } from "@/lib/settings";
+import { buildBlogListGraph } from "@/lib/seo";
+
+const settings = await getSettings();
+const { siteName, city, niche } = settings;
 
 const projects = await getCollection("projects");
-const business = await getEntry("business", "global");
-const { siteName, city, niche } = (business?.data as any) || {
-    siteName: "Nombre Negocio",
-    city: "Ciudad",
-    niche: "Servicio",
-};
 
 // Ordenar: destacados primero
 const sortedProjects = [...projects].sort((a, b) => {
@@ -21,17 +19,28 @@ const sortedProjects = [...projects].sort((a, b) => {
     return 0;
 });
 
-const gallerySchema: WithContext<CollectionPage> = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: `Galería de Trabajos - ${siteName}`,
-    description: `Portafolio de trabajos de ${niche} en ${city}.`,
-};
+const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const pageTitle = `Nuestros Proyectos | ${siteName}`;
+const pageDesc = `Galería de proyectos de ${niche} en ${city}. Descubre la calidad de nuestros trabajos.`;
+
+const gallerySchema = buildBlogListGraph({
+    settings,
+    siteUrl,
+    pageUrl,
+    title: pageTitle,
+    description: pageDesc,
+    posts: sortedProjects.map(p => ({
+        url: `${siteUrl.replace(/\/$/, '')}/proyectos/${p.slug}/`,
+        title: p.data.title,
+        image: p.data.image,
+    })),
+});
 ---
 
 <Layout
-    title={`Nuestros Proyectos | ${siteName}`}
-    description={`Galería de proyectos de ${niche} en ${city}. Descubre la calidad de nuestros trabajos.`}
+    title={pageTitle}
+    description={pageDesc}
     schema={gallerySchema}
 >
     <section class="relative py-20 bg-secondary border-b border-heading/5">

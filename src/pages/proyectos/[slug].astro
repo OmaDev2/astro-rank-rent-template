@@ -3,11 +3,9 @@ import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/Footer.astro";
 import FinalCTA from "../../components/FinalCTA.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { MapPin, Calendar, Wrench, ArrowLeft } from "lucide-react";
-import type { WithContext, CreativeWork } from "schema-dts";
-import { getSettings } from "../../lib/settings";
-import { getSettings } from "../../lib/settings";
+import { getSettings } from "@/lib/settings";
 
 // Importar componentes MDX
 import CtaBlock from "../../components/mdx/CtaBlock.astro";
@@ -44,10 +42,12 @@ const description =
     parsedSeo.description ||
     `Proyecto de ${project.data.serviceType || settings.niche} en ${project.data.locationTag || settings.city}. Descubre el trabajo realizado por ${settings.siteName}.`;
 
-const siteUrl = Astro.site?.href?.replace(/\/$/, "") || settings.siteUrl || "";
+import { buildGenericGraph } from "@/lib/seo";
 
-const projectSchema: WithContext<CreativeWork> = {
-    "@context": "https://schema.org",
+const siteUrl = (settings.siteUrl || Astro.site?.href || '').replace(/\/$/, '');
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const creativeWork = {
     "@type": "CreativeWork",
     "@id": `${siteUrl}/proyectos/${project.slug}/#project`,
     name: project.data.title,
@@ -63,9 +63,25 @@ const projectSchema: WithContext<CreativeWork> = {
             addressCountry: "ES",
         },
     },
-    creator: {
-        "@id": `${siteUrl}/#business`,
-    } as any,
+    creator: { "@id": `${siteUrl}/#business` },
+};
+
+const baseGraph = buildGenericGraph({
+    settings,
+    siteUrl,
+    pageUrl,
+    title,
+    description,
+    breadcrumbs: [
+        { name: "Inicio", item: `${siteUrl}/` },
+        { name: "Proyectos", item: `${siteUrl}/proyectos/` },
+        { name: project.data.title, item: pageUrl },
+    ],
+});
+
+const projectSchema = {
+    ...baseGraph,
+    "@graph": [...(baseGraph["@graph"] as any[]), creativeWork],
 };
 
 // Formatear fecha

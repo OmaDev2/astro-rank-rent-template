@@ -111,7 +111,7 @@ const sortedLocations = allLocations.sort((a, b) =>
                             {sortedServices.map((service) => (
                                 <li>
                                     <a
-                                        href={`/servicios/${service.slug}`}
+                                        href={`/servicios/${service.slug}/`}
                                         class="group flex items-center gap-1.5 text-sm text-body hover:text-heading transition-colors"
                                     >
                                         <span class="w-1.5 h-1.5 rounded-full bg-body/40 group-hover:bg-primary transition-colors shrink-0" />
@@ -123,7 +123,7 @@ const sortedLocations = allLocations.sort((a, b) =>
                             ))}
                         </ul>
                         <div class="mt-4 pt-4 border-t border-heading/10">
-                            <a href="/servicios"
+                            <a href="/servicios/"
                                 class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
                                 Ver todos los servicios
                                 <ArrowRight className="w-3 h-3" />
@@ -142,7 +142,7 @@ const sortedLocations = allLocations.sort((a, b) =>
                             {sortedLocations.map((loc) => (
                                 <li>
                                     <a
-                                        href={`/zona/${loc.slug}`}
+                                        href={`/zona/${loc.slug}/`}
                                         class="group flex items-center gap-1.5 text-sm text-body hover:text-heading transition-colors"
                                     >
                                         <span class="w-1.5 h-1.5 rounded-full bg-body/40 group-hover:bg-primary transition-colors shrink-0" />
@@ -154,7 +154,7 @@ const sortedLocations = allLocations.sort((a, b) =>
                             ))}
                         </ul>
                         <div class="mt-4 pt-4 border-t border-heading/10">
-                            <a href="/zonas"
+                            <a href="/zonas/"
                                 class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
                                 Ver cobertura completa
                                 <ArrowRight className="w-3 h-3" />

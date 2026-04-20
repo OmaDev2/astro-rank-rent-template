@@ -89,7 +89,7 @@ const activeFont =
 interface Props {
     title: string;
     description?: string;
-    schema?: WithContext<Thing> | WithContext<Thing>[];
+    schema?: WithContext<Thing> | WithContext<Thing>[] | Record<string, any>;
     noindex?: boolean;
     stickyPhone?: boolean;
     whatsappFloat?: boolean;

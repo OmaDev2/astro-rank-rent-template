@@ -10,7 +10,7 @@ interface Props {
   title: string;
   description: string;
   image?: string;
-  schema?: WithContext<Thing> | WithContext<Thing>[];
+  schema?: WithContext<Thing> | WithContext<Thing>[] | Record<string, any>;
   noindex?: boolean;
   canonical?: string;
 }
