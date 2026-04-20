@@ -1,0 +1,104 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import FinalCTA from "../../components/FinalCTA.astro";
+import { getCollection } from "astro:content";
+import { ArrowRight, Wrench } from "lucide-react";
+import { getSettings } from "@/lib/settings";
+import { buildBlogListGraph } from "@/lib/seo";
+
+const settings = await getSettings();
+const { siteName, city, niche } = settings;
+
+const services = (await getCollection("services")).sort((a, b) =>
+    a.data.title.localeCompare(b.data.title, "es")
+);
+
+const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const seoTitle = `Servicios de ${niche} en ${city} | ${siteName}`;
+const seoDescription = `Todos nuestros servicios de ${niche.toLowerCase()} en ${city}. Presupuesto sin compromiso, respuesta en menos de 24 horas.`;
+
+const schema = buildBlogListGraph({
+    settings,
+    siteUrl,
+    pageUrl,
+    title: seoTitle,
+    description: seoDescription,
+    posts: services.map(s => ({
+        url: `${siteUrl.replace(/\/$/, '')}/servicios/${s.slug}/`,
+        title: s.data.title,
+        image: s.data.heroImage,
+    })),
+});
+---
+
+<Layout title={seoTitle} description={seoDescription} schema={schema}>
+
+    <!-- Hero -->
+    <section class="relative py-20 bg-secondary overflow-hidden">
+        <div class="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-widest mb-4">
+                <Wrench className="w-4 h-4" />
+                {niche}
+            </div>
+            <h1 class="text-4xl md:text-6xl font-heading font-bold text-heading mb-6">
+                Nuestros <span class="text-primary">Servicios</span>
+            </h1>
+            <p class="text-xl text-body max-w-2xl mx-auto">
+                {seoDescription}
+            </p>
+        </div>
+    </section>
+
+    <!-- Servicios Grid -->
+    <section class="py-20 bg-surface/30">
+        <div class="container mx-auto px-4">
+            {services.length > 0 ? (
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {services.map((service) => (
+                        <a
+                            href={`/servicios/${service.slug}/`}
+                            class="group flex flex-col gap-4 p-7 rounded-2xl bg-surface border border-heading/5 hover:border-primary/30 hover:shadow-lg transition-all"
+                        >
+                            {service.data.heroImage && (
+                                <div class="aspect-video rounded-xl overflow-hidden">
+                                    <img
+                                        src={service.data.heroImage}
+                                        alt={service.data.title}
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            )}
+                            <div class="flex items-start justify-between gap-3">
+                                <h2 class="text-xl font-heading font-bold text-heading group-hover:text-primary transition-colors leading-snug">
+                                    {service.data.title}
+                                </h2>
+                                <ArrowRight className="w-5 h-5 text-primary shrink-0 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all mt-0.5" />
+                            </div>
+                            {service.data.shortDesc && (
+                                <p class="text-sm text-body leading-relaxed line-clamp-3">
+                                    {service.data.shortDesc}
+                                </p>
+                            )}
+                            <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold text-primary">
+                                Ver detalles
+                                <ArrowRight className="w-3 h-3" />
+                            </span>
+                        </a>
+                    ))}
+                </div>
+            ) : (
+                <div class="text-center py-20">
+                    <p class="text-body text-xl">Próximamente nuestros servicios.</p>
+                </div>
+            )}
+        </div>
+    </section>
+
+    <FinalCTA />
+    <Footer />
+</Layout>

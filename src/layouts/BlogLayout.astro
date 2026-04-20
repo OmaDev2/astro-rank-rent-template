@@ -3,6 +3,8 @@ import Layout from "./Layout.astro";
 import Footer from "../components/Footer.astro";
 import FinalCTA from "../components/FinalCTA.astro";
 import { User, Calendar, Tag, ArrowRight } from "lucide-react";
+import { getSettings } from "@/lib/settings";
+import { buildBlogPostGraph } from "@/lib/seo";
 
 interface Props {
     title: string;
@@ -26,7 +28,22 @@ const {
     category,
 } = Astro.props;
 
-// Date formatter helper if needed
+const settings = await getSettings();
+const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const schema = buildBlogPostGraph({
+    settings,
+    siteUrl,
+    pageUrl,
+    title,
+    description,
+    image: heroImage,
+    datePublished: pubDate?.toISOString(),
+    dateModified: updatedDate?.toISOString(),
+    author,
+});
+
 const formattedDate = pubDate
     ? new Date(pubDate).toLocaleDateString("es-ES", {
           year: "numeric",
@@ -36,7 +53,7 @@ const formattedDate = pubDate
     : null;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} schema={schema}>
     <!-- Progress Bar (Opcional, detalle premium) -->
     <div
         id="progress-container"

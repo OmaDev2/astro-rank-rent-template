@@ -28,7 +28,7 @@ const mdxComponents = { CtaBlock, AlertBlock, PhoneBlock, BusinessNameBlock, Cus
 
 const settings = await getSettings();
 
-const allServices = await getCollection("services", ({ data }) => data.featured === true);
+const allServices = await getCollection("services");
 const allLocations = await getCollection("locations");
 const testimonials = await getCollection("testimonials", ({ data }) => data.featured === true);
 

@@ -13,7 +13,6 @@ import {
     Target,
     Heart,
 } from "lucide-react";
-import type { WithContext, AboutPage } from "schema-dts";
 
 // Fetch Global Settings
 import { getSettings } from "@/lib/settings";
@@ -128,32 +127,22 @@ const iconMap: Record<string, any> = {
     CheckCircle,
 };
 
-// Import Schema Helpers
-import { generateLocalBusinessSchema } from "@/lib/seo";
+import { buildGenericGraph } from "@/lib/seo";
 
-const localBusinessSchema = generateLocalBusinessSchema(
-    {
-        siteName,
-        city,
-        address: settings.address,
-        phone: settings.phone,
-        coordinates: settings.coordinates,
-        businessType: settings.businessType,
-        description: seo.description || defaults.seo.description,
-        areaServed: settings.areaServed,
-        serviceRadius: settings.serviceRadius,
-    },
-    [],
-    Astro.url.href,
-);
+const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
-const schema: WithContext<AboutPage> = {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    name: seo.title || `Sobre Nosotros - ${siteName}`,
+const schema = buildGenericGraph({
+    settings,
+    siteUrl,
+    pageUrl,
+    title: seo.title || defaults.seo.title,
     description: seo.description || defaults.seo.description,
-    mainEntity: localBusinessSchema as any,
-};
+    breadcrumbs: [
+        { name: "Inicio", item: `${siteUrl.replace(/\/$/, '')}/` },
+        { name: "Sobre Nosotros", item: pageUrl },
+    ],
+});
 ---
 
 <Layout

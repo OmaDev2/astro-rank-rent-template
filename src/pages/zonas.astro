@@ -15,7 +15,7 @@ import {
     MessageCircle,
     Calendar,
 } from "lucide-react";
-import type { WithContext, CollectionPage } from "schema-dts";
+import { buildBlogListGraph } from "@/lib/seo";
 
 const locations = await getCollection("locations");
 
@@ -62,12 +62,20 @@ const finalBlocks = zonasPageData.blocks && zonasPageData.blocks.length > 0
 
 import BlockRenderer from "../components/BlockRenderer.astro";
 
-const schema: WithContext<CollectionPage> = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: seoTitle,
+const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const schema = buildBlogListGraph({
+    settings,
+    siteUrl,
+    pageUrl,
+    title: seoTitle,
     description: seoDescription,
-};
+    posts: locations.map(loc => ({
+        url: `${siteUrl.replace(/\/$/, '')}/zona/${loc.slug}/`,
+        title: loc.data.name,
+    })),
+});
 ---
 
 <Layout

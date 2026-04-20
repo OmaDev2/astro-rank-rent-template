@@ -351,7 +351,7 @@ export function buildServiceGraph(opts: {
     ]);
 }
 
-/** Páginas genéricas (about, blog, legal...) */
+/** Páginas genéricas (about, legal...) */
 export function buildGenericGraph(opts: {
     settings: SiteSettings;
     siteUrl: string;
@@ -370,6 +370,112 @@ export function buildGenericGraph(opts: {
         buildBusinessEntity(settings, siteUrl),
         buildWebPageEntity({ url: pageUrl, title, description, siteUrl }),
         buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
+    ]);
+}
+
+/** Listado del blog (con paginación opcional) */
+export function buildBlogListGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+    posts?: { url: string; title: string; image?: string; datePublished?: string }[];
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description, posts = [] } = opts;
+    const defaultBreadcrumbs = [
+        { name: "Inicio", item: `${norm(siteUrl)}/` },
+        { name: "Blog", item: pageUrl },
+    ];
+    const itemList = posts.length ? {
+        "@type": "ItemList",
+        "@id": `${norm(pageUrl)}#itemlist`,
+        name: title,
+        numberOfItems: posts.length,
+        itemListElement: posts.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: p.url,
+            name: p.title,
+        })),
+    } : null;
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        buildBusinessEntity(settings, siteUrl),
+        buildWebPageEntity({ url: pageUrl, title, description, siteUrl, type: "CollectionPage" }),
+        buildBreadcrumbEntity(defaultBreadcrumbs, pageUrl),
+        itemList,
+    ]);
+}
+
+/** Artículos individuales del blog */
+export function buildBlogPostGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+    image?: string;
+    datePublished?: string;
+    dateModified?: string;
+    author?: string;
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description, image, datePublished, dateModified, author } = opts;
+
+    const defaultBreadcrumbs = [
+        { name: "Inicio", item: `${norm(siteUrl)}/` },
+        { name: "Blog", item: `${norm(siteUrl)}/blog/` },
+        { name: title, item: pageUrl },
+    ];
+
+    const article: Record<string, any> = {
+        "@type": "BlogPosting",
+        "@id": `${norm(pageUrl)}#article`,
+        headline: title,
+        url: pageUrl,
+        inLanguage: "es-ES",
+        isPartOf: { "@id": schemaId.website(siteUrl) },
+        publisher: { "@id": schemaId.business(siteUrl) },
+        breadcrumb: { "@id": schemaId.breadcrumb(pageUrl) },
+    };
+    if (description) article.description = description;
+    if (image) {
+        article.image = { "@type": "ImageObject", "@id": schemaId.image(pageUrl), url: image };
+        article.thumbnailUrl = image;
+    }
+    if (datePublished) article.datePublished = datePublished;
+    article.dateModified = dateModified || datePublished || new Date().toISOString().split('T')[0];
+    article.author = author
+        ? { "@type": "Person", name: author }
+        : { "@id": schemaId.business(siteUrl) };
+
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        buildBusinessEntity(settings, siteUrl),
+        article,
+        buildBreadcrumbEntity(defaultBreadcrumbs, pageUrl),
+    ]);
+}
+
+/** Página de contacto */
+export function buildContactGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description } = opts;
+    const defaultBreadcrumbs = [
+        { name: "Inicio", item: `${norm(siteUrl)}/` },
+        { name: "Contacto", item: pageUrl },
+    ];
+    const webpage = buildWebPageEntity({ url: pageUrl, title, description, siteUrl, type: "ContactPage" });
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        buildBusinessEntity(settings, siteUrl),
+        webpage,
+        buildBreadcrumbEntity(defaultBreadcrumbs, pageUrl),
     ]);
 }
 
