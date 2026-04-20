@@ -37,10 +37,12 @@ const isExternal = (url: string) => url?.startsWith("http");
         <div class="absolute inset-0 w-full h-full">
             {isDefaultImage ? (
                 <Image src={defaultHeroImage} alt={`${config?.niche} en ${config?.city}`}
-                    class="w-full h-full object-cover" loading="eager" />
+                    class="w-full h-full object-cover" loading="eager" fetchpriority="high" />
             ) : (
                 <img src={heroBgImage} alt={`${config?.niche} en ${config?.city}`}
-                    class="w-full h-full object-cover" fetchpriority="high" loading="eager" />
+                    class="w-full h-full object-cover"
+                    fetchpriority="high" loading="eager" decoding="sync"
+                    width="1920" height="1080" />
             )}
         </div>
         <div class="absolute inset-0"
@@ -124,10 +126,12 @@ const isExternal = (url: string) => url?.startsWith("http");
                     <div class="relative w-full h-[70vh] min-h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                         {isDefaultImage ? (
                             <Image src={defaultHeroImage} alt={`${config?.niche} en ${config?.city}`}
-                                class="w-full h-full object-cover" loading="eager" />
+                                class="w-full h-full object-cover" loading="eager" fetchpriority="high" />
                         ) : (
                             <img src={heroBgImage} alt={`${config?.niche} en ${config?.city}`}
-                                class="w-full h-full object-cover" fetchpriority="high" loading="eager" />
+                                class="w-full h-full object-cover"
+                                fetchpriority="high" loading="eager" decoding="sync"
+                                width="1200" height="900" />
                         )}
                     </div>
                 </div>
@@ -144,9 +148,12 @@ const isExternal = (url: string) => url?.startsWith("http");
         {/* Imagen de fondo con overlay oscuro */}
         <div class="absolute inset-0 w-full h-full">
             {isDefaultImage ? (
-                <Image src={defaultHeroImage} alt="" class="w-full h-full object-cover" loading="eager" />
+                <Image src={defaultHeroImage} alt="" class="w-full h-full object-cover" loading="eager" fetchpriority="high" />
             ) : (
-                <img src={heroBgImage} alt="" class="w-full h-full object-cover" loading="eager" />
+                <img src={heroBgImage} alt=""
+                    class="w-full h-full object-cover"
+                    fetchpriority="high" loading="eager" decoding="sync"
+                    width="1920" height="1080" />
             )}
         </div>
         <div class="absolute inset-0"

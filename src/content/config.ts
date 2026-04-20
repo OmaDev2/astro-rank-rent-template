@@ -169,8 +169,9 @@ const design = defineCollection({
         }).optional(),
 
         advanced: z.object({
+            favicon:    z.string().optional().default(''),
             themeColor: z.string().optional().default(''),
-            customCss: z.string().optional().default(''),
+            customCss:  z.string().optional().default(''),
         }).optional(),
 
         // Fallbacks para compatibilidad durante migración (opcionales)

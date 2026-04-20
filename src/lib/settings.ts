@@ -86,6 +86,7 @@ export async function getSettings() {
         sectionDivider:     d?.effects?.sectionDivider || d?.sectionDivider     || 'none',
         bgTexture:          d?.effects?.bgTexture      || d?.bgTexture          || 'none',
 
+        favicon:             d?.advanced?.favicon      || d?.favicon             || '',
         themeColor:         d?.advanced?.themeColor    || d?.themeColor         || '',
         customCss:          d?.advanced?.customCss     || d?.customCss          || '',
     };

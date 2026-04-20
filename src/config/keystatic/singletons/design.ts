@@ -94,9 +94,15 @@ export const design = singleton({
         }, { label: '✨ Efectos e Interactividad' }),
 
         advanced: fields.object({
+            favicon: fields.image({
+                label: 'Favicon del Sitio',
+                description: 'Icono que aparece en la pestaña del navegador. Recomendado: 512x512 PNG, ICO o SVG.',
+                directory: 'public/favicons',
+                publicPath: '/favicons/',
+            }),
             themeColor: fields.text({
                 label: 'Color Barra Móvil (Theme-Color)',
-                description: 'Color hex (ej: #FF0000). Si está vacío, usa el color base.',
+                description: 'Color hex (ej: #dc2626). Si está vacío, usa el color primario del tema.',
             }),
             customCss: fields.text({
                 label: 'Custom CSS Global',

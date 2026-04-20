@@ -239,7 +239,10 @@ const heroProcessed = isHome
             />
         )}
         <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        {settings.favicon
+            ? <link rel="icon" href={settings.favicon} />
+            : <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        }
         <meta name="generator" content={Astro.generator} />
         {settings.themeColor && <meta name="theme-color" content={settings.themeColor} />}
         {settings.customCss && <style set:html={settings.customCss}></style>}
