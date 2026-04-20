@@ -5,6 +5,7 @@ import FinalCTA from "../components/FinalCTA.astro";
 import { User, Calendar, Tag } from "lucide-react";
 import { getSettings } from "@/lib/settings";
 import { buildBlogPostGraph } from "@/lib/seo";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 
 interface Props {
     title: string;
@@ -84,28 +85,7 @@ const formattedDate = pubDate
         }
 
         <div class="container mx-auto px-4 relative z-10 text-center max-w-4xl">
-            <!-- Breadcrumbs / Categoría -->
-            <div
-                class="flex justify-center items-center gap-2 mb-6 text-sm text-body/80"
-            >
-                <a href="/" class="hover:text-primary transition-colors"
-                    >Inicio</a
-                >
-                <span>/</span>
-                <a href="/blog/" class="hover:text-primary transition-colors"
-                    >Blog</a
-                >
-                {
-                    category && (
-                        <>
-                            <span>/</span>
-                            <span class="text-primary font-medium">
-                                {category}
-                            </span>
-                        </>
-                    )
-                }
-            </div>
+            <Breadcrumbs isBlog postTitle={title} />
 
             <h1
                 class="text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6 leading-tight"

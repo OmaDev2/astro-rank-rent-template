@@ -95,9 +95,7 @@ const formattedDate = project.data.date
 
 <Layout title={`${title} | ${settings.siteName}`} description={description} schema={projectSchema}>
     <!-- Breadcrumbs -->
-    <div class="relative bg-secondary pt-20">
-        <Breadcrumbs isService={true} serviceName={project.data.title} />
-    </div>
+    <Breadcrumbs isProject projectTitle={project.data.title} />
 
     <!-- Hero -->
     <section class="bg-secondary border-b border-heading/5 pb-0">

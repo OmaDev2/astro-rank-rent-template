@@ -4,80 +4,102 @@ import { generateBreadcrumbsList } from "../lib/seo";
 
 interface Props {
     locationName?: string;
-    locationType?: string;
     serviceName?: string;
+    postTitle?: string;
+    projectTitle?: string;
     isLocation?: boolean;
     isService?: boolean;
+    isBlog?: boolean;
+    isProject?: boolean;
 }
 
-const { locationName, serviceName, isLocation, isService } = Astro.props;
+const { locationName, serviceName, postTitle, projectTitle, isLocation, isService, isBlog, isProject } = Astro.props;
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, "") || "";
 
-// Construir items del breadcrumb para JSON-LD
 const breadcrumbItems: { name: string; item?: string }[] = [
     { name: "Inicio", item: `${siteUrl}/` },
 ];
 
 if (isLocation) {
     breadcrumbItems.push({ name: "Zonas", item: `${siteUrl}/zonas/` });
-    if (locationName) {
-        breadcrumbItems.push({ name: locationName });
-    }
+    if (locationName) breadcrumbItems.push({ name: locationName });
 } else if (isService) {
     breadcrumbItems.push({ name: "Servicios", item: `${siteUrl}/servicios/` });
-    if (serviceName) {
-        breadcrumbItems.push({ name: serviceName });
-    }
+    if (serviceName) breadcrumbItems.push({ name: serviceName });
+} else if (isBlog) {
+    breadcrumbItems.push({ name: "Blog", item: `${siteUrl}/blog/` });
+    if (postTitle) breadcrumbItems.push({ name: postTitle });
+} else if (isProject) {
+    breadcrumbItems.push({ name: "Proyectos", item: `${siteUrl}/proyectos/` });
+    if (projectTitle) breadcrumbItems.push({ name: projectTitle });
 }
 
 const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 ---
 
-<div class="w-full bg-surface/60 border-b border-heading/10 px-6">
-    <div class="container mx-auto">
+<div class="w-full bg-surface/60 border-b border-heading/10">
+    <div class="container mx-auto px-4">
         <nav
-            class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-body py-3"
+            aria-label="Ruta de navegación"
+            class="flex items-center flex-wrap gap-1.5 text-xs font-medium text-body py-3"
         >
-            <a
-                href="/"
-                class="hover:text-primary transition-colors flex items-center gap-1 group"
-            >
-                <Home className="w-3 h-3" />
+            <a href="/" class="flex items-center gap-1 text-body/60 hover:text-primary transition-colors group">
+                <Home className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                 <span class="hidden sm:inline">Inicio</span>
             </a>
 
-            {
-                isLocation && (
-                    <>
-                        <ChevronRight className="w-3 h-3 opacity-50" />
-                        <a
-                            href="/zonas/"
-                            class="hover:text-primary transition-colors"
-                        >
-                            Zonas
-                        </a>
-                        <ChevronRight className="w-3 h-3 opacity-50" />
-                        <span class="text-heading font-bold">{locationName}</span>
-                    </>
-                )
-            }
+            {isLocation && (
+                <>
+                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                    <a href="/zonas/" class="text-body/60 hover:text-primary transition-colors">Zonas</a>
+                    {locationName && (
+                        <>
+                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{locationName}</span>
+                        </>
+                    )}
+                </>
+            )}
 
-            {
-                isService && (
-                    <>
-                        <ChevronRight className="w-3 h-3 opacity-50" />
-                        <a
-                            href="/servicios/"
-                            class="hover:text-primary transition-colors"
-                        >
-                            Servicios
-                        </a>
-                        <ChevronRight className="w-3 h-3 opacity-50" />
-                        <span class="text-heading font-bold">{serviceName}</span>
-                    </>
-                )
-            }
+            {isService && (
+                <>
+                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                    <a href="/servicios/" class="text-body/60 hover:text-primary transition-colors">Servicios</a>
+                    {serviceName && (
+                        <>
+                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{serviceName}</span>
+                        </>
+                    )}
+                </>
+            )}
+
+            {isBlog && (
+                <>
+                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                    <a href="/blog/" class="text-body/60 hover:text-primary transition-colors">Blog</a>
+                    {postTitle && (
+                        <>
+                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{postTitle}</span>
+                        </>
+                    )}
+                </>
+            )}
+
+            {isProject && (
+                <>
+                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                    <a href="/proyectos/" class="text-body/60 hover:text-primary transition-colors">Proyectos</a>
+                    {projectTitle && (
+                        <>
+                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
+                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{projectTitle}</span>
+                        </>
+                    )}
+                </>
+            )}
         </nav>
     </div>
 </div>

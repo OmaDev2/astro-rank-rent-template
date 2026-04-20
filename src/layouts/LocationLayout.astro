@@ -5,6 +5,7 @@ import FinalCTA from "../components/FinalCTA.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import RelatedServices from "../components/RelatedServices.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { CheckCircle, ArrowRight, Home, ChevronRight } from "lucide-react";
 import { getCollection } from "astro:content";
 import { getSettings } from "../lib/settings";
@@ -73,13 +74,7 @@ const finalBlocks =
     description={props.pageDescription}
     schema={props.schema}
 >
-    {
-        /* Breadcrumbs integrados visualmente (Opcional: mover dentro del Hero si se prefiere) */
-    }
-    {
-        /* Por ahora, los eliminamos de la barra superior "rota" y los dejamos solo como texto auxiliar si es necesario,
-        o mejoramos la barra para que sea parte del diseño premium */
-    }
+    <Breadcrumbs isLocation locationName={props.locationName} />
 
     <div class="relative">
         {

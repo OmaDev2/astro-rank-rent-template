@@ -5,6 +5,7 @@ import FinalCTA from "../components/FinalCTA.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import RelatedLocations from "../components/RelatedLocations.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { CheckCircle, ArrowRight, Shield } from "lucide-react";
 import BlockRenderer from "../components/BlockRenderer.astro";
 import { getSettings } from "../lib/settings";
@@ -73,6 +74,7 @@ const settings = await getSettings();
 ---
 
 <Layout title={pageTitle} description={pageDescription} schema={schema}>
+    <Breadcrumbs isService serviceName={title} />
     <BlockRenderer
         blocks={finalBlocks}
         locationName={city}
