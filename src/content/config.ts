@@ -141,31 +141,53 @@ const business = defineCollection({
 const design = defineCollection({
     type: 'data',
     schema: z.object({
-        themeSettings: z.string().optional(), // NEW: JSON string with theme + colors
-        theme: z.enum([
-            'industrial', 'corporate', 'nature', 'urgent',
-            'legal', 'health', 'luxury', 'beauty', 'tech', 'clean_light',
-            'clay_paper', 'forest_stone', 'classic_workshop',
-            'sky_white', 'sand_terra', 'mint_fresh', 'slate_modern',
-            'lavender_soft', 'rose_clean', 'navy_gold_light',
-        ]).optional().default('industrial'),
+        identity: z.object({
+            themeSettings: z.string().optional(),
+            fontPair: z.enum([
+                'modern', 'robust', 'elegant', 'friendly', 'tech',
+                'artisan_warm', 'artisan_natural', 'artisan_classic'
+            ]).optional().default('modern'),
+            typographyScale: z.string().optional(),
+        }).optional(),
 
-        fontPair: z.enum([
-            'modern', 'robust', 'elegant', 'friendly', 'tech',
-            'artisan_warm', 'artisan_natural', 'artisan_classic'
-        ]).optional().default('modern'),
+        layout: z.object({
+            navbarStyle: z.enum(['glass', 'solid', 'minimal']).optional().default('glass'),
+            footerStyle: z.enum(['full', 'simple']).optional().default('full'),
+            heroStyle: z.enum(['image', 'split_photo', 'split_form', 'split_form_clean', 'centered', 'minimal']).optional().default('image'),
+            headingStyle: z.enum(['normal', 'uppercase', 'underline', 'italic']).optional().default('normal'),
+            sectionSpacing: z.enum(['compact', 'normal', 'spacious']).optional().default('normal'),
+        }).optional(),
+
+        effects: z.object({
+            borderRadius: z.enum(['sharp', 'subtle', 'rounded', 'smooth', 'pill']).optional().default('rounded'),
+            buttonStyle: z.enum(['solid', 'outline', 'gradient']).optional().default('solid'),
+            shadowStyle: z.enum(['flat', 'subtle', 'elevated', 'floating']).optional().default('elevated'),
+            heroOverlayOpacity: z.number().optional().default(0.6),
+            animationStyle: z.enum(['none', 'subtle', 'full']).optional().default('subtle'),
+            sectionDivider: z.enum(['none', 'diagonal', 'wave', 'curve', 'arrow', 'zigzag']).optional().default('none'),
+            bgTexture: z.enum(['none', 'dots', 'grid', 'noise']).optional().default('none'),
+        }).optional(),
+
+        advanced: z.object({
+            themeColor: z.string().optional().default(''),
+            customCss: z.string().optional().default(''),
+        }).optional(),
+
+        // Fallbacks para compatibilidad durante migración (opcionales)
+        themeSettings: z.string().optional(),
+        fontPair: z.string().optional(),
         typographyScale: z.string().optional(),
-        borderRadius: z.enum(['sharp', 'subtle', 'rounded', 'smooth', 'pill']).optional().default('rounded'),
-        buttonStyle: z.enum(['solid', 'outline', 'gradient']).optional().default('solid'),
-        heroOverlayOpacity: z.number().optional().default(0.6),
-        shadowStyle: z.enum(['flat', 'subtle', 'elevated', 'floating']).optional().default('elevated'),
-        sectionSpacing: z.enum(['compact', 'normal', 'spacious']).optional().default('normal'),
-        animationStyle: z.enum(['none', 'subtle', 'full']).optional().default('subtle'),
-        navbarStyle: z.enum(['glass', 'solid', 'minimal']).optional().default('glass'),
-        sectionDivider: z.enum(['none', 'diagonal', 'wave', 'curve']).optional().default('none'),
-        bgTexture: z.enum(['none', 'dots', 'grid', 'noise']).optional().default('none'),
-        heroStyle: z.enum(['image', 'split_photo', 'split_form', 'split_form_clean', 'centered', 'minimal']).optional().default('image'),
-        headingStyle: z.enum(['normal', 'uppercase', 'underline', 'italic']).optional().default('normal'),
+        borderRadius: z.string().optional(),
+        buttonStyle: z.string().optional(),
+        shadowStyle: z.string().optional(),
+        heroOverlayOpacity: z.number().optional(),
+        sectionSpacing: z.string().optional(),
+        animationStyle: z.string().optional(),
+        navbarStyle: z.string().optional(),
+        sectionDivider: z.string().optional(),
+        bgTexture: z.string().optional(),
+        heroStyle: z.string().optional(),
+        headingStyle: z.string().optional(),
     }),
 });
 

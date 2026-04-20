@@ -175,10 +175,11 @@ html[data-heading-style="italic"] h2 span {
    el margin-top negativo elimina el hueco entre secciones. */
 
 html[data-divider="diagonal"] section + section {
-    clip-path: polygon(0 2.5rem, 100% 0, 100% 100%, 0 100%);
-    padding-top: calc(var(--section-py, 5rem) + 2.5rem) !important;
-    margin-top: -2.5rem;
+    clip-path: polygon(0 3rem, 100% 0, 100% 100%, 0 100%);
+    padding-top: calc(var(--section-py, 5rem) + 3rem) !important;
+    margin-top: -3rem;
     position: relative;
+    z-index: 10;
 }
 
 html[data-divider="wave"] section + section {
@@ -193,14 +194,32 @@ html[data-divider="wave"] section + section {
     padding-top: calc(var(--section-py, 5rem) + 4.5rem) !important;
     margin-top: -4.5rem;
     position: relative;
+    z-index: 10;
 }
 
 html[data-divider="curve"] section + section {
-    border-radius: 2.5rem 2.5rem 0 0;
+    border-radius: 3.5rem 3.5rem 0 0;
     overflow: hidden;
     margin-top: -2.5rem;
-    padding-top: calc(var(--section-py, 5rem) + 2.5rem) !important;
+    padding-top: calc(var(--section-py, 5rem) + 1.5rem) !important;
     position: relative;
+    z-index: 10;
+}
+
+html[data-divider="arrow"] section + section {
+    clip-path: polygon(0 0, 50% 4rem, 100% 0, 100% 100%, 0 100%);
+    padding-top: calc(var(--section-py, 5rem) + 4rem) !important;
+    margin-top: -4rem;
+    position: relative;
+    z-index: 10;
+}
+
+html[data-divider="zigzag"] section + section {
+    clip-path: polygon(0 1.5rem, 10% 0, 20% 1.5rem, 30% 0, 40% 1.5rem, 50% 0, 60% 1.5rem, 70% 0, 80% 1.5rem, 90% 0, 100% 1.5rem, 100% 100%, 0 100%);
+    padding-top: calc(var(--section-py, 5rem) + 1.5rem) !important;
+    margin-top: -1.5rem;
+    position: relative;
+    z-index: 10;
 }
 
 /* ---- TEXTURA DE FONDO ----

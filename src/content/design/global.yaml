@@ -1,22 +1,20 @@
 identity:
   themeSettings: >-
-    {"theme":"urgent","colors":{"primary":"#dc2626","secondary":"#18181b","surface":"#27272a","accent":"#ef4444","textMain":"#ffffff","textMuted":"#a1a1aa"}}
-  fontPair: artisan_warm
-  typographyScale: '{"heading":"xs","body":"xl"}'
+    {"theme":"clean_light","colors":{"primary":"#2563eb","secondary":"#f8fafc","surface":"#ffffff","accent":"#3b82f6","textMain":"#0f172a","textMuted":"#475569"}}
+  fontPair: modern
+  typographyScale: '{"heading":"lg","body":"xl"}'
 layout:
-  navbarStyle: minimal
+  navbarStyle: solid
   footerStyle: full
   heroStyle: split_form
   headingStyle: normal
-  sectionSpacing: spacious
+  sectionSpacing: compact
 effects:
-  borderRadius: sharp
+  borderRadius: rounded
   buttonStyle: solid
-  shadowStyle: floating
+  shadowStyle: subtle
   heroOverlayOpacity: 0.75
   animationStyle: full
-  sectionDivider: diagonal
+  sectionDivider: arrow
   bgTexture: noise
-advanced:
-  themeColor: ''
-  customCss: ''
+advanced: {}

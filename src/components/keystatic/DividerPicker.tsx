@@ -41,10 +41,30 @@ const OPTIONS: DividerOption[] = [
     {
         value: "curve",
         label: "Curva",
-        desc: "Borde redondeado",
+        desc: "Borde suave",
         renderTop: () => (
             <svg viewBox="0 0 60 12" style={{ width: "100%", height: "12px", display: "block" }}>
                 <path d="M0,12 Q30,-4 60,12 Z" fill="#e2e8f0" />
+            </svg>
+        ),
+    },
+    {
+        value: "arrow",
+        label: "Flecha",
+        desc: "Punta central",
+        renderTop: () => (
+            <svg viewBox="0 0 60 12" style={{ width: "100%", height: "12px", display: "block" }}>
+                <polygon points="0,0 30,10 60,0 60,12 0,12" fill="#e2e8f0" />
+            </svg>
+        ),
+    },
+    {
+        value: "zigzag",
+        label: "Dientes",
+        desc: "Puntas múltiples",
+        renderTop: () => (
+            <svg viewBox="0 0 60 12" style={{ width: "100%", height: "12px", display: "block" }}>
+                <polygon points="0,0 10,8 20,0 30,8 40,0 50,8 60,0 60,12 0,12" fill="#e2e8f0" />
             </svg>
         ),
     },
