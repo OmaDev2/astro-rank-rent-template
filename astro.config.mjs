@@ -27,8 +27,8 @@ export default defineConfig({
   // 🌐 Dominio final del sitio
   site: siteUrl,
 
-  // 🔗 Trailing slash: siempre con barra al final — URLs canónicas consistentes
-  trailingSlash: 'always',
+  // 🔗 Trailing slash: ignorar para evitar conflictos con el CMS
+  trailingSlash: 'ignore',
 
   image: {
     domains: ["images.unsplash.com"],
@@ -120,7 +120,10 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      noExternal: ['@keystatic/core', '@keystatic/astro'],
+      noExternal: ['@keystatic/core', '@keystatic/astro', '@keystar/ui'],
+    },
+    optimizeDeps: {
+      exclude: ['@resvg/resvg-js']
     }
   }
 });
