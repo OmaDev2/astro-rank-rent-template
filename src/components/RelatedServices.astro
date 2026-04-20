@@ -1,0 +1,94 @@
+---
+/**
+ * RelatedServices.astro
+ * Muestra todos los servicios disponibles al final de una página de ZONA.
+ * Genera interlinking horizontal automático: Zona → Todos los Servicios.
+ * Los datos vienen del layout padre (ya tiene getCollection resuelto).
+ */
+import { Wrench, ArrowRight } from "lucide-react";
+
+interface Service {
+    slug: string;
+    data: {
+        title: string;
+        shortDesc: string;
+        icon: string;
+        featured?: boolean;
+    };
+}
+
+interface Props {
+    services: Service[];
+    locationName: string;
+    niche: string;
+    currentServiceSlug?: string;
+}
+
+const { services, locationName, niche, currentServiceSlug } = Astro.props;
+
+if (!services || services.length === 0) return;
+
+// Excluir el servicio actual si se usa también en páginas de servicio
+// y poner los featured primero
+const sorted = [...services]
+    .filter(s => s.slug !== currentServiceSlug)
+    .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+
+// Mapa de emojis para íconos comunes (compatibilidad con el campo icon del schema)
+const iconFallback = "🔧";
+---
+
+<section class="py-16 bg-secondary border-t border-heading/5">
+    <div class="container mx-auto px-4">
+
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-widest mb-3">
+                <Wrench className="w-4 h-4" />
+                <span>Nuestros Servicios</span>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-heading font-bold text-heading">
+                {niche || "Servicios Profesionales"} en {locationName}
+            </h2>
+            <p class="text-body mt-2 max-w-xl mx-auto text-sm">
+                Descubre toda la gama de servicios que ofrecemos en {locationName}.
+                Presupuesto gratuito y sin compromiso.
+            </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sorted.map((service) => (
+                <a
+                    href={`/servicios/${service.slug}/`}
+                    class="group relative flex items-start gap-4 p-5 rounded-2xl bg-surface border border-heading/5
+                           hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+                >
+                    {service.data.featured && (
+                        <span class="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider
+                                     px-2 py-0.5 bg-primary text-white rounded-full">
+                            Destacado
+                        </span>
+                    )}
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center
+                                text-xl shrink-0 group-hover:bg-primary/20 transition-colors">
+                        {service.data.icon || iconFallback}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-heading group-hover:text-primary transition-colors text-sm mb-1">
+                            {service.data.title}
+                        </div>
+                        <p class="text-xs text-body leading-relaxed line-clamp-2 opacity-80">
+                            {service.data.shortDesc}
+                        </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-heading/20 group-hover:text-primary transition-colors shrink-0 mt-1" />
+                </a>
+            ))}
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="/servicios/" class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent transition-colors">
+                Ver todos los servicios →
+            </a>
+        </div>
+    </div>
+</section>

@@ -89,6 +89,8 @@ const activeFont =
 interface Props {
     title: string;
     description?: string;
+    image?: string;
+    canonical?: string;
     schema?: WithContext<Thing> | WithContext<Thing>[] | Record<string, any>;
     noindex?: boolean;
     stickyPhone?: boolean;
@@ -99,6 +101,8 @@ interface Props {
 const {
     title,
     description,
+    image,
+    canonical,
     schema,
     noindex = false,
     stickyPhone = true,
@@ -109,12 +113,15 @@ const {
 // Generar descripción por defecto si no viene en props
 const defaultDescription = `${settings.niche} en ${settings.city}. Expertos profesionales, servicio rápido y presupuesto sin compromiso en ${settings.siteName}.`;
 
-// WebSite schema (grafo base presente en todas las páginas)
+// Si el schema ya incluye @graph (nuevo patrón), no añadir webSiteSchema legacy para evitar duplicados
 const siteUrl = Astro.site?.href?.replace(/\/$/, "") || settings.siteUrl || "";
+const hasGraph = schema && !Array.isArray(schema) && '@graph' in (schema as any);
 const webSiteSchema = generateWebSiteSchema(settings.siteName, siteUrl);
-const allSchemas = schema
-    ? (Array.isArray(schema) ? [webSiteSchema, ...schema] : [webSiteSchema, schema])
-    : [webSiteSchema];
+const allSchemas = hasGraph
+    ? schema
+    : schema
+        ? (Array.isArray(schema) ? [webSiteSchema, ...schema] : [webSiteSchema, schema])
+        : [webSiteSchema];
 
 // Hero Opacity (Default 0.6)
 const heroOpacity = settings.heroOverlayOpacity ?? 0.6;
@@ -260,9 +267,10 @@ const heroProcessed = isHome
         <SeoHead
             title={title}
             description={description || defaultDescription}
+            image={image}
             schema={allSchemas}
             noindex={noindex}
-            canonical={canonicalUrl}
+            canonical={canonical || canonicalUrl}
         />
 
         <SearchConsoleVerification />

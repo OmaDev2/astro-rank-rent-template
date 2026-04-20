@@ -64,7 +64,7 @@ const gallerySchema = buildBlogListGraph({
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {sortedProjects.map((project) => (
                         <a
-                            href={`/proyectos/${project.slug}`}
+                            href={`/proyectos/${project.slug}/`}
                             class="group relative rounded-xl overflow-hidden bg-surface shadow-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-2xl hover:shadow-primary/10 aspect-[4/3] block"
                         >
                             <!-- Imagen -->
@@ -117,7 +117,7 @@ const gallerySchema = buildBlogListGraph({
                     <p class="text-body text-lg mb-4">
                         Estamos actualizando nuestra galería de proyectos de {niche}.
                     </p>
-                    <a href="/contacto" class="text-primary font-bold hover:underline">
+                    <a href="/contacto/" class="text-primary font-bold hover:underline">
                         Solicitar fotos de trabajos recientes
                     </a>
                 </div>

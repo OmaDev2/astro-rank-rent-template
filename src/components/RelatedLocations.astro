@@ -1,0 +1,90 @@
+---
+/**
+ * RelatedLocations.astro
+ * Muestra todas las zonas de servicio al final de una página de SERVICIO.
+ * Genera interlinking horizontal automático: Servicio → Todas las Zonas.
+ * Los datos vienen del layout padre (ya tiene getCollection resuelto).
+ */
+import { MapPin, ArrowRight } from "lucide-react";
+
+interface Location {
+    slug: string;
+    data: {
+        name: string;
+        type: "residencial" | "industrial" | "centro";
+    };
+}
+
+interface Props {
+    locations: Location[];
+    serviceTitle: string;
+    niche: string;
+}
+
+const { locations, serviceTitle, niche } = Astro.props;
+
+if (!locations || locations.length === 0) return;
+
+// Ordenar: centro primero, luego residencial, industrial al final
+const sorted = [...locations].sort((a, b) => {
+    const order = { centro: 0, residencial: 1, industrial: 2 };
+    return (order[a.data.type] ?? 3) - (order[b.data.type] ?? 3);
+});
+
+const typeLabel: Record<string, string> = {
+    residencial: "Residencial",
+    industrial:  "Industrial",
+    centro:      "Centro",
+};
+const typeBadge: Record<string, string> = {
+    residencial: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+    industrial:  "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+    centro:      "bg-primary/10 text-primary border border-primary/20",
+};
+---
+
+<section class="py-16 bg-surface/50 border-t border-heading/5">
+    <div class="container mx-auto px-4">
+
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-widest mb-3">
+                <MapPin className="w-4 h-4" />
+                <span>Cobertura Total</span>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-heading font-bold text-heading">
+                {serviceTitle} en Todas Nuestras Zonas
+            </h2>
+            <p class="text-body mt-2 max-w-xl mx-auto text-sm">
+                Ofrecemos {(niche || serviceTitle).toLowerCase()} con garantía en toda el área metropolitana.
+                Encuentra tu zona y solicita presupuesto sin compromiso.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {sorted.map((loc) => (
+                <a
+                    href={`/zona/${loc.slug}/`}
+                    class="group flex items-center gap-2 p-3 rounded-xl bg-secondary border border-heading/5
+                           hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
+                >
+                    <MapPin className="w-3.5 h-3.5 text-primary/60 group-hover:text-primary shrink-0 transition-colors" />
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-semibold text-heading group-hover:text-primary transition-colors truncate">
+                            {loc.data.name}
+                        </div>
+                        <div class={`text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full mt-0.5 inline-block ${typeBadge[loc.data.type]}`}>
+                            {typeLabel[loc.data.type]}
+                        </div>
+                    </div>
+                    <ArrowRight className="w-3 h-3 text-heading/20 group-hover:text-primary transition-colors shrink-0" />
+                </a>
+            ))}
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="/zonas/" class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent transition-colors">
+                Ver mapa completo de cobertura →
+            </a>
+        </div>
+    </div>
+</section>

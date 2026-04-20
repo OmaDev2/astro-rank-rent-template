@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import FinalCTA from "../components/FinalCTA.astro";
 import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import RelatedServices from "../components/RelatedServices.astro";
 import { CheckCircle, ArrowRight, Home, ChevronRight } from "lucide-react";
 import { getCollection } from "astro:content";
 import { getSettings } from "../lib/settings";
@@ -116,6 +117,13 @@ const finalBlocks =
         }
 
         <WhatsAppButton />
+
+        <RelatedServices
+            services={services}
+            locationName={props.locationName}
+            niche={niche}
+        />
+
         <Footer />
     </div>
 
