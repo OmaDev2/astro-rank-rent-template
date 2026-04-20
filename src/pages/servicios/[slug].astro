@@ -2,9 +2,8 @@
 import ServiceLayout from "../../layouts/ServiceLayout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
-import type { WithContext, Service, FAQPage, BreadcrumbList } from "schema-dts";
+import { buildServiceGraph } from "@/lib/seo";
 
-// Importar componentes MDX
 import CtaBlock from "../../components/mdx/CtaBlock.astro";
 import AlertBlock from "../../components/mdx/AlertBlock.astro";
 import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
@@ -13,7 +12,6 @@ import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
 
 export const prerender = true;
 
-// 1. Generar rutas estáticas para cada servicio
 export async function getStaticPaths() {
     const services = await getCollection("services");
     return services.map((entry) => ({
@@ -22,103 +20,43 @@ export async function getStaticPaths() {
     }));
 }
 
-// 2. Obtener datos del servicio actual
-interface Props {
-    entry: CollectionEntry<"services">;
-}
-const { entry } = Astro.props;
+const { entry } = Astro.props as { entry: CollectionEntry<"services"> };
 const { Content } = await entry.render();
 const data = entry.data;
 
-// Componentes disponibles en MDX
-const mdxComponents = {
-    CtaBlock,
-    AlertBlock,
-    PhoneBlock,
-    BusinessNameBlock,
-    CustomImageBlock,
-};
+const mdxComponents = { CtaBlock, AlertBlock, PhoneBlock, BusinessNameBlock, CustomImageBlock };
 
-// 3. Obtener configuración global
 const settings = await getSettings();
 
-// 4. Fetch para Sidebar y Navegación
 const allServices = await getCollection("services");
 const allLocations = await getCollection("locations");
-const testimonials = await getCollection(
-    "testimonials",
-    ({ data }) => data.featured === true,
-);
+const testimonials = await getCollection("testimonials", ({ data }) => data.featured === true);
 
-// 5. Schema SEO
-import {
-    getAggregateRating,
-    generateBreadcrumbsList,
-    generateFAQSchema,
-    formatAreaServed,
-    generateLocalBusinessSchema,
-} from "@/lib/seo";
-
-const aggregateRating = getAggregateRating(testimonials);
-
-// 6. SEO: Título y descripción (Moved up for schema usage)
+// SEO
 let parsedSeo = { title: "", description: "" };
 try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
 
-const serviceSchema: WithContext<Service> = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: data.title,
-    description: parsedSeo.description || `Servicio de ${data.title}`,
-    provider: generateLocalBusinessSchema(
-        {
-            siteName: settings.siteName,
-            phone: settings.phone,
-            city: settings.city,
-            address: settings.address,
-            coordinates: settings.coordinates,
-            image: data.heroImage,
-            businessType: settings.businessType,
-            openingHours: settings.openingHours,
-            paymentAccepted: settings.paymentAccepted,
-            slogan: settings.slogan,
-            knowsAbout: [data.title],
-        },
-        testimonials,
-        Astro.url.href,
-    ) as any,
-    areaServed: formatAreaServed(
-        settings.areaServed,
-        settings.serviceRadius,
-        settings.coordinates,
-    ) || {
-        "@type": "City",
-        name: settings.city,
-    },
-    ...(aggregateRating && { aggregateRating }), // También a nivel de servicio
-};
-
-const breadcrumbsPoints = [
-    { name: "Inicio", item: Astro.site?.href || "https://example.com" },
-    { name: "Servicios", item: new URL("/#servicios", Astro.site).href },
-    { name: data.title, item: Astro.url.href },
-];
-
-const breadcrumbsSchema = generateBreadcrumbsList(breadcrumbsPoints);
-
-const faqSchema = generateFAQSchema(data.faq || []);
-
-const schema = [
-    serviceSchema,
-    breadcrumbsSchema,
-    ...(faqSchema ? [faqSchema] : []),
-] as any;
-
-// SEO vars ya parseadas arriba
-
-const pageTitle =
-    parsedSeo.title || `${data.title} en ${settings.city} | ${settings.siteName}`;
+const pageTitle = parsedSeo.title || `${data.title} en ${settings.city} | ${settings.siteName}`;
 const pageDescription = parsedSeo.description || data.shortDesc;
+
+// Schema @graph
+const schema = buildServiceGraph({
+    settings,
+    siteUrl: settings.siteUrl,
+    pageUrl: Astro.url.href,
+    title: pageTitle,
+    description: pageDescription,
+    image: data.heroImage,
+    serviceSlug: entry.slug,
+    testimonials,
+    faqs: data.faq || [],
+    locationNames: allLocations.map((l) => l.data.name),
+    breadcrumbs: [
+        { name: "Inicio", item: new URL("/", Astro.site).href },
+        { name: "Servicios", item: new URL("/servicios/", Astro.site).href },
+        { name: data.title, item: Astro.url.href },
+    ],
+});
 ---
 
 <ServiceLayout

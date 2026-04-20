@@ -1,222 +1,430 @@
-import type {
-    WithContext,
-    LocalBusiness,
-    AggregateRating,
-    BreadcrumbList,
-    ListItem,
-    FAQPage,
-    WebSite,
-} from "schema-dts";
+// ─────────────────────────────────────────────────────────────────────────────
+// Schema.org Knowledge Graph builder
+// Patrón: factory functions (piezas) + orchestrators (buildXxxGraph)
+// Cada página llama a UN orchestrator → emite UN bloque @graph
+// ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * Calcula el AggregateRating basado en una lista de testimonios
- */
-export function getAggregateRating(testimonials: any[]): AggregateRating | undefined {
-    if (!testimonials || testimonials.length === 0) return undefined;
+// ── URL helpers ──────────────────────────────────────────────────────────────
 
-    const count = testimonials.length;
-    const totalRating = testimonials.reduce((acc, t) => acc + (t.data?.rating || t.rating || 5), 0);
-    const average = (totalRating / count).toFixed(1);
-
-    return {
-        "@type": "AggregateRating",
-        ratingValue: average,
-        reviewCount: count,
-        bestRating: "5",
-        worstRating: "1"
-    };
+/** Elimina la barra final para evitar dobles // en los @id */
+function norm(url: string): string {
+    return (url || '').replace(/\/$/, '');
 }
 
-/**
- * Genera el FAQ Schema
- */
-export function generateFAQSchema(faqs: { question: string; answer: string }[]): WithContext<FAQPage> | null {
-    if (!faqs || faqs.length === 0) return null;
+/** Genera @id consistentes. Google distingue mayúsculas, barras y fragmentos. */
+const schemaId = {
+    business:   (siteUrl: string) => `${norm(siteUrl)}/#business`,
+    website:    (siteUrl: string) => `${norm(siteUrl)}/#website`,
+    webpage:    (pageUrl: string) => `${norm(pageUrl)}#webpage`,
+    breadcrumb: (pageUrl: string) => `${norm(pageUrl)}#breadcrumb`,
+    service:    (pageUrl: string) => `${norm(pageUrl)}#service`,
+    image:      (pageUrl: string) => `${norm(pageUrl)}#primaryimage`,
+    faq:        (pageUrl: string) => `${norm(pageUrl)}#faq`,
+};
 
-    return {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqs.map(faq => ({
-            "@type": "Question",
-            name: faq.question,
-            acceptedAnswer: {
-                "@type": "Answer",
-                text: faq.answer
-            }
-        }))
-    };
-}
+// ── Types ─────────────────────────────────────────────────────────────────────
 
-/**
- * Genera el BreadcrumbList Schema
- */
-export function generateBreadcrumbsList(items: { name: string; item?: string }[]): WithContext<BreadcrumbList> {
-    const itemListElement: ListItem[] = items.map((item, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: item.name,
-        item: item.item // URL completa
-    }));
-
-    return {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement
-    };
-}
-
-interface LocalBusinessSettings {
+interface SiteSettings {
     siteName?: string;
+    siteUrl?: string;
+    logo?: string;
+    niche?: string;
     phone?: string;
+    email?: string;
     city?: string;
     address?: string;
     coordinates?: { lat?: string; lng?: string };
-    image?: string;
-    priceRange?: string;
     businessType?: string;
-    description?: string;
-    areaServed?: any;
+    priceRange?: string;
+    openingHours?: { dayOfWeek: string[]; opens: string; closes: string }[];
+    paymentAccepted?: string[];
+    areaServed?: any[];
     serviceRadius?: number;
-    openingHours?: any[]; // Añadido
-    paymentAccepted?: string[]; // Añadido
-    knowsAbout?: string[]; // Añadido por SEO
-    slogan?: string; // Añadido
+    slogan?: string;
+    foundingDate?: string;
+    facebook?: string;
+    instagram?: string;
 }
 
-/**
- * Helper para formatear areaServed correctamente (City list o GeoCircle)
- */
-export function formatAreaServed(areaData: any, radius?: number, coordinates?: { lat?: string; lng?: string }) {
-    // Opción A: Si hay una lista explícita, priorizarla (Mejor SEO semántico)
-    if (areaData && Array.isArray(areaData) && areaData.length > 0) {
-        return areaData.map(item => {
-            if (typeof item === 'string') {
-                return {
-                    "@type": "City",
-                    name: item
-                };
-            }
-            return item;
-        }) as any;
-    }
+// ── Entity builders ───────────────────────────────────────────────────────────
+// Devuelven objetos planos SIN @context. El @context va solo en wrapGraph().
 
-    // Opción B: Si hay un radio definido y coordenadas, usar GeoCircle (Automatización)
-    if (radius && radius > 0 && coordinates?.lat && coordinates?.lng) {
-        return {
-            "@type": "GeoCircle",
-            "geoMidpoint": {
-                "@type": "GeoCoordinates",
-                "latitude": parseFloat(coordinates.lat),
-                "longitude": parseFloat(coordinates.lng)
-            },
-            "geoRadius": (radius * 1000).toString() // Convertir km a metros
-        };
-    }
-
-    // Opción C: Si es un objeto individual (fallback)
-    return areaData;
-}
-
-/**
- * Genera el esquema LocalBusiness mejorado
- */
-export function generateLocalBusinessSchema(
-    settings: LocalBusinessSettings,
-    testimonials: any[] = [],
-    url: string
-): WithContext<LocalBusiness> {
-    const aggregateRating = getAggregateRating(testimonials);
-
-    const schema: WithContext<LocalBusiness> = {
-        "@context": "https://schema.org",
-        "@type": (settings.businessType as any) || "LocalBusiness",
-        name: settings.siteName || "Negocio Local",
-        image: settings.image,
+export function buildBusinessEntity(settings: SiteSettings, siteUrl: string): Record<string, any> {
+    const entity: Record<string, any> = {
+        "@type": settings.businessType || "LocalBusiness",
+        "@id": schemaId.business(siteUrl),
+        name: settings.siteName,
+        url: norm(siteUrl),
         telephone: settings.phone,
-        url: url,
-        description: settings.description,
+        priceRange: settings.priceRange || "€€",
+        currenciesAccepted: "EUR",
+        inLanguage: "es-ES",
         address: {
             "@type": "PostalAddress",
             addressLocality: settings.city || "",
             addressRegion: settings.city || "",
             addressCountry: "ES",
-            streetAddress: settings.address || settings.city || ""
+            streetAddress: settings.address || settings.city || "",
         },
-        priceRange: settings.priceRange || "€",
-        currenciesAccepted: "EUR",
     };
 
-    if (settings.slogan) {
-        schema.slogan = settings.slogan;
+    if (settings.logo) {
+        entity.logo = { "@type": "ImageObject", url: settings.logo, inLanguage: "es-ES" };
+        entity.image = settings.logo;
     }
-
-    if (settings.paymentAccepted && settings.paymentAccepted.length > 0) {
-        schema.paymentAccepted = settings.paymentAccepted.join(", ");
+    if (settings.slogan) entity.slogan = settings.slogan;
+    if (settings.foundingDate) entity.foundingDate = settings.foundingDate;
+    if (settings.paymentAccepted?.length) {
+        entity.paymentAccepted = settings.paymentAccepted.join(", ");
     }
-
-    if (settings.openingHours && settings.openingHours.length > 0) {
-        // Formato Schema: "Mo-Fr 09:00-18:00"
-        schema.openingHours = settings.openingHours.map(h => {
+    if (settings.openingHours?.length) {
+        entity.openingHours = settings.openingHours.map(h => {
             const days = Array.isArray(h.dayOfWeek) ? h.dayOfWeek.join(",") : h.dayOfWeek;
             return `${days} ${h.opens}-${h.closes}`;
         });
     }
-
-    // Campo CRÍTICO: Indica de qué somos expertos
-    if (settings.knowsAbout && settings.knowsAbout.length > 0) {
-        (schema as any).knowsAbout = settings.knowsAbout;
-    }
-
-    if (aggregateRating) {
-        schema.aggregateRating = aggregateRating;
-    }
-
     if (settings.coordinates?.lat && settings.coordinates?.lng) {
-        // CORRECCIÓN: URL válida y clicable de Google Maps
-        schema.hasMap = `https://www.google.com/maps?q=${settings.coordinates.lat},${settings.coordinates.lng}`;
-
-        schema.geo = {
+        entity.geo = {
             "@type": "GeoCoordinates",
             latitude: settings.coordinates.lat,
-            longitude: settings.coordinates.lng
+            longitude: settings.coordinates.lng,
+        };
+        entity.hasMap = `https://www.google.com/maps?q=${settings.coordinates.lat},${settings.coordinates.lng}`;
+    }
+
+    // areaServed: lista de ciudades > GeoCircle > undefined
+    if (settings.areaServed?.length) {
+        entity.areaServed = settings.areaServed.map(a =>
+            typeof a === 'string' ? { "@type": "City", name: a } : a
+        );
+    } else if (settings.serviceRadius && settings.serviceRadius > 0 && settings.coordinates?.lat) {
+        entity.areaServed = {
+            "@type": "GeoCircle",
+            geoMidpoint: {
+                "@type": "GeoCoordinates",
+                latitude: parseFloat(settings.coordinates.lat),
+                longitude: parseFloat(settings.coordinates.lng ?? '0'),
+            },
+            geoRadius: String(settings.serviceRadius * 1000),
         };
     }
 
-    // Lógica mejorada para areaServed
-    if (settings.areaServed || settings.serviceRadius) {
-        schema.areaServed = formatAreaServed(
-            settings.areaServed,
-            settings.serviceRadius,
-            settings.coordinates
-        );
-    }
+    // sameAs — consolida la entidad con perfiles sociales
+    const sameAs: string[] = [];
+    if (settings.facebook) sameAs.push(settings.facebook);
+    if (settings.instagram) sameAs.push(settings.instagram);
+    if (sameAs.length) entity.sameAs = sameAs;
 
-    // @id para conectar el grafo
-    (schema as any)["@id"] = `${url}/#business`;
-
-    return schema;
+    return entity;
 }
 
-// ─── WebSite schema (conectado al grafo mediante @id) ─────────────────────────
+export function buildWebSiteEntity(settings: SiteSettings, siteUrl: string): Record<string, any> {
+    return {
+        "@type": "WebSite",
+        "@id": schemaId.website(siteUrl),
+        name: settings.siteName,
+        url: norm(siteUrl),
+        inLanguage: "es-ES",
+        publisher: { "@id": schemaId.business(siteUrl) },
+    };
+}
 
-export function generateWebSiteSchema(siteName: string, siteUrl: string): WithContext<WebSite> {
+export function buildWebPageEntity(opts: {
+    url: string;
+    title: string;
+    description?: string;
+    image?: string;
+    siteUrl: string;
+    type?: string;
+}): Record<string, any> {
+    const { url, title, description, image, siteUrl, type = "WebPage" } = opts;
+    const entity: Record<string, any> = {
+        "@type": type,
+        "@id": schemaId.webpage(url),
+        url,
+        name: title,
+        inLanguage: "es-ES",
+        isPartOf: { "@id": schemaId.website(siteUrl) },
+        about: { "@id": schemaId.business(siteUrl) },
+        breadcrumb: { "@id": schemaId.breadcrumb(url) },
+    };
+    if (description) entity.description = description;
+    if (image) {
+        entity.primaryImageOfPage = {
+            "@type": "ImageObject",
+            "@id": schemaId.image(url),
+            url: image,
+        };
+    }
+    return entity;
+}
+
+export function buildBreadcrumbEntity(
+    items: { name: string; item?: string }[],
+    pageUrl: string
+): Record<string, any> {
+    return {
+        "@type": "BreadcrumbList",
+        "@id": schemaId.breadcrumb(pageUrl),
+        itemListElement: items.map((item, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: item.name,
+            ...(item.item ? { item: item.item } : {}),
+        })),
+    };
+}
+
+export function buildServiceEntity(opts: {
+    slug: string;
+    title: string;
+    description?: string;
+    image?: string;
+    siteUrl: string;
+    locationNames?: string[];
+}): Record<string, any> {
+    const { slug, title, description, image, siteUrl, locationNames = [] } = opts;
+    const pageUrl = `${norm(siteUrl)}/servicios/${slug}/`;
+    const entity: Record<string, any> = {
+        "@type": "Service",
+        "@id": schemaId.service(pageUrl),
+        name: title,
+        serviceType: title,
+        inLanguage: "es-ES",
+        provider: { "@id": schemaId.business(siteUrl) },
+    };
+    if (description) entity.description = description;
+    if (image) entity.image = image;
+    if (locationNames.length) {
+        entity.areaServed = locationNames.map(name => ({ "@type": "City", name }));
+    }
+    return entity;
+}
+
+export function buildFaqEntity(faqs: { question: string; answer: string }[]): Record<string, any> | null {
+    if (!faqs?.length) return null;
+    return {
+        "@type": "FAQPage",
+        mainEntity: faqs.map(faq => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        })),
+    };
+}
+
+export function buildAggregateRating(testimonials: any[]): Record<string, any> | null {
+    if (!testimonials?.length) return null;
+    const count = testimonials.length;
+    const total = testimonials.reduce((acc, t) => acc + (t.data?.rating ?? t.rating ?? 5), 0);
+    return {
+        "@type": "AggregateRating",
+        ratingValue: (total / count).toFixed(1),
+        reviewCount: count,
+        bestRating: "5",
+        worstRating: "1",
+    };
+}
+
+// ── Graph orchestrators ───────────────────────────────────────────────────────
+// Cada orchestrator monta el @graph completo para un tipo de página.
+
+function wrapGraph(entities: (Record<string, any> | null)[]): Record<string, any> {
     return {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "@id": `${siteUrl}/#website`,
-        name: siteName,
-        url: siteUrl,
-        inLanguage: "es-ES",
-        publisher: {
-            "@id": `${siteUrl}/#business`,
-        } as any,
-        potentialAction: {
-            "@type": "SearchAction",
-            target: {
-                "@type": "EntryPoint",
-                urlTemplate: `${siteUrl}/?s={search_term_string}`,
+        "@graph": entities.filter(Boolean),
+    };
+}
+
+/** Página de inicio */
+export function buildHomeGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+    image?: string;
+    testimonials?: any[];
+    faqs?: { question: string; answer: string }[];
+    serviceNames?: string[];
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description, image, testimonials = [], faqs = [], serviceNames = [] } = opts;
+
+    const business = buildBusinessEntity(settings, siteUrl);
+    const rating = buildAggregateRating(testimonials);
+    if (rating) business.aggregateRating = rating;
+    if (serviceNames.length) {
+        business.knowsAbout = serviceNames;
+        business.hasOfferCatalog = {
+            "@type": "OfferCatalog",
+            name: `Servicios de ${settings.niche || settings.siteName}`,
+            itemListElement: serviceNames.map(name => ({
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name },
+            })),
+        };
+    }
+
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        business,
+        buildWebPageEntity({ url: pageUrl, title, description, image, siteUrl }),
+        buildBreadcrumbEntity([{ name: "Inicio", item: pageUrl }], pageUrl),
+        faqs.length ? { ...buildFaqEntity(faqs), "@id": schemaId.faq(pageUrl) } : null,
+    ]);
+}
+
+/** Páginas de zona/localización */
+export function buildLocationGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+    image?: string;
+    locationName: string;
+    testimonials?: any[];
+    faqs?: { question: string; answer: string }[];
+    breadcrumbs?: { name: string; item?: string }[];
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description, image, locationName, testimonials = [], faqs = [], breadcrumbs } = opts;
+
+    const business = buildBusinessEntity(settings, siteUrl);
+    const rating = buildAggregateRating(testimonials);
+    if (rating) business.aggregateRating = rating;
+
+    const defaultBreadcrumbs = [
+        { name: "Inicio", item: `${norm(siteUrl)}/` },
+        { name: "Zonas", item: `${norm(siteUrl)}/zonas/` },
+        { name: locationName, item: pageUrl },
+    ];
+
+    const webpage = buildWebPageEntity({ url: pageUrl, title, description, image, siteUrl });
+    // Esta página trata sobre el negocio Y sobre la ciudad concreta
+    webpage.about = [
+        { "@id": schemaId.business(siteUrl) },
+        { "@type": "City", name: locationName },
+    ];
+
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        business,
+        webpage,
+        buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
+        faqs.length ? { ...buildFaqEntity(faqs), "@id": schemaId.faq(pageUrl) } : null,
+    ]);
+}
+
+/** Páginas de servicio */
+export function buildServiceGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+    image?: string;
+    serviceSlug: string;
+    testimonials?: any[];
+    faqs?: { question: string; answer: string }[];
+    locationNames?: string[];
+    breadcrumbs?: { name: string; item?: string }[];
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description, image, serviceSlug, testimonials = [], faqs = [], locationNames = [], breadcrumbs } = opts;
+
+    const business = buildBusinessEntity(settings, siteUrl);
+    const rating = buildAggregateRating(testimonials);
+    if (rating) business.aggregateRating = rating;
+
+    const defaultBreadcrumbs = [
+        { name: "Inicio", item: `${norm(siteUrl)}/` },
+        { name: "Servicios", item: `${norm(siteUrl)}/servicios/` },
+        { name: title, item: pageUrl },
+    ];
+
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        business,
+        buildWebPageEntity({ url: pageUrl, title, description, image, siteUrl }),
+        buildServiceEntity({ slug: serviceSlug, title, description, image, siteUrl, locationNames }),
+        buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
+        faqs.length ? { ...buildFaqEntity(faqs), "@id": schemaId.faq(pageUrl) } : null,
+    ]);
+}
+
+/** Páginas genéricas (about, blog, legal...) */
+export function buildGenericGraph(opts: {
+    settings: SiteSettings;
+    siteUrl: string;
+    pageUrl: string;
+    title: string;
+    description?: string;
+    breadcrumbs?: { name: string; item?: string }[];
+}): Record<string, any> {
+    const { settings, siteUrl, pageUrl, title, description, breadcrumbs } = opts;
+    const defaultBreadcrumbs = [
+        { name: "Inicio", item: `${norm(siteUrl)}/` },
+        { name: title, item: pageUrl },
+    ];
+    return wrapGraph([
+        buildWebSiteEntity(settings, siteUrl),
+        buildBusinessEntity(settings, siteUrl),
+        buildWebPageEntity({ url: pageUrl, title, description, siteUrl }),
+        buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
+    ]);
+}
+
+// ── Legacy exports ─────────────────────────────────────────────────────────────
+// Mantienen compatibilidad con páginas no migradas todavía.
+
+export function getAggregateRating(testimonials: any[]) {
+    return buildAggregateRating(testimonials);
+}
+
+export function generateFAQSchema(faqs: { question: string; answer: string }[]) {
+    if (!faqs?.length) return null;
+    const entity = buildFaqEntity(faqs);
+    return entity ? { "@context": "https://schema.org", ...entity } : null;
+}
+
+export function generateBreadcrumbsList(items: { name: string; item?: string }[]) {
+    const lastItem = items[items.length - 1]?.item || '';
+    return {
+        "@context": "https://schema.org",
+        ...buildBreadcrumbEntity(items, lastItem),
+    };
+}
+
+export function formatAreaServed(areaData: any, radius?: number, coordinates?: { lat?: string; lng?: string }) {
+    if (areaData && Array.isArray(areaData) && areaData.length > 0) {
+        return areaData.map((item: any) =>
+            typeof item === 'string' ? { "@type": "City", name: item } : item
+        );
+    }
+    if (radius && radius > 0 && coordinates?.lat && coordinates?.lng) {
+        return {
+            "@type": "GeoCircle",
+            geoMidpoint: {
+                "@type": "GeoCoordinates",
+                latitude: parseFloat(coordinates.lat),
+                longitude: parseFloat(coordinates.lng),
             },
-            "query-input": "required name=search_term_string",
-        } as any,
+            geoRadius: String(radius * 1000),
+        };
+    }
+    return areaData;
+}
+
+export function generateLocalBusinessSchema(settings: SiteSettings & { siteUrl?: string }, testimonials: any[] = [], url: string) {
+    const siteUrl = settings.siteUrl || norm(url);
+    const entity = buildBusinessEntity(settings, siteUrl);
+    const rating = buildAggregateRating(testimonials);
+    if (rating) entity.aggregateRating = rating;
+    return { "@context": "https://schema.org", ...entity };
+}
+
+export function generateWebSiteSchema(siteName: string, siteUrl: string) {
+    return {
+        "@context": "https://schema.org",
+        ...buildWebSiteEntity({ siteName }, siteUrl),
     };
 }

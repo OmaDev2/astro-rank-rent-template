@@ -1,0 +1,76 @@
+---
+import { MapPin, ArrowRight } from "lucide-react";
+import type { Location } from "../../types";
+
+interface Props {
+    allLocations?: Location[];
+    serviceName?: string;
+    title?: string;
+    subtitle?: string;
+    bgClass?: string;
+}
+
+const {
+    allLocations = [],
+    serviceName = "",
+    title,
+    subtitle,
+    bgClass = "bg-secondary",
+} = Astro.props;
+
+const heading =
+    title ||
+    (serviceName
+        ? `${serviceName} en todas nuestras zonas`
+        : "Zonas donde trabajamos");
+const desc =
+    subtitle ||
+    "Ofrecemos servicio en las siguientes localidades. Selecciona tu zona para más información.";
+
+const typeLabel: Record<string, string> = {
+    residencial: "Residencial",
+    industrial: "Industrial",
+    centro: "Centro",
+};
+---
+
+{
+    allLocations.length > 0 && (
+        <section class={`py-20 ${bgClass}`}>
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4">
+                        {heading}
+                    </h2>
+                    <p class="text-lg text-body opacity-90">{desc}</p>
+                </div>
+
+                <ul class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 list-none p-0">
+                    {allLocations.map((loc) => (
+                        <li>
+                            <a
+                                href={`/zona/${loc.slug}`}
+                                class="group flex items-center gap-3 p-4 rounded-xl bg-surface border border-heading/5 hover:border-primary/40 hover:shadow-md transition-all"
+                            >
+                                <span class="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary transition-colors">
+                                    <MapPin className="w-4 h-4 text-primary group-hover:text-white transition-colors" />
+                                </span>
+                                <div class="flex-1 min-w-0">
+                                    <span class="block font-bold text-sm text-heading group-hover:text-primary transition-colors truncate">
+                                        {serviceName
+                                            ? `${serviceName} en ${loc.data.name}`
+                                            : loc.data.name}
+                                    </span>
+                                    <span class="text-[11px] text-body opacity-60">
+                                        {typeLabel[loc.data.type] || loc.data.type}
+                                    </span>
+                                </div>
+                                <ArrowRight className="w-3.5 h-3.5 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
+    )
+}

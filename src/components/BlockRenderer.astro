@@ -27,6 +27,8 @@ import PriceFromBlock from "./blocks/PriceFromBlock.astro";
 import ContentBlock from "./blocks/Content.astro";
 import ContentWithSidebar from "./blocks/ContentWithSidebar.astro";
 import ServiceAreas from "./blocks/ServiceAreas.astro";
+import LocationServicesBlock from "./blocks/LocationServicesBlock.astro";
+import ServiceLocationsBlock from "./blocks/ServiceLocationsBlock.astro";
 
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 
@@ -469,6 +471,29 @@ const blockBgClasses = (blocks as any[]).map(b => {
                         buttonText={value?.buttonText}
                         buttonLink={value?.buttonLink}
                         isOffer={value?.isOffer}
+                        bgClass={bgClass}
+                    />
+                );
+
+            case "location_services":
+                return (
+                    <LocationServicesBlock
+                        services={services}
+                        locationName={locationName}
+                        niche={niche}
+                        title={value?.title}
+                        subtitle={value?.subtitle}
+                        bgClass={bgClass}
+                    />
+                );
+
+            case "service_locations":
+                return (
+                    <ServiceLocationsBlock
+                        allLocations={allLocations}
+                        serviceName={title}
+                        title={value?.title}
+                        subtitle={value?.subtitle}
                         bgClass={bgClass}
                     />
                 );

@@ -286,16 +286,12 @@ export function SpintaxPreview() {
 import type { BasicFormField } from '@keystatic/core';
 import { FieldPrimitive } from '@keystar/ui/field';
 
-export function spintaxSimulator(): BasicFormField<string, undefined, string> {
+export function spintaxSimulator(): BasicFormField<string> {
     return {
         kind: 'form',
         formKind: undefined,
         defaultValue() { return ''; },
-        Input({ onChange, value, autoFocus }: {
-            onChange: (val: string) => void;
-            value: string;
-            autoFocus?: boolean;
-        }) {
+        Input(_props: { onChange: (val: string) => void; value: string }) {
             return (
                 <FieldPrimitive label="Simulador de Spintax">
                     <SpintaxPreview />
@@ -304,7 +300,7 @@ export function spintaxSimulator(): BasicFormField<string, undefined, string> {
         },
         parse(val: unknown) { return typeof val === 'string' ? val : ''; },
         serialize(val: string) { return { value: val ?? '' }; },
-        validate(val: unknown) { return typeof val === 'string' ? val : ''; },
+        validate(val: string) { return val; },
         reader: {
             parse(val: unknown) { return typeof val === 'string' ? val : ''; },
         },

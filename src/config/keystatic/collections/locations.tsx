@@ -141,6 +141,19 @@ export const locations = collection({
                     )
                 })
             },
+            location_services: {
+                label: '🔗 Servicios en esta Zona (Interlinking)',
+                schema: fields.object({
+                    title: fields.text({
+                        label: 'Título (Opcional)',
+                        description: 'Deja vacío para generar automáticamente: "Nuestros Servicios en [Zona]"',
+                    }),
+                    subtitle: fields.text({
+                        label: 'Subtítulo (Opcional)',
+                        multiline: true,
+                    }),
+                })
+            },
             before_after: {
                 label: '🔄 Antes y Después (Comparativa)',
                 schema: fields.object({

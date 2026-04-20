@@ -1,19 +1,15 @@
 ---
-import ServiceAreas from "./ServiceAreas.astro";
-import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, ArrowRight } from "lucide-react";
+import { getCollection } from "astro:content";
 import { getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 
-// 1. Recuperar configuración unificada
 const settings = await getSettings();
-const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle } =
-    settings;
+const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle } = settings;
 
-// 2. Recuperar configuración específica del Footer
 const footerConfig = await getEntry("footer", "main");
 const footerData = footerConfig?.data || {};
 
-// Valores por defecto si no se configuran en Keystatic
 const description =
     footerData.description ||
     `⚠️ Configura esta descripción en el CMS (Footer > Descripción)`;
@@ -28,131 +24,165 @@ const footerLinks =
               { label: "Privacidad", url: "/privacidad/" },
               { label: "Cookies", url: "/cookies/" },
           ];
+
+// Auto-fetch colecciones para interlinking SEO
+const allServices = await getCollection("services");
+const allLocations = await getCollection("locations");
+
+const sortedServices = allServices.sort((a, b) =>
+    a.data.title.localeCompare(b.data.title)
+);
+const sortedLocations = allLocations.sort((a, b) =>
+    a.data.name.localeCompare(b.data.name)
+);
 ---
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
     <div class="container mx-auto px-4">
         {footerStyle !== 'simple' && (
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                {/* COLUMNA 1: INFO NEGOCIO */}
-                <div>
-                <div class="text-2xl font-heading font-bold text-heading mb-4">
-                    {siteName}
-                </div>
-                <p class="text-body text-sm leading-relaxed mb-6">
-                    {description}
-                </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
-                {
-                    /* Redes Sociales (Se muestran solo si hay URL configurada en settings) */
-                }
-                {
-                    (facebook || instagram) && (
+                {/* COL 1 — NEGOCIO */}
+                <div>
+                    <div class="text-2xl font-heading font-bold text-heading mb-4">
+                        {siteName}
+                    </div>
+                    <p class="text-body text-sm leading-relaxed mb-6">
+                        {description}
+                    </p>
+                    {(facebook || instagram) && (
                         <div class="flex gap-4">
                             {facebook && (
-                                <a
-                                    href={facebook}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-body hover:text-primary transition-colors"
-                                    aria-label="Facebook"
-                                >
+                                <a href={facebook} target="_blank" rel="noopener noreferrer"
+                                    class="text-body hover:text-primary transition-colors" aria-label="Facebook">
                                     <Facebook className="w-5 h-5" />
                                 </a>
                             )}
                             {instagram && (
-                                <a
-                                    href={instagram}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-body hover:text-primary transition-colors"
-                                    aria-label="Instagram"
-                                >
+                                <a href={instagram} target="_blank" rel="noopener noreferrer"
+                                    class="text-body hover:text-primary transition-colors" aria-label="Instagram">
                                     <Instagram className="w-5 h-5" />
                                 </a>
                             )}
                         </div>
-                    )
-                }
-            </div>
-
-            {/* COLUMNA 2: CONTACTO */}
-            <div>
-                <div
-                    class="text-heading font-bold mb-4 uppercase tracking-wider text-sm"
-                >
-                    Contacto
+                    )}
                 </div>
-                <ul class="space-y-3 text-body text-sm">
-                    <li class="flex items-center gap-2">
-                        <Phone className="w-4 h-4 text-primary" />
-                        <a
-                            href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                            class="hover:text-heading transition-colors"
-                        >
-                            {phone}
-                        </a>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-primary" />
-                        <a
-                            href={`mailto:${email}`}
-                            class="hover:text-heading transition-colors"
-                        >
-                            {email}
-                        </a>
-                    </li>
-                    {
-                        address && (
+
+                {/* COL 2 — CONTACTO */}
+                <div>
+                    <div class="text-heading font-bold mb-4 uppercase tracking-wider text-sm">
+                        Contacto
+                    </div>
+                    <ul class="space-y-3 text-body text-sm">
+                        {phone && (
                             <li class="flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-primary" />
+                                <Phone className="w-4 h-4 text-primary shrink-0" />
+                                <a href={`tel:${phone.replace(/\s/g, "")}`}
+                                    class="hover:text-heading transition-colors">
+                                    {phone}
+                                </a>
+                            </li>
+                        )}
+                        {email && (
+                            <li class="flex items-center gap-2">
+                                <Mail className="w-4 h-4 text-primary shrink-0" />
+                                <a href={`mailto:${email}`}
+                                    class="hover:text-heading transition-colors break-all">
+                                    {email}
+                                </a>
+                            </li>
+                        )}
+                        {address && (
+                            <li class="flex items-start gap-2">
+                                <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                                 <span>{address}</span>
                             </li>
-                        )
-                    }
-                </ul>
-            </div>
+                        )}
+                    </ul>
+                </div>
 
-            {/* COLUMNA 3 y 4: ÁREAS DE SERVICIO (Componente externo) */}
-            <div class="lg:col-span-2">
-                <ServiceAreas />
+                {/* COL 3 — SERVICIOS (SEO interlinking) */}
+                {sortedServices.length > 0 && (
+                    <div>
+                        <div class="text-heading font-bold mb-4 uppercase tracking-wider text-sm">
+                            Servicios
+                        </div>
+                        <ul class="space-y-2">
+                            {sortedServices.map((service) => (
+                                <li>
+                                    <a
+                                        href={`/servicios/${service.slug}`}
+                                        class="group flex items-center gap-1.5 text-sm text-body hover:text-heading transition-colors"
+                                    >
+                                        <span class="w-1.5 h-1.5 rounded-full bg-body/40 group-hover:bg-primary transition-colors shrink-0" />
+                                        <span class="group-hover:translate-x-0.5 transition-transform duration-200">
+                                            {service.data.title}
+                                        </span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                        <div class="mt-4 pt-4 border-t border-heading/10">
+                            <a href="/servicios"
+                                class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
+                                Ver todos los servicios
+                                <ArrowRight className="w-3 h-3" />
+                            </a>
+                        </div>
+                    </div>
+                )}
+
+                {/* COL 4 — ZONAS (SEO interlinking) */}
+                {sortedLocations.length > 0 && (
+                    <div>
+                        <div class="text-heading font-bold mb-4 uppercase tracking-wider text-sm">
+                            Zonas de Servicio
+                        </div>
+                        <ul class="grid grid-cols-2 gap-x-3 gap-y-2">
+                            {sortedLocations.map((loc) => (
+                                <li>
+                                    <a
+                                        href={`/zona/${loc.slug}`}
+                                        class="group flex items-center gap-1.5 text-sm text-body hover:text-heading transition-colors"
+                                    >
+                                        <span class="w-1.5 h-1.5 rounded-full bg-body/40 group-hover:bg-primary transition-colors shrink-0" />
+                                        <span class="group-hover:translate-x-0.5 transition-transform duration-200 truncate">
+                                            {loc.data.name}
+                                        </span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                        <div class="mt-4 pt-4 border-t border-heading/10">
+                            <a href="/zonas"
+                                class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
+                                Ver cobertura completa
+                                <ArrowRight className="w-3 h-3" />
+                            </a>
+                        </div>
+                    </div>
+                )}
             </div>
-        </div>
         )}
 
-        {/* BARRA INFERIOR (LINKS LEGALES) */}
-        <div
-            class="border-t border-heading/10 pt-8 text-center text-body/70 text-xs"
-        >
+        {/* BARRA INFERIOR */}
+        <div class="border-t border-heading/10 pt-8 text-center text-body/70 text-xs">
             <div class="flex flex-wrap justify-center gap-4 mb-4">
-                {
-                    footerLinks.map((link, index) => (
-                        <>
-                            <a
-                                href={link.url}
-                                class="hover:text-primary transition-colors"
-                            >
-                                {link.label}
-                            </a>
-                            {/* Separador entre enlaces, pero no después del último */}
-                            {index < footerLinks.length - 1 && (
-                                <span class="text-body/30">|</span>
-                            )}
-                        </>
-                    ))
-                }
+                {footerLinks.map((link, index) => (
+                    <>
+                        <a href={link.url} class="hover:text-primary transition-colors">
+                            {link.label}
+                        </a>
+                        {index < footerLinks.length - 1 && (
+                            <span class="text-body/30">|</span>
+                        )}
+                    </>
+                ))}
             </div>
-
-            <p>
-                &copy; {new Date().getFullYear()}
-                {siteName}. Todos los derechos reservados.
-            </p>
-
-            {
-                disclaimer && (
-                    <p class="text-body/50 mt-2 text-[10px]">{disclaimer}</p>
-                )
-            }
+            <p>&copy; {new Date().getFullYear()} {siteName}. Todos los derechos reservados.</p>
+            {disclaimer && (
+                <p class="text-body/50 mt-2 text-[10px]">{disclaimer}</p>
+            )}
         </div>
     </div>
 </footer>

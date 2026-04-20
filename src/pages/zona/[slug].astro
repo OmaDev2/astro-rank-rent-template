@@ -2,9 +2,8 @@
 import LocationLayout from "../../layouts/LocationLayout.astro";
 import { getCollection } from "astro:content";
 import { getSettings } from "@/lib/settings";
-import type { WithContext, LocalBusiness } from "schema-dts";
+import { buildLocationGraph } from "@/lib/seo";
 
-// Importar componentes MDX
 import CtaBlock from "../../components/mdx/CtaBlock.astro";
 import AlertBlock from "../../components/mdx/AlertBlock.astro";
 import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
@@ -13,7 +12,6 @@ import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
 
 export const prerender = true;
 
-// 1. Generar rutas estáticas para cada zona
 export async function getStaticPaths() {
     const locations = await getCollection("locations");
     return locations.map((entry) => ({
@@ -22,81 +20,19 @@ export async function getStaticPaths() {
     }));
 }
 
-// 2. Obtener los datos de la zona actual
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const data = entry.data;
 
-// Componentes disponibles en MDX
-const mdxComponents = {
-    CtaBlock,
-    AlertBlock,
-    PhoneBlock,
-    BusinessNameBlock,
-    CustomImageBlock,
-};
+const mdxComponents = { CtaBlock, AlertBlock, PhoneBlock, BusinessNameBlock, CustomImageBlock };
 
-// 3. Obtener configuración global
 const settings = await getSettings();
 
-// 4. Obtener servicios destacados
-const allServices = await getCollection("services", ({ data }) => {
-    return data.featured === true;
-});
-
-// 5. Obtener todas las zonas para el sidebar
+const allServices = await getCollection("services", ({ data }) => data.featured === true);
 const allLocations = await getCollection("locations");
+const testimonials = await getCollection("testimonials", ({ data }) => data.featured === true);
 
-// 6. Schema SEO Local
-// 6. Schema SEO Local
-import {
-    generateLocalBusinessSchema,
-    generateBreadcrumbsList,
-    generateFAQSchema,
-} from "@/lib/seo";
-
-// Recopilar testimonios (idealmente filtraríamos por zona si tuviéramos esa data,
-// por ahora usamos los destacados globalmente para dar autoridad)
-const testimonials = await getCollection(
-    "testimonials",
-    ({ data }) => data.featured === true,
-);
-
-const localSchema = generateLocalBusinessSchema(
-    {
-        siteName: `${settings.niche} en ${data.name} | ${settings.siteName}`,
-        phone: settings.phone,
-        city: data.name, // Ciudad específica de la zona
-        address: undefined, // Usamos undefined para que use la ciudad como dirección en zonas locales
-        coordinates: data.coordinates,
-        image: data.heroImage,
-        businessType: settings.businessType,
-        areaServed: data.name, // Dinámico para SEO local
-        openingHours: settings.openingHours,
-        paymentAccepted: settings.paymentAccepted,
-        slogan: settings.slogan,
-        knowsAbout: allServices.map((s) => s.data.title),
-    },
-    testimonials,
-    Astro.url.href,
-);
-
-const breadcrumbsPoints = [
-    { name: "Inicio", item: Astro.site?.href || "https://example.com" },
-    { name: "Zonas", item: new URL("/zonas", Astro.site).href },
-    { name: data.name, item: Astro.url.href },
-];
-
-const breadcrumbsSchema = generateBreadcrumbsList(breadcrumbsPoints);
-const faqSchema = generateFAQSchema(data.faq || []);
-
-const finalSchema = [
-    localSchema,
-    breadcrumbsSchema,
-    ...(faqSchema ? [faqSchema] : []),
-];
-
-// 7. SEO: Título y descripción
+// SEO
 let parsedSeo = { title: "", description: "" };
 try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
 
@@ -105,6 +41,24 @@ const pageTitle =
 const pageDescription =
     parsedSeo.description ||
     `Servicio profesional de ${settings.niche.toLowerCase()} en ${data.name}. Presupuesto gratis.`;
+
+// Schema @graph
+const finalSchema = buildLocationGraph({
+    settings,
+    siteUrl: settings.siteUrl,
+    pageUrl: Astro.url.href,
+    title: pageTitle,
+    description: pageDescription,
+    image: data.heroImage,
+    locationName: data.name,
+    testimonials,
+    faqs: data.faq || [],
+    breadcrumbs: [
+        { name: "Inicio", item: new URL("/", Astro.site).href },
+        { name: "Zonas", item: new URL("/zonas/", Astro.site).href },
+        { name: data.name, item: Astro.url.href },
+    ],
+});
 ---
 
 <LocationLayout

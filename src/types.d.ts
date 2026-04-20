@@ -26,7 +26,7 @@ export interface Location {
     };
 }
 
-export type BlockDiscriminant = 'hero' | 'features' | 'map' | 'content' | 'cta' | 'faq' | 'services' | 'services_grid' | 'services_list' | 'about' | 'process' | 'testimonials' | 'locations' | 'contact' | 'price_from' | 'pricing' | 'stats' | 'logos' | 'before_after' | 'service_areas';
+export type BlockDiscriminant = 'hero' | 'features' | 'map' | 'content' | 'cta' | 'faq' | 'services' | 'services_grid' | 'services_list' | 'about' | 'process' | 'testimonials' | 'locations' | 'contact' | 'price_from' | 'pricing' | 'stats' | 'logos' | 'before_after' | 'service_areas' | 'location_services' | 'service_locations';
 
 export interface Block {
     discriminant: BlockDiscriminant;

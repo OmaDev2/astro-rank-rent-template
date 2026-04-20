@@ -58,7 +58,7 @@ export function AnimationPicker({
 
             return (
                 <FieldPrimitive description={description} label={label}>
-                    <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                    <div><div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                         {OPTIONS.map((opt) => {
                             const isSel = selected === opt.value;
                             return (
@@ -129,7 +129,7 @@ export function AnimationPicker({
                         @keyframes fadeSlideIn {
                             to { opacity: 1; transform: translateY(0); }
                         }
-                    `}</style>
+                    `}</style></div>
                 </FieldPrimitive>
             );
         },

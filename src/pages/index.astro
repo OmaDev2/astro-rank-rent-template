@@ -48,49 +48,24 @@ const finalBlocks =
 		: defaultBlocks;
 
 // 4. Schema SEO
-import {
-	generateLocalBusinessSchema,
-	generateFAQSchema,
-	generateBreadcrumbsList,
-} from "@/lib/seo";
-
-const localBusinessSchema = generateLocalBusinessSchema(
-	{
-		siteName: config.siteName,
-		phone: config.phone,
-		city: config.city,
-		address: config.address,
-		coordinates: config.coordinates,
-		image: config.logo || `${config.siteUrl}/images/home/logo.png`,
-		businessType: config.businessType,
-		description: `${config.niche} en ${config.city}. Servicio profesional.`,
-		areaServed: config.areaServed, // Lista global de localidades
-		serviceRadius: config.serviceRadius, // Radio global
-		openingHours: config.openingHours,
-		paymentAccepted: config.paymentAccepted,
-		slogan: config.slogan,
-		knowsAbout: featuredServices.map((s) => s.data.title),
-	},
-	testimonialsCollection,
-	Astro.url.href,
-);
+import { buildHomeGraph } from "@/lib/seo";
 
 const homepageFaqs =
 	homeData.faq ||
-	homeData.blocks?.find((b: any) => b.discriminant === "faq")?.value
-		?.questions ||
+	homeData.blocks?.find((b: any) => b.discriminant === "faq")?.value?.questions ||
 	[];
-const faqSchema = generateFAQSchema(homepageFaqs);
 
-const breadcrumbsSchema = generateBreadcrumbsList([
-	{ name: "Inicio", item: Astro.site?.href || Astro.url.origin },
-]);
-
-const schema = [
-	localBusinessSchema,
-	breadcrumbsSchema,
-	...(faqSchema ? [faqSchema] : []),
-] as any;
+const schema = buildHomeGraph({
+	settings: config,
+	siteUrl: config.siteUrl,
+	pageUrl: Astro.url.href,
+	title: config.seoTitle || `${config.niche} en ${config.city}`,
+	description: config.seoDescription,
+	image: config.logo,
+	testimonials: testimonialsCollection,
+	faqs: homepageFaqs,
+	serviceNames: featuredServices.map((s) => s.data.title),
+});
 
 // Parse visual editor overrides if set
 const parsePreview = (json: string) => {

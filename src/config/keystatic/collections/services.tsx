@@ -90,6 +90,19 @@ export const services = collection({
                     showSidebar: fields.checkbox({ label: 'Mostrar Sidebar de Contacto', defaultValue: true }),
                 })
             },
+            service_locations: {
+                label: '🗺️ Zonas donde ofrecemos este servicio (Interlinking)',
+                schema: fields.object({
+                    title: fields.text({
+                        label: 'Título (Opcional)',
+                        description: 'Deja vacío para generar automáticamente: "[Servicio] en todas nuestras zonas"',
+                    }),
+                    subtitle: fields.text({
+                        label: 'Subtítulo (Opcional)',
+                        multiline: true,
+                    }),
+                })
+            },
             faq: {
                 label: '❓ Preguntas Frecuentes',
                 schema: fields.object({
