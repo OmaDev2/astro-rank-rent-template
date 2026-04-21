@@ -93,6 +93,29 @@ export const design = singleton({
             }),
         }, { label: '✨ Efectos e Interactividad' }),
 
+        contact: fields.object({
+            stickyPhoneMobile: fields.checkbox({
+                label: 'Teléfono flotante en móvil',
+                description: 'Muestra el botón de llamada flotante en pantallas pequeñas.',
+                defaultValue: true,
+            }),
+            stickyPhoneDesktop: fields.checkbox({
+                label: 'Teléfono flotante en escritorio',
+                description: 'Muestra el botón de llamada flotante en pantallas grandes.',
+                defaultValue: false,
+            }),
+            whatsappMobile: fields.checkbox({
+                label: 'WhatsApp flotante en móvil',
+                description: 'Muestra el botón de WhatsApp flotante en pantallas pequeñas.',
+                defaultValue: true,
+            }),
+            whatsappDesktop: fields.checkbox({
+                label: 'WhatsApp flotante en escritorio',
+                description: 'Muestra el botón de WhatsApp flotante en pantallas grandes.',
+                defaultValue: true,
+            }),
+        }, { label: '📞 Botones de Contacto Flotantes' }),
+
         advanced: fields.object({
             favicon: fields.image({
                 label: 'Favicon del Sitio',

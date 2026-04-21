@@ -7,19 +7,47 @@ interface Props {
         heading: string;
         content: string;
     }[];
+    niche?: string;
+    locationName?: string;
+    city?: string;
     bgClass?: string;
 }
 
-const { title, sections, bgClass = "bg-secondary" } = Astro.props;
+const { 
+    title, 
+    sections, 
+    niche = "", 
+    locationName = "", 
+    city = "", 
+    bgClass = "bg-secondary" 
+} = Astro.props;
+
+// Función para reemplazar variables dinámicas
+const makeDynamic = (text: string) => {
+    if (!text) return "";
+    return text
+        .replace(/\{city\}/gi, city || locationName)
+        .replace(/\{location\}/gi, locationName || city)
+        .replace(/\{niche\}/gi, niche)
+        .replace(/Madrid/g, locationName || city || "Madrid")
+        .replace(/Fontanería/g, niche || "Servicios");
+};
+
+const displayTitle = makeDynamic(title || "");
+const processedSections = sections?.map(s => ({
+    heading: makeDynamic(s.heading || s.title || ""),
+    content: makeDynamic(s.content || "")
+}));
+
 ---
 
 <section class={`py-16 md:py-24 ${bgClass}`}>
     <div class="container mx-auto px-4 max-w-5xl">
         {
-            title && (
+            displayTitle && (
                 <div class="text-center mb-16 md:mb-20">
                     <h2 class="text-3xl md:text-5xl font-heading font-bold text-heading mb-4 tracking-tight">
-                        {title}
+                        {displayTitle}
                     </h2>
                     <div class="w-20 h-1 bg-primary mx-auto rounded-full" />
                 </div>
@@ -28,7 +56,7 @@ const { title, sections, bgClass = "bg-secondary" } = Astro.props;
 
         <div class="space-y-16 md:space-y-20">
             {
-                sections?.map((section: any, index: number) => (
+                processedSections?.map((section: any, index: number) => (
                     <article class="reveal-on-scroll bg-surface rounded-2xl shadow-sm hover:shadow-md transition-all duration-500 overflow-hidden">
                         {/* Barra superior decorativa con gradiente del tema */}
                         <div class="h-1.5 bg-gradient-to-r from-primary via-accent to-primary opacity-80" />
@@ -127,7 +155,7 @@ const { title, sections, bgClass = "bg-secondary" } = Astro.props;
         {/* CTA final - ADAPTADO A TU SISTEMA */}
         <div class="mt-16 pt-12 border-t border-heading/10 text-center">
             <p class="text-body mb-6 text-lg font-medium">
-                ¿Tienes más preguntas sobre quitar el gotelé?
+                ¿Tienes más preguntas sobre {niche.toLowerCase()}?
             </p>
             <a
                 href="/contacto/"

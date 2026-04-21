@@ -89,5 +89,11 @@ export async function getSettings() {
         favicon:             d?.advanced?.favicon      || d?.favicon             || '',
         themeColor:         d?.advanced?.themeColor    || d?.themeColor         || '',
         customCss:          d?.advanced?.customCss     || d?.customCss          || '',
+
+        // ── Botones flotantes ─────────────────────────────────────────────────
+        stickyPhoneMobile:  d?.contact?.stickyPhoneMobile  ?? true,
+        stickyPhoneDesktop: d?.contact?.stickyPhoneDesktop ?? false,
+        whatsappMobile:     d?.contact?.whatsappMobile     ?? true,
+        whatsappDesktop:    d?.contact?.whatsappDesktop    ?? true,
     };
 }

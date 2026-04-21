@@ -93,8 +93,6 @@ interface Props {
     canonical?: string;
     schema?: WithContext<Thing> | WithContext<Thing>[] | Record<string, any>;
     noindex?: boolean;
-    stickyPhone?: boolean;
-    whatsappFloat?: boolean;
     canonicalUrl?: string;
 }
 
@@ -105,8 +103,6 @@ const {
     canonical,
     schema,
     noindex = false,
-    stickyPhone = true,
-    whatsappFloat = true,
     canonicalUrl,
 } = Astro.props;
 
@@ -329,10 +325,7 @@ const heroProcessed = isHome
             <slot />
         </main>
 
-        <WhatsAppButton
-            stickyPhone={stickyPhone}
-            whatsappFloat={whatsappFloat}
-        />
+        <WhatsAppButton />
         <CookieBanner />
         <CallbackModal />
         <ClickTracker />

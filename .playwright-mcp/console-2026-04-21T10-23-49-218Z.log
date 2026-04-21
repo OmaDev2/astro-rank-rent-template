@@ -1,0 +1,53 @@
+[     103ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:21608
+[     270ms] NotFoundError: Not found
+    at notFound (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:10240:9)
+    at AlwaysNotFound (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:18223:3)
+    at renderWithHooks (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:11596:26)
+    at mountIndeterminateComponent (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:14974:21)
+    at beginWork (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:15962:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:3680:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:3705:24)
+    at invokeGuardedCallback (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:3739:39)
+    at beginWork$1 (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:19818:15)
+    at performUnitOfWork (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:19251:20)
+[     287ms] NotFoundError: Not found
+    at notFound (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:10240:9)
+    at AlwaysNotFound (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:18223:3)
+    at renderWithHooks (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:11596:26)
+    at mountIndeterminateComponent (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:14974:21)
+    at beginWork (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:15962:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:3680:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:3705:24)
+    at invokeGuardedCallback (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:3739:39)
+    at beginWork$1 (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:19818:15)
+    at performUnitOfWork (http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:19251:20)
+[     283ms] [ERROR] The above error occurred in the <AlwaysNotFound> component:
+
+    at AlwaysNotFound (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:18223:3)
+    at NotFoundErrorBoundaryInner (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:10244:5)
+    at NotFoundBoundary (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:10276:13)
+    at BranchNotFound (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:16238:13)
+    at div
+    at SplitPaneSecondary2 (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:93510:13)
+    at div
+    at SplitView (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:93057:13)
+    at MainPanelLayout (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:16174:13)
+    at SidebarProvider (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:131329:13)
+    at LocalAppShellProvider (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:88053:75)
+    at AppShell (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:16261:13)
+    at PageInner (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:17986:13)
+    at div
+    at ProviderWrapper2 (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:11717:5)
+    at $ea8dcbcb9ea1b556$export$323e4fc2fa4753fb (http://localhost:4321/node_modules/.vite/deps/chunk-YOAN4N44.js?v=39a03433:770:9)
+    at $f57aed4a881a3485$export$178405afcd8c5eb (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:10437:9)
+    at $18f2051aff69b9bf$var$I18nProviderWithLocale (http://localhost:4321/node_modules/.vite/deps/chunk-KC3L6ETO.js?v=39a03433:296:9)
+    at $18f2051aff69b9bf$export$a54013f0d02a8f82 (http://localhost:4321/node_modules/.vite/deps/chunk-KC3L6ETO.js?v=39a03433:315:9)
+    at BreakpointProvider (http://localhost:4321/node_modules/.vite/deps/chunk-YOAN4N44.js?v=39a03433:6065:13)
+    at KeystarProvider2 (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:11653:51)
+    at Provider (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:11727:13)
+    at RouterProvider (http://localhost:4321/node_modules/.vite/deps/chunk-QJ3LX7GF.js?v=39a03433:85821:13)
+    at ClientOnly (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:18418:13)
+    at Keystatic (http://localhost:4321/node_modules/.vite/deps/chunk-MJ2HSD4P.js?v=39a03433:18361:13)
+    at Keystatic$1
+
+React will try to recreate this component tree from scratch using the error boundary you provided, NotFoundErrorBoundaryInner. @ http://localhost:4321/node_modules/.vite/deps/chunk-H343HIDT.js?v=39a03433:14079

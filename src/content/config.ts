@@ -20,11 +20,11 @@ const locations = defineCollection({
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
-                z.object({ discriminant: z.literal('hero') }),
-                z.object({ discriminant: z.literal('features') }),
-                z.object({ discriminant: z.literal('map') }),
-                z.object({ discriminant: z.literal('content') }),
-                z.object({ discriminant: z.literal('cta') }),
+                z.object({ discriminant: z.literal('hero'), value: z.any().optional() }),
+                z.object({ discriminant: z.literal('features'), value: z.any().optional() }),
+                z.object({ discriminant: z.literal('map'), value: z.any().optional() }),
+                z.object({ discriminant: z.literal('content'), value: z.any().optional() }),
+                z.object({ discriminant: z.literal('cta'), value: z.any().optional() }),
                 z.object({ discriminant: z.literal('pricing'), value: z.any() }),
                 z.object({ discriminant: z.literal('stats'), value: z.any() }),
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
@@ -172,6 +172,13 @@ const design = defineCollection({
             animationStyle: z.enum(['none', 'subtle', 'full']).optional().default('subtle'),
             sectionDivider: z.enum(['none', 'diagonal', 'wave', 'curve', 'arrow', 'zigzag']).optional().default('none'),
             bgTexture: z.enum(['none', 'dots', 'grid', 'noise']).optional().default('none'),
+        }).optional(),
+
+        contact: z.object({
+            stickyPhoneMobile:  z.boolean().optional().default(true),
+            stickyPhoneDesktop: z.boolean().optional().default(false),
+            whatsappMobile:     z.boolean().optional().default(true),
+            whatsappDesktop:    z.boolean().optional().default(true),
         }).optional(),
 
         advanced: z.object({

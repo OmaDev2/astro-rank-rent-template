@@ -78,6 +78,18 @@ export const locations = collection({
                 label: '🖼️ Hero (Portada)',
                 schema: fields.object({
                     content: heroPreview(),
+                    backgroundImage: fields.text({
+                        label: 'URL Imagen de Fondo',
+                        description: 'URL completa (https://...) o ruta local (/images/...)',
+                    }),
+                    ctaPrimaryLink: fields.text({
+                        label: 'Enlace Botón Principal',
+                        description: 'Ej: /contacto/',
+                    }),
+                    ctaSecondaryLink: fields.text({
+                        label: 'Enlace Botón Secundario',
+                        description: 'Ej: /proyectos/',
+                    }),
                 })
             },
             features: {
