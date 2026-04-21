@@ -3,7 +3,6 @@ menuItems:
     url: "/"
     type: link
   - label: "Servicios"
-    
     type: services_dropdown
   - label: "Blog"
     url: "/blog/"
