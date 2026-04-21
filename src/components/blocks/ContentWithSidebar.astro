@@ -104,7 +104,7 @@ const currentIconBgClass = iconBgMap[urgencyStyle] || "bg-primary";
                         <div class="grid md:grid-cols-2 gap-6">
                             {services.map((service) => (
                                 <a
-                                    href={`/${service.slug}`}
+                                    href={`/servicios/${service.slug}/`}
                                     class="group relative p-6 rounded-2xl bg-surface border border-heading/5 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 overflow-hidden"
                                 >
                                     <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -129,8 +129,8 @@ const currentIconBgClass = iconBgMap[urgencyStyle] || "bg-primary";
         </div>
 
         {/* SIDEBAR CON GLASSMORFISMO Y DISEÑO PREMIUM */}
-        <div class="space-y-8">
-            <div class="p-8 rounded-2xl sticky top-24 glass-card">
+        <div class="space-y-8 lg:sticky lg:top-24 lg:self-start">
+            <div class="p-8 rounded-2xl glass-card">
                 <div
                     class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl pointer-events-none"
                 >

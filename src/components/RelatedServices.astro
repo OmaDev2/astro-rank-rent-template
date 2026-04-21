@@ -5,7 +5,19 @@
  * Genera interlinking horizontal automático: Zona → Todos los Servicios.
  * Los datos vienen del layout padre (ya tiene getCollection resuelto).
  */
-import { Wrench, ArrowRight } from "lucide-react";
+import {
+    Wrench, ArrowRight, Droplets, Flame, Zap, Star, Home, Building2, MapPin,
+    Clock, Shield, CheckCircle, Phone, Settings, Hammer, Scissors, Wind,
+    Paintbrush, Bolt, Truck, Package, Layers, Leaf, Sun, Snowflake, Lock,
+    Wifi, Camera, AlertTriangle, Thermometer,
+} from "lucide-react";
+
+const iconMap: Record<string, any> = {
+    Wrench, Droplets, Flame, Zap, Star, Home, Building2, MapPin, Clock,
+    Shield, CheckCircle, Phone, Settings, Hammer, Scissors, Wind,
+    Paintbrush, Bolt, Truck, Package, Layers, Leaf, Sun, Snowflake, Lock,
+    Wifi, Camera, AlertTriangle, Thermometer,
+};
 
 interface Service {
     slug: string;
@@ -34,8 +46,6 @@ const sorted = [...services]
     .filter(s => s.slug !== currentServiceSlug)
     .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
 
-// Mapa de emojis para íconos comunes (compatibilidad con el campo icon del schema)
-const iconFallback = "🔧";
 ---
 
 <section class="py-16 bg-secondary border-t border-heading/5">
@@ -69,8 +79,13 @@ const iconFallback = "🔧";
                         </span>
                     )}
                     <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center
-                                text-xl shrink-0 group-hover:bg-primary/20 transition-colors">
-                        {service.data.icon || iconFallback}
+                                shrink-0 group-hover:bg-primary/20 transition-colors text-primary">
+                        {(() => {
+                            const Icon = iconMap[service.data.icon];
+                            return Icon
+                                ? <Icon className="w-5 h-5" />
+                                : <Wrench className="w-5 h-5" />;
+                        })()}
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="font-bold text-heading group-hover:text-primary transition-colors text-sm mb-1">
