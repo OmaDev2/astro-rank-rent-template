@@ -6,6 +6,7 @@ import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import RelatedServices from "../components/RelatedServices.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+
 import { CheckCircle, ArrowRight, Home, ChevronRight } from "lucide-react";
 import { getCollection } from "astro:content";
 import { getSettings } from "../lib/settings";
@@ -76,7 +77,7 @@ const finalBlocks =
 >
     <Breadcrumbs isLocation locationName={props.locationName} />
 
-    <div class="relative">
+    <div class="relative pt-16 md:pt-20">
         {
             /* 
          NOTA: Movemos el renderizado de bloques aquí. 

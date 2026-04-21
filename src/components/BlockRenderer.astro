@@ -4,7 +4,7 @@ import FeaturesBlock from "./blocks/FeaturesBlock.astro";
 import MapBlock from "./blocks/MapBlock.astro";
 import FinalCTA from "./FinalCTA.astro";
 import FaqAccordion from "./FaqAccordion.astro";
-import Breadcrumbs from "./Breadcrumbs.astro";
+
 import LocationsSection from "./LocationsSection.astro";
 import Testimonials from "./Testimonials.astro";
 import { ArrowRight, CheckCircle, Shield } from "lucide-react";
@@ -135,30 +135,24 @@ const blockBgClasses = (blocks as any[]).map(b => {
                     return <HomeHero hero={heroMerged} config={config} />;
                 }
                 return (
-                    <>
-                        <HeroBlock
-                            locationName={locationName}
-                            locationType={locationType}
-                            zipCodes={zipCodes}
-                            heroImage={value?.heroImage || heroImage}
-                            heroImageAlt={value?.heroImageAlt}
-                            phone={phone}
-                            siteName={siteName}
-                            niche={niche}
-                            title={heroContent?.title || value?.title || title}
-                            subtitle={heroContent?.subtitle || value?.subtitle}
-                            heading={heroContent?.heading}
-                            headingHighlight={heroContent?.headingHighlight}
-                            subheading={heroContent?.subheading}
-                            ctaPrimaryText={heroContent?.ctaPrimaryText}
-                            ctaSecondaryText={heroContent?.ctaSecondaryText}
-                            heroStyle={config?.heroStyle || 'image'}
-                        />
-                        <Breadcrumbs
-                            locationName={locationName}
-                            isLocation={true}
-                        />
-                    </>
+                    <HeroBlock
+                        locationName={locationName}
+                        locationType={locationType}
+                        zipCodes={zipCodes}
+                        heroImage={value?.heroImage || heroImage}
+                        heroImageAlt={value?.heroImageAlt}
+                        phone={phone}
+                        siteName={siteName}
+                        niche={niche}
+                        title={heroContent?.title || value?.title || title}
+                        subtitle={heroContent?.subtitle || value?.subtitle}
+                        heading={heroContent?.heading}
+                        headingHighlight={heroContent?.headingHighlight}
+                        subheading={heroContent?.subheading}
+                        ctaPrimaryText={heroContent?.ctaPrimaryText}
+                        ctaSecondaryText={heroContent?.ctaSecondaryText}
+                        heroStyle={config?.heroStyle || 'image'}
+                    />
                 );
 
             case "services_grid":
