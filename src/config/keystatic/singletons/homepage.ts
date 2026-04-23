@@ -1,4 +1,23 @@
 import { singleton, fields } from '@keystatic/core';
+
+// import.meta.glob se resuelve en tiempo de build por Vite — no usa Node fs
+const _servicePaths = Object.keys(
+    import.meta.glob('/src/content/services/*.mdx')
+);
+
+const serviceCheckboxFields = Object.fromEntries(
+    _servicePaths
+        .map(p => p.split('/').pop()!.replace('.mdx', ''))
+        .sort()
+        .map((slug, idx) => [
+            slug,
+            fields.object({
+                enabled:  fields.checkbox({ label: slug.replace(/-/g, ' '), defaultValue: false }),
+                isPopular: fields.checkbox({ label: '⭐ Destacar (Badge)', defaultValue: false }),
+                order: fields.integer({ label: 'Posición (1 = primero)', defaultValue: idx + 1 }),
+            }),
+        ])
+);
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
 import { heroPreview } from '../../../components/keystatic/HeroPreview';
@@ -55,50 +74,7 @@ export const homepage = singleton({
                     title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
                     titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
                     subtitle: fields.text({ label: 'Resumen', multiline: true }),
-                    services: fields.array(
-                        fields.conditional(
-                            fields.select({
-                                label: 'Modo de Configuración',
-                                options: [
-                                    { label: 'Manual (Escribir todo)', value: 'manual' },
-                                    { label: 'Automático (Seleccionar Servicio)', value: 'auto' },
-                                ],
-                                defaultValue: 'manual',
-                            }),
-                            {
-                                manual: fields.object({
-                                    title: fields.text({ label: 'Nombre' }),
-                                    description: fields.text({ label: 'Descripción', multiline: true }),
-                                    icon: IconPicker({ label: 'Icono (Lucide)' }),
-                                    price: fields.text({ label: 'Precio (Ej: Desde 12€/m²)' }),
-                                    link: fields.text({ label: 'Enlace a Página' }),
-                                    isPopular: fields.checkbox({ label: '¿Destacar?', defaultValue: false }),
-                                    image: fields.image({
-                                        label: 'Imagen (Opcional)',
-                                        directory: 'public/images/services',
-                                        publicPath: '/images/services',
-                                    }),
-                                    imageAlt: fields.text({ label: 'Alt Imagen (Opcional)' }),
-                                    features: fields.array(fields.text({ label: 'Característica' }), {
-                                        label: 'Características',
-                                    }),
-                                }),
-                                auto: fields.object({
-                                    service: fields.relationship({
-                                        label: 'Seleccionar Servicio',
-                                        collection: 'services',
-                                    }),
-                                    overrideTitle: fields.text({ label: 'Sobrescribir Título (Opcional)' }),
-                                    overridePrice: fields.text({ label: 'Mostrar Precio (Opcional)' }),
-                                    isPopular: fields.checkbox({ label: '¿Destacar?', defaultValue: false }),
-                                }),
-                            }
-                        ),
-                        {
-                            label: 'Servicios de la Grilla',
-                            itemLabel: (props) => props?.discriminant === 'manual' ? props?.value?.fields?.title?.value : props?.value?.fields?.service?.value || 'Servicio',
-                        }
-                    )
+                    services: fields.object(serviceCheckboxFields)
                 })
             },
             services_list: {

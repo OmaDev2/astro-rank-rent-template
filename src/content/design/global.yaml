@@ -1,20 +1,25 @@
 identity:
   themeSettings: >-
-    {"theme":"sky_white","colors":{"primary":"#2563eb","secondary":"#ffffff","surface":"#f0f9ff","accent":"#38bdf8","textMain":"#0f172a","textMuted":"#64748b"}}
-  fontPair: robust
-  typographyScale: '{"heading":"md","body":"md"}'
+    {"theme":"forge_dark","colors":{"primary":"#f0a824","secondary":"#0f0f0e","surface":"#1c1c1a","accent":"#c8850a","textMain":"#f0ede8","textSecondary":"#d505c8","textMuted":"#e5e1e3","textSubtle":"#6a6860","accentDark":"#a06405"}}
+  fontPair: forge
+  typographyScale: '{"heading":"sm","body":"xs"}'
 layout:
-  navbarStyle: minimal
+  navbarStyle: glass
   footerStyle: full
   heroStyle: split_form
-  headingStyle: uppercase
+  headingStyle: italic
   sectionSpacing: normal
 effects:
   borderRadius: rounded
-  buttonStyle: gradient
+  buttonStyle: solid
   shadowStyle: floating
   heroOverlayOpacity: 0.5
   animationStyle: full
-  sectionDivider: wave
+  sectionDivider: diagonal
   bgTexture: none
+contact:
+  stickyPhoneMobile: true
+  stickyPhoneDesktop: false
+  whatsappMobile: true
+  whatsappDesktop: true
 advanced: {}

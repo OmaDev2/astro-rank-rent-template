@@ -1,12 +1,7 @@
 ---
 import Layout from "./Layout.astro";
 import Footer from "../components/Footer.astro";
-import FinalCTA from "../components/FinalCTA.astro";
-import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
-import RelatedLocations from "../components/RelatedLocations.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
-import { CheckCircle, ArrowRight, Shield } from "lucide-react";
 import BlockRenderer from "../components/BlockRenderer.astro";
 import { getSettings } from "../lib/settings";
 import type { Service, Location, Block, FAQItem } from "../types";
@@ -41,12 +36,12 @@ interface Props {
 
 const {
     title,
-    shortDesc,
-    icon,
+    shortDesc: _shortDesc,
+    icon: _icon,
     heroImage,
     faq,
     content: Content,
-    slug,
+    slug: _slug,
     siteName,
     phone,
     whatsapp,
@@ -61,11 +56,12 @@ const {
     blocks,
 } = Astro.props;
 
-// Orden por defecto para servicios antiguos
+// Orden por defecto para servicios antiguos o sin bloques definidos
 const defaultBlocks: Block[] = [
     { discriminant: "hero" },
     { discriminant: "content" },
     { discriminant: "faq" },
+    { discriminant: "service_locations" }, // Ahora es parte de los bloques y se puede quitar/mover
     { discriminant: "cta" },
 ];
 
@@ -74,7 +70,6 @@ const settings = await getSettings();
 ---
 
 <Layout title={pageTitle} description={pageDescription} schema={schema}>
-    <Breadcrumbs isService serviceName={title} />
     <BlockRenderer
         blocks={finalBlocks}
         locationName={city}
@@ -92,12 +87,8 @@ const settings = await getSettings();
         allLocations={allLocations}
         whatsapp={whatsapp}
         config={settings}
-    />
-
-    <RelatedLocations
-        locations={allLocations}
-        serviceTitle={title}
-        niche={niche}
+        breadcrumbType="service"
+        breadcrumbName={title}
     />
 
     <WhatsAppButton />

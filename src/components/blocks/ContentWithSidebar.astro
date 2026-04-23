@@ -16,6 +16,8 @@ interface Props {
     allLocations?: Location[];
     currentSlug?: string;
     bgClass?: string;
+    showSidebar?: boolean;
+    showServices?: boolean;
 }
 
 const {
@@ -32,6 +34,8 @@ const {
     allLocations,
     currentSlug,
     bgClass = "bg-secondary",
+    showSidebar = true,
+    showServices = true,
 } = Astro.props;
 
 const urgencyMap = {
@@ -55,9 +59,9 @@ const currentIconBgClass = iconBgMap[urgencyStyle] || "bg-primary";
 ---
 
 <section class={`py-20 ${bgClass}`}>
-    <div class="container mx-auto px-4 grid lg:grid-cols-3 gap-12">
+    <div class={`container mx-auto px-4 ${showSidebar ? 'grid lg:grid-cols-3 gap-12' : 'max-w-4xl'}`}>
         {/* CONTENIDO PRINCIPAL */}
-        <div class="lg:col-span-2 space-y-12">
+        <div class={`${showSidebar ? 'lg:col-span-2' : ''} space-y-12`}>
             {/* Caja de Urgencia Dinámica */}
             {
                 urgencyStyle !== "none" && (
@@ -96,7 +100,7 @@ const currentIconBgClass = iconBgMap[urgencyStyle] || "bg-primary";
 
             {/* SERVICIOS EN LA ZONA (Solo si no es home y hay servicios) */}
             {
-                services && services.length > 0 && (
+                showServices && services && services.length > 0 && (
                     <div>
                         <h2 class="text-3xl font-heading font-bold text-heading mb-8">
                             Servicios de {niche} en {locationName}
@@ -129,98 +133,100 @@ const currentIconBgClass = iconBgMap[urgencyStyle] || "bg-primary";
         </div>
 
         {/* SIDEBAR CON GLASSMORFISMO Y DISEÑO PREMIUM */}
-        <div class="space-y-8 lg:sticky lg:top-24 lg:self-start">
-            <div class="p-8 rounded-2xl glass-card">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl pointer-events-none"
-                >
-                </div>
-
-                <h3
-                    class="relative text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4"
-                >
-                    Contacto Directo
-                </h3>
-                <ul class="relative space-y-4 mb-8">
-                    <li class="flex items-start gap-3">
-                        <div
-                            class="p-1 rounded-full bg-primary/20 text-primary mt-0.5"
-                        >
-                            <CheckCircle className="w-4 h-4" />
-                        </div>
-                        <span class="text-body font-medium text-sm">
-                            Presupuesto 100% Gratuito
-                        </span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div
-                            class="p-1 rounded-full bg-primary/20 text-primary mt-0.5"
-                        >
-                            <CheckCircle className="w-4 h-4" />
-                        </div>
-                        <span class="text-body font-medium text-sm">
-                            Disponibilidad Inmediata en {locationName}
-                        </span>
-                    </li>
-                </ul>
-
-                <div class="relative flex flex-col gap-3">
-                    <a
-                        href={`tel:${phone?.replace(/\s/g, "")}`}
-                        class="flex flex-col items-center justify-center w-full py-4 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 rounded-xl transition-all transform hover:-translate-y-1"
+        {showSidebar && (
+            <div class="space-y-8 lg:sticky lg:top-24 lg:self-start">
+                <div class="p-8 rounded-2xl glass-card">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl pointer-events-none"
                     >
-                        <span
-                            class="text-[10px] uppercase tracking-widest opacity-90 mb-1"
-                        >
-                            Hablar con un Experto
-                        </span>
-                        <span class="text-2xl font-bold tracking-tight">
-                            {phone}
-                        </span>
-                    </a>
-                    <a
-                        href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone?.replace(/\s/g, "")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex items-center justify-center w-full py-3 bg-brand-whatsapp hover:bg-brand-whatsapp-dark text-white shadow-lg shadow-green-500/20 rounded-xl font-bold transition-all transform hover:-translate-y-1 gap-2"
-                    >
-                        <span>WhatsApp Directo</span>
-                    </a>
-                </div>
-            </div>
-
-            {/* OTRAS ZONAS (Solo si hay zonas) */}
-            {
-                allLocations && allLocations.length > 0 && (
-                    <div class="rounded-2xl border border-heading/5 overflow-hidden shadow-sm bg-surface">
-                        <div class="bg-surface-variant/30 p-4 border-b border-heading/5">
-                            <h4 class="font-bold text-heading uppercase text-xs tracking-widest opacity-70">
-                                Explorar Otras Zonas
-                            </h4>
-                        </div>
-                        <div class="p-2">
-                            <ul class="space-y-1">
-                                {allLocations
-                                    .filter((loc) => loc.slug !== currentSlug)
-                                    .slice(0, 6)
-                                    .map((location) => (
-                                        <li>
-                                            <a
-                                                href={`/zona/${location.slug}/`}
-                                                class="block p-3 rounded-lg hover:bg-primary/5 text-body hover:text-primary transition-all text-sm flex justify-between items-center group"
-                                            >
-                                                <span class="font-medium">
-                                                    {location.data.name}
-                                                </span>
-                                                <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
-                                            </a>
-                                        </li>
-                                    ))}
-                            </ul>
-                        </div>
                     </div>
-                )
-            }
-        </div>
+
+                    <h3
+                        class="relative text-2xl font-heading font-bold text-heading mb-6 border-b border-heading/10 pb-4"
+                    >
+                        Contacto Directo
+                    </h3>
+                    <ul class="relative space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="p-1 rounded-full bg-primary/20 text-primary mt-0.5"
+                            >
+                                <CheckCircle className="w-4 h-4" />
+                            </div>
+                            <span class="text-body font-medium text-sm">
+                                Presupuesto 100% Gratuito
+                            </span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div
+                                class="p-1 rounded-full bg-primary/20 text-primary mt-0.5"
+                            >
+                                <CheckCircle className="w-4 h-4" />
+                            </div>
+                            <span class="text-body font-medium text-sm">
+                                Disponibilidad Inmediata en {locationName}
+                            </span>
+                        </li>
+                    </ul>
+
+                    <div class="relative flex flex-col gap-3">
+                        <a
+                            href={`tel:${phone?.replace(/\s/g, "")}`}
+                            class="flex flex-col items-center justify-center w-full py-4 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 rounded-xl transition-all transform hover:-translate-y-1"
+                        >
+                            <span
+                                class="text-[10px] uppercase tracking-widest opacity-90 mb-1"
+                            >
+                                Hablar con un Experto
+                            </span>
+                            <span class="text-2xl font-bold tracking-tight">
+                                {phone}
+                            </span>
+                        </a>
+                        <a
+                            href={`https://wa.me/${whatsapp?.replace(/\s/g, "") || phone?.replace(/\s/g, "")}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center justify-center w-full py-3 bg-brand-whatsapp hover:bg-brand-whatsapp-dark text-white shadow-lg shadow-green-500/20 rounded-xl font-bold transition-all transform hover:-translate-y-1 gap-2"
+                        >
+                            <span>WhatsApp Directo</span>
+                        </a>
+                    </div>
+                </div>
+
+                {/* OTRAS ZONAS (Solo si hay zonas) */}
+                {
+                    allLocations && allLocations.length > 0 && (
+                        <div class="rounded-2xl border border-heading/5 overflow-hidden shadow-sm bg-surface">
+                            <div class="bg-surface-variant/30 p-4 border-b border-heading/5">
+                                <h4 class="font-bold text-heading uppercase text-xs tracking-widest opacity-70">
+                                    Explorar Otras Zonas
+                                </h4>
+                            </div>
+                            <div class="p-2">
+                                <ul class="space-y-1">
+                                    {allLocations
+                                        .filter((loc) => loc.slug !== currentSlug)
+                                        .slice(0, 6)
+                                        .map((location) => (
+                                            <li>
+                                                <a
+                                                    href={`/zona/${location.slug}/`}
+                                                    class="block p-3 rounded-lg hover:bg-primary/5 text-body hover:text-primary transition-all text-sm flex justify-between items-center group"
+                                                >
+                                                    <span class="font-medium">
+                                                        {location.data.name}
+                                                    </span>
+                                                    <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                                                </a>
+                                            </li>
+                                        ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        )}
     </div>
 </section>

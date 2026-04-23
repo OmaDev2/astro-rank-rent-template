@@ -1,4 +1,5 @@
 import { collection, fields } from '@keystatic/core';
+import { citySlug } from '@/config/citySlug';
 import { SeoPreview } from '@/components/keystatic/SeoPreview';
 import { IconPicker } from '@/components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
@@ -24,7 +25,16 @@ export const services = collection({
             },
             slug: {
                 label: 'URL / Slug',
-                description: 'Se genera automático.'
+                description: `Se genera automático con la ciudad al final (ej: cerramientos-de-aluminio-${citySlug}).`,
+                generate: (name) => {
+                    const base = name
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    return `${base}-${citySlug}`;
+                },
             }
         }),
         heroImage: fields.image({
@@ -99,7 +109,19 @@ export const services = collection({
                 label: '📝 Bloque de Texto y MDX',
                 schema: fields.object({
                     title: fields.text({ label: 'Título del bloque de texto' }),
+                    urgencyBoxStyle: fields.select({
+                        label: 'Estilo de Caja de Urgencia',
+                        options: [
+                            { label: 'Ninguno', value: 'none' },
+                            { label: 'Éxito (Verde)', value: 'success' },
+                            { label: 'Urgente (Rojo)', value: 'urgent' },
+                            { label: 'Tema Principal', value: 'primary' },
+                            { label: 'Tema Acento', value: 'accent' },
+                        ],
+                        defaultValue: 'none',
+                    }),
                     showSidebar: fields.checkbox({ label: 'Mostrar Sidebar de Contacto', defaultValue: true }),
+                    showServices: fields.checkbox({ label: 'Mostrar Grid de Servicios Relacionados', defaultValue: true }),
                 })
             },
             service_locations: {

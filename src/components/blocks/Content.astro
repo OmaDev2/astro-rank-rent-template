@@ -5,6 +5,7 @@ interface Props {
     title?: string;
     sections?: {
         heading: string;
+        title?: string;
         content: string;
     }[];
     niche?: string;
@@ -114,9 +115,9 @@ const processedSections = sections?.map(s => ({
                                 prose-tr:transition-colors 
                                 prose-tr:hover:bg-primary/5
                                 
-                                prose-a:text-primary prose-a:font-medium 
-                                prose-a:no-underline prose-a:border-b-2 prose-a:border-primary/30 
-                                hover:prose-a:border-accent hover:prose-a:text-accent 
+                                prose-a:text-primary prose-a:font-semibold
+                                prose-a:no-underline prose-a:border-b-2 prose-a:border-primary/70
+                                hover:prose-a:border-accent hover:prose-a:text-accent
                                 prose-a:transition-all prose-a:duration-300
                                 
                                 prose-blockquote:border-l-4 prose-blockquote:border-primary 

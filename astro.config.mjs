@@ -114,7 +114,7 @@ export default defineConfig({
     })
   ],
 
-  // ✅ MODO SERVER: SSR completo necesario para Keystatic CMS
+  // ✅ MODO STATIC con SSR opt-in por ruta (equivalente al antiguo 'hybrid' en Astro v5)
   output: 'static',
   adapter: netlify(),
 

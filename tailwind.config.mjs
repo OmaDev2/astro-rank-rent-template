@@ -16,6 +16,10 @@ export default {
 				heading: 'rgb(var(--color-text-heading) / <alpha-value>)',
 				text: 'rgb(var(--color-text-body) / <alpha-value>)',
 				body: 'rgb(var(--color-text-body) / <alpha-value>)', // Alias for text-body to match user request
+				muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
+				subtle: 'rgb(var(--color-text-subtle) / <alpha-value>)',
+				'text-secondary': 'rgb(var(--color-text-secondary) / <alpha-value>)',
+				'accent-dark': 'rgb(var(--color-accent-dark) / <alpha-value>)',
 
 				// Brand Colors (Semantic)
 				brand: {

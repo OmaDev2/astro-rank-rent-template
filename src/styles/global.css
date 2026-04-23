@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---- VARIABLES DE BORDE DERIVADAS ----
+   Siempre semitransparentes sobre el color de texto principal.
+   Funcionan en temas oscuros (texto claro) y claros (texto oscuro). */
+:root {
+    --color-border:        rgb(var(--color-text-main) / 0.10);
+    --color-border-strong: rgb(var(--color-text-main) / 0.18);
+}
+
 /* ---- TIPOGRAFÍA UNIFICADA ----
    Tamaños base para cada nivel de heading + escala global desde el CMS.
    Fuera de @layer para ganar a las clases text-* de Tailwind.
@@ -220,6 +228,25 @@ html[data-divider="zigzag"] section + section {
     margin-top: -1.5rem;
     position: relative;
     z-index: 10;
+}
+
+/* ---- ENLACES EN CONTENIDO PROSE ----
+   Solo afecta a enlaces dentro de texto (p, li, blockquote).
+   Los CTAs van en <div> y quedan excluidos. */
+.prose p a,
+.prose li a,
+.prose blockquote a {
+    color: rgb(var(--color-primary)) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    border-bottom: 2px solid rgb(var(--color-primary) / 0.5) !important;
+    transition: color 0.2s ease, border-color 0.2s ease !important;
+}
+.prose p a:hover,
+.prose li a:hover,
+.prose blockquote a:hover {
+    color: rgb(var(--color-accent)) !important;
+    border-bottom-color: rgb(var(--color-accent)) !important;
 }
 
 /* ---- TEXTURA DE FONDO ----

@@ -8,45 +8,32 @@ Template de sitio web para negocios de servicios locales (Rank & Rent / lead gen
 
 - **Page Builder visual** — 15+ bloques de contenido configurables vía CMS sin tocar código
 - **SEO local avanzado** — Schema.org Knowledge Graph (@graph) en todas las páginas, sitemap priorizado, robots.txt configurado
-- **OG images dinámicas** — Generadas en build time para cada servicio y zona con `satori`
+- **OG images dinámicas** — Generadas en build time para cada servicio y zona
 - **Multi-tema** — 15 temas de color predefinidos + 8 pares de fuentes, cambiables desde el CMS
-- **Paginación de blog** — Con canonicals correctos y schema `BlogPosting` por artículo
 - **Interlinking SEO** — Bloques automáticos de servicios-por-zona y zonas-por-servicio
-- **Formulario de contacto** configurable desde CMS con validación de privacidad
-- **WhatsApp float + teléfono sticky** activables por página
+- **Blog con paginación** — Schema `BlogPosting` y canonicals correctos
+- **Botones flotantes globales** — WhatsApp y teléfono configurables por dispositivo desde el CMS
 - **Google Tag Manager** vía Partytown (sin impacto en Core Web Vitals)
-- **Trailing slash consistente** — `trailingSlash: always` en todo el sitio
 
 ---
 
 ## Stack tecnológico
 
-| Tecnología | Versión | Uso |
-|---|---|---|
-| [Astro](https://astro.build) | 5.x | Framework SSG |
-| [Keystatic](https://keystatic.com) | 0.5.x | CMS headless local/GitHub |
-| [Tailwind CSS](https://tailwindcss.com) | 3.4.x | Estilos |
-| [React](https://react.dev) | 18.x | Componentes de UI interactivos |
-| [satori](https://github.com/vercel/satori) + resvg | — | OG images en build time |
-| [Lucide React](https://lucide.dev) | — | Iconografía |
-| [astro-seo](https://github.com/jonasmerlin/astro-seo) | — | Meta tags y OG |
-| [@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/) | — | Sitemap XML |
-| [astro-robots-txt](https://github.com/alextim/astro-lib/tree/main/packages/astro-robots-txt) | — | robots.txt |
-| Netlify | — | Despliegue y SSR edge |
-
----
-
-## Requisitos
-
-- Node.js 18+
-- npm
+| Tecnología | Uso |
+|---|---|
+| [Astro 5](https://astro.build) | Framework SSG |
+| [Keystatic 0.5](https://keystatic.com) | CMS headless local/GitHub |
+| [Tailwind CSS 3](https://tailwindcss.com) | Estilos |
+| [React 18](https://react.dev) | Componentes de UI interactivos en el CMS |
+| [Lucide React](https://lucide.dev) | Iconografía |
+| Netlify | Despliegue y SSR edge |
 
 ---
 
 ## Inicio rápido
 
 ```bash
-# 1. Clonar
+# 1. Clonar o duplicar el repositorio
 git clone https://github.com/TU_USUARIO/TU_REPO.git mi-sitio
 cd mi-sitio
 
@@ -57,141 +44,150 @@ npm install
 npm run dev
 ```
 
-- Sitio: `http://localhost:4321`
-- CMS: `http://localhost:4321/admin`
-
-Para la configuración inicial del negocio, sigue la [Guía de Inicio](./GETTING_STARTED.md).
+- **Sitio:** `http://localhost:4321`
+- **CMS:** `http://localhost:4321/keystatic`
 
 ---
 
-## Estructura del proyecto
+## Comandos
 
-```
-/
-├── public/
-│   └── images/                # Imágenes estáticas
-├── src/
-│   ├── components/
-│   │   ├── blocks/            # Bloques del page builder (15+)
-│   │   ├── mdx/               # Componentes para contenido MDX
-│   │   └── keystatic/         # UI custom para el CMS
-│   ├── config/
-│   │   ├── themes.ts          # 15 temas de color predefinidos
-│   │   ├── fonts.ts           # 8 pares de fuentes Google
-│   │   └── keystatic/         # Configuración de colecciones CMS
-│   ├── content/               # Contenido gestionado por Keystatic
-│   │   ├── business/          # Datos del negocio (nombre, teléfono, ciudad...)
-│   │   ├── design/            # Tema, fuentes y layout
-│   │   ├── services/          # Servicios (.mdx con bloques)
-│   │   ├── locations/         # Zonas de cobertura (.mdx con bloques)
-│   │   ├── projects/          # Galería de trabajos (.md)
-│   │   ├── testimonials/      # Reseñas de clientes (.json)
-│   │   ├── blog/              # Artículos del blog (.md / .mdx)
-│   │   ├── pages/             # Home y páginas hub
-│   │   ├── about/             # Contenido de "Sobre Nosotros"
-│   │   └── legal/             # Aviso legal, privacidad, cookies
-│   ├── layouts/               # Layouts por tipo de página
-│   ├── lib/
-│   │   ├── seo.ts             # Schema @graph builders
-│   │   ├── og.tsx             # Generador de OG images
-│   │   └── settings.ts        # Helper de configuración global
-│   └── pages/
-│       ├── servicios/         # Páginas de servicio dinámicas
-│       ├── zona/              # Páginas de zona dinámicas
-│       ├── blog/              # Blog paginado ([...page].astro)
-│       ├── proyectos/         # Galería de proyectos
-│       ├── og/                # Endpoints de OG images (build time)
-│       └── api/               # Endpoints de API (formulario, etc.)
-├── astro.config.mjs
-├── keystatic.config.ts
-├── tailwind.config.mjs
-├── GETTING_STARTED.md         # Checklist de configuración inicial
-└── README.md
-```
-
----
-
-## CMS — Keystatic
-
-El CMS es accesible en `/admin`. Permite gestionar sin código:
-
-| Sección CMS | Qué controla |
+| Comando | Acción |
 |---|---|
-| **Business** | Nombre, teléfono, email, ciudad, coordenadas, horarios, redes sociales |
-| **Design** | Tema de color, par de fuentes, estilo de navbar/footer/hero |
-| **Services** | Cada servicio con su page builder de bloques |
-| **Locations** | Cada zona con su page builder, coordenadas y FAQ |
-| **Projects** | Galería de trabajos con imagen, zona y tipo de servicio |
-| **Testimonials** | Reseñas con nombre, nota y servicio |
-| **Blog** | Artículos con imagen, autor, categoría y tags |
-| **Pages → Home** | Todos los bloques de la página de inicio |
-| **Form** | Campos, textos y URL de éxito del formulario de contacto |
-| **Navigation** | Menú principal con soporte de submenús |
+| `npm run dev` | Servidor de desarrollo en `localhost:4321` |
+| `npm run build` | Build de producción en `./dist/` |
+| `npm run preview` | Preview del build en local |
 
 ---
 
-## Bloques disponibles
+## Cómo usar el CMS (Keystatic)
 
-Todos los bloques son configurables desde el CMS y se pueden combinar en cualquier orden en servicios, zonas y la home.
+Accede a `http://localhost:4321/keystatic`. Todo el contenido se gestiona desde aquí sin tocar código.
 
+### Secciones del CMS
+
+```
+⚙️ Configuración
+├── 🏢 Mi Negocio        → Nombre, teléfono, email, ciudad, WhatsApp, horarios, redes
+└── 🎨 Diseño y Tema     → Colores, fuentes, navbar, footer, botones flotantes
+
+📝 Contenido
+├── 🏠 Página de Inicio  → Bloques de la home
+├── 👥 Sobre Nosotros    → Historia, valores, equipo
+├── 📍 Página de Zonas   → Texto introductorio del listado de zonas
+├── 🛠️ Servicios         → Cada servicio con su page builder
+├── 📍 Zonas de Servicio → Cada zona con su page builder
+├── 💼 Proyectos         → Galería de trabajos
+├── ⭐ Testimonios       → Reseñas de clientes
+└── 📰 Blog              → Artículos
+
+📄 Páginas Legales
+├── 🧭 Navegación (Menú)
+├── 🦶 Footer
+├── ⚖️ Aviso Legal
+├── 🛡️ Política de Privacidad
+└── 🍪 Política de Cookies
+```
+
+---
+
+## Configuración inicial de un nuevo negocio
+
+### 1. Mi Negocio
+Rellena los datos del negocio: nombre, teléfono, WhatsApp (con código de país, ej: `34612345678`), email, ciudad, dirección y URL del sitio.
+
+> ⚠️ La URL del sitio es importante: afecta a todos los `@id` del schema y a las OG images. Actualízala antes del deploy.
+
+### 2. Diseño y Tema
+- **Identidad Visual** — Elige un tema de color base y personaliza los colores, fuentes y escala tipográfica.
+- **Estructura y Layout** — Estilo de navbar, footer, hero y espaciado entre secciones.
+- **Efectos** — Esquinas, sombras, animaciones y separadores de sección.
+- **Botones de Contacto Flotantes** — Activa o desactiva el teléfono y WhatsApp flotante de forma independiente en móvil y escritorio.
+- **Ajustes Avanzados** — Favicon, color de barra móvil y CSS personalizado.
+
+### 3. Navegación
+Configura el menú principal. Tipos de enlace disponibles:
+- `Enlace Simple` — URL directa
+- `Desplegable de Servicios` — Se genera automáticamente con todos los servicios
+- `Desplegable de Zonas` — Se genera automáticamente con todas las zonas
+
+---
+
+## Gestión de Servicios
+
+Cada servicio es una entrada en la colección **Servicios** del CMS.
+
+### Campos del servicio
+- **Título / Slug** — Nombre del servicio y su URL (`/servicios/slug`)
+- **Imagen Principal** — Usada en las cards y como fallback del hero
+- **Icono** — Icono Lucide que aparece en las cards y navegación
+- **Descripción Corta** — Texto de la card en listings
+- **Destacado** — Aparece en la home si está marcado
+- **SEO Preview** — Título y descripción para Google
+- **Constructor de Página** — Bloques que componen la página del servicio
+
+### Bloques disponibles en Servicios
 | Bloque | Descripción |
 |---|---|
-| `hero` | Hero con imagen de fondo, headline, subheadline y CTAs |
-| `features` | Grid de características con icono, título y descripción |
-| `services_list` | Listado de servicios con imagen, icono y descripción |
-| `stats` | Contadores animados (proyectos, años, valoración...) |
-| `testimonials` | Carrusel/grid de reseñas de clientes |
-| `pricing` | Tabla de precios con planes y features |
-| `process` | Pasos del proceso de trabajo con duración |
-| `faq` | Preguntas frecuentes con schema FAQ integrado |
-| `about` | Sección "sobre nosotros" con imagen y puntos fuertes |
-| `content` | Texto rico en columnas para SEO on-page |
-| `cta` | Llamada a la acción con features y enlace |
-| `service_areas` | Mapa de zonas de cobertura con suplementos |
-| `location_services` | Grid automático de servicios para una zona (interlinking) |
-| `service_locations` | Grid automático de zonas para un servicio (interlinking) |
-| `locations` | Listado de zonas (automático desde la colección) |
-| `contact` | Formulario de contacto embebido |
+| 🖼️ Hero | Portada con imagen de fondo, headline y CTAs |
+| 💎 Características | Grid de beneficios con icono |
+| 👷 Método de Trabajo | Pasos del proceso |
+| 📊 Estadísticas | Contadores animados |
+| 🎯 CTA | Llamada a la acción final |
+| 💰 Tabla de Precios | Planes y precios |
+| 📝 Texto y MDX | Bloque de contenido libre |
+| 🗺️ Zonas donde ofrecemos este servicio | Interlinking automático a zonas |
+| ❓ Preguntas Frecuentes | FAQ con schema integrado |
+
+### Cómo funciona el page builder
+
+1. En el **Constructor de Página**, pulsa **Add** para añadir un bloque.
+2. Selecciona el bloque que quieres y configura su contenido.
+3. Arrastra el icono `⠿` para reordenar los bloques.
+4. Pulsa el icono 🗑️ para eliminar un bloque.
+5. Guarda con el botón **Save**.
+
+> **Nota:** Si un servicio no tiene ningún bloque configurado, la página mostrará automáticamente un conjunto de bloques por defecto (hero, características, contenido, CTA). En cuanto añades aunque sea un bloque desde Keystatic, la página usa exactamente lo que hayas definido.
 
 ---
 
-## SEO
+## Gestión de Zonas
 
-### Schema @graph
+Cada zona es una entrada en la colección **Zonas de Servicio**.
 
-Cada tipo de página emite un único bloque `@graph` con entidades interconectadas por `@id`:
+### Campos de la zona
+- **Nombre / Slug** — Nombre de la zona y su URL (`/zona/slug`)
+- **Tipo de Zona** — Agrupa el listado de `/zonas` en secciones:
+  - `Residencial` — Barrios y municipios residenciales (badge azul)
+  - `Industrial` — Polígonos y zonas industriales (badge ámbar)
+  - `Centro Urbano` — Ciudad principal o centro (badge primario, aparece primero)
+- **Imagen Hero** — Imagen representativa de la zona
+- **Coordenadas GPS** — Para centrar el mapa en esa zona
+- **Códigos Postales** — Para el schema y el bloque de mapa
+- **Preguntas Frecuentes** — FAQ específicas de la zona (mejora SEO local)
+- **SEO Preview** — Título y descripción para Google
+- **Constructor de Página** — Bloques que componen la página de la zona
 
-| Página | Entidades en el @graph |
+### Bloques disponibles en Zonas
+| Bloque | Descripción |
 |---|---|
-| Home | `WebSite`, `LocalBusiness` (con `hasOfferCatalog`), `WebPage`, `BreadcrumbList`, `FAQPage` |
-| Servicio | `WebSite`, `LocalBusiness`, `WebPage`, `Service`, `BreadcrumbList`, `FAQPage` |
-| Zona | `WebSite`, `LocalBusiness`, `WebPage` (about: [business, City]), `BreadcrumbList`, `FAQPage` |
-| Blog post | `WebSite`, `LocalBusiness`, `BlogPosting`, `BreadcrumbList` |
-| Contacto | `WebSite`, `LocalBusiness`, `ContactPage`, `BreadcrumbList` |
-| Proyectos | `WebSite`, `LocalBusiness`, `CollectionPage` + `ItemList`, `BreadcrumbList` |
-| Proyecto | `WebSite`, `LocalBusiness`, `WebPage`, `CreativeWork`, `BreadcrumbList` |
+| 🖼️ Hero | Portada con imagen de fondo y CTAs |
+| 💎 Características | Por qué elegirnos |
+| 📍 Mapa de Ubicación | Mapa centrado en las coordenadas de la zona |
+| 📝 Contenido + Sidebar | Texto SEO con barra lateral de contacto |
+| 🎯 CTA | Llamada a la acción final |
+| 💰 Tabla de Precios | Precios para esta zona |
+| 📊 Estadísticas | Contadores |
+| 🤝 Logos | Logos de partners o certificaciones |
+| 🔗 Servicios en esta Zona | Interlinking automático a servicios |
+| 🔄 Antes y Después | Comparativa de imágenes |
 
-### OG Images dinámicas
-
-Se generan en build time en `src/pages/og/`:
-- `/og/servicio/[slug].png` — OG image por servicio
-- `/og/zona/[slug].png` — OG image por zona
-- Detectadas automáticamente en `SeoHead.astro` según el path
-
-### Sitemap
-
-Prioridades configuradas en `astro.config.mjs`:
-- Home: `1.0`
-- Zonas: `0.9`
-- Servicios individuales: `0.8`
-- Hub servicios/zonas: `0.7`
-- Blog: `0.6–0.7`
+> **Nota:** Al igual que los servicios, si la zona no tiene bloques configurados se muestran 5 bloques por defecto. Una vez añades bloques desde Keystatic, manda tu configuración.
 
 ---
 
-## Temas disponibles
+## Temas de color disponibles
 
-Configurables desde el CMS sin tocar código:
+Seleccionables desde **Diseño → Identidad Visual** sin tocar código:
 
 | Tema | Paleta |
 |---|---|
@@ -205,55 +201,105 @@ Configurables desde el CMS sin tocar código:
 | `beauty` | Rosa |
 | `tech` | Violeta |
 | `clean` | Claro / Minimal |
-| `clay_paper` | Arcilla / Papel (artesano cálido) |
-| `forest_stone` | Bosque / Piedra (artesano natural) |
-| `workshop` | Taller clásico (artesano premium) |
-| `sky_white` | Cielo blanco (claro/azul) |
-| `sand_terracotta` | Arena / Terracota (cálido claro) |
+| `clay_paper` | Arcilla / Papel |
+| `forest_stone` | Bosque / Piedra |
+| `workshop` | Taller clásico |
+| `sky_white` | Cielo / Blanco |
+| `sand_terracotta` | Arena / Terracota |
 
 ---
 
-## Comandos
+## Botones flotantes (WhatsApp y Teléfono)
 
-| Comando | Acción |
+Se configuran globalmente desde **Diseño → Botones de Contacto Flotantes**:
+
+| Ajuste | Por defecto |
 |---|---|
-| `npm install` | Instala dependencias |
-| `npm run dev` | Servidor de desarrollo en `localhost:4321` |
-| `npm run build` | Build de producción en `./dist/` |
-| `npm run preview` | Preview del build en local |
+| Teléfono flotante en móvil | ✅ Activado |
+| Teléfono flotante en escritorio | ❌ Desactivado |
+| WhatsApp flotante en móvil | ✅ Activado |
+| WhatsApp flotante en escritorio | ✅ Activado |
 
 ---
 
-## Despliegue
+## SEO
 
-### Netlify (recomendado)
+### Schema @graph
+Cada tipo de página emite un bloque `@graph` con entidades interconectadas:
 
-El proyecto incluye `netlify.toml` preconfigurado con soporte de SSR para el CMS.
+| Página | Entidades |
+|---|---|
+| Home | `WebSite`, `LocalBusiness`, `WebPage`, `BreadcrumbList`, `FAQPage` |
+| Servicio | `WebSite`, `LocalBusiness`, `WebPage`, `Service`, `BreadcrumbList`, `FAQPage` |
+| Zona | `WebSite`, `LocalBusiness`, `WebPage`, `BreadcrumbList`, `FAQPage` |
+| Blog post | `WebSite`, `LocalBusiness`, `BlogPosting`, `BreadcrumbList` |
+| Contacto | `WebSite`, `LocalBusiness`, `ContactPage`, `BreadcrumbList` |
+
+### OG Images dinámicas
+Generadas automáticamente en build time para cada servicio y zona.
+
+### Sitemap
+Prioridades configuradas en `astro.config.mjs`:
+- Home: `1.0` · Zonas: `0.9` · Servicios: `0.8` · Blog: `0.6–0.7`
+
+---
+
+## Estructura del proyecto
+
+```
+/
+├── public/
+│   └── images/                # Imágenes estáticas subidas desde el CMS
+├── src/
+│   ├── components/
+│   │   ├── blocks/            # Bloques del page builder
+│   │   └── keystatic/         # UI personalizada del CMS
+│   ├── config/
+│   │   ├── themes.ts          # 15 temas de color
+│   │   └── keystatic/         # Schemas de colecciones y singletons
+│   ├── content/               # Contenido gestionado por Keystatic
+│   │   ├── business/          # Datos del negocio
+│   │   ├── design/            # Tema y diseño global
+│   │   ├── services/          # Servicios (.mdx)
+│   │   ├── locations/         # Zonas (.mdx)
+│   │   ├── projects/          # Trabajos realizados
+│   │   ├── testimonials/      # Reseñas
+│   │   ├── blog/              # Artículos
+│   │   ├── pages/             # Home y otras páginas
+│   │   ├── about/             # Página sobre nosotros
+│   │   └── legal/             # Páginas legales
+│   ├── layouts/               # Layouts por tipo de página
+│   ├── lib/
+│   │   ├── seo.ts             # Schema @graph builders
+│   │   └── settings.ts        # Configuración global (punto único de verdad)
+│   └── pages/
+│       ├── servicios/         # Páginas de servicio dinámicas
+│       ├── zona/              # Páginas de zona dinámicas
+│       ├── blog/              # Blog paginado
+│       └── api/               # Endpoints (formulario, generador IA)
+├── keystatic.config.tsx       # Config principal del CMS
+├── astro.config.mjs
+└── tailwind.config.mjs
+```
+
+---
+
+## Despliegue en Netlify
+
+El proyecto incluye `netlify.toml` preconfigurado.
 
 1. Sube el código a GitHub
 2. Conecta el repositorio en Netlify
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Actualiza `siteUrl` en el CMS con la URL de producción
+3. Build command: `npm run build` · Publish directory: `dist`
+4. Actualiza `siteUrl` en **Mi Negocio** con la URL de producción
 
-### Importante tras el despliegue
-
-- Actualiza `siteUrl` en `src/content/business/global.yaml` con la URL real
-- Este campo impacta en todos los `@id` del schema y en las OG images
+> ⚠️ El CMS (`/keystatic`) solo funciona en modo desarrollo local o con soporte de SSR activo en Netlify. En sitios estáticos puros, edita directamente los archivos `.mdx` y `.yaml` del directorio `src/content/`.
 
 ---
 
 ## Demo incluida
 
-El template incluye un negocio demo completo (**Fontanería García, Madrid**) con:
-- 3 servicios con page builder completo
-- 4 zonas de Madrid (1 completa + 3 básicas)
-- 1 proyecto de galería
-- 2 testimonios
-- 2 artículos de blog
-- Home con todos los bloques configurados
-
-Para adaptar el demo a tu negocio real, sigue el checklist en [GETTING_STARTED.md](./GETTING_STARTED.md).
+El template incluye un negocio demo completo (**Fontanería García, Madrid**) con servicios, zonas, proyectos, testimonios y blog configurados. Úsalo como referencia y sustitúyelo con los datos reales de tu negocio.
 
 ---
 

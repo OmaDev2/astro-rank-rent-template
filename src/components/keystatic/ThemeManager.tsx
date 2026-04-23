@@ -230,8 +230,8 @@ export function ThemeManager({
                 secondary: 'Secundario (Fondo Principal)',
                 surface: 'Superficie (Tarjetas)',
                 accent: 'Acento (Detalles)',
-                textMain: 'Texto Principal',
-                textMuted: 'Texto Secundario',
+                textMain: 'Texto Títulos',
+                textMuted: 'Texto Párrafos',
             };
 
             return (

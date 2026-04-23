@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 
 // Fetch Global Settings
@@ -25,7 +26,10 @@ const schema = buildContactGraph({
 ---
 
 <Layout title={`Contacto y Presupuesto | ${siteName}`} schema={schema}>
-    <div class="pt-24 md:pt-32 pb-12">
+    <div class="pt-20 md:pt-24">
+        <Breadcrumbs pageName="Contacto" />
+    </div>
+    <div class="pb-12">
     <section class="py-20 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">

@@ -33,40 +33,31 @@ try {
             : settings.themeSettings; // Por si acaso ya viene parseado o es objeto
 
     if (themeState && themeState.theme) {
-        // Si el tema es un preset conocido Y tenemos colores en el state, preferimos el state
-        // porque el usuario podría haber editado los colores de un preset.
-        // Pero para simplificar: nuestro ThemeManager guarda TODOS los colores actuales en `colors`.
-        // Así que simplemente confiamos en `themeState.colors`.
+        // Resolver el preset primero para usarlo como fallback de tokens nuevos
+        const knownTheme = themes[themeState.theme as keyof typeof themes];
+        activeTheme = knownTheme ?? (null as any);
 
         if (themeState.colors) {
-            // Helper local para asegurar formato RGB (RRR GGG BBB)
-            // Si viene en Hex (#ffffff), convertir. Si viene en RGB (255 255 255), dejar.
             const toRgb = (val: string) => {
                 if (!val) return "0 0 0";
-                if (val.includes(" ")) return val; // Ya es RGB
+                if (val.includes(" ")) return val;
                 if (val.startsWith("#")) return hexToRgb(val);
                 return val;
             };
 
-            colors = {
-                primary: toRgb(themeState.colors.primary),
-                secondary: toRgb(themeState.colors.secondary),
-                surface: toRgb(themeState.colors.surface),
-                accent: toRgb(themeState.colors.accent),
-                textMain: toRgb(themeState.colors.textMain),
-                textMuted: toRgb(themeState.colors.textMuted),
-            };
-        }
+            const preset = knownTheme?.colors as any;
 
-        // Para el gradiente, si es uno de los presets originales sin modificar, podríamos usar su gradiente.
-        // Pero si el usuario toca algo, mejor un gradiente genérico.
-        // Vamos a mantener la lógica simple: Si es un theme conocido, toma su gradiente.
-        const knownTheme = themes[themeState.theme as keyof typeof themes];
-        if (knownTheme) {
-            activeTheme = knownTheme;
-        } else {
-            // Es custom o desconocido
-            activeTheme = null as any;
+            colors = {
+                primary:        toRgb(themeState.colors.primary),
+                secondary:      toRgb(themeState.colors.secondary),
+                surface:        toRgb(themeState.colors.surface),
+                accent:         toRgb(themeState.colors.accent),
+                textMain:       toRgb(themeState.colors.textMain),
+                textSecondary:  toRgb(themeState.colors.textSecondary  || preset?.textSecondary  || themeState.colors.textMuted),
+                textMuted:      toRgb(themeState.colors.textMuted),
+                textSubtle:     toRgb(themeState.colors.textSubtle     || preset?.textSubtle     || themeState.colors.textMuted),
+                accentDark:     toRgb(themeState.colors.accentDark     || preset?.accentDark     || themeState.colors.accent),
+            };
         }
     }
 } catch (e) {
@@ -206,8 +197,13 @@ const heroProcessed = isHome
         "--color-secondary": colors.secondary,
         "--color-surface": colors.surface,
         "--color-accent": colors.accent,
+        "--color-accent-dark": (colors as any).accentDark || colors.accent,
         "--color-text-heading": colors.textMain,
+        "--color-text-main": colors.textMain,
+        "--color-text-secondary": (colors as any).textSecondary || colors.textMuted,
         "--color-text-body": colors.textMuted,
+        "--color-text-muted": colors.textMuted,
+        "--color-text-subtle": (colors as any).textSubtle || colors.textMuted,
         "--theme-gradient": gradient,
         "--hero-opacity": heroOpacity,
         "--hero-overlay": heroOverlay,

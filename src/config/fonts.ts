@@ -123,4 +123,18 @@ export const fontPairs = {
             '@fontsource/eb-garamond/500.css',
         ],
     },
+    forge: {
+        label: '🔥 Forja (Barlow Condensed / DM Sans)',
+        googleFontsUrl: 'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap',
+        fontHeading: "'Barlow Condensed', sans-serif",
+        fontBody: "'DM Sans', sans-serif",
+        fontsource: ['@fontsource/barlow-condensed', '@fontsource/dm-sans'],
+        fontsourceImports: [
+            '@fontsource/barlow-condensed/600.css',
+            '@fontsource/barlow-condensed/700.css',
+            '@fontsource/barlow-condensed/800.css',
+            '@fontsource/dm-sans/400.css',
+            '@fontsource/dm-sans/500.css',
+        ],
+    },
 };

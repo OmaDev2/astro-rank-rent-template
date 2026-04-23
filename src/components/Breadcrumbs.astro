@@ -7,13 +7,15 @@ interface Props {
     serviceName?: string;
     postTitle?: string;
     projectTitle?: string;
+    pageName?: string;
     isLocation?: boolean;
     isService?: boolean;
     isBlog?: boolean;
     isProject?: boolean;
+    overlay?: boolean;
 }
 
-const { locationName, serviceName, postTitle, projectTitle, isLocation, isService, isBlog, isProject } = Astro.props;
+const { locationName, serviceName, postTitle, projectTitle, pageName, isLocation, isService, isBlog, isProject, overlay = false } = Astro.props;
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, "") || "";
 
@@ -21,7 +23,9 @@ const breadcrumbItems: { name: string; item?: string }[] = [
     { name: "Inicio", item: `${siteUrl}/` },
 ];
 
-if (isLocation) {
+if (pageName) {
+    breadcrumbItems.push({ name: pageName });
+} else if (isLocation) {
     breadcrumbItems.push({ name: "Zonas", item: `${siteUrl}/zonas/` });
     if (locationName) breadcrumbItems.push({ name: locationName });
 } else if (isService) {
@@ -38,25 +42,52 @@ if (isLocation) {
 const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 ---
 
-<div class="w-full bg-surface/60 border-b border-heading/10">
+<div class:list={[
+    "w-full",
+    overlay
+        ? "bg-gray-900/95 border-b border-white/5"
+        : "bg-surface/60 border-b border-heading/10"
+]}>
     <div class="container mx-auto px-4">
         <nav
             aria-label="Ruta de navegación"
-            class="flex items-center flex-wrap gap-1.5 text-xs font-medium text-body py-3"
+            class:list={[
+                "flex items-center flex-wrap gap-1.5 text-xs font-medium py-2.5",
+                overlay ? "text-white/90" : "text-body"
+            ]}
         >
-            <a href="/" class="flex items-center gap-1 text-body/60 hover:text-primary transition-colors group">
+            <a href="/" class:list={[
+                "flex items-center gap-1 transition-colors group",
+                overlay ? "text-white/60 hover:text-white" : "text-body/60 hover:text-primary"
+            ]}>
                 <Home className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                 <span class="hidden sm:inline">Inicio</span>
             </a>
 
+            {pageName && (
+                <>
+                    <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                    <span class:list={[
+                        "font-semibold truncate max-w-[160px] sm:max-w-none",
+                        overlay ? "text-white" : "text-heading"
+                    ]} aria-current="page">{pageName}</span>
+                </>
+            )}
+
             {isLocation && (
                 <>
-                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                    <a href="/zonas/" class="text-body/60 hover:text-primary transition-colors">Zonas</a>
+                    <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                    <a href="/zonas/" class:list={[
+                        "transition-colors",
+                        overlay ? "text-white/60 hover:text-white" : "text-body/60 hover:text-primary"
+                    ]}>Zonas</a>
                     {locationName && (
                         <>
-                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{locationName}</span>
+                            <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                            <span class:list={[
+                                "font-semibold truncate max-w-[160px] sm:max-w-none",
+                                overlay ? "text-white" : "text-heading"
+                            ]} aria-current="page">{locationName}</span>
                         </>
                     )}
                 </>
@@ -64,12 +95,18 @@ const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 
             {isService && (
                 <>
-                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                    <a href="/servicios/" class="text-body/60 hover:text-primary transition-colors">Servicios</a>
+                    <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                    <a href="/servicios/" class:list={[
+                        "transition-colors",
+                        overlay ? "text-white/60 hover:text-white" : "text-body/60 hover:text-primary"
+                    ]}>Servicios</a>
                     {serviceName && (
                         <>
-                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{serviceName}</span>
+                            <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                            <span class:list={[
+                                "font-semibold truncate max-w-[160px] sm:max-w-none",
+                                overlay ? "text-white" : "text-heading"
+                            ]} aria-current="page">{serviceName}</span>
                         </>
                     )}
                 </>
@@ -77,12 +114,18 @@ const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 
             {isBlog && (
                 <>
-                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                    <a href="/blog/" class="text-body/60 hover:text-primary transition-colors">Blog</a>
+                    <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                    <a href="/blog/" class:list={[
+                        "transition-colors",
+                        overlay ? "text-white/60 hover:text-white" : "text-body/60 hover:text-primary"
+                    ]}>Blog</a>
                     {postTitle && (
                         <>
-                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{postTitle}</span>
+                            <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                            <span class:list={[
+                                "font-semibold truncate max-w-[160px] sm:max-w-none",
+                                overlay ? "text-white" : "text-heading"
+                            ]} aria-current="page">{postTitle}</span>
                         </>
                     )}
                 </>
@@ -90,12 +133,18 @@ const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
 
             {isProject && (
                 <>
-                    <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                    <a href="/proyectos/" class="text-body/60 hover:text-primary transition-colors">Proyectos</a>
+                    <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                    <a href="/proyectos/" class:list={[
+                        "transition-colors",
+                        overlay ? "text-white/60 hover:text-white" : "text-body/60 hover:text-primary"
+                    ]}>Proyectos</a>
                     {projectTitle && (
                         <>
-                            <ChevronRight className="w-3 h-3 text-heading/20 shrink-0" />
-                            <span class="text-heading font-semibold truncate max-w-[160px] sm:max-w-none" aria-current="page">{projectTitle}</span>
+                            <ChevronRight className={`w-3 h-3 shrink-0 ${overlay ? 'text-white/30' : 'text-heading/20'}`} />
+                            <span class:list={[
+                                "font-semibold truncate max-w-[160px] sm:max-w-none",
+                                overlay ? "text-white" : "text-heading"
+                            ]} aria-current="page">{projectTitle}</span>
                         </>
                     )}
                 </>

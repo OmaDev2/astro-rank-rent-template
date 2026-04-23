@@ -116,6 +116,8 @@ export const locations = collection({
                         ],
                         defaultValue: 'none',
                     }),
+                    showSidebar: fields.checkbox({ label: 'Mostrar Sidebar de Contacto', defaultValue: true }),
+                    showServices: fields.checkbox({ label: 'Mostrar Grid de Servicios Relacionados', defaultValue: true }),
                 })
             },
             cta: {

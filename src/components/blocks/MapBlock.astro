@@ -1,52 +1,176 @@
 ---
 import { MapPin } from "lucide-react";
-const { coordinates, locationName, zipCodes } = Astro.props;
-const mapLat = coordinates?.lat || "";
-const mapLng = coordinates?.lng || "";
+
+interface Props {
+    coordinates?: { lat?: string; lng?: string };
+    locationName?: string;
+    zipCodes?: string[];
+}
+
+const { coordinates, locationName = "Zona de Servicio", zipCodes } = Astro.props;
+
+const locationLat = parseFloat(coordinates?.lat || "0") || null;
+const locationLng = parseFloat(coordinates?.lng || "0") || null;
+
+// Costa del Sol service area constants
+const SERVICE_CENTER_LAT = 36.56;
+const SERVICE_CENTER_LNG = -4.78;
+const SERVICE_RADIUS_KM  = 52;
+const MAP_ZOOM = 10;
+
+const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<section
-    class="w-full h-[450px] bg-secondary border-t border-heading/10 relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
->
-    {
-        mapLat && mapLng ? (
-            <iframe
-                src={`https://maps.google.com/maps?q=${mapLat},${mapLng}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                width="100%"
-                height="100%"
-                style="border:0;"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                class="opacity-90 hover:opacity-100 transition-opacity"
-            />
-        ) : (
-            <iframe
-                src={`https://maps.google.com/maps?q=${encodeURIComponent(locationName)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                width="100%"
-                height="100%"
-                style="border:0;"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                class="opacity-90 hover:opacity-100 transition-opacity"
-            />
-        )
-    }
+<section class="w-full h-[450px] bg-secondary border-t border-heading/10 relative z-10">
 
-    <div
-        class="absolute bottom-6 left-6 bg-surface/95 backdrop-blur p-4 rounded-lg shadow-xl border border-heading/10 max-w-sm pointer-events-none"
-    >
-        <h3 class="font-bold text-heading mb-2 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary" />
-            Zona de Servicio: {locationName}
-        </h3>
-        {
-            zipCodes && (
-                <p class="text-body text-sm">
-                    Códigos Postales: {zipCodes.join(", ")}
-                </p>
-            )
-        }
+    <div id={uid} class="w-full h-full"></div>
+
+    <!-- Service area badge -->
+    <div class="absolute bottom-6 left-6 bg-surface/95 backdrop-blur-sm p-4 rounded-lg shadow-xl border border-heading/10 max-w-xs pointer-events-none z-[1000]">
+        <p class="font-bold text-heading text-sm mb-1 flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary shrink-0" />
+            Zona de servicio: {locationName}
+        </p>
+        <p class="text-body text-xs leading-relaxed">
+            Cubrimos toda la Costa del Sol · Málaga → Estepona
+        </p>
+        {zipCodes && zipCodes.length > 0 && (
+            <p class="text-muted text-xs mt-1">C.P.: {zipCodes.join(", ")}</p>
+        )}
     </div>
+
+    <script
+        is:inline
+        define:vars={{ uid, locationLat, locationLng, locationName, SERVICE_CENTER_LAT, SERVICE_CENTER_LNG, SERVICE_RADIUS_KM, MAP_ZOOM }}
+    >
+        (function () {
+            // Inject Leaflet CSS
+            if (!document.getElementById("leaflet-css")) {
+                const link = document.createElement("link");
+                link.id   = "leaflet-css";
+                link.rel  = "stylesheet";
+                link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+                document.head.appendChild(link);
+            }
+
+            // Inject grayscale + label styles once
+            if (!document.getElementById("map-block-styles")) {
+                const style = document.createElement("style");
+                style.id = "map-block-styles";
+                style.textContent = `
+                    .mb-tiles { filter: grayscale(100%) brightness(0.55) contrast(1.1); transition: filter 0.6s ease; }
+                    .mb-tiles.active { filter: grayscale(30%) brightness(0.75); }
+                    .mb-city-label {
+                        background: transparent !important;
+                        border: none !important;
+                        box-shadow: none !important;
+                        color: #f0ede8 !important;
+                        font-size: 11px !important;
+                        font-weight: 600 !important;
+                        text-shadow: 0 1px 4px rgba(0,0,0,0.95) !important;
+                        white-space: nowrap !important;
+                    }
+                    .mb-city-label::before { display: none !important; }
+                    .leaflet-popup-content-wrapper { background: #1c1c1a; color: #f0ede8; border: 1px solid rgba(240,168,36,0.3); border-radius: 8px; }
+                    .leaflet-popup-tip { background: #1c1c1a; }
+                    .leaflet-popup-content { color: #f0ede8; margin: 10px 14px; font-size: 13px; }
+                `;
+                document.head.appendChild(style);
+            }
+
+            function buildMap() {
+                if (typeof L === "undefined") return;
+
+                const container = document.getElementById(uid);
+                if (!container || container._leaflet_id) return;
+
+                const map = L.map(uid, {
+                    center:             [SERVICE_CENTER_LAT, SERVICE_CENTER_LNG],
+                    zoom:               MAP_ZOOM,
+                    scrollWheelZoom:    false,
+                    zoomControl:        true,
+                    attributionControl: true,
+                });
+
+                // Tile layer with grayscale class
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    className:   "mb-tiles",
+                }).addTo(map);
+
+                // Hover: temporarily un-grayscale the map
+                container.addEventListener("mouseenter", () => {
+                    document.querySelectorAll(".mb-tiles").forEach(el => el.classList.add("active"));
+                });
+                container.addEventListener("mouseleave", () => {
+                    document.querySelectorAll(".mb-tiles").forEach(el => el.classList.remove("active"));
+                });
+
+                // Service coverage circle (Costa del Sol)
+                L.circle([SERVICE_CENTER_LAT, SERVICE_CENTER_LNG], {
+                    radius:      SERVICE_RADIUS_KM * 1000,
+                    color:       "#f0a824",
+                    weight:      2,
+                    opacity:     0.75,
+                    fillColor:   "#f0a824",
+                    fillOpacity: 0.10,
+                }).addTo(map);
+
+                // City dots along the Costa del Sol corridor
+                const cities = [
+                    { name: "Málaga",       lat: 36.7213, lng: -4.4214 },
+                    { name: "Torremolinos", lat: 36.6218, lng: -4.4997 },
+                    { name: "Fuengirola",   lat: 36.5390, lng: -4.6260 },
+                    { name: "Marbella",     lat: 36.5101, lng: -4.8825 },
+                    { name: "Estepona",     lat: 36.4265, lng: -5.1465 },
+                ];
+
+                function makeIcon(highlighted) {
+                    const size = highlighted ? 14 : 9;
+                    return L.divIcon({
+                        html: `<div style="
+                            width:${size}px;height:${size}px;
+                            background:${highlighted ? "#f0a824" : "#fff"};
+                            border:2.5px solid ${highlighted ? "#fff" : "#f0a824"};
+                            border-radius:50%;
+                            box-shadow:0 2px 6px rgba(0,0,0,0.5);
+                        "></div>`,
+                        iconSize:   [size, size],
+                        iconAnchor: [size / 2, size / 2],
+                        className:  "",
+                    });
+                }
+
+                cities.forEach(({ name, lat, lng }) => {
+                    L.marker([lat, lng], { icon: makeIcon(false) })
+                        .addTo(map)
+                        .bindTooltip(name, {
+                            permanent:  true,
+                            direction:  "top",
+                            offset:     [0, -8],
+                            className:  "mb-city-label",
+                        });
+                });
+
+                // Highlighted pin for the current location
+                if (locationLat && locationLng) {
+                    L.marker([locationLat, locationLng], { icon: makeIcon(true) })
+                        .addTo(map)
+                        .bindPopup(`<strong>${locationName}</strong><br><span style="color:#f0a824;font-size:11px">✓ Zona cubierta</span>`)
+                        .openPopup();
+                }
+            }
+
+            // Load Leaflet JS then initialize
+            if (typeof L !== "undefined") {
+                buildMap();
+            } else {
+                const script = document.createElement("script");
+                script.src       = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+                script.crossOrigin = "";
+                script.onload    = buildMap;
+                document.head.appendChild(script);
+            }
+        })();
+    </script>
 </section>

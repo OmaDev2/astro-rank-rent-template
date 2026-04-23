@@ -1,4 +1,5 @@
 ---
+import { Home, ChevronRight } from "lucide-react";
 import HeroBlock from "./blocks/HeroBlock.astro";
 import FeaturesBlock from "./blocks/FeaturesBlock.astro";
 import MapBlock from "./blocks/MapBlock.astro";
@@ -33,470 +34,544 @@ import ServiceLocationsBlock from "./blocks/ServiceLocationsBlock.astro";
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 
 interface Props {
-    blocks: Block[];
-    locationName?: string;
-    locationType?: "residencial" | "industrial" | "centro";
-    zipCodes?: string[];
-    heroImage?: string;
-    phone?: string;
-    siteName?: string;
-    niche?: string;
-    title?: string;
-    city?: string;
-    coordinates?: Coordinates;
-    content?: any; // Still any for now as MDX props are complex
-    mdxComponents?: any;
-    services?: Service[];
-    faq?: FAQItem[];
-    allLocations?: Location[];
-    allServices?: Service[]; // New prop for Auto lookup
-    currentSlug?: string;
-    whatsapp?: string;
-    isHome?: boolean;
-    config?: any; // Global settings
+  blocks: Block[];
+  locationName?: string;
+  locationType?: "residencial" | "industrial" | "centro";
+  zipCodes?: string[];
+  heroImage?: string;
+  phone?: string;
+  siteName?: string;
+  niche?: string;
+  title?: string;
+  city?: string;
+  coordinates?: Coordinates;
+  content?: any; // Still any for now as MDX props are complex
+  mdxComponents?: any;
+  services?: Service[];
+  faq?: FAQItem[];
+  allLocations?: Location[];
+  allServices?: Service[]; // New prop for Auto lookup
+  currentSlug?: string;
+  whatsapp?: string;
+  isHome?: boolean;
+  config?: any; // Global settings
+  breadcrumbType?: "service" | "location";
+  breadcrumbName?: string;
 }
 
 const {
-    blocks,
-    locationName,
-    locationType,
-    zipCodes,
-    heroImage,
-    phone,
-    siteName,
-    niche,
-    title,
-    city,
-    coordinates,
-    content: Content,
-    mdxComponents,
-    services,
-    allServices,
-    faq,
-    allLocations,
-    currentSlug,
-    whatsapp,
-    isHome,
-    config,
+  blocks,
+  locationName,
+  locationType,
+  zipCodes,
+  heroImage,
+  phone,
+  siteName,
+  niche,
+  title,
+  city,
+  coordinates,
+  content: Content,
+  mdxComponents,
+  services,
+  allServices,
+  faq,
+  allLocations,
+  currentSlug,
+  whatsapp,
+  isHome,
+  config,
+  breadcrumbType,
+  breadcrumbName,
 } = Astro.props;
 
 // Bloques con fondo fijo (no participan en la alternancia).
 const FIXED_BG: Record<string, string> = {
-    hero:    'bg-secondary',
-    about:   'bg-surface',
-    contact: 'bg-secondary',
-    cta:     'bg-secondary',
+  hero: "bg-secondary",
+  about: "bg-surface",
 };
 
 // Cada bloque alternante toma el color OPUESTO al último bloque alternante,
 // sin importar cuántos bloques fijos haya entre medias.
 // Así el orden de bloques en el CMS siempre produce fondos alternados correctos.
-let _prevAlt = 'bg-surface'; // el primero recibirá bg-secondary
-const blockBgClasses = (blocks as any[]).map(b => {
-    if (b.discriminant in FIXED_BG) return FIXED_BG[b.discriminant];
-    _prevAlt = _prevAlt === 'bg-secondary' ? 'bg-surface' : 'bg-secondary';
-    return _prevAlt;
+let currentBg = "bg-secondary"; // El estado inicial asume que venimos de un fondo secundario (como el hero)
+const blockBgClasses = (blocks as any[]).map((b) => {
+  if (b.discriminant in FIXED_BG) {
+    currentBg = FIXED_BG[b.discriminant];
+    return currentBg;
+  }
+  // Alternancia dinámica: cambia al opuesto del fondo anterior
+  currentBg = currentBg === "bg-secondary" ? "bg-surface" : "bg-secondary";
+  return currentBg;
 });
 ---
 
 {
-    blocks.map((block, index) => {
-        const { discriminant, value } = block as any;
-        const parseJson = (v: any) => { 
-            if (typeof v === 'object' && v !== null) return v;
-            try { return v ? JSON.parse(v) : null; } catch { return null; } 
-        };
-        
-        const bgClass = blockBgClasses[index];
+  blocks.map((block, index) => {
+    const { discriminant, value } = block as any;
+    const parseJson = (v: any) => {
+      if (typeof v === "object" && v !== null) return v;
+      try {
+        return v ? JSON.parse(v) : null;
+      } catch {
+        return null;
+      }
+    };
 
-        switch (discriminant) {
-            case "hero":
-                const heroContent = parseJson(value?.content);
-                if (isHome) {
-                    const heroMerged = {
-                        backgroundImage: value?.backgroundImage,
-                        heading:          heroContent?.heading          || value?.heading,
-                        headingHighlight: heroContent?.headingHighlight || value?.headingHighlight,
-                        subheading:       heroContent?.subheading       || value?.subheading,
-                        ctaPrimary: {
-                            text: heroContent?.ctaPrimaryText    || value?.ctaPrimary?.text,
-                            link: value?.ctaPrimaryLink || value?.ctaPrimary?.link || '#presupuesto',
-                        },
-                        ctaSecondary: {
-                            text: heroContent?.ctaSecondaryText  || value?.ctaSecondary?.text,
-                            link: value?.ctaSecondaryLink || value?.ctaSecondary?.link || '',
-                        },
-                        features: Array.isArray(heroContent?.features)
-                            ? heroContent.features
-                            : (typeof heroContent?.features === 'string'
-                                ? heroContent.features.split('\n').map((f: string) => f.trim()).filter(Boolean)
-                                : (value?.features || [])),
-                    };
-                    return <HomeHero hero={heroMerged} config={config} />;
-                }
-                return (
-                    <HeroBlock
-                        locationName={locationName}
-                        locationType={locationType}
-                        zipCodes={zipCodes}
-                        heroImage={value?.heroImage || heroImage}
-                        heroImageAlt={value?.heroImageAlt}
-                        phone={phone}
-                        siteName={siteName}
-                        niche={niche}
-                        title={heroContent?.title || value?.title || title}
-                        subtitle={heroContent?.subtitle || value?.subtitle}
-                        heading={heroContent?.heading}
-                        headingHighlight={heroContent?.headingHighlight}
-                        subheading={heroContent?.subheading}
-                        ctaPrimaryText={heroContent?.ctaPrimaryText}
-                        ctaSecondaryText={heroContent?.ctaSecondaryText}
-                        heroStyle={config?.heroStyle || 'image'}
-                    />
-                );
+    const bgClass = blockBgClasses[index];
 
-            case "services_grid":
-                return (
-                    <HomeServices
-                        servicesSection={value}
-                        featuredServices={services}
-                        customServices={value?.services}
-                        allServices={allServices}
-                        city={city}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "services_list":
-                return (
-                    <HomeServicesOnePage
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        services={value?.items}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "about":
-                const aboutContent = parseJson(value?.content);
-                const finalAboutData = aboutContent || value;
-                return finalAboutData ? (
-                    <HomeAbout
-                        title={finalAboutData.title}
-                        titleHighlight={finalAboutData.titleHighlight}
-                        description={finalAboutData.description}
-                        yearsExperience={finalAboutData.yearsExperience}
-                        projectsCompleted={finalAboutData.projectsCompleted}
-                        image={finalAboutData.image}
-                        features={finalAboutData.features}
-                        buttonText={finalAboutData.buttonText}
-                        buttonLink={finalAboutData.buttonLink}
-                        titleTag={finalAboutData.titleTag}
-                        bgClass={bgClass}
-                    />
-                ) : null;
-
-            case "features":
-                const featuresContent = parseJson(value?.content);
-                const finalFeatures = featuresContent?.features || value?.features || value?.items || value || [];
-                const finalTitle = featuresContent?.title || value?.title;
-                const finalSubtitle = featuresContent?.subtitle || value?.subtitle;
-                if (isHome) {
-                    return (
-                        <HomeFeatures
-                            features={finalFeatures}
-                            title={finalTitle}
-                            titleTag={featuresContent?.titleTag}
-                            city={city}
-                            bgClass={bgClass}
-                        />
-                    );
-                }
-                return (
-                    <FeaturesBlock
-                        locationName={locationName}
-                        city={city}
-                        title={finalTitle}
-                        subtitle={finalSubtitle}
-                        items={finalFeatures}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "process":
-                const processContent = parseJson(value?.content);
-                const finalProcess = processContent || value;
-                return finalProcess ? (
-                    <HomeProcess process={finalProcess} bgClass={bgClass} />
-                ) : null;
-
-            case "testimonials":
-                const testimonialsContent = parseJson(value?.content);
-                const finalTestimonials = testimonialsContent?.testimonials || value?.testimonials || value || [];
-                const finalTestiTitle = testimonialsContent?.title || value?.title;
-                const finalTestiSubtitle = testimonialsContent?.subtitle || value?.subtitle;
-                return (
-                    <Testimonials
-                        title={finalTestiTitle}
-                        subtitle={finalTestiSubtitle}
-                        titleTag={testimonialsContent?.titleTag}
-                        testimonials={
-                            Array.isArray(finalTestimonials)
-                                ? finalTestimonials.map((t: any) => ({
-                                      name: t.author || t.name,
-                                      text: t.quote || t.text,
-                                      location: t.location,
-                                      initials: t.initials,
-                                      rating: t.rating || 5,
-                                  }))
-                                : []
-                        }
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "map":
-                return (
-                    <MapBlock
-                        coordinates={coordinates}
-                        locationName={locationName}
-                        zipCodes={zipCodes}
-                    />
-                );
-
-            case "cta":
-                const ctaContent = parseJson(value?.content);
-                const finalCta = ctaContent || value;
-                return (
-                    <FinalCTA
-                        title={finalCta?.title}
-                        subtitle={finalCta?.subtitle}
-                        buttonText={finalCta?.buttonText}
-                        buttonLink={finalCta?.buttonLink}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "locations":
-                return (
-                    <LocationsSection
-                        bgClass={bgClass}
-                        locationsSection={value}
-                    />
-                );
-
-            case "contact":
-                return (
-                    <HomeContact
-                        config={config}
-                        bgClass={bgClass}
-                        contactSection={value}
-                    />
-                );
-
-            case "faq":
-                const faqItems = value?.faqs || value?.questions || value || []; // Handle both formats
-                if (isHome) {
-                    return faqItems && faqItems.length > 0 ? (
-                        <div class={`py-20 ${bgClass}`}>
-                            <div class="container mx-auto px-4 max-w-4xl">
-                                <h2 class="text-3xl font-heading font-bold text-heading mb-4 text-center">
-                                    {value?.title || "Preguntas Frecuentes"}
-                                </h2>
-                                {value?.subtitle && (
-                                    <p class="text-body text-center mb-12 max-w-2xl mx-auto">
-                                        {value.subtitle}
-                                    </p>
-                                )}
-                                <FaqAccordion items={faqItems} title="" />
-                            </div>
-                        </div>
-                    ) : null;
-                }
-                return (
-                    faqItems &&
-                    faqItems.length > 0 && (
-                        <section class="py-20 bg-surface/30">
-                            <div class="container mx-auto px-4 max-w-4xl">
-                                <FaqAccordion
-                                    title={`Preguntas Frecuentes sobre ${title || locationName}`}
-                                    items={faqItems}
-                                />
-                            </div>
-                        </section>
-                    )
-                );
-
-            case "content":
-                const urgencyStyle = value?.urgencyBoxStyle || "none";
-
-                if (value?.sections && value.sections.length > 0) {
-                    return (
-                        <ContentBlock
-                            title={value?.title}
-                            sections={value?.sections}
-                            locationName={locationName}
-                            city={city}
-                            niche={niche}
-                            bgClass={bgClass}
-                        />
-                    );
-                }
-                if (isHome) {
-                    return (
-                        <section class={`py-20 ${bgClass}`}>
-                            <div class="container mx-auto px-4 max-w-4xl">
-                                <h2 class="text-3xl font-heading font-bold text-heading mb-8">
-                                    {value?.title}
-                                </h2>
-                                <div class="prose prose-invert prose-lg text-body">
-                                    {Content && (
-                                        <Content components={mdxComponents} />
-                                    )}
-                                </div>
-                            </div>
-                        </section>
-                    );
-                }
-                return (
-                    <ContentWithSidebar
-                        title={title}
-                        niche={niche}
-                        locationName={locationName}
-                        city={city}
-                        phone={phone}
-                        whatsapp={whatsapp}
-                        urgencyStyle={urgencyStyle}
-                        content={Content}
-                        mdxComponents={mdxComponents}
-                        services={services}
-                        allLocations={allLocations}
-                        currentSlug={currentSlug}
-                        bgClass={bgClass}
-                    />
-                );
-            case "service_areas":
-                return (
-                    <ServiceAreas
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        group1={value?.group1}
-                        group2={value?.group2}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "pricing":
-                const pricingContent = parseJson(value?.content);
-                const pricingData = pricingContent
-                    ? {
-                          title: pricingContent.title,
-                          subtitle: pricingContent.subtitle,
-                          plans: pricingContent.plans?.map((p: any) => ({
-                              ...p,
-                              features: Array.isArray(p.features)
-                                  ? p.features
-                                  : (typeof p.features === 'string'
-                                      ? p.features.split("\n").map((f: string) => f.trim()).filter(Boolean)
-                                      : [])
-                          })),
-                      }
-                    : value;
-                return (
-                    <PricingBlock
-                        title={pricingData?.title}
-                        subtitle={pricingData?.subtitle}
-                        titleTag={pricingData?.titleTag}
-                        note={pricingData?.note}
-                        plans={pricingData?.plans}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "stats":
-                const statsContent = parseJson(value?.content);
-                const statsData = statsContent
-                    ? {
-                          title: statsContent.title,
-                          subtitle: statsContent.subtitle,
-                          stats: statsContent.stats,
-                      }
-                    : value;
-                return (
-                    <StatsBlock
-                        title={statsData?.title}
-                        subtitle={statsData?.subtitle}
-                        stats={statsData?.stats}
-                        titleTag={statsData?.titleTag}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "logos":
-                return (
-                    <LogosBlock
-                        title={value?.title}
-                        logos={value?.logos}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "before_after":
-                return (
-                    <BeforeAfterBlock
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        beforeImage={value?.beforeImage}
-                        beforeAlt={value?.beforeAlt}
-                        afterImage={value?.afterImage}
-                        afterAlt={value?.afterAlt}
-                        beforeLabel={value?.beforeLabel}
-                        afterLabel={value?.afterLabel}
-                        bgClass={bgClass}
-                    />
-                );
-
-
-
-            case "price_from":
-                return (
-                    <PriceFromBlock
-                        price={value?.price}
-                        unit={value?.unit}
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        buttonText={value?.buttonText}
-                        buttonLink={value?.buttonLink}
-                        isOffer={value?.isOffer}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "location_services":
-                return (
-                    <LocationServicesBlock
-                        services={services}
-                        locationName={locationName}
-                        niche={niche}
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        bgClass={bgClass}
-                    />
-                );
-
-            case "service_locations":
-                return (
-                    <ServiceLocationsBlock
-                        allLocations={allLocations}
-                        serviceName={title}
-                        title={value?.title}
-                        subtitle={value?.subtitle}
-                        bgClass={bgClass}
-                    />
-                );
-
-            default:
-                return null;
+    switch (discriminant) {
+      case "hero":
+        const heroContent = parseJson(value?.content);
+        if (isHome) {
+          const heroMerged = {
+            backgroundImage: value?.backgroundImage,
+            heading: heroContent?.heading || value?.heading,
+            headingHighlight:
+              heroContent?.headingHighlight || value?.headingHighlight,
+            subheading: heroContent?.subheading || value?.subheading,
+            ctaPrimary: {
+              text: heroContent?.ctaPrimaryText || value?.ctaPrimary?.text,
+              link:
+                value?.ctaPrimaryLink ||
+                value?.ctaPrimary?.link ||
+                "#presupuesto",
+            },
+            ctaSecondary: {
+              text: heroContent?.ctaSecondaryText || value?.ctaSecondary?.text,
+              link: value?.ctaSecondaryLink || value?.ctaSecondary?.link || "",
+            },
+            features: Array.isArray(heroContent?.features)
+              ? heroContent.features
+              : typeof heroContent?.features === "string"
+                ? heroContent.features
+                    .split("\n")
+                    .map((f: string) => f.trim())
+                    .filter(Boolean)
+                : value?.features || [],
+          };
+          return <HomeHero hero={heroMerged} config={config} />;
         }
-    })
+        return (
+          <>
+            <HeroBlock
+              locationName={locationName}
+              locationType={locationType}
+              zipCodes={zipCodes}
+              heroImage={value?.heroImage || heroImage}
+              heroImageAlt={value?.heroImageAlt}
+              phone={phone}
+              siteName={siteName}
+              niche={niche}
+              title={heroContent?.title || value?.title || title}
+              subtitle={heroContent?.subtitle || value?.subtitle}
+              heading={heroContent?.heading}
+              headingHighlight={heroContent?.headingHighlight}
+              subheading={heroContent?.subheading}
+              ctaPrimaryText={heroContent?.ctaPrimaryText}
+              ctaSecondaryText={heroContent?.ctaSecondaryText}
+              heroStyle={config?.heroStyle || "image"}
+            />
+            {breadcrumbType && (
+              <nav
+                aria-label="Ruta de navegación"
+                class="w-full bg-gray-900 border-b border-gray-700"
+              >
+                <div class="container mx-auto px-4 flex items-center flex-wrap gap-1.5 text-xs font-medium py-3 text-gray-400">
+                  <a
+                    href="/"
+                    class="flex items-center gap-1 hover:text-white transition-colors"
+                  >
+                    <Home className="w-3.5 h-3.5" />
+                    <span class="hidden sm:inline">Inicio</span>
+                  </a>
+                  <ChevronRight className="w-3 h-3 shrink-0 text-gray-600" />
+                  {breadcrumbType === "service" && (
+                    <>
+                      <a
+                        href="/servicios/"
+                        class="hover:text-white transition-colors"
+                      >
+                        Servicios
+                      </a>
+                      {breadcrumbName && (
+                        <>
+                          <ChevronRight className="w-3 h-3 shrink-0 text-gray-600" />
+                          <span
+                            class="font-semibold text-gray-200 truncate max-w-[200px] sm:max-w-none"
+                            aria-current="page"
+                          >
+                            {breadcrumbName}
+                          </span>
+                        </>
+                      )}
+                    </>
+                  )}
+                  {breadcrumbType === "location" && (
+                    <>
+                      <a
+                        href="/zonas/"
+                        class="hover:text-white transition-colors"
+                      >
+                        Zonas
+                      </a>
+                      {breadcrumbName && (
+                        <>
+                          <ChevronRight className="w-3 h-3 shrink-0 text-gray-600" />
+                          <span
+                            class="font-semibold text-gray-200 truncate max-w-[200px] sm:max-w-none"
+                            aria-current="page"
+                          >
+                            {breadcrumbName}
+                          </span>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+              </nav>
+            )}
+          </>
+        );
+
+      case "services_grid":
+        return (
+          <HomeServices
+            servicesSection={value}
+            featuredServices={services}
+            customServices={value?.services}
+            allServices={allServices}
+            city={city}
+            bgClass={bgClass}
+          />
+        );
+
+      case "services_list":
+        return (
+          <HomeServicesOnePage
+            title={value?.title}
+            subtitle={value?.subtitle}
+            services={value?.items}
+            bgClass={bgClass}
+          />
+        );
+
+      case "about":
+        const aboutContent = parseJson(value?.content);
+        const finalAboutData = aboutContent || value;
+        return finalAboutData ? (
+          <HomeAbout aboutSection={finalAboutData} bgClass={bgClass} />
+        ) : null;
+
+      case "features":
+        const featuresContent = parseJson(value?.content);
+        const finalFeatures =
+          featuresContent?.features ||
+          value?.features ||
+          value?.items ||
+          value ||
+          [];
+        const finalTitle = featuresContent?.title || value?.title;
+        const finalSubtitle = featuresContent?.subtitle || value?.subtitle;
+        if (isHome) {
+          return (
+            <HomeFeatures
+              features={finalFeatures}
+              title={finalTitle}
+              titleTag={featuresContent?.titleTag}
+              city={city}
+              bgClass={bgClass}
+            />
+          );
+        }
+        return (
+          <FeaturesBlock
+            locationName={locationName}
+            city={city}
+            title={finalTitle}
+            subtitle={finalSubtitle}
+            items={finalFeatures}
+            bgClass={bgClass}
+          />
+        );
+
+      case "process":
+        const processContent = parseJson(value?.content);
+        const finalProcess = processContent || value;
+        return finalProcess ? (
+          <HomeProcess process={finalProcess} bgClass={bgClass} />
+        ) : null;
+
+      case "testimonials":
+        const testimonialsContent = parseJson(value?.content);
+        const finalTestimonials =
+          testimonialsContent?.testimonials ||
+          value?.testimonials ||
+          value ||
+          [];
+        const finalTestiTitle = testimonialsContent?.title || value?.title;
+        const finalTestiSubtitle =
+          testimonialsContent?.subtitle || value?.subtitle;
+        return (
+          <Testimonials
+            title={finalTestiTitle}
+            subtitle={finalTestiSubtitle}
+            titleTag={testimonialsContent?.titleTag}
+            testimonials={
+              Array.isArray(finalTestimonials)
+                ? finalTestimonials.map((t: any) => ({
+                    name: t.author || t.name,
+                    text: t.quote || t.text,
+                    location: t.location,
+                    initials: t.initials,
+                    rating: t.rating || 5,
+                  }))
+                : []
+            }
+            bgClass={bgClass}
+          />
+        );
+
+      case "map":
+        return (
+          <MapBlock
+            coordinates={coordinates}
+            locationName={locationName}
+            zipCodes={zipCodes}
+          />
+        );
+
+      case "cta":
+        const ctaContent = parseJson(value?.content);
+        const finalCta = ctaContent || value;
+        return (
+          <FinalCTA
+            title={finalCta?.title}
+            subtitle={finalCta?.subtitle}
+            buttonText={finalCta?.buttonText}
+            buttonLink={finalCta?.buttonLink}
+            bgClass={bgClass}
+          />
+        );
+
+      case "locations":
+        return <LocationsSection bgClass={bgClass} locationsSection={value} />;
+
+      case "contact":
+        return (
+          <HomeContact
+            config={config}
+            bgClass={bgClass}
+            contactSection={value}
+          />
+        );
+
+      case "faq":
+        const faqItems = value?.faqs || value?.questions || value || []; // Handle both formats
+        if (isHome) {
+          return faqItems && faqItems.length > 0 ? (
+            <div class={`py-20 ${bgClass}`}>
+              <div class="container mx-auto px-4 max-w-4xl">
+                <h2 class="text-3xl font-heading font-bold text-heading mb-4 text-center">
+                  {value?.title || "Preguntas Frecuentes"}
+                </h2>
+                {value?.subtitle && (
+                  <p class="text-body text-center mb-12 max-w-2xl mx-auto">
+                    {value.subtitle}
+                  </p>
+                )}
+                <FaqAccordion items={faqItems} title="" />
+              </div>
+            </div>
+          ) : null;
+        }
+        return (
+          faqItems &&
+          faqItems.length > 0 && (
+            <section class={`py-20 ${bgClass}`}>
+              <div class="container mx-auto px-4 max-w-4xl">
+                <FaqAccordion
+                  title={`Preguntas Frecuentes sobre ${title || locationName}`}
+                  items={faqItems}
+                />
+              </div>
+            </section>
+          )
+        );
+
+      case "content":
+        const urgencyStyle = value?.urgencyBoxStyle || "none";
+        const showSidebar = value?.showSidebar ?? true;
+        const showServices = value?.showServices ?? true;
+
+        if (value?.sections && value.sections.length > 0) {
+          return (
+            <ContentBlock
+              title={value?.title}
+              sections={value?.sections}
+              locationName={locationName}
+              city={city}
+              niche={niche}
+              bgClass={bgClass}
+            />
+          );
+        }
+        if (isHome) {
+          return (
+            <section class={`py-20 ${bgClass}`}>
+              <div class="container mx-auto px-4 max-w-4xl">
+                <h2 class="text-3xl font-heading font-bold text-heading mb-8">
+                  {value?.title}
+                </h2>
+                <div class="prose prose-invert prose-lg text-body">
+                  {Content && <Content components={mdxComponents} />}
+                </div>
+              </div>
+            </section>
+          );
+        }
+        return (
+          <ContentWithSidebar
+            title={title}
+            niche={niche}
+            locationName={locationName}
+            city={city}
+            phone={phone}
+            whatsapp={whatsapp}
+            urgencyStyle={urgencyStyle}
+            content={Content}
+            mdxComponents={mdxComponents}
+            services={services}
+            allLocations={allLocations}
+            currentSlug={currentSlug}
+            bgClass={bgClass}
+            showSidebar={showSidebar}
+            showServices={showServices}
+          />
+        );
+      case "service_areas":
+        return (
+          <ServiceAreas
+            title={value?.title}
+            subtitle={value?.subtitle}
+            group1={value?.group1}
+            group2={value?.group2}
+            bgClass={bgClass}
+          />
+        );
+
+      case "pricing":
+        const pricingContent = parseJson(value?.content);
+        const pricingData = pricingContent
+          ? {
+              title: pricingContent.title,
+              subtitle: pricingContent.subtitle,
+              plans: pricingContent.plans?.map((p: any) => ({
+                ...p,
+                features: Array.isArray(p.features)
+                  ? p.features
+                  : typeof p.features === "string"
+                    ? p.features
+                        .split("\n")
+                        .map((f: string) => f.trim())
+                        .filter(Boolean)
+                    : [],
+              })),
+            }
+          : value;
+        return (
+          <PricingBlock
+            title={pricingData?.title}
+            subtitle={pricingData?.subtitle}
+            titleTag={pricingData?.titleTag}
+            note={pricingData?.note}
+            plans={pricingData?.plans}
+            bgClass={bgClass}
+          />
+        );
+
+      case "stats":
+        const statsContent = parseJson(value?.content);
+        const statsData = statsContent
+          ? {
+              title: statsContent.title,
+              subtitle: statsContent.subtitle,
+              stats: statsContent.stats,
+            }
+          : value;
+        return (
+          <StatsBlock
+            title={statsData?.title}
+            subtitle={statsData?.subtitle}
+            stats={statsData?.stats}
+            titleTag={statsData?.titleTag}
+            bgClass={bgClass}
+          />
+        );
+
+      case "logos":
+        return (
+          <LogosBlock
+            title={value?.title}
+            logos={value?.logos}
+            bgClass={bgClass}
+          />
+        );
+
+      case "before_after":
+        return (
+          <BeforeAfterBlock
+            title={value?.title}
+            subtitle={value?.subtitle}
+            beforeImage={value?.beforeImage}
+            beforeAlt={value?.beforeAlt}
+            afterImage={value?.afterImage}
+            afterAlt={value?.afterAlt}
+            beforeLabel={value?.beforeLabel}
+            afterLabel={value?.afterLabel}
+            bgClass={bgClass}
+          />
+        );
+
+      case "price_from":
+        return (
+          <PriceFromBlock
+            price={value?.price}
+            unit={value?.unit}
+            title={value?.title}
+            subtitle={value?.subtitle}
+            buttonText={value?.buttonText}
+            buttonLink={value?.buttonLink}
+            isOffer={value?.isOffer}
+            bgClass={bgClass}
+          />
+        );
+
+      case "location_services":
+        return (
+          <LocationServicesBlock
+            services={services}
+            locationName={locationName}
+            niche={niche}
+            title={value?.title}
+            subtitle={value?.subtitle}
+            bgClass={bgClass}
+          />
+        );
+
+      case "service_locations":
+        return (
+          <ServiceLocationsBlock
+            allLocations={allLocations}
+            serviceName={title}
+            title={value?.title}
+            subtitle={value?.subtitle}
+            bgClass={bgClass}
+          />
+        );
+
+      default:
+        return null;
+    }
+  })
 }

@@ -14,6 +14,7 @@ const ALL_FONTS_URL =
     "family=Merriweather:wght@700;900&family=Lora:wght@400;500&" +
     "family=Crimson+Text:wght@600;700&family=Source+Serif+4:wght@400;500&" +
     "family=Cormorant:wght@600;700&family=EB+Garamond:wght@400;500&" +
+    "family=DM+Sans:wght@400;500&" +
     "display=swap";
 
 function loadFonts() {

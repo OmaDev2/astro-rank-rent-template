@@ -85,18 +85,33 @@ function StatsInput({ value, onChange }: { value: string, onChange: (v: string) 
     };
     const [state, setState] = useState<StatsState>(() => parse(value));
 
-    const updateField = (key: 'title' | 'subtitle', val: string) => {
-        const next = { ...state, [key]: val };
-        setState(next);
-        onChange(JSON.stringify(next));
+    const update = (next: StatsState) => { setState(next); onChange(JSON.stringify(next)); };
+
+    const updateField = (key: 'title' | 'subtitle' | 'titleTag', val: string) =>
+        update({ ...state, [key]: val });
+
+    const updateStat = (i: number, key: keyof StatItem, val: string) => {
+        const stats = [...state.stats];
+        stats[i] = { ...stats[i], [key]: val };
+        update({ ...state, stats });
     };
 
-    const updateStat = (index: number, key: keyof StatItem, val: string) => {
-        const nextStats = [...state.stats];
-        nextStats[index] = { ...nextStats[index], [key]: val };
-        const next = { ...state, stats: nextStats };
-        setState(next);
-        onChange(JSON.stringify(next));
+    const addStat = () => update({
+        ...state,
+        stats: [...state.stats, { label: 'Nueva estadística', value: '0', suffix: '+', icon: 'Star' }]
+    });
+
+    const removeStat = (i: number) => {
+        const stats = state.stats.filter((_, idx) => idx !== i);
+        update({ ...state, stats });
+    };
+
+    const moveStat = (i: number, dir: -1 | 1) => {
+        const stats = [...state.stats];
+        const j = i + dir;
+        if (j < 0 || j >= stats.length) return;
+        [stats[i], stats[j]] = [stats[j], stats[i]];
+        update({ ...state, stats });
     };
 
     const inp: React.CSSProperties = {
@@ -104,45 +119,71 @@ function StatsInput({ value, onChange }: { value: string, onChange: (v: string) 
         borderRadius: '6px', padding: '10px', color: '#e2e8f0',
         fontSize: '13px', width: '100%', boxSizing: 'border-box'
     };
+    const btn = (color: string): React.CSSProperties => ({
+        background: 'transparent', border: `1px solid ${color}44`, borderRadius: '4px',
+        color, cursor: 'pointer', fontSize: '12px', padding: '3px 7px', lineHeight: 1,
+    });
 
     return (
         <FieldPrimitive label="📊 Estadísticas (Vista Previa)">
             <div>
                 <StatsPreviewUI state={state} />
                 <div style={{ background: '#0f172a', border: '1px solid rgba(239, 68, 68, 0.15)', borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {/* Título / subtítulo / tag */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                        {(['title', 'subtitle'] as const).map(k => (
+                            <div key={k}>
+                                <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>{k === 'title' ? 'Título' : 'Subtítulo'}</div>
+                                <input style={inp} value={(state as any)[k]} onChange={e => updateField(k, e.target.value)} />
+                            </div>
+                        ))}
                         <div>
-                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Título</div>
-                            <input style={inp} placeholder="Título" value={state.title} onChange={e => updateField('title', e.target.value)} />
-                        </div>
-                        <div>
-                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Subtítulo</div>
-                            <input style={inp} placeholder="Subtítulo" value={state.subtitle} onChange={e => updateField('subtitle', e.target.value)} />
-                        </div>
-                        <div>
-                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Etiqueta SEO (H2 recom.)</div>
-                            <select style={{ ...inp, cursor: 'pointer', appearance: 'none' }} value={state.titleTag} onChange={e => updateField('titleTag' as any, e.target.value)}>
-                                <option value="h1">H1 (Principal)</option>
-                                <option value="h2">H2 (Secundario)</option>
-                                <option value="h3">H3 (Terciario)</option>
+                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '5px' }}>Etiqueta SEO</div>
+                            <select style={{ ...inp, cursor: 'pointer' }} value={state.titleTag} onChange={e => updateField('titleTag', e.target.value)}>
+                                <option value="h1">H1</option>
+                                <option value="h2">H2 (recomendado)</option>
+                                <option value="h3">H3</option>
                             </select>
                         </div>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+
+                    {/* Lista de stats */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         {state.stats.map((s, i) => (
-                            <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '10px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                <IconPickerUI 
-                                    value={s.icon} 
-                                    onChange={v => updateStat(i, 'icon', v)}
-                                />
-                                <input style={inp} placeholder="Etiqueta" value={s.label} onChange={e => updateField('label' as any, e.target.value)} />
-                                <div style={{ display: 'flex', gap: '6px' }}>
-                                    <input style={inp} placeholder="Valor" value={s.value} onChange={e => updateStat(i, 'value', e.target.value)} />
-                                    <input style={{ ...inp, width: '60px' }} placeholder="Sufijo" value={s.suffix} onChange={e => updateStat(i, 'suffix', e.target.value)} />
+                            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                {/* Fila superior: icono + controles */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <IconPickerUI value={s.icon} onChange={v => updateStat(i, 'icon', v)} />
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        <button style={btn('#94a3b8')} onClick={() => moveStat(i, -1)} title="Subir">▲</button>
+                                        <button style={btn('#94a3b8')} onClick={() => moveStat(i, 1)} title="Bajar">▼</button>
+                                        <button style={btn('#ef4444')} onClick={() => removeStat(i)} title="Eliminar">✕</button>
+                                    </div>
+                                </div>
+                                {/* Etiqueta */}
+                                <div>
+                                    <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>Etiqueta</div>
+                                    <input style={inp} placeholder="Ej: Clientes satisfechos" value={s.label} onChange={e => updateStat(i, 'label', e.target.value)} />
+                                </div>
+                                {/* Valor + Sufijo */}
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px', gap: '8px' }}>
+                                    <div>
+                                        <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>Valor</div>
+                                        <input style={inp} placeholder="Ej: 98" value={s.value} onChange={e => updateStat(i, 'value', e.target.value)} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>Sufijo</div>
+                                        <input style={inp} placeholder="Ej: %" value={s.suffix} onChange={e => updateStat(i, 'suffix', e.target.value)} />
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
+
+                    {/* Añadir stat */}
+                    <button onClick={addStat} style={{ background: 'rgba(255,255,255,0.04)', border: '1px dashed rgba(255,255,255,0.15)', borderRadius: '8px', color: '#94a3b8', cursor: 'pointer', fontSize: '13px', padding: '10px', width: '100%' }}>
+                        + Añadir estadística
+                    </button>
                 </div>
             </div>
         </FieldPrimitive>

@@ -151,7 +151,7 @@ const design = defineCollection({
             themeSettings: z.string().optional(),
             fontPair: z.enum([
                 'modern', 'robust', 'elegant', 'friendly', 'tech',
-                'artisan_warm', 'artisan_natural', 'artisan_classic'
+                'artisan_warm', 'artisan_natural', 'artisan_classic', 'forge'
             ]).optional().default('modern'),
             typographyScale: z.string().optional(),
         }).optional(),

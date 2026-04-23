@@ -1,16 +1,9 @@
 ---
 import Layout from "./Layout.astro";
 import Footer from "../components/Footer.astro";
-import FinalCTA from "../components/FinalCTA.astro";
-import FaqAccordion from "../components/FaqAccordion.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
-import RelatedServices from "../components/RelatedServices.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
-
-import { CheckCircle, ArrowRight, Home, ChevronRight } from "lucide-react";
 import { getCollection } from "astro:content";
 import { getSettings } from "../lib/settings";
-
 import BlockRenderer from "../components/BlockRenderer.astro";
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 
@@ -60,10 +53,10 @@ const currentSlug = props.currentSlug || "";
 // 3. GESTIÓN DE BLOQUES
 const defaultBlocks: Block[] = [
   { discriminant: "hero" },
-  { discriminant: "features" },
   { discriminant: "content" },
-  { discriminant: "cta" },
+  { discriminant: "location_services" },
   { discriminant: "map" },
+  { discriminant: "cta" },
 ];
 
 const finalBlocks =
@@ -75,42 +68,30 @@ const finalBlocks =
   description={props.pageDescription}
   schema={props.schema}
 >
-  <Breadcrumbs isLocation locationName={props.locationName} />
-
-  <div class="relative pt-16 md:pt-20">
-    {
-      /* 
-         NOTA: Movemos el renderizado de bloques aquí. 
-         El HeroBlock debería incluir idealmente los breadcrumbs si se quiere un diseño integrado.
-         Si no, una barra flotante transparente.
-      */
-    }
-
-    {
-      (
-        <BlockRenderer
-          blocks={finalBlocks}
-          locationName={props.locationName}
-          locationType={props.locationType}
-          zipCodes={props.zipCodes}
-          heroImage={props.heroImage}
-          phone={phone}
-          siteName={siteName}
-          niche={niche}
-          title={props.title}
-          city={city}
-          coordinates={props.coordinates}
-          content={props.content}
-          mdxComponents={props.mdxComponents}
-          services={services}
-          faq={props.faq}
-          allLocations={allLocations}
-          currentSlug={currentSlug}
-          whatsapp={whatsapp}
-          config={settings}
-        />
-      )
-    }
+  <div class="relative">
+    <BlockRenderer
+      blocks={finalBlocks}
+      locationName={props.locationName}
+      locationType={props.locationType}
+      zipCodes={props.zipCodes}
+      heroImage={props.heroImage}
+      phone={phone}
+      siteName={siteName}
+      niche={niche}
+      title={props.title}
+      city={city}
+      coordinates={props.coordinates}
+      content={props.content}
+      mdxComponents={props.mdxComponents}
+      services={services}
+      faq={props.faq}
+      allLocations={allLocations}
+      currentSlug={currentSlug}
+      whatsapp={whatsapp}
+      config={settings}
+      breadcrumbType="location"
+      breadcrumbName={props.locationName}
+    />
 
     <WhatsAppButton />
 

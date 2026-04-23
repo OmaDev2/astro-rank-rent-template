@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import defaultHeroImage from "../../../assets/images/hero-home.png";
-import { Phone, CheckCircle } from "lucide-react";
+import { Phone } from "lucide-react";
 import HeroContactForm from "../../HeroContactForm.astro";
 
 const { hero, config } = Astro.props;
@@ -60,11 +60,9 @@ const isExternal = (url: string) => url?.startsWith("http");
                 </TitleTag>
                 <p class="text-xl text-heading/90 mb-8 font-bold border-l-4 border-primary pl-4 max-w-2xl readable-hero-text">{subheading}</p>
                 {features.length > 0 && (
-                    <ul class="grid sm:grid-cols-2 gap-y-3 gap-x-6 mb-10">
+                    <ul class="hero-badges">
                         {features.map((f: string) => (
-                            <li class="flex items-center gap-2 text-heading font-bold text-sm readable-hero-text">
-                                <CheckCircle className="w-4 h-4 text-primary shrink-0" /><span>{f}</span>
-                            </li>
+                            <li class="hero-badge">{f}</li>
                         ))}
                     </ul>
                 )}
@@ -102,11 +100,9 @@ const isExternal = (url: string) => url?.startsWith("http");
                     </TitleTag>
                     <p class="text-lg text-body leading-relaxed max-w-lg">{subheading}</p>
                     {features.length > 0 && (
-                        <ul class="space-y-2">
+                        <ul class="hero-badges">
                             {features.map((f: string) => (
-                                <li class="flex items-center gap-2 text-body text-sm">
-                                    <CheckCircle className="w-4 h-4 text-primary shrink-0" /><span>{f}</span>
-                                </li>
+                                <li class="hero-badge">{f}</li>
                             ))}
                         </ul>
                     )}
@@ -173,11 +169,9 @@ const isExternal = (url: string) => url?.startsWith("http");
                     </TitleTag>
                     <p class="text-lg text-body leading-relaxed max-w-xl">{subheading}</p>
                     {features.length > 0 && (
-                        <ul class="grid sm:grid-cols-2 gap-3">
+                        <ul class="hero-badges">
                             {features.map((f: string) => (
-                                <li class="flex items-center gap-2 text-body text-sm">
-                                    <CheckCircle className="w-4 h-4 text-primary shrink-0" /><span>{f}</span>
-                                </li>
+                                <li class="hero-badge">{f}</li>
                             ))}
                         </ul>
                     )}
@@ -213,11 +207,9 @@ const isExternal = (url: string) => url?.startsWith("http");
                     </TitleTag>
                     <p class="text-lg text-body leading-relaxed max-w-xl">{subheading}</p>
                     {features.length > 0 && (
-                        <ul class="grid sm:grid-cols-2 gap-3">
+                        <ul class="hero-badges">
                             {features.map((f: string) => (
-                                <li class="flex items-center gap-2 text-body text-sm">
-                                    <CheckCircle className="w-4 h-4 text-primary shrink-0" /><span>{f}</span>
-                                </li>
+                                <li class="hero-badge">{f}</li>
                             ))}
                         </ul>
                     )}
@@ -292,11 +284,9 @@ const isExternal = (url: string) => url?.startsWith("http");
                 </TitleTag>
                 <p class="text-xl text-body mb-10 max-w-2xl leading-relaxed">{subheading}</p>
                 {features.length > 0 && (
-                    <ul class="flex flex-wrap gap-x-6 gap-y-2 mb-10">
+                    <ul class="hero-badges">
                         {features.map((f: string) => (
-                            <li class="flex items-center gap-2 text-body text-sm">
-                                <CheckCircle className="w-4 h-4 text-primary shrink-0" /><span>{f}</span>
-                            </li>
+                            <li class="hero-badge">{f}</li>
                         ))}
                     </ul>
                 )}
@@ -314,3 +304,28 @@ const isExternal = (url: string) => url?.startsWith("http");
         </div>
     </section>
 )}
+
+<style>
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgb(var(--color-text-main) / 0.9);
+    background: rgb(var(--color-text-main) / 0.18);
+    border: 1px solid rgb(var(--color-text-main) / 0.30);
+    border-radius: 4px;
+    padding: 6px 14px;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+  }
+</style>

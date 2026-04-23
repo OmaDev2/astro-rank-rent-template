@@ -1,39 +1,37 @@
 _spintax: ''
-siteName: Fontanería García
-niche: Fontanería
-businessType: Plumber
-logo: ''
-siteUrl: https://fontaneria-garcia.es
+siteName: 'METALISUR '
+niche: CARPINTERÍA METÁLICA
+businessType: LocalBusiness
+siteUrl: https://metalisur.es
 ctaText: Pedir Presupuesto Gratis
-phone: 600 000 000
-whatsapp: '34600000000'
-email: info@fontaneria-garcia.es
-city: Madrid
+phone: +34 675 56 81 48
+whatsapp: '34675568148'
+email: info@metalisur.es
+city: 'Málaga '
 address: Calle Mayor 10, Madrid
 coordinates:
   lat: '40.4168'
   lng: '-3.7038'
-schedule: Lun-Vie 8:00-20:00 · Urgencias 24h
-seo: '{"title":"","description":""}'
+schedule: Lun-Vie 8:00-20:00· Sáb 10:00-14:00  Urgencias 24h
+nif: 30972965s
+seo: >-
+  {"title":"Carpintería Metálica en Málaga | Aluminio ·
+  Metalisur","description":"Carpintería metálica y de aluminio en Málaga.
+  Fabricamos e instalamos ventanas, puertas, cerramientos, mosquiteras y
+  automatismos. Presupuesto sin compromiso."}
 slogan: Tu fontanero de confianza en Madrid, siempre disponible.
 foundingDate: '2012'
-facebook: https://facebook.com/fontaneria-garcia
-instagram: https://instagram.com/fontaneria_garcia
+facebook: https://facebook.com/metalisur
+instagram: https://instagram.com/metalisur
 areaServed:
-  - Madrid Centro
-  - Vallecas
-  - Carabanchel
-  - Salamanca
-  - Retiro
-  - Chamberí
-serviceRadius: 25
+  - Málaga
+serviceRadius: 100
 priceRange: €€
 paymentAccepted:
   - Cash
   - Credit Card
   - Debit Card
   - Bank Transfer
-  - Bizum
 openingHours:
   - dayOfWeek:
       - Monday
@@ -45,5 +43,5 @@ openingHours:
     closes: '20:00'
   - dayOfWeek:
       - Saturday
-    opens: '09:00'
+    opens: '10:00'
     closes: '14:00'
