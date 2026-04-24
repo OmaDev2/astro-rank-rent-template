@@ -9,6 +9,7 @@ import AlertBlock from "../../components/mdx/AlertBlock.astro";
 import PhoneBlock from "../../components/mdx/PhoneBlock.astro";
 import BusinessNameBlock from "../../components/mdx/BusinessNameBlock.astro";
 import CustomImageBlock from "../../components/mdx/CustomImageBlock.astro";
+import H1AsH2 from "../../components/mdx/H1AsH2.astro";
 
 export const prerender = true;
 
@@ -24,7 +25,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 const data = entry.data;
 
-const mdxComponents = { CtaBlock, AlertBlock, PhoneBlock, BusinessNameBlock, CustomImageBlock };
+const mdxComponents = { h1: H1AsH2, CtaBlock, AlertBlock, PhoneBlock, BusinessNameBlock, CustomImageBlock };
 
 const settings = await getSettings();
 

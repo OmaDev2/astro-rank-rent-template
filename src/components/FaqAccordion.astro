@@ -38,9 +38,9 @@ const { title = "Preguntas Frecuentes", items } = Astro.props;
             items.map((item) => (
                 <details class="group bg-surface/50 rounded-lg border border-heading/5 transition-all duration-300 hover:border-primary/30 open:border-primary/50 open:shadow-lg open:shadow-primary/10">
                     <summary class="flex justify-between items-center w-full p-5 cursor-pointer list-none text-left">
-                        <span class="font-bold text-heading group-hover:text-primary transition-colors pr-8">
+                        <h3 class="font-bold text-heading group-hover:text-primary transition-colors pr-8 text-base m-0">
                             {item.question}
-                        </span>
+                        </h3>
 
                         <span class="text-body/70 group-open:text-primary transition-transform duration-300 group-open:rotate-180 shrink-0">
                             <ChevronDown className="w-5 h-5" />
