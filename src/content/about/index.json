@@ -1,49 +1,50 @@
 {
   "hero": {
-    "title": "Fontaneros Profesionales en Madrid desde 2012",
-    "description": "Somos el fontanero de confianza de miles de familias y negocios en Madrid. Más de 10 años resolviendo instalaciones, averías y urgencias con garantía total y precio cerrado."
+    "title": "METALISUR — Carpintería de Aluminio en Málaga",
+    "description": "Fabricamos e instalamos ventanas, puertas, persianas, mosquiteras, mamparas y cerramientos de aluminio en Málaga. Más de 15 años con taller propio, sin intermediarios y con garantía en cada instalación."
   },
   "mainImage": {
-    "experienceBadge": "+10 Años"
+    "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&auto=format&fit=crop",
+    "experienceBadge": "+15 Años"
   },
   "history": {
-    "subtitle": "Nuestra Trayectoria desde 2012",
-    "title": "De Fontanero Autónomo a Equipo de Confianza en Madrid",
+    "subtitle": "Quiénes Somos",
+    "title": "De taller local a referencia en carpintería de aluminio en Málaga",
     "stats": [
-      { "value": "3.000+", "label": "Trabajos Realizados" },
-      { "value": "98%", "label": "Clientes Satisfechos" },
-      { "value": "45 min", "label": "Tiempo Medio de Llegada" },
-      { "value": "10", "label": "Años de Experiencia" }
+      { "value": "2.000+", "label": "Instalaciones" },
+      { "value": "15+", "label": "Años de Experiencia" },
+      { "value": "100%", "label": "Fabricación Propia" },
+      { "value": "6", "label": "Servicios Especializados" }
     ]
   },
   "values": {
     "title": "Nuestros Compromisos",
-    "description": "En Fontanería García nos regimos por tres principios que nunca negociamos: rapidez, transparencia y calidad en los materiales.",
+    "description": "Los principios que no negociamos en ningún trabajo, sea grande o pequeño.",
     "items": [
       {
-        "icon": "Clock",
-        "title": "Respuesta Rápida",
-        "description": "En urgencias llegamos en menos de 1 hora. Para trabajos planificados, disponibilidad en menos de 48 horas en toda la zona de Madrid."
+        "icon": "Wrench",
+        "title": "Fabricación a Medida",
+        "description": "Fabricamos en nuestro taller con las medidas exactas de cada hueco. Sin estándares que no encajan, sin holguras, sin remates que quedan mal."
+      },
+      {
+        "icon": "Award",
+        "title": "Materiales con Garantía",
+        "description": "Solo trabajamos con perfiles de aluminio y herrajes de primera calidad, con marcado CE y garantía del fabricante. Lo que instalamos dura."
+      },
+      {
+        "icon": "Users",
+        "title": "Instalación Propia",
+        "description": "Instalamos nosotros, sin subcontratar. El resultado de una carpintería depende tanto del producto como del montaje — por eso controlamos los dos."
       },
       {
         "icon": "Calculator",
         "title": "Precio Cerrado",
-        "description": "Te damos presupuesto antes de empezar. El precio que aceptas es el precio final, sin sorpresas al terminar."
-      },
-      {
-        "icon": "ShieldCheck",
-        "title": "Garantía por Escrito",
-        "description": "Todos nuestros trabajos incluyen garantía de 2 años en mano de obra y materiales. Lo ponemos por escrito siempre."
-      },
-      {
-        "icon": "Award",
-        "title": "Empresa Registrada",
-        "description": "Somos empresa legalmente constituida con todos los seguros en regla. Emitimos factura y tenemos habilitación para trabajar con gas."
+        "description": "Presupuesto con medidas reales antes de empezar. El precio que aceptas es el precio final. Sin letra pequeña, sin sorpresas al terminar."
       }
     ]
   },
   "seo": {
-    "title": "Sobre Nosotros | Fontanería García Madrid",
-    "description": "Conoce al equipo de Fontanería García. Fontaneros profesionales en Madrid con más de 10 años de experiencia y garantía total en todos los trabajos."
+    "title": "Quiénes Somos | METALISUR — Carpintería de Aluminio en Málaga",
+    "description": "Conoce a METALISUR, especialistas en carpintería de aluminio en Málaga. Fabricación propia, instalación profesional y más de 15 años de experiencia en ventanas, puertas, persianas y cerramientos."
   }
 }
