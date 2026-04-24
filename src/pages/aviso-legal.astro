@@ -1,306 +1,241 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
-import { Scale } from "lucide-react";
+import { Scale, ShieldCheck, AlertCircle, MapPin, User } from "lucide-react";
 import { getSettings } from "../lib/settings";
-
 import { getEntry } from "astro:content";
 
-// Fetch Global Settings
-const { siteName, city, niche, email, address, nif } = await getSettings();
+// Recuperamos la configuración global de la empresa
+const { siteName, city, niche, email, nif } = await getSettings();
+const ownerName = "Javier Ávila"; // Titular responsable
+const businessName = "METALISUR";
 
-// Fetch Legal Content from CMS
+// Intentamos cargar contenido desde el CMS, si no, usamos el fallback detallado
 const legacyEntry = await getEntry("legal", "aviso-legal");
-const { Content } = legacyEntry ? await legacyEntry.render() : { Content: null };
+const { Content } = legacyEntry
+  ? await legacyEntry.render()
+  : { Content: null };
 ---
 
 <Layout
-    title={`Aviso Legal | ${siteName}`}
-    description={`Aviso legal del sitio web ${siteName}`}
-    noindex={true}
+  title={`Aviso Legal | ${siteName}`}
+  description={`Aviso legal y condiciones de uso de ${siteName}`}
+  noindex={true}
 >
-    <section class="py-20 bg-secondary">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12">
-                    <div class="flex items-center justify-center gap-3 mb-6">
-                        <Scale className="w-8 h-8 text-primary" />
-                        <h1
-                            class="text-4xl font-heading font-bold text-heading"
-                        >
-                            Aviso Legal
-                        </h1>
-                    </div>
-                    <p class="text-body/70">
-                        Última actualización: {
-                            new Date().toLocaleDateString("es-ES", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                            })
-                        }
-                    </p>
-                </div>
-
-                <div
-                    class="prose prose-invert prose-headings:text-heading prose-p:text-body prose-strong:text-heading prose-li:text-body max-w-none"
-                >
-                    <div
-                        class="bg-surface/50 border border-heading/10 rounded-xl p-8 space-y-6"
-                    >
-                    {
-                        Content ? (
-                            <Content />
-                        ) : (
-                            // FALLBACK CONTENT (if no CMS entry exists)
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                1. Datos Identificativos
-                            </h2>
-                            <p class="text-body leading-relaxed">
-                                En cumplimiento del artículo 10 de la Ley
-                                34/2002, de 11 de julio, de Servicios de la
-                                Sociedad de la Información y Comercio
-                                Electrónico, se informa a los usuarios de los
-                                datos identificativos del titular de este sitio
-                                web:
-                            </p>
-                            <ul class="list-none space-y-2 mt-4 text-body">
-                                <li>
-                                    <strong class="text-heading"
-                                        >Titular:</strong
-                                    >
-                                    {siteName}
-                                </li>
-                                <li>
-                                    <strong class="text-heading"
-                                        >NIF/CIF:</strong
-                                    >
-                                    {nif || "Pendiente de asignar"}
-                                </li>
-                                <li>
-                                    <strong class="text-heading"
-                                        >Domicilio:</strong
-                                    >
-                                    {address || "Dirección no disponible"}
-                                </li>
-                                <li>
-                                    <strong class="text-heading">Email:</strong>
-                                    {email || "info@ejemplo.com"}
-                                </li>
-                                <li>
-                                    <strong class="text-heading"
-                                        >Sitio web:</strong
-                                    >
-                                    {Astro.site?.host || "www.ejemplo.com"}
-                                </li>
-                            </ul>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                2. Objeto y Naturaleza del Servicio
-                            </h2>
-                            <p class="text-body leading-relaxed mb-4">
-                                Este sitio web tiene como único objetivo <strong
-                                    class="text-primary"
-                                    >facilitar el contacto entre usuarios
-                                    interesados en servicios de {
-                                        niche.toLowerCase()
-                                    }
-                                    y profesionales del sector en {city}</strong
-                                >.
-                            </p>
-
-                            <div
-                                class="bg-primary/10 border border-primary/30 rounded-lg p-6 my-6"
-                            >
-                                <h3 class="text-xl font-bold text-primary mb-3">
-                                    ⚠️ IMPORTANTE - Descargo de Responsabilidad
-                                </h3>
-                                <p class="text-body leading-relaxed">
-                                    <strong
-                                        >{siteName} NO presta servicios de {
-                                            niche.toLowerCase()
-                                        }</strong
-                                    >. Este sitio web actúa únicamente como <strong
-                                        >intermediario o plataforma de contacto</strong
-                                    >
-                                    entre usuarios y profesionales independientes
-                                    del sector.
-                                </p>
-                                <p class="text-body leading-relaxed mt-3">
-                                    La titular del sitio web <strong
-                                        >NO se hace responsable</strong
-                                    > de:
-                                </p>
-                                <ul
-                                    class="list-disc list-inside space-y-2 mt-3 text-body"
-                                >
-                                    <li>
-                                        La calidad de los trabajos realizados
-                                        por los profesionales contactados
-                                    </li>
-                                    <li>
-                                        Los presupuestos, plazos o condiciones
-                                        acordadas entre el usuario y el
-                                        profesional
-                                    </li>
-                                    <li>
-                                        Cualquier incidencia, daño o perjuicio
-                                        derivado de la contratación de servicios
-                                    </li>
-                                    <li>
-                                        La veracidad de la información
-                                        proporcionada por terceros
-                                    </li>
-                                </ul>
-                                <p class="text-body leading-relaxed mt-3">
-                                    <strong
-                                        >Toda responsabilidad sobre los trabajos
-                                        ejecutados recae exclusivamente en el
-                                        profesional contratado.</strong
-                                    >
-                                </p>
-                            </div>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                3. Condiciones de Uso
-                            </h2>
-                            <p class="text-body leading-relaxed mb-3">
-                                El acceso y uso de este sitio web implica la
-                                aceptación de las presentes condiciones. El
-                                usuario se compromete a:
-                            </p>
-                            <ul
-                                class="list-disc list-inside space-y-2 text-body ml-4"
-                            >
-                                <li>
-                                    Utilizar el sitio web de forma lícita y
-                                    conforme a la legislación vigente
-                                </li>
-                                <li>
-                                    No realizar actividades fraudulentas o que
-                                    puedan dañar la imagen del sitio
-                                </li>
-                                <li>
-                                    Proporcionar información veraz en los
-                                    formularios de contacto
-                                </li>
-                                <li>
-                                    Respetar los derechos de propiedad
-                                    intelectual e industrial
-                                </li>
-                            </ul>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                4. Propiedad Intelectual e Industrial
-                            </h2>
-                            <p class="text-body leading-relaxed">
-                                Todos los contenidos de este sitio web (textos,
-                                imágenes, diseño, logotipos, código fuente,
-                                etc.) son propiedad de {siteName} o de terceros que
-                                han autorizado su uso, y están protegidos por las
-                                leyes de propiedad intelectual e industrial.
-                            </p>
-                            <p class="text-body leading-relaxed mt-3">
-                                Queda prohibida la reproducción, distribución,
-                                comunicación pública o transformación de los
-                                contenidos sin autorización expresa del titular.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                5. Limitación de Responsabilidad
-                            </h2>
-                            <p class="text-body leading-relaxed mb-3">
-                                El titular del sitio web no se responsabiliza
-                                de:
-                            </p>
-                            <ul
-                                class="list-disc list-inside space-y-2 text-body ml-4"
-                            >
-                                <li>
-                                    Interrupciones, errores o fallos en el
-                                    acceso al sitio web
-                                </li>
-                                <li>
-                                    Contenidos o servicios prestados por
-                                    terceros a través de enlaces externos
-                                </li>
-                                <li>
-                                    Virus o elementos dañinos que puedan afectar
-                                    al equipo del usuario
-                                </li>
-                                <li>
-                                    Uso indebido que terceros puedan hacer del
-                                    sitio web
-                                </li>
-                            </ul>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                6. Enlaces a Terceros
-                            </h2>
-                            <p class="text-body leading-relaxed">
-                                Este sitio web puede contener enlaces a sitios
-                                de terceros. El titular no se responsabiliza del
-                                contenido, políticas de privacidad o prácticas
-                                de estos sitios externos.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                7. Modificaciones
-                            </h2>
-                            <p class="text-body leading-relaxed">
-                                El titular se reserva el derecho a modificar, en
-                                cualquier momento y sin previo aviso, el
-                                contenido del sitio web y las presentes
-                                condiciones de uso.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                8. Legislación Aplicable y Jurisdicción
-                            </h2>
-                            <p class="text-body leading-relaxed">
-                                Las presentes condiciones se rigen por la
-                                legislación española. Para la resolución de
-                                cualquier controversia, las partes se someten a
-                                los Juzgados y Tribunales de {city}, renunciando
-                                expresamente a cualquier otro fuero que pudiera
-                                corresponderles.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 class="text-2xl font-bold text-heading mb-4">
-                                9. Contacto
-                            </h2>
-                            <p class="text-body leading-relaxed">
-                                Para cualquier consulta relacionada con este
-                                aviso legal, puede contactar en:
-                            </p>
-                            <p class="text-primary font-semibold mt-2">
-                                Email: {email}
-                            </p>
-                        </section>
-                        )
-                    }
-                    </div>
-                </div>
-            </div>
+  <section class="py-20 bg-[#0f172a]">
+    {/* Fondo oscuro elegante */}
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+          <div
+            class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6"
+          >
+            <Scale className="w-8 h-8 text-primary" />
+          </div>
+          <h1
+            class="text-4xl md:text-5xl font-heading font-bold text-white mb-4"
+          >
+            Aviso Legal
+          </h1>
+          <div class="h-1 w-20 bg-primary mx-auto mb-6"></div>
+          <p class="text-slate-400 text-sm">
+            De conformidad con la LSSI-CE, este documento regula el uso del
+            sitio web de {businessName}.
+          </p>
         </div>
-    </section>
 
-    <Footer />
+        <div
+          class="bg-slate-900/50 border border-slate-800 rounded-2xl p-8 md:p-12 shadow-2xl backdrop-blur-md"
+        >
+          <div class="prose prose-invert prose-primary max-w-none">
+            {
+              Content ? (
+                <Content />
+              ) : (
+                <div class="space-y-12">
+                  <section>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                      <User className="w-6 h-6 text-primary" />
+                      1. Datos del Titular
+                    </h2>
+                    <p class="mt-4 text-slate-300">
+                      En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa que el titular del sitio web es:
+                    </p>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 list-none p-0">
+                      <li class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                        <span class="block text-xs uppercase tracking-wider text-primary font-bold">
+                          Nombre Comercial
+                        </span>
+                        <span class="text-lg text-white font-semibold">
+                          {businessName}
+                        </span>
+                      </li>
+                      <li class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                        <span class="block text-xs uppercase tracking-wider text-primary font-bold">
+                          Responsable
+                        </span>
+                        <span class="text-lg text-white font-semibold">
+                          {ownerName}
+                        </span>
+                      </li>
+                      <li class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                        <span class="block text-xs uppercase tracking-wider text-primary font-bold">
+                          DNI / NIF
+                        </span>
+                        <span class="text-lg text-white font-semibold">
+                          {nif || "Disponible bajo petición"}
+                        </span>
+                      </li>
+                      <li class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                        <span class="block text-xs uppercase tracking-wider text-primary font-bold">
+                          Email de contacto
+                        </span>
+                        <span class="text-lg text-white font-semibold">
+                          {email}
+                        </span>
+                      </li>
+                    </ul>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                      <MapPin className="w-6 h-6 text-primary" />
+                      2. Actividad y Ámbito de Actuación
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Este sitio web ofrece información comercial sobre servicios de <strong>{niche}</strong> especializados en el área de <strong>{city}</strong> y provincia. {businessName} opera como empresa de servicios profesionales, realizando los trabajos directamente en el domicilio o local del cliente dentro de su zona de cobertura.
+                    </p>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      La finalidad del sitio web es exclusivamente informativa y comercial. No se realiza venta online de productos ni contratación de servicios a través de la web.
+                    </p>
+                    <div class="bg-primary/5 border-l-4 border-primary p-6 mt-6 rounded-r-lg">
+                      <div class="flex gap-4">
+                        <AlertCircle className="w-6 h-6 text-primary shrink-0" />
+                        <p class="text-sm text-slate-300">
+                          <strong>Nota sobre la contratación:</strong> El envío de un formulario o mensaje de WhatsApp no constituye un contrato vinculante. La relación contractual se inicia únicamente tras la aceptación expresa de un presupuesto formal emitido por {businessName}, previo estudio técnico o visita de medición.
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      3. Condiciones de Uso
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación plena de las presentes condiciones. El usuario se compromete a hacer un uso adecuado de los contenidos y servicios ofrecidos, y a no emplearlos para realizar actividades ilícitas o contrarias a la buena fe y al ordenamiento jurídico.
+                    </p>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Queda expresamente prohibido el uso de este sitio web para:
+                    </p>
+                    <ul class="mt-4 space-y-2 text-slate-300 list-disc list-inside">
+                      <li>Realizar actividades ilícitas, ilegales o contrarias a la buena fe y al orden público.</li>
+                      <li>Difundir contenidos o propaganda de carácter racista, xenófobo, pornográfico o que vulnere los derechos humanos.</li>
+                      <li>Provocar daños en los sistemas físicos y lógicos del titular, de sus proveedores o de terceros.</li>
+                      <li>Intentar acceder sin autorización a los sistemas informáticos del titular o de terceros.</li>
+                      <li>Vulnerar los derechos de propiedad intelectual o industrial, así como los datos personales de terceros.</li>
+                    </ul>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      {businessName} se reserva el derecho de retirar el acceso al sitio web, de forma unilateral y sin previo aviso, a cualquier usuario que incumpla las presentes condiciones.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                      <ShieldCheck className="w-6 h-6 text-primary" />
+                      4. Propiedad Intelectual e Industrial
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Todos los derechos de propiedad intelectual e industrial de este sitio web — incluyendo, con carácter enunciativo y no limitativo, su diseño gráfico, estructura, textos, fotografías, logotipos, iconos, imágenes, código fuente y demás elementos — son titularidad exclusiva de <strong>{ownerName} ({businessName})</strong> o de terceros que han autorizado expresamente su uso.
+                    </p>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Queda estrictamente prohibida su reproducción total o parcial, distribución, comunicación pública, transformación o cualquier otra forma de explotación, por cualquier medio o procedimiento, sin la autorización previa, expresa y por escrito del titular. El incumplimiento de lo anterior constituirá una infracción de los derechos de propiedad intelectual e industrial del titular.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      5. Política de Enlazado
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Este sitio web puede contener enlaces a páginas de terceros. {businessName} no controla ni se responsabiliza de los contenidos, productos o servicios de dichos sitios, ni de las prácticas de privacidad de sus titulares. Se recomienda al usuario que revise los avisos legales y políticas de privacidad de cada sitio externo que visite.
+                    </p>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Cualquier persona o entidad que desee establecer un enlace hacia este sitio web deberá hacerlo de forma que el enlace apunte a la página de inicio o a una sección concreta, y no reproduzca sus contenidos. Queda prohibido el uso de <em>framing</em> o cualquier técnica que suponga la visualización de este sitio dentro de otro sitio web sin autorización expresa.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      6. Protección de Datos Personales
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      El tratamiento de los datos personales recogidos a través de los formularios de contacto de este sitio web está sujeto a lo establecido en nuestra <a href="/privacidad/" class="text-primary hover:text-accent underline font-semibold">Política de Privacidad</a>, de conformidad con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD).
+                    </p>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      El usuario tiene derecho a acceder, rectificar, suprimir, limitar el tratamiento, portabilidad y oposición al tratamiento de sus datos personales. Para ejercer estos derechos puede contactar con {businessName} en la dirección de email <strong>{email}</strong>.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      7. Cookies
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Este sitio web utiliza cookies propias y de terceros para mejorar la experiencia de navegación y obtener estadísticas de uso. Puede consultar la información detallada sobre qué cookies se utilizan, para qué finalidad y cómo gestionarlas en nuestra <a href="/cookies/" class="text-primary hover:text-accent underline font-semibold">Política de Cookies</a>.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      8. Exclusión de Garantías y Responsabilidad
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      {businessName} no garantiza la disponibilidad continua del sitio web ni la ausencia de errores en sus contenidos. El titular no será responsable de los daños o perjuicios de cualquier naturaleza derivados de:
+                    </p>
+                    <ul class="mt-4 space-y-2 text-slate-300 list-disc list-inside">
+                      <li>La imposibilidad de acceso al sitio web o la falta de veracidad, exactitud o actualidad de sus contenidos.</li>
+                      <li>La existencia de virus o programas maliciosos en los sistemas del usuario derivados del acceso a este sitio.</li>
+                      <li>El uso ilícito, negligente, fraudulento o contrario a este aviso legal por parte del usuario.</li>
+                      <li>La falta de licitud, calidad, fiabilidad, utilidad y disponibilidad de los servicios prestados por terceros enlazados desde este sitio.</li>
+                    </ul>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      {businessName} se reserva el derecho a modificar, suspender o interrumpir el acceso al sitio web en cualquier momento y sin previo aviso.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      9. Modificaciones del Aviso Legal
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      {businessName} se reserva el derecho a modificar las presentes condiciones en cualquier momento. Los cambios serán efectivos desde su publicación en este sitio web. Se recomienda al usuario revisar periódicamente este aviso legal para estar informado de posibles actualizaciones.
+                    </p>
+                  </section>
+
+                  <section>
+                    <h2 class="text-2xl font-bold text-white">
+                      10. Ley Aplicable y Jurisdicción
+                    </h2>
+                    <p class="mt-4 text-slate-300 leading-relaxed">
+                      Este aviso legal se rige en su integridad por la legislación española. Para la resolución de cualquier controversia o conflicto que pudiera derivarse del acceso o uso de este sitio web, las partes, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, se someten a la jurisdicción de los Juzgados y Tribunales de la ciudad de <strong>{city}</strong>, España.
+                    </p>
+                  </section>
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        <div class="mt-12 text-center text-slate-500 text-sm">
+          <p>
+            &copy; {new Date().getFullYear()}
+            {businessName} | {ownerName}. Todos los derechos reservados.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
 </Layout>
