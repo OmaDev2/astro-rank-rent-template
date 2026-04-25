@@ -3,10 +3,10 @@
  * Google Search Console Verification Meta Tag
  * Añade automáticamente el meta tag de verificación si está configurado
  */
-import { getEntry } from "astro:content";
+import { getSettings } from "@/lib/settings";
 
-const analytics = await getEntry("analytics", "global");
-const searchConsoleVerification = analytics?.data?.searchConsoleVerification;
+const settings = await getSettings();
+const searchConsoleVerification = settings.searchConsoleVerification;
 ---
 
 {

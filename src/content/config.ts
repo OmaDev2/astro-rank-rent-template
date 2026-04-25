@@ -206,42 +206,11 @@ const design = defineCollection({
     }),
 });
 
-// Social Media
-const social = defineCollection({
-    type: 'data',
-    schema: z.object({
-        facebook: z.string().optional(),
-        instagram: z.string().optional(),
-    }),
-});
 
-// Analytics
-const analytics = defineCollection({
-    type: 'data',
-    schema: z.object({
-        googleAnalyticsId: z.string().optional(),
-        gtmId: z.string().optional(),
-        searchConsoleVerification: z.string().optional(),
-    }),
-});
 
-// Schema.org Structured Data
-const schema = defineCollection({
-    type: 'data',
-    schema: z.object({
-        priceRange: z.string().optional(),
-        openingHours: z.array(z.object({
-            dayOfWeek: z.array(z.string()),
-            opens: z.string(),
-            closes: z.string(),
-        })).optional(),
-        areaServed: z.array(z.string()).optional(),
-        serviceRadius: z.number().optional().default(0),
-        paymentAccepted: z.array(z.string()).optional(),
-        foundingDate: z.string().optional(),
-        slogan: z.string().optional(),
-    }),
-});
+
+
+
 
 const pages = defineCollection({
     schema: z.object({
@@ -424,53 +393,22 @@ const about = defineCollection({
     }).passthrough(),
 });
 
-const legal = defineCollection({
-    type: 'content',
-    schema: z.object({}),
-});
 
-// Inicio Rápido — configuración esencial en un solo formulario
-const quickstart = defineCollection({
-    type: 'data',
-    schema: z.object({
-        _spintax: z.string().optional(), // UI-only helper, not used at runtime
-        siteName: z.string().optional(),
-        niche: z.string().optional(),
-        city: z.string().optional(),
-        phone: z.string().optional(),
-        whatsapp: z.string().optional(),
-        email: z.string().optional(),
-        siteUrl: z.string().optional(),
-        logo: z.string().optional(),
-        ctaText: z.string().optional(),
-        businessType: z.string().optional(),
-        seo: z.string().optional(),
-        fontPair: z.string().optional(),
-        googleAnalyticsId: z.string().optional(),
-        gtmId: z.string().optional(),
-        n8nWebhookUrl: z.string().optional(),
-        facebook: z.string().optional(),
-        instagram: z.string().optional(),
-    }),
-});
+
+
 
 export const collections = {
-    quickstart,
     locations,
     services,
     projects,
     business,
     design,
-    social,
-    analytics,
-    schema,
     pages,
     testimonials,
     navigation,
     form,
     footer,
     blog,
-    legal,
     about,
 };
 

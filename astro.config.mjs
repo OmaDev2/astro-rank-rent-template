@@ -2,12 +2,19 @@ import { defineConfig } from 'astro/config';
 import fs from 'node:fs';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
-import keystatic from '@keystatic/astro';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
 import netlify from '@astrojs/netlify';
 import robotsTxt from 'astro-robots-txt';
+
+// ── Keystatic: solo en desarrollo ────────────────────────────
+// En producción no queremos el panel admin ni sus rutas /keystatic
+const isDev = import.meta.env?.DEV ?? process.env.NODE_ENV !== 'production';
+let keystatic;
+if (isDev) {
+  keystatic = (await import('@keystatic/astro')).default;
+}
 
 // Leer siteUrl desde global.yaml manualmente (no podemos usar astro:content aquí)
 function getSiteUrl() {
@@ -36,7 +43,8 @@ export default defineConfig({
 
   integrations: [
     react(),
-    keystatic(),
+    // Keystatic solo en desarrollo — en producción no se genera /keystatic
+    ...(isDev && keystatic ? [keystatic()] : []),
     mdx(),
     tailwind(),
     sitemap({
@@ -120,7 +128,8 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      noExternal: ['@keystatic/core', '@keystatic/astro', '@keystar/ui'],
+      // Solo necesario en dev para Keystatic
+      noExternal: isDev ? ['@keystatic/core', '@keystatic/astro', '@keystar/ui'] : [],
     },
     optimizeDeps: {
       exclude: ['@resvg/resvg-js']
