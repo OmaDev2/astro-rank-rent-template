@@ -1,38 +1,61 @@
 ---
 import { MapPin } from "lucide-react";
 
-interface Props {
-    coordinates?: { lat?: string; lng?: string };
-    locationName?: string;
-    zipCodes?: string[];
+interface CityDot {
+    name: string;
+    lat: number;
+    lng: number;
 }
 
-const { coordinates, locationName = "Zona de Servicio", zipCodes } = Astro.props;
+interface Props {
+    coordinates?: { lat?: string; lng?: string }; // pin: coordenadas de la zona concreta
+    center?: { lat?: string; lng?: string };       // centro del círculo de cobertura (settings)
+    locationName?: string;
+    city?: string;
+    radius?: number;    // km — de settings.serviceRadius
+    zipCodes?: string[];
+    cities?: CityDot[]; // puntos opcionales en el mapa
+}
 
-const locationLat = parseFloat(coordinates?.lat || "0") || null;
-const locationLng = parseFloat(coordinates?.lng || "0") || null;
+const {
+    coordinates,
+    center,
+    locationName = "Zona de Servicio",
+    city,
+    radius = 30,
+    zipCodes,
+    cities = [],
+} = Astro.props;
 
-// Costa del Sol service area constants
-const SERVICE_CENTER_LAT = 36.56;
-const SERVICE_CENTER_LNG = -4.78;
-const SERVICE_RADIUS_KM  = 52;
-const MAP_ZOOM = 10;
+// Pin de la localización concreta
+const pinLat = parseFloat(coordinates?.lat || "0") || null;
+const pinLng = parseFloat(coordinates?.lng || "0") || null;
+
+// Centro del mapa: pin si existe, si no base del negocio, si no 0/0
+const rawCenterLat = parseFloat(center?.lat || coordinates?.lat || "0");
+const rawCenterLng = parseFloat(center?.lng || coordinates?.lng || "0");
+const centerLat = isNaN(rawCenterLat) ? 0 : rawCenterLat;
+const centerLng = isNaN(rawCenterLng) ? 0 : rawCenterLng;
+const hasCenter = centerLat !== 0 || centerLng !== 0;
+
+// Zoom automático según radio de cobertura
+const mapZoom = radius <= 10 ? 12 : radius <= 20 ? 11 : radius <= 40 ? 10 : radius <= 80 ? 9 : 8;
 
 const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
+const badgeText = city ? `Servicio disponible en ${city} y alrededores` : "Cobertura en zona de servicio";
 ---
 
 <section class="w-full h-[450px] bg-secondary border-t border-heading/10 relative z-10">
 
     <div id={uid} class="w-full h-full"></div>
 
-    <!-- Service area badge -->
     <div class="absolute bottom-6 left-6 bg-surface/95 backdrop-blur-sm p-4 rounded-lg shadow-xl border border-heading/10 max-w-xs pointer-events-none z-[1000]">
         <p class="font-bold text-heading text-sm mb-1 flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary shrink-0" />
             Zona de servicio: {locationName}
         </p>
         <p class="text-body text-xs leading-relaxed">
-            Cubrimos toda la Costa del Sol · Málaga → Estepona
+            {badgeText}
         </p>
         {zipCodes && zipCodes.length > 0 && (
             <p class="text-muted text-xs mt-1">C.P.: {zipCodes.join(", ")}</p>
@@ -41,10 +64,9 @@ const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
 
     <script
         is:inline
-        define:vars={{ uid, locationLat, locationLng, locationName, SERVICE_CENTER_LAT, SERVICE_CENTER_LNG, SERVICE_RADIUS_KM, MAP_ZOOM }}
+        define:vars={{ uid, pinLat, pinLng, centerLat, centerLng, hasCenter, radius, mapZoom, locationName, cities }}
     >
         (function () {
-            // Inject Leaflet CSS
             if (!document.getElementById("leaflet-css")) {
                 const link = document.createElement("link");
                 link.id   = "leaflet-css";
@@ -53,7 +75,6 @@ const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
                 document.head.appendChild(link);
             }
 
-            // Inject grayscale + label styles once
             if (!document.getElementById("map-block-styles")) {
                 const style = document.createElement("style");
                 style.id = "map-block-styles";
@@ -84,21 +105,25 @@ const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
                 const container = document.getElementById(uid);
                 if (!container || container._leaflet_id) return;
 
+                // Si no hay coordenadas configuradas, mostrar mensaje en lugar de mapa vacío
+                if (!hasCenter) {
+                    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888;font-size:14px;">Configura las coordenadas del negocio en los ajustes para mostrar el mapa.</div>';
+                    return;
+                }
+
                 const map = L.map(uid, {
-                    center:             [SERVICE_CENTER_LAT, SERVICE_CENTER_LNG],
-                    zoom:               MAP_ZOOM,
+                    center:             [centerLat, centerLng],
+                    zoom:               mapZoom,
                     scrollWheelZoom:    false,
                     zoomControl:        true,
                     attributionControl: true,
                 });
 
-                // Tile layer with grayscale class
                 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                     className:   "mb-tiles",
                 }).addTo(map);
 
-                // Hover: temporarily un-grayscale the map
                 container.addEventListener("mouseenter", () => {
                     document.querySelectorAll(".mb-tiles").forEach(el => el.classList.add("active"));
                 });
@@ -106,24 +131,15 @@ const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
                     document.querySelectorAll(".mb-tiles").forEach(el => el.classList.remove("active"));
                 });
 
-                // Service coverage circle (Costa del Sol)
-                L.circle([SERVICE_CENTER_LAT, SERVICE_CENTER_LNG], {
-                    radius:      SERVICE_RADIUS_KM * 1000,
+                // Círculo de cobertura centrado en la base del negocio
+                L.circle([centerLat, centerLng], {
+                    radius:      radius * 1000,
                     color:       "#f0a824",
                     weight:      2,
                     opacity:     0.75,
                     fillColor:   "#f0a824",
                     fillOpacity: 0.10,
                 }).addTo(map);
-
-                // City dots along the Costa del Sol corridor
-                const cities = [
-                    { name: "Málaga",       lat: 36.7213, lng: -4.4214 },
-                    { name: "Torremolinos", lat: 36.6218, lng: -4.4997 },
-                    { name: "Fuengirola",   lat: 36.5390, lng: -4.6260 },
-                    { name: "Marbella",     lat: 36.5101, lng: -4.8825 },
-                    { name: "Estepona",     lat: 36.4265, lng: -5.1465 },
-                ];
 
                 function makeIcon(highlighted) {
                     const size = highlighted ? 14 : 9;
@@ -141,10 +157,11 @@ const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
                     });
                 }
 
-                cities.forEach(({ name, lat, lng }) => {
-                    L.marker([lat, lng], { icon: makeIcon(false) })
+                // Puntos de ciudad opcionales
+                cities.forEach(function(c) {
+                    L.marker([c.lat, c.lng], { icon: makeIcon(false) })
                         .addTo(map)
-                        .bindTooltip(name, {
+                        .bindTooltip(c.name, {
                             permanent:  true,
                             direction:  "top",
                             offset:     [0, -8],
@@ -152,16 +169,15 @@ const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
                         });
                 });
 
-                // Highlighted pin for the current location
-                if (locationLat && locationLng) {
-                    L.marker([locationLat, locationLng], { icon: makeIcon(true) })
+                // Pin destacado para la localización concreta
+                if (pinLat && pinLng) {
+                    L.marker([pinLat, pinLng], { icon: makeIcon(true) })
                         .addTo(map)
                         .bindPopup(`<strong>${locationName}</strong><br><span style="color:#f0a824;font-size:11px">✓ Zona cubierta</span>`)
                         .openPopup();
                 }
             }
 
-            // Load Leaflet JS then initialize
             if (typeof L !== "undefined") {
                 buildMap();
             } else {
