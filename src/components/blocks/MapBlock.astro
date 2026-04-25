@@ -1,5 +1,6 @@
 ---
 import { MapPin } from "lucide-react";
+import { getSettings } from "@/lib/settings";
 
 interface CityDot {
     name: string;
@@ -9,20 +10,22 @@ interface CityDot {
 
 interface Props {
     coordinates?: { lat?: string; lng?: string }; // pin: coordenadas de la zona concreta
-    center?: { lat?: string; lng?: string };       // centro del círculo de cobertura (settings)
+    center?: { lat?: string; lng?: string };       // centro del círculo (sobrescribe settings)
     locationName?: string;
     city?: string;
-    radius?: number;    // km — de settings.serviceRadius
+    radius?: number;    // km — sobrescribe settings.serviceRadius
     zipCodes?: string[];
-    cities?: CityDot[]; // puntos opcionales en el mapa
+    cities?: CityDot[];
 }
+
+const settings = await getSettings();
 
 const {
     coordinates,
-    center,
+    center = settings.coordinates,
     locationName = "Zona de Servicio",
-    city,
-    radius = 30,
+    city = settings.city,
+    radius = settings.serviceRadius || 30,
     zipCodes,
     cities = [],
 } = Astro.props;

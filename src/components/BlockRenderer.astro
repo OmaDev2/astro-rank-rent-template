@@ -335,10 +335,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         return (
           <MapBlock
             coordinates={coordinates}
-            center={config?.coordinates}
             locationName={locationName}
-            city={config?.city}
-            radius={config?.serviceRadius}
             zipCodes={zipCodes}
           />
         );
@@ -370,7 +367,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         );
 
       case "faq":
-        const faqItems = value?.faqs || value?.questions || value || []; // Handle both formats
+        const faqItems = value?.faqs || value?.questions || (Array.isArray(value) ? value : null) || faq || [];
         if (isHome) {
           return faqItems && faqItems.length > 0 ? (
             <div class={`py-20 ${bgClass}`}>
