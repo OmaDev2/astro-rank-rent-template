@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "astro build",
+        "check:site": "node scripts/preflight.mjs",
+        "build": "node scripts/preflight.mjs && astro build",
         "preview": "astro preview",
         "astro": "astro",
         "optimize-images": "node scripts/optimize-images.mjs",

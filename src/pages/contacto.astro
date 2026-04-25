@@ -143,7 +143,18 @@ const schema = buildContactGraph({
                     <h3 class="text-2xl font-bold text-heading mb-6">
                         Envíenos un Mensaje
                     </h3>
-                    <form class="space-y-6">
+                    <form
+                        class="space-y-6"
+                        method="POST"
+                        data-netlify="true"
+                        name="contact-page"
+                        data-netlify-honeypot="bot-field"
+                        action="/gracias"
+                    >
+                        {/* Honeypot anti-spam — invisible para usuarios, atrapa bots */}
+                        <p class="hidden" aria-hidden="true">
+                            <label>No rellenar: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+                        </p>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label
@@ -257,8 +268,7 @@ const schema = buildContactGraph({
                         <button
                             type="submit"
                             id="submit-button-contact"
-                            disabled
-                            class="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-primary/25"
+                            class="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/25"
                         >
                             <Send className="w-5 h-5" />
                             Enviar Solicitud
@@ -276,20 +286,5 @@ const schema = buildContactGraph({
     <Footer />
 </Layout>
 
-<script>
-    // Enable/disable submit button based on privacy checkbox
-    document.addEventListener("DOMContentLoaded", () => {
-        const privacyCheckbox = document.getElementById(
-            "privacy-contact",
-        ) as HTMLInputElement;
-        const submitButton = document.getElementById(
-            "submit-button-contact",
-        ) as HTMLButtonElement;
 
-        if (privacyCheckbox && submitButton) {
-            privacyCheckbox.addEventListener("change", () => {
-                submitButton.disabled = !privacyCheckbox.checked;
-            });
-        }
-    });
-</script>
+

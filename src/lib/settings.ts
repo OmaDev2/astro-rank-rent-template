@@ -37,9 +37,9 @@ export async function getSettings() {
             lat: b?.coordinates?.lat || '40.4168',
             lng: b?.coordinates?.lng || '-3.7038',
         },
-        phone:    b?.phone    || '600 000 000',
-        whatsapp: b?.whatsapp || '34600000000',
-        email:    b?.email    || 'contacto@ejemplo.com',
+        phone:    b?.phone    || '',
+        whatsapp: b?.whatsapp || '',
+        email:    b?.email    || '',
         schedule: b?.schedule || 'Lunes a Viernes: 9:00 - 18:00',
         nif:      b?.nif      || '',
 

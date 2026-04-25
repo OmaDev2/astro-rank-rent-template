@@ -238,6 +238,10 @@ const heroProcessed = isHome
             />
         )}
         <meta name="viewport" content="width=device-width" />
+        {/* #5 — Staging noindex: bloquea indexación en previews de Netlify */}
+        {import.meta.env.PUBLIC_SITE_ENV !== "production" && (
+            <meta name="robots" content="noindex,nofollow" />
+        )}
         {settings.favicon
             ? <link rel="icon" href={settings.favicon} />
             : <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

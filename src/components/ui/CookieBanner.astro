@@ -157,12 +157,20 @@
         document.getElementById("cookie-banner")?.classList.add("translate-y-full");
     }
 
-    function grantAnalytics() {
+    function updateConsent(analytics: boolean) {
         const w = window as any;
         w.dataLayer = w.dataLayer || [];
         w.gtag = w.gtag || function () { w.dataLayer.push(arguments); };
-        w.gtag("consent", "update", { analytics_storage: "granted" });
+        w.gtag("consent", "update", {
+            analytics_storage: analytics ? "granted" : "denied",
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+        });
     }
+
+    // Exponer para uso externo (GTM, scripts de terceros)
+    (window as any).updateConsent = updateConsent;
 
     function acceptCookies(analytics: boolean = true) {
         setCookie(
@@ -171,7 +179,7 @@
             COOKIE_EXPIRY_DAYS,
         );
         hideBanner();
-        if (analytics) grantAnalytics();
+        updateConsent(analytics);
     }
 
     function getModalFocusables(): HTMLElement[] {
