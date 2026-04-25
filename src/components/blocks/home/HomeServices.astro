@@ -1,5 +1,6 @@
 ---
 import { ChevronRight } from "lucide-react";
+import { slugify } from "@/utils/slugify";
 const {
     servicesSection,
     featuredServices = [],
@@ -72,9 +73,7 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
                     if (item.discriminant) {
                         if (item.discriminant === "manual") {
                             data = item.value;
-                            slug = data.title
-                                ?.toLowerCase()
-                                .replace(/\s+/g, "-");
+                            slug = slugify(data.title ?? "");
                             link = data.link || `/servicios/${slug}/`;
                         } else if (item.discriminant === "auto") {
                             const serviceSlug = item.value.service;
@@ -116,9 +115,7 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
                     // 3. Caso Manual Antiguo (si hubiera datos legacy sin discriminant)
                     else {
                         data = item;
-                        slug =
-                            item.slug ||
-                            item.name?.toLowerCase().replace(/\s+/g, "-");
+                        slug = item.slug || slugify(item.name ?? "");
                         link = item.link || `/servicios/${slug}/`;
                     }
 
@@ -134,9 +131,12 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
                             href={link}
                             class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
                         >
-                            <div
-                                class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                style={`background-image: url('${image}')`}
+                            <img
+                                src={image}
+                                alt={title}
+                                loading="lazy"
+                                decoding="async"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
                             {data.isPopular && (

@@ -34,45 +34,51 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
                     )}
                 </div>
 
-                <div class="relative max-w-5xl mx-auto">
-                    {/* Vertical Line (Desktop) */}
-                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 -translate-x-1/2" />
+                {/* Mobile: numbered cards */}
+                <div class="md:hidden space-y-4">
+                    {process.steps.map((step, index) => (
+                        <div class={`${cardBgClass} rounded-2xl shadow-lg border border-heading/5 relative overflow-hidden`}>
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-50" />
+                            <div class="flex items-start gap-4 p-6">
+                                <div class={`shrink-0 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center shadow-md`}>
+                                    <span class="font-bold text-primary text-sm">{index + 1}</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-heading mb-2">
+                                        {step.title || (step as any).name}
+                                    </h3>
+                                    <p class="text-body leading-relaxed text-sm">{step.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
-                    <div class="space-y-12 md:space-y-0">
+                {/* Desktop: alternating timeline */}
+                <div class="hidden md:block relative max-w-5xl mx-auto">
+                    <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 -translate-x-1/2" />
+                    <div>
                         {process.steps.map((step, index) => (
                             <div
-                                class={`relative flex items-center ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+                                class={`relative flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
                             >
-                                {/* Content Side */}
-                                <div class="flex-1 md:w-1/2 p-6">
+                                <div class="flex-1 w-1/2 p-6">
                                     <div
-                                        class={`${cardBgClass} p-8 rounded-2xl shadow-lg border border-heading/5 relative hover:-translate-y-1 transition-transform duration-300 ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}
+                                        class={`${cardBgClass} p-8 rounded-2xl shadow-lg border border-heading/5 relative hover:-translate-y-1 transition-transform duration-300 ${index % 2 === 0 ? "text-right" : "text-left"}`}
                                     >
                                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-2xl opacity-50" />
                                         <h3 class="text-2xl font-bold text-heading mb-3">
                                             {step.title || (step as any).name}
                                         </h3>
-                                        <p class="text-body leading-relaxed">
-                                            {step.description}
-                                        </p>
+                                        <p class="text-body leading-relaxed">{step.description}</p>
                                     </div>
                                 </div>
-
-                                {/* Center Circle */}
                                 <div
-                                    class={`absolute left-0 md:left-1/2 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center z-10 -translate-x-1/2 md:-translate-x-1/2 shadow-md`}
+                                    class={`absolute left-1/2 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center z-10 -translate-x-1/2 shadow-md`}
                                 >
-                                    <span class="font-bold text-primary text-sm">
-                                        {index + 1}
-                                    </span>
+                                    <span class="font-bold text-primary text-sm">{index + 1}</span>
                                 </div>
-
-                                {/* Empty Side (Desktop) */}
-                                <div class="hidden md:block flex-1 md:w-1/2" />
-
-                                {/* Mobile Line Fix: Add padding to content to avoid overlap with absolute circle if needed, but flex layout handles it mostly. 
-                    Actually for mobile, the circle is absolute left-0. We need to push content.
-                */}
+                                <div class="flex-1 w-1/2" />
                             </div>
                         ))}
                     </div>
@@ -81,13 +87,3 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
         </section>
     )
 }
-
-<style>
-    /* Mobile adjustments */
-    @media (max-width: 768px) {
-        .container {
-            padding-left: 2rem; /* Make space for the timeline line/circles if we want them on the left */
-        }
-        /* Override the absolute positioning for mobile to be a simple left-aligned timeline */
-    }
-</style>

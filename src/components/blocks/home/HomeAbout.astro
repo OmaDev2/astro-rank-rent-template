@@ -6,6 +6,11 @@ import { CheckCircle, ArrowRight } from "lucide-react";
 const { aboutSection, bgClass = "bg-secondary" } = Astro.props;
 if (!aboutSection) return null;
 
+const boldMarkdown = (text: string) =>
+    text
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-heading">$1</strong>');
+
 const isDefaultImage =
     !aboutSection.image ||
     aboutSection.image === "/images/home/about-placeholder.jpg" ||
@@ -84,13 +89,7 @@ const TitleTag = aboutSection?.titleTag || "h2";
                         ).map(
                             (p: string) =>
                                 p.trim() && (
-                                    <p
-                                        class="mb-4"
-                                        set:html={p.replace(
-                                            /\*\*(.*?)\*\*/g,
-                                            '<strong class="text-heading">$1</strong>',
-                                        )}
-                                    />
+                                    <p class="mb-4" set:html={boldMarkdown(p)} />
                                 ),
                         )
                     }
