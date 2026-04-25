@@ -48,8 +48,8 @@ const areaServed = settings.areaServed || [];
 // Dynamically generate the province items based on areaServed (excluding main city "Málaga")
 if (group2 && areaServed.length > 0) {
     const dynamicItems = areaServed
-        .filter(city => city !== "Málaga")
-        .map(city => ({
+        .filter((city: string) => city !== "Málaga")
+        .map((city: string) => ({
             name: city,
             icon: "MapPin"
         }));
