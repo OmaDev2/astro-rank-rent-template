@@ -35,11 +35,17 @@ const MAX_FOOTER_LOCATIONS = 12;
 const sortedServices = allServices
     .sort((a, b) => a.data.title.localeCompare(b.data.title))
     .slice(0, MAX_FOOTER_SERVICES);
-const sortedLocations = allLocations
-    .sort((a, b) => a.data.name.localeCompare(b.data.name))
-    .slice(0, MAX_FOOTER_LOCATIONS);
+const areaServed = settings.areaServed || [];
+const displayLocations = areaServed.map(cityName => {
+    const locFile = allLocations.find(l => l.data.name === cityName);
+    return {
+        name: cityName,
+        url: locFile ? `/zona/${locFile.slug}/` : null
+    };
+}).slice(0, MAX_FOOTER_LOCATIONS);
+
 const hasMoreServices = allServices.length > MAX_FOOTER_SERVICES;
-const hasMoreLocations = allLocations.length > MAX_FOOTER_LOCATIONS;
+const hasMoreLocations = areaServed.length > MAX_FOOTER_LOCATIONS;
 ---
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
@@ -138,33 +144,42 @@ const hasMoreLocations = allLocations.length > MAX_FOOTER_LOCATIONS;
                 )}
 
                 {/* COL 4 — ZONAS (SEO interlinking) */}
-                {sortedLocations.length > 0 && (
+                {displayLocations.length > 0 && (
                     <div>
                         <div class="text-heading font-bold mb-4 uppercase tracking-wider text-sm">
                             Zonas de Servicio
                         </div>
                         <ul class="grid grid-cols-2 gap-x-3 gap-y-2">
-                            {sortedLocations.map((loc) => (
+                            {displayLocations.map((loc) => (
                                 <li>
-                                    <a
-                                        href={`/zona/${loc.slug}/`}
-                                        class="group flex items-center gap-1.5 text-sm text-body hover:text-heading transition-colors"
-                                    >
-                                        <span class="w-1.5 h-1.5 rounded-full bg-body/40 group-hover:bg-primary transition-colors shrink-0" />
-                                        <span class="group-hover:translate-x-0.5 transition-transform duration-200 truncate">
-                                            {loc.data.name}
-                                        </span>
-                                    </a>
+                                    {loc.url ? (
+                                        <a
+                                            href={loc.url}
+                                            class="group flex items-center gap-1.5 text-sm text-body hover:text-heading transition-colors"
+                                        >
+                                            <span class="w-1.5 h-1.5 rounded-full bg-body/40 group-hover:bg-primary transition-colors shrink-0" />
+                                            <span class="group-hover:translate-x-0.5 transition-transform duration-200 truncate">
+                                                {loc.name}
+                                            </span>
+                                        </a>
+                                    ) : (
+                                        <div class="flex items-center gap-1.5 text-sm text-body">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-body/40 shrink-0" />
+                                            <span class="truncate">{loc.name}</span>
+                                        </div>
+                                    )}
                                 </li>
                             ))}
                         </ul>
-                        <div class="mt-4 pt-4 border-t border-heading/10">
-                            <a href="/zonas/"
-                                class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
-                                Ver cobertura completa
-                                <ArrowRight className="w-3 h-3" />
-                            </a>
-                        </div>
+                        {hasMoreLocations && (
+                            <div class="mt-4 pt-4 border-t border-heading/10">
+                                <a href="/zonas/"
+                                    class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
+                                    Ver cobertura completa
+                                    <ArrowRight className="w-3 h-3" />
+                                </a>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
