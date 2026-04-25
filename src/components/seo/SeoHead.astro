@@ -1,7 +1,7 @@
 ---
 import { SEO } from "astro-seo";
 import type { WithContext, Thing } from "schema-dts";
-import { getSettings } from "../lib/settings";
+import { getSettings } from "@/lib/settings";
 
 const settings = await getSettings();
 const siteName = settings.siteName || "Herrero Zaragoza";

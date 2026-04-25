@@ -1,6 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
-import GeneradorIA from '../components/GeneradorIA';
+import GeneradorIA from '../components/admin/GeneradorIA';
 
 const business = await getEntry('business', 'global');
 const businessName = business?.data?.siteName ?? 'Mi Negocio';
