@@ -30,19 +30,25 @@ const {
     cities = [],
 } = Astro.props;
 
-// Pin de la localización concreta
+// Pin de la localización concreta (coordenadas de la localidad, ej: Estepona)
 const pinLat = parseFloat(coordinates?.lat || "0") || null;
 const pinLng = parseFloat(coordinates?.lng || "0") || null;
 
-// Centro del mapa: pin si existe, si no base del negocio, si no 0/0
-const rawCenterLat = parseFloat(center?.lat || coordinates?.lat || "0");
-const rawCenterLng = parseFloat(center?.lng || coordinates?.lng || "0");
+// Centro del círculo: primero el pin de la localidad, luego la base del negocio
+const rawCircleLat = parseFloat(coordinates?.lat || center?.lat || "0");
+const rawCircleLng = parseFloat(coordinates?.lng || center?.lng || "0");
+const circleLat = isNaN(rawCircleLat) ? 0 : rawCircleLat;
+const circleLng = isNaN(rawCircleLng) ? 0 : rawCircleLng;
+
+// Centro inicial del mapa para el fallback sin coordenadas
+const rawCenterLat = parseFloat(center?.lat || "0");
+const rawCenterLng = parseFloat(center?.lng || "0");
 const centerLat = isNaN(rawCenterLat) ? 0 : rawCenterLat;
 const centerLng = isNaN(rawCenterLng) ? 0 : rawCenterLng;
-const hasCenter = centerLat !== 0 || centerLng !== 0;
 
-// Zoom automático según radio de cobertura
-const mapZoom = radius <= 10 ? 12 : radius <= 20 ? 11 : radius <= 40 ? 10 : radius <= 80 ? 9 : 8;
+const hasCenter = circleLat !== 0 || circleLng !== 0 || centerLat !== 0 || centerLng !== 0;
+// El zoom lo calculará fitBounds automáticamente, solo lo usamos como fallback
+const mapZoom = 11;
 
 const uid = `map-${Math.random().toString(36).slice(2, 9)}`;
 const badgeText = city ? `Servicio disponible en ${city} y alrededores` : "Cobertura en zona de servicio";
@@ -67,7 +73,7 @@ const badgeText = city ? `Servicio disponible en ${city} y alrededores` : "Cober
 
     <script
         is:inline
-        define:vars={{ uid, pinLat, pinLng, centerLat, centerLng, hasCenter, radius, mapZoom, locationName, cities }}
+        define:vars={{ uid, pinLat, pinLng, circleLat, circleLng, centerLat, centerLng, hasCenter, radius, mapZoom, locationName, cities }}
     >
         (function () {
             if (!document.getElementById("leaflet-css")) {
@@ -114,8 +120,12 @@ const badgeText = city ? `Servicio disponible en ${city} y alrededores` : "Cober
                     return;
                 }
 
+                // Usar el centro de la localidad si existe, si no el centro del negocio
+                const effectiveLat = circleLat !== 0 ? circleLat : centerLat;
+                const effectiveLng = circleLng !== 0 ? circleLng : centerLng;
+
                 const map = L.map(uid, {
-                    center:             [centerLat, centerLng],
+                    center:             [effectiveLat, effectiveLng],
                     zoom:               mapZoom,
                     scrollWheelZoom:    false,
                     zoomControl:        true,
@@ -134,8 +144,8 @@ const badgeText = city ? `Servicio disponible en ${city} y alrededores` : "Cober
                     document.querySelectorAll(".mb-tiles").forEach(el => el.classList.remove("active"));
                 });
 
-                // Círculo de cobertura centrado en la base del negocio
-                L.circle([centerLat, centerLng], {
+                // Círculo de cobertura centrado en la localidad (no en la base del negocio)
+                const circle = L.circle([effectiveLat, effectiveLng], {
                     radius:      radius * 1000,
                     color:       "#f0a824",
                     weight:      2,
@@ -143,6 +153,9 @@ const badgeText = city ? `Servicio disponible en ${city} y alrededores` : "Cober
                     fillColor:   "#f0a824",
                     fillOpacity: 0.10,
                 }).addTo(map);
+
+                // fitBounds: Leaflet ajusta el zoom automáticamente para encuadrar el círculo completo
+                map.fitBounds(circle.getBounds(), { padding: [20, 20] });
 
                 function makeIcon(highlighted) {
                     const size = highlighted ? 14 : 9;
