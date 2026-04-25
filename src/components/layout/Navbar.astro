@@ -89,17 +89,23 @@ const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
                                 <div class="relative group">
                                     <button class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1 py-4">
                                         {item.label}
-                                        <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                                        <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
                                     </button>
-                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 text-left">
-                                        {services.map((service) => (
+                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 group-focus-within:translate-y-0 text-left">
+                                        {services.slice(0, 8).map((service) => (
                                             <a
                                                 href={`/servicios/${service.slug}/`}
-                                                class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors border-b border-heading/5 last:border-0"
+                                                class="block px-4 py-3 text-sm text-body hover:bg-primary/10 hover:text-primary transition-colors border-b border-heading/5"
                                             >
                                                 {service.data.title}
                                             </a>
                                         ))}
+                                        <a
+                                            href="/servicios/"
+                                            class="block px-4 py-3 text-sm text-primary font-bold hover:bg-primary/10 transition-colors bg-surface/30"
+                                        >
+                                            Ver todos los servicios →
+                                        </a>
                                     </div>
                                 </div>
                             );
@@ -114,9 +120,9 @@ const dynamicLogoSrc = logo && images[logoPath] ? images[logoPath] : null;
                                 <div class="relative group">
                                     <button class="text-sm font-medium text-heading hover:text-primary transition-colors uppercase tracking-wide flex items-center gap-1 py-4">
                                         {item.label}
-                                        <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
+                                        <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
                                     </button>
-                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 text-left">
+                                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-secondary border border-heading/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50 overflow-hidden transform translate-y-2 group-hover:translate-y-0 group-focus-within:translate-y-0 text-left">
                                         {locations
                                             .slice(0, 6)
                                             .map((location) => (

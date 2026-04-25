@@ -33,7 +33,7 @@ export const services = collection({
                         .replace(/[\u0300-\u036f]/g, '')
                         .replace(/[^a-z0-9]+/g, '-')
                         .replace(/^-|-$/g, '');
-                    return `${base}-${citySlug}`;
+                    return base.endsWith(`-${citySlug}`) ? base : `${base}-${citySlug}`;
                 },
             }
         }),

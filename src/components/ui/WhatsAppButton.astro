@@ -2,17 +2,19 @@
 import { getSettings } from "@/lib/settings";
 
 const settings = await getSettings();
-const whatsappNum = (settings.whatsapp || settings.phone || "34600000000").replace(/\s/g, "");
-const whatsappUrl = `https://wa.me/${whatsappNum}?text=Hola,%20necesito%20información`;
-const phoneUrl = `tel:${(settings.phone || "").replace(/\s/g, "")}`;
+const rawWhatsapp = settings.whatsapp || settings.phone || "";
+const whatsappNum = rawWhatsapp.replace(/\s/g, "");
+const whatsappUrl = whatsappNum ? `https://wa.me/${whatsappNum}?text=Hola,%20necesito%20información` : null;
+const rawPhone = settings.phone || "";
+const phoneUrl = rawPhone ? `tel:${rawPhone.replace(/\s/g, "")}` : null;
 
 const stickyPhoneMobile  = settings.stickyPhoneMobile  ?? true;
 const stickyPhoneDesktop = settings.stickyPhoneDesktop ?? false;
 const whatsappMobile     = settings.whatsappMobile     ?? true;
 const whatsappDesktop    = settings.whatsappDesktop    ?? true;
 
-const showPhone     = stickyPhoneMobile || stickyPhoneDesktop;
-const showWhatsapp  = whatsappMobile || whatsappDesktop;
+const showPhone     = Boolean(phoneUrl) && (stickyPhoneMobile || stickyPhoneDesktop);
+const showWhatsapp  = Boolean(whatsappUrl) && (whatsappMobile || whatsappDesktop);
 
 const phoneClass    = stickyPhoneMobile && stickyPhoneDesktop ? 'phone-float'
                     : stickyPhoneMobile  ? 'phone-float md:hidden'
@@ -86,14 +88,11 @@ const whatsappClass = whatsappMobile && whatsappDesktop ? 'whatsapp-float'
         right: 24px;
         width: 60px;
         height: 60px;
-        width: 60px;
-        height: 60px;
         background: linear-gradient(
             135deg,
             theme("colors.brand.whatsapp") 0%,
             theme("colors.brand.whatsapp-dark") 100%
         );
-        border-radius: 50%;
         border-radius: 50%;
         display: flex;
         align-items: center;

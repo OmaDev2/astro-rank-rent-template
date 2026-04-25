@@ -27,11 +27,9 @@ const {
             )
         }
 
-        <div
-            class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 hover:opacity-100 transition-opacity duration-700 grayscale hover:grayscale-0"
-        >
-            {
-                logos.map((logo) => (
+        {logos.length > 0 && (
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 hover:opacity-100 transition-opacity duration-700 grayscale hover:grayscale-0">
+                {logos.map((logo) => (
                     <div class="h-8 md:h-12 w-auto flex items-center justify-center">
                         <img
                             src={logo.image}
@@ -39,19 +37,8 @@ const {
                             class="max-h-full max-w-full object-contain"
                         />
                     </div>
-                ))
-            }
-            {/* Fallback placeholders if logos array is empty for demo */}
-            {
-                logos.length === 0 && (
-                    <div class="flex flex-wrap justify-center items-center gap-12 text-heading/20 font-heading font-black text-2xl italic">
-                        <span>LOGO_PLACEHOLDER</span>
-                        <span>TRUST_BADGE</span>
-                        <span>CERTIFIED_PRO</span>
-                        <span>PARTNER_X</span>
-                    </div>
-                )
-            }
-        </div>
+                ))}
+            </div>
+        )}
     </div>
 </section>

@@ -49,13 +49,16 @@
 
 <div
     id="cookie-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookie-modal-title"
     class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] hidden items-center justify-center p-4"
 >
     <div
         class="bg-secondary border border-heading/20 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
     >
         <div class="p-6">
-            <p class="text-2xl font-bold text-heading mb-4">
+            <p id="cookie-modal-title" class="text-2xl font-bold text-heading mb-4">
                 Configuración de Cookies
             </p>
             <p class="text-body text-sm mb-6">
@@ -123,9 +126,9 @@
 </div>
 
 <script>
-    // Cookie consent logic
     const COOKIE_NAME = "cookie_consent";
     const COOKIE_EXPIRY_DAYS = 365;
+    let lastFocused: HTMLElement | null = null;
 
     function setCookie(name: string, value: string, days: number) {
         const date = new Date();
@@ -147,86 +150,87 @@
 
     function showBanner() {
         const banner = document.getElementById("cookie-banner");
-        if (banner) {
-            setTimeout(() => {
-                banner.classList.remove("translate-y-full");
-            }, 500);
-        }
+        if (banner) setTimeout(() => banner.classList.remove("translate-y-full"), 500);
     }
 
     function hideBanner() {
-        const banner = document.getElementById("cookie-banner");
-        if (banner) {
-            banner.classList.add("translate-y-full");
-        }
+        document.getElementById("cookie-banner")?.classList.add("translate-y-full");
+    }
+
+    function grantAnalytics() {
+        const w = window as any;
+        w.dataLayer = w.dataLayer || [];
+        w.gtag = w.gtag || function () { w.dataLayer.push(arguments); };
+        w.gtag("consent", "update", { analytics_storage: "granted" });
     }
 
     function acceptCookies(analytics: boolean = true) {
-        const consent = {
-            necessary: true,
-            analytics: analytics,
-            timestamp: new Date().toISOString(),
-        };
-        setCookie(COOKIE_NAME, JSON.stringify(consent), COOKIE_EXPIRY_DAYS);
+        setCookie(
+            COOKIE_NAME,
+            JSON.stringify({ necessary: true, analytics, timestamp: new Date().toISOString() }),
+            COOKIE_EXPIRY_DAYS,
+        );
         hideBanner();
+        if (analytics) grantAnalytics();
+    }
 
-        if (analytics) {
-            // Activar analytics si es necesario
-            // window.gtag('consent', 'update', { analytics_storage: 'granted' });
+    function getModalFocusables(): HTMLElement[] {
+        const modal = document.getElementById("cookie-modal");
+        if (!modal) return [];
+        return Array.from(
+            modal.querySelectorAll<HTMLElement>(
+                'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+            ),
+        );
+    }
+
+    function handleModalKeydown(e: KeyboardEvent) {
+        if (e.key === "Escape") { closeModal(); return; }
+        if (e.key === "Tab") {
+            const focusables = getModalFocusables();
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey) {
+                if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+            } else {
+                if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
         }
     }
 
+    function openModal() {
+        const modal = document.getElementById("cookie-modal");
+        if (!modal) return;
+        lastFocused = document.activeElement as HTMLElement;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        getModalFocusables()[0]?.focus();
+        document.addEventListener("keydown", handleModalKeydown);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("cookie-modal");
+        if (!modal) return;
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        document.removeEventListener("keydown", handleModalKeydown);
+        lastFocused?.focus();
+        lastFocused = null;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
-        const consent = getCookie(COOKIE_NAME);
-        if (!consent) {
-            showBanner();
-        }
+        if (!getCookie(COOKIE_NAME)) showBanner();
 
-        document
-            .getElementById("cookie-accept")
-            ?.addEventListener("click", () => {
-                acceptCookies(true);
-            });
+        document.getElementById("cookie-accept")?.addEventListener("click", () => acceptCookies(true));
+        document.getElementById("cookie-reject")?.addEventListener("click", () => acceptCookies(false));
+        document.getElementById("cookie-settings")?.addEventListener("click", openModal);
+        document.getElementById("cookie-modal-close")?.addEventListener("click", closeModal);
 
-        document
-            .getElementById("cookie-reject")
-            ?.addEventListener("click", () => {
-                acceptCookies(false);
-            });
-
-        document
-            .getElementById("cookie-settings")
-            ?.addEventListener("click", () => {
-                const modal = document.getElementById("cookie-modal");
-                if (modal) {
-                    modal.classList.remove("hidden");
-                    modal.classList.add("flex");
-                }
-            });
-
-        document
-            .getElementById("cookie-modal-close")
-            ?.addEventListener("click", () => {
-                const modal = document.getElementById("cookie-modal");
-                if (modal) {
-                    modal.classList.add("hidden");
-                    modal.classList.remove("flex");
-                }
-            });
-
-        document
-            .getElementById("cookie-save")
-            ?.addEventListener("click", () => {
-                const analyticsCheckbox = document.getElementById(
-                    "analytics-cookies",
-                ) as HTMLInputElement;
-                acceptCookies(analyticsCheckbox?.checked || false);
-
-                const modal = document.getElementById("cookie-modal");
-                if (modal) {
-                    modal.classList.add("hidden");
-                    modal.classList.remove("flex");
-                }
-            });
+        document.getElementById("cookie-save")?.addEventListener("click", () => {
+            const cb = document.getElementById("analytics-cookies") as HTMLInputElement;
+            acceptCookies(cb?.checked || false);
+            closeModal();
+        });
     });
 </script>

@@ -62,7 +62,7 @@ const TitleTag = titleTag;
             class="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
             <a
-                href={`tel:${phone.replace(/\s/g, "")}`}
+                href={link}
                 class="btn-cta group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold bg-white text-primary rounded-2xl transition-all hover:scale-105 shadow-2xl hover:shadow-white/20 overflow-hidden w-full sm:w-auto"
             >
                 <div
@@ -70,7 +70,7 @@ const TitleTag = titleTag;
                 >
                 </div>
                 <Phone className="w-6 h-6 mr-3 group-hover:animate-pulse" />
-                <span>Llamar Ahora</span>
+                <span>{ctaText}</span>
             </a>
 
             <a

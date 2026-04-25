@@ -9,6 +9,8 @@ interface Props {
   title?: string;
   subtitle?: string;
   guarantees?: Guarantee[];
+  bgClass?: string;
+  titleTag?: string;
 }
 
 const defaultGuarantees: Guarantee[] = [
@@ -48,16 +50,20 @@ const {
   title = "Por Qué Elegirnos",
   subtitle = "Nos comprometemos con cada cliente. Estas son nuestras garantías.",
   guarantees = defaultGuarantees,
+  bgClass = "bg-surface/50",
+  titleTag = "h2",
 } = Astro.props;
+
+const TitleTag = titleTag as any;
 ---
 
-<section class="py-16 bg-[rgb(var(--color-surface))]/50 border-t border-white/5">
+<section class={`py-16 ${bgClass} border-t border-heading/10`}>
   <div class="container mx-auto px-4">
     <div class="text-center mb-12">
-      <h2 class="text-2xl md:text-3xl font-bold text-[rgb(var(--color-text-heading))] mb-3">
+      <TitleTag class="text-2xl md:text-3xl font-bold text-heading mb-3">
         {title}
-      </h2>
-      <p class="text-[rgb(var(--color-text-body))]/70 max-w-xl mx-auto">
+      </TitleTag>
+      <p class="text-body/70 max-w-xl mx-auto">
         {subtitle}
       </p>
     </div>
@@ -66,9 +72,9 @@ const {
       {
         guarantees.map((g) => (
           <div class="flex gap-4 items-start">
-            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-[rgb(var(--color-primary))]/10 flex items-center justify-center border border-[rgb(var(--color-primary))]/20">
+            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
               <svg
-                class="w-6 h-6 text-[rgb(var(--color-primary))]"
+                class="w-6 h-6 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -78,10 +84,10 @@ const {
               </svg>
             </div>
             <div>
-              <h3 class="text-[rgb(var(--color-text-heading))] font-bold mb-1">
+              <h3 class="text-heading font-bold mb-1">
                 {g.title}
               </h3>
-              <p class="text-[rgb(var(--color-text-body))]/70 text-sm leading-relaxed">
+              <p class="text-body/70 text-sm leading-relaxed">
                 {g.desc}
               </p>
             </div>

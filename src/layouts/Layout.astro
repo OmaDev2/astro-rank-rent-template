@@ -291,8 +291,23 @@ const heroProcessed = isHome
                     <script type="text/partytown">
                         {`window.dataLayer = window.dataLayer || [];
                         function gtag(){dataLayer.push(arguments);}
+                        gtag('consent', 'default', {analytics_storage:'denied',ad_storage:'denied',wait_for_update:500});
                         gtag('js', new Date());
                         gtag('config', '${settings.googleAnalyticsId}');`}
+                    </script>
+                    <script is:inline>
+                        {/* Restore consent on page load if user already accepted */}
+                        (function(){
+                            try {
+                                const match = document.cookie.match(/(?:^|;\s*)cookie_consent=([^;]*)/);
+                                if (!match) return;
+                                const consent = JSON.parse(decodeURIComponent(match[1]));
+                                if (consent && consent.analytics) {
+                                    window.dataLayer = window.dataLayer || [];
+                                    (function gtag(){ window.dataLayer.push(arguments); })('consent','update',{analytics_storage:'granted'});
+                                }
+                            } catch(e){}
+                        })();
                     </script>
                 </>
             )

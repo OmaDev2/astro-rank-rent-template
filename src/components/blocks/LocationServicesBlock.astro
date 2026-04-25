@@ -20,10 +20,10 @@ const {
     bgClass = "bg-surface",
 } = Astro.props;
 
-const heading = title || `Servicios de carpintería metálica en ${locationName}`;
+const heading = title || `Servicios de ${niche} en ${locationName}`;
 const desc =
     subtitle ||
-    `Aluminio a medida en ${locationName}. Selecciona el servicio que necesitas para ver todos los detalles y precios.`;
+    `${niche.charAt(0).toUpperCase() + niche.slice(1)} en ${locationName}. Selecciona el servicio que necesitas para ver todos los detalles y precios.`;
 ---
 
 {

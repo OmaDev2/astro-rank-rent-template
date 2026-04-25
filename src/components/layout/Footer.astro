@@ -29,12 +29,17 @@ const footerLinks =
 const allServices = await getCollection("services");
 const allLocations = await getCollection("locations");
 
-const sortedServices = allServices.sort((a, b) =>
-    a.data.title.localeCompare(b.data.title)
-);
-const sortedLocations = allLocations.sort((a, b) =>
-    a.data.name.localeCompare(b.data.name)
-);
+const MAX_FOOTER_SERVICES = 8;
+const MAX_FOOTER_LOCATIONS = 12;
+
+const sortedServices = allServices
+    .sort((a, b) => a.data.title.localeCompare(b.data.title))
+    .slice(0, MAX_FOOTER_SERVICES);
+const sortedLocations = allLocations
+    .sort((a, b) => a.data.name.localeCompare(b.data.name))
+    .slice(0, MAX_FOOTER_LOCATIONS);
+const hasMoreServices = allServices.length > MAX_FOOTER_SERVICES;
+const hasMoreLocations = allLocations.length > MAX_FOOTER_LOCATIONS;
 ---
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">

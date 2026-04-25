@@ -7,6 +7,7 @@ const locations = defineCollection({
         type: z.enum(['residencial', 'industrial', 'centro']),
         seo: z.string().optional(),
         heroImage: z.string().optional(),
+        heroImageAlt: z.string().optional(),
         coordinates: z.object({
             lat: z.string().optional(),
             lng: z.string().optional(),
@@ -356,6 +357,7 @@ const blog = defineCollection({
         description: z.string().optional(),
         author: z.string().optional(),
         image: z.string().optional(),
+        imageAlt: z.string().optional(),
         tags: z.array(z.string()).optional(),
         category: z.string().optional(),
         featured: z.boolean().default(false),

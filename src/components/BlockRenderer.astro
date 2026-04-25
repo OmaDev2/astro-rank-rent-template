@@ -466,6 +466,8 @@ const blockBgClasses = (blocks as any[]).map((b) => {
           ? {
               title: pricingContent.title,
               subtitle: pricingContent.subtitle,
+              titleTag: pricingContent.titleTag,
+              note: pricingContent.note,
               plans: pricingContent.plans?.map((p: any) => ({
                 ...p,
                 features: Array.isArray(p.features)
@@ -496,6 +498,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
           ? {
               title: statsContent.title,
               subtitle: statsContent.subtitle,
+              titleTag: statsContent.titleTag,
               stats: statsContent.stats,
             }
           : value;

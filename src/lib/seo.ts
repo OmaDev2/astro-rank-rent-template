@@ -11,6 +11,13 @@ function norm(url: string): string {
     return (url || '').replace(/\/$/, '');
 }
 
+/** Garantiza URL absoluta para JSON-LD (Google no resuelve rutas relativas) */
+function absUrl(url: string | undefined, siteUrl: string): string | undefined {
+    if (!url) return undefined;
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `${norm(siteUrl)}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
 /** Genera @id consistentes. Google distingue mayúsculas, barras y fragmentos. */
 const schemaId = {
     business:   (siteUrl: string) => `${norm(siteUrl)}/#business`,
@@ -59,18 +66,23 @@ export function buildBusinessEntity(settings: SiteSettings, siteUrl: string): Re
         priceRange: settings.priceRange || "€€",
         currenciesAccepted: "EUR",
         inLanguage: "es-ES",
-        address: {
-            "@type": "PostalAddress",
-            addressLocality: settings.city || "",
-            addressRegion: settings.city || "",
-            addressCountry: "ES",
-            streetAddress: settings.address || settings.city || "",
-        },
     };
 
-    if (settings.logo) {
-        entity.logo = { "@type": "ImageObject", url: settings.logo, inLanguage: "es-ES" };
-        entity.image = settings.logo;
+    // Address — solo si hay datos reales. SABs sin dirección física omiten este bloque.
+    if (settings.city || settings.address) {
+        const addr: Record<string, any> = {
+            "@type": "PostalAddress",
+            addressCountry: "ES",
+        };
+        if (settings.city)    addr.addressLocality = settings.city;
+        if (settings.address) addr.streetAddress   = settings.address;
+        entity.address = addr;
+    }
+
+    const logoUrl = absUrl(settings.logo, siteUrl);
+    if (logoUrl) {
+        entity.logo  = { "@type": "ImageObject", url: logoUrl, inLanguage: "es-ES" };
+        entity.image = logoUrl;
     }
     if (settings.slogan) entity.slogan = settings.slogan;
     if (settings.foundingDate) entity.foundingDate = settings.foundingDate;
@@ -149,11 +161,12 @@ export function buildWebPageEntity(opts: {
         breadcrumb: { "@id": schemaId.breadcrumb(url) },
     };
     if (description) entity.description = description;
-    if (image) {
+    const imageUrl = absUrl(image, siteUrl);
+    if (imageUrl) {
         entity.primaryImageOfPage = {
             "@type": "ImageObject",
             "@id": schemaId.image(url),
-            url: image,
+            url: imageUrl,
         };
     }
     return entity;
@@ -176,15 +189,14 @@ export function buildBreadcrumbEntity(
 }
 
 export function buildServiceEntity(opts: {
-    slug: string;
+    pageUrl: string;
     title: string;
     description?: string;
     image?: string;
     siteUrl: string;
     locationNames?: string[];
 }): Record<string, any> {
-    const { slug, title, description, image, siteUrl, locationNames = [] } = opts;
-    const pageUrl = `${norm(siteUrl)}/servicios/${slug}/`;
+    const { pageUrl, title, description, image, siteUrl, locationNames = [] } = opts;
     const entity: Record<string, any> = {
         "@type": "Service",
         "@id": schemaId.service(pageUrl),
@@ -194,7 +206,8 @@ export function buildServiceEntity(opts: {
         provider: { "@id": schemaId.business(siteUrl) },
     };
     if (description) entity.description = description;
-    if (image) entity.image = image;
+    const imageUrl = absUrl(image, siteUrl);
+    if (imageUrl) entity.image = imageUrl;
     if (locationNames.length) {
         entity.areaServed = locationNames.map(name => ({ "@type": "City", name }));
     }
@@ -323,13 +336,12 @@ export function buildServiceGraph(opts: {
     title: string;
     description?: string;
     image?: string;
-    serviceSlug: string;
     testimonials?: any[];
     faqs?: { question: string; answer: string }[];
     locationNames?: string[];
     breadcrumbs?: { name: string; item?: string }[];
 }): Record<string, any> {
-    const { settings, siteUrl, pageUrl, title, description, image, serviceSlug, testimonials = [], faqs = [], locationNames = [], breadcrumbs } = opts;
+    const { settings, siteUrl, pageUrl, title, description, image, testimonials = [], faqs = [], locationNames = [], breadcrumbs } = opts;
 
     const business = buildBusinessEntity(settings, siteUrl);
     const rating = buildAggregateRating(testimonials);
@@ -345,7 +357,7 @@ export function buildServiceGraph(opts: {
         buildWebSiteEntity(settings, siteUrl),
         business,
         buildWebPageEntity({ url: pageUrl, title, description, image, siteUrl }),
-        buildServiceEntity({ slug: serviceSlug, title, description, image, siteUrl, locationNames }),
+        buildServiceEntity({ pageUrl, title, description, image, siteUrl, locationNames }),
         buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
         faqs.length ? { ...buildFaqEntity(faqs), "@id": schemaId.faq(pageUrl) } : null,
     ]);
@@ -435,13 +447,15 @@ export function buildBlogPostGraph(opts: {
         url: pageUrl,
         inLanguage: "es-ES",
         isPartOf: { "@id": schemaId.website(siteUrl) },
+        mainEntityOfPage: { "@id": schemaId.webpage(pageUrl) },
         publisher: { "@id": schemaId.business(siteUrl) },
         breadcrumb: { "@id": schemaId.breadcrumb(pageUrl) },
     };
     if (description) article.description = description;
-    if (image) {
-        article.image = { "@type": "ImageObject", "@id": schemaId.image(pageUrl), url: image };
-        article.thumbnailUrl = image;
+    const imageUrl = absUrl(image, siteUrl);
+    if (imageUrl) {
+        article.image = { "@type": "ImageObject", "@id": schemaId.image(pageUrl), url: imageUrl };
+        article.thumbnailUrl = imageUrl;
     }
     if (datePublished) article.datePublished = datePublished;
     article.dateModified = dateModified || datePublished || new Date().toISOString().split('T')[0];
@@ -452,6 +466,7 @@ export function buildBlogPostGraph(opts: {
     return wrapGraph([
         buildWebSiteEntity(settings, siteUrl),
         buildBusinessEntity(settings, siteUrl),
+        buildWebPageEntity({ url: pageUrl, title, description, image, siteUrl, type: "WebPage" }),
         article,
         buildBreadcrumbEntity(defaultBreadcrumbs, pageUrl),
     ]);

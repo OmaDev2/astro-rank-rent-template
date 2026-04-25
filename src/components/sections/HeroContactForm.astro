@@ -44,6 +44,7 @@ interface Props {
     variant?: "default" | "clean";
     theme?: "dark" | "light";
     compact?: boolean;
+    formId?: string;
 }
 
 // Props que vienen del Layout (pueden sobreescribir la config global si se pasan)
@@ -53,6 +54,7 @@ const {
     variant = "default",
     theme = "dark",
     compact = false,
+    formId = "main",
 } = Astro.props;
 
 const finalTitle = propTitle || title;
@@ -93,7 +95,7 @@ const labelClasses =
         class="grid grid-cols-12 gap-4"
         method="POST"
         data-netlify="true"
-        name="contact"
+        name={`contact-${formId}`}
         action={successUrl}
     >
         {/* Generación Dinámica de Campos */}
@@ -169,13 +171,13 @@ const labelClasses =
         <div class="col-span-12 flex items-start gap-3 mt-2">
             <input
                 type="checkbox"
-                id="privacy"
+                id={`${formId}-privacy`}
                 name="privacy"
                 required
                 class="mt-1 w-4 h-4 rounded border-heading/20 bg-surface/50 text-primary focus:ring-primary focus:ring-offset-secondary"
             />
             <label
-                for="privacy"
+                for={`${formId}-privacy`}
                 class={`text-xs ${theme === "dark" ? "text-body" : "text-slate-600"}`}
             >
                 He leído y acepto la <a
@@ -190,9 +192,7 @@ const labelClasses =
         <div class="col-span-12">
             <button
                 type="submit"
-                id="submit-button"
-                disabled
-                class="w-full bg-primary hover:bg-accent text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
+                class="w-full bg-primary hover:bg-accent text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/50 transform hover:-translate-y-0.5"
             >
                 {submitText}
             </button>
@@ -208,19 +208,3 @@ const labelClasses =
     </form>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const privacyCheckbox = document.getElementById(
-            "privacy",
-        ) as HTMLInputElement;
-        const submitButton = document.getElementById(
-            "submit-button",
-        ) as HTMLButtonElement;
-
-        if (privacyCheckbox && submitButton) {
-            privacyCheckbox.addEventListener("change", () => {
-                submitButton.disabled = !privacyCheckbox.checked;
-            });
-        }
-    });
-</script>

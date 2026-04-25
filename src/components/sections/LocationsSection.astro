@@ -13,9 +13,10 @@ const staticZones = [
     "Polígonos Industriales",
 ];
 
-const { bgClass = "bg-secondary", locationsSection } = Astro.props;
+const { bgClass = "bg-secondary", locationsSection, showStaticZones } = Astro.props;
 const cardBgClass =
     bgClass === "bg-secondary" ? "bg-surface/50" : "bg-secondary/50";
+const displayStaticZones = showStaticZones ?? locations.length === 0;
 ---
 
 <section id="zonas" class={`py-20 ${bgClass} border-t border-heading/10`}>
@@ -58,7 +59,7 @@ const cardBgClass =
 
             {/* Static Zones Display (Visualmente más sutiles) */}
             {
-                staticZones.map((zone) => (
+                displayStaticZones && staticZones.map((zone) => (
                     <div class="group flex items-center p-4 bg-surface/30 rounded-lg border border-heading/10 hover:border-body/30 transition-all">
                         <div class="p-3 bg-surface/50 rounded-full text-body/50 mr-4">
                             <MapPin className="w-6 h-6" />

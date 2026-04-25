@@ -147,8 +147,7 @@ const siteName = settings.siteName || "nosotros";
         <button
           type="submit"
           id="cb-submit"
-          disabled
-          class="w-full bg-[rgb(var(--color-primary))] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-4 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2"
+          class="w-full bg-[rgb(var(--color-primary))] hover:opacity-90 text-white font-bold py-4 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -212,6 +211,9 @@ const siteName = settings.siteName || "nosotros";
       setTimeout(() => {
         modal.classList.add("pointer-events-none");
         document.body.classList.remove("overflow-hidden");
+        form?.reset();
+        formWrapper?.classList.remove("hidden");
+        successDiv?.classList.add("hidden");
       }, 300);
     }
 
@@ -226,10 +228,6 @@ const siteName = settings.siteName || "nosotros";
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeModal();
-    });
-
-    privacyCheckbox?.addEventListener("change", () => {
-      if (submitBtn) submitBtn.disabled = !privacyCheckbox.checked;
     });
 
     form?.addEventListener("submit", async (e) => {
