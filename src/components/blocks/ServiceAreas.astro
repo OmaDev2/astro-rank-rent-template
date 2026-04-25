@@ -37,7 +37,27 @@ interface Props {
     bgClass?: string;
 }
 
+import { getSettings } from "@/lib/settings";
+
 const { title, subtitle, group1, group2, bgClass = "bg-secondary" } = Astro.props;
+
+// Fetch global settings to synchronize the province list with areaServed
+const settings = await getSettings();
+const areaServed = settings.areaServed || [];
+
+// Dynamically generate the province items based on areaServed (excluding main city "Málaga")
+if (group2 && areaServed.length > 0) {
+    const dynamicItems = areaServed
+        .filter(city => city !== "Málaga")
+        .map(city => ({
+            name: city,
+            supplement: "Consultar",
+            icon: "MapPin"
+        }));
+    
+    // Replace the manually typed items with the dynamic ones to guarantee sync
+    group2.items = dynamicItems;
+}
 
 const iconMap: Record<string, any> = {
     Building2,

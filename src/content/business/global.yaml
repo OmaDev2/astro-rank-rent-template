@@ -1,17 +1,16 @@
 _spintax: ''
 siteName: 'METALISUR '
-niche: CARPINTERÍA METÁLICA
-businessType: LocalBusiness
+niche: 'CARPINTERÍA METÁLICA DE ALUMINIO '
+businessType: HomeAndConstructionBusiness
 siteUrl: https://metalisur.es
 ctaText: Pedir Presupuesto Gratis
 phone: +34 675 56 81 48
 whatsapp: '34675568148'
 email: info@metalisur.es
 city: 'Málaga '
-address: Calle Mayor 10, Madrid
 coordinates:
-  lat: '40.4168'
-  lng: '-3.7038'
+  lat: '36.7213'
+  lng: '-4.4214'
 schedule: Lun-Vie 8:00-20:00· Sáb 10:00-14:00  Urgencias 24h
 nif: 30972965s
 seo: >-
@@ -19,13 +18,24 @@ seo: >-
   Metalisur","description":"Carpintería metálica y de aluminio en Málaga.
   Fabricamos e instalamos ventanas, puertas, cerramientos, mosquiteras y
   automatismos. Presupuesto sin compromiso."}
-slogan: Tu fontanero de confianza en Madrid, siempre disponible.
-foundingDate: '2012'
+slogan: >-
+  Carpintería de aluminio en Málaga — fabricación propia e instalación
+  profesional
+foundingDate: '2010'
 facebook: https://facebook.com/metalisur
 instagram: https://instagram.com/metalisur
 areaServed:
   - Málaga
-serviceRadius: 100
+  - Marbella
+  - Estepona
+  - Fuengirola
+  - Benalmádena
+  - Torremolinos
+  - Vélez-Málaga
+  - Rincón de la Victoria
+  - Nerja
+  - Alhaurín de la Torre
+serviceRadius: 0
 priceRange: €€
 paymentAccepted:
   - Cash
