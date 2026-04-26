@@ -8,9 +8,9 @@ import { processPreview } from '../../../components/keystatic/ProcessPreview';
 import { noticeField } from '../../../components/keystatic/NoticeField';
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 
-export const zonasPage = singleton({
-    label: '📍 Página de Zonas (Listado)',
-    path: 'src/content/pages/zonas',
+export const serviciosPage = singleton({
+    label: '🛠️ Página de Servicios (Listado)',
+    path: 'src/content/pages/servicios',
     format: { contentField: 'content' },
     schema: {
         seoControls: SeoPreview({
@@ -19,7 +19,7 @@ export const zonasPage = singleton({
         }),
 
         _notice: noticeField({
-            message: 'Los bloques se renderizan antes del listado automático de zonas. Si no hay bloques, se muestra un hero genérico.',
+            message: 'Los bloques se renderizan antes del listado automático de servicios. Si no hay bloques, se muestra un hero genérico.',
             tone: 'info',
         }),
 
@@ -134,8 +134,8 @@ export const zonasPage = singleton({
                     ),
                     image: fields.image({
                         label: 'Imagen (Opcional, variante split)',
-                        directory: 'public/images/pages/zonas',
-                        publicPath: '/images/pages/zonas',
+                        directory: 'public/images/pages/servicios',
+                        publicPath: '/images/pages/servicios',
                     }),
                     imageAlt: fields.text({ label: 'Texto Alt Imagen (Opcional)' }),
                     ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
@@ -202,8 +202,8 @@ export const zonasPage = singleton({
                             icon: IconPicker({ label: 'Icono (Lucide)' }),
                             image: fields.image({
                                 label: 'Imagen (Opcional)',
-                                directory: 'public/images/pages/zonas',
-                                publicPath: '/images/pages/zonas',
+                                directory: 'public/images/pages/servicios',
+                                publicPath: '/images/pages/servicios',
                             }),
                             imageAlt: fields.text({ label: 'Texto Alt Imagen (Opcional)' }),
                         }),
@@ -270,8 +270,8 @@ export const zonasPage = singleton({
                         fields.object({
                             src: fields.image({
                                 label: 'Imagen',
-                                directory: 'public/images/pages/zonas',
-                                publicPath: '/images/pages/zonas',
+                                directory: 'public/images/pages/servicios',
+                                publicPath: '/images/pages/servicios',
                             }),
                             alt: fields.text({ label: 'Texto Alt (obligatorio)', validation: { isRequired: true } }),
                             caption: fields.text({ label: 'Pie de foto (Opcional)' }),
@@ -316,15 +316,15 @@ export const zonasPage = singleton({
             },
         }, {
             label: 'Bloques de la Página',
-            description: 'Se renderizan antes del listado automático de zonas.',
+            description: 'Se renderizan antes del listado automático de servicios.',
         }),
 
         content: fields.mdx({
-            label: 'Introducción / Texto SEO',
+            label: 'Contenido Adicional (MDX)',
             options: {
                 image: {
-                    directory: 'public/images/pages/zonas',
-                    publicPath: '/images/pages/zonas',
+                    directory: 'public/images/pages/servicios',
+                    publicPath: '/images/pages/servicios',
                 },
             },
         }),

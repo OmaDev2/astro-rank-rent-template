@@ -1,24 +1,40 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Footer from "../../components/layout/Footer.astro";
+import BlockRenderer from "../../components/BlockRenderer.astro";
 import FinalCTA from "../../components/sections/FinalCTA.astro";
-import { getCollection } from "astro:content";
-import { ArrowRight, Wrench } from "lucide-react";
+import WhatsAppButton from "../../components/ui/WhatsAppButton.astro";
+import { getCollection, getEntry } from "astro:content";
+import { ArrowRight } from "lucide-react";
 import { getSettings } from "@/lib/settings";
 import { buildBlogListGraph } from "@/lib/seo";
 
 const settings = await getSettings();
-const { siteName, city, niche } = settings;
+const { siteName, city, niche, phone, whatsapp } = settings;
 
 const services = (await getCollection("services")).sort((a, b) =>
     a.data.title.localeCompare(b.data.title, "es")
 );
 
-const siteUrl = settings.siteUrl || Astro.site?.href || '';
-const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+// CMS
+const serviciosPage = await getEntry("pages", "servicios");
+const pageData = serviciosPage?.data ?? {};
 
-const seoTitle = `Servicios de ${niche} en ${city} | ${siteName}`;
-const seoDescription = `Todos nuestros servicios de ${niche.toLowerCase()} en ${city}. Presupuesto sin compromiso, respuesta en menos de 24 horas.`;
+const parsePreview = (json: string | undefined) => {
+    try { return json ? JSON.parse(json) : null; } catch { return null; }
+};
+
+const seoData = parsePreview(pageData.seoControls as string | undefined);
+const seoTitle = seoData?.title || `Servicios de ${niche} en ${city} | ${siteName}`;
+const seoDescription = seoData?.description ||
+    `Todos nuestros servicios de ${niche.toLowerCase()} en ${city}. Fabricación e instalación a medida. Presupuesto sin compromiso.`;
+
+const finalBlocks = (pageData.blocks && (pageData.blocks as any[]).length > 0)
+    ? pageData.blocks as any[]
+    : [{ discriminant: "hero" }];
+
+const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const pageUrl  = new URL(Astro.url.pathname, Astro.site).href;
 
 const schema = buildBlogListGraph({
     settings,
@@ -36,32 +52,26 @@ const schema = buildBlogListGraph({
 
 <Layout title={seoTitle} description={seoDescription} schema={schema}>
 
-    <!-- Hero -->
-    <section class="relative py-20 bg-secondary overflow-hidden">
-        <div class="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-widest mb-4">
-                <Wrench className="w-4 h-4" />
-                {niche}
-            </div>
-            <h1 class="text-4xl md:text-6xl font-heading font-bold text-heading mb-6">
-                Nuestros <span class="text-primary">Servicios</span>
-            </h1>
-            <p class="text-xl text-body max-w-2xl mx-auto">
-                {seoDescription}
-            </p>
-        </div>
-    </section>
+    <BlockRenderer
+        blocks={finalBlocks}
+        config={settings}
+        city={city}
+        locationName={city}
+        siteName={siteName}
+        niche={niche}
+        phone={phone}
+        whatsapp={whatsapp}
+    />
 
-    <!-- Servicios Grid -->
-    <section class="py-20 bg-surface/30">
+    <!-- Listado automático de servicios -->
+    <section class="py-20 bg-surface">
         <div class="container mx-auto px-4">
             {services.length > 0 ? (
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {services.map((service) => (
                         <a
                             href={`/servicios/${service.slug}/`}
-                            class="group flex flex-col gap-4 p-7 rounded-2xl bg-surface border border-heading/5 hover:border-primary/30 hover:shadow-lg transition-all"
+                            class="group flex flex-col gap-4 p-7 rounded-2xl bg-secondary border border-heading/5 hover:border-primary/30 hover:shadow-lg transition-all"
                         >
                             {service.data.heroImage && (
                                 <div class="aspect-video rounded-xl overflow-hidden">
@@ -70,6 +80,7 @@ const schema = buildBlogListGraph({
                                         alt={service.data.title}
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                         loading="lazy"
+                                        decoding="async"
                                     />
                                 </div>
                             )}
@@ -100,5 +111,6 @@ const schema = buildBlogListGraph({
     </section>
 
     <FinalCTA />
+    <WhatsAppButton />
     <Footer />
 </Layout>

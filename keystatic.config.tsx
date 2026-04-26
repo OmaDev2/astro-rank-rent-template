@@ -9,6 +9,7 @@ import { legalNotice, privacyPolicy, cookiesPolicy } from './src/config/keystati
 import { homepage } from './src/config/keystatic/singletons/homepage';
 import { about } from './src/config/keystatic/singletons/about';
 import { zonasPage } from './src/config/keystatic/singletons/zonasPage';
+import { serviciosPage } from './src/config/keystatic/singletons/serviciosPage';
 
 // Collections
 import { services } from './src/config/keystatic/collections/services';
@@ -29,7 +30,7 @@ export default config({
         navigation: {
             '⚙️ Configuración': ['business', 'design'],
             '---': [],
-            '📝 Contenido': ['homepage', 'about', 'zonasPage', 'services', 'locations', 'projects', 'testimonials', 'blog'],
+            '📝 Contenido': ['homepage', 'about', 'serviciosPage', 'zonasPage', 'services', 'locations', 'projects', 'testimonials', 'blog'],
             '----': [],
             '📄 Páginas Legales': ['navigation', 'footer', 'legalNotice', 'privacyPolicy', 'cookiesPolicy'],
         },
@@ -45,6 +46,7 @@ export default config({
         cookiesPolicy,
         homepage,
         about,
+        serviciosPage,
         zonasPage,
     },
 
