@@ -35,7 +35,7 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
                 </div>
 
                 {/* Mobile: numbered cards */}
-                <div class="md:hidden space-y-4">
+                <div class="md:hidden space-y-4" aria-hidden="true">
                     {process.steps.map((step, index) => (
                         <div class={`${cardBgClass} rounded-2xl shadow-lg border border-heading/5 relative overflow-hidden`}>
                             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-50" />
@@ -57,7 +57,7 @@ const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
                 {/* Desktop: alternating timeline */}
                 <div class="hidden md:block relative max-w-5xl mx-auto">
                     <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 -translate-x-1/2" />
-                    <div>
+                    <div data-stagger>
                         {process.steps.map((step, index) => (
                             <div
                                 class={`relative flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}

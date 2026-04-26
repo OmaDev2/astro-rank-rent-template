@@ -19,6 +19,8 @@ import HomeProcess from "./blocks/home/HomeProcess.astro";
 import HomeServicesOnePage from "./blocks/home/HomeServicesOnePage.astro";
 
 // New Modular Blocks
+import TrustStripBlock from "./blocks/TrustStripBlock.astro";
+import ProblemSolutionBlock from "./blocks/ProblemSolutionBlock.astro";
 import PricingBlock from "./blocks/PricingBlock.astro";
 import StatsBlock from "./blocks/StatsBlock.astro";
 import LogosBlock from "./blocks/LogosBlock.astro";
@@ -569,6 +571,40 @@ const blockBgClasses = (blocks as any[]).map((b) => {
             serviceName={title}
             title={value?.title}
             subtitle={value?.subtitle}
+            bgClass={bgClass}
+          />
+        );
+
+      case "trust_strip":
+        return (
+          <TrustStripBlock
+            title={value?.title}
+            subtitle={value?.subtitle}
+            titleTag={value?.titleTag}
+            items={value?.items || []}
+            variant={value?.variant}
+            bgClass={bgClass}
+          />
+        );
+
+      case "problem_solution":
+        return (
+          <ProblemSolutionBlock
+            eyebrow={value?.eyebrow}
+            title={value?.title}
+            subtitle={value?.subtitle}
+            problemTitle={value?.problemTitle}
+            problemText={value?.problemText}
+            solutionTitle={value?.solutionTitle}
+            solutionText={value?.solutionText}
+            problems={value?.problems || []}
+            solutions={value?.solutions || []}
+            image={value?.image}
+            imageAlt={value?.imageAlt}
+            ctaText={value?.ctaText}
+            ctaLink={value?.ctaLink}
+            variant={value?.variant}
+            titleTag={value?.titleTag}
             bgClass={bgClass}
           />
         );

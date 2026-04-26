@@ -1,0 +1,301 @@
+---
+interface Props {
+    eyebrow?: string;
+    title: string;
+    subtitle?: string;
+    problemTitle?: string;
+    problemText?: string;
+    solutionTitle?: string;
+    solutionText?: string;
+    problems?: string[];
+    solutions?: string[];
+    image?: string;
+    imageAlt?: string;
+    ctaText?: string;
+    ctaLink?: string;
+    variant?: "split" | "cards" | "highlight";
+    bgClass?: string;
+    titleTag?: "h2" | "h3";
+}
+
+const {
+    eyebrow,
+    title,
+    subtitle,
+    problemTitle = "El problema",
+    problemText,
+    solutionTitle = "Nuestra solución",
+    solutionText,
+    problems = [],
+    solutions = [],
+    image,
+    imageAlt,
+    ctaText,
+    ctaLink = "/contacto/",
+    variant = "split",
+    bgClass = "bg-secondary",
+    titleTag = "h2",
+} = Astro.props;
+
+const TitleTag = titleTag as "h2" | "h3";
+---
+
+{/* ══════════════════════════════════════
+    VARIANT: split — texto izquierda, visual derecha
+    ══════════════════════════════════════ */}
+{variant === "split" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+
+                {/* Columna texto */}
+                <div class="space-y-6">
+                    {eyebrow && (
+                        <p class="text-sm font-bold uppercase tracking-widest text-primary">
+                            {eyebrow}
+                        </p>
+                    )}
+                    <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading leading-tight">
+                        {title}
+                    </TitleTag>
+                    {subtitle && (
+                        <p class="text-body text-lg leading-relaxed">{subtitle}</p>
+                    )}
+
+                    {/* Listas problema / solución */}
+                    {(problems.length > 0 || solutions.length > 0) && (
+                        <div class="grid sm:grid-cols-2 gap-4 pt-2">
+                            {problems.length > 0 && (
+                                <div class="space-y-2">
+                                    <p class="text-xs font-bold uppercase tracking-wider text-body opacity-60 mb-3">
+                                        {problemTitle}
+                                    </p>
+                                    {problems.map((item) => (
+                                        <div class="flex items-start gap-2.5">
+                                            <span class="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full bg-heading/10 flex items-center justify-center">
+                                                <svg class="w-2.5 h-2.5 text-body opacity-50" fill="none" viewBox="0 0 10 10" aria-hidden="true">
+                                                    <path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                                </svg>
+                                            </span>
+                                            <span class="text-sm text-body leading-snug">{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {solutions.length > 0 && (
+                                <div class="space-y-2">
+                                    <p class="text-xs font-bold uppercase tracking-wider text-primary opacity-80 mb-3">
+                                        {solutionTitle}
+                                    </p>
+                                    {solutions.map((item) => (
+                                        <div class="flex items-start gap-2.5">
+                                            <span class="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full bg-primary/15 flex items-center justify-center">
+                                                <svg class="w-2.5 h-2.5 text-primary" fill="none" viewBox="0 0 10 8" aria-hidden="true">
+                                                    <path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </span>
+                                            <span class="text-sm text-heading font-medium leading-snug">{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {ctaText && (
+                        <div class="pt-2">
+                            <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg">
+                                {ctaText}
+                            </a>
+                        </div>
+                    )}
+                </div>
+
+                {/* Columna visual */}
+                <div class="relative">
+                    {image ? (
+                        <div class="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3]">
+                            <img
+                                src={image}
+                                alt={imageAlt || title}
+                                loading="lazy"
+                                decoding="async"
+                                class="w-full h-full object-cover"
+                                width="800"
+                                height="600"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-secondary/40 to-transparent" />
+                        </div>
+                    ) : (
+                        /* Visual card cuando no hay imagen */
+                        <div class="space-y-4">
+                            <div class="p-6 rounded-2xl bg-surface border border-heading/10 relative overflow-hidden">
+                                <div class="absolute top-0 left-0 right-0 h-1 bg-heading/10" />
+                                <p class="text-xs font-bold uppercase tracking-widest text-body opacity-50 mb-3">{problemTitle}</p>
+                                {problemText && <p class="text-body leading-relaxed">{problemText}</p>}
+                            </div>
+                            <div class="p-6 rounded-2xl bg-surface border border-primary/30 relative overflow-hidden shadow-lg">
+                                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent" />
+                                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">{solutionTitle}</p>
+                                {solutionText && <p class="text-heading font-medium leading-relaxed">{solutionText}</p>}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+            </div>
+        </div>
+    </section>
+)}
+
+{/* ══════════════════════════════════════
+    VARIANT: cards — dos tarjetas enfrentadas
+    ══════════════════════════════════════ */}
+{variant === "cards" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            {(eyebrow || title || subtitle) && (
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    {eyebrow && (
+                        <p class="text-sm font-bold uppercase tracking-widest text-primary mb-3">{eyebrow}</p>
+                    )}
+                    <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4">
+                        {title}
+                    </TitleTag>
+                    {subtitle && <p class="text-body text-lg">{subtitle}</p>}
+                </div>
+            )}
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                {/* Card Problema */}
+                <div class="p-8 rounded-2xl bg-surface border border-heading/10 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-heading/15" />
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-xl bg-heading/10 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-body opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" stroke-width="1.5"/>
+                                <path d="M12 8v4M12 16h.01" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-heading">{problemTitle}</h3>
+                    </div>
+                    {problemText && <p class="text-body leading-relaxed mb-5">{problemText}</p>}
+                    {problems.length > 0 && (
+                        <ul class="space-y-2.5">
+                            {problems.map((item) => (
+                                <li class="flex items-start gap-2.5 text-sm text-body">
+                                    <span class="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full bg-heading/10 flex items-center justify-center">
+                                        <svg class="w-2.5 h-2.5 opacity-50" fill="none" viewBox="0 0 10 10" aria-hidden="true">
+                                            <path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                    </span>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+
+                {/* Card Solución */}
+                <div class="p-8 rounded-2xl bg-surface border border-primary/25 relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent" />
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-heading">{solutionTitle}</h3>
+                    </div>
+                    {solutionText && <p class="text-heading font-medium leading-relaxed mb-5">{solutionText}</p>}
+                    {solutions.length > 0 && (
+                        <ul class="space-y-2.5">
+                            {solutions.map((item) => (
+                                <li class="flex items-start gap-2.5 text-sm text-heading font-medium">
+                                    <span class="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full bg-primary/15 flex items-center justify-center">
+                                        <svg class="w-2.5 h-2.5 text-primary" fill="none" viewBox="0 0 10 8" aria-hidden="true">
+                                            <path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </div>
+
+            {ctaText && (
+                <div class="text-center mt-10">
+                    <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg">
+                        {ctaText}
+                    </a>
+                </div>
+            )}
+        </div>
+    </section>
+)}
+
+{/* ══════════════════════════════════════
+    VARIANT: highlight — bloque compacto destacado
+    ══════════════════════════════════════ */}
+{variant === "highlight" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto rounded-3xl bg-surface border border-heading/10 overflow-hidden shadow-lg">
+                {/* Cabecera */}
+                <div class="px-8 pt-10 pb-6 border-b border-heading/10">
+                    {eyebrow && (
+                        <p class="text-sm font-bold uppercase tracking-widest text-primary mb-3">{eyebrow}</p>
+                    )}
+                    <TitleTag class="text-2xl md:text-3xl font-heading font-bold text-heading mb-3">
+                        {title}
+                    </TitleTag>
+                    {subtitle && <p class="text-body">{subtitle}</p>}
+                </div>
+
+                {/* Cuerpo: problema | solución */}
+                <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-heading/10">
+                    <div class="px-8 py-7">
+                        <p class="text-xs font-bold uppercase tracking-widest text-body opacity-50 mb-4">{problemTitle}</p>
+                        {problemText && <p class="text-body text-sm leading-relaxed mb-4">{problemText}</p>}
+                        {problems.length > 0 && (
+                            <ul class="space-y-2">
+                                {problems.map((item) => (
+                                    <li class="flex items-center gap-2 text-sm text-body">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-heading/30 flex-shrink-0" />
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                    <div class="px-8 py-7 relative">
+                        <div class="absolute top-0 left-0 bottom-0 w-1 bg-gradient-to-b from-primary to-accent hidden md:block" />
+                        <p class="text-xs font-bold uppercase tracking-widest text-primary mb-4">{solutionTitle}</p>
+                        {solutionText && <p class="text-heading font-medium text-sm leading-relaxed mb-4">{solutionText}</p>}
+                        {solutions.length > 0 && (
+                            <ul class="space-y-2">
+                                {solutions.map((item) => (
+                                    <li class="flex items-center gap-2 text-sm text-heading font-medium">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+
+                {/* Footer con CTA */}
+                {ctaText && (
+                    <div class="px-8 py-6 border-t border-heading/10 bg-primary/5">
+                        <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-3 text-base font-bold bg-primary text-white rounded transition-all shadow-lg">
+                            {ctaText}
+                        </a>
+                    </div>
+                )}
+            </div>
+        </div>
+    </section>
+)}

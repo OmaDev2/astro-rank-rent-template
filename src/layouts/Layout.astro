@@ -149,12 +149,14 @@ try {
     console.error("Error parsing typography scale settings", e);
 }
 
-// Shadow presets
+// Shadow presets — theme-adaptive: the hairline ring uses --color-text-main
+// (light on dark themes, dark on light themes) so it's always visible.
+// The primary glow adds branded depth on both theme types.
 const shadowMap: Record<string, string> = {
     flat:     'none',
-    subtle:   '0 2px 8px -1px rgb(0 0 0 / 0.10)',
-    elevated: '0 10px 24px -4px rgb(0 0 0 / 0.18), 0 4px 8px -2px rgb(0 0 0 / 0.10)',
-    floating: '0 24px 48px -8px rgb(0 0 0 / 0.30), 0 8px 16px -4px rgb(0 0 0 / 0.15)',
+    subtle:   '0 2px 12px -1px rgb(0 0 0 / 0.22), 0 0 0 1px rgb(var(--color-text-main) / 0.06)',
+    elevated: '0 8px 24px -4px rgb(0 0 0 / 0.32), 0 4px 8px -2px rgb(0 0 0 / 0.16), 0 0 0 1px rgb(var(--color-text-main) / 0.08)',
+    floating: '0 20px 48px -8px rgb(0 0 0 / 0.42), 0 8px 16px -4px rgb(0 0 0 / 0.22), 0 0 0 1px rgb(var(--color-text-main) / 0.10), 0 4px 20px rgb(var(--color-primary) / 0.12)',
 };
 const shadowValue = shadowMap[settings.shadowStyle || 'elevated'] ?? shadowMap.elevated;
 
@@ -350,6 +352,8 @@ const heroProcessed = isHome
             (function () {
                 var mode = document.documentElement.dataset.anim || 'subtle';
                 if (mode === 'none') return;
+
+                // ── Secciones: fade / slide al entrar en viewport ──
                 var sections = document.querySelectorAll('main > * > section, main > section');
                 if (!sections.length) sections = document.querySelectorAll('section');
                 var observer = new IntersectionObserver(function (entries) {
@@ -364,6 +368,25 @@ const heroProcessed = isHome
                     if (i === 0) return; // hero siempre visible
                     el.classList.add('anim-ready');
                     observer.observe(el);
+                });
+
+                // ── Tarjetas [data-stagger]: entrada escalonada ──
+                var staggerEls = document.querySelectorAll('[data-stagger]');
+                var staggerObs = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) return;
+                        Array.from(entry.target.children).forEach(function (child, i) {
+                            child.style.transitionDelay = (i * 90) + 'ms';
+                            child.classList.add('anim-visible');
+                        });
+                        staggerObs.unobserve(entry.target);
+                    });
+                }, { threshold: 0.05 });
+                staggerEls.forEach(function (container) {
+                    Array.from(container.children).forEach(function (child) {
+                        child.classList.add('anim-ready');
+                    });
+                    staggerObs.observe(container);
                 });
             })();
         </script>

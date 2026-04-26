@@ -1,0 +1,137 @@
+---
+import DynamicIcon from "../ui/DynamicIcon.astro";
+
+interface TrustItem {
+    icon?: string;
+    label: string;
+    description?: string;
+}
+
+interface Props {
+    title?: string;
+    subtitle?: string;
+    titleTag?: "h2" | "h3";
+    items: TrustItem[];
+    variant?: "bar" | "cards" | "minimal";
+    bgClass?: string;
+}
+
+const {
+    title,
+    subtitle,
+    titleTag = "h2",
+    items = [],
+    variant = "cards",
+    bgClass = "bg-surface",
+} = Astro.props;
+
+if (!items || items.length === 0) return;
+
+const TitleTag = titleTag;
+
+// Determina columnas del grid según número de items
+const colsMap: Record<number, string> = {
+    1: "lg:grid-cols-1",
+    2: "lg:grid-cols-2",
+    3: "lg:grid-cols-3",
+    4: "lg:grid-cols-4",
+    5: "lg:grid-cols-5",
+};
+const gridCols = colsMap[Math.min(items.length, 5)] ?? "lg:grid-cols-3";
+---
+
+{variant === "bar" && (
+    <section class={`${bgClass} border-y border-heading/10`}>
+        <div class="container mx-auto px-4 py-5">
+            <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+                {items.map((item, i) => (
+                    <li class="flex items-center gap-2.5 text-sm font-semibold text-heading">
+                        {item.icon && (
+                            <span class="flex-shrink-0 text-primary">
+                                <DynamicIcon name={item.icon} className="w-4 h-4" />
+                            </span>
+                        )}
+                        <span>{item.label}</span>
+                        {i < items.length - 1 && (
+                            <span class="hidden sm:inline-block w-px h-4 bg-heading/20 ml-4" aria-hidden="true" />
+                        )}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </section>
+)}
+
+{variant === "cards" && (
+    <section class={`py-16 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            {(title || subtitle) && (
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    {title && (
+                        <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-3">
+                            {title}
+                        </TitleTag>
+                    )}
+                    {subtitle && (
+                        <p class="text-body text-lg">{subtitle}</p>
+                    )}
+                </div>
+            )}
+            <ul
+                data-stagger
+                class={`grid grid-cols-1 sm:grid-cols-2 ${gridCols} gap-6 max-w-6xl mx-auto`}
+            >
+                {items.map((item) => (
+                    <li class="flex items-start gap-4 p-6 rounded-xl bg-surface border border-heading/10 hover:border-primary/40 transition-all group">
+                        <div class="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                            <DynamicIcon name={item.icon || "CheckCircle"} className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <p class="font-bold text-heading leading-snug">{item.label}</p>
+                            {item.description && (
+                                <p class="mt-1 text-sm text-body leading-relaxed">{item.description}</p>
+                            )}
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </section>
+)}
+
+{variant === "minimal" && (
+    <section class={`py-12 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            {(title || subtitle) && (
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    {title && (
+                        <TitleTag class="text-2xl md:text-3xl font-heading font-bold text-heading mb-2">
+                            {title}
+                        </TitleTag>
+                    )}
+                    {subtitle && (
+                        <p class="text-body">{subtitle}</p>
+                    )}
+                </div>
+            )}
+            <ul
+                data-stagger
+                class={`grid grid-cols-1 sm:grid-cols-2 ${gridCols} gap-4 max-w-5xl mx-auto`}
+            >
+                {items.map((item) => (
+                    <li class="flex items-start gap-3 group">
+                        <span class="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+                            <DynamicIcon name={item.icon || "Check"} className="w-3 h-3" />
+                        </span>
+                        <div>
+                            <span class="text-sm font-semibold text-heading">{item.label}</span>
+                            {item.description && (
+                                <p class="text-xs text-body mt-0.5 leading-relaxed">{item.description}</p>
+                            )}
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </section>
+)}

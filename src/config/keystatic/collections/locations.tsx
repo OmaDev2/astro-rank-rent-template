@@ -1,5 +1,6 @@
 import { collection, fields } from '@keystatic/core';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
+import { IconPicker } from '../../../components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
 import { heroPreview } from '../../../components/keystatic/HeroPreview';
 import { statsPreview } from '../../../components/keystatic/StatsPreview';
@@ -187,6 +188,83 @@ export const locations = collection({
                     afterAlt: fields.text({ label: 'Texto Alt Después (Opcional)' }),
                     beforeLabel: fields.text({ label: 'Etiqueta Antes', defaultValue: 'Antes' }),
                     afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
+                })
+            },
+            trust_strip: {
+                label: '✅ Franja de Confianza (Trust Strip)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título (Opcional)' }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '━ Barra horizontal compacta (bar)', value: 'bar' },
+                            { label: '▦ Tarjetas con icono (cards)', value: 'cards' },
+                            { label: '✓ Lista mínima (minimal)', value: 'minimal' },
+                        ],
+                        defaultValue: 'cards',
+                    }),
+                    items: fields.array(
+                        fields.object({
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
+                            label: fields.text({ label: 'Texto Principal' }),
+                            description: fields.text({ label: 'Descripción (Opcional)', multiline: true }),
+                        }),
+                        { label: 'Puntos de Confianza', itemLabel: p => p.fields.label.value || 'Punto' }
+                    ),
+                })
+            },
+            problem_solution: {
+                label: '⚡ Problema / Solución',
+                schema: fields.object({
+                    eyebrow: fields.text({ label: 'Eyebrow (Opcional)' }),
+                    title: fields.text({ label: 'Título', validation: { isRequired: true } }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '◧ Texto izquierda / Visual derecha (split)', value: 'split' },
+                            { label: '▦ Dos tarjetas enfrentadas (cards)', value: 'cards' },
+                            { label: '▣ Bloque compacto destacado (highlight)', value: 'highlight' },
+                        ],
+                        defaultValue: 'split',
+                    }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    problemTitle: fields.text({ label: 'Título columna Problema', defaultValue: 'El problema' }),
+                    problemText: fields.text({ label: 'Texto del Problema', multiline: true }),
+                    problems: fields.array(
+                        fields.text({ label: 'Punto' }),
+                        { label: 'Lista de Problemas', itemLabel: p => p.value || 'Problema' }
+                    ),
+                    solutionTitle: fields.text({ label: 'Título columna Solución', defaultValue: 'Nuestra solución' }),
+                    solutionText: fields.text({ label: 'Texto de la Solución', multiline: true }),
+                    solutions: fields.array(
+                        fields.text({ label: 'Punto' }),
+                        { label: 'Lista de Soluciones', itemLabel: p => p.value || 'Solución' }
+                    ),
+                    image: fields.image({
+                        label: 'Imagen (Opcional, variante split)',
+                        directory: 'public/images/locations',
+                        publicPath: '/images/locations',
+                    }),
+                    imageAlt: fields.text({ label: 'Texto Alt Imagen (Opcional)' }),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
                 })
             }
         }, {

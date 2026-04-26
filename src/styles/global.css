@@ -12,21 +12,28 @@
 
 /* ---- TIPOGRAFÍA UNIFICADA ----
    Tamaños base para cada nivel de heading + escala global desde el CMS.
-   line-height específico para que 2+ líneas respiren bien. */
+   Fuera de @layer para ganar a las utilidades de Tailwind (text-5xl, etc.)
+   !important necesario para que --heading-scale se aplique también al hero. */
 
 @layer base {
     html {
         font-size: var(--body-font-size, 16px);
     }
+}
 
-    h1 {
-        font-size: calc(clamp(2.25rem, 5vw, 4rem) * var(--heading-scale, 1));
-        line-height: 1.15;
-    }
-    h2 {
-        font-size: calc(clamp(1.75rem, 3.5vw, 2.75rem) * var(--heading-scale, 1));
-        line-height: 1.28;
-    }
+/* h1 y h2: fuera de @layer + !important — siempre son títulos de sección/página */
+h1 {
+    font-size: calc(clamp(2.25rem, 5vw, 4rem) * var(--heading-scale, 1)) !important;
+    line-height: 1.15 !important;
+}
+h2 {
+    font-size: calc(clamp(1.75rem, 3.5vw, 2.75rem) * var(--heading-scale, 1)) !important;
+    line-height: 1.28 !important;
+}
+
+/* h3-h6: dentro de @layer base — la escala aplica por defecto pero las
+   utilidades Tailwind (text-2xl, text-lg…) del componente pueden sobreescribirlas */
+@layer base {
     h3 {
         font-size: calc(clamp(1.25rem, 2.5vw, 1.875rem) * var(--heading-scale, 1));
         line-height: 1.35;
@@ -47,7 +54,7 @@
     }
 
     .readable-hero-text {
-        text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+        text-shadow: 0 1px 4px rgb(0 0 0 / 0.55), 0 0 16px rgb(var(--color-text-heading) / 0.20);
     }
 }
 
@@ -55,12 +62,16 @@
    Fuera de @layer para ganar a las utilidades de Tailwind (bg-*, text-*, etc.) */
 .btn-cta {
     border-radius: var(--radius-btn, 0.75rem) !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 html[data-btn-style="solid"] .btn-cta {
     background: rgb(var(--color-primary)) !important;
     color: #fff !important;
     border-color: transparent !important;
+}
+html[data-btn-style="solid"] .btn-cta:hover {
+    background: rgb(var(--color-accent)) !important;
 }
 
 html[data-btn-style="outline"] .btn-cta {
@@ -70,13 +81,64 @@ html[data-btn-style="outline"] .btn-cta {
     box-shadow: none !important;
 }
 html[data-btn-style="outline"] .btn-cta:hover {
-    background: rgb(var(--color-primary) / 0.08) !important;
+    background: rgb(var(--color-primary)) !important;
+    color: #fff !important;
 }
 
 html[data-btn-style="gradient"] .btn-cta {
     background: var(--theme-gradient) !important;
     color: #fff !important;
     border-color: transparent !important;
+}
+html[data-btn-style="gradient"] .btn-cta:hover {
+    filter: brightness(1.1) !important;
+}
+
+/* ---- BOTÓN SECUNDARIO (WhatsApp / CTA secundario) ----
+   Siempre outline del color primary por defecto.
+   buttonStyle="solid"    → fondo primary atenuado
+   buttonStyle="outline"  → outline primary (igual al default)
+   buttonStyle="gradient" → outline con texto degradado */
+.btn-secondary {
+    border-radius: var(--radius-btn, 0.75rem) !important;
+    border: 2px solid rgb(var(--color-primary)) !important;
+    color: rgb(var(--color-primary)) !important;
+    background: transparent !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
+}
+.btn-secondary:hover {
+    background: rgb(var(--color-primary) / 0.12) !important;
+}
+
+html[data-btn-style="solid"] .btn-secondary {
+    background: rgb(var(--color-primary) / 0.15) !important;
+    color: rgb(var(--color-primary)) !important;
+}
+html[data-btn-style="solid"] .btn-secondary:hover {
+    background: rgb(var(--color-primary) / 0.28) !important;
+}
+
+html[data-btn-style="gradient"] .btn-secondary {
+    border-image: var(--theme-gradient) 1 !important;
+    border-color: transparent !important;
+    background: transparent !important;
+}
+html[data-btn-style="gradient"] .btn-secondary:hover {
+    background: rgb(var(--color-primary) / 0.10) !important;
+}
+
+/* ---- BOTÓN WHATSAPP ----
+   Se aplica automáticamente cuando el link secundario apunta a wa.me */
+.btn-whatsapp {
+    border-radius: var(--radius-btn, 0.75rem) !important;
+    background: #25D366 !important;
+    color: #fff !important;
+    border: 2px solid #25D366 !important;
+    transition: background 0.2s ease, border-color 0.2s ease !important;
+}
+.btn-whatsapp:hover {
+    background: #128C7E !important;
+    border-color: #128C7E !important;
 }
 
 /* ---- RADIO DE ESQUINAS ----
@@ -257,7 +319,7 @@ html[data-texture]:not([data-texture="none"]) body::before {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 9998;
+    z-index: 10;
 }
 
 html[data-texture="dots"] body::before {
@@ -276,4 +338,74 @@ html[data-texture="noise"] body::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
     background-size: 200px 200px;
     opacity: 0.04;
+}
+
+/* ---- HERO: ANIMACIÓN DE ENTRADA SECUENCIAL ----
+   subtle = solo fade | full = fade + deslizamiento | none = sin animación */
+html[data-anim="subtle"] [data-hero-animate],
+html[data-anim="full"]   [data-hero-animate] {
+    animation: heroFadeIn 0.6s ease both;
+}
+html[data-anim="full"] [data-hero-animate] {
+    animation: heroSlideIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+html[data-anim="subtle"] [data-hero-animate="1"],
+html[data-anim="full"]   [data-hero-animate="1"] { animation-delay: 80ms; }
+html[data-anim="subtle"] [data-hero-animate="2"],
+html[data-anim="full"]   [data-hero-animate="2"] { animation-delay: 240ms; }
+html[data-anim="subtle"] [data-hero-animate="3"],
+html[data-anim="full"]   [data-hero-animate="3"] { animation-delay: 390ms; }
+html[data-anim="subtle"] [data-hero-animate="4"],
+html[data-anim="full"]   [data-hero-animate="4"] { animation-delay: 530ms; }
+html[data-anim="subtle"] [data-hero-animate="5"],
+html[data-anim="full"]   [data-hero-animate="5"] { animation-delay: 660ms; }
+
+@keyframes heroSlideIn {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ---- PULSO DE ANILLO EN BOTÓN CTA PRINCIPAL ---- */
+html[data-anim="full"] .btn-cta-pulse,
+html[data-anim="subtle"] .btn-cta-pulse {
+    outline-style: solid;
+    outline-width: 2px;
+    outline-color: transparent;
+    animation: ctaPulse 3s ease-out infinite 1.4s;
+}
+@keyframes ctaPulse {
+    0%   { outline-color: rgb(var(--color-primary) / 0.65); outline-offset: 0px; }
+    75%  { outline-color: rgb(var(--color-primary) / 0);    outline-offset: 10px; }
+    100% { outline-color: rgb(var(--color-primary) / 0);    outline-offset: 10px; }
+}
+
+/* ---- ELEMENTOS DECORATIVOS FLOTANTES (hero) ---- */
+@keyframes floatUp {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-18px); }
+}
+@keyframes floatDown {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(18px); }
+}
+html[data-anim="full"] .anim-float-up   { animation: floatUp   9s ease-in-out infinite; }
+html[data-anim="full"] .anim-float-down { animation: floatDown 11s ease-in-out infinite; }
+
+/* ---- ACCESIBILIDAD: REDUCIR MOVIMIENTO ----
+   Respeta la preferencia del sistema operativo. */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
 }

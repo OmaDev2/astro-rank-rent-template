@@ -6,11 +6,11 @@ interface Props {
     title?: string;
     subtitle?: string;
     bgClass?: string;
-    titleTag?: string;
+    titleTag?: "h1" | "h2" | "h3" | "h4";
 }
 
 const { testimonials, title, subtitle, bgClass = "bg-surface", titleTag = "h2" } = Astro.props;
-const TitleTag = titleTag;
+const TitleTag = titleTag as "h1" | "h2" | "h3" | "h4";
 
 // Determine card background based on section background
 const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";

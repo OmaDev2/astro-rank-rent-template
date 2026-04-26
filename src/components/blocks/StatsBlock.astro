@@ -11,11 +11,11 @@ interface Props {
     subtitle?: string;
     stats: Stat[];
     bgClass?: string;
-    titleTag?: string;
+    titleTag?: "h1" | "h2" | "h3" | "h4";
 }
 
 const { title, subtitle, stats = [], bgClass = "bg-surface", titleTag = "h2" } = Astro.props;
-const TitleTag = titleTag;
+const TitleTag = titleTag as "h1" | "h2" | "h3" | "h4";
 ---
 
 <section class={`py-20 ${bgClass}`}>

@@ -64,7 +64,7 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
                 }
             </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div data-stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {
                 servicesToDisplay.map((item: any) => {
                     let data, slug, link;
@@ -138,7 +138,7 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
                                 decoding="async"
                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
                             {data.isPopular && (
                                 <div class="absolute top-4 left-4 z-10">
                                     <span class="inline-flex items-center gap-1.5 bg-primary text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg">
@@ -148,13 +148,13 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
                                 </div>
                             )}
                             <div class="relative h-full flex flex-col justify-end p-8">
-                                <h3 class="text-2xl font-heading font-bold text-white mb-3 drop-shadow-md">
+                                <h3 class="text-2xl font-heading font-bold text-white mb-3" style="text-shadow: 0 2px 6px rgb(0 0 0 / 0.90), 0 0 20px rgb(0 0 0 / 0.50)">
                                     {title}
                                 </h3>
-                                <p class="text-white font-medium mb-6 line-clamp-2 text-sm leading-relaxed drop-shadow-md" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8)">
+                                <p class="text-white/90 font-semibold mb-6 line-clamp-2 text-sm leading-relaxed" style="text-shadow: 0 1px 4px rgb(0 0 0 / 0.90)">
                                     {description}
                                 </p>
-                                <div class="inline-flex items-center text-primary font-bold group-hover:text-accent drop-shadow-sm">
+                                <div class="inline-flex items-center text-primary font-bold group-hover:text-accent" style="text-shadow: 0 1px 3px rgb(0 0 0 / 0.70)">
                                     Leer más{" "}
                                     <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
                                 </div>
