@@ -5,6 +5,7 @@ import WhatsAppButton from "../components/ui/WhatsAppButton.astro";
 import BlockRenderer from "../components/BlockRenderer.astro";
 import { getSettings } from "../lib/settings";
 import type { Service, Location, Block, FAQItem } from "../types";
+import { getPresetBlocks } from "../utils/pagePresets";
 
 interface Props {
     title: string;
@@ -27,6 +28,7 @@ interface Props {
     allLocations: Location[];
     testimonials: any[];
     blocks?: Block[];
+    pagePreset?: string;
 
     pageTitle: string;
     pageDescription: string;
@@ -54,18 +56,23 @@ const {
     schema,
     mdxComponents = {},
     blocks,
+    pagePreset,
 } = Astro.props;
 
-// Orden por defecto para servicios antiguos o sin bloques definidos
 const defaultBlocks: Block[] = [
     { discriminant: "hero" },
     { discriminant: "content" },
     { discriminant: "faq" },
-    { discriminant: "service_locations" }, // Ahora es parte de los bloques y se puede quitar/mover
+    { discriminant: "service_locations" },
     { discriminant: "cta" },
 ];
 
-const finalBlocks = blocks && blocks.length > 0 ? blocks : defaultBlocks;
+const finalBlocks =
+    blocks && blocks.length > 0
+        ? blocks
+        : pagePreset
+            ? getPresetBlocks('service', pagePreset)
+            : defaultBlocks;
 const settings = await getSettings();
 ---
 

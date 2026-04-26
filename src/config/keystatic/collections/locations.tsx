@@ -8,6 +8,7 @@ import { ctaPreview } from '../../../components/keystatic/CtaPreview';
 import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
 import { testimonialsPreview } from '../../../components/keystatic/TestimonialsPreview';
 import { processPreview } from '../../../components/keystatic/ProcessPreview';
+import { noticeField } from '../../../components/keystatic/NoticeField';
 import { aboutPreview } from '../../../components/keystatic/AboutPreview';
 import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 
@@ -62,6 +63,19 @@ export const locations = collection({
             itemLabel: (props) => props.value,
         }),
 
+        pagePreset: fields.select({
+            label: '⚡ Preset de Página',
+            description: 'Estructura automática para páginas rápidas. Si añades bloques manualmente abajo, el preset se ignora.',
+            options: [
+                { label: '— Sin preset (bloques manuales o default) —', value: '' },
+                { label: '✅ Estándar — Hero + Contenido + Servicios + Mapa + CTA', value: 'standard_location' },
+                { label: '🔍 SEO — Hero + Contenido + Áreas + Servicios + FAQ + Mapa + CTA', value: 'seo_location' },
+                { label: '⭐ Confianza — Hero + Trust Strip + Testimonios + Servicios + FAQ + Mapa + CTA', value: 'trust_location' },
+                { label: '⚡ Compacto — Hero + Servicios + Mapa + CTA', value: 'compact_location' },
+            ],
+            defaultValue: '',
+        }),
+
         faq: fields.array(
             fields.object({
                 question: fields.text({ label: 'Pregunta' }),
@@ -73,6 +87,11 @@ export const locations = collection({
                 itemLabel: (props) => props.fields.question.value || 'Pregunta',
             }
         ),
+
+        _notice: noticeField({
+            message: 'Los bloques manuales tienen prioridad sobre el preset. Si añades al menos un bloque, el preset se ignora completamente.',
+            tone: 'warning',
+        }),
 
         blocks: fields.blocks({
             hero: {
@@ -391,10 +410,47 @@ export const locations = collection({
                     ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
                     ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
                 })
+            },
+            comparison: {
+                label: '⚖️ Comparativa (Tabla / Columnas)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título', validation: { isRequired: true } }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Tabla responsive (table)', value: 'table' },
+                            { label: '☰ Filas en tarjetas (cards)', value: 'cards' },
+                            { label: '◧ Dos columnas grandes (split)', value: 'split' },
+                        ],
+                        defaultValue: 'table',
+                    }),
+                    leftTitle: fields.text({ label: 'Título columna izquierda', validation: { isRequired: true } }),
+                    rightTitle: fields.text({ label: 'Título columna derecha (recomendada)', validation: { isRequired: true } }),
+                    rows: fields.array(
+                        fields.object({
+                            label: fields.text({ label: 'Aspecto / Criterio' }),
+                            left: fields.text({ label: 'Valor columna izquierda', multiline: true }),
+                            right: fields.text({ label: 'Valor columna derecha', multiline: true }),
+                        }),
+                        { label: 'Filas de Comparativa', itemLabel: p => p.fields.label.value || 'Fila' }
+                    ),
+                    conclusion: fields.text({ label: 'Conclusión (Opcional)', multiline: true }),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
             }
         }, {
-            label: 'Constructor de Página (Orden de Secciones)',
-            description: 'Define qué secciones mostrar y en qué orden aparecerán en la página'
+            label: 'Bloques Manuales (Opcional)',
+            description: 'Opcional. Si este listado tiene bloques, se ignorará el preset seleccionado.'
         }),
 
         content: fields.mdx({

@@ -9,6 +9,7 @@ import { statsPreview } from '@/components/keystatic/StatsPreview';
 import { ctaPreview } from '@/components/keystatic/CtaPreview';
 import { pricingPreview } from '@/components/keystatic/PricingPreview';
 import { processPreview } from '@/components/keystatic/ProcessPreview';
+import { noticeField } from '@/components/keystatic/NoticeField';
 
 export const services = collection({
     label: '🛠️ Servicios',
@@ -54,6 +55,24 @@ export const services = collection({
         icon: IconPicker({ label: 'Icono Principal (Lucide)' }),
         shortDesc: fields.text({ label: 'Descripción Corta (Cards)', multiline: true }),
         featured: fields.checkbox({ label: 'Destacado en Home', defaultValue: false }),
+
+        pagePreset: fields.select({
+            label: '⚡ Preset de Página',
+            description: 'Estructura automática para páginas rápidas. Si añades bloques manualmente abajo, el preset se ignora.',
+            options: [
+                { label: '— Sin preset (bloques manuales o default) —', value: '' },
+                { label: '✅ Estándar — Hero + Problema/Solución + Precios + FAQ + CTA', value: 'standard_service' },
+                { label: '🖼️ Visual — Hero + Galería + Materiales + Antes/Después + Testimonios + CTA', value: 'visual_service' },
+                { label: '🔧 Técnico — Hero + Materiales + Comparativa + Proceso + Precios + FAQ + CTA', value: 'technical_service' },
+                { label: '💶 Precios — Hero + Confianza + Factores de precio + Comparativa + Testimonios + CTA', value: 'price_focused_service' },
+            ],
+            defaultValue: '',
+        }),
+
+        _notice: noticeField({
+            message: 'Los bloques manuales tienen prioridad sobre el preset. Si añades al menos un bloque, el preset se ignora completamente.',
+            tone: 'warning',
+        }),
 
         // CONSTRUCTOR DE BLOQUES MEJORADO
         blocks: fields.blocks({
@@ -413,8 +432,8 @@ export const services = collection({
                 })
             }
         }, {
-            label: 'Constructor Visual de Página',
-            description: 'Añade y ordena los bloques que compondrán la página de este servicio.'
+            label: 'Bloques Manuales (Opcional)',
+            description: 'Opcional. Si este listado tiene bloques, se ignorará el preset seleccionado.'
         }),
 
         content: fields.mdx({

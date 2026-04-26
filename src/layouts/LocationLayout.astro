@@ -6,6 +6,7 @@ import { getCollection } from "astro:content";
 import { getSettings } from "../lib/settings";
 import BlockRenderer from "../components/BlockRenderer.astro";
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
+import { getPresetBlocks } from "../utils/pagePresets";
 
 interface Props {
   locationName: string;
@@ -24,6 +25,7 @@ interface Props {
   allLocations?: Location[];
   title?: string;
   blocks?: Block[];
+  pagePreset?: string;
   currentSlug?: string;
   pageTitle: string;
   pageDescription: string;
@@ -60,7 +62,11 @@ const defaultBlocks: Block[] = [
 ];
 
 const finalBlocks =
-  props.blocks && props.blocks.length > 0 ? props.blocks : defaultBlocks;
+    props.blocks && props.blocks.length > 0
+        ? props.blocks
+        : props.pagePreset
+            ? getPresetBlocks('location', props.pagePreset)
+            : defaultBlocks;
 ---
 
 <Layout
