@@ -222,6 +222,83 @@ export const locations = collection({
                     ),
                 })
             },
+            materials: {
+                label: '🧱 Materiales y Acabados',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título', validation: { isRequired: true } }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Tarjetas en cuadrícula (grid)', value: 'grid' },
+                            { label: '☰ Lista compacta (list)', value: 'list' },
+                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
+                    items: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Nombre del Material / Acabado' }),
+                            description: fields.text({ label: 'Descripción (Opcional)', multiline: true }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
+                            image: fields.image({
+                                label: 'Imagen (Opcional)',
+                                directory: 'public/images/locations',
+                                publicPath: '/images/locations',
+                            }),
+                            imageAlt: fields.text({ label: 'Texto Alt Imagen (Opcional)' }),
+                        }),
+                        { label: 'Materiales / Acabados', itemLabel: p => p.fields.title.value || 'Material' }
+                    ),
+                    note: fields.text({ label: 'Nota al pie (Opcional)', multiline: true }),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
+            },
+            price_factors: {
+                label: '💰 Factores de Precio',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título', validation: { isRequired: true } }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Tarjetas con icono (cards)', value: 'cards' },
+                            { label: '① Lista numerada (numbered)', value: 'numbered' },
+                            { label: '≡ Cuadrícula densa (compact)', value: 'compact' },
+                        ],
+                        defaultValue: 'cards',
+                    }),
+                    intro: fields.text({ label: 'Introducción (Opcional)', multiline: true }),
+                    factors: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Factor' }),
+                            description: fields.text({ label: 'Descripción (Opcional)', multiline: true }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
+                        }),
+                        { label: 'Factores de Precio', itemLabel: p => p.fields.title.value || 'Factor' }
+                    ),
+                    footerText: fields.text({ label: 'Texto al pie (Opcional)', multiline: true }),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
+            },
             problem_solution: {
                 label: '⚡ Problema / Solución',
                 schema: fields.object({

@@ -1,0 +1,211 @@
+---
+import DynamicIcon from "../ui/DynamicIcon.astro";
+
+interface Factor {
+    title: string;
+    description?: string;
+    icon?: string;
+}
+
+interface Props {
+    title: string;
+    subtitle?: string;
+    titleTag?: "h2" | "h3";
+    intro?: string;
+    factors: Factor[];
+    footerText?: string;
+    ctaText?: string;
+    ctaLink?: string;
+    variant?: "cards" | "numbered" | "compact";
+    bgClass?: string;
+}
+
+const {
+    title,
+    subtitle,
+    titleTag = "h2",
+    intro,
+    factors = [],
+    footerText,
+    ctaText,
+    ctaLink = "/contacto/",
+    variant = "cards",
+    bgClass = "bg-surface",
+} = Astro.props;
+
+if (!factors || factors.length === 0) return;
+
+const TitleTag = titleTag as "h2" | "h3";
+---
+
+{/* ══════════════════════════════════════
+    VARIANT: cards — cuadrícula con icono
+    ══════════════════════════════════════ */}
+{variant === "cards" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4">
+                    {title}
+                </TitleTag>
+                {subtitle && (
+                    <p class="text-body text-lg leading-relaxed">{subtitle}</p>
+                )}
+            </div>
+
+            {intro && (
+                <p class="max-w-2xl mx-auto text-center text-body mb-10 border border-heading/10 rounded-xl px-6 py-4 bg-surface text-sm leading-relaxed">
+                    {intro}
+                </p>
+            )}
+
+            <ul
+                data-stagger
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto"
+            >
+                {factors.map((factor) => (
+                    <li class="group flex flex-col gap-3 p-6 rounded-2xl border border-heading/10 bg-surface hover:border-primary/40 hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-3">
+                            <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                                <DynamicIcon name={factor.icon || "CircleDot"} className="w-5 h-5" />
+                            </span>
+                            <p class="font-bold text-heading leading-snug">{factor.title}</p>
+                        </div>
+                        {factor.description && (
+                            <p class="text-sm text-body leading-relaxed">{factor.description}</p>
+                        )}
+                    </li>
+                ))}
+            </ul>
+
+            {(footerText || ctaText) && (
+                <div class="mt-12 max-w-2xl mx-auto text-center space-y-5">
+                    {footerText && (
+                        <p class="text-heading font-semibold text-lg leading-relaxed border-l-4 border-primary pl-4 text-left">
+                            {footerText}
+                        </p>
+                    )}
+                    {ctaText && (
+                        <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg">
+                            {ctaText}
+                        </a>
+                    )}
+                </div>
+            )}
+        </div>
+    </section>
+)}
+
+{/* ══════════════════════════════════════
+    VARIANT: numbered — lista numerada editorial
+    ══════════════════════════════════════ */}
+{variant === "numbered" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-10">
+                    <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4">
+                        {title}
+                    </TitleTag>
+                    {subtitle && (
+                        <p class="text-body text-lg leading-relaxed">{subtitle}</p>
+                    )}
+                </div>
+
+                {intro && (
+                    <p class="text-body mb-8 leading-relaxed">{intro}</p>
+                )}
+
+                <ol data-stagger class="space-y-6">
+                    {factors.map((factor, i) => (
+                        <li class="group flex items-start gap-5">
+                            <span class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+                                <span class="text-lg font-black text-primary group-hover:text-white transition-colors leading-none">
+                                    {i + 1}
+                                </span>
+                            </span>
+                            <div class="flex-1 pt-2">
+                                <p class="font-bold text-heading text-lg leading-snug mb-1">{factor.title}</p>
+                                {factor.description && (
+                                    <p class="text-body leading-relaxed">{factor.description}</p>
+                                )}
+                            </div>
+                            {factor.icon && (
+                                <span class="flex-shrink-0 mt-2 text-body opacity-30 group-hover:text-primary group-hover:opacity-100 transition-all hidden sm:block">
+                                    <DynamicIcon name={factor.icon} className="w-5 h-5" />
+                                </span>
+                            )}
+                        </li>
+                    ))}
+                </ol>
+
+                {(footerText || ctaText) && (
+                    <div class="mt-10 pt-8 border-t border-heading/10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                        {footerText && (
+                            <p class="flex-1 text-heading font-semibold leading-relaxed">{footerText}</p>
+                        )}
+                        {ctaText && (
+                            <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg flex-shrink-0">
+                                {ctaText}
+                            </a>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    </section>
+)}
+
+{/* ══════════════════════════════════════
+    VARIANT: compact — lista densa en 2 columnas
+    ══════════════════════════════════════ */}
+{variant === "compact" && (
+    <section class={`py-16 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto rounded-2xl border border-heading/10 bg-surface overflow-hidden shadow-sm">
+
+                {/* Cabecera */}
+                <div class="px-8 py-8 border-b border-heading/10">
+                    <TitleTag class="text-2xl md:text-3xl font-heading font-bold text-heading mb-2">
+                        {title}
+                    </TitleTag>
+                    {subtitle && <p class="text-body leading-relaxed">{subtitle}</p>}
+                    {intro && <p class="mt-3 text-sm text-body opacity-80 leading-relaxed">{intro}</p>}
+                </div>
+
+                {/* Lista de factores */}
+                <ul data-stagger class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 divide-heading/10">
+                    {factors.map((factor, i) => (
+                        <li class={`flex items-start gap-3 px-6 py-4 hover:bg-primary/5 transition-colors group ${
+                            i % 2 === 0 && i !== factors.length - 1 ? "sm:border-r border-heading/10" : ""
+                        }`}>
+                            <span class="flex-shrink-0 mt-0.5 w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                                <DynamicIcon name={factor.icon || "Minus"} className="w-3.5 h-3.5" />
+                            </span>
+                            <div>
+                                <p class="font-semibold text-heading text-sm leading-snug">{factor.title}</p>
+                                {factor.description && (
+                                    <p class="text-xs text-body mt-0.5 leading-relaxed">{factor.description}</p>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+
+                {/* Footer */}
+                {(footerText || ctaText) && (
+                    <div class="px-8 py-6 border-t border-heading/10 bg-primary/5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        {footerText && (
+                            <p class="flex-1 text-sm font-semibold text-heading leading-relaxed">{footerText}</p>
+                        )}
+                        {ctaText && (
+                            <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-7 py-3 text-sm font-bold bg-primary text-white rounded transition-all shadow-md flex-shrink-0">
+                                {ctaText}
+                            </a>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    </section>
+)}

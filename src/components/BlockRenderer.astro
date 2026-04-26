@@ -21,6 +21,8 @@ import HomeServicesOnePage from "./blocks/home/HomeServicesOnePage.astro";
 // New Modular Blocks
 import TrustStripBlock from "./blocks/TrustStripBlock.astro";
 import ProblemSolutionBlock from "./blocks/ProblemSolutionBlock.astro";
+import MaterialsBlock from "./blocks/MaterialsBlock.astro";
+import PriceFactorsBlock from "./blocks/PriceFactorsBlock.astro";
 import PricingBlock from "./blocks/PricingBlock.astro";
 import StatsBlock from "./blocks/StatsBlock.astro";
 import LogosBlock from "./blocks/LogosBlock.astro";
@@ -605,6 +607,37 @@ const blockBgClasses = (blocks as any[]).map((b) => {
             ctaLink={value?.ctaLink}
             variant={value?.variant}
             titleTag={value?.titleTag}
+            bgClass={bgClass}
+          />
+        );
+
+      case "materials":
+        return (
+          <MaterialsBlock
+            title={value?.title}
+            subtitle={value?.subtitle}
+            titleTag={value?.titleTag}
+            variant={value?.variant}
+            items={value?.items || []}
+            note={value?.note}
+            ctaText={value?.ctaText}
+            ctaLink={value?.ctaLink}
+            bgClass={bgClass}
+          />
+        );
+
+      case "price_factors":
+        return (
+          <PriceFactorsBlock
+            title={value?.title}
+            subtitle={value?.subtitle}
+            titleTag={value?.titleTag}
+            intro={value?.intro}
+            factors={value?.factors || []}
+            footerText={value?.footerText}
+            ctaText={value?.ctaText}
+            ctaLink={value?.ctaLink}
+            variant={value?.variant}
             bgClass={bgClass}
           />
         );

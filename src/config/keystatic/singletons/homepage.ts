@@ -306,6 +306,47 @@ export const homepage = singleton({
                     ),
                 })
             },
+            materials: {
+                label: '🧱 Materiales y Acabados',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título', validation: { isRequired: true } }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Tarjetas en cuadrícula (grid)', value: 'grid' },
+                            { label: '☰ Lista compacta (list)', value: 'list' },
+                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
+                    items: fields.array(
+                        fields.object({
+                            title: fields.text({ label: 'Nombre del Material / Acabado' }),
+                            description: fields.text({ label: 'Descripción (Opcional)', multiline: true }),
+                            icon: IconPicker({ label: 'Icono (Lucide)' }),
+                            image: fields.image({
+                                label: 'Imagen (Opcional)',
+                                directory: 'public/images',
+                                publicPath: '/images',
+                            }),
+                            imageAlt: fields.text({ label: 'Texto Alt Imagen (Opcional)' }),
+                        }),
+                        { label: 'Materiales / Acabados', itemLabel: p => p.fields.title.value || 'Material' }
+                    ),
+                    note: fields.text({ label: 'Nota al pie (Opcional)', multiline: true }),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
+            },
             problem_solution: {
                 label: '⚡ Problema / Solución',
                 schema: fields.object({

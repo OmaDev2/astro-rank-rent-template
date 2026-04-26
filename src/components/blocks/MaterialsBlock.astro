@@ -1,0 +1,228 @@
+---
+import DynamicIcon from "../ui/DynamicIcon.astro";
+
+interface MaterialItem {
+    title: string;
+    description?: string;
+    icon?: string;
+    image?: string;
+    imageAlt?: string;
+}
+
+interface Props {
+    title: string;
+    subtitle?: string;
+    titleTag?: "h2" | "h3";
+    variant?: "grid" | "list" | "split";
+    items: MaterialItem[];
+    note?: string;
+    ctaText?: string;
+    ctaLink?: string;
+    bgClass?: string;
+}
+
+const {
+    title,
+    subtitle,
+    titleTag = "h2",
+    variant = "grid",
+    items = [],
+    note,
+    ctaText,
+    ctaLink = "/contacto/",
+    bgClass = "bg-surface",
+} = Astro.props;
+
+if (!items || items.length === 0) return;
+
+const TitleTag = titleTag as "h2" | "h3";
+---
+
+{/* ══════════════════════════════════════
+    VARIANT: grid — cards en 2/3 columnas
+    ══════════════════════════════════════ */}
+{variant === "grid" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4">
+                    {title}
+                </TitleTag>
+                {subtitle && (
+                    <p class="text-body text-lg leading-relaxed">{subtitle}</p>
+                )}
+            </div>
+
+            <ul
+                data-stagger
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+            >
+                {items.map((item) => (
+                    <li class="group flex flex-col rounded-2xl border border-heading/10 bg-surface overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+                        {item.image ? (
+                            <div class="relative h-40 overflow-hidden">
+                                <img
+                                    src={item.image}
+                                    alt={item.imageAlt || item.title}
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    width="400"
+                                    height="160"
+                                />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                            </div>
+                        ) : (
+                            <div class="flex items-center justify-center h-20 bg-primary/5 border-b border-heading/10 group-hover:bg-primary/10 transition-colors">
+                                <span class="text-primary group-hover:scale-110 transition-transform duration-300">
+                                    <DynamicIcon name={item.icon || "Square"} className="w-8 h-8" />
+                                </span>
+                            </div>
+                        )}
+                        <div class="p-5 flex flex-col gap-1.5">
+                            <p class="font-bold text-heading leading-snug">{item.title}</p>
+                            {item.description && (
+                                <p class="text-sm text-body leading-relaxed">{item.description}</p>
+                            )}
+                        </div>
+                    </li>
+                ))}
+            </ul>
+
+            {(note || ctaText) && (
+                <div class="mt-10 text-center space-y-4">
+                    {note && (
+                        <p class="text-sm text-body opacity-70 max-w-xl mx-auto">{note}</p>
+                    )}
+                    {ctaText && (
+                        <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg">
+                            {ctaText}
+                        </a>
+                    )}
+                </div>
+            )}
+        </div>
+    </section>
+)}
+
+{/* ══════════════════════════════════════
+    VARIANT: list — lista compacta
+    ══════════════════════════════════════ */}
+{variant === "list" && (
+    <section class={`py-16 ${bgClass}`}>
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="mb-10">
+                <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-3">
+                    {title}
+                </TitleTag>
+                {subtitle && (
+                    <p class="text-body text-lg leading-relaxed">{subtitle}</p>
+                )}
+            </div>
+
+            <ul data-stagger class="divide-y divide-heading/10 border border-heading/10 rounded-2xl overflow-hidden">
+                {items.map((item) => (
+                    <li class="flex items-center gap-4 px-6 py-4 bg-surface hover:bg-primary/5 transition-colors group">
+                        <span class="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                            <DynamicIcon name={item.icon || "ChevronRight"} className="w-4 h-4" />
+                        </span>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-heading leading-snug">{item.title}</p>
+                            {item.description && (
+                                <p class="text-xs text-body mt-0.5 leading-relaxed truncate">{item.description}</p>
+                            )}
+                        </div>
+                        {item.image && (
+                            <img
+                                src={item.image}
+                                alt={item.imageAlt || item.title}
+                                loading="lazy"
+                                decoding="async"
+                                class="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                                width="48"
+                                height="48"
+                            />
+                        )}
+                    </li>
+                ))}
+            </ul>
+
+            {(note || ctaText) && (
+                <div class="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    {note && (
+                        <p class="text-sm text-body opacity-70 flex-1">{note}</p>
+                    )}
+                    {ctaText && (
+                        <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg flex-shrink-0">
+                            {ctaText}
+                        </a>
+                    )}
+                </div>
+            )}
+        </div>
+    </section>
+)}
+
+{/* ══════════════════════════════════════
+    VARIANT: split — título izquierda, materiales derecha
+    ══════════════════════════════════════ */}
+{variant === "split" && (
+    <section class={`py-20 ${bgClass}`}>
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
+
+                {/* Columna izquierda: texto */}
+                <div class="lg:sticky lg:top-24 space-y-5">
+                    <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading leading-tight">
+                        {title}
+                    </TitleTag>
+                    {subtitle && (
+                        <p class="text-body text-lg leading-relaxed">{subtitle}</p>
+                    )}
+                    {note && (
+                        <p class="text-sm text-body opacity-70 border-l-2 border-primary/40 pl-4 leading-relaxed">
+                            {note}
+                        </p>
+                    )}
+                    {ctaText && (
+                        <div class="pt-2">
+                            <a href={ctaLink} class="btn-cta inline-flex items-center justify-center px-8 py-4 text-base font-bold bg-primary text-white rounded transition-all shadow-lg">
+                                {ctaText}
+                            </a>
+                        </div>
+                    )}
+                </div>
+
+                {/* Columna derecha: materiales */}
+                <ul data-stagger class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {items.map((item) => (
+                        <li class="group flex items-start gap-4 p-5 rounded-xl border border-heading/10 bg-surface hover:border-primary/40 hover:shadow-md transition-all duration-300">
+                            {item.image ? (
+                                <img
+                                    src={item.image}
+                                    alt={item.imageAlt || item.title}
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                                    width="56"
+                                    height="56"
+                                />
+                            ) : (
+                                <span class="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                                    <DynamicIcon name={item.icon || "Layers"} className="w-5 h-5" />
+                                </span>
+                            )}
+                            <div>
+                                <p class="font-bold text-heading leading-snug">{item.title}</p>
+                                {item.description && (
+                                    <p class="mt-1 text-sm text-body leading-relaxed">{item.description}</p>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+
+            </div>
+        </div>
+    </section>
+)}
