@@ -23,6 +23,8 @@ import TrustStripBlock from "./blocks/TrustStripBlock.astro";
 import ProblemSolutionBlock from "./blocks/ProblemSolutionBlock.astro";
 import MaterialsBlock from "./blocks/MaterialsBlock.astro";
 import PriceFactorsBlock from "./blocks/PriceFactorsBlock.astro";
+import ComparisonBlock from "./blocks/ComparisonBlock.astro";
+import GalleryBlock from "./blocks/GalleryBlock.astro";
 import PricingBlock from "./blocks/PricingBlock.astro";
 import StatsBlock from "./blocks/StatsBlock.astro";
 import LogosBlock from "./blocks/LogosBlock.astro";
@@ -638,6 +640,37 @@ const blockBgClasses = (blocks as any[]).map((b) => {
             ctaText={value?.ctaText}
             ctaLink={value?.ctaLink}
             variant={value?.variant}
+            bgClass={bgClass}
+          />
+        );
+
+      case "comparison":
+        return (
+          <ComparisonBlock
+            title={value?.title}
+            subtitle={value?.subtitle}
+            titleTag={value?.titleTag}
+            leftTitle={value?.leftTitle}
+            rightTitle={value?.rightTitle}
+            rows={value?.rows || []}
+            conclusion={value?.conclusion}
+            ctaText={value?.ctaText}
+            ctaLink={value?.ctaLink}
+            variant={value?.variant}
+            bgClass={bgClass}
+          />
+        );
+
+      case "gallery":
+        return (
+          <GalleryBlock
+            title={value?.title}
+            subtitle={value?.subtitle}
+            titleTag={value?.titleTag}
+            variant={value?.variant}
+            images={value?.images || []}
+            ctaText={value?.ctaText}
+            ctaLink={value?.ctaLink}
             bgClass={bgClass}
           />
         );

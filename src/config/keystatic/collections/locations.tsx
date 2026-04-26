@@ -190,6 +190,44 @@ export const locations = collection({
                     afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
                 })
             },
+            gallery: {
+                label: '🖼️ Galería de Imágenes',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título (Opcional)' }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Cuadrícula uniforme (grid)', value: 'grid' },
+                            { label: '⊞ Alturas naturales (masonry)', value: 'masonry' },
+                            { label: '◧ Primera imagen grande (featured)', value: 'featured' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
+                    images: fields.array(
+                        fields.object({
+                            src: fields.image({
+                                label: 'Imagen',
+                                directory: 'public/images/locations',
+                                publicPath: '/images/locations',
+                            }),
+                            alt: fields.text({ label: 'Texto Alt (obligatorio)', validation: { isRequired: true } }),
+                            caption: fields.text({ label: 'Pie de foto (Opcional)' }),
+                        }),
+                        { label: 'Imágenes', itemLabel: p => p.fields.alt.value || 'Imagen' }
+                    ),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
+            },
             trust_strip: {
                 label: '✅ Franja de Confianza (Trust Strip)',
                 schema: fields.object({

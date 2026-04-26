@@ -226,6 +226,81 @@ export const services = collection({
                     ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
                 })
             },
+            gallery: {
+                label: '🖼️ Galería de Imágenes',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título (Opcional)' }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Cuadrícula uniforme (grid)', value: 'grid' },
+                            { label: '⊞ Alturas naturales (masonry)', value: 'masonry' },
+                            { label: '◧ Primera imagen grande (featured)', value: 'featured' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
+                    images: fields.array(
+                        fields.object({
+                            src: fields.image({
+                                label: 'Imagen',
+                                directory: 'public/images/services',
+                                publicPath: '/images/services',
+                            }),
+                            alt: fields.text({ label: 'Texto Alt (obligatorio)', validation: { isRequired: true } }),
+                            caption: fields.text({ label: 'Pie de foto (Opcional)' }),
+                        }),
+                        { label: 'Imágenes', itemLabel: p => p.fields.alt.value || 'Imagen' }
+                    ),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
+            },
+            comparison: {
+                label: '⚖️ Comparativa (vs)',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título', validation: { isRequired: true } }),
+                    subtitle: fields.text({ label: 'Subtítulo (Opcional)', multiline: true }),
+                    titleTag: fields.select({
+                        label: 'Nivel de Encabezado',
+                        options: [
+                            { label: 'H2', value: 'h2' },
+                            { label: 'H3', value: 'h3' },
+                        ],
+                        defaultValue: 'h2',
+                    }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Tabla responsive (table)', value: 'table' },
+                            { label: '☰ Fila a fila en cards (cards)', value: 'cards' },
+                            { label: '◧ Dos columnas grandes (split)', value: 'split' },
+                        ],
+                        defaultValue: 'table',
+                    }),
+                    leftTitle: fields.text({ label: 'Título Opción A (izquierda)', validation: { isRequired: true } }),
+                    rightTitle: fields.text({ label: 'Título Opción B (derecha, destacada)', validation: { isRequired: true } }),
+                    rows: fields.array(
+                        fields.object({
+                            label: fields.text({ label: 'Aspecto a comparar' }),
+                            left: fields.text({ label: 'Valor Opción A', multiline: true }),
+                            right: fields.text({ label: 'Valor Opción B', multiline: true }),
+                        }),
+                        { label: 'Filas de Comparativa', itemLabel: p => p.fields.label.value || 'Fila' }
+                    ),
+                    conclusion: fields.text({ label: 'Conclusión (Opcional)', multiline: true }),
+                    ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
+                    ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
+                })
+            },
             price_factors: {
                 label: '💰 Factores de Precio',
                 schema: fields.object({

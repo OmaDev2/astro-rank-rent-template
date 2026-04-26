@@ -36,6 +36,8 @@ const locations = defineCollection({
                 z.object({ discriminant: z.literal('problem_solution'), value: z.any() }),
                 z.object({ discriminant: z.literal('materials'), value: z.any() }),
                 z.object({ discriminant: z.literal('price_factors'), value: z.any() }),
+                z.object({ discriminant: z.literal('comparison'), value: z.any() }),
+                z.object({ discriminant: z.literal('gallery'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper zonas antiguas sin este campo
     }),
@@ -79,6 +81,8 @@ const services = defineCollection({
                 z.object({ discriminant: z.literal('problem_solution'), value: z.any() }),
                 z.object({ discriminant: z.literal('materials'), value: z.any() }),
                 z.object({ discriminant: z.literal('price_factors'), value: z.any() }),
+                z.object({ discriminant: z.literal('comparison'), value: z.any() }),
+                z.object({ discriminant: z.literal('gallery'), value: z.any() }),
             ])
         ).optional(), // Opcional para no romper servicios antiguos sin este campo
         faq: z.array(z.object({
@@ -258,6 +262,8 @@ const pages = defineCollection({
                 z.object({ discriminant: z.literal('problem_solution'), value: z.any() }),
                 z.object({ discriminant: z.literal('materials'), value: z.any() }),
                 z.object({ discriminant: z.literal('price_factors'), value: z.any() }),
+                z.object({ discriminant: z.literal('comparison'), value: z.any() }),
+                z.object({ discriminant: z.literal('gallery'), value: z.any() }),
             ])
         ).optional(),
 
