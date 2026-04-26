@@ -79,12 +79,32 @@ export const services = collection({
                 label: '💎 Características (Beneficios)',
                 schema: fields.object({
                     content: featuresPreview(),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Cuadrícula con icono (grid)', value: 'grid' },
+                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
+                            { label: '☰ Lista horizontal (horizontal)', value: 'horizontal' },
+                            { label: '⊙ Solo iconos y título (icons_only)', value: 'icons_only' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
                 })
             },
             process: {
                 label: '👷 Método de Trabajo (Proceso)',
                 schema: fields.object({
                     content: processPreview(),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '↔ Línea de tiempo alternada (timeline)', value: 'timeline' },
+                            { label: '▦ Tarjetas numeradas (cards)', value: 'cards' },
+                            { label: '☰ Lista compacta (compact)', value: 'compact' },
+                            { label: '◧ Título izquierda / Pasos derecha (split)', value: 'split' },
+                        ],
+                        defaultValue: 'timeline',
+                    }),
                 })
             },
             stats: {
@@ -141,6 +161,16 @@ export const services = collection({
                 label: '❓ Preguntas Frecuentes',
                 schema: fields.object({
                     title: fields.text({ label: 'Título Sección FAQ' }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▼ Acordeón (accordion)', value: 'accordion' },
+                            { label: '▦ Dos columnas (two_columns)', value: 'two_columns' },
+                            { label: '☰ Compacto (compact)', value: 'compact' },
+                            { label: '⊞ Agrupado por categoría (grouped)', value: 'grouped' },
+                        ],
+                        defaultValue: 'accordion',
+                    }),
                     faqs: fields.array(
                         fields.object({
                             question: fields.text({ label: 'Pregunta' }),

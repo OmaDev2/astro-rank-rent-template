@@ -97,6 +97,16 @@ export const locations = collection({
                 label: '💎 Características (Por qué elegirnos)',
                 schema: fields.object({
                     content: featuresPreview(),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Cuadrícula con icono (grid)', value: 'grid' },
+                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
+                            { label: '☰ Lista horizontal (horizontal)', value: 'horizontal' },
+                            { label: '⊙ Solo iconos y título (icons_only)', value: 'icons_only' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
                 })
             },
             map: {

@@ -1,15 +1,18 @@
 ---
 import { ChevronRight } from "lucide-react";
+import DynamicIcon from "../../ui/DynamicIcon.astro";
 import { slugify } from "@/utils/slugify";
+
 const {
     servicesSection,
     featuredServices = [],
     customServices = null,
     allServices = [],
     bgClass = "bg-secondary",
+    variant = "grid",
 } = Astro.props;
 
-// Normaliza el nuevo formato objeto { slug: { enabled, isPopular, order } } al formato array que usa el render
+// Normaliza el nuevo formato objeto { slug: { enabled, isPopular, order } } al formato array
 const rawServices = servicesSection?.services;
 let servicesToDisplay: any[];
 if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object') {
@@ -23,146 +26,180 @@ if (rawServices && !Array.isArray(rawServices) && typeof rawServices === 'object
 } else {
     servicesToDisplay = customServices || featuredServices || [];
 }
+
+// Normaliza un item al objeto { data, slug, link } que usa el render
+function resolveItem(item: any) {
+    let data: any, slug: string, link: string;
+    if (item.discriminant) {
+        if (item.discriminant === "manual") {
+            data = item.value;
+            slug = slugify(data.title ?? "");
+            link = data.link || `/servicios/${slug}/`;
+        } else {
+            const serviceSlug = item.value.service;
+            const found = allServices.find((s: any) => s.slug === serviceSlug);
+            if (found) {
+                data = { ...found.data, title: item.value.overrideTitle || found.data.title, isPopular: item.value.isPopular || false };
+                slug = found.slug;
+                link = `/servicios/${slug}/`;
+            } else {
+                data = { title: "Servicio no encontrado", description: "Revisar CMS", icon: "AlertCircle" };
+                slug = "#"; link = "#";
+            }
+        }
+    } else if (item.data) {
+        data = item.data; slug = item.slug; link = `/servicios/${slug}/`;
+    } else {
+        data = item; slug = item.slug || slugify(item.name ?? ""); link = item.link || `/servicios/${slug}/`;
+    }
+    return {
+        title: data.title || data.name,
+        description: data.shortDesc || data.description,
+        image: data.heroImage || data.image || `/images/services/${slug}-1.png`,
+        icon: data.icon,
+        isPopular: data.isPopular,
+        link,
+    };
+}
+
+const resolved = servicesToDisplay.map(resolveItem);
+const [first, ...rest] = resolved;
 ---
 
 <section id="servicios" class={`py-20 ${bgClass} border-b border-heading/10`}>
     <div class="container mx-auto px-4">
+
+        {/* Header común */}
         <div class="text-center mb-16">
             <div class="flex items-center justify-center gap-4 mb-4">
-                <div class="h-px w-12 bg-primary"></div>
-                <span
-                    class="text-primary font-bold uppercase tracking-widest text-sm"
-                    >Nuestros Servicios</span
-                >
-                <div class="h-px w-12 bg-primary"></div>
+                <div class="h-px w-12 bg-primary" />
+                <span class="text-primary font-bold uppercase tracking-widest text-sm">Nuestros Servicios</span>
+                <div class="h-px w-12 bg-primary" />
             </div>
-            <h2
-                class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
-            >
-                {
-                    servicesSection?.title ? (
-                        <>
-                            {servicesSection.title}
-                            {servicesSection.titleHighlight && (
-                                <>
-                                    <br />
-                                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                                        {servicesSection.titleHighlight}
-                                    </span>
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        `⚠️ Configura el Título en CMS (Home > Servicios)`
-                    )
-                }
+            <h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6">
+                {servicesSection?.title ? (
+                    <>
+                        {servicesSection.title}
+                        {servicesSection.titleHighlight && (
+                            <>
+                                <br />
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                                    {servicesSection.titleHighlight}
+                                </span>
+                            </>
+                        )}
+                    </>
+                ) : "⚠️ Configura el Título en CMS"}
             </h2>
             <p class="text-body max-w-2xl mx-auto text-lg">
-                {
-                    servicesSection?.subtitle ||
-                        "⚠️ Configura el Subtítulo en CMS (Home > Servicios)"
-                }
+                {servicesSection?.subtitle || "⚠️ Configura el Subtítulo en CMS"}
             </p>
         </div>
-        <div data-stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {
-                servicesToDisplay.map((item: any) => {
-                    let data, slug, link;
 
-                    // 1. Caso Híbrido: Discriminant (Keystatic Conditional)
-                    if (item.discriminant) {
-                        if (item.discriminant === "manual") {
-                            data = item.value;
-                            slug = slugify(data.title ?? "");
-                            link = data.link || `/servicios/${slug}/`;
-                        } else if (item.discriminant === "auto") {
-                            const serviceSlug = item.value.service;
-                            const foundService = allServices.find(
-                                (s: any) => s.slug === serviceSlug,
-                            );
-
-                            if (foundService) {
-                                data = {
-                                    ...foundService.data,
-                                    title:
-                                        item.value.overrideTitle ||
-                                        foundService.data.title,
-                                    price:
-                                        item.value.overridePrice ||
-                                        foundService.data.price,
-                                    isPopular: item.value.isPopular || false,
-                                };
-                                slug = foundService.slug;
-                                link = `/servicios/${slug}/`;
-                            } else {
-                                // Fallback si no se encuentra el servicio (aunque no debería pasar)
-                                data = {
-                                    title: "Servicio no encontrado",
-                                    description: "Revisar configuración en CMS",
-                                    icon: "AlertCircle",
-                                };
-                                slug = "#";
-                                link = "#";
-                            }
-                        }
-                    }
-                    // 2. Caso Colección Directa (Featured Services o Fallback antiguo)
-                    else if (item.data) {
-                        data = item.data;
-                        slug = item.slug;
-                        link = `/servicios/${slug}/`;
-                    }
-                    // 3. Caso Manual Antiguo (si hubiera datos legacy sin discriminant)
-                    else {
-                        data = item;
-                        slug = item.slug || slugify(item.name ?? "");
-                        link = item.link || `/servicios/${slug}/`;
-                    }
-
-                    const title = data.title || data.name;
-                    const description = data.shortDesc || data.description;
-                    const image =
-                        data.heroImage ||
-                        data.image ||
-                        `/images/services/${slug}-1.png`;
-
-                    return (
-                        <a
-                            href={link}
-                            class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
-                        >
-                            <img
-                                src={image}
-                                alt={title}
-                                loading="lazy"
-                                decoding="async"
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
-                            {data.isPopular && (
-                                <div class="absolute top-4 left-4 z-10">
-                                    <span class="inline-flex items-center gap-1.5 bg-primary text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
-                                        Destacado
-                                    </span>
-                                </div>
-                            )}
-                            <div class="relative h-full flex flex-col justify-end p-8">
-                                <h3 class="text-2xl font-heading font-bold text-white mb-3" style="text-shadow: 0 2px 6px rgb(0 0 0 / 0.90), 0 0 20px rgb(0 0 0 / 0.50)">
-                                    {title}
-                                </h3>
-                                <p class="text-white/90 font-semibold mb-6 line-clamp-2 text-sm leading-relaxed" style="text-shadow: 0 1px 4px rgb(0 0 0 / 0.90)">
-                                    {description}
-                                </p>
-                                <div class="inline-flex items-center text-primary font-bold group-hover:text-accent" style="text-shadow: 0 1px 3px rgb(0 0 0 / 0.70)">
-                                    Leer más{" "}
-                                    <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                                </div>
+        {/* ══ VARIANT: grid (default) ════════════════════════════ */}
+        {(variant === "grid" || !variant) && (
+            <div data-stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {resolved.map((s) => (
+                    <a href={s.link} class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]">
+                        <img src={s.image} alt={s.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
+                        {s.isPopular && (
+                            <div class="absolute top-4 left-4 z-10">
+                                <span class="inline-flex items-center gap-1.5 bg-primary text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white inline-block" />Destacado
+                                </span>
                             </div>
+                        )}
+                        <div class="relative h-full flex flex-col justify-end p-8">
+                            <h3 class="text-2xl font-heading font-bold text-white mb-3" style="text-shadow: 0 2px 6px rgb(0 0 0 / 0.90)">{s.title}</h3>
+                            <p class="text-white/90 font-semibold mb-6 line-clamp-2 text-sm leading-relaxed" style="text-shadow: 0 1px 4px rgb(0 0 0 / 0.90)">{s.description}</p>
+                            <div class="inline-flex items-center text-primary font-bold group-hover:text-accent" style="text-shadow: 0 1px 3px rgb(0 0 0 / 0.70)">
+                                Leer más <ChevronRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                            </div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        )}
+
+        {/* ══ VARIANT: list ══════════════════════════════════════ */}
+        {variant === "list" && (
+            <ul data-stagger class="space-y-3 max-w-4xl mx-auto">
+                {resolved.map((s) => (
+                    <li>
+                        <a href={s.link} class="group flex items-center gap-5 p-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/40 hover:shadow-md transition-all">
+                            <div class="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-heading/5">
+                                <img src={s.image} alt={s.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-heading group-hover:text-primary transition-colors leading-snug">{s.title}</p>
+                                {s.description && <p class="text-sm text-body mt-0.5 line-clamp-1 leading-relaxed">{s.description}</p>}
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-body/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all flex-shrink-0" />
                         </a>
-                    );
-                })
-            }
-        </div>
+                    </li>
+                ))}
+            </ul>
+        )}
+
+        {/* ══ VARIANT: featured ══════════════════════════════════ */}
+        {variant === "featured" && resolved.length > 0 && (
+            <div class="max-w-6xl mx-auto space-y-4">
+                {/* Primera card grande */}
+                <a href={first.link} class="group relative overflow-hidden rounded-2xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[420px] md:h-[480px] block">
+                    <img src={first.image} alt={first.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+                    {first.isPopular && (
+                        <div class="absolute top-5 left-5 z-10">
+                            <span class="inline-flex items-center gap-1.5 bg-primary text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white inline-block" />Destacado
+                            </span>
+                        </div>
+                    )}
+                    <div class="relative h-full flex flex-col justify-end p-8 md:p-10">
+                        <h3 class="text-3xl md:text-4xl font-heading font-bold text-white mb-3" style="text-shadow: 0 2px 8px rgb(0 0 0 / 0.90)">{first.title}</h3>
+                        <p class="text-white/85 mb-6 max-w-xl leading-relaxed" style="text-shadow: 0 1px 4px rgb(0 0 0 / 0.80)">{first.description}</p>
+                        <div class="inline-flex items-center text-primary font-bold text-lg group-hover:text-accent">
+                            Leer más <ChevronRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+                        </div>
+                    </div>
+                </a>
+                {/* Resto de cards */}
+                {rest.length > 0 && (
+                    <div data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {rest.map((s) => (
+                            <a href={s.link} class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/15 h-[260px]">
+                                <img src={s.image} alt={s.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                                <div class="relative h-full flex flex-col justify-end p-6">
+                                    <h3 class="text-xl font-heading font-bold text-white mb-2" style="text-shadow: 0 2px 6px rgb(0 0 0 / 0.90)">{s.title}</h3>
+                                    <div class="inline-flex items-center text-primary font-semibold text-sm group-hover:text-accent">
+                                        Ver más <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                )}
+            </div>
+        )}
+
+        {/* ══ VARIANT: compact_links ════════════════════════════ */}
+        {variant === "compact_links" && (
+            <ul data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
+                {resolved.map((s) => (
+                    <li>
+                        <a href={s.link} class="group flex items-center gap-3 px-5 py-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/50 hover:bg-primary/5 transition-all">
+                            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                                <DynamicIcon name={s.icon || "ChevronRight"} className="w-4 h-4" />
+                            </span>
+                            <span class="font-semibold text-heading text-sm group-hover:text-primary transition-colors flex-1 leading-snug">{s.title}</span>
+                            <ChevronRight className="w-3.5 h-3.5 text-body/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        )}
+
     </div>
 </section>

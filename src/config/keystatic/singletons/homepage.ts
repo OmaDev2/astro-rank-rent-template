@@ -71,6 +71,16 @@ export const homepage = singleton({
             services_grid: {
                 label: 'Grilla de Servicios (Links)',
                 schema: fields.object({
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Cards con imagen (grid)', value: 'grid' },
+                            { label: '☰ Lista compacta (list)', value: 'list' },
+                            { label: '⭐ Primera card grande (featured)', value: 'featured' },
+                            { label: '🔗 Links SEO compactos (compact_links)', value: 'compact_links' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
                     title: fields.text({ label: 'Título Sección (Parte Blanca)' }),
                     titleHighlight: fields.text({ label: 'Título Destacado (Parte Color)' }),
                     subtitle: fields.text({ label: 'Resumen', multiline: true }),
@@ -107,6 +117,16 @@ export const homepage = singleton({
                 label: '💎 Por Qué Elegirnos (Ventajas)',
                 schema: fields.object({
                     content: featuresPreview(),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▦ Cuadrícula con icono (grid)', value: 'grid' },
+                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
+                            { label: '☰ Lista horizontal (horizontal)', value: 'horizontal' },
+                            { label: '⊙ Solo iconos y título (icons_only)', value: 'icons_only' },
+                        ],
+                        defaultValue: 'grid',
+                    }),
                 })
             },
             testimonials: {
@@ -119,6 +139,16 @@ export const homepage = singleton({
                 label: '👷 Método Paso a Paso (Proceso)',
                 schema: fields.object({
                     content: processPreview(),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '↔ Línea de tiempo alternada (timeline)', value: 'timeline' },
+                            { label: '▦ Tarjetas numeradas (cards)', value: 'cards' },
+                            { label: '☰ Lista compacta (compact)', value: 'compact' },
+                            { label: '◧ Título izquierda / Pasos derecha (split)', value: 'split' },
+                        ],
+                        defaultValue: 'timeline',
+                    }),
                 })
             },
             faq: {
@@ -126,6 +156,16 @@ export const homepage = singleton({
                 schema: fields.object({
                     title: fields.text({ label: 'Título' }),
                     subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    variant: fields.select({
+                        label: 'Variante Visual',
+                        options: [
+                            { label: '▼ Acordeón (accordion)', value: 'accordion' },
+                            { label: '▦ Dos columnas (two_columns)', value: 'two_columns' },
+                            { label: '☰ Compacto (compact)', value: 'compact' },
+                            { label: '⊞ Agrupado por categoría (grouped)', value: 'grouped' },
+                        ],
+                        defaultValue: 'accordion',
+                    }),
                     questions: fields.array(
                         fields.object({
                             question: fields.text({ label: 'Pregunta' }),

@@ -1,89 +1,170 @@
 ---
+interface Step {
+    title: string;
+    description: string;
+    icon?: string;
+    duration?: string;
+}
+
 interface Props {
     process: {
         title?: string;
         description?: string;
-        steps: {
-            title: string;
-            description: string;
-        }[];
+        steps: Step[];
+        titleTag?: string;
     };
     bgClass?: string;
+    variant?: "timeline" | "cards" | "compact" | "split";
 }
 
-const { process, bgClass = "bg-surface" } = Astro.props;
-const TitleTag = (process as any)?.titleTag || "h2";
-
-// Determine card background based on section background for contrast
+const { process, bgClass = "bg-surface", variant = "timeline" } = Astro.props;
+const TitleTag = ((process as any)?.titleTag || "h2") as "h2" | "h3";
 const cardBgClass = bgClass === "bg-secondary" ? "bg-surface" : "bg-secondary";
 ---
 
-{
-    process && process.steps && process.steps.length > 0 && (
-        <section class={`py-20 ${bgClass} relative overflow-hidden`}>
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-16 max-w-3xl mx-auto">
-                    {process.title && (
-                        <TitleTag class="text-4xl font-heading font-bold text-heading mb-4">
-                            {process.title}
-                        </TitleTag>
-                    )}
-                    <div class="w-24 h-1 bg-primary mx-auto mb-6" />
-                    {process.description && (
-                        <p class="text-body text-lg">{process.description}</p>
-                    )}
-                </div>
+{process && process.steps && process.steps.length > 0 && (
+    <section class={`py-20 ${bgClass} relative overflow-hidden`}>
+        <div class="container mx-auto px-4">
 
-                {/* Mobile: numbered cards */}
-                <div class="md:hidden space-y-4" aria-hidden="true">
-                    {process.steps.map((step, index) => (
-                        <div class={`${cardBgClass} rounded-2xl shadow-lg border border-heading/5 relative overflow-hidden`}>
-                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-50" />
-                            <div class="flex items-start gap-4 p-6">
-                                <div class={`shrink-0 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center shadow-md`}>
-                                    <span class="font-bold text-primary text-sm">{index + 1}</span>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-heading mb-2">
-                                        {step.title || (step as any).name}
-                                    </h3>
-                                    <p class="text-body leading-relaxed text-sm">{step.description}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+            {/* ══ VARIANT: timeline (default) ══════════════════════════ */}
+            {(variant === "timeline" || !variant) && (
+                <>
+                    <div class="text-center mb-16 max-w-3xl mx-auto">
+                        {process.title && (
+                            <TitleTag class="text-4xl font-heading font-bold text-heading mb-4">{process.title}</TitleTag>
+                        )}
+                        <div class="w-24 h-1 bg-primary mx-auto mb-6" />
+                        {process.description && <p class="text-body text-lg">{process.description}</p>}
+                    </div>
 
-                {/* Desktop: alternating timeline */}
-                <div class="hidden md:block relative max-w-5xl mx-auto">
-                    <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 -translate-x-1/2" />
-                    <div data-stagger>
+                    {/* Mobile */}
+                    <div class="md:hidden space-y-4" aria-hidden="true">
                         {process.steps.map((step, index) => (
-                            <div
-                                class={`relative flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
-                            >
-                                <div class="flex-1 w-1/2 p-6">
-                                    <div
-                                        class={`${cardBgClass} p-8 rounded-2xl shadow-lg border border-heading/5 relative hover:-translate-y-1 transition-transform duration-300 ${index % 2 === 0 ? "text-right" : "text-left"}`}
-                                    >
-                                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-2xl opacity-50" />
-                                        <h3 class="text-2xl font-bold text-heading mb-3">
-                                            {step.title || (step as any).name}
-                                        </h3>
-                                        <p class="text-body leading-relaxed">{step.description}</p>
+                            <div class={`${cardBgClass} rounded-2xl shadow-lg border border-heading/5 relative overflow-hidden`}>
+                                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-50" />
+                                <div class="flex items-start gap-4 p-6">
+                                    <div class={`shrink-0 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center shadow-md`}>
+                                        <span class="font-bold text-primary text-sm">{index + 1}</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-heading mb-2">{step.title || (step as any).name}</h3>
+                                        <p class="text-body leading-relaxed text-sm">{step.description}</p>
                                     </div>
                                 </div>
-                                <div
-                                    class={`absolute left-1/2 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center z-10 -translate-x-1/2 shadow-md`}
-                                >
-                                    <span class="font-bold text-primary text-sm">{index + 1}</span>
-                                </div>
-                                <div class="flex-1 w-1/2" />
                             </div>
                         ))}
                     </div>
+
+                    {/* Desktop alternating */}
+                    <div class="hidden md:block relative max-w-5xl mx-auto">
+                        <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/50 to-primary/20 -translate-x-1/2" />
+                        <div data-stagger>
+                            {process.steps.map((step, index) => (
+                                <div class={`relative flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}>
+                                    <div class="flex-1 w-1/2 p-6">
+                                        <div class={`${cardBgClass} p-8 rounded-2xl shadow-lg border border-heading/5 relative hover:-translate-y-1 transition-transform duration-300 ${index % 2 === 0 ? "text-right" : "text-left"}`}>
+                                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-2xl opacity-50" />
+                                            <h3 class="text-2xl font-bold text-heading mb-3">{step.title || (step as any).name}</h3>
+                                            <p class="text-body leading-relaxed">{step.description}</p>
+                                        </div>
+                                    </div>
+                                    <div class={`absolute left-1/2 w-10 h-10 rounded-full ${cardBgClass} border-4 border-primary flex items-center justify-center z-10 -translate-x-1/2 shadow-md`}>
+                                        <span class="font-bold text-primary text-sm">{index + 1}</span>
+                                    </div>
+                                    <div class="flex-1 w-1/2" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* ══ VARIANT: cards ════════════════════════════════════════ */}
+            {variant === "cards" && (
+                <>
+                    <div class="text-center mb-12 max-w-3xl mx-auto">
+                        {process.title && (
+                            <TitleTag class="text-4xl font-heading font-bold text-heading mb-4">{process.title}</TitleTag>
+                        )}
+                        <div class="w-24 h-1 bg-primary mx-auto mb-6" />
+                        {process.description && <p class="text-body text-lg">{process.description}</p>}
+                    </div>
+                    <ul data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        {process.steps.map((step, index) => (
+                            <li class={`group ${cardBgClass} rounded-2xl border border-heading/5 hover:border-primary/40 hover:shadow-lg transition-all duration-300 relative overflow-hidden`}>
+                                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-40 group-hover:opacity-100 transition-opacity" />
+                                <div class="p-6">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
+                                            <span class="font-black text-primary group-hover:text-white transition-colors text-base leading-none">{index + 1}</span>
+                                        </span>
+                                        <h3 class="font-bold text-heading text-lg leading-snug">{step.title || (step as any).name}</h3>
+                                    </div>
+                                    <p class="text-body text-sm leading-relaxed">{step.description}</p>
+                                    {step.duration && (
+                                        <span class="inline-block mt-3 text-xs font-semibold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">{step.duration}</span>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
+
+            {/* ══ VARIANT: compact ══════════════════════════════════════ */}
+            {variant === "compact" && (
+                <div class="max-w-2xl mx-auto">
+                    <div class="mb-10">
+                        {process.title && (
+                            <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-4 leading-tight">{process.title}</TitleTag>
+                        )}
+                        {process.description && <p class="text-body text-lg leading-relaxed">{process.description}</p>}
+                    </div>
+                    <ol class="space-y-4">
+                        {process.steps.map((step, index) => (
+                            <li class="flex items-start gap-4 group">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-sm group-hover:bg-primary group-hover:text-white transition-all mt-0.5">
+                                    {index + 1}
+                                </span>
+                                <div class="flex-1 border-b border-heading/10 pb-4 last:border-0 last:pb-0">
+                                    <p class="font-bold text-heading leading-snug mb-1">{step.title || (step as any).name}</p>
+                                    <p class="text-sm text-body leading-relaxed">{step.description}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                 </div>
-            </div>
-        </section>
-    )
-}
+            )}
+
+            {/* ══ VARIANT: split ════════════════════════════════════════ */}
+            {variant === "split" && (
+                <div class="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
+                    <div class="lg:sticky lg:top-24">
+                        {process.title && (
+                            <TitleTag class="text-3xl md:text-4xl font-heading font-bold text-heading mb-6 leading-tight">{process.title}</TitleTag>
+                        )}
+                        <div class="w-16 h-1 bg-primary mb-6" />
+                        {process.description && <p class="text-body text-lg leading-relaxed">{process.description}</p>}
+                    </div>
+                    <ol data-stagger class="space-y-3">
+                        {process.steps.map((step, index) => (
+                            <li class={`group flex items-start gap-4 p-5 rounded-xl ${cardBgClass} border border-heading/5 hover:border-primary/30 transition-all`}>
+                                <span class="flex-shrink-0 w-9 h-9 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all mt-0.5">
+                                    <span class="font-black text-primary group-hover:text-white transition-colors text-sm leading-none">{index + 1}</span>
+                                </span>
+                                <div class="flex-1">
+                                    <p class="font-bold text-heading text-base mb-1 leading-snug">{step.title || (step as any).name}</p>
+                                    <p class="text-sm text-body leading-relaxed">{step.description}</p>
+                                    {step.duration && (
+                                        <span class="inline-block mt-2 text-xs font-semibold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">{step.duration}</span>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            )}
+
+        </div>
+    </section>
+)}

@@ -1,6 +1,6 @@
 identity:
   themeSettings: >-
-    {"theme":"urgent","colors":{"primary":"#dc2626","secondary":"#18181b","surface":"#27272a","accent":"#ef4444","textMain":"#ffffff","textSecondary":"#d2d2da","textMuted":"#d5d5dd","textSubtle":"#6e6e7d","accentDark":"#b41616"}}
+    {"theme":"tech","colors":{"primary":"#7c3aed","secondary":"#0f172a","surface":"#1e293b","accent":"#a78bfa","textMain":"#ffffff","textSecondary":"#cdd4e8","textMuted":"#94a3b8","textSubtle":"#6c7694","accentDark":"#5820c6"}}
   fontPair: modern
   typographyScale: '{"heading":"lg","body":"md"}'
 layout:

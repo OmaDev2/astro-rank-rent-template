@@ -1,85 +1,143 @@
 ---
 import DynamicIcon from "../../ui/DynamicIcon.astro";
+import { ChevronRight } from "lucide-react";
 
-const { title, subtitle, services, bgClass = "bg-secondary" } = Astro.props;
+const { title, subtitle, services, bgClass = "bg-secondary", variant = "grid" } = Astro.props;
 
-// Si no hay servicios, no renderizamos nada
 if (!services || services.length === 0) return null;
+
+const [first, ...rest] = services;
 ---
 
 <section id="servicios" class={`py-20 ${bgClass} border-b border-heading/10`}>
     <div class="container mx-auto px-4">
+
+        {/* Header */}
         <div class="text-center mb-16">
             <div class="flex items-center justify-center gap-4 mb-4">
-                <div class="h-px w-12 bg-primary"></div>
-                <span
-                    class="text-primary font-bold uppercase tracking-widest text-sm"
-                    >Nuestros Servicios</span
-                >
-                <div class="h-px w-12 bg-primary"></div>
+                <div class="h-px w-12 bg-primary" />
+                <span class="text-primary font-bold uppercase tracking-widest text-sm">Nuestros Servicios</span>
+                <div class="h-px w-12 bg-primary" />
             </div>
-            <h2
-                class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6"
-            >
-                {title || "Nuestros Servicios"}
-            </h2>
-            {
-                subtitle && (
-                    <p class="text-body max-w-2xl mx-auto text-lg">
-                        {subtitle}
-                    </p>
-                )
-            }
+            <h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6">{title || "Nuestros Servicios"}</h2>
+            {subtitle && <p class="text-body max-w-2xl mx-auto text-lg">{subtitle}</p>}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {
-                services.map((service: any) =>
+        {/* ══ VARIANT: grid (default) ════════════════════════════ */}
+        {(variant === "grid" || !variant) && (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {services.map((service: any) => (
                     service.image ? (
-                        // Card con Imagen de Fondo (Estilo tipo Page)
                         <div class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]">
-                            <img
-                                src={service.image}
-                                alt={service.title}
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                loading="lazy"
-                            />
+                            <img src={service.image} alt={service.title} class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" decoding="async" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
-                                <h3 class="text-2xl font-heading font-bold text-white mb-3 shadow-black drop-shadow-sm">
-                                    {service.title}
-                                </h3>
-                                <p class="text-white/80 mb-2 line-clamp-3 text-sm">
-                                    {service.description}
-                                </p>
+                                <h3 class="text-2xl font-heading font-bold text-white mb-3">{service.title}</h3>
+                                <p class="text-white/80 mb-2 line-clamp-3 text-sm">{service.description}</p>
                             </div>
                         </div>
                     ) : (
-                        // Card por defecto (Icono)
                         <div class="group relative overflow-hidden rounded-xl bg-surface p-8 border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/10">
                             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-
                             <div class="mb-6 inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <DynamicIcon
-                                    name={
-                                        service.icon ||
-                                        service.icon_suggestion ||
-                                        "CheckCircle"
-                                    }
-                                    className="w-6 h-6"
-                                />
+                                <DynamicIcon name={service.icon || service.icon_suggestion || "CheckCircle"} className="w-6 h-6" />
                             </div>
-
-                            <h3 class="text-2xl font-heading font-bold text-heading mb-4 group-hover:text-primary transition-colors">
-                                {service.title}
-                            </h3>
-
-                            <p class="text-body leading-relaxed">
-                                {service.description}
-                            </p>
+                            <h3 class="text-2xl font-heading font-bold text-heading mb-4 group-hover:text-primary transition-colors">{service.title}</h3>
+                            <p class="text-body leading-relaxed">{service.description}</p>
                         </div>
-                    ),
-                )
-            }
-        </div>
+                    )
+                ))}
+            </div>
+        )}
+
+        {/* ══ VARIANT: list ══════════════════════════════════════ */}
+        {variant === "list" && (
+            <ul data-stagger class="space-y-3 max-w-4xl mx-auto">
+                {services.map((service: any) => (
+                    <li class="group flex items-center gap-5 p-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/40 hover:shadow-md transition-all">
+                        {service.image ? (
+                            <div class="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-heading/5">
+                                <img src={service.image} alt={service.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            </div>
+                        ) : (
+                            <span class="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                                <DynamicIcon name={service.icon || "CheckCircle"} className="w-6 h-6" />
+                            </span>
+                        )}
+                        <div class="flex-1 min-w-0">
+                            <p class="font-bold text-heading group-hover:text-primary transition-colors leading-snug">{service.title}</p>
+                            {service.description && <p class="text-sm text-body mt-0.5 line-clamp-1 leading-relaxed">{service.description}</p>}
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        )}
+
+        {/* ══ VARIANT: featured ══════════════════════════════════ */}
+        {variant === "featured" && services.length > 0 && (
+            <div class="max-w-6xl mx-auto space-y-4">
+                {/* Primera card destacada */}
+                <div class="group relative overflow-hidden rounded-2xl border border-heading/10 hover:border-primary/40 hover:shadow-xl transition-all">
+                    {first.image ? (
+                        <>
+                            <img src={first.image} alt={first.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 h-[420px]" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent h-[420px]" />
+                            <div class="relative h-[420px] flex flex-col justify-end p-8 md:p-10">
+                                <h3 class="text-3xl md:text-4xl font-heading font-bold text-white mb-3" style="text-shadow: 0 2px 8px rgb(0 0 0 / 0.90)">{first.title}</h3>
+                                {first.description && <p class="text-white/85 max-w-xl leading-relaxed" style="text-shadow: 0 1px 4px rgb(0 0 0 / 0.80)">{first.description}</p>}
+                            </div>
+                        </>
+                    ) : (
+                        <div class="p-10 md:p-14 bg-surface">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent opacity-60" />
+                            <span class="inline-flex w-16 h-16 rounded-xl bg-primary/15 items-center justify-center text-primary mb-6">
+                                <DynamicIcon name={first.icon || "CheckCircle"} className="w-8 h-8" />
+                            </span>
+                            <h3 class="text-3xl font-heading font-bold text-heading mb-4">{first.title}</h3>
+                            {first.description && <p class="text-body text-lg leading-relaxed max-w-xl">{first.description}</p>}
+                        </div>
+                    )}
+                </div>
+                {/* Resto */}
+                {rest.length > 0 && (
+                    <div data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {rest.map((service: any) => (
+                            service.image ? (
+                                <div class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all h-[240px]">
+                                    <img src={service.image} alt={service.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
+                                    <div class="relative h-full flex items-end p-5">
+                                        <h3 class="text-lg font-heading font-bold text-white" style="text-shadow: 0 2px 4px rgb(0 0 0 / 0.80)">{service.title}</h3>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div class="group p-6 rounded-xl bg-surface border border-heading/10 hover:border-primary/40 transition-all">
+                                    <span class="inline-flex w-10 h-10 rounded-lg bg-primary/10 items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all mb-4">
+                                        <DynamicIcon name={service.icon || "CheckCircle"} className="w-5 h-5" />
+                                    </span>
+                                    <h3 class="font-bold text-heading mb-2">{service.title}</h3>
+                                    {service.description && <p class="text-body text-sm line-clamp-2 leading-relaxed">{service.description}</p>}
+                                </div>
+                            )
+                        ))}
+                    </div>
+                )}
+            </div>
+        )}
+
+        {/* ══ VARIANT: compact_links ════════════════════════════ */}
+        {variant === "compact_links" && (
+            <ul data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
+                {services.map((service: any) => (
+                    <li class="group flex items-center gap-3 px-5 py-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/50 hover:bg-primary/5 transition-all">
+                        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                            <DynamicIcon name={service.icon || "ChevronRight"} className="w-4 h-4" />
+                        </span>
+                        <span class="font-semibold text-heading text-sm group-hover:text-primary transition-colors flex-1 leading-snug">{service.title}</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-body/30 group-hover:text-primary flex-shrink-0" />
+                    </li>
+                ))}
+            </ul>
+        )}
+
     </div>
 </section>

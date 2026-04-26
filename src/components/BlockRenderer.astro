@@ -247,6 +247,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
             customServices={value?.services}
             allServices={allServices}
             city={city}
+            variant={value?.variant}
             bgClass={bgClass}
           />
         );
@@ -257,6 +258,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
             title={value?.title}
             subtitle={value?.subtitle}
             services={value?.items}
+            variant={value?.variant}
             bgClass={bgClass}
           />
         );
@@ -278,6 +280,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
           [];
         const finalTitle = featuresContent?.title || value?.title;
         const finalSubtitle = featuresContent?.subtitle || value?.subtitle;
+        const featuresVariant = value?.variant;
         if (isHome) {
           return (
             <HomeFeatures
@@ -285,6 +288,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
               title={finalTitle}
               titleTag={featuresContent?.titleTag}
               city={city}
+              variant={featuresVariant}
               bgClass={bgClass}
             />
           );
@@ -296,6 +300,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
             title={finalTitle}
             subtitle={finalSubtitle}
             items={finalFeatures}
+            variant={featuresVariant}
             bgClass={bgClass}
           />
         );
@@ -304,7 +309,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         const processContent = parseJson(value?.content);
         const finalProcess = processContent || value;
         return finalProcess ? (
-          <HomeProcess process={finalProcess} bgClass={bgClass} />
+          <HomeProcess process={finalProcess} variant={value?.variant} bgClass={bgClass} />
         ) : null;
 
       case "testimonials":
@@ -386,7 +391,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
                     {value.subtitle}
                   </p>
                 )}
-                <FaqAccordion items={faqItems} title="" />
+                <FaqAccordion items={faqItems} title="" variant={value?.variant} />
               </div>
             </div>
           ) : null;
@@ -399,6 +404,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
                 <FaqAccordion
                   title={`Preguntas Frecuentes sobre ${title || locationName}`}
                   items={faqItems}
+                  variant={value?.variant}
                 />
               </div>
             </section>
