@@ -53,6 +53,11 @@ const services = servicesData;
 const allLocations = locationsData;
 const currentSlug = props.currentSlug || "";
 
+// Zonas publicadas distintas a la actual (máx. 4) para el bloque de interlinking
+const otherLocations = allLocations
+    .filter((loc) => loc.slug !== currentSlug)
+    .slice(0, 4);
+
 // 3. GESTIÓN DE BLOQUES
 const defaultBlocks: Block[] = [
   { discriminant: "hero" },
@@ -105,6 +110,43 @@ const finalBlocks =
       locationName={props.locationName}
       niche={niche}
     />
+
+    {/* ── Otras zonas + enlace al hub ───────────────────────── */}
+    <section class="py-10 bg-secondary border-t border-heading/5">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto text-center space-y-4">
+          <p class="text-xs font-bold uppercase tracking-widest text-primary">
+            Otras zonas de servicio
+          </p>
+          <h2 class="text-xl font-heading font-bold text-heading">
+            También trabajamos en otras zonas
+          </h2>
+          <p class="text-sm text-body">
+            Además de {props.locationName}, realizamos trabajos de aluminio en otros municipios de Málaga y Costa del Sol.
+          </p>
+          {otherLocations.length > 0 && (
+            <div class="flex flex-wrap justify-center gap-3 pt-1">
+              {otherLocations.map((loc) => (
+                <a
+                  href={`/zona/${loc.slug}/`}
+                  class="inline-flex items-center text-sm font-semibold text-heading hover:text-primary transition-colors px-4 py-2 rounded-lg bg-surface border border-heading/10 hover:border-primary/30"
+                >
+                  {loc.data.name}
+                </a>
+              ))}
+            </div>
+          )}
+          <div class="pt-1">
+            <a
+              href="/zonas/"
+              class="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-accent transition-colors"
+            >
+              Ver todas las zonas donde trabajamos →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <WhatsAppButton />
     <Footer />
