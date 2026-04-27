@@ -18,7 +18,7 @@ const services = (await getCollection("services")).sort((a, b) =>
 
 // CMS
 const serviciosPage = await getEntry("pages", "servicios");
-const pageData = serviciosPage?.data ?? {};
+const pageData = (serviciosPage?.data ?? {}) as any;
 
 const parsePreview = (json: string | undefined) => {
     try { return json ? JSON.parse(json) : null; } catch { return null; }
@@ -96,7 +96,7 @@ const schema = buildBlogListGraph({
                                 </p>
                             )}
                             <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold text-primary">
-                                Ver detalles
+                                Ver {service.data.title}
                                 <ArrowRight className="w-3 h-3" />
                             </span>
                         </a>
