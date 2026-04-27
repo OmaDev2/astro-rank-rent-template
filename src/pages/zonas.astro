@@ -13,11 +13,12 @@ import {
     CheckCircle2,
     Phone,
     MessageCircle,
-    Calendar,
+    Wrench,
 } from "lucide-react";
 import { buildBlogListGraph } from "@/lib/seo";
 
 const locations = await getCollection("locations");
+const services = await getCollection("services");
 
 // Fetch Global Settings (Dinámico)
 import { getSettings } from "@/lib/settings";
@@ -33,15 +34,38 @@ const unlinkedCoverageAreas = (areaServed as string[]).filter(
 );
 
 // Agrupar por tipo
-const residenciales = locations.filter(
-    (loc) => loc.data.type === "residencial",
-);
+const residenciales = locations.filter((loc) => loc.data.type === "residencial");
 const industriales = locations.filter((loc) => loc.data.type === "industrial");
 const centros = locations.filter((loc) => loc.data.type === "centro");
 
+// Limpiar título de servicio (quita referencia a Málaga)
+const cleanServiceTitle = (title: string) =>
+    title.replace(/\s+en\s+M[aá]laga\b/gi, "").replace(/\s+M[aá]laga\b/gi, "").trim();
+
+// Prioridad de servicios en la sección hub
+const SERVICE_PRIORITY = [
+    "ventanas-de-aluminio-malaga",
+    "cerramientos-de-aluminio-malaga",
+    "puertas-de-aluminio-malaga",
+    "mosquiteras-de-aluminio-a-medida-malaga",
+    "persianas-de-aluminio-malaga",
+    "cortinas-cristal-malaga",
+];
+
+const sortedServices = [...services]
+    .sort((a, b) => {
+        const ia = SERVICE_PRIORITY.indexOf(a.slug);
+        const ib = SERVICE_PRIORITY.indexOf(b.slug);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return 0;
+    })
+    .slice(0, 6);
+
 const getSeoDesc = (seoStr: string | undefined, defaultDesc: string) => {
     try {
-        return JSON.parse(seoStr || '{}').description || defaultDesc;
+        return JSON.parse(seoStr || "{}").description || defaultDesc;
     } catch {
         return defaultDesc;
     }
@@ -57,21 +81,20 @@ const parsePreview = (json: string) => {
 };
 
 const seoPreviewData = parsePreview(zonasPageData.seoControls as string);
-const seoTitle = seoPreviewData?.title || `Zonas de Servicio y Cobertura | ${siteName}`;
-const seoDescription = seoPreviewData?.description || `¿Buscas ${niche} en ${city}? Cubrimos toda la ciudad y provincia. Encuentra tu zona, barrio o código postal aquí. Respuesta rápida garantizada.`;
+const seoTitle = seoPreviewData?.title || `Zonas de Servicio en Málaga y Costa del Sol | ${siteName}`;
+const seoDescription = seoPreviewData?.description || `Carpintería de aluminio en toda la provincia de Málaga. Marbella, Estepona, Fuengirola, Benalmádena y más. Presupuesto sin compromiso.`;
 
-const defaultBlocks = [
-    { discriminant: "hero" }
-];
+const defaultBlocks = [{ discriminant: "hero" }];
 
-const finalBlocks = zonasPageData.blocks && zonasPageData.blocks.length > 0
-    ? zonasPageData.blocks
-    : defaultBlocks;
+const finalBlocks =
+    zonasPageData.blocks && zonasPageData.blocks.length > 0
+        ? zonasPageData.blocks
+        : defaultBlocks;
 
 import BlockRenderer from "../components/BlockRenderer.astro";
 import Breadcrumbs from "../components/navigation/Breadcrumbs.astro";
 
-const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const siteUrl = settings.siteUrl || Astro.site?.href || "";
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
 const schema = buildBlogListGraph({
@@ -84,8 +107,8 @@ const schema = buildBlogListGraph({
         { name: "Inicio", item: new URL("/", Astro.site).href },
         { name: "Zonas", item: pageUrl },
     ],
-    posts: locations.map(loc => ({
-        url: `${siteUrl.replace(/\/$/, '')}/zona/${loc.slug}/`,
+    posts: locations.map((loc) => ({
+        url: `${siteUrl.replace(/\/$/, "")}/zona/${loc.slug}/`,
         title: loc.data.name,
     })),
 });
@@ -98,7 +121,7 @@ const schema = buildBlogListGraph({
 >
     <Breadcrumbs pageName="Zonas" noSchema />
 
-    {/* --- NEW MODULAR PAGE BUILDER --- */}
+    {/* --- BLOQUES CMS (hero, stats, cta desde zonas.mdx) --- */}
     <BlockRenderer
         blocks={finalBlocks}
         config={settings}
@@ -115,264 +138,270 @@ const schema = buildBlogListGraph({
         class="py-24 bg-secondary relative overflow-hidden"
     >
         {/* Decorative background blurs */}
-        <div
-            class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/2"
-        >
-        </div>
-        <div
-            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none translate-y-1/2 -translate-x-1/2"
-        >
-        </div>
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/2" />
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none translate-y-1/2 -translate-x-1/2" />
 
-        <div class="container mx-auto px-4 relative z-10 space-y-32">
-            {/* Zonas Residenciales */}
-            {
-                residenciales.length > 0 && (
-                    <div class="group/section">
-                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 border-b border-white/5 pb-8">
-                            <div>
-                                <div class="flex items-center gap-3 mb-4 text-primary">
-                                    <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                                        <Home className="w-5 h-5" />
-                                    </span>
-                                    <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
-                                        Áreas del Hogar
-                                    </span>
-                                </div>
-                                <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
-                                    Zonas Residenciales
-                                </h2>
-                            </div>
-                            <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                                Despliegue rápido en barrios residenciales y
-                                comunidades de vecinos. Minimizamos las
-                                molestias y garantizamos discreción.
-                            </p>
-                        </div>
+        <div class="container mx-auto px-4 relative z-10 space-y-24">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {residenciales.map((location) => (
-                                <a
-                                    href={`/zona/${location.slug}/`}
-                                    class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
-                                >
-                                    <div>
-                                        <div class="flex justify-between items-start mb-6">
-                                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
-                                                <MapPin className="w-5 h-5 text-text/50 group-hover:text-primary transition-colors" />
-                                            </div>
-                                            <ArrowRight className="w-6 h-6 text-text/50 group-hover:text-primary transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
-                                        </div>
-                                        <h3 class="text-2xl font-bold text-heading mb-2 group-hover:text-primary transition-colors">
-                                            {location.data.name}
-                                        </h3>
-                                        <p class="text-text/60 text-sm line-clamp-2 mb-6">
-                                            {getSeoDesc(location.data.seo, `Servicio urgente en ${location.data.name}.`)}
-                                        </p>
-                                    </div>
-                                    <div class="border-t border-white/5 pt-4">
-                                        <div class="flex items-center gap-2 text-xs text-text/50">
-                                            <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                                            <span>Servicio activo hoy</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Zonas Industriales */}
-            {
-                industriales.length > 0 && (
-                    <div class="group/section">
-                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 border-b border-white/5 pb-8">
-                            <div>
-                                <div class="flex items-center gap-3 mb-4 text-primary">
-                                    <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                                        <Factory className="w-5 h-5" />
-                                    </span>
-                                    <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
-                                        Polígonos y Naves
-                                    </span>
-                                </div>
-                                <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
-                                    Zonas Industriales
-                                </h2>
-                            </div>
-                            <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                                Equipos preparados para intervenciones en
-                                grandes instalaciones, con protocolos de
-                                seguridad industrial y maquinaria especializada.
-                            </p>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {industriales.map((location) => (
-                                <a
-                                    href={`/zona/${location.slug}/`}
-                                    class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
-                                >
-                                    <div>
-                                        <div class="flex justify-between items-start mb-6">
-                                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
-                                                <Factory className="w-5 h-5 text-text/50 group-hover:text-primary transition-colors" />
-                                            </div>
-                                            <ArrowRight className="w-6 h-6 text-text/50 group-hover:text-primary transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
-                                        </div>
-                                        <h3 class="text-2xl font-bold text-heading mb-2 group-hover:text-primary transition-colors">
-                                            {location.data.name}
-                                        </h3>
-                                        <p class="text-text/60 text-sm line-clamp-2 mb-6">
-                                            {getSeoDesc(location.data.seo, `Soluciones industriales en ${location.data.name}.`)}
-                                        </p>
-                                    </div>
-                                    <div class="border-t border-white/5 pt-4">
-                                        <div class="flex items-center gap-2 text-xs text-text/50">
-                                            <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                                            <span>Atención Business 24/7</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Centros Urbanos */}
-            {
-                centros.length > 0 && (
-                    <div class="group/section">
-                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 border-b border-white/5 pb-8">
-                            <div>
-                                <div class="flex items-center gap-3 mb-4 text-primary">
-                                    <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                                        <Building2 className="w-5 h-5" />
-                                    </span>
-                                    <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
-                                        Casco Urbano
-                                    </span>
-                                </div>
-                                <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
-                                    Centro y Distritos
-                                </h2>
-                            </div>
-                            <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                                Logística adaptada al centro de la ciudad.
-                                Vehículos compactos para acceso a zonas
-                                peatonales y cascos antiguos.
-                            </p>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {centros.map((location) => (
-                                <a
-                                    href={`/zona/${location.slug}/`}
-                                    class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
-                                >
-                                    <div>
-                                        <div class="flex justify-between items-start mb-6">
-                                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
-                                                <Building2 className="w-5 h-5 text-text/50 group-hover:text-primary transition-colors" />
-                                            </div>
-                                            <ArrowRight className="w-6 h-6 text-text/50 group-hover:text-primary transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
-                                        </div>
-                                        <h3 class="text-2xl font-bold text-heading mb-2 group-hover:text-primary transition-colors">
-                                            {location.data.name}
-                                        </h3>
-                                        <p class="text-text/60 text-sm line-clamp-2 mb-6">
-                                            {getSeoDesc(location.data.seo, `Servicio rápido en ${location.data.name}.`)}
-                                        </p>
-                                    </div>
-                                    <div class="border-t border-white/5 pt-4">
-                                        <div class="flex items-center gap-2 text-xs text-text/50">
-                                            <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                                            <span>Acceso Zona SER/APR</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Zonas de Cobertura (sin página propia) */}
-            {
-                unlinkedCoverageAreas.length > 0 && (
-                    <div class="group/section">
-                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 border-b border-white/5 pb-8">
-                            <div>
-                                <div class="flex items-center gap-3 mb-4 text-primary">
-                                    <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                                        <MapPin className="w-5 h-5" />
-                                    </span>
-                                    <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
-                                        Más zonas
-                                    </span>
-                                </div>
-                                <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
-                                    Cobertura extendida
-                                </h2>
-                            </div>
-                            <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                                Además de las zonas con página propia, también
-                                atendemos estos municipios y localidades cercanas.
-                                Consulta disponibilidad sin compromiso.
-                            </p>
-                        </div>
-
-                        <div class="flex flex-wrap gap-3">
-                            {unlinkedCoverageAreas.map((area) => (
-                                <span class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-text/70 text-sm font-medium">
-                                    <MapPin className="w-3.5 h-3.5 text-primary/60 shrink-0" />
-                                    {area}
+            {/* ── Zonas Residenciales ────────────────────────────── */}
+            {residenciales.length > 0 && (
+                <div>
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 border-b border-white/5 pb-8">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4 text-primary">
+                                <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                    <Home className="w-5 h-5" />
                                 </span>
-                            ))}
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
+                                    Zonas principales
+                                </span>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
+                                Zonas principales donde trabajamos
+                            </h2>
                         </div>
+                        <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
+                            Selecciona tu zona para ver información específica sobre servicios de carpintería de aluminio, ventanas, cerramientos y presupuesto.
+                        </p>
                     </div>
-                )
-            }
 
-            {/* Empty State / CTA Final Premium */}
-            <div
-                class="relative overflow-hidden rounded-3xl bg-surface/50 border border-white/10 p-12 lg:p-24 text-center"
-            >
-                <div
-                    class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"
-                >
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {residenciales.map((location) => (
+                            <a
+                                href={`/zona/${location.slug}/`}
+                                class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
+                            >
+                                <div>
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
+                                            <MapPin className="w-5 h-5 text-text/50 group-hover:text-primary transition-colors" />
+                                        </div>
+                                        <ArrowRight className="w-6 h-6 text-text/50 group-hover:text-primary transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                                    </div>
+                                    <h3 class="text-2xl font-bold text-heading mb-2 group-hover:text-primary transition-colors">
+                                        {location.data.name}
+                                    </h3>
+                                    <p class="text-text/60 text-sm line-clamp-2 mb-6">
+                                        {getSeoDesc(location.data.seo, `Carpintería de aluminio en ${location.data.name}. Ventanas, cerramientos y puertas a medida.`)}
+                                    </p>
+                                </div>
+                                <div class="border-t border-white/5 pt-4">
+                                    <div class="flex items-center gap-2 text-xs text-primary font-semibold">
+                                        <CheckCircle2 className="w-3.5 h-3.5" />
+                                        <span>Ver servicios en {location.data.name}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
                 </div>
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-secondary via-transparent to-secondary pointer-events-none"
-                >
+            )}
+
+            {/* ── Zonas Industriales ────────────────────────────── */}
+            {industriales.length > 0 && (
+                <div>
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 border-b border-white/5 pb-8">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4 text-primary">
+                                <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                    <Factory className="w-5 h-5" />
+                                </span>
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
+                                    Industrial y comercial
+                                </span>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
+                                Zonas industriales y comerciales
+                            </h2>
+                        </div>
+                        <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
+                            Fabricamos e instalamos cerramientos, puertas y ventanas de aluminio para naves industriales, locales y espacios comerciales.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {industriales.map((location) => (
+                            <a
+                                href={`/zona/${location.slug}/`}
+                                class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
+                            >
+                                <div>
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
+                                            <Factory className="w-5 h-5 text-text/50 group-hover:text-primary transition-colors" />
+                                        </div>
+                                        <ArrowRight className="w-6 h-6 text-text/50 group-hover:text-primary transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                                    </div>
+                                    <h3 class="text-2xl font-bold text-heading mb-2 group-hover:text-primary transition-colors">
+                                        {location.data.name}
+                                    </h3>
+                                    <p class="text-text/60 text-sm line-clamp-2 mb-6">
+                                        {getSeoDesc(location.data.seo, `Cerramientos industriales y carpintería de aluminio en ${location.data.name}.`)}
+                                    </p>
+                                </div>
+                                <div class="border-t border-white/5 pt-4">
+                                    <div class="flex items-center gap-2 text-xs text-primary font-semibold">
+                                        <CheckCircle2 className="w-3.5 h-3.5" />
+                                        <span>Ver servicios en {location.data.name}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
                 </div>
+            )}
+
+            {/* ── Centros Urbanos ───────────────────────────────── */}
+            {centros.length > 0 && (
+                <div>
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 border-b border-white/5 pb-8">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4 text-primary">
+                                <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                    <Building2 className="w-5 h-5" />
+                                </span>
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
+                                    Centro urbano
+                                </span>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
+                                Centro y zonas urbanas
+                            </h2>
+                        </div>
+                        <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
+                            Servicio de carpintería de aluminio en el centro de la ciudad. Instalación profesional en locales, viviendas y edificios con mínimas molestias.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {centros.map((location) => (
+                            <a
+                                href={`/zona/${location.slug}/`}
+                                class="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-8 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
+                            >
+                                <div>
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
+                                            <Building2 className="w-5 h-5 text-text/50 group-hover:text-primary transition-colors" />
+                                        </div>
+                                        <ArrowRight className="w-6 h-6 text-text/50 group-hover:text-primary transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                                    </div>
+                                    <h3 class="text-2xl font-bold text-heading mb-2 group-hover:text-primary transition-colors">
+                                        {location.data.name}
+                                    </h3>
+                                    <p class="text-text/60 text-sm line-clamp-2 mb-6">
+                                        {getSeoDesc(location.data.seo, `Carpintería de aluminio en ${location.data.name}. Instalación profesional a medida.`)}
+                                    </p>
+                                </div>
+                                <div class="border-t border-white/5 pt-4">
+                                    <div class="flex items-center gap-2 text-xs text-primary font-semibold">
+                                        <CheckCircle2 className="w-3.5 h-3.5" />
+                                        <span>Ver servicios en {location.data.name}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Otras poblaciones (sin página propia) ─────────── */}
+            {unlinkedCoverageAreas.length > 0 && (
+                <div>
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 border-b border-white/5 pb-8">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4 text-primary">
+                                <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                    <MapPin className="w-5 h-5" />
+                                </span>
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
+                                    Más zonas
+                                </span>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
+                                Otras poblaciones donde trabajamos
+                            </h2>
+                        </div>
+                        <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
+                            También realizamos trabajos de aluminio en otros municipios de Málaga y Costa del Sol. Si no ves tu zona, consúltanos y te confirmamos disponibilidad.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        {unlinkedCoverageAreas.slice(0, 20).map((area) => (
+                            <span class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-text/70 text-sm font-medium">
+                                <MapPin className="w-3.5 h-3.5 text-primary/60 shrink-0" />
+                                {area}
+                            </span>
+                        ))}
+                        {unlinkedCoverageAreas.length > 20 && (
+                            <span class="inline-flex items-center px-4 py-2.5 text-text/50 text-sm italic">
+                                y otros municipios cercanos
+                            </span>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Servicios disponibles en todas las zonas ──────── */}
+            {sortedServices.length > 0 && (
+                <div>
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 border-b border-white/5 pb-8">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4 text-primary">
+                                <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                    <Wrench className="w-5 h-5" />
+                                </span>
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
+                                    Qué instalamos
+                                </span>
+                            </div>
+                            <h2 class="text-3xl md:text-4xl font-bold text-heading tracking-tight">
+                                Servicios disponibles en nuestras zonas de cobertura
+                            </h2>
+                        </div>
+                        <p class="text-text/70 text-base max-w-xl leading-relaxed lg:text-right text-pretty">
+                            Fabricamos e instalamos en taller propio. Sin intermediarios, con presupuesto personalizado para cada zona.
+                        </p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {sortedServices.map((service) => (
+                            <a
+                                href={`/servicios/${service.slug}/`}
+                                class="group flex items-center gap-4 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-white/10 transition-all duration-200"
+                            >
+                                <div class="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                                    <Wrench className="w-4 h-4 text-primary" />
+                                </div>
+                                <span class="font-semibold text-heading group-hover:text-primary transition-colors text-sm">
+                                    {cleanServiceTitle(service.data.title)}
+                                </span>
+                                <ArrowRight className="w-4 h-4 text-text/30 group-hover:text-primary ml-auto shrink-0 transition-colors" />
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* ── CTA final ─────────────────────────────────────── */}
+            <div class="relative overflow-hidden rounded-3xl bg-surface/50 border border-white/10 p-12 lg:p-24 text-center">
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+                <div class="absolute inset-0 bg-gradient-to-r from-secondary via-transparent to-secondary pointer-events-none" />
 
                 <div class="relative z-10 max-w-3xl mx-auto">
-                    <div
-                        class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/10 shadow-xl shadow-black/50"
-                    >
-                        <Search className="w-8 h-8 text-heading" />
+                    <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/10 shadow-xl shadow-black/50">
+                        <MapPin className="w-8 h-8 text-heading" />
                     </div>
 
-                    <h3
-                        class="text-3xl md:text-5xl font-black text-heading mb-6 tracking-tight"
-                    >
-                        ¿No encuentras tu ubicación exacta?
+                    <h3 class="text-3xl md:text-5xl font-black text-heading mb-6 tracking-tight">
+                        ¿No ves tu municipio?
                     </h3>
-                    <p
-                        class="text-xl text-text/80 mb-10 leading-relaxed text-pretty"
-                    >
-                        Aunque no aparezca listada específicamente, es muy
-                        probable que una de nuestras unidades móviles en <strong
-                            >{city}</strong
-                        > pueda darte servicio en menos de 30 minutos.
+                    <p class="text-xl text-text/80 mb-10 leading-relaxed text-pretty">
+                        Trabajamos en Málaga y Costa del Sol. Escríbenos y te confirmamos disponibilidad para tu zona sin compromiso.
                     </p>
 
-                    <div
-                        class="flex flex-col sm:flex-row items-center justify-center gap-4"
-                    >
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <a
                             href={`https://wa.me/${whatsapp.replace(/\s/g, "")}`}
                             target="_blank"
@@ -393,18 +422,12 @@ const schema = buildBlogListGraph({
                             href="/contacto/"
                             class="btn-cta w-full sm:w-auto inline-flex items-center justify-center gap-2"
                         >
-                            <Calendar className="w-5 h-5" />
-                            Consultar online
+                            Pedir presupuesto
                         </a>
                     </div>
-
-                    <p
-                        class="mt-8 text-xs text-text/50 uppercase tracking-widest"
-                    >
-                        Respuesta garantizada en el día
-                    </p>
                 </div>
             </div>
+
         </div>
     </section>
 
