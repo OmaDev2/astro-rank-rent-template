@@ -52,19 +52,26 @@ const normalize = (v = '') => v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/
 
 function cleanServiceTitle(title: string, loc: string): string {
     if (!_city) return `${title.trim()} en ${loc}`;
-    const e = escapeRegExp(_city);
+    
+    // Generar regex dinámico basado en _city con soporte de acentos
+    const cityPattern = _city.replace(/[aáà]/gi, '[aáà]').replace(/[eéè]/gi, '[eéè]').replace(/[iíì]/gi, '[iíì]').replace(/[oóò]/gi, '[oóò]').replace(/[uúù]/gi, '[uúù]');
+    const cityRegex = new RegExp(`(\\s+en)?\\s+${cityPattern}\\b`, 'gi');
+
     const cleaned = title
-        .replace(new RegExp(`\\s+en\\s+${e}\\b`, 'gi'), '')
-        .replace(new RegExp(`\\s+${e}\\b`, 'gi'), '')
+        .replace(cityRegex, '')
         .replace(/\s+/g, ' ')
         .trim();
+        
     return `${cleaned} en ${loc}`;
 }
 
 function getContextualDesc(shortDesc: string, loc: string): string {
-    const cityNorm = normalize(_city);
-    return cityNorm && normalize(shortDesc).includes(cityNorm)
-        ? `${niche || _settings.niche || 'Nuestros servicios'} en ${loc} y alrededores.`
+    if (!_city) return shortDesc;
+    const cityPattern = _city.replace(/[aáà]/gi, '[aáà]').replace(/[eéè]/gi, '[eéè]').replace(/[iíì]/gi, '[iíì]').replace(/[oóò]/gi, '[oóò]').replace(/[uúù]/gi, '[uúù]');
+    const cityRegex = new RegExp(cityPattern, 'i');
+
+    return cityRegex.test(shortDesc)
+        ? `Instalación y fabricación a medida en ${loc} y alrededores.`
         : shortDesc;
 }
 
@@ -79,6 +86,9 @@ const sorted = [...services]
         return a.data.title.localeCompare(b.data.title, 'es');
     })
     .slice(0, 6);
+
+// Si todos son destacados, no mostramos el badge para no saturar
+const allFeatured = sorted.length > 0 && sorted.every(s => s.data.featured);
 
 ---
 
@@ -116,8 +126,14 @@ const sorted = [...services]
                         })()}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="font-bold text-heading group-hover:text-primary transition-colors text-sm mb-1">
-                            {cleanServiceTitle(service.data.title, locationName)}
+                        <div class="font-bold text-heading group-hover:text-primary transition-colors text-sm mb-1 flex items-center justify-between gap-2">
+                            <span class="truncate">{cleanServiceTitle(service.data.title, locationName)}</span>
+                            {service.data.featured && !allFeatured && (
+                                <span class="shrink-0 flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-primary/10 text-[10px] text-primary font-black uppercase tracking-tighter">
+                                    <Star className="w-2.5 h-2.5 fill-current" />
+                                    Destacado
+                                </span>
+                            )}
                         </div>
                         <p class="text-xs text-body leading-relaxed line-clamp-2 opacity-80">
                             {getContextualDesc(service.data.shortDesc, locationName)}
