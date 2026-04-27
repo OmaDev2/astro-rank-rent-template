@@ -40,6 +40,12 @@ try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
 const pageTitle = parsedSeo.title || `${data.title} en ${settings.city} | ${settings.siteName}`;
 const pageDescription = parsedSeo.description || data.shortDesc;
 
+// Extraer FAQs desde blocks si no están en frontmatter faq:
+const faqsFromBlocks = (data.blocks || [])
+    .filter((b: any) => b.discriminant === 'faq')
+    .flatMap((b: any) => b.value?.faqs || []);
+const resolvedFaqs = (data.faq && data.faq.length) ? data.faq : faqsFromBlocks;
+
 // Schema @graph
 const schema = buildServiceGraph({
     settings,
@@ -49,7 +55,7 @@ const schema = buildServiceGraph({
     description: pageDescription,
     image: data.heroImage,
     testimonials,
-    faqs: data.faq || [],
+    faqs: resolvedFaqs,
     locationNames: allLocations.map((l) => l.data.name),
     breadcrumbs: [
         { name: "Inicio", item: new URL("/", Astro.site).href },
