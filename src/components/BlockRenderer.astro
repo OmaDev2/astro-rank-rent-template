@@ -391,7 +391,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
                     {value.subtitle}
                   </p>
                 )}
-                <FaqAccordion items={faqItems} title="" variant={value?.variant} />
+                <FaqAccordion items={faqItems} title="" variant={value?.variant} noSchema={true} />
               </div>
             </div>
           ) : null;
@@ -405,6 +405,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
                   title={`Preguntas Frecuentes sobre ${title || locationName}`}
                   items={faqItems}
                   variant={value?.variant}
+                  noSchema={true}
                 />
               </div>
             </section>
