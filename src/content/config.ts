@@ -156,6 +156,10 @@ const business = defineCollection({
             opens: z.string(),
             closes: z.string(),
         })).optional(),
+        // ── Orden de visualización ────────────────────────────────────────────
+        servicePriority:  z.array(z.string()).optional(),
+        locationPriority: z.array(z.string()).optional(),
+        ctaTagline:       z.string().optional(),
     }),
 });
 

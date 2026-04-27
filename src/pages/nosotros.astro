@@ -27,7 +27,7 @@ const aboutData = aboutEntry?.data;
 // Default Values (Fallback)
 const defaults = {
     hero: {
-        title: "METALISUR — Carpintería de Aluminio en Málaga",
+        title: `${siteName} — ${niche} en ${city}`,
         description: `Fabricamos e instalamos ventanas, puertas, persianas, mosquiteras, mamparas y cerramientos de aluminio en ${city}. Más de 15 años con taller propio, sin intermediarios y con garantía en cada instalación.`,
         image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop",
     },
@@ -73,7 +73,7 @@ const defaults = {
         ],
     },
     whyChooseUs: {
-        title: "¿Por Qué Elegir METALISUR?",
+        title: `¿Por Qué Elegir ${siteName}?`,
         items: [
             {
                 title: `Taller propio en ${city}`,
@@ -102,12 +102,12 @@ const defaults = {
         ],
     },
     team: {
-        title: "El Equipo METALISUR",
+        title: `El Equipo ${siteName}`,
         description: `El equipo de METALISUR está formado por instaladores especializados en carpintería de aluminio con años de experiencia en ${city} y provincia. Cada persona que entra en tu vivienda sabe lo que hace: mide con precisión, instala sin atajos y te explica cómo funciona lo que ha instalado. Sin comerciales que prometen y técnicos que improvisan — el mismo equipo que presupuesta es el que instala.`,
     },
     seo: {
-        title: `Quiénes Somos | ${siteName} — Carpintería de Aluminio en ${city}`,
-        description: `Conoce a METALISUR, especialistas en carpintería de aluminio en ${city}. Fabricación propia, instalación profesional y más de 15 años de experiencia en ventanas, puertas, persianas y cerramientos.`,
+        title: `Quiénes Somos | ${siteName} — ${niche} en ${city}`,
+        description: `Conoce a ${siteName}, especialistas en ${niche.toLowerCase()} en ${city}. Fabricación propia, instalación profesional y más de 15 años de experiencia.`,
     },
 };
 

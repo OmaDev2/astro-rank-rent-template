@@ -90,6 +90,11 @@ export async function getSettings() {
         themeColor:         d?.advanced?.themeColor    || d?.themeColor         || '',
         customCss:          d?.advanced?.customCss     || d?.customCss          || '',
 
+        // ── Orden de visualización ────────────────────────────────────────────
+        servicePriority:  (b?.servicePriority  || []) as string[],
+        locationPriority: (b?.locationPriority || []) as string[],
+        ctaTagline:       b?.ctaTagline || '',
+
         // ── Botones flotantes ─────────────────────────────────────────────────
         stickyPhoneMobile:  d?.contact?.stickyPhoneMobile  ?? true,
         stickyPhoneDesktop: d?.contact?.stickyPhoneDesktop ?? false,

@@ -27,6 +27,8 @@ if (!locations || locations.length === 0) return;
 
 const settings = await getSettings();
 const areaServed = settings.areaServed as string[];
+// Orden configurable desde global.yaml → locationPriority; fallback: orden alfabético
+const PRIORITY: string[] = settings.locationPriority?.length ? settings.locationPriority : [];
 
 const normalizeAreaName = (value: string) =>
     value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
@@ -36,17 +38,7 @@ const unlinkedCoverageAreas = areaServed.filter(
     (area) => !linkedLocationNames.has(normalizeAreaName(area))
 );
 
-const PRIORITY: string[] = [
-    'malaga',
-    'marbella',
-    'fuengirola',
-    'estepona',
-    'torremolinos',
-    'benalmadena',
-    'mijas',
-];
-
-// Prioridad fija por slug; los slugs nuevos van al final alfabético; límite 6
+// Slugs en PRIORITY primero; slugs no listados van al final por orden alfabético; límite 6
 const sorted = [...locations]
     .sort((a, b) => {
         const ia = PRIORITY.indexOf(a.slug);

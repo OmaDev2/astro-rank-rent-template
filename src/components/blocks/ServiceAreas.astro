@@ -45,10 +45,11 @@ const { title, subtitle, group1, group2, bgClass = "bg-secondary" } = Astro.prop
 const settings = await getSettings();
 const areaServed = settings.areaServed || [];
 
-// Dynamically generate the province items based on areaServed (excluding main city "Málaga")
+// Dynamically generate the province items based on areaServed (excluding the main city)
+const mainCity = settings.city || '';
 if (group2 && areaServed.length > 0) {
     const dynamicItems = areaServed
-        .filter((city: string) => city !== "Málaga")
+        .filter((area: string) => area !== mainCity)
         .map((city: string) => ({
             name: city,
             icon: "MapPin"

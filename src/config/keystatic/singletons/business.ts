@@ -203,8 +203,33 @@ export const business = singleton({
             defaultValue: ['Cash', 'Credit Card'],
         }),
 
+        // ── 8. PRIORIDAD DE SERVICIOS Y ZONAS ────────────────────────────────
+        servicePriority: fields.array(
+            fields.text({ label: 'Slug del servicio' }),
+            {
+                label: 'Orden de Servicios en hubs y footer',
+                description: 'Slugs exactos de los servicios en el orden deseado. Se usa en /zonas/, /servicios/ y el footer. Nuevos servicios no listados van al final por orden alfabético.',
+                itemLabel: (props) => props.value || 'Nuevo slug',
+            }
+        ),
+
+        locationPriority: fields.array(
+            fields.text({ label: 'Slug de la zona' }),
+            {
+                label: 'Orden de Zonas en hubs y footer',
+                description: 'Slugs exactos de las zonas en el orden deseado. Se usa en /servicios/, el footer y RelatedLocations. Nuevas zonas no listadas van al final por orden alfabético.',
+                itemLabel: (props) => props.value || 'Nuevo slug',
+            }
+        ),
+
+        ctaTagline: fields.text({
+            label: 'Tagline del CTA final',
+            description: 'Texto pequeño bajo los botones de llamada a la acción. Ej: Presupuesto gratuito · Sin compromiso',
+            defaultValue: 'Presupuesto gratuito · Sin compromiso',
+        }),
+
         openingHours: fields.array(
-            fields.object({
+    fields.object({
                 dayOfWeek: fields.multiselect({
                     label: 'Días',
                     options: [

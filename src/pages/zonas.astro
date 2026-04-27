@@ -38,19 +38,20 @@ const residenciales = locations.filter((loc) => loc.data.type === "residencial")
 const industriales = locations.filter((loc) => loc.data.type === "industrial");
 const centros = locations.filter((loc) => loc.data.type === "centro");
 
-// Limpiar título de servicio (quita referencia a Málaga)
-const cleanServiceTitle = (title: string) =>
-    title.replace(/\s+en\s+M[aá]laga\b/gi, "").replace(/\s+M[aá]laga\b/gi, "").trim();
+// Quitar referencia a la ciudad principal de los títulos de servicio
+const _escapeRE = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const cleanServiceTitle = (title: string) => {
+    if (!city) return title.trim();
+    const e = _escapeRE(city);
+    return title
+        .replace(new RegExp(`\\s+en\\s+${e}\\b`, 'gi'), '')
+        .replace(new RegExp(`\\s+${e}\\b`, 'gi'), '')
+        .replace(/\s+/g, ' ')
+        .trim();
+};
 
-// Prioridad de servicios en la sección hub
-const SERVICE_PRIORITY = [
-    "ventanas-de-aluminio-malaga",
-    "cerramientos-de-aluminio-malaga",
-    "puertas-de-aluminio-malaga",
-    "mosquiteras-de-aluminio-a-medida-malaga",
-    "persianas-de-aluminio-malaga",
-    "cortinas-cristal-malaga",
-];
+// Orden configurable desde global.yaml → servicePriority; fallback: orden natural
+const SERVICE_PRIORITY: string[] = settings.servicePriority?.length ? settings.servicePriority : [];
 
 const sortedServices = [...services]
     .sort((a, b) => {
@@ -81,8 +82,8 @@ const parsePreview = (json: string) => {
 };
 
 const seoPreviewData = parsePreview(zonasPageData.seoControls as string);
-const seoTitle = seoPreviewData?.title || `Zonas de Servicio en Málaga y Costa del Sol | ${siteName}`;
-const seoDescription = seoPreviewData?.description || `Carpintería de aluminio en toda la provincia de Málaga. Marbella, Estepona, Fuengirola, Benalmádena y más. Presupuesto sin compromiso.`;
+const seoTitle = seoPreviewData?.title || `Zonas de Servicio en ${city} | ${siteName}`;
+const seoDescription = seoPreviewData?.description || `${niche} en ${city} y provincia. Presupuesto sin compromiso.`;
 
 const defaultBlocks = [{ discriminant: "hero" }];
 
@@ -161,7 +162,7 @@ const schema = buildBlogListGraph({
                             </h2>
                         </div>
                         <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                            Selecciona tu zona para ver información específica sobre servicios de carpintería de aluminio, ventanas, cerramientos y presupuesto.
+                            Selecciona tu zona para ver información específica sobre {niche.toLowerCase()} y presupuesto personalizado.
                         </p>
                     </div>
 
@@ -182,7 +183,7 @@ const schema = buildBlogListGraph({
                                         {location.data.name}
                                     </h3>
                                     <p class="text-text/60 text-sm line-clamp-2 mb-4">
-                                        {getSeoDesc(location.data.seo, `Carpintería de aluminio en ${location.data.name}. Ventanas, cerramientos y puertas a medida.`)}
+                                        {getSeoDesc(location.data.seo, `${niche} en ${location.data.name}. Presupuesto sin compromiso.`)}
                                     </p>
                                 </div>
                                 <div class="border-t border-white/5 pt-4 flex items-center justify-between">
@@ -215,7 +216,7 @@ const schema = buildBlogListGraph({
                             </h2>
                         </div>
                         <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                            Fabricamos e instalamos cerramientos, puertas y ventanas de aluminio para naves industriales, locales y espacios comerciales.
+                            {niche} para naves industriales, locales y espacios comerciales.
                         </p>
                     </div>
 
@@ -236,7 +237,7 @@ const schema = buildBlogListGraph({
                                         {location.data.name}
                                     </h3>
                                     <p class="text-text/60 text-sm line-clamp-2 mb-4">
-                                        {getSeoDesc(location.data.seo, `Cerramientos industriales y carpintería de aluminio en ${location.data.name}.`)}
+                                        {getSeoDesc(location.data.seo, `${niche} industrial en ${location.data.name}.`)}
                                     </p>
                                 </div>
                                 <div class="border-t border-white/5 pt-4 flex items-center justify-between">
@@ -269,7 +270,7 @@ const schema = buildBlogListGraph({
                             </h2>
                         </div>
                         <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                            Servicio de carpintería de aluminio en el centro de la ciudad. Instalación profesional en locales, viviendas y edificios con mínimas molestias.
+                            {niche} en el centro de la ciudad. Instalación profesional en locales, viviendas y edificios con mínimas molestias.
                         </p>
                     </div>
 
@@ -290,7 +291,7 @@ const schema = buildBlogListGraph({
                                         {location.data.name}
                                     </h3>
                                     <p class="text-text/60 text-sm line-clamp-2 mb-4">
-                                        {getSeoDesc(location.data.seo, `Carpintería de aluminio en ${location.data.name}. Instalación profesional a medida.`)}
+                                        {getSeoDesc(location.data.seo, `${niche} en ${location.data.name}. Instalación profesional a medida.`)}
                                     </p>
                                 </div>
                                 <div class="border-t border-white/5 pt-4 flex items-center justify-between">
@@ -323,7 +324,7 @@ const schema = buildBlogListGraph({
                             </h2>
                         </div>
                         <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
-                            También realizamos trabajos de aluminio en otros municipios de Málaga y Costa del Sol. Si no ves tu zona, consúltanos y te confirmamos disponibilidad.
+                            También realizamos trabajos de {niche.toLowerCase()} en otros municipios de {city} y alrededores. Si no ves tu zona, consúltanos y te confirmamos disponibilidad.
                         </p>
                     </div>
 
@@ -361,7 +362,7 @@ const schema = buildBlogListGraph({
                             </h2>
                         </div>
                         <p class="text-text/70 text-base max-w-xl leading-relaxed lg:text-right text-pretty">
-                            Fabricamos e instalamos en taller propio. Sin intermediarios, con presupuesto personalizado para cada zona.
+                            {niche} disponible en todas nuestras zonas. Presupuesto personalizado sin compromiso.
                         </p>
                     </div>
 
@@ -398,7 +399,7 @@ const schema = buildBlogListGraph({
                         ¿No ves tu municipio?
                     </h3>
                     <p class="text-xl text-text/80 mb-10 leading-relaxed text-pretty">
-                        Trabajamos en Málaga y Costa del Sol. Escríbenos y te confirmamos disponibilidad para tu zona sin compromiso.
+                        Trabajamos en {city} y alrededores. Escríbenos y te confirmamos disponibilidad para tu zona sin compromiso.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2">

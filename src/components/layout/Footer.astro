@@ -6,6 +6,9 @@ import { getSettings } from "@/lib/settings";
 
 const settings = await getSettings();
 const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle, areaServed } = settings;
+// Orden configurable desde global.yaml; fallback a [] → orden alfabético
+const SERVICE_PRIORITY: string[] = settings.servicePriority?.length  ? settings.servicePriority  : [];
+const LOCATION_PRIORITY: string[] = settings.locationPriority?.length ? settings.locationPriority : [];
 
 const footerConfig = await getEntry("footer", "main");
 const footerData = footerConfig?.data || {};
@@ -28,19 +31,6 @@ const footerLinks =
 // Auto-fetch colecciones para interlinking SEO
 const allServices = await getCollection("services");
 const allLocations = await getCollection("locations");
-
-const SERVICE_PRIORITY = [
-    'ventanas-de-aluminio-malaga',
-    'cerramientos-de-aluminio-malaga',
-    'puertas-de-aluminio-malaga',
-    'mosquiteras-de-aluminio-a-medida-malaga',
-    'persianas-de-aluminio-malaga',
-    'cortinas-cristal-malaga',
-];
-const LOCATION_PRIORITY = [
-    'malaga', 'marbella', 'fuengirola', 'estepona',
-    'torremolinos', 'benalmadena', 'mijas',
-];
 
 const sortedServices = [...allServices]
     .sort((a, b) => {

@@ -55,3 +55,19 @@ openingHours:
       - Saturday
     opens: '10:00'
     closes: '14:00'
+servicePriority:
+  - ventanas-de-aluminio-malaga
+  - cerramientos-de-aluminio-malaga
+  - puertas-de-aluminio-malaga
+  - mosquiteras-de-aluminio-a-medida-malaga
+  - persianas-de-aluminio-malaga
+  - cortinas-cristal-malaga
+locationPriority:
+  - malaga
+  - marbella
+  - fuengirola
+  - estepona
+  - torremolinos
+  - benalmadena
+  - mijas
+ctaTagline: "Presupuesto gratuito · Sin compromiso"

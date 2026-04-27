@@ -11,6 +11,7 @@ import {
     Paintbrush, Bolt, Truck, Package, Layers, Leaf, Sun, Snowflake, Lock,
     Wifi, Camera, AlertTriangle, Thermometer,
 } from "lucide-react";
+import { getSettings } from "@/lib/settings";
 
 const iconMap: Record<string, any> = {
     Wrench, Droplets, Flame, Zap, Star, Home, Building2, MapPin, Clock,
@@ -40,30 +41,32 @@ const { services, locationName, niche, currentServiceSlug } = Astro.props;
 
 if (!services || services.length === 0) return;
 
+const _settings = await getSettings();
+const _city = _settings.city || '';
+const _ctaTagline = _settings.ctaTagline || 'Presupuesto sin compromiso';
+// Orden configurable desde global.yaml → servicePriority; fallback: orden alfabético
+const PRIORITY: string[] = _settings.servicePriority?.length ? _settings.servicePriority : [];
+
+const escapeRegExp = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const normalize = (v = '') => v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+
 function cleanServiceTitle(title: string, loc: string): string {
+    if (!_city) return `${title.trim()} en ${loc}`;
+    const e = escapeRegExp(_city);
     const cleaned = title
-        .replace(/\s+en\s+M[aá]laga\b/gi, '')
-        .replace(/\s+M[aá]laga\b/gi, '')
+        .replace(new RegExp(`\\s+en\\s+${e}\\b`, 'gi'), '')
+        .replace(new RegExp(`\\s+${e}\\b`, 'gi'), '')
+        .replace(/\s+/g, ' ')
         .trim();
     return `${cleaned} en ${loc}`;
 }
 
 function getContextualDesc(shortDesc: string, loc: string): string {
-    return /m[aá]laga/i.test(shortDesc)
-        ? `Instalación y fabricación a medida en ${loc} y alrededores.`
+    const cityNorm = normalize(_city);
+    return cityNorm && normalize(shortDesc).includes(cityNorm)
+        ? `${niche || _settings.niche || 'Nuestros servicios'} en ${loc} y alrededores.`
         : shortDesc;
 }
-
-const PRIORITY: string[] = [
-    'ventanas-de-aluminio-malaga',
-    'cerramientos-de-aluminio-malaga',
-    'puertas-de-aluminio-malaga',
-    'mosquiteras-de-aluminio-a-medida-malaga',
-    'persianas-de-aluminio-malaga',
-    'cortinas-cristal-malaga',
-    'mamparas-de-bano-malaga',
-    'automatismos-de-puertas-y-garajes-malaga',
-];
 
 const sorted = [...services]
     .filter(s => s.slug !== currentServiceSlug)
@@ -92,7 +95,7 @@ const sorted = [...services]
             </h2>
             <p class="text-body mt-2 max-w-xl mx-auto text-sm">
                 Instalamos {niche ? niche.toLowerCase() : "nuestros servicios"} a medida en {locationName} y alrededores.
-                Presupuesto gratuito y sin compromiso.
+                {_ctaTagline}.
             </p>
         </div>
 

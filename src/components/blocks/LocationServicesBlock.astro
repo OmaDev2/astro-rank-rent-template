@@ -1,6 +1,7 @@
 ---
 import { ArrowRight } from "lucide-react";
 import type { Service } from "../../types";
+import { getSettings } from "@/lib/settings";
 
 interface Props {
     services?: Service[];
@@ -20,18 +21,33 @@ const {
     bgClass = "bg-surface",
 } = Astro.props;
 
+const _s = await getSettings();
+const _city = _s.city || '';
+const _niche = _s.niche || niche;
+
 const heading = title || `Servicios de ${niche} en ${locationName}`;
 const desc =
     subtitle ||
     `${niche.charAt(0).toUpperCase() + niche.slice(1)} en ${locationName}. Selecciona el servicio que necesitas para ver todos los detalles y precios.`;
 
-const cleanServiceTitle = (t: string) =>
-    t.replace(/\s+en\s+M[aá]laga\b/gi, "").replace(/\s+M[aá]laga\b/gi, "").trim();
+const _escapeRE = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const _norm = (v = '') => v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+
+const cleanServiceTitle = (t: string) => {
+    if (!_city) return t.trim();
+    const e = _escapeRE(_city);
+    return t
+        .replace(new RegExp(`\\s+en\\s+${e}\\b`, 'gi'), '')
+        .replace(new RegExp(`\\s+${e}\\b`, 'gi'), '')
+        .replace(/\s+/g, ' ')
+        .trim();
+};
 
 const getContextualDesc = (shortDesc: string | undefined, loc: string) => {
     if (!shortDesc) return undefined;
-    return /m[aá]laga/i.test(shortDesc)
-        ? `Instalación y fabricación a medida en ${loc} y alrededores.`
+    const cityNorm = _norm(_city);
+    return cityNorm && _norm(shortDesc).includes(cityNorm)
+        ? `${_niche} en ${loc} y alrededores.`
         : shortDesc;
 };
 ---

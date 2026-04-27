@@ -5,6 +5,7 @@ import { getSettings } from "@/lib/settings";
 const settings = await getSettings();
 const phone = settings.phone || "";
 const niche = settings.niche || "Profesional";
+const ctaTagline = settings.ctaTagline || "Presupuesto gratuito · Sin compromiso";
 const defaultCtaText = "PEDIR PRESUPUESTO";
 
 const {
@@ -96,7 +97,7 @@ const TitleTag = titleTag;
         <p
             class="mt-14 text-sm text-white/50 tracking-[0.2em] uppercase font-bold"
         >
-            ⚡ Respuesta inmediata · Presupuesto gratuito · Sin compromiso
+            ⚡ {ctaTagline}
         </p>
     </div>
 </section>

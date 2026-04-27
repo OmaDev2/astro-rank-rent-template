@@ -8,7 +8,7 @@ import { getEntry } from "astro:content";
 // Recuperamos la configuración global de la empresa
 const { siteName, city, niche, email, nif } = await getSettings();
 const ownerName = "Javier Ávila"; // Titular responsable
-const businessName = "METALISUR";
+const businessName = siteName;
 
 // Intentamos cargar contenido desde el CMS, si no, usamos el fallback detallado
 const legacyEntry = await getEntry("legal", "aviso-legal");
