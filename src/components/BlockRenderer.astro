@@ -166,6 +166,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
               heroImage={value?.heroImage || heroImage}
               heroImageAlt={value?.heroImageAlt}
               phone={phone}
+              whatsapp={config?.contact?.whatsapp || config?.whatsapp || whatsapp}
               siteName={siteName}
               niche={niche}
               title={heroContent?.title || value?.title || title}
@@ -173,8 +174,10 @@ const blockBgClasses = (blocks as any[]).map((b) => {
               heading={heroContent?.heading}
               headingHighlight={heroContent?.headingHighlight}
               subheading={heroContent?.subheading}
-              ctaPrimaryText={heroContent?.ctaPrimaryText}
-              ctaSecondaryText={heroContent?.ctaSecondaryText}
+              ctaPrimaryText={heroContent?.ctaPrimaryText || value?.ctaPrimaryText}
+              ctaSecondaryText={heroContent?.ctaSecondaryText || value?.ctaSecondaryText}
+              ctaPrimaryLink={heroContent?.ctaPrimaryLink || value?.ctaPrimaryLink}
+              ctaSecondaryLink={heroContent?.ctaSecondaryLink || value?.ctaSecondaryLink}
               heroStyle={config?.heroStyle || "image"}
             />
             {breadcrumbType && (
