@@ -25,6 +25,7 @@ const phone = props.phone;
 const title = spin(props.title);
 const isIndustrial = Astro.props.locationType === "industrial";
 const heroStyle: string = props.heroStyle || "image";
+const eyebrow: string | undefined = props.eyebrow;
 
 // Lógica de Selección de Imagen (Mantenida intacta)
 let selectedImage = null;
@@ -121,7 +122,7 @@ const whatsappIconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
                             class="relative inline-flex rounded-full h-2 w-2 bg-primary"
                         ></span>
                     </span>
-                    Disponible en {locationName}
+                    {eyebrow ?? `Disponible en ${locationName}`}
                 </div>
 
                 <h1
@@ -246,7 +247,7 @@ const whatsappIconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
             <div class="lg:col-span-8 space-y-5">
                 <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
                     <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                    Disponible en {locationName}
+                    {eyebrow ?? `Disponible en ${locationName}`}
                 </div>
                 <h1 class="text-4xl lg:text-6xl font-heading font-black text-heading leading-tight drop-shadow-xl">
                     {heading || props.title || `${niche} en ${locationName}`}
@@ -290,7 +291,7 @@ const whatsappIconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
             <div class="lg:col-span-8 space-y-5">
                 <div class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
                     <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                    Disponible en {locationName}
+                    {eyebrow ?? `Disponible en ${locationName}`}
                 </div>
                 <h1 class="text-4xl lg:text-6xl font-heading font-black text-heading leading-tight">
                     {heading || props.title || `${niche} en ${locationName}`}
