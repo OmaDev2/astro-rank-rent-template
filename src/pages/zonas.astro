@@ -22,7 +22,15 @@ const locations = await getCollection("locations");
 // Fetch Global Settings (Dinámico)
 import { getSettings } from "@/lib/settings";
 const settings = await getSettings();
-const { siteName, city, niche, phone, whatsapp } = settings;
+const { siteName, city, niche, phone, whatsapp, areaServed } = settings;
+
+const normalizeAreaName = (value: string) =>
+    value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+
+const linkedLocationNames = new Set(locations.map((loc) => normalizeAreaName(loc.data.name)));
+const unlinkedCoverageAreas = (areaServed as string[]).filter(
+    (area) => !linkedLocationNames.has(normalizeAreaName(area))
+);
 
 // Agrupar por tipo
 const residenciales = locations.filter(
@@ -285,6 +293,43 @@ const schema = buildBlogListGraph({
                                         </div>
                                     </div>
                                 </a>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+
+            {/* Zonas de Cobertura (sin página propia) */}
+            {
+                unlinkedCoverageAreas.length > 0 && (
+                    <div class="group/section">
+                        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 border-b border-white/5 pb-8">
+                            <div>
+                                <div class="flex items-center gap-3 mb-4 text-primary">
+                                    <span class="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                        <MapPin className="w-5 h-5" />
+                                    </span>
+                                    <span class="text-sm font-bold tracking-[0.2em] uppercase text-text/70">
+                                        Más zonas
+                                    </span>
+                                </div>
+                                <h2 class="text-4xl md:text-5xl font-bold text-heading tracking-tight">
+                                    Cobertura extendida
+                                </h2>
+                            </div>
+                            <p class="text-text/70 text-base md:text-lg max-w-xl leading-relaxed lg:text-right text-pretty">
+                                Además de las zonas con página propia, también
+                                atendemos estos municipios y localidades cercanas.
+                                Consulta disponibilidad sin compromiso.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-3">
+                            {unlinkedCoverageAreas.map((area) => (
+                                <span class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-text/70 text-sm font-medium">
+                                    <MapPin className="w-3.5 h-3.5 text-primary/60 shrink-0" />
+                                    {area}
+                                </span>
                             ))}
                         </div>
                     </div>

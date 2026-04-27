@@ -6,6 +6,7 @@
  * Los datos vienen del layout padre (ya tiene getCollection resuelto).
  */
 import { MapPin, ArrowRight } from "lucide-react";
+import { getSettings } from "@/lib/settings";
 
 interface Location {
     slug: string;
@@ -23,6 +24,17 @@ interface Props {
 const { locations, serviceTitle } = Astro.props;
 
 if (!locations || locations.length === 0) return;
+
+const settings = await getSettings();
+const areaServed = settings.areaServed as string[];
+
+const normalizeAreaName = (value: string) =>
+    value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+
+const linkedLocationNames = new Set(locations.map((loc) => normalizeAreaName(loc.data.name)));
+const unlinkedCoverageAreas = areaServed.filter(
+    (area) => !linkedLocationNames.has(normalizeAreaName(area))
+);
 
 const PRIORITY: string[] = [
     'malaga',
@@ -95,6 +107,21 @@ const typeBadge: Record<string, string> = {
                 </a>
             ))}
         </div>
+
+        {unlinkedCoverageAreas.length > 0 && (
+            <div class="mt-8 pt-6 border-t border-heading/5 text-center">
+                <p class="text-xs text-body/50 mb-3 uppercase tracking-wider font-bold">
+                    También cubrimos
+                </p>
+                <div class="flex flex-wrap justify-center gap-2">
+                    {unlinkedCoverageAreas.map((area) => (
+                        <span class="text-xs text-body/60 px-3 py-1 rounded-full bg-secondary border border-heading/10">
+                            {area}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        )}
 
         <div class="text-center mt-8">
             <a href="/zonas/" class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent transition-colors">

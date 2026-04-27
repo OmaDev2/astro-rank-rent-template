@@ -5,7 +5,7 @@ import { getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 
 const settings = await getSettings();
-const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle } = settings;
+const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle, areaServed } = settings;
 
 const footerConfig = await getEntry("footer", "main");
 const footerData = footerConfig?.data || {};
@@ -63,6 +63,14 @@ const sortedLocations = [...allLocations]
         return a.data.name.localeCompare(b.data.name, 'es');
     })
     .slice(0, 5);
+
+const normalizeAreaName = (value: string) =>
+    value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+
+const linkedLocationNames = new Set(allLocations.map((loc) => normalizeAreaName(loc.data.name)));
+const unlinkedCoverageAreas = (areaServed as string[]).filter(
+    (area) => !linkedLocationNames.has(normalizeAreaName(area))
+);
 ---
 
 <footer class="bg-secondary border-t border-heading/10 pt-16 pb-8">
@@ -199,6 +207,20 @@ const sortedLocations = [...allLocations]
                                 </li>
                             ))}
                         </ul>
+                        {unlinkedCoverageAreas.length > 0 && (
+                            <div class="mt-4 pt-3 border-t border-heading/10">
+                                <div class="text-body/50 text-[10px] font-bold uppercase tracking-wider mb-2">
+                                    También cubrimos
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    {unlinkedCoverageAreas.map((area) => (
+                                        <span class="text-[11px] text-body/60 bg-surface px-2 py-0.5 rounded-full border border-heading/10">
+                                            {area}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <div class="mt-4 pt-3 border-t border-heading/10">
                             <a href="/zonas/"
                                 class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-accent transition-colors">
