@@ -40,7 +40,10 @@ try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
 const pageTitle = parsedSeo.title || `${data.title} en ${settings.city} | ${settings.siteName}`;
 const pageDescription = parsedSeo.description || data.shortDesc;
 
-// Extraer FAQs desde blocks si no están en frontmatter faq:
+// Services use FAQ blocks (discriminant: faq, value.faqs) as the source of truth.
+// Frontmatter faq: is kept as a legacy/fallback source with priority if present.
+// Avoid defining both to prevent visual/schema mismatch (schema uses resolvedFaqs,
+// accordion uses value.faqs from the block directly).
 const faqsFromBlocks = (data.blocks || [])
     .filter((b: any) => b.discriminant === 'faq')
     .flatMap((b: any) => b.value?.faqs || []);
