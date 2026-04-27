@@ -40,6 +40,20 @@ const { services, locationName, niche, currentServiceSlug } = Astro.props;
 
 if (!services || services.length === 0) return;
 
+function cleanServiceTitle(title: string, loc: string): string {
+    const cleaned = title
+        .replace(/\s+en\s+M[aá]laga\b/gi, '')
+        .replace(/\s+M[aá]laga\b/gi, '')
+        .trim();
+    return `${cleaned} en ${loc}`;
+}
+
+function getContextualDesc(shortDesc: string, loc: string): string {
+    return /m[aá]laga/i.test(shortDesc)
+        ? `Instalación y fabricación a medida en ${loc} y alrededores.`
+        : shortDesc;
+}
+
 const PRIORITY: string[] = [
     'ventanas-de-aluminio-malaga',
     'cerramientos-de-aluminio-malaga',
@@ -89,12 +103,6 @@ const sorted = [...services]
                     class="group relative flex items-start gap-4 p-5 rounded-2xl bg-surface border border-heading/5
                            hover:border-primary/30 hover:shadow-lg transition-all duration-300"
                 >
-                    {service.data.featured && (
-                        <span class="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider
-                                     px-2 py-0.5 bg-primary text-white rounded-full">
-                            Destacado
-                        </span>
-                    )}
                     <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center
                                 shrink-0 group-hover:bg-primary/20 transition-colors text-primary">
                         {(() => {
@@ -106,10 +114,10 @@ const sorted = [...services]
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="font-bold text-heading group-hover:text-primary transition-colors text-sm mb-1">
-                            {service.data.title}
+                            {cleanServiceTitle(service.data.title, locationName)}
                         </div>
                         <p class="text-xs text-body leading-relaxed line-clamp-2 opacity-80">
-                            {service.data.shortDesc}
+                            {getContextualDesc(service.data.shortDesc, locationName)}
                         </p>
                     </div>
                     <ArrowRight className="w-4 h-4 text-heading/20 group-hover:text-primary transition-colors shrink-0 mt-1" />
