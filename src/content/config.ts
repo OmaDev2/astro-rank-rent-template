@@ -374,6 +374,7 @@ const about = defineCollection({
     type: 'data',
     schema: z.object({
         hero: z.object({
+            eyebrow: z.string().optional(),
             title: z.string().optional(),
             description: z.string().optional(),
             image: z.string().optional(),
@@ -389,6 +390,7 @@ const about = defineCollection({
             stats: z.array(z.object({
                 value: z.string(),
                 label: z.string(),
+                description: z.string().optional(),
             })).optional(),
         }).optional(),
         values: z.object({
@@ -410,6 +412,20 @@ const about = defineCollection({
         team: z.object({
             title: z.string().optional(),
             description: z.string().optional(),
+            members: z.array(z.object({
+                name: z.string(),
+                role: z.string(),
+                image: z.string().optional(),
+                imageAlt: z.string().optional(),
+            })).optional(),
+        }).optional(),
+        cta: z.object({
+            title: z.string().optional(),
+            text: z.string().optional(),
+            primaryText: z.string().optional(),
+            primaryLink: z.string().optional(),
+            secondaryText: z.string().optional(),
+            secondaryLink: z.string().optional(),
         }).optional(),
         seo: z.object({
             title: z.string().optional(),

@@ -13,22 +13,28 @@ import {
     Clock,
     Target,
     Heart,
+    Calculator,
+    Star
 } from "lucide-react";
 
-// Fetch Global Settings
+// 1. Fetch Global Settings & Singleton
 import { getSettings } from "@/lib/settings";
 const settings = await getSettings();
-const { siteName, city, niche } = settings;
+const { siteName, city, niche, phone, whatsapp } = settings;
 
-// Fetch About Content
 const aboutEntry = await getEntry("about", "index");
 const aboutData = aboutEntry?.data;
 
-// Default Values (Fallback)
+// 2. Import History MDX Content
+// For singletons with MDX fields, static import is the most reliable way in Astro.
+import HistoryContent from "../content/about/index/history/content.mdx";
+
+// 3. Defaults & Fallbacks
 const defaults = {
     hero: {
-        title: `${siteName} — ${niche} en ${city}`,
-        description: `Fabricamos e instalamos ventanas, puertas, persianas, mosquiteras, mamparas y cerramientos de aluminio en ${city}. Más de 15 años con taller propio, sin intermediarios y con garantía en cada instalación.`,
+        eyebrow: "Sobre Nosotros",
+        title: `Quiénes Somos | ${siteName}`,
+        description: `Especialistas en ${niche.toLowerCase()} en ${city}. Fabricación propia, instalación profesional y más de 15 años de experiencia.`,
         image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop",
     },
     mainImage: {
@@ -36,104 +42,66 @@ const defaults = {
         experienceBadge: "+15 Años",
     },
     history: {
-        subtitle: "Quiénes Somos",
-        title: `De taller local a referencia en carpintería de aluminio en ${city}`,
-        content: `METALISUR nació como un taller de carpintería de aluminio en Málaga con un planteamiento muy claro: fabricar e instalar con el mismo equipo, sin subcontratar, con control total del resultado de principio a fin.\n\nCon los años hemos ampliado la gama de servicios — ventanas, puertas, persianas, mosquiteras, mamparas y cerramientos — pero sin perder ese enfoque: cada trabajo lo hacemos nosotros, medimos nosotros e instalamos nosotros. Eso nos permite garantizar el resultado de una forma que un intermediario no puede.\n\nConocemos bien la particularidad del parque inmobiliario malagueño: los edificios de los años 70 del centro con huecos fuera de estándar, las viviendas de la costa donde el salitre deteriora los acabados de baja calidad, y las promociones nuevas donde el detalle del acabado marca la diferencia. Ese conocimiento local se traduce en asesoramiento real, no en catálogos.`,
+        subtitle: "Nuestra Historia",
+        title: `Excelencia en ${niche.toLowerCase()} desde hace más de una década`,
         stats: [
-            { value: "2.000+", label: "Instalaciones" },
-            { value: "15+", label: "Años de Experiencia" },
-            { value: "100%", label: "Fabricación Propia" },
-            { value: "6", label: "Servicios Especializados" },
+            { value: "500+", label: "Proyectos" },
+            { value: "15+", label: "Años" },
+            { value: "100%", label: "Garantía" },
         ],
     },
     values: {
-        title: "Nuestros Compromisos",
-        description: "Los principios que no negociamos en ningún trabajo, sea grande o pequeño.",
+        title: "Nuestros Valores",
+        description: "Los principios que guían nuestro trabajo diario para ofrecer el mejor servicio.",
         items: [
-            {
-                icon: "Wrench",
-                title: "Fabricación a Medida",
-                description: "Fabricamos en nuestro taller con las medidas exactas de cada hueco. Sin estándares que no encajan, sin holguras, sin remates que quedan mal.",
-            },
-            {
-                icon: "Award",
-                title: "Materiales con Garantía",
-                description: "Solo trabajamos con perfiles de aluminio y herrajes de primera calidad, con marcado CE y garantía del fabricante. Lo que instalamos dura.",
-            },
-            {
-                icon: "Users",
-                title: "Instalación Propia",
-                description: "Instalamos nosotros, sin subcontratar. El resultado de una carpintería depende tanto del producto como del montaje — por eso controlamos los dos.",
-            },
-            {
-                icon: "Calculator",
-                title: "Precio Cerrado",
-                description: "Presupuesto con medidas reales antes de empezar. El precio que aceptas es el precio final. Sin letra pequeña, sin sorpresas al terminar.",
-            },
+            { icon: "Shield", title: "Confianza", description: "Transparencia total en cada presupuesto y proyecto." },
+            { icon: "Award", title: "Calidad", description: "Solo utilizamos materiales certificados de alta gama." },
+            { icon: "Clock", title: "Puntualidad", description: "Respetamos los plazos acordados con el cliente." },
+            { icon: "Heart", title: "Pasión", description: "Cuidamos cada detalle como si fuera para nuestra propia casa." },
         ],
     },
     whyChooseUs: {
         title: `¿Por Qué Elegir ${siteName}?`,
         items: [
-            {
-                title: `Taller propio en ${city}`,
-                description: `Fabricamos directamente en nuestro taller de ${city}. Sin intermediarios, con control total de materiales, tiempos y calidad de ejecución.`,
-            },
-            {
-                title: "Especialistas, no generalistas",
-                description: "No hacemos de todo. Nos especializamos en carpintería de aluminio y llevamos más de 15 años perfeccionando la instalación de ventanas, puertas, persianas, mosquiteras, mamparas y cerramientos.",
-            },
-            {
-                title: "Coordinación en una sola visita",
-                description: "Si cambias ventanas, persianas y mosquiteras a la vez, lo coordinamos todo en una sola intervención. Menos molestias, resultado más integrado.",
-            },
-            {
-                title: `Sabemos lo que aguanta en ${city}`,
-                description: "Conocemos qué perfiles, lacados y herrajes resisten mejor el ambiente marino de la costa malagueña y las temperaturas extremas del interior. Te asesoramos en función de dónde está tu vivienda.",
-            },
-            {
-                title: "Garantía por escrito en todos los trabajos",
-                description: "Cada instalación incluye garantía documentada. Si algo no funciona como debe, volvemos a resolverlo sin coste adicional.",
-            },
-            {
-                title: "Presupuesto con medidas reales",
-                description: "No damos precios de catálogo. Visitamos, medimos y presupuestamos en función de tus huecos y necesidades reales. Sin sorpresas al terminar.",
-            },
+            { title: "Taller Propio", description: `Fabricamos directamente en nuestras instalaciones en ${city}.` },
+            { title: "Sin Intermediarios", description: "Trato directo con los técnicos encargados de la ejecución." },
+            { title: "Presupuesto Cerrado", description: "Sin sorpresas ni costes ocultos al finalizar el trabajo." },
         ],
     },
     team: {
-        title: `El Equipo ${siteName}`,
-        description: `El equipo de METALISUR está formado por instaladores especializados en carpintería de aluminio con años de experiencia en ${city} y provincia. Cada persona que entra en tu vivienda sabe lo que hace: mide con precisión, instala sin atajos y te explica cómo funciona lo que ha instalado. Sin comerciales que prometen y técnicos que improvisan — el mismo equipo que presupuesta es el que instala.`,
+        title: "Nuestro Equipo",
+        description: `Contamos con técnicos cualificados con amplia experiencia en el sector de ${niche.toLowerCase()} en ${city}.`,
+    },
+    cta: {
+        title: "¿Tienes un proyecto en mente?",
+        text: "Pide presupuesto sin compromiso y te asesoraremos sobre la mejor solución para tu hogar.",
+        primaryText: "Pedir Presupuesto",
+        primaryLink: "/contacto/",
+        secondaryText: "WhatsApp",
+        secondaryLink: `https://wa.me/${whatsapp.replace(/\s/g, "")}`,
     },
     seo: {
         title: `Quiénes Somos | ${siteName} — ${niche} en ${city}`,
-        description: `Conoce a ${siteName}, especialistas en ${niche.toLowerCase()} en ${city}. Fabricación propia, instalación profesional y más de 15 años de experiencia.`,
+        description: `Conoce a ${siteName}, tu empresa de confianza de ${niche.toLowerCase()} en ${city}. Más de 15 años de experiencia y taller propio.`,
     },
 };
 
-// Merge data
-const hero = aboutData?.hero || defaults.hero;
-const mainImage = aboutData?.mainImage || defaults.mainImage;
-const history = aboutData?.history || defaults.history;
-const values = aboutData?.values || defaults.values;
-const whyChooseUs = aboutData?.whyChooseUs || defaults.whyChooseUs;
-const team = aboutData?.team || defaults.team;
-const seo = aboutData?.seo || defaults.seo;
+// 4. Merge Data with Fallbacks
+const hero = { ...defaults.hero, ...aboutData?.hero };
+const mainImage = { ...defaults.mainImage, ...aboutData?.mainImage };
+const history = { ...defaults.history, ...aboutData?.history };
+const values = { ...defaults.values, ...aboutData?.values };
+const whyChooseUs = { ...defaults.whyChooseUs, ...aboutData?.whyChooseUs };
+const team = { ...defaults.team, ...aboutData?.team };
+const cta = { ...defaults.cta, ...aboutData?.cta };
+const seo = { ...defaults.seo, ...aboutData?.seo };
 
-// Icon Map
+// 5. Icons Mapping
 const iconMap: Record<string, any> = {
-    Shield,
-    Heart,
-    Clock,
-    Target,
-    Users,
-    Wrench,
-    Award,
-    CheckCircle,
+    Shield, Heart, Clock, Target, Users, Wrench, Award, CheckCircle, Calculator, Star
 };
 
 import { buildGenericGraph } from "@/lib/seo";
-
 const siteUrl = settings.siteUrl || Astro.site?.href || '';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
@@ -141,8 +109,8 @@ const schema = buildGenericGraph({
     settings,
     siteUrl,
     pageUrl,
-    title: seo.title || defaults.seo.title,
-    description: seo.description || defaults.seo.description,
+    title: seo.title,
+    description: seo.description,
     breadcrumbs: [
         { name: "Inicio", item: `${siteUrl.replace(/\/$/, '')}/` },
         { name: "Sobre Nosotros", item: pageUrl },
@@ -151,8 +119,8 @@ const schema = buildGenericGraph({
 ---
 
 <Layout
-    title={seo.title || defaults.seo.title}
-    description={seo.description || defaults.seo.description}
+    title={seo.title}
+    description={seo.description}
     schema={schema}
 >
     <div class="pt-24 md:pt-32 pb-12">
@@ -160,7 +128,7 @@ const schema = buildGenericGraph({
     <section class="relative py-20 bg-secondary overflow-hidden">
         <div
             class="absolute inset-0 bg-cover bg-center opacity-20"
-            style={`background-image: url('${hero.image || defaults.hero.image}')`}
+            style={`background-image: url('${hero.image}')`}
         >
         </div>
         <div
@@ -170,13 +138,18 @@ const schema = buildGenericGraph({
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-3xl mx-auto text-center">
+                {hero.eyebrow && (
+                    <span class="inline-block text-primary font-bold uppercase tracking-[0.3em] text-sm mb-4">
+                        {hero.eyebrow}
+                    </span>
+                )}
                 <h1
-                    class="text-5xl lg:text-6xl font-heading font-bold text-heading mb-6"
+                    class="text-5xl lg:text-7xl font-heading font-black text-heading mb-6 tracking-tight"
                 >
-                    {hero.title || defaults.hero.title}
+                    {hero.title}
                 </h1>
-                <p class="text-xl text-body leading-relaxed">
-                    {hero.description || defaults.hero.description}
+                <p class="text-xl text-body leading-relaxed max-w-2xl mx-auto">
+                    {hero.description}
                 </p>
             </div>
         </div>
@@ -185,7 +158,7 @@ const schema = buildGenericGraph({
     <Breadcrumbs pageName="Nosotros" />
 
     <!-- HISTORY & STATS SECTION -->
-    <section class="py-20 bg-surface/30">
+    <section class="py-20 bg-surface/30 relative overflow-hidden">
         <div class="container mx-auto px-4">
             <div
                 class="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto"
@@ -196,8 +169,8 @@ const schema = buildGenericGraph({
                         class="aspect-[4/3] rounded-2xl overflow-hidden border border-heading/10 shadow-2xl"
                     >
                         <img
-                            src={mainImage.image || defaults.mainImage.image}
-                            alt={`Sobre nosotros - ${siteName}`}
+                            src={mainImage.image}
+                            alt={mainImage.mainImageAlt || `Sobre nosotros - ${siteName}`}
                             class="w-full h-full object-cover"
                         />
                     </div>
@@ -221,32 +194,37 @@ const schema = buildGenericGraph({
                         <span
                             class="text-primary font-bold uppercase tracking-wider text-sm"
                         >
-                            {history.subtitle || defaults.history.subtitle}
+                            {history.subtitle}
                         </span>
                     </div>
                     <h2
-                        class="text-4xl font-heading font-bold text-heading mb-6"
+                        class="text-4xl font-heading font-bold text-heading mb-6 tracking-tight"
                     >
-                        {history.title || defaults.history.title}
+                        {history.title}
                     </h2>
 
                     <div
-                        class="text-body mb-8 leading-relaxed text-lg whitespace-pre-line"
+                        class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary max-w-none mb-10"
                     >
-                        {history.content || defaults.history.content}
+                        {HistoryContent ? <HistoryContent /> : <p>{aboutData?.history?.content || defaults.history.title}</p>}
                     </div>
 
                     {
-                        history.stats && (
-                            <div class="grid grid-cols-3 gap-6">
+                        history.stats && history.stats.length > 0 && (
+                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-6 pt-6 border-t border-heading/5">
                                 {history.stats.map((stat) => (
-                                    <div class="text-center">
+                                    <div>
                                         <div class="text-3xl font-bold text-primary mb-1">
                                             {stat.value}
                                         </div>
-                                        <div class="text-xs text-body/70 uppercase">
+                                        <div class="text-xs text-body/70 uppercase font-bold tracking-widest">
                                             {stat.label}
                                         </div>
+                                        {stat.description && (
+                                            <p class="text-[10px] text-body/50 mt-1 leading-tight">
+                                                {stat.description}
+                                            </p>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -258,15 +236,15 @@ const schema = buildGenericGraph({
     </section>
 
     <!-- VALUES SECTION -->
-    <section class="py-20 bg-secondary">
+    <section class="py-24 bg-secondary">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-heading font-bold text-heading mb-4">
-                    {values.title || defaults.values.title}
+                <h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6 tracking-tight">
+                    {values.title}
                 </h2>
-                <div class="w-24 h-1 bg-primary mx-auto mb-4"></div>
-                <p class="text-body max-w-2xl mx-auto">
-                    {values.description || defaults.values.description}
+                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-body text-lg max-w-2xl mx-auto">
+                    {values.description}
                 </p>
             </div>
 
@@ -274,17 +252,17 @@ const schema = buildGenericGraph({
                 class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
             >
                 {
-                    (values.items || defaults.values.items).map((item) => {
+                    (values.items || []).map((item) => {
                         const Icon = iconMap[item.icon] || Shield;
                         return (
-                            <div class="p-6 bg-surface/50 border border-heading/10 rounded-xl hover:border-primary/50 transition-all group">
-                                <div class="w-14 h-14 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <Icon className="w-7 h-7 text-primary" />
+                            <div class="p-8 bg-surface/40 border border-heading/10 rounded-2xl hover:border-primary/50 transition-all group hover:shadow-xl hover:shadow-primary/5">
+                                <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/20 transition-all">
+                                    <Icon className="w-8 h-8 text-primary" />
                                 </div>
-                                <h3 class="text-xl font-bold text-heading mb-3">
+                                <h3 class="text-2xl font-bold text-heading mb-4">
                                     {item.title}
                                 </h3>
-                                <p class="text-body text-sm leading-relaxed">
+                                <p class="text-body leading-relaxed">
                                     {item.description}
                                 </p>
                             </div>
@@ -296,31 +274,33 @@ const schema = buildGenericGraph({
     </section>
 
     <!-- WHY CHOOSE US -->
-    <section class="py-20 bg-surface/30">
+    <section class="py-24 bg-surface/30 relative overflow-hidden">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-16">
                     <h2
-                        class="text-4xl font-heading font-bold text-heading mb-4"
+                        class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6 tracking-tight"
                     >
-                        {whyChooseUs.title || defaults.whyChooseUs.title}
+                        {whyChooseUs.title}
                     </h2>
                     <div class="w-24 h-1 bg-primary mx-auto"></div>
                 </div>
 
-                <div class="space-y-6">
+                <div class="grid gap-6">
                     {
-                        (whyChooseUs.items || defaults.whyChooseUs.items).map(
+                        (whyChooseUs.items || []).map(
                             (item) => (
-                                <div class="flex items-start gap-4 p-6 bg-surface border border-heading/10 shadow-sm rounded-lg hover:border-primary/50 transition-colors">
+                                <div class="flex items-start gap-6 p-8 bg-surface border border-heading/10 shadow-sm rounded-2xl hover:border-primary/50 transition-all group">
                                     <div class="shrink-0">
-                                        <CheckCircle className="w-6 h-6 text-primary mt-1" />
+                                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                            <CheckCircle className="w-6 h-6 text-primary group-hover:text-white" />
+                                        </div>
                                     </div>
                                     <div>
-                                        <h3 class="text-xl font-bold text-heading mb-2">
+                                        <h3 class="text-2xl font-bold text-heading mb-2">
                                             {item.title}
                                         </h3>
-                                        <p class="text-body leading-relaxed">
+                                        <p class="text-body text-lg leading-relaxed">
                                             {item.description}
                                         </p>
                                     </div>
@@ -334,25 +314,50 @@ const schema = buildGenericGraph({
     </section>
 
     <!-- TEAM SECTION -->
-    <section class="py-20 bg-secondary border-t border-heading/5">
+    <section class="py-24 bg-secondary border-t border-heading/5">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <div
-                    class="inline-flex items-center justify-center w-20 h-20 bg-primary/20 rounded-full mb-8"
-                >
-                    <Users className="w-10 h-10 text-primary" />
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-16">
+                    <div
+                        class="inline-flex items-center justify-center w-24 h-24 bg-primary/10 rounded-full mb-8"
+                    >
+                        <Users className="w-12 h-12 text-primary" />
+                    </div>
+                    <h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6 tracking-tight">
+                        {team.title}
+                    </h2>
+                    <p class="text-body text-xl leading-relaxed max-w-3xl mx-auto">
+                        {team.description}
+                    </p>
                 </div>
-                <h2 class="text-4xl font-heading font-bold text-heading mb-6">
-                    {team.title || defaults.team.title}
-                </h2>
-                <p class="text-body text-lg leading-relaxed mb-8">
-                    {team.description || defaults.team.description}
-                </p>
+
+                {team.members && team.members.length > 0 && (
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                        {team.members.map((member) => (
+                            <div class="group text-center">
+                                <div class="aspect-square rounded-2xl overflow-hidden mb-6 border border-heading/10 shadow-lg">
+                                    <img 
+                                        src={member.image || "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&auto=format&fit=crop"} 
+                                        alt={member.imageAlt || member.name}
+                                        class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                                    />
+                                </div>
+                                <h3 class="text-2xl font-bold text-heading mb-1">{member.name}</h3>
+                                <p class="text-primary font-bold uppercase tracking-widest text-sm">{member.role}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     </section>
 
     </div>
-    <FinalCTA />
+    <FinalCTA 
+        title={cta.title}
+        subtitle={cta.text}
+        buttonText={cta.primaryText}
+        buttonLink={cta.primaryLink}
+    />
     <Footer />
 </Layout>

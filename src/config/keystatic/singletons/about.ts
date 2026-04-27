@@ -9,7 +9,8 @@ export const about = singleton({
     schema: {
         // Hero Section
         hero: fields.object({
-            title: fields.text({ label: 'Título Hero', defaultValue: 'Sobre Nosotros' }),
+            eyebrow: fields.text({ label: 'Cejilla (Eyebrow)', defaultValue: 'Sobre Nosotros' }),
+            title: fields.text({ label: 'Título Hero', defaultValue: 'Nuestra Historia' }),
             description: fields.text({ label: 'Descripción Hero', defaultValue: 'Profesionales comprometidos con la calidad, la seguridad y la satisfacción del cliente.', multiline: true }),
             image: fields.image({
                 label: 'Imagen de Fondo Hero',
@@ -45,6 +46,7 @@ export const about = singleton({
                 fields.object({
                     value: fields.text({ label: 'Valor (ej: 500+)' }),
                     label: fields.text({ label: 'Etiqueta (ej: Proyectos)' }),
+                    description: fields.text({ label: 'Descripción (Opcional)', multiline: true }),
                 }),
                 {
                     label: 'Estadísticas',
@@ -89,7 +91,33 @@ export const about = singleton({
         team: fields.object({
             title: fields.text({ label: 'Título Equipo', defaultValue: 'Equipo Profesional' }),
             description: fields.text({ label: 'Descripción Equipo', multiline: true, defaultValue: 'Nuestro equipo está formado por técnicos certificados y con años de experiencia.' }),
+            members: fields.array(
+                fields.object({
+                    name: fields.text({ label: 'Nombre' }),
+                    role: fields.text({ label: 'Cargo/Especialidad' }),
+                    image: fields.image({
+                        label: 'Foto',
+                        directory: 'public/images/about/team',
+                        publicPath: '/images/about/team/'
+                    }),
+                    imageAlt: fields.text({ label: 'Alt Foto' }),
+                }),
+                {
+                    label: 'Miembros del Equipo (Opcional)',
+                    itemLabel: (props) => props.fields.name.value,
+                }
+            )
         }, { label: 'Sección Equipo' }),
+
+        // Final CTA Section
+        cta: fields.object({
+            title: fields.text({ label: 'Título CTA', defaultValue: '¿Hablamos de tu proyecto?' }),
+            text: fields.text({ label: 'Texto CTA', multiline: true, defaultValue: 'Cuéntanos qué necesitas y te asesoraremos sin compromiso.' }),
+            primaryText: fields.text({ label: 'Texto Botón Principal', defaultValue: 'Pedir Presupuesto' }),
+            primaryLink: fields.text({ label: 'Enlace Botón Principal', defaultValue: '/contacto/' }),
+            secondaryText: fields.text({ label: 'Texto Botón Secundario', defaultValue: 'Llamar Ahora' }),
+            secondaryLink: fields.text({ label: 'Enlace Botón Secundario', defaultValue: 'tel:+34' }),
+        }, { label: 'CTA Final' }),
 
         seo: fields.object({
             title: fields.text({ label: 'Título SEO' }),
