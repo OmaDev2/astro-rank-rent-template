@@ -18,18 +18,33 @@ interface Location {
 interface Props {
     locations: Location[];
     serviceTitle: string;
-    niche: string;
 }
 
-const { locations, serviceTitle, niche } = Astro.props;
+const { locations, serviceTitle } = Astro.props;
 
 if (!locations || locations.length === 0) return;
 
-// Ordenar: centro primero, luego residencial, industrial al final
-const sorted = [...locations].sort((a, b) => {
-    const order = { centro: 0, residencial: 1, industrial: 2 };
-    return (order[a.data.type] ?? 3) - (order[b.data.type] ?? 3);
-});
+const PRIORITY: string[] = [
+    'malaga',
+    'marbella',
+    'fuengirola',
+    'estepona',
+    'torremolinos',
+    'benalmadena',
+    'mijas',
+];
+
+// Prioridad fija por slug; los slugs nuevos van al final alfabético; límite 6
+const sorted = [...locations]
+    .sort((a, b) => {
+        const ia = PRIORITY.indexOf(a.slug);
+        const ib = PRIORITY.indexOf(b.slug);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.data.name.localeCompare(b.data.name, 'es');
+    })
+    .slice(0, 6);
 
 const typeLabel: Record<string, string> = {
     residencial: "Residencial",
@@ -37,8 +52,8 @@ const typeLabel: Record<string, string> = {
     centro:      "Centro",
 };
 const typeBadge: Record<string, string> = {
-    residencial: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-    industrial:  "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+    residencial: "bg-surface border border-heading/10 text-body/60",
+    industrial:  "bg-surface border border-heading/10 text-body/60",
     centro:      "bg-primary/10 text-primary border border-primary/20",
 };
 ---
@@ -52,11 +67,11 @@ const typeBadge: Record<string, string> = {
                 <span>Cobertura Total</span>
             </div>
             <h2 class="text-2xl md:text-3xl font-heading font-bold text-heading">
-                {serviceTitle} en Todas Nuestras Zonas
+                {serviceTitle ? `También realizamos ${serviceTitle.toLowerCase()} en` : "Zonas donde trabajamos"}
             </h2>
             <p class="text-body mt-2 max-w-xl mx-auto text-sm">
-                Ofrecemos {(niche || serviceTitle).toLowerCase()} con garantía en toda el área metropolitana.
-                Encuentra tu zona y solicita presupuesto sin compromiso.
+                Prestamos servicio en toda el área metropolitana.
+                Solicita presupuesto sin compromiso.
             </p>
         </div>
 

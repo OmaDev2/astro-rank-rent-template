@@ -8,6 +8,7 @@ import { getCollection, getEntry } from "astro:content";
 import { ArrowRight } from "lucide-react";
 import { getSettings } from "@/lib/settings";
 import { buildBlogListGraph } from "@/lib/seo";
+import Breadcrumbs from "../../components/navigation/Breadcrumbs.astro";
 
 const settings = await getSettings();
 const { siteName, city, niche, phone, whatsapp } = settings;
@@ -42,6 +43,10 @@ const schema = buildBlogListGraph({
     pageUrl,
     title: seoTitle,
     description: seoDescription,
+    breadcrumbs: [
+        { name: "Inicio", item: new URL("/", Astro.site).href },
+        { name: "Servicios", item: pageUrl },
+    ],
     posts: services.map(s => ({
         url: `${siteUrl.replace(/\/$/, '')}/servicios/${s.slug}/`,
         title: s.data.title,
@@ -51,6 +56,8 @@ const schema = buildBlogListGraph({
 ---
 
 <Layout title={seoTitle} description={seoDescription} schema={schema}>
+
+    <Breadcrumbs pageName="Servicios" noSchema />
 
     <BlockRenderer
         blocks={finalBlocks}

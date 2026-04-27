@@ -7,6 +7,7 @@ import { getSettings } from "../lib/settings";
 import BlockRenderer from "../components/BlockRenderer.astro";
 import type { Service, Location, Block, Coordinates, FAQItem } from "../types";
 import { getPresetBlocks } from "../utils/pagePresets";
+import RelatedServices from "../components/navigation/RelatedServices.astro";
 
 interface Props {
   locationName: string;
@@ -99,14 +100,13 @@ const finalBlocks =
       breadcrumbName={props.locationName}
     />
 
+    <RelatedServices
+      services={services}
+      locationName={props.locationName}
+      niche={niche}
+    />
+
     <WhatsAppButton />
-
-    <!-- <RelatedServices
-            services={services}
-            locationName={props.locationName}
-            niche={niche}
-        /> -->
-
     <Footer />
   </div>
 

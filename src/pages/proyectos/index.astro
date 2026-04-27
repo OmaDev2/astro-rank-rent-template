@@ -32,6 +32,10 @@ const gallerySchema = buildBlogListGraph({
     pageUrl,
     title: pageTitle,
     description: pageDesc,
+    breadcrumbs: [
+        { name: "Inicio", item: new URL("/", Astro.site).href },
+        { name: "Proyectos", item: pageUrl },
+    ],
     posts: sortedProjects.map(p => ({
         url: `${siteUrl.replace(/\/$/, '')}/proyectos/${p.slug}/`,
         title: p.data.title,
@@ -61,7 +65,7 @@ const gallerySchema = buildBlogListGraph({
         </div>
     </section>
 
-    <Breadcrumbs pageName="Proyectos" />
+    <Breadcrumbs pageName="Proyectos" noSchema />
 
     <section class="py-20 bg-surface/30">
         <div class="container mx-auto px-4">

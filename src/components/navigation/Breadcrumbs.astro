@@ -13,9 +13,10 @@ interface Props {
     isBlog?: boolean;
     isProject?: boolean;
     overlay?: boolean;
+    noSchema?: boolean;
 }
 
-const { locationName, serviceName, postTitle, projectTitle, pageName, isLocation, isService, isBlog, isProject, overlay = false } = Astro.props;
+const { locationName, serviceName, postTitle, projectTitle, pageName, isLocation, isService, isBlog, isProject, overlay = false, noSchema = false } = Astro.props;
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, "") || "";
 
@@ -153,4 +154,4 @@ const breadcrumbSchema = generateBreadcrumbsList(breadcrumbItems);
     </div>
 </div>
 
-<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+{!noSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}

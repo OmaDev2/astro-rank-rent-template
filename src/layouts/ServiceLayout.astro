@@ -6,6 +6,7 @@ import BlockRenderer from "../components/BlockRenderer.astro";
 import { getSettings } from "../lib/settings";
 import type { Service, Location, Block, FAQItem } from "../types";
 import { getPresetBlocks } from "../utils/pagePresets";
+import RelatedLocations from "../components/navigation/RelatedLocations.astro";
 
 interface Props {
     title: string;
@@ -96,6 +97,11 @@ const settings = await getSettings();
         config={settings}
         breadcrumbType="service"
         breadcrumbName={title}
+    />
+
+    <RelatedLocations
+        locations={allLocations}
+        serviceTitle={title}
     />
 
     <WhatsAppButton />

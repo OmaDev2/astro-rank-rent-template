@@ -40,11 +40,28 @@ const { services, locationName, niche, currentServiceSlug } = Astro.props;
 
 if (!services || services.length === 0) return;
 
-// Excluir el servicio actual si se usa también en páginas de servicio
-// y poner los featured primero
+const PRIORITY: string[] = [
+    'ventanas-de-aluminio-malaga',
+    'cerramientos-de-aluminio-malaga',
+    'puertas-de-aluminio-malaga',
+    'mosquiteras-de-aluminio-a-medida-malaga',
+    'persianas-de-aluminio-malaga',
+    'cortinas-cristal-malaga',
+    'mamparas-de-bano-malaga',
+    'automatismos-de-puertas-y-garajes-malaga',
+];
+
 const sorted = [...services]
     .filter(s => s.slug !== currentServiceSlug)
-    .sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+    .sort((a, b) => {
+        const ia = PRIORITY.indexOf(a.slug);
+        const ib = PRIORITY.indexOf(b.slug);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.data.title.localeCompare(b.data.title, 'es');
+    })
+    .slice(0, 6);
 
 ---
 
@@ -54,13 +71,13 @@ const sorted = [...services]
         <div class="text-center mb-10">
             <div class="inline-flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-widest mb-3">
                 <Wrench className="w-4 h-4" />
-                <span>Nuestros Servicios</span>
+                <span>Servicios disponibles</span>
             </div>
             <h2 class="text-2xl md:text-3xl font-heading font-bold text-heading">
-                {niche || "Servicios Profesionales"} en {locationName}
+                {niche ? `${niche} en ${locationName}` : `Servicios disponibles en ${locationName}`}
             </h2>
             <p class="text-body mt-2 max-w-xl mx-auto text-sm">
-                Descubre toda la gama de servicios que ofrecemos en {locationName}.
+                Instalamos {niche ? niche.toLowerCase() : "nuestros servicios"} a medida en {locationName} y alrededores.
                 Presupuesto gratuito y sin compromiso.
             </p>
         </div>

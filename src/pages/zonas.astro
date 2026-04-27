@@ -61,6 +61,7 @@ const finalBlocks = zonasPageData.blocks && zonasPageData.blocks.length > 0
     : defaultBlocks;
 
 import BlockRenderer from "../components/BlockRenderer.astro";
+import Breadcrumbs from "../components/navigation/Breadcrumbs.astro";
 
 const siteUrl = settings.siteUrl || Astro.site?.href || '';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
@@ -71,6 +72,10 @@ const schema = buildBlogListGraph({
     pageUrl,
     title: seoTitle,
     description: seoDescription,
+    breadcrumbs: [
+        { name: "Inicio", item: new URL("/", Astro.site).href },
+        { name: "Zonas", item: pageUrl },
+    ],
     posts: locations.map(loc => ({
         url: `${siteUrl.replace(/\/$/, '')}/zona/${loc.slug}/`,
         title: loc.data.name,
@@ -83,6 +88,8 @@ const schema = buildBlogListGraph({
     description={seoDescription}
     schema={schema}
 >
+    <Breadcrumbs pageName="Zonas" noSchema />
+
     {/* --- NEW MODULAR PAGE BUILDER --- */}
     <BlockRenderer
         blocks={finalBlocks}

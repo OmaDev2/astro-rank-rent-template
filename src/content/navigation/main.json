@@ -7,25 +7,27 @@
     },
     {
       "label": "Servicios",
+      "url": "/servicios/",
       "type": "services_dropdown"
     },
     {
       "label": "Zonas",
+      "url": "/zonas/",
       "type": "locations_dropdown"
     },
     {
       "label": "Nosotros",
-      "url": "/nosotros",
+      "url": "/nosotros/",
+      "type": "link"
+    },
+    {
+      "label": "Proyectos",
+      "url": "/proyectos/",
       "type": "link"
     },
     {
       "label": "Contacto",
-      "url": "/contacto",
-      "type": "link"
-    },
-    {
-      "label": "Proyectos ",
-      "url": "/proyectos",
+      "url": "/contacto/",
       "type": "link"
     }
   ]

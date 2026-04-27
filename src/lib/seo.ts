@@ -393,8 +393,9 @@ export function buildBlogListGraph(opts: {
     title: string;
     description?: string;
     posts?: { url: string; title: string; image?: string; datePublished?: string }[];
+    breadcrumbs?: { name: string; item?: string }[];
 }): Record<string, any> {
-    const { settings, siteUrl, pageUrl, title, description, posts = [] } = opts;
+    const { settings, siteUrl, pageUrl, title, description, posts = [], breadcrumbs } = opts;
     const defaultBreadcrumbs = [
         { name: "Inicio", item: `${norm(siteUrl)}/` },
         { name: "Blog", item: pageUrl },
@@ -415,7 +416,7 @@ export function buildBlogListGraph(opts: {
         buildWebSiteEntity(settings, siteUrl),
         buildBusinessEntity(settings, siteUrl),
         buildWebPageEntity({ url: pageUrl, title, description, siteUrl, type: "CollectionPage" }),
-        buildBreadcrumbEntity(defaultBreadcrumbs, pageUrl),
+        buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
         itemList,
     ]);
 }

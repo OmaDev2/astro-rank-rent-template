@@ -12,9 +12,11 @@ const serviceCheckboxFields = Object.fromEntries(
         .map((slug, idx) => [
             slug,
             fields.object({
-                enabled:  fields.checkbox({ label: slug.replace(/-/g, ' '), defaultValue: false }),
-                isPopular: fields.checkbox({ label: '⭐ Destacar (Badge)', defaultValue: false }),
-                order: fields.integer({ label: 'Posición (1 = primero)', defaultValue: idx + 1 }),
+                enabled:       fields.checkbox({ label: slug.replace(/-/g, ' '), defaultValue: false }),
+                isPopular:     fields.checkbox({ label: '⭐ Destacar (Badge)', defaultValue: false }),
+                order:         fields.integer({ label: 'Posición (1 = primero)', defaultValue: idx + 1 }),
+                overrideTitle: fields.text({ label: 'Título alternativo (Opcional)', description: 'Reemplaza el título del servicio solo en esta card.' }),
+                anchorText:    fields.text({ label: 'Texto del enlace CTA (Opcional)', description: 'Ej: "Ver precios", "Solicitar instalación". Por defecto: "Ver [título]".' }),
             }),
         ])
 );
