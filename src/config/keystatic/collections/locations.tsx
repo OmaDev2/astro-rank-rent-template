@@ -447,6 +447,15 @@ export const locations = collection({
                     ctaText: fields.text({ label: 'Texto del Botón CTA (Opcional)' }),
                     ctaLink: fields.text({ label: 'Enlace CTA', defaultValue: '/contacto/' }),
                 })
+            },
+            faq: {
+                label: '❓ Preguntas Frecuentes (FAQ)',
+                schema: fields.object({
+                    title: fields.text({
+                        label: 'Título de la Sección (Opcional)',
+                        description: 'Deja vacío para usar el título por defecto. Las preguntas se toman del campo FAQ del frontmatter.',
+                    }),
+                })
             }
         }, {
             label: 'Bloques Manuales (Opcional)',

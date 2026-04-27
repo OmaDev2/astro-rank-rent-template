@@ -39,6 +39,7 @@ const locations = defineCollection({
                 z.object({ discriminant: z.literal('price_factors'), value: z.any() }),
                 z.object({ discriminant: z.literal('comparison'), value: z.any() }),
                 z.object({ discriminant: z.literal('gallery'), value: z.any() }),
+                z.object({ discriminant: z.literal('faq'), value: z.any().optional() }),
             ])
         ).optional(), // Opcional para no romper zonas antiguas sin este campo
     }),
