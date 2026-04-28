@@ -14,7 +14,8 @@
         "export": "node scripts/utils/export_client.js",
         "manual": "node scripts/utils/manual_research.js",
         "generate_site": "node scripts/generate_site.js",
-        "research:wizard": "node scripts/utils/research_wizard.js"
+        "research:wizard": "node scripts/utils/research_wizard.js",
+        "images:optimize": "node scripts/optimize-images.js"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.3",
@@ -53,6 +54,7 @@
         "axios": "^1.7.9",
         "dotenv": "^16.4.7",
         "json5": "^2.2.3",
-        "schema-dts": "^1.1.5"
+        "schema-dts": "^1.1.5",
+        "sharp": "^0.34.5"
     }
 }
