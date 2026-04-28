@@ -20,11 +20,15 @@ const mdxComponents = {
 export const prerender = true;
 
 export async function getStaticPaths() {
+    // Blog sin publicar — quitar return [] y descomentar cuando haya posts reales
+    return [];
+    /* eslint-disable no-unreachable */
     const posts = await getCollection("blog");
     return posts.map((post) => ({
         params: { slug: post.slug },
         props: post,
     }));
+    /* eslint-enable no-unreachable */
 }
 
 const post = Astro.props;

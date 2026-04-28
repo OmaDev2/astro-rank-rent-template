@@ -345,6 +345,10 @@ const footer = defineCollection({
 });
 
 const blog = defineCollection({
+    // Loader vacío: no dispara warnings de glob cuando no hay posts.
+    // Para activar blog: cambiar a glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' })
+    // e importar glob desde 'astro/loaders'.
+    loader: { name: 'blog-placeholder', load: async () => {} },
     schema: z.object({
         title: z.string(),
         pubDate: z.union([z.string(), z.date()]).optional(), // Accepts YAML Date or string
