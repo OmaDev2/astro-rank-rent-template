@@ -85,6 +85,10 @@ interface Props {
     schema?: WithContext<Thing> | WithContext<Thing>[] | Record<string, any>;
     noindex?: boolean;
     canonicalUrl?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    twitterTitle?: string;
+    twitterDescription?: string;
 }
 
 const {
@@ -95,6 +99,10 @@ const {
     schema,
     noindex = false,
     canonicalUrl,
+    ogTitle,
+    ogDescription,
+    twitterTitle,
+    twitterDescription,
 } = Astro.props;
 
 // Generar descripción por defecto si no viene en props
@@ -269,6 +277,10 @@ const heroProcessed = isHome
             schema={allSchemas}
             noindex={noindex}
             canonical={canonical || canonicalUrl}
+            ogTitle={ogTitle}
+            ogDescription={ogDescription}
+            twitterTitle={twitterTitle}
+            twitterDescription={twitterDescription}
         />
 
         <SearchConsoleVerification />

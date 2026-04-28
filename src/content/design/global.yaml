@@ -10,9 +10,9 @@ layout:
   headingStyle: normal
   sectionSpacing: normal
 effects:
-  borderRadius: pill
+  borderRadius: rounded
   buttonStyle: solid
-  shadowStyle: floating
+  shadowStyle: subtle
   heroOverlayOpacity: 0.8
   animationStyle: full
   sectionDivider: diagonal

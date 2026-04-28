@@ -35,6 +35,10 @@ interface Props {
     pageDescription: string;
     schema: any;
     mdxComponents?: any;
+    ogTitle?: string;
+    ogDescription?: string;
+    twitterTitle?: string;
+    twitterDescription?: string;
 }
 
 const {
@@ -58,6 +62,10 @@ const {
     mdxComponents = {},
     blocks,
     pagePreset,
+    ogTitle,
+    ogDescription,
+    twitterTitle,
+    twitterDescription,
 } = Astro.props;
 
 const defaultBlocks: Block[] = [
@@ -76,7 +84,7 @@ const finalBlocks =
 const settings = await getSettings();
 ---
 
-<Layout title={pageTitle} description={pageDescription} schema={schema}>
+<Layout title={pageTitle} description={pageDescription} schema={schema} ogTitle={ogTitle} ogDescription={ogDescription} twitterTitle={twitterTitle} twitterDescription={twitterDescription}>
     <BlockRenderer
         blocks={finalBlocks}
         locationName={city}

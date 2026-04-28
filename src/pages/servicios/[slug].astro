@@ -35,11 +35,15 @@ const allLocations = await getCollection("locations");
 const testimonials = await getCollection("testimonials", ({ data }) => data.featured === true);
 
 // SEO
-let parsedSeo = { title: "", description: "" };
+let parsedSeo: Record<string, string> = {};
 try { parsedSeo = data.seo ? JSON.parse(data.seo) : {}; } catch(e) {}
 
-const pageTitle = parsedSeo.title || `${data.title} en ${settings.city} | ${settings.siteName}`;
+const pageTitle       = parsedSeo.title       || `${data.title} en ${settings.city} | ${settings.siteName}`;
 const pageDescription = parsedSeo.description || data.shortDesc;
+const ogTitle         = parsedSeo.ogTitle         || undefined;
+const ogDescription   = parsedSeo.ogDescription   || undefined;
+const twitterTitle    = parsedSeo.twitterTitle    || undefined;
+const twitterDescription = parsedSeo.twitterDescription || undefined;
 
 // Services use FAQ blocks (discriminant: faq, value.faqs) as the source of truth.
 // Frontmatter faq: is kept as a legacy/fallback source with priority if present.
@@ -97,6 +101,10 @@ const schema = buildServiceGraph({
     pageTitle={pageTitle}
     pageDescription={pageDescription}
     schema={schema}
+    ogTitle={ogTitle}
+    ogDescription={ogDescription}
+    twitterTitle={twitterTitle}
+    twitterDescription={twitterDescription}
     mdxComponents={mdxComponents}
     blocks={data.blocks}
     pagePreset={data.pagePreset}

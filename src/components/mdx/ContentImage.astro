@@ -47,11 +47,11 @@ const aspectClass = {
 const hasFixedRatio = aspectRatio !== 'auto';
 const fitClass = objectFit === 'contain' ? 'object-contain' : 'object-cover';
 const roundedClass = rounded ? 'rounded-xl' : 'rounded-none';
-const shadowClass  = shadow  ? 'shadow-lg'  : '';
+const shadowStyle  = shadow  ? 'box-shadow: 0 1px 4px rgb(0 0 0 / 0.10);' : '';
 ---
 
 <figure class={`not-prose my-8 w-full ${maxWidthClass} ${alignClass}`}>
-    <div class={`overflow-hidden border border-heading/10 bg-surface ${roundedClass} ${shadowClass}${hasFixedRatio ? ` ${aspectClass}` : ''}`}>
+    <div class={`overflow-hidden border border-heading/10 bg-surface ${roundedClass}${hasFixedRatio ? ` ${aspectClass}` : ''}`} style={shadowStyle}>
         <img
             src={src}
             alt={alt || ''}
