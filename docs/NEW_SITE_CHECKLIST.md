@@ -165,6 +165,7 @@ Este documento detalla el proceso paso a paso para configurar y lanzar un nuevo 
 ## 14. Reactivar blog
 
 Si se quieren publicar artículos:
+
 1. Restaurar loader glob de la colección blog en `src/content/config.ts`.
 2. Reactivar `getStaticPaths` en `src/pages/blog/[...page].astro` y `src/pages/blog/[...slug].astro`.
 3. Crear posts reales en `src/content/blog/`.
