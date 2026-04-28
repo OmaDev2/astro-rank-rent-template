@@ -47,10 +47,7 @@ Este documento detalla el proceso paso a paso para configurar y lanzar un nuevo 
 - Editar la página de inicio desde Keystatic.
 - Revisar bloque a bloque:
   - Hero (título, descripción, imagen).
-  - Ssitemap-index.xml
-sitemap-index.xml
-sitemap-index.xml
-ervicios destacados.
+  - Servicios destacados.
   - Zonas destacadas.
   - Proceso de trabajo.
   - Ventajas/Diferenciadores.
@@ -165,7 +162,15 @@ ervicios destacados.
 - Asegurar que figuran los datos fiscales correctos (NIF, Razón Social).
 - Comprobar que no quedan datos de ejemplo (direcciones de Barcelona, etc.).
 
-## 14. Revisión técnica
+## 14. Reactivar blog
+
+Si se quieren publicar artículos:
+1. Restaurar loader glob de la colección blog en `src/content/config.ts`.
+2. Reactivar `getStaticPaths` en `src/pages/blog/[...page].astro` y `src/pages/blog/[...slug].astro`.
+3. Crear posts reales en `src/content/blog/`.
+4. Ejecutar `npm run build`.
+
+## 15. Revisión técnica
 
 - Ejecutar en local: `npm run build`.
 - Si el proyecto incluye preflight: `npm run preflight`.
@@ -177,7 +182,7 @@ ervicios destacados.
   - Enlaces internos (que todos funcionen).
   - Errores 404 en consola.
 
-## 15. Revisión visual
+## 16. Revisión visual
 
 - Revisar en Desktop y Móvil (Responsive):
   - Página de inicio.
@@ -189,7 +194,7 @@ ervicios destacados.
   - Formularios de contacto.
   - Botones de WhatsApp y llamada.
 
-## 16. Publicación
+## 17. Publicación
 
 - Configurar dominio (DNS).
 - Configurar hosting (Netlify, Vercel, etc.).
@@ -201,7 +206,7 @@ ervicios destacados.
 - Subir fotos reales a Google Maps.
 - Pedir las primeras reseñas reales.
 
-## 17. Checklist final antes de publicar
+## 18. Checklist final antes de publicar
 
 - [ ] No quedan textos de "Metalisur" o la plantilla anterior.
 - [ ] No quedan imágenes placeholder.
@@ -218,13 +223,13 @@ ervicios destacados.
 
 ## Orden recomendado de trabajo
 
-1. **Configuración global**: Datos del negocio en Ajustes.
-2. **Identidad visual**: Logo y colores.
-3. **Servicios**: Crear el catálogo real de lo que se ofrece.
-4. **Zonas**: Definir dónde se trabaja.
-5. **Home**: Montar la portada con los bloques deseados.
-6. **Nosotros**: Escribir la historia y valores.
-7. **Contacto**: Verificar datos y formulario.
-8. **SEO**: Revisar títulos y descripciones de cada página.
-9. **Revisión visual**: Comprobar en móvil todo el sitio.
-10. **Publicación**: Dominio y lanzamiento.
+1. Configuración global.
+2. Identidad visual.
+3. Servicios.
+4. Zonas.
+5. Home.
+6. Nosotros.
+7. Contacto.
+8. SEO.
+9. Revisión visual.
+10. Publicación.
