@@ -27,6 +27,11 @@ if (!locations || locations.length === 0) return;
 
 const settings = await getSettings();
 const areaServed = settings.areaServed as string[];
+
+const _escapeRE = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const serviceType = serviceTitle
+    .replace(new RegExp(`\\s+en\\s+${_escapeRE(settings.city)}\\b.*$`, 'gi'), '')
+    .trim();
 // Orden configurable desde global.yaml → locationPriority; fallback: orden alfabético
 const PRIORITY: string[] = settings.locationPriority?.length ? settings.locationPriority : [];
 
@@ -71,7 +76,7 @@ const typeBadge: Record<string, string> = {
                 <span>Cobertura Total</span>
             </div>
             <h2 class="text-2xl md:text-3xl font-heading font-bold text-heading">
-                {serviceTitle ? `También realizamos ${serviceTitle.toLowerCase()} en` : "Zonas donde trabajamos"}
+                {serviceType ? `Zonas donde realizamos ${serviceType.toLowerCase()}` : "Zonas donde trabajamos"}
             </h2>
             <p class="text-body mt-2 max-w-xl mx-auto text-sm">
                 Prestamos servicio en toda el área metropolitana.
