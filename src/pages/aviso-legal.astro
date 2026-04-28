@@ -3,18 +3,13 @@ import Layout from "../layouts/Layout.astro";
 import Footer from "../components/layout/Footer.astro";
 import { Scale, ShieldCheck, AlertCircle, MapPin, User } from "lucide-react";
 import { getSettings } from "../lib/settings";
-import { getEntry } from "astro:content";
 
 // Recuperamos la configuración global de la empresa
 const { siteName, city, niche, email, nif } = await getSettings();
 const ownerName = "Javier Ávila"; // Titular responsable
 const businessName = siteName;
 
-// Intentamos cargar contenido desde el CMS, si no, usamos el fallback detallado
-const legacyEntry = await getEntry("legal", "aviso-legal");
-const { Content } = legacyEntry
-  ? await legacyEntry.render()
-  : { Content: null };
+const Content = null;
 ---
 
 <Layout

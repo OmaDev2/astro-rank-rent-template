@@ -40,14 +40,15 @@ const defaults = {
     mainImage: {
         image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop",
         experienceBadge: "+15 Años",
+        mainImageAlt: undefined as string | undefined,
     },
     history: {
         subtitle: "Nuestra Historia",
         title: `Excelencia en ${niche.toLowerCase()} desde hace más de una década`,
         stats: [
-            { value: "500+", label: "Proyectos" },
-            { value: "15+", label: "Años" },
-            { value: "100%", label: "Garantía" },
+            { value: "500+", label: "Proyectos", description: undefined as string | undefined },
+            { value: "15+", label: "Años", description: undefined as string | undefined },
+            { value: "100%", label: "Garantía", description: undefined as string | undefined },
         ],
     },
     values: {
@@ -155,7 +156,7 @@ const schema = buildGenericGraph({
         </div>
     </section>
 
-    <Breadcrumbs pageName="Nosotros" />
+    <Breadcrumbs pageName="Nosotros" noSchema={true} />
 
     <!-- HISTORY & STATS SECTION -->
     <section class="py-20 bg-surface/30 relative overflow-hidden">

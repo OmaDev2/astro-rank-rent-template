@@ -191,17 +191,19 @@ export function buildBreadcrumbEntity(
 export function buildServiceEntity(opts: {
     pageUrl: string;
     title: string;
+    serviceName?: string;
+    serviceType?: string;
     description?: string;
     image?: string;
     siteUrl: string;
     locationNames?: string[];
 }): Record<string, any> {
-    const { pageUrl, title, description, image, siteUrl, locationNames = [] } = opts;
+    const { pageUrl, title, serviceName, serviceType, description, image, siteUrl, locationNames = [] } = opts;
     const entity: Record<string, any> = {
         "@type": "Service",
         "@id": schemaId.service(pageUrl),
-        name: title,
-        serviceType: title,
+        name: serviceName ?? title,
+        serviceType: serviceType ?? serviceName ?? title,
         inLanguage: "es-ES",
         provider: { "@id": schemaId.business(siteUrl) },
     };
@@ -334,6 +336,8 @@ export function buildServiceGraph(opts: {
     siteUrl: string;
     pageUrl: string;
     title: string;
+    serviceName?: string;
+    serviceType?: string;
     description?: string;
     image?: string;
     testimonials?: any[];
@@ -341,7 +345,7 @@ export function buildServiceGraph(opts: {
     locationNames?: string[];
     breadcrumbs?: { name: string; item?: string }[];
 }): Record<string, any> {
-    const { settings, siteUrl, pageUrl, title, description, image, testimonials = [], faqs = [], locationNames = [], breadcrumbs } = opts;
+    const { settings, siteUrl, pageUrl, title, serviceName, serviceType, description, image, testimonials = [], faqs = [], locationNames = [], breadcrumbs } = opts;
 
     const business = buildBusinessEntity(settings, siteUrl);
     const rating = buildAggregateRating(testimonials);
@@ -357,7 +361,7 @@ export function buildServiceGraph(opts: {
         buildWebSiteEntity(settings, siteUrl),
         business,
         buildWebPageEntity({ url: pageUrl, title, description, image, siteUrl }),
-        buildServiceEntity({ pageUrl, title, description, image, siteUrl, locationNames }),
+        buildServiceEntity({ pageUrl, title, serviceName, serviceType, description, image, siteUrl, locationNames }),
         buildBreadcrumbEntity(breadcrumbs ?? defaultBreadcrumbs, pageUrl),
         faqs.length ? { ...buildFaqEntity(faqs), "@id": schemaId.faq(pageUrl) } : null,
     ]);

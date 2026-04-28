@@ -57,7 +57,8 @@ export default defineConfig({
         !page.includes('/keystatic') &&
         !page.includes('/_keystatic') &&
         !page.includes('/admin') &&
-        !page.includes('/api'),
+        !page.includes('/api') &&
+        !page.includes('/generar'),
       serialize(item) {
         const lastmod = new Date().toISOString().split('T')[0];
         // Home — máxima prioridad
@@ -103,6 +104,7 @@ export default defineConfig({
             '/admin/',
             '/api/',
             '/gracias/',
+            '/generar/',
           ],
         },
         // Bloquear bots de IA (protección de contenido)

@@ -4,13 +4,10 @@ import Footer from "../components/layout/Footer.astro";
 import { Cookie } from "lucide-react";
 import { getSettings } from "../lib/settings";
 
-import { getEntry } from "astro:content";
-
 // Fetch Global Settings
 const { siteName, email } = await getSettings();
 
-const legalEntry = await getEntry("legal", "cookies");
-const { Content } = legalEntry ? await legalEntry.render() : { Content: null };
+const Content = null;
 ---
 
 <Layout

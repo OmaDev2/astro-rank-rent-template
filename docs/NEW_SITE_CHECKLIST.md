@@ -47,7 +47,10 @@ Este documento detalla el proceso paso a paso para configurar y lanzar un nuevo 
 - Editar la página de inicio desde Keystatic.
 - Revisar bloque a bloque:
   - Hero (título, descripción, imagen).
-  - Servicios destacados.
+  - Ssitemap-index.xml
+sitemap-index.xml
+sitemap-index.xml
+ervicios destacados.
   - Zonas destacadas.
   - Proceso de trabajo.
   - Ventajas/Diferenciadores.

@@ -50,11 +50,18 @@ const faqsFromBlocks = (data.blocks || [])
 const resolvedFaqs = (data.faq && data.faq.length) ? data.faq : faqsFromBlocks;
 
 // Schema @graph
+const _escapeRE = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const serviceType = data.title
+    .replace(new RegExp(`\\s+en\\s+${_escapeRE(settings.city)}\\b.*$`, 'gi'), '')
+    .trim();
+
 const schema = buildServiceGraph({
     settings,
     siteUrl: settings.siteUrl,
     pageUrl: Astro.url.href,
     title: pageTitle,
+    serviceName: data.title,
+    serviceType,
     description: pageDescription,
     image: data.heroImage,
     testimonials,

@@ -4,15 +4,11 @@ import Footer from "../components/layout/Footer.astro";
 import { Shield } from "lucide-react";
 import { getSettings } from "../lib/settings";
 
-import { getEntry } from "astro:content";
-
 // Fetch Global Settings
 const { siteName, city, niche, email, address, nif, siteUrl } =
     await getSettings();
 
-// Fetch Legal Content from CMS
-const legacyEntry = await getEntry("legal", "privacidad");
-const { Content } = legacyEntry ? await legacyEntry.render() : { Content: null };
+const Content = null;
 ---
 
 <Layout
