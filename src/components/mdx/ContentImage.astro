@@ -1,0 +1,68 @@
+---
+interface Props {
+    src: string;
+    alt: string;
+    caption?: string;
+    size?: 'full' | 'large' | 'medium' | 'small';
+    aspectRatio?: 'auto' | '16:9' | '4:3' | '1:1' | '3:4';
+    align?: 'left' | 'center' | 'right';
+    objectFit?: 'cover' | 'contain';
+    rounded?: boolean;
+    shadow?: boolean;
+}
+
+const {
+    src,
+    alt,
+    caption,
+    size = 'large',
+    aspectRatio = 'auto',
+    align = 'center',
+    objectFit = 'cover',
+    rounded = true,
+    shadow = true,
+} = Astro.props;
+
+const maxWidthClass = {
+    full:   'max-w-full',
+    large:  'max-w-[960px]',
+    medium: 'max-w-[720px]',
+    small:  'max-w-[480px]',
+}[size] ?? 'max-w-[960px]';
+
+const alignClass = {
+    left:   'mr-auto',
+    center: 'mx-auto',
+    right:  'ml-auto',
+}[align] ?? 'mx-auto';
+
+const aspectClass = {
+    'auto': '',
+    '16:9': 'aspect-video',
+    '4:3':  'aspect-[4/3]',
+    '1:1':  'aspect-square',
+    '3:4':  'aspect-[3/4]',
+}[aspectRatio] ?? '';
+
+const hasFixedRatio = aspectRatio !== 'auto';
+const fitClass = objectFit === 'contain' ? 'object-contain' : 'object-cover';
+const roundedClass = rounded ? 'rounded-xl' : 'rounded-none';
+const shadowClass  = shadow  ? 'shadow-lg'  : '';
+---
+
+<figure class={`not-prose my-8 w-full ${maxWidthClass} ${alignClass}`}>
+    <div class={`overflow-hidden border border-heading/10 bg-surface ${roundedClass} ${shadowClass}${hasFixedRatio ? ` ${aspectClass}` : ''}`}>
+        <img
+            src={src}
+            alt={alt || ''}
+            class={`w-full block${hasFixedRatio ? ` h-full ${fitClass}` : ' h-auto'}`}
+            loading="lazy"
+            decoding="async"
+        />
+    </div>
+    {caption && (
+        <figcaption class="text-center text-sm text-body/70 mt-3 italic px-2">
+            {caption}
+        </figcaption>
+    )}
+</figure>

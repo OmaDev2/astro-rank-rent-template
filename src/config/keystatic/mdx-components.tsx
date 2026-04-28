@@ -96,37 +96,51 @@ export const mdxComponentsConfig = {
             }),
             alt: fields.text({ label: 'Texto Alternativo (SEO)' }),
             caption: fields.text({ label: 'Pie de Foto (Opcional)' }),
+            size: fields.select({
+                label: 'Tamaño',
+                options: [
+                    { label: 'Completo (100%)', value: 'full' },
+                    { label: 'Grande (960px)', value: 'large' },
+                    { label: 'Mediano (720px)', value: 'medium' },
+                    { label: 'Pequeño (480px)', value: 'small' },
+                ],
+                defaultValue: 'large',
+            }),
+            aspectRatio: fields.select({
+                label: 'Proporción',
+                options: [
+                    { label: 'Automático (altura natural)', value: 'auto' },
+                    { label: '16:9 — Panorámico', value: '16:9' },
+                    { label: '4:3 — Clásico', value: '4:3' },
+                    { label: '1:1 — Cuadrado', value: '1:1' },
+                    { label: '3:4 — Retrato', value: '3:4' },
+                ],
+                defaultValue: 'auto',
+            }),
+            align: fields.select({
+                label: 'Alineación',
+                options: [
+                    { label: 'Izquierda', value: 'left' },
+                    { label: 'Centro', value: 'center' },
+                    { label: 'Derecha', value: 'right' },
+                ],
+                defaultValue: 'center',
+            }),
             objectFit: fields.select({
-                label: 'Ajuste de Imagen (Object Fit)',
+                label: 'Ajuste de imagen dentro del recorte',
                 options: [
                     { label: 'Cubrir (Cover)', value: 'cover' },
                     { label: 'Contener (Contain)', value: 'contain' },
-                    { label: 'Estirar (Fill)', value: 'fill' },
                 ],
                 defaultValue: 'cover',
             }),
-            borderRadius: fields.select({
-                label: 'Bordes Redondeados',
-                options: [
-                    { label: 'Ninguno', value: 'none' },
-                    { label: 'Pequeño', value: 'sm' },
-                    { label: 'Mediano', value: 'md' },
-                    { label: 'Grande', value: 'lg' },
-                    { label: 'Extra Grande', value: 'xl' },
-                    { label: 'Completo (Círculo)', value: 'full' },
-                ],
-                defaultValue: 'xl',
-            }),
-            shadow: fields.select({
+            shadow: fields.checkbox({
                 label: 'Sombra',
-                options: [
-                    { label: 'Ninguna', value: 'none' },
-                    { label: 'Pequeña', value: 'sm' },
-                    { label: 'Mediana', value: 'md' },
-                    { label: 'Grande', value: 'lg' },
-                    { label: 'Extra Grande', value: 'xl' },
-                ],
-                defaultValue: 'lg',
+                defaultValue: true,
+            }),
+            rounded: fields.checkbox({
+                label: 'Bordes redondeados',
+                defaultValue: true,
             }),
         },
     },

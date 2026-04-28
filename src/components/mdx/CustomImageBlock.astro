@@ -1,85 +1,57 @@
 ---
-import { Image } from "astro:assets";
+import ContentImage from './ContentImage.astro';
 
 interface Props {
-    image: string;
-    alt: string;
+    // Legacy props (backward compat with old Keystatic schema)
+    image?: string;
+    borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+    // New props (new Keystatic schema and direct use)
+    src?: string;
+    alt?: string;
     caption?: string;
-    objectFit?: "cover" | "contain" | "fill";
-    borderRadius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
-    shadow?: "none" | "sm" | "md" | "lg" | "xl";
+    objectFit?: 'cover' | 'contain' | 'fill';
+    size?: 'full' | 'large' | 'medium' | 'small';
+    aspectRatio?: 'auto' | '16:9' | '4:3' | '1:1' | '3:4';
+    align?: 'left' | 'center' | 'right';
+    // Shadow and rounded accept both boolean (new) and string (legacy)
+    shadow?: boolean | 'none' | 'sm' | 'md' | 'lg' | 'xl';
+    rounded?: boolean;
 }
 
 const {
     image,
-    alt,
+    src,
+    alt = '',
     caption,
-    objectFit = "cover",
-    borderRadius = "xl",
-    shadow = "lg",
+    objectFit = 'cover',
+    borderRadius = 'xl',
+    shadow = true,
+    size = 'large',
+    aspectRatio = 'auto',
+    align = 'center',
+    rounded = true,
 } = Astro.props;
 
-const objectFitClasses = {
-    cover: "object-cover",
-    contain: "object-contain",
-    fill: "object-fill",
-};
+const resolvedSrc = src || image || '';
+const resolvedObjectFit: 'cover' | 'contain' = objectFit === 'contain' ? 'contain' : 'cover';
 
-const borderRadiusClasses = {
-    none: "rounded-none",
-    sm: "rounded-sm",
-    md: "rounded-md",
-    lg: "rounded-lg",
-    xl: "rounded-xl",
-    full: "rounded-full",
-};
+// shadow can be boolean (new schema) or string (legacy schema)
+const resolvedShadow = typeof shadow === 'boolean' ? shadow : shadow !== 'none';
 
-const shadowClasses = {
-    none: "shadow-none",
-    sm: "shadow-sm",
-    md: "shadow-md",
-    lg: "shadow-lg",
-    xl: "shadow-xl",
-};
-
-const fitClass = objectFitClasses[objectFit] || objectFitClasses.cover;
-const roundedClass =
-    borderRadiusClasses[borderRadius] || borderRadiusClasses.xl;
-const shadowClass = shadowClasses[shadow] || shadowClasses.lg;
+// rounded can be boolean (new schema) or derived from borderRadius (legacy)
+const resolvedRounded = typeof rounded === 'boolean'
+    ? rounded
+    : borderRadius !== 'none';
 ---
 
-<figure class="my-8 group">
-    <div
-        class={`overflow-hidden border border-heading/10 bg-surface ${roundedClass} ${shadowClass}`}
-    >
-        {
-            image ? (
-                typeof image === "string" ? (
-                    <img
-                        src={image}
-                        alt={alt || ""}
-                        class={`w-full h-auto group-hover:scale-105 transition-transform duration-700 ${fitClass}`}
-                        loading="lazy"
-                    />
-                ) : (
-                    <Image
-                        src={image}
-                        alt={alt || ""}
-                        class={`w-full h-auto group-hover:scale-105 transition-transform duration-700 ${fitClass}`}
-                        width={1200}
-                        height={630}
-                        inferSize={true}
-                    />
-                )
-            ) : null
-        }
-    </div>
-
-    {
-        caption && (
-            <figcaption class="text-center text-sm text-body/70 mt-3 italic">
-                {caption}
-            </figcaption>
-        )
-    }
-</figure>
+<ContentImage
+    src={resolvedSrc}
+    alt={alt}
+    caption={caption}
+    size={size}
+    aspectRatio={aspectRatio}
+    align={align}
+    objectFit={resolvedObjectFit}
+    rounded={resolvedRounded}
+    shadow={resolvedShadow}
+/>
