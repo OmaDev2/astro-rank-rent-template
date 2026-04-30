@@ -19,7 +19,7 @@ Accede a `http://localhost:4321/keystatic` y configura:
 - [ ] Teléfono de contacto
 - [ ] Email de contacto
 - [ ] Dirección completa
-- [ ] WhatsApp (número con código de país, ej: 34612345678)
+- [ ] WhatsApp (número con código de país, ej: 34675568148)
 - [ ] Horario de atención
 
 #### Settings → SEO

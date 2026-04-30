@@ -106,7 +106,11 @@ const [first, ...rest] = resolved;
         {(variant === "grid" || !variant) && (
             <div data-stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {resolved.map((s) => (
-                    <a href={s.link} class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]">
+                    <a 
+                        href={s.link} 
+                        class="group relative overflow-hidden rounded-lg border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[400px]"
+                        aria-label={s.anchorText || `Ver servicio de ${s.title}`}
+                    >
                         <img src={s.image} alt={s.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
                         {s.isPopular && (
@@ -133,7 +137,11 @@ const [first, ...rest] = resolved;
             <ul data-stagger class="space-y-3 max-w-4xl mx-auto">
                 {resolved.map((s) => (
                     <li>
-                        <a href={s.link} class="group flex items-center gap-5 p-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/40 hover:shadow-md transition-all">
+                        <a 
+                            href={s.link} 
+                            class="group flex items-center gap-5 p-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/40 hover:shadow-md transition-all"
+                            aria-label={s.anchorText || `Ver servicio de ${s.title}`}
+                        >
                             <div class="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-heading/5">
                                 <img src={s.image} alt={s.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                             </div>
@@ -152,7 +160,11 @@ const [first, ...rest] = resolved;
         {variant === "featured" && resolved.length > 0 && (
             <div class="max-w-6xl mx-auto space-y-4">
                 {/* Primera card grande */}
-                <a href={first.link} class="group relative overflow-hidden rounded-2xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[420px] md:h-[480px] block">
+                <a 
+                    href={first.link} 
+                    class="group relative overflow-hidden rounded-2xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/20 h-[420px] md:h-[480px] block"
+                    aria-label={first.anchorText || `Ver servicio de ${first.title}`}
+                >
                     <img src={first.image} alt={first.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
                     {first.isPopular && (
@@ -174,7 +186,11 @@ const [first, ...rest] = resolved;
                 {rest.length > 0 && (
                     <div data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {rest.map((s) => (
-                            <a href={s.link} class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/15 h-[260px]">
+                            <a 
+                                href={s.link} 
+                                class="group relative overflow-hidden rounded-xl border border-heading/10 hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/15 h-[260px]"
+                                aria-label={s.anchorText || `Ver servicio de ${s.title}`}
+                            >
                                 <img src={s.image} alt={s.title} loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                                 <div class="relative h-full flex flex-col justify-end p-6">
@@ -195,7 +211,11 @@ const [first, ...rest] = resolved;
             <ul data-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
                 {resolved.map((s) => (
                     <li>
-                        <a href={s.link} class="group flex items-center gap-3 px-5 py-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/50 hover:bg-primary/5 transition-all">
+                        <a 
+                            href={s.link} 
+                            class="group flex items-center gap-3 px-5 py-4 rounded-xl border border-heading/10 bg-surface hover:border-primary/50 hover:bg-primary/5 transition-all"
+                            aria-label={s.anchorText || `Ver servicio de ${s.title}`}
+                        >
                             <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
                                 <DynamicIcon name={s.icon || "ChevronRight"} className="w-4 h-4" />
                             </span>

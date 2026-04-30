@@ -9,282 +9,278 @@ import { getSettings } from "@/lib/settings";
 const settings = await getSettings();
 
 const { siteName, phone, email, address, city, niche, schedule, coordinates } =
-    settings;
+  settings;
 
 import { buildContactGraph } from "@/lib/seo";
 
-const siteUrl = settings.siteUrl || Astro.site?.href || '';
+const siteUrl = settings.siteUrl || Astro.site?.href || "";
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 
 const schema = buildContactGraph({
-    settings,
-    siteUrl,
-    pageUrl,
-    title: `Contacto y Presupuesto | ${siteName}`,
-    description: `Contacte con ${siteName} para solicitar presupuesto sin compromiso de ${niche} en ${city}.`,
+  settings,
+  siteUrl,
+  pageUrl,
+  title: `Contacto y Presupuesto | ${siteName}`,
+  description: `Contacte con ${siteName} para solicitar presupuesto sin compromiso de ${niche} en ${city}.`,
 });
 ---
 
 <Layout title={`Contacto y Presupuesto | ${siteName}`} schema={schema}>
-    <div class="pt-20 md:pt-24">
-        <Breadcrumbs pageName="Contacto" />
-    </div>
-    <div class="pb-12">
+  <div class="pt-20 md:pt-24">
+    <Breadcrumbs pageName="Contacto" />
+  </div>
+  <div class="pb-12">
     <section class="py-20 bg-secondary">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h1 class="text-5xl font-heading font-bold text-heading mb-4">
-                    Contactar
-                </h1>
-                <p class="text-body max-w-2xl mx-auto">
-                    Solicite presupuesto sin compromiso. Respondemos en menos de
-                    24 horas. Para urgencias, llámenos directamente.
-                </p>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-                <div class="space-y-8">
-                    <div
-                        class="p-8 bg-surface/50 rounded-lg border border-heading/10 backdrop-blur-sm"
-                    >
-                        <h3 class="text-2xl font-bold text-heading mb-6">
-                            Información Directa
-                        </h3>
-                        <ul class="space-y-6">
-                            <li class="flex items-start gap-4">
-                                <div
-                                    class="p-3 bg-primary/20 rounded text-primary"
-                                >
-                                    <Phone className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-heading">
-                                        Teléfono / WhatsApp
-                                    </h4>
-                                    <a
-                                        href={`tel:${(phone || "").replace(/\s/g, "")}`}
-                                        class="text-body hover:text-primary transition-colors text-lg"
-                                        >{phone}</a
-                                    >
-                                    <p class="text-xs text-body/70 mt-1">
-                                        {schedule}
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-4">
-                                <div
-                                    class="p-3 bg-primary/20 rounded text-primary"
-                                >
-                                    <Mail className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-heading">
-                                        Email
-                                    </h4>
-                                    <a
-                                        href={`mailto:${email}`}
-                                        class="text-body hover:text-primary transition-colors"
-                                        >{email}</a
-                                    >
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-4">
-                                <div
-                                    class="p-3 bg-primary/20 rounded text-primary"
-                                >
-                                    <MapPin className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-heading">
-                                        Taller
-                                    </h4>
-                                    <p class="text-body">
-                                        {address}, {city}
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div
-                        class="aspect-video bg-surface rounded-lg border border-heading/20 overflow-hidden relative group"
-                    >
-                        {
-                            coordinates?.lat && coordinates?.lng ? (
-                                <iframe
-                                    src={`https://maps.google.com/maps?q=${coordinates.lat},${coordinates.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                                    width="100%"
-                                    height="100%"
-                                    style="border:0;"
-                                    allowfullscreen=""
-                                    loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"
-                                    class="grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
-                                />
-                            ) : (
-                                <iframe
-                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(city)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
-                                    width="100%"
-                                    height="100%"
-                                    style="border:0;"
-                                    allowfullscreen=""
-                                    loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"
-                                    class="grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
-                                />
-                            )
-                        }
-                    </div>
-                </div>
-
-                <div
-                    class="p-8 bg-surface/50 rounded-lg border border-heading/10 h-fit backdrop-blur-sm"
-                >
-                    <h3 class="text-2xl font-bold text-heading mb-6">
-                        Envíenos un Mensaje
-                    </h3>
-                    <form
-                        class="space-y-6"
-                        method="POST"
-                        data-netlify="true"
-                        name="contact-page"
-                        data-netlify-honeypot="bot-field"
-                        action="/gracias"
-                    >
-                        {/* Honeypot anti-spam — invisible para usuarios, atrapa bots */}
-                        <p class="hidden" aria-hidden="true">
-                            <label>No rellenar: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-                        </p>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label
-                                    for="name"
-                                    class="block text-sm font-medium text-body mb-2"
-                                    >Nombre</label
-                                >
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
-                                    placeholder="Su nombre"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    for="phone"
-                                    class="block text-sm font-medium text-body mb-2"
-                                    >Teléfono</label
-                                >
-                                <input
-                                    type="tel"
-                                    id="phone"
-                                    name="phone"
-                                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
-                                    placeholder={phone}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label
-                                for="email"
-                                class="block text-sm font-medium text-body mb-2"
-                                >Email</label
-                            >
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
-                                placeholder={email}
-                            />
-                        </div>
-
-                        <div>
-                            <label
-                                for="service"
-                                class="block text-sm font-medium text-body mb-2"
-                                >Tipo de Servicio</label
-                            >
-                            <select
-                                id="service"
-                                name="service"
-                                class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                            >
-                                <option value=""
-                                    >Seleccione una opción...</option
-                                >
-                                <option value="urgencia">Urgencia 24h</option>
-                                <option value="presupuesto"
-                                    >Solicitar Presupuesto</option
-                                >
-                                <option value="informacion"
-                                    >Información General</option
-                                >
-                                <option value="otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label
-                                for="message"
-                                class="block text-sm font-medium text-body mb-2"
-                                >Mensaje</label
-                            >
-                            <textarea
-                                id="message"
-                                name="message"
-                                rows="4"
-                                class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50 resize-none"
-                                placeholder="Describa brevemente lo que necesita..."
-                                required></textarea>
-                        </div>
-
-                        <div class="flex items-start gap-3">
-                            <input
-                                type="checkbox"
-                                id="privacy-contact"
-                                name="privacy"
-                                required
-                                class="mt-1 w-4 h-4 rounded border-heading/20 bg-surface text-primary focus:ring-primary focus:ring-offset-secondary"
-                            />
-                            <label
-                                for="privacy-contact"
-                                class="text-xs text-body/70"
-                            >
-                                He leído y acepto la <a
-                                    href="/privacidad/"
-                                    target="_blank"
-                                    class="text-primary hover:text-accent underline font-bold"
-                                    >Política de Privacidad</a
-                                > y consiento que mis datos sean tratados para gestionar
-                                la solicitud. *
-                            </label>
-                        </div>
-
-                        <button
-                            type="submit"
-                            id="submit-button-contact"
-                            class="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/25"
-                        >
-                            <Send className="w-5 h-5" />
-                            Enviar Solicitud
-                        </button>
-                        <p class="text-xs text-body/70 text-center">
-                            No enviamos spam. Tus datos están seguros.
-                        </p>
-                    </form>
-                </div>
-            </div>
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h1 class="text-5xl font-heading font-bold text-heading mb-4">
+            Contactar
+          </h1>
+          <p class="text-body max-w-2xl mx-auto">
+            Solicite presupuesto sin compromiso. Respondemos en menos de 24
+            horas. Para urgencias, llámenos directamente.
+          </p>
         </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div class="space-y-8">
+            <div
+              class="p-8 bg-surface/50 rounded-lg border border-heading/10 backdrop-blur-sm"
+            >
+              <h3 class="text-2xl font-bold text-heading mb-6">
+                Información Directa
+              </h3>
+              <ul class="space-y-6">
+                <li class="flex items-start gap-4">
+                  <div class="p-3 bg-primary/20 rounded text-primary">
+                    <Phone className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-heading">Teléfono / WhatsApp</h4>
+                    <a
+                      href={`tel:${(phone || "").replace(/\s/g, "")}`}
+                      class="text-body hover:text-primary transition-colors text-lg"
+                      >{phone}</a
+                    >
+                    <p class="text-xs text-body/70 mt-1">
+                      {schedule}
+                    </p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-4">
+                  <div class="p-3 bg-primary/20 rounded text-primary">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-heading">Email</h4>
+                    <a
+                      href={`mailto:${email}`}
+                      class="text-body hover:text-primary transition-colors"
+                      >{email}</a
+                    >
+                  </div>
+                </li>
+                <li class="flex items-start gap-4">
+                  <div class="p-3 bg-primary/20 rounded text-primary">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-heading">Taller</h4>
+                    <p class="text-body">
+                      {address}, {city}
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              class="aspect-video bg-surface rounded-lg border border-heading/20 overflow-hidden relative group"
+            >
+              {
+                coordinates?.lat && coordinates?.lng ? (
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${coordinates.lat},${coordinates.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                  />
+                ) : (
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(city)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                  />
+                )
+              }
+            </div>
+          </div>
+
+          <div
+            class="p-8 bg-surface/50 rounded-lg border border-heading/10 h-fit backdrop-blur-sm"
+          >
+            <h3 class="text-2xl font-bold text-heading mb-6">
+              Envíenos un Mensaje
+            </h3>
+            <form
+              class="space-y-6"
+              method="POST"
+              data-netlify="true"
+              name="contact-page"
+              data-netlify-honeypot="bot-field"
+              action="/gracias"
+            >
+              {/* Honeypot anti-spam — invisible para usuarios, atrapa bots */}
+              <p class="hidden" aria-hidden="true">
+                <label
+                  >No rellenar: <input
+                    name="bot-field"
+                    tabindex="-1"
+                    autocomplete="off"
+                  /></label
+                >
+              </p>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    for="name"
+                    class="block text-sm font-medium text-body mb-2"
+                    >Nombre</label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
+                    placeholder="Su nombre"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="phone"
+                    class="block text-sm font-medium text-body mb-2"
+                    >Teléfono</label
+                  >
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
+                    placeholder={phone}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    for="poblacion"
+                    class="block text-sm font-medium text-body mb-2"
+                    >Población</label
+                  >
+                  <input
+                    type="text"
+                    id="poblacion"
+                    name="poblacion"
+                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
+                    placeholder="Tu localidad"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="email"
+                    class="block text-sm font-medium text-body mb-2">Email</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50"
+                    placeholder={email}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  for="service"
+                  class="block text-sm font-medium text-body mb-2"
+                  >Tipo de Servicio</label
+                >
+                <select
+                  id="service"
+                  name="service"
+                  class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                >
+                  <option value="">Seleccione una opción...</option>
+                  <option value="urgencia">Urgencia 24h</option>
+                  <option value="presupuesto">Solicitar Presupuesto</option>
+                  <option value="informacion">Información General</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  for="message"
+                  class="block text-sm font-medium text-body mb-2"
+                  >Mensaje</label
+                >
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  class="w-full bg-surface border border-heading/20 rounded px-4 py-3 text-heading focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-body/50 resize-none"
+                  placeholder="Describa brevemente lo que necesita..."
+                  required></textarea>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="privacy-contact"
+                  name="privacy"
+                  required
+                  class="mt-1 w-4 h-4 rounded border-heading/20 bg-surface text-primary focus:ring-primary focus:ring-offset-secondary"
+                />
+                <label for="privacy-contact" class="text-xs text-body/70">
+                  He leído y acepto la <a
+                    href="/privacidad/"
+                    target="_blank"
+                    class="text-primary hover:text-accent underline font-bold"
+                    >Política de Privacidad</a
+                  > y consiento que mis datos sean tratados para gestionar la solicitud.
+                  *
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                id="submit-button-contact"
+                class="w-full bg-primary hover:bg-accent text-white font-bold py-4 rounded transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/25"
+              >
+                <Send className="w-5 h-5" />
+                Solicitar presupuesto gratis
+              </button>
+              <p class="text-xs text-body/70 text-center">
+                No enviamos spam. Tus datos están seguros.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
     </section>
-
-    </div>
-    <Footer />
+  </div>
+  <Footer />
 </Layout>
-
-
-

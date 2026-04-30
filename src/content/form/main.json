@@ -1,7 +1,7 @@
 {
     "title": "Solicita Presupuesto Gratis",
     "subtitle": "Respuesta rápida en tu zona",
-    "submitText": "Enviar Solicitud",
+    "submitText": "Solicitar presupuesto gratis",
     "successUrl": "/gracias",
     "formFields": [
         {
@@ -23,12 +23,21 @@
             "selectOptions": []
         },
         {
+            "label": "Población",
+            "name": "poblacion",
+            "type": "text",
+            "placeholder": "Tu localidad",
+            "required": false,
+            "width": "half",
+            "selectOptions": []
+        },
+        {
             "label": "Email",
             "name": "email",
             "type": "email",
             "placeholder": "tu@email.com",
             "required": false,
-            "width": "full",
+            "width": "half",
             "selectOptions": []
         },
         {

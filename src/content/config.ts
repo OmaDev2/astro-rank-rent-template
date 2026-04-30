@@ -265,6 +265,7 @@ const pages = defineCollection({
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
                 z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
+                z.object({ discriminant: z.literal('home_intro'), value: z.any() }),
                 z.object({ discriminant: z.literal('trust_strip'), value: z.any() }),
                 z.object({ discriminant: z.literal('problem_solution'), value: z.any() }),
                 z.object({ discriminant: z.literal('materials'), value: z.any() }),

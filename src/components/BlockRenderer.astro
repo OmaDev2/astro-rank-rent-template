@@ -17,6 +17,7 @@ import HomeFeatures from "./blocks/home/HomeFeatures.astro";
 import HomeContact from "./blocks/home/HomeContact.astro";
 import HomeProcess from "./blocks/home/HomeProcess.astro";
 import HomeServicesOnePage from "./blocks/home/HomeServicesOnePage.astro";
+import HomeIntro from "./blocks/home/HomeIntro.astro";
 
 // New Modular Blocks
 import TrustStripBlock from "./blocks/TrustStripBlock.astro";
@@ -241,6 +242,11 @@ const blockBgClasses = (blocks as any[]).map((b) => {
               </nav>
             )}
           </>
+        );
+
+      case "home_intro":
+        return (
+          <HomeIntro introSection={value} bgClass={bgClass} />
         );
 
       case "services_grid":

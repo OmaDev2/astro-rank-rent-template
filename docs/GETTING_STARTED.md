@@ -14,7 +14,7 @@ Este template viene con un negocio demo funcional (**Fontanería García, Madrid
 - [ ] `businessType` — Tipo Schema.org: `Electrician`, `Painter`, `Plumber`, `GeneralContractor`...
 - [ ] `siteUrl` — URL de producción (sin barra final)
 - [ ] `phone` — Teléfono real
-- [ ] `whatsapp` — Número con prefijo internacional (ej: `34612345678`)
+- [ ] `whatsapp` — Número con prefijo internacional (ej: `34675568148`)
 - [ ] `email` — Email de contacto
 - [ ] `city` — Ciudad principal
 - [ ] `address` — Dirección completa

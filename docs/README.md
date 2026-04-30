@@ -93,7 +93,7 @@ Accede a `http://localhost:4321/keystatic`. Todo el contenido se gestiona desde 
 ## Configuración inicial de un nuevo negocio
 
 ### 1. Mi Negocio
-Rellena los datos del negocio: nombre, teléfono, WhatsApp (con código de país, ej: `34612345678`), email, ciudad, dirección y URL del sitio.
+Rellena los datos del negocio: nombre, teléfono, WhatsApp (con código de país, ej: `34675568148`), email, ciudad, dirección y URL del sitio.
 
 > ⚠️ La URL del sitio es importante: afecta a todos los `@id` del schema y a las OG images. Actualízala antes del deploy.
 

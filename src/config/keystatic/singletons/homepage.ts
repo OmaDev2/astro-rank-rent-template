@@ -316,6 +316,21 @@ export const homepage = singleton({
                     afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
                 })
             },
+            home_intro: {
+                label: '📝 Intro SEO (Texto Introductorio)',
+                schema: fields.object({
+                    heading: fields.text({
+                        label: 'Encabezado H2',
+                        description: 'Título introductorio visible bajo el hero. No debe repetir el H1.',
+                        defaultValue: 'Carpintería metálica en Málaga a medida',
+                    }),
+                    paragraph: fields.text({
+                        label: 'Párrafo Introductorio',
+                        multiline: true,
+                        description: 'Texto descriptivo breve que presenta la empresa o el servicio.',
+                    }),
+                })
+            },
             trust_strip: {
                 label: '✅ Franja de Confianza (Trust Strip)',
                 schema: fields.object({
