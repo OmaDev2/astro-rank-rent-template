@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import defaultServiceImage from "../../assets/images/service-default.webp";
 import pinturaServiceImage from "../../assets/images/pintura.webp";
 import {
     Phone,
@@ -27,22 +26,18 @@ const isIndustrial = Astro.props.locationType === "industrial";
 const heroStyle: string = props.heroStyle || "image";
 const eyebrow: string | undefined = props.eyebrow;
 
-// Lógica de Selección de Imagen (Mantenida intacta)
-let selectedImage = null;
+// Lógica de Selección de Imagen
+let selectedImage: any = null;
 let isOptimized = false;
+let isDefaultImage = false;
 
 if (!heroImage || heroImage === "/images/services/default.jpg") {
-    selectedImage = defaultServiceImage;
-    isOptimized = true;
+    isDefaultImage = true;
 } else if (heroImage === "/images/services/pintura.jpg") {
     selectedImage = pinturaServiceImage;
     isOptimized = true;
 } else {
-    selectedImage =
-        heroImage ||
-        (isIndustrial
-            ? "https://images.unsplash.com/photo-1531834685032-c34bf0d84c7c?q=80&w=1997&auto=format&fit=crop"
-            : "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop");
+    selectedImage = heroImage;
 }
 
 const heroSubtitle = props.subheading || props.subtitle || (isIndustrial
@@ -78,25 +73,25 @@ const whatsappIconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
 >
     {/* --- 1. FONDO E IMAGEN --- */}
     <div class="absolute inset-0 w-full h-full select-none">
-        {
-            isOptimized ? (
-                <Image
-                    src={selectedImage}
-                    alt={heroImageAlt || `${niche} en ${locationName}`}
-                    class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
-                    loading="eager"
-                    width={1920}
-                    height={1080}
-                />
-            ) : (
-                <img
-                    src={selectedImage}
-                    alt={heroImageAlt || `${niche} en ${locationName}`}
-                    class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
-                    loading="eager"
-                />
-            )
-        }
+        {isDefaultImage ? (
+            <div class="hero-placeholder w-full h-full" aria-hidden="true" />
+        ) : isOptimized ? (
+            <Image
+                src={selectedImage}
+                alt={heroImageAlt || `${niche} en ${locationName}`}
+                class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
+                loading="eager"
+                width={1920}
+                height={1080}
+            />
+        ) : (
+            <img
+                src={selectedImage}
+                alt={heroImageAlt || `${niche} en ${locationName}`}
+                class="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s]"
+                loading="eager"
+            />
+        )}
         {/* Gradiente estilo "Cine" — usa --hero-overlay para que los temas claros no laven la imagen */}
         <div
             class="absolute inset-0"
@@ -231,7 +226,9 @@ const whatsappIconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
 {heroStyle === "split_form" && (
 <section class="relative min-h-[85vh] flex items-center bg-secondary overflow-hidden pt-24">
     <div class="absolute inset-0 w-full h-full select-none">
-        {isOptimized ? (
+        {isDefaultImage ? (
+            <div class="hero-placeholder w-full h-full" aria-hidden="true" />
+        ) : isOptimized ? (
             <Image src={selectedImage} alt={heroImageAlt || `${niche} en ${locationName}`}
                 class="w-full h-full object-cover" loading="eager" width={1920} height={1080} />
         ) : (
@@ -310,3 +307,13 @@ const whatsappIconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
     </div>
 </section>
 )}
+
+<style>
+  .hero-placeholder {
+    background: linear-gradient(135deg,
+      rgb(var(--color-primary)) 0%,
+      rgb(var(--color-accent)) 60%,
+      rgb(var(--color-secondary)) 100%
+    );
+  }
+</style>
