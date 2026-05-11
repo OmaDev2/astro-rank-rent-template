@@ -319,34 +319,82 @@ Artículos de blog en `/blog/`. Útil para SEO de cola larga.
 
 ## 9. Imágenes
 
-### Dónde poner las imágenes
+### Cómo funciona la optimización
 
-| Tipo de imagen | Carpeta en `public/` |
+Las imágenes del template se gestionan en dos niveles:
+
+- **Imágenes del código** (`src/assets/`) — iconos, decorativas, fondos del tema. Las optimiza Astro en tiempo de build con el componente `<Image>`.
+- **Imágenes de contenido** (`public/images/`) — las que subes desde Keystatic. Las sirve **Netlify Image CDN** automáticamente en producción: convierte a WebP, redimensiona según el dispositivo y las cachea en el edge.
+
+No tienes que ejecutar ningún script manual. En producción todas las imágenes se sirven optimizadas automáticamente.
+
+> En desarrollo local las imágenes se sirven tal cual (sin optimización). Eso es normal.
+
+### Flujo para subir una imagen
+
+```text
+1. Prepara la imagen en tu ordenador (ver tamaños abajo)
+2. Keystatic → el campo de imagen del servicio/zona/bloque
+3. Sube desde el selector de archivos de Keystatic
+4. Keystatic la guarda en public/images/[colección]/
+5. git add . → git commit → git push
+6. Netlify despliega y el CDN optimiza automáticamente
+```
+
+No toques la carpeta `public/images/` a mano. Usa siempre Keystatic para subir imágenes de contenido.
+
+### Tamaños recomendados
+
+| Tipo de imagen | Tamaño | Peso máximo |
+| --- | --- | --- |
+| Hero (fondo de página) | 1920×1080 px | 200 KB |
+| Thumbnail servicio / zona | 800×600 px | 80 KB |
+| Imagen de galería | 800×600 px | 80 KB |
+| Blog / Open Graph | 1200×630 px | 150 KB |
+| Logo empresa | SVG o 400×200 px | 20 KB |
+| Favicon | PNG 512×512 px | 20 KB |
+
+### Nomenclatura de archivos
+
+El nombre del archivo es una señal SEO. Antes de subir, renombra siguiendo estas reglas:
+
+- Minúsculas siempre
+- Guiones en lugar de espacios (`-` no `_` ni espacios)
+- Sin acentos ni ñ (`malaga` no `málaga`)
+- Descriptivo: incluye el servicio y/o ciudad
+
+```text
+✅ hero-ventanas-aluminio-malaga.jpg
+✅ cerramiento-terraza-marbella.jpg
+✅ puerta-corredera-aluminio.jpg
+
+❌ IMG_4821.jpg
+❌ foto 1.jpg
+❌ WhatsApp Image 2024-05-11.jpg
+```
+
+### Herramientas gratuitas para preparar imágenes
+
+| Herramienta | Uso |
+| --- | --- |
+| [squoosh.app](https://squoosh.app) | Comprimir y convertir a WebP en el navegador |
+| [tinypng.com](https://tinypng.com) | Comprimir JPG y PNG con un clic |
+| [birme.net](https://www.birme.net) | Redimensionar por lotes |
+
+El flujo habitual: abres la foto en Squoosh, eliges formato WebP, bajas la calidad a 80-85 y descargas. Sin instalar nada.
+
+### Carpetas por colección
+
+| Colección | Carpeta en `public/` |
 | --- | --- |
 | Servicios | `public/images/services/` |
 | Zonas | `public/images/locations/` |
+| Blog | `public/images/blog/` |
 | Proyectos | `public/images/projects/` |
-| Página de inicio | `public/images/home/` |
-| Nosotros | `public/images/about-main.webp` |
-| Favicon | `public/favicons/` |
+| Páginas (inicio, zonas…) | `public/images/pages/` |
+| Logos de clientes | `public/images/logos/` |
 
-Las imágenes subidas desde el CMS se guardan automáticamente en la carpeta correcta.
-
-### Recomendaciones
-
-- **Formato:** WebP para el mejor equilibrio calidad/peso
-- **Hero principal:** 1920×1080 px mínimo
-- **Tarjetas de servicio:** 800×600 px
-- **Logos:** PNG con fondo transparente, mínimo 400×200 px
-- **Favicon:** PNG 512×512 px
-
-### Optimizar imágenes
-
-```bash
-npm run optimize-images
-```
-
-Optimiza automáticamente todas las imágenes en `public/images/`.
+Keystatic selecciona la carpeta correcta automáticamente según el campo donde subas la imagen.
 
 ---
 
