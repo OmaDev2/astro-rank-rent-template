@@ -129,7 +129,7 @@ export default defineConfig({
   output: 'static',
   // El adaptador de Netlify en dev intercepta /_keystatic/api/* y rompe Keystatic.
   // Solo se carga en producción (build).
-  adapter: isDev ? undefined : netlify(),
+  adapter: isDev ? undefined : netlify({ imageCDN: true }),
 
   vite: {
     ssr: {
