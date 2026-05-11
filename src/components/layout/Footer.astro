@@ -15,10 +15,9 @@ const footerData = footerConfig?.data || {};
 
 const description =
     footerData.description ||
-    `⚠️ Configura esta descripción en el CMS (Footer > Descripción)`;
-const disclaimer =
-    footerData.disclaimer ||
-    `⚠️ Configura este texto legal en el CMS (Footer > Disclaimer)`;
+    slogan ||
+    '';
+const disclaimer = footerData.disclaimer || '';
 const footerLinks =
     footerData.footerLinks && footerData.footerLinks.length > 0
         ? footerData.footerLinks
