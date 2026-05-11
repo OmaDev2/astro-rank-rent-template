@@ -42,6 +42,7 @@ export const homepage = singleton({
         // --- 🎯 SEO y METADATOS DE LA PÁGINA ---
         seoControls: SeoPreview({
             label: 'Configuración SEO Visual',
+            description: 'Si lo dejas vacío, el título se genera automáticamente como "[Servicio] en [Ciudad] | [Negocio]" y la descripción también. Rellénalo solo si quieres personalizar lo que ve Google.',
         }),
         canonicalUrl: fields.text({
             label: 'URL Canonica (Opcional)',

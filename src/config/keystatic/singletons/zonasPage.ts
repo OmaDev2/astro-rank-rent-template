@@ -15,7 +15,7 @@ export const zonasPage = singleton({
     schema: {
         seoControls: SeoPreview({
             label: 'SEO Google Preview',
-            description: 'Título y descripción para buscadores.',
+            description: 'Si lo dejas vacío, se genera automáticamente: "Zonas de Servicio en [ciudad] | [negocio]". Rellénalo solo si quieres personalizarlo.',
         }),
 
         _notice: noticeField({

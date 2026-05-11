@@ -35,7 +35,7 @@ export const locations = collection({
         }),
         seo: SeoPreview({
             label: 'SEO Google Preview',
-            description: 'Ajusta tu título y descripción SEO con previsualización en vivo.',
+            description: 'Si lo dejas vacío, se genera automáticamente desde el nombre de la zona y el negocio. Rellénalo solo si quieres personalizar lo que ve Google.',
         }),
 
         heroImage: fields.image({

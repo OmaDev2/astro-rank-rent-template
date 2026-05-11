@@ -15,7 +15,7 @@ export const serviciosPage = singleton({
     schema: {
         seoControls: SeoPreview({
             label: 'SEO Google Preview',
-            description: 'Título y descripción para buscadores.',
+            description: 'Si lo dejas vacío, se genera automáticamente: "Servicios de [servicio] en [ciudad] | [negocio]". Rellénalo solo si quieres personalizarlo.',
         }),
 
         _notice: noticeField({

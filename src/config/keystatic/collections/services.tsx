@@ -51,6 +51,7 @@ export const services = collection({
         // Metadatos globales (no cambian de posición)
         seo: SeoPreview({
             label: 'SEO Google Preview',
+            description: 'Si lo dejas vacío, se genera automáticamente desde el título del servicio y la ciudad. Rellénalo solo si quieres personalizar lo que ve Google.',
         }),
         icon: IconPicker({ label: 'Icono Principal (Lucide)' }),
         shortDesc: fields.text({ label: 'Descripción Corta (Cards)', multiline: true }),

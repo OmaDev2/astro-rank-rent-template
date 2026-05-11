@@ -75,7 +75,10 @@ const parsePreview = (json: string) => {
 // SEO manually set in Keystatic
 const seoPreviewData = parsePreview(homeData.seoControls);
 const seoTitle = seoPreviewData?.title || homeData.seoTitle;
-const seoDescription = seoPreviewData?.description || homeData.seoDescription;
+const seoDescription = seoPreviewData?.description || homeData.seoDescription ||
+    (config.niche && config.city
+        ? `Especialistas en ${config.niche} en ${config.city}. Presupuesto gratuito y garantía incluida. ${config.siteName}.`
+        : '');
 
 // Find Hero Data for Title Fallback if SEO is empty
 const heroBlock = homeData.blocks?.find((b: any) => b.discriminant === "hero");
