@@ -16,13 +16,13 @@ const whatsappDesktop    = settings.whatsappDesktop    ?? true;
 const showPhone     = Boolean(phoneUrl) && (stickyPhoneMobile || stickyPhoneDesktop);
 const showWhatsapp  = Boolean(whatsappUrl) && (whatsappMobile || whatsappDesktop);
 
-const phoneClass    = stickyPhoneMobile && stickyPhoneDesktop ? 'phone-float'
-                    : stickyPhoneMobile  ? 'phone-float md:hidden'
+// El círculo de teléfono solo se muestra en desktop; en móvil lo cubre MobileCtaBar
+const phoneClass    = stickyPhoneMobile && stickyPhoneDesktop ? 'phone-float hidden md:flex'
+                    : stickyPhoneMobile  ? 'phone-float hidden md:flex'
                     : 'phone-float hidden md:flex';
 
-const whatsappClass = whatsappMobile && whatsappDesktop ? 'whatsapp-float'
-                    : whatsappMobile  ? 'whatsapp-float md:hidden'
-                    : 'whatsapp-float hidden md:flex';
+// El círculo de WhatsApp solo en desktop; en móvil lo cubre MobileCtaBar
+const whatsappClass = 'whatsapp-float hidden md:flex';
 ---
 
 <!-- Botón Teléfono flotante -->{

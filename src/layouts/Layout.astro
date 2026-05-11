@@ -6,6 +6,7 @@ import CookieBanner from "../components/ui/CookieBanner.astro";
 import SearchConsoleVerification from "../components/seo/SearchConsoleVerification.astro";
 import ClickTracker from "../components/seo/ClickTracker.astro";
 import CallbackModal from "../components/ui/CallbackModal.astro";
+import MobileCtaBar from "../components/ui/MobileCtaBar.astro";
 import { generateWebSiteSchema } from "../lib/seo";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
@@ -362,6 +363,7 @@ const heroProcessed = isHome
         </main>
 
         <WhatsAppButton />
+        <MobileCtaBar />
         <CookieBanner />
         <CallbackModal />
         <ClickTracker />
