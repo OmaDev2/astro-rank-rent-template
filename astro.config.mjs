@@ -21,7 +21,8 @@ function getSiteUrl() {
   try {
     const fileContent = fs.readFileSync('./src/content/business/global.yaml', 'utf-8');
     const match = fileContent.match(/siteUrl:\s*['"]?(.*?)['"]?\s*$/m);
-    return match ? match[1] : 'https://localhost:4321';
+    const url = match ? match[1].trim() : '';
+    return url || 'https://localhost:4321';
   } catch (e) {
     return 'https://localhost:4321';
   }

@@ -4,27 +4,192 @@ blocks:
   - discriminant: hero
     value:
       content: >-
-        {"heading":"HERO_HEADING","headingHighlight":"HERO_HIGHLIGHT","subheading":"HERO_SUBHEADING","ctaPrimaryText":"Llámanos","ctaSecondaryText":"WhatsApp","features":"Feature
-        1\nFeature 2\nFeature 3","bgColor":"#0a0a0a"}
-      backgroundImageAlt: Hero image alt
-      ctaPrimaryLink: tel:+34000000000
+        {"heading":"SERVICIO en","headingHighlight":"CIUDAD","subheading":"Descripción
+        breve del servicio. Sin intermediarios. Presupuesto cerrado antes de
+        empezar.","ctaPrimaryText":"Pedir Presupuesto","ctaSecondaryText":"WhatsApp","features":"Servicio
+        Rápido\nGarantía Total\nPresupuesto Gratis","bgColor":"#0a0a0a","titleTag":"h1"}
+      backgroundImageAlt: ''
+      ctaPrimaryLink: '#contacto'
+      ctaSecondaryLink: ''
+
   - discriminant: home_intro
     value:
-      heading: INTRO_HEADING
-      paragraph: INTRO_PARAGRAPH
+      heading: 'Especialistas en SERVICIO en CIUDAD'
+      paragraph: >-
+        Texto introductorio SEO (2-3 frases). Describe quién eres, qué haces y
+        para quién. Incluye ciudad y servicio principal de forma natural. Este
+        bloque es clave para posicionamiento.
+
+  - discriminant: features
+    value:
+      content: >-
+        {"title":"Por qué confiar en
+        nosotros","features":[{"title":"+10 años de
+        experiencia","description":"Especialistas en SERVICIO para viviendas,
+        comunidades y negocios.","icon":"Award"},{"title":"Trabajo a
+        medida","description":"Medimos, presupuestamos e instalamos según las
+        necesidades reales de tu espacio.","icon":"Ruler"},{"title":"Precio
+        cerrado","description":"Te damos un presupuesto claro antes de empezar.
+        Sin sorpresas ni costes
+        ocultos.","icon":"ShieldCheck"}],"titleTag":"h2"}
+      variant: grid
+
   - discriminant: services_grid
     value:
-      variant: grid
-      title: NUESTROS SERVICIOS
-      subtitle: Descripción de los servicios
+      variant: featured
+      title: Nuestros Servicios
+      titleHighlight: en CIUDAD
+      subtitle: >-
+        Fabricamos e instalamos desde nuestro propio taller. Trabajamos sin
+        intermediarios con el mismo equipo desde la visita hasta el acabado
+        final.
       services: {}
+
+  - discriminant: stats
+    value:
+      content: >-
+        {"title":"Expertos en SERVICIO en
+        CIUDAD","subtitle":"","stats":[{"label":"Años de
+        experiencia","value":"10","suffix":"+","icon":"Award"},{"label":"Proyectos
+        realizados","value":"500","suffix":"+","icon":"CheckCircle"},{"label":"Satisfacción","value":"100","suffix":"%","icon":"Star"}],"titleTag":"h2"}
+
+  - discriminant: about
+    value:
+      content: >-
+        {"title":"NOMBRE_EMPRESA — SERVICIO
+        en","titleHighlight":"CIUDAD","description":"Llevamos más de 10 años
+        especializados en SERVICIO en CIUDAD para viviendas, comunidades y
+        locales. Trabajamos sin subcontratas, con el mismo equipo desde la
+        primera visita hasta la instalación
+        final.","yearsExperience":"10+","projectsCompleted":"500+","image":null,"features":[{"title":"Sin
+        intermediarios","description":"Trato directo con los técnicos que hacen
+        el trabajo.","icon":"Users"},{"title":"Presupuesto
+        cerrado","description":"Sin sorpresas: sabés exactamente qué se va a
+        hacer y cuánto cuesta.","icon":"FileCheck"}],"buttonText":"Quiénes
+        somos","buttonLink":"/nosotros/","titleTag":"h2"}
+
+  - discriminant: process
+    value:
+      content: >-
+        {"title":"Cómo
+        trabajamos","subtitle":"Un proceso claro y sin sorpresas de principio a
+        fin.","steps":[{"title":"1. Visita y medición","description":"Nos
+        desplazamos a medir sin
+        compromiso.","icon":"ClipboardCheck","duration":"Gratis"},{"title":"2.
+        Presupuesto cerrado","description":"Recibes precio exacto por escrito
+        antes de empezar.","icon":"FileText","duration":"24-48h"},{"title":"3.
+        Instalación profesional","description":"Nuestro equipo ejecuta el
+        trabajo en el plazo acordado.","icon":"Hammer","duration":"Según
+        proyecto"},{"title":"4. Entrega y
+        garantía","description":"Revisamos juntos el resultado y te dejamos la
+        garantía por escrito.","icon":"BadgeCheck","duration":"Garantía
+        incluida"}],"titleTag":"h2"}
+      variant: timeline
+
+  - discriminant: testimonials
+    value:
+      content: >-
+        {"title":"Lo que dicen nuestros
+        clientes","subtitle":"Opiniones reales de personas que han confiado en
+        nosotros.","testimonials":[{"quote":"Un trabajo impecable. Muy
+        profesionales y puntuales. El resultado superó nuestras
+        expectativas.","author":"María G.","initials":"MG","location":"CIUDAD","date":"2024","rating":5,"service":"SERVICIO","size":"","verified":true},{"quote":"Presupuesto
+        claro, sin sorpresas y con muy buen acabado. Los
+        recomiendo.","author":"Carlos M.","initials":"CM","location":"CIUDAD","date":"2024","rating":5,"service":"SERVICIO","size":"","verified":true},{"quote":"Rápidos,
+        limpios y profesionales. Volveré a
+        contratarlos.","author":"Ana R.","initials":"AR","location":"CIUDAD","date":"2024","rating":5,"service":"SERVICIO","size":"","verified":true}],"titleTag":"h2"}
+
+  - discriminant: service_areas
+    value:
+      title: Dónde trabajamos
+      subtitle: >-
+        Nos desplazamos para medir y presupuestar sin compromiso en toda la zona
+        de CIUDAD y alrededores.
+      group1:
+        title: CIUDAD Capital
+        description: Cubrimos todos los barrios y distritos.
+        items:
+          - name: Zona Centro
+            description: ''
+            icon: MapPin
+            popular: true
+          - name: Zona Norte
+            description: ''
+            icon: MapPin
+            popular: false
+          - name: Zona Sur
+            description: ''
+            icon: MapPin
+            popular: false
+          - name: Zona Este
+            description: ''
+            icon: MapPin
+            popular: false
+      group2:
+        title: Municipios cercanos
+        description: Desplazamiento incluido sin coste adicional.
+        note: ''
+        items:
+          - name: Municipio 1
+            supplement: ''
+            icon: MapPin
+          - name: Municipio 2
+            supplement: ''
+            icon: MapPin
+          - name: Municipio 3
+            supplement: ''
+            icon: MapPin
+
+  - discriminant: faq
+    value:
+      title: Preguntas frecuentes sobre SERVICIO en CIUDAD
+      subtitle: Resolvemos las dudas más habituales antes de pedir presupuesto.
+      variant: accordion
+      questions:
+        - question: '¿Cuánto cuesta SERVICIO en CIUDAD?'
+          answer: >-
+            El precio depende del tipo de trabajo y las dimensiones. Hacemos
+            visita gratuita y te damos presupuesto cerrado sin compromiso.
+          category: ''
+        - question: '¿Cuánto tiempo tarda la instalación?'
+          answer: >-
+            Depende del proyecto. Una vez aceptado el presupuesto, te damos
+            fecha y cumplimos los plazos acordados.
+          category: ''
+        - question: '¿Dais garantía por el trabajo?'
+          answer: >-
+            Sí. Todos nuestros trabajos incluyen garantía por escrito. Si algo
+            no está bien, volvemos a arreglarlo sin coste adicional.
+          category: ''
+        - question: '¿Trabajáis en toda la provincia?'
+          answer: >-
+            Trabajamos en CIUDAD y municipios de la zona. Consúltanos tu
+            ubicación y te confirmamos cobertura.
+          category: ''
+
   - discriminant: contact
     value:
-      title: Cuéntanos tu proyecto
-      subtitle: Contacta con nosotros para un presupuesto gratuito
-      responseTime: lo antes posible
-seoContentTitle: CONTENIDO_SEO_TITLE
-stickyPhone: false
+      title: Solicita tu presupuesto gratuito
+      subtitle: Cuéntanos qué necesitas y te respondemos en menos de 24 horas.
+      description: ''
+      phone: ''
+      whatsapp: ''
+      email: ''
+      schedule: ''
+      responseTime: menos de 24 horas
+
+  - discriminant: cta
+    value:
+      content: >-
+        {"title":"¿Necesitas SERVICIO en
+        CIUDAD?","subtitle":"Llámanos o escríbenos por WhatsApp. Venimos a
+        medir, te damos presupuesto cerrado y te decimos exactamente qué vamos a
+        hacer antes de
+        empezar.","buttonText":"Presupuesto gratuito · Sin
+        compromiso","buttonLink":"/contacto/","features":"Visita
+        gratuita\nPresupuesto cerrado\nGarantía incluida","style":"gradient","titleTag":"h2"}
+
+seoContentTitle: ''
+stickyPhone: true
 whatsappFloat: true
 ---
-# Bienvenidos a SITE\_NAME

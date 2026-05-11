@@ -5,7 +5,7 @@ import { getEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 
 const settings = await getSettings();
-const { siteName, phone, email, address, city, niche, facebook, instagram, footerStyle, areaServed } = settings;
+const { siteName, phone, email, address, city, niche, slogan, facebook, instagram, footerStyle, areaServed } = settings;
 // Orden configurable desde global.yaml; fallback a [] → orden alfabético
 const SERVICE_PRIORITY: string[] = settings.servicePriority?.length  ? settings.servicePriority  : [];
 const LOCATION_PRIORITY: string[] = settings.locationPriority?.length ? settings.locationPriority : [];
