@@ -9,6 +9,33 @@ if (!webhookUrl) return;
 
 <script is:inline define:vars={{ webhookUrl }}>
 (function () {
+  function enviar(datos) {
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(webhookUrl, new URLSearchParams(datos));
+      } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", webhookUrl, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send(new URLSearchParams(datos).toString());
+      }
+    } catch (err) {
+      console.warn("[ClickTracker] Error:", err);
+    }
+  }
+
+  function base() {
+    return {
+      pagina: window.location.pathname,
+      paginaCompleta: window.location.href,
+      timestamp: new Date().toISOString(),
+      origen: document.referrer || "directo",
+      userAgent: navigator.userAgent,
+      pantalla: window.innerWidth + "x" + window.innerHeight,
+    };
+  }
+
+  // Clics en teléfono y WhatsApp
   document.addEventListener("click", function (e) {
     var link = e.target.closest ? e.target.closest("a[href]") : null;
     if (!link) return;
@@ -26,30 +53,17 @@ if (!webhookUrl) return;
     }
 
     if (!tipo) return;
+    enviar(Object.assign({ tipo: tipo, destino: destino }, base()));
+  });
 
-    var datos = {
-      tipo: tipo,
-      destino: destino,
-      pagina: window.location.pathname,
-      paginaCompleta: window.location.href,
-      timestamp: new Date().toISOString(),
-      origen: document.referrer || "directo",
-      userAgent: navigator.userAgent,
-      pantalla: window.innerWidth + "x" + window.innerHeight,
-    };
-
-    try {
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon(webhookUrl, new URLSearchParams(datos));
-      } else {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", webhookUrl, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.send(new URLSearchParams(datos).toString());
-      }
-    } catch (err) {
-      console.warn("[ClickTracker] Error:", err);
-    }
+  // Envíos de formulario
+  document.addEventListener("submit", function (e) {
+    var form = e.target;
+    if (!form || form.tagName !== "FORM") return;
+    enviar(Object.assign({
+      tipo: "formulario",
+      destino: form.getAttribute("name") || "contacto",
+    }, base()));
   });
 })();
 </script>
