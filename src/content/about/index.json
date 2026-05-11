@@ -1,50 +1,47 @@
 {
   "hero": {
-    "title": "METALISUR — Carpintería de Aluminio en Málaga",
-    "description": "Fabricamos e instalamos ventanas, puertas, persianas, mosquiteras, mamparas y cerramientos de aluminio en Málaga. Más de 15 años con taller propio, sin intermediarios y con garantía en cada instalación."
+    "title": "Sobre Nosotros",
+    "description": ""
   },
   "mainImage": {
-    "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&auto=format&fit=crop",
-    "experienceBadge": "+15 Años"
+    "image": "/images/about-main.webp",
+    "experienceBadge": ""
   },
   "history": {
-    "subtitle": "Quiénes Somos",
-    "title": "De taller local a referencia en carpintería de aluminio en Málaga",
+    "subtitle": "Nuestra Historia",
+    "title": "",
     "stats": [
-      { "value": "2.000+", "label": "Instalaciones" },
-      { "value": "15+", "label": "Años de Experiencia" },
-      { "value": "100%", "label": "Fabricación Propia" },
-      { "value": "6", "label": "Servicios Especializados" }
+      { "value": "", "label": "Proyectos" },
+      { "value": "", "label": "Años" },
+      { "value": "100%", "label": "Garantía" }
     ]
   },
   "values": {
-    "title": "Nuestros Compromisos",
-    "description": "Los principios que no negociamos en ningún trabajo, sea grande o pequeño.",
+    "title": "Nuestros Valores",
+    "description": "",
     "items": [
-      {
-        "icon": "Wrench",
-        "title": "Fabricación a Medida",
-        "description": "Fabricamos en nuestro taller con las medidas exactas de cada hueco. Sin estándares que no encajan, sin holguras, sin remates que quedan mal."
-      },
-      {
-        "icon": "Award",
-        "title": "Materiales con Garantía",
-        "description": "Solo trabajamos con perfiles de aluminio y herrajes de primera calidad, con marcado CE y garantía del fabricante. Lo que instalamos dura."
-      },
-      {
-        "icon": "Users",
-        "title": "Instalación Propia",
-        "description": "Instalamos nosotros, sin subcontratar. El resultado de una carpintería depende tanto del producto como del montaje — por eso controlamos los dos."
-      },
-      {
-        "icon": "Calculator",
-        "title": "Precio Cerrado",
-        "description": "Presupuesto con medidas reales antes de empezar. El precio que aceptas es el precio final. Sin letra pequeña, sin sorpresas al terminar."
-      }
+      { "icon": "Shield", "title": "Confianza", "description": "" },
+      { "icon": "Award", "title": "Calidad", "description": "" },
+      { "icon": "Clock", "title": "Puntualidad", "description": "" },
+      { "icon": "Heart", "title": "Pasión", "description": "" }
     ]
   },
+  "whyChooseUs": {
+    "title": "¿Por Qué Elegirnos?",
+    "items": [
+      { "title": "", "description": "" },
+      { "title": "", "description": "" },
+      { "title": "", "description": "" }
+    ]
+  },
+  "cta": {
+    "title": "¿Tienes un proyecto en mente?",
+    "text": "",
+    "primaryText": "Pedir Presupuesto",
+    "primaryLink": "/contacto/"
+  },
   "seo": {
-    "title": "Quiénes Somos | METALISUR — Carpintería de Aluminio en Málaga",
-    "description": "Conoce a METALISUR, especialistas en carpintería de aluminio en Málaga. Fabricación propia, instalación profesional y más de 15 años de experiencia en ventanas, puertas, persianas y cerramientos."
+    "title": "Sobre Nosotros",
+    "description": ""
   }
 }

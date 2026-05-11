@@ -1,35 +1,31 @@
 _spintax: ''
-siteName: SITE_NAME
-niche: NICHE_DESCRIPTION
+siteName: ''
+niche: ''
 businessType: LocalBusiness
-siteUrl: https://example.com
+siteUrl: ''
 ctaText: Pedir Presupuesto
-phone: '+34 000 00 00 00'
-whatsapp: '34000000000'
-email: info@example.com
-city: CITY_NAME
+phone: ''
+whatsapp: ''
+email: ''
+city: ''
 coordinates:
-  lat: '0.0000'
-  lng: '0.0000'
-schedule: Lun-Vie 9:00-18:00
-nif: 00000000X
-ownerName: OWNER_NAME
-seo: '{"title":"SITE_NAME | NICHE_DESCRIPTION en CITY_NAME","description":"DESCRIPTION_HERE"}'
-slogan: SLOGAN_HERE
-foundingDate: '2024'
-facebook: ''
-instagram: ''
-googleAnalyticsId: ''
-gtmId: ''
-searchConsoleVerification: ''
-n8nWebhookUrl: ''
-areaServed:
-  - CITY_NAME
+  lat: ''
+  lng: ''
+schedule: ''
+nif: ''
+ownerName: ''
+seo: '{"title":"","description":""}'
+slogan: ''
+foundingDate: ''
+areaServed: []
 serviceRadius: 0
 priceRange: €€
 paymentAccepted:
   - Cash
   - Credit Card
+servicePriority: []
+locationPriority: []
+ctaTagline: Presupuesto gratuito · Sin compromiso
 openingHours:
   - dayOfWeek:
       - Monday
@@ -39,6 +35,3 @@ openingHours:
       - Friday
     opens: '09:00'
     closes: '18:00'
-servicePriority: []
-locationPriority: []
-ctaTagline: "Presupuesto gratuito · Sin compromiso"

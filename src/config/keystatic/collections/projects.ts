@@ -21,8 +21,8 @@ export const projects = collection({
         image: fields.image({
             label: 'Imagen Principal *',
             description: 'Foto del resultado final. Recomendado: 1200×800px, formato WebP o JPG.',
-            directory: 'src/assets/images/projects',
-            publicPath: '../../assets/images/projects',
+            directory: 'public/images/projects',
+            publicPath: '/images/projects',
         }),
         imageAlt: fields.text({
             label: 'Texto Alt Imagen (Opcional)',
@@ -33,8 +33,8 @@ export const projects = collection({
             fields.object({
                 image: fields.image({
                     label: 'Imagen',
-                    directory: 'src/assets/images/projects',
-                    publicPath: '../../assets/images/projects',
+                    directory: 'public/images/projects',
+                    publicPath: '/images/projects',
                 }),
                 alt: fields.text({
                     label: 'Texto descriptivo (Alt)',
@@ -80,8 +80,8 @@ export const projects = collection({
             description: 'Detalla el trabajo realizado: qué se hizo, materiales usados, duración, resultado.',
             options: {
                 image: {
-                    directory: 'src/assets/images/projects',
-                    publicPath: '../../assets/images/projects',
+                    directory: 'public/images/projects',
+                    publicPath: '/images/projects',
                 },
             },
             components: mdxComponentsConfig

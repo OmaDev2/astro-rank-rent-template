@@ -96,11 +96,11 @@ const services = defineCollection({
 });
 
 const projects = defineCollection({
-    schema: ({ image }) => z.object({
+    schema: z.object({
         title: z.string(),
-        image: image().optional(),
+        image: z.string().optional(),
         gallery: z.array(z.object({
-            image: image(),
+            image: z.string(),
             alt: z.string()
         })).optional(),
         locationTag: z.string().optional(),

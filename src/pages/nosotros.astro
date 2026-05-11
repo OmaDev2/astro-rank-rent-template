@@ -29,27 +29,45 @@ const aboutData = aboutEntry?.data;
 // For singletons with MDX fields, static import is the most reliable way in Astro.
 import HistoryContent from "../content/about/index/history/content.mdx";
 
-// 3. Defaults & Fallbacks
+// Dynamic template variables
+const historyVars = {
+    year: new Date().getFullYear() - 10,
+    years: 10,
+    projects: 100,
+    niche: niche.toLowerCase(),
+    city: city,
+};
+
+// Process MDX with dynamic variables
+let historyHtml = '';
+try {
+    const HistoryContentModule = HistoryContent as any;
+    let content = HistoryContentModule.default?.content || '';
+    Object.entries(historyVars).forEach(([key, value]) => {
+        content = content.replace(new RegExp(`\\{${key}\\}`, 'g'), String(value));
+    });
+    historyHtml = content;
+} catch {
+    historyHtml = defaults.history.title;
+}
+
+// 3. Defaults & Fallbacks (Placeholders genéricos)
 const defaults = {
     hero: {
         eyebrow: "Sobre Nosotros",
-        title: `Quiénes Somos | ${siteName}`,
-        description: `Especialistas en ${niche.toLowerCase()} en ${city}. Fabricación propia, instalación profesional y más de 15 años de experiencia.`,
-        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop",
+        title: `Sobre Nosotros | ${siteName}`,
+        description: `Profesionales especializados en ${niche.toLowerCase()} en ${city}. Calidad garantizada y atención personalizada.`,
+        image: "/images/about-hero.webp",
     },
     mainImage: {
-        image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop",
-        experienceBadge: "+15 Años",
+        image: "/images/about-main.webp",
+        experienceBadge: undefined as string | undefined,
         mainImageAlt: undefined as string | undefined,
     },
     history: {
         subtitle: "Nuestra Historia",
-        title: `Excelencia en ${niche.toLowerCase()} desde hace más de una década`,
-        stats: [
-            { value: "500+", label: "Proyectos", description: undefined as string | undefined },
-            { value: "15+", label: "Años", description: undefined as string | undefined },
-            { value: "100%", label: "Garantía", description: undefined as string | undefined },
-        ],
+        title: `Profesionales en ${niche.toLowerCase()} con experiencia`,
+        stats: [],
     },
     values: {
         title: "Nuestros Valores",
@@ -62,28 +80,29 @@ const defaults = {
         ],
     },
     whyChooseUs: {
-        title: `¿Por Qué Elegir ${siteName}?`,
+        title: "¿Por Qué Elegirnos?",
         items: [
-            { title: "Taller Propio", description: `Fabricamos directamente en nuestras instalaciones en ${city}.` },
+            { title: "Profesionales Cualificados", description: `Equipo con amplia experiencia en ${niche.toLowerCase()} en ${city}.` },
             { title: "Sin Intermediarios", description: "Trato directo con los técnicos encargados de la ejecución." },
             { title: "Presupuesto Cerrado", description: "Sin sorpresas ni costes ocultos al finalizar el trabajo." },
         ],
     },
     team: {
         title: "Nuestro Equipo",
-        description: `Contamos con técnicos cualificados con amplia experiencia en el sector de ${niche.toLowerCase()} en ${city}.`,
+        description: `Contamos con técnicos cualificados con amplia experiencia en el sector de ${niche.toLowerCase()}.`,
+        members: [] as { name: string; role: string; image?: string; imageAlt?: string }[],
     },
     cta: {
         title: "¿Tienes un proyecto en mente?",
-        text: "Pide presupuesto sin compromiso y te asesoraremos sobre la mejor solución para tu hogar.",
+        text: "Pide presupuesto sin compromiso y te asesoraremos sobre la mejor solución.",
         primaryText: "Pedir Presupuesto",
         primaryLink: "/contacto/",
         secondaryText: "WhatsApp",
         secondaryLink: `https://wa.me/${whatsapp.replace(/\s/g, "")}`,
     },
     seo: {
-        title: `Quiénes Somos | ${siteName} — ${niche} en ${city}`,
-        description: `Conoce a ${siteName}, tu empresa de confianza de ${niche.toLowerCase()} en ${city}. Más de 15 años de experiencia y taller propio.`,
+        title: `Sobre Nosotros | ${siteName} — ${niche} en ${city}`,
+        description: `Conoce a ${siteName}, tu empresa de confianza de ${niche.toLowerCase()} en ${city}.`,
     },
 };
 
@@ -207,7 +226,7 @@ const schema = buildGenericGraph({
                     <div
                         class="prose prose-lg prose-headings:text-heading prose-p:text-body prose-strong:text-primary max-w-none mb-10"
                     >
-                        {HistoryContent ? <HistoryContent /> : <p>{aboutData?.history?.content || defaults.history.title}</p>}
+                        <Fragment set:html={historyHtml} />
                     </div>
 
                     {
