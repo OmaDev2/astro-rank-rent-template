@@ -1,5 +1,4 @@
 import { defineCollection, z } from 'astro:content';
-import { optional } from 'astro:schema';
 
 const locations = defineCollection({
     schema: z.object({
@@ -99,6 +98,7 @@ const projects = defineCollection({
     schema: z.object({
         title: z.string(),
         image: z.string().optional(),
+        imageAlt: z.string().optional(),
         gallery: z.array(z.object({
             image: z.string(),
             alt: z.string()

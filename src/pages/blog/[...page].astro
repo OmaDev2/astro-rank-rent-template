@@ -21,7 +21,7 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
     /* eslint-enable no-unreachable */
 }
 
-const { page } = Astro.props;
+const { page } = Astro.props as any;
 const posts = page.data;
 
 const settings = await getSettings();
@@ -43,7 +43,7 @@ const schema = buildBlogListGraph({
     pageUrl: canonicalUrl,
     title: pageTitle,
     description: "Artículos, guías y consejos útiles sobre nuestros servicios y el sector.",
-    posts: posts.map(p => ({
+    posts: posts.map((p: any) => ({
         url: `${siteUrl.replace(/\/$/, '')}/blog/${p.slug}/`,
         title: p.data.title,
         image: p.data.image,
@@ -83,7 +83,7 @@ const formatDate = (dateString?: string) => {
             {posts.length > 0 ? (
                 <>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {posts.map((post) => (
+                        {posts.map((post: any) => (
                             <article class="bg-surface rounded-2xl shadow-sm border border-heading/5 overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full">
                                 <!-- Imagen -->
                                 <a href={`/blog/${post.slug}/`} class="block aspect-video overflow-hidden relative">

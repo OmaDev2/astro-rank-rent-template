@@ -8,8 +8,6 @@ import { getSettings } from "../lib/settings";
 const { siteName, city, niche, email, nif, ownerName: settingsOwnerName } = await getSettings();
 const ownerName = settingsOwnerName || "Javier Ávila"; // Titular responsable
 const businessName = siteName;
-
-const Content = null;
 ---
 
 <Layout
@@ -43,10 +41,6 @@ const Content = null;
           class="bg-slate-900/50 border border-slate-800 rounded-2xl p-8 md:p-12 shadow-2xl backdrop-blur-md"
         >
           <div class="prose prose-invert prose-primary max-w-none">
-            {
-              Content ? (
-                <Content />
-              ) : (
                 <div class="space-y-12">
                   <section>
                     <h2 class="text-2xl font-bold text-white flex items-center gap-3">
@@ -217,8 +211,6 @@ const Content = null;
                     </p>
                   </section>
                 </div>
-              )
-            }
           </div>
         </div>
 

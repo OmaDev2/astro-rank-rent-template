@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BlogLayout from "../../layouts/BlogLayout.astro";
 
 // Importar componentes MDX
@@ -27,14 +27,14 @@ export async function getStaticPaths() {
     /* eslint-disable no-unreachable */
     const posts = await getCollection("blog");
     return posts.map((post) => ({
-        params: { slug: post.slug },
+        params: { slug: post.id },
         props: post,
     }));
     /* eslint-enable no-unreachable */
 }
 
-const post = Astro.props;
-const { Content } = await post.render();
+const post = Astro.props as any;
+const { Content } = await render(post);
 ---
 
 <BlogLayout
