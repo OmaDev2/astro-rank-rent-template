@@ -11,11 +11,12 @@
         "astro": "astro",
         "optimize-images": "node scripts/optimize-images.mjs",
         "reset": "node scripts/utils/reset.js",
+        "fresh": "npm run reset",
         "export": "node scripts/utils/export_client.js",
         "manual": "node scripts/utils/manual_research.js",
         "generate_site": "node scripts/generate_site.js",
         "research:wizard": "node scripts/utils/research_wizard.js",
-        "images:optimize": "node scripts/optimize-images.js"
+        "images:optimize": "node scripts/optimize-images.mjs"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.3",

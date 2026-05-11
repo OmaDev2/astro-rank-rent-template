@@ -5,8 +5,8 @@ import { Scale, ShieldCheck, AlertCircle, MapPin, User } from "lucide-react";
 import { getSettings } from "../lib/settings";
 
 // Recuperamos la configuración global de la empresa
-const { siteName, city, niche, email, nif } = await getSettings();
-const ownerName = "Javier Ávila"; // Titular responsable
+const { siteName, city, niche, email, nif, ownerName: settingsOwnerName } = await getSettings();
+const ownerName = settingsOwnerName || "Javier Ávila"; // Titular responsable
 const businessName = siteName;
 
 const Content = null;

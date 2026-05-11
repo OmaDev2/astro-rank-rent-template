@@ -119,6 +119,11 @@ export const business = singleton({
             description: 'Necesario para la página de Aviso Legal.',
         }),
 
+        ownerName: fields.text({
+            label: 'Nombre del Titular / Propietario',
+            description: 'Nombre completo del titular. Se usa en el Aviso Legal.',
+        }),
+
         // ── 3. SEO ────────────────────────────────────────────────────────────
         seo: SeoPreview({
             label: '🔍 SEO Google Preview',

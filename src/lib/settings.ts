@@ -42,6 +42,7 @@ export async function getSettings() {
         email:    b?.email    || '',
         schedule: b?.schedule || 'Lunes a Viernes: 9:00 - 18:00',
         nif:      b?.nif      || '',
+        ownerName: b?.ownerName || '',
 
         // ── SEO ───────────────────────────────────────────────────────────────
         seoTitle:       seoTitle,

@@ -1,47 +1,35 @@
 _spintax: ''
-siteName: METALISUR
-niche: Carpintería Metálica y de Aluminio
-businessType: HomeAndConstructionBusiness
-siteUrl: https://metalisur.es
-ctaText: Pedir Presupuesto Gratis
-phone: +34 675 56 81 48
-whatsapp: '34675568148'
-email: info@metalisur.es
-city: Málaga
+siteName: SITE_NAME
+niche: NICHE_DESCRIPTION
+businessType: LocalBusiness
+siteUrl: https://example.com
+ctaText: Pedir Presupuesto
+phone: '+34 000 00 00 00'
+whatsapp: '34000000000'
+email: info@example.com
+city: CITY_NAME
 coordinates:
-  lat: '36.7213'
-  lng: '-4.4214'
-schedule: Lun-Vie 8:00-20:00· Sáb 10:00-14:00  Urgencias 24h
-nif: 30972965s
-seo: >-
-  {"title":"Carpintería Metálica en Málaga | Aluminio ·
-  Metalisur","description":"Carpintería metálica y de aluminio en Málaga.
-  Fabricamos e instalamos ventanas, puertas, cerramientos, mosquiteras y
-  automatismos. Presupuesto sin compromiso."}
-slogan: >-
-  Carpintería de aluminio en Málaga — fabricación propia e instalación
-  profesional
-foundingDate: '2010'
-facebook: https://facebook.com/metalisur
-instagram: https://instagram.com/metalisur
+  lat: '0.0000'
+  lng: '0.0000'
+schedule: Lun-Vie 9:00-18:00
+nif: 00000000X
+ownerName: OWNER_NAME
+seo: '{"title":"SITE_NAME | NICHE_DESCRIPTION en CITY_NAME","description":"DESCRIPTION_HERE"}'
+slogan: SLOGAN_HERE
+foundingDate: '2024'
+facebook: ''
+instagram: ''
+googleAnalyticsId: ''
+gtmId: ''
+searchConsoleVerification: ''
+n8nWebhookUrl: ''
 areaServed:
-  - Málaga
-  - Marbella
-  - Estepona
-  - Fuengirola
-  - Benalmádena
-  - Torremolinos
-  - Vélez-Málaga
-  - Rincón de la Victoria
-  - Nerja
-  - Alhaurín de la Torre
+  - CITY_NAME
 serviceRadius: 0
 priceRange: €€
 paymentAccepted:
   - Cash
   - Credit Card
-  - Debit Card
-  - Bank Transfer
 openingHours:
   - dayOfWeek:
       - Monday
@@ -49,25 +37,8 @@ openingHours:
       - Wednesday
       - Thursday
       - Friday
-    opens: '08:00'
-    closes: '20:00'
-  - dayOfWeek:
-      - Saturday
-    opens: '10:00'
-    closes: '14:00'
-servicePriority:
-  - ventanas-de-aluminio-malaga
-  - cerramientos-de-aluminio-malaga
-  - puertas-aluminio-malaga
-  - mosquiteras-de-aluminio-a-medida-malaga
-  - persianas-de-aluminio-malaga
-  - cortinas-cristal-malaga
-locationPriority:
-  - malaga
-  - marbella
-  - fuengirola
-  - estepona
-  - torremolinos
-  - benalmadena
-  - mijas
+    opens: '09:00'
+    closes: '18:00'
+servicePriority: []
+locationPriority: []
 ctaTagline: "Presupuesto gratuito · Sin compromiso"

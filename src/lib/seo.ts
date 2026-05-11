@@ -51,6 +51,7 @@ interface SiteSettings {
     foundingDate?: string;
     facebook?: string;
     instagram?: string;
+    ownerName?: string;
 }
 
 // ── Entity builders ───────────────────────────────────────────────────────────
@@ -86,6 +87,12 @@ export function buildBusinessEntity(settings: SiteSettings, siteUrl: string): Re
     }
     if (settings.slogan) entity.slogan = settings.slogan;
     if (settings.foundingDate) entity.foundingDate = settings.foundingDate;
+    if (settings.ownerName) {
+        entity.founder = {
+            "@type": "Person",
+            name: settings.ownerName
+        };
+    }
     if (settings.paymentAccepted?.length) {
         entity.paymentAccepted = settings.paymentAccepted.join(", ");
     }
@@ -126,6 +133,13 @@ export function buildBusinessEntity(settings: SiteSettings, siteUrl: string): Re
     if (settings.facebook) sameAs.push(settings.facebook);
     if (settings.instagram) sameAs.push(settings.instagram);
     if (sameAs.length) entity.sameAs = sameAs;
+
+    if (settings.ownerName) {
+        entity.founder = {
+            "@type": "Person",
+            name: settings.ownerName
+        };
+    }
 
     return entity;
 }

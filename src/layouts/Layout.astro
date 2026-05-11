@@ -9,7 +9,7 @@ import CallbackModal from "../components/ui/CallbackModal.astro";
 import { generateWebSiteSchema } from "../lib/seo";
 import "../styles/global.css";
 import type { WithContext, Thing } from "schema-dts";
-import heroImageSrc from "../assets/images/hero-home.png";
+import heroImageSrc from "../assets/images/hero-home.webp";
 import { getImage } from "astro:assets";
 
 // 1. Imports de configuración
@@ -335,6 +335,13 @@ const heroProcessed = isHome
     <body
         class="bg-secondary text-text font-sans antialiased selection:bg-primary selection:text-white"
     >
+        <a
+            href="#main-content"
+            class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:font-bold focus:rounded focus:shadow-lg"
+        >
+            Saltar al contenido
+        </a>
+
         {/* GTM noscript fallback */}
         {
             settings.gtmId && (
@@ -350,7 +357,7 @@ const heroProcessed = isHome
         }
         <Navbar />
 
-        <main>
+        <main id="main-content">
             <slot />
         </main>
 

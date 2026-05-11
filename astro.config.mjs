@@ -126,7 +126,9 @@ export default defineConfig({
 
   // ✅ MODO STATIC con SSR opt-in por ruta (equivalente al antiguo 'hybrid' en Astro v5)
   output: 'static',
-  adapter: netlify(),
+  // El adaptador de Netlify en dev intercepta /_keystatic/api/* y rompe Keystatic.
+  // Solo se carga en producción (build).
+  adapter: isDev ? undefined : netlify(),
 
   vite: {
     ssr: {
