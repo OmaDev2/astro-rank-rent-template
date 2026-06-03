@@ -187,14 +187,7 @@ export const testimonialsBlock = () => ({
                 initials: fields.text({ label: 'Iniciales (ej: MG)', defaultValue: 'AB' }),
                 location: fields.text({ label: 'Ciudad / Barrio' }),
                 date: fields.text({ label: 'Año o fecha', defaultValue: '2025' }),
-                rating: fields.select({
-                    label: 'Valoración',
-                    options: [
-                        { label: '⭐⭐⭐⭐⭐ 5 estrellas', value: '5' },
-                        { label: '⭐⭐⭐⭐ 4 estrellas', value: '4' },
-                    ],
-                    defaultValue: '5',
-                }),
+                rating: fields.integer({ label: 'Valoración (1-5)', defaultValue: 5 }),
                 service: fields.text({ label: 'Servicio contratado (Opcional)' }),
                 verified: fields.checkbox({ label: 'Verificado', defaultValue: true }),
             }),
