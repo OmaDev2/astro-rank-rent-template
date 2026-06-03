@@ -3,14 +3,21 @@ seoControls: '{"title":"","description":""}'
 blocks:
   - discriminant: hero
     value:
-      content: >-
-        {"heading":"SERVICIO en","headingHighlight":"CIUDAD","subheading":"Descripción
-        breve del servicio. Sin intermediarios. Presupuesto cerrado antes de
-        empezar.","ctaPrimaryText":"Pedir Presupuesto","ctaSecondaryText":"WhatsApp","features":"Servicio
-        Rápido\nGarantía Total\nPresupuesto Gratis","bgColor":"#0a0a0a","titleTag":"h1"}
-      backgroundImageAlt: ''
+      heading: SERVICIO en
+      headingHighlight: CIUDAD
+      subheading: >-
+        Descripción breve del servicio. Sin intermediarios. Presupuesto cerrado
+        antes de empezar.
+      ctaPrimaryText: Pedir Presupuesto
+      ctaSecondaryText: WhatsApp
       ctaPrimaryLink: '#contacto'
       ctaSecondaryLink: ''
+      features:
+        - Servicio Rápido
+        - Garantía Total
+        - Presupuesto Gratis
+      titleTag: h1
+      backgroundImageAlt: ''
 
   - discriminant: home_intro
     value:
@@ -22,17 +29,23 @@ blocks:
 
   - discriminant: features
     value:
-      content: >-
-        {"title":"Por qué confiar en
-        nosotros","features":[{"title":"+10 años de
-        experiencia","description":"Especialistas en SERVICIO para viviendas,
-        comunidades y negocios.","icon":"Award"},{"title":"Trabajo a
-        medida","description":"Medimos, presupuestamos e instalamos según las
-        necesidades reales de tu espacio.","icon":"Ruler"},{"title":"Precio
-        cerrado","description":"Te damos un presupuesto claro antes de empezar.
-        Sin sorpresas ni costes
-        ocultos.","icon":"ShieldCheck"}],"titleTag":"h2"}
+      title: Por qué confiar en nosotros
+      titleTag: h2
       variant: grid
+      features:
+        - title: +10 años de experiencia
+          description: Especialistas en SERVICIO para viviendas, comunidades y negocios.
+          icon: Award
+        - title: Trabajo a medida
+          description: >-
+            Medimos, presupuestamos e instalamos según las necesidades reales de
+            tu espacio.
+          icon: Ruler
+        - title: Precio cerrado
+          description: >-
+            Te damos un presupuesto claro antes de empezar. Sin sorpresas ni
+            costes ocultos.
+          icon: ShieldCheck
 
   - discriminant: services_grid
     value:
@@ -47,57 +60,105 @@ blocks:
 
   - discriminant: stats
     value:
-      content: >-
-        {"title":"Expertos en SERVICIO en
-        CIUDAD","subtitle":"","stats":[{"label":"Años de
-        experiencia","value":"10","suffix":"+","icon":"Award"},{"label":"Proyectos
-        realizados","value":"500","suffix":"+","icon":"CheckCircle"},{"label":"Satisfacción","value":"100","suffix":"%","icon":"Star"}],"titleTag":"h2"}
+      title: Expertos en SERVICIO en CIUDAD
+      subtitle: ''
+      titleTag: h2
+      stats:
+        - label: Años de experiencia
+          value: '10'
+          suffix: +
+          icon: Award
+        - label: Proyectos realizados
+          value: '500'
+          suffix: +
+          icon: CheckCircle
+        - label: Satisfacción
+          value: '100'
+          suffix: '%'
+          icon: Star
 
   - discriminant: about
     value:
-      content: >-
-        {"title":"NOMBRE_EMPRESA — SERVICIO
-        en","titleHighlight":"CIUDAD","description":"Llevamos más de 10 años
-        especializados en SERVICIO en CIUDAD para viviendas, comunidades y
-        locales. Trabajamos sin subcontratas, con el mismo equipo desde la
-        primera visita hasta la instalación
-        final.","yearsExperience":"10+","projectsCompleted":"500+","image":null,"features":[{"title":"Sin
-        intermediarios","description":"Trato directo con los técnicos que hacen
-        el trabajo.","icon":"Users"},{"title":"Presupuesto
-        cerrado","description":"Sin sorpresas: sabés exactamente qué se va a
-        hacer y cuánto cuesta.","icon":"FileCheck"}],"buttonText":"Quiénes
-        somos","buttonLink":"/nosotros/","titleTag":"h2"}
+      title: NOMBRE_EMPRESA — SERVICIO en
+      titleHighlight: CIUDAD
+      titleTag: h2
+      description: >-
+        Llevamos más de 10 años especializados en SERVICIO en CIUDAD para
+        viviendas, comunidades y locales. Trabajamos sin subcontratas, con el
+        mismo equipo desde la primera visita hasta la instalación final.
+      yearsExperience: '10+'
+      projectsCompleted: '500+'
+      image: null
+      features:
+        - title: Sin intermediarios
+          description: Trato directo con los técnicos que hacen el trabajo.
+          icon: Users
+        - title: Presupuesto cerrado
+          description: >-
+            Sin sorpresas: sabés exactamente qué se va a hacer y cuánto cuesta.
+          icon: FileCheck
+      buttonText: Quiénes somos
+      buttonLink: /nosotros/
 
   - discriminant: process
     value:
-      content: >-
-        {"title":"Cómo
-        trabajamos","subtitle":"Un proceso claro y sin sorpresas de principio a
-        fin.","steps":[{"title":"1. Visita y medición","description":"Nos
-        desplazamos a medir sin
-        compromiso.","icon":"ClipboardCheck","duration":"Gratis"},{"title":"2.
-        Presupuesto cerrado","description":"Recibes precio exacto por escrito
-        antes de empezar.","icon":"FileText","duration":"24-48h"},{"title":"3.
-        Instalación profesional","description":"Nuestro equipo ejecuta el
-        trabajo en el plazo acordado.","icon":"Hammer","duration":"Según
-        proyecto"},{"title":"4. Entrega y
-        garantía","description":"Revisamos juntos el resultado y te dejamos la
-        garantía por escrito.","icon":"BadgeCheck","duration":"Garantía
-        incluida"}],"titleTag":"h2"}
+      title: Cómo trabajamos
+      subtitle: Un proceso claro y sin sorpresas de principio a fin.
+      titleTag: h2
       variant: timeline
+      steps:
+        - title: '1. Visita y medición'
+          description: Nos desplazamos a medir sin compromiso.
+          icon: ClipboardCheck
+          duration: Gratis
+        - title: '2. Presupuesto cerrado'
+          description: Recibes precio exacto por escrito antes de empezar.
+          icon: FileText
+          duration: 24-48h
+        - title: '3. Instalación profesional'
+          description: Nuestro equipo ejecuta el trabajo en el plazo acordado.
+          icon: Hammer
+          duration: Según proyecto
+        - title: '4. Entrega y garantía'
+          description: >-
+            Revisamos juntos el resultado y te dejamos la garantía por escrito.
+          icon: BadgeCheck
+          duration: Garantía incluida
 
   - discriminant: testimonials
     value:
-      content: >-
-        {"title":"Lo que dicen nuestros
-        clientes","subtitle":"Opiniones reales de personas que han confiado en
-        nosotros.","testimonials":[{"quote":"Un trabajo impecable. Muy
-        profesionales y puntuales. El resultado superó nuestras
-        expectativas.","author":"María G.","initials":"MG","location":"CIUDAD","date":"2024","rating":5,"service":"SERVICIO","size":"","verified":true},{"quote":"Presupuesto
-        claro, sin sorpresas y con muy buen acabado. Los
-        recomiendo.","author":"Carlos M.","initials":"CM","location":"CIUDAD","date":"2024","rating":5,"service":"SERVICIO","size":"","verified":true},{"quote":"Rápidos,
-        limpios y profesionales. Volveré a
-        contratarlos.","author":"Ana R.","initials":"AR","location":"CIUDAD","date":"2024","rating":5,"service":"SERVICIO","size":"","verified":true}],"titleTag":"h2"}
+      title: Lo que dicen nuestros clientes
+      subtitle: Opiniones reales de personas que han confiado en nosotros.
+      titleTag: h2
+      testimonials:
+        - quote: >-
+            Un trabajo impecable. Muy profesionales y puntuales. El resultado
+            superó nuestras expectativas.
+          author: María G.
+          initials: MG
+          location: CIUDAD
+          date: '2024'
+          rating: 5
+          service: SERVICIO
+          verified: true
+        - quote: >-
+            Presupuesto claro, sin sorpresas y con muy buen acabado. Los
+            recomiendo.
+          author: Carlos M.
+          initials: CM
+          location: CIUDAD
+          date: '2024'
+          rating: 5
+          service: SERVICIO
+          verified: true
+        - quote: Rápidos, limpios y profesionales. Volveré a contratarlos.
+          author: Ana R.
+          initials: AR
+          location: CIUDAD
+          date: '2024'
+          rating: 5
+          service: SERVICIO
+          verified: true
 
   - discriminant: service_areas
     value:
@@ -180,14 +241,19 @@ blocks:
 
   - discriminant: cta
     value:
-      content: >-
-        {"title":"¿Necesitas SERVICIO en
-        CIUDAD?","subtitle":"Llámanos o escríbenos por WhatsApp. Venimos a
-        medir, te damos presupuesto cerrado y te decimos exactamente qué vamos a
-        hacer antes de
-        empezar.","buttonText":"Presupuesto gratuito · Sin
-        compromiso","buttonLink":"/contacto/","features":"Visita
-        gratuita\nPresupuesto cerrado\nGarantía incluida","style":"gradient","titleTag":"h2"}
+      title: '¿Necesitas SERVICIO en CIUDAD?'
+      subtitle: >-
+        Llámanos o escríbenos por WhatsApp. Venimos a medir, te damos
+        presupuesto cerrado y te decimos exactamente qué vamos a hacer antes de
+        empezar.
+      titleTag: h2
+      buttonText: Presupuesto gratuito · Sin compromiso
+      buttonLink: /contacto/
+      style: gradient
+      features:
+        - Visita gratuita
+        - Presupuesto cerrado
+        - Garantía incluida
 
 seoContentTitle: ''
 stickyPhone: true

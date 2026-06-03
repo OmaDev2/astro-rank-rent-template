@@ -124,37 +124,39 @@ const blockBgClasses = (blocks as any[]).map((b) => {
       }
     };
 
+    // Acepta formato antiguo (content: string JSON) y nuevo (campos nativos).
+    const resolveBlock = (v: any): any => {
+      if (!v) return {};
+      if (typeof v.content === "string") return parseJson(v.content) ?? {};
+      return v;
+    };
+
     const bgClass = blockBgClasses[index];
 
     switch (discriminant) {
       case "hero":
-        const heroContent = parseJson(value?.content);
+        const heroData = resolveBlock(value);
+        const heroFeatures = Array.isArray(heroData.features)
+          ? heroData.features
+          : typeof heroData.features === "string"
+            ? heroData.features.split("\n").map((f: string) => f.trim()).filter(Boolean)
+            : [];
         if (isHome) {
           const heroMerged = {
-            backgroundImage: value?.backgroundImage,
-            heading: heroContent?.heading || value?.heading,
-            headingHighlight:
-              heroContent?.headingHighlight || value?.headingHighlight,
-            subheading: heroContent?.subheading || value?.subheading,
+            backgroundImage: value?.backgroundImage || heroData.backgroundImage,
+            backgroundImageAlt: value?.backgroundImageAlt || heroData.backgroundImageAlt,
+            heading: heroData.heading,
+            headingHighlight: heroData.headingHighlight,
+            subheading: heroData.subheading,
             ctaPrimary: {
-              text: heroContent?.ctaPrimaryText || value?.ctaPrimary?.text,
-              link:
-                value?.ctaPrimaryLink ||
-                value?.ctaPrimary?.link ||
-                "#presupuesto",
+              text: heroData.ctaPrimaryText || value?.ctaPrimary?.text,
+              link: value?.ctaPrimaryLink || heroData.ctaPrimaryLink || value?.ctaPrimary?.link || "#presupuesto",
             },
             ctaSecondary: {
-              text: heroContent?.ctaSecondaryText || value?.ctaSecondary?.text,
-              link: value?.ctaSecondaryLink || value?.ctaSecondary?.link || "",
+              text: heroData.ctaSecondaryText || value?.ctaSecondary?.text,
+              link: value?.ctaSecondaryLink || heroData.ctaSecondaryLink || value?.ctaSecondary?.link || "",
             },
-            features: Array.isArray(heroContent?.features)
-              ? heroContent.features
-              : typeof heroContent?.features === "string"
-                ? heroContent.features
-                    .split("\n")
-                    .map((f: string) => f.trim())
-                    .filter(Boolean)
-                : value?.features || [],
+            features: heroFeatures,
           };
           return <HomeHero hero={heroMerged} config={config} />;
         }
@@ -164,22 +166,22 @@ const blockBgClasses = (blocks as any[]).map((b) => {
               locationName={locationName}
               locationType={locationType}
               zipCodes={zipCodes}
-              heroImage={value?.heroImage || heroImage}
-              heroImageAlt={value?.heroImageAlt}
+              heroImage={value?.heroImage || heroData.heroImage || heroImage}
+              heroImageAlt={value?.heroImageAlt || heroData.heroImageAlt}
               phone={phone}
               whatsapp={config?.contact?.whatsapp || config?.whatsapp || whatsapp}
               siteName={siteName}
               niche={niche}
-              title={heroContent?.title || value?.title || title}
-              subtitle={heroContent?.subtitle || value?.subtitle}
-              heading={heroContent?.heading}
-              headingHighlight={heroContent?.headingHighlight}
-              subheading={heroContent?.subheading}
-              ctaPrimaryText={heroContent?.ctaPrimaryText || value?.ctaPrimaryText}
-              ctaSecondaryText={heroContent?.ctaSecondaryText || value?.ctaSecondaryText}
-              ctaPrimaryLink={heroContent?.ctaPrimaryLink || value?.ctaPrimaryLink}
-              ctaSecondaryLink={heroContent?.ctaSecondaryLink || value?.ctaSecondaryLink}
-              eyebrow={heroContent?.eyebrow}
+              title={heroData.title || title}
+              subtitle={heroData.subtitle}
+              heading={heroData.heading}
+              headingHighlight={heroData.headingHighlight}
+              subheading={heroData.subheading}
+              ctaPrimaryText={heroData.ctaPrimaryText}
+              ctaSecondaryText={heroData.ctaSecondaryText}
+              ctaPrimaryLink={value?.ctaPrimaryLink || heroData.ctaPrimaryLink}
+              ctaSecondaryLink={value?.ctaSecondaryLink || heroData.ctaSecondaryLink}
+              eyebrow={heroData.eyebrow}
               heroStyle={config?.heroStyle || "image"}
             />
             {breadcrumbType && (
@@ -274,29 +276,23 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         );
 
       case "about":
-        const aboutContent = parseJson(value?.content);
-        const finalAboutData = aboutContent || value;
+        const finalAboutData = resolveBlock(value);
         return finalAboutData ? (
           <HomeAbout aboutSection={finalAboutData} bgClass={bgClass} />
         ) : null;
 
       case "features":
-        const featuresContent = parseJson(value?.content);
-        const finalFeatures =
-          featuresContent?.features ||
-          value?.features ||
-          value?.items ||
-          value ||
-          [];
-        const finalTitle = featuresContent?.title || value?.title;
-        const finalSubtitle = featuresContent?.subtitle || value?.subtitle;
-        const featuresVariant = value?.variant;
+        const featuresData = resolveBlock(value);
+        const finalFeatures = featuresData.features || featuresData.items || [];
+        const finalTitle = featuresData.title;
+        const finalSubtitle = featuresData.subtitle;
+        const featuresVariant = value?.variant || featuresData.variant || "grid";
         if (isHome) {
           return (
             <HomeFeatures
               features={finalFeatures}
               title={finalTitle}
-              titleTag={featuresContent?.titleTag}
+              titleTag={featuresData.titleTag}
               city={city}
               variant={featuresVariant}
               bgClass={bgClass}
@@ -316,27 +312,21 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         );
 
       case "process":
-        const processContent = parseJson(value?.content);
-        const finalProcess = processContent || value;
+        const finalProcess = resolveBlock(value);
         return finalProcess ? (
-          <HomeProcess process={finalProcess} variant={value?.variant} bgClass={bgClass} />
+          <HomeProcess process={finalProcess} variant={value?.variant || finalProcess.variant} bgClass={bgClass} />
         ) : null;
 
       case "testimonials":
-        const testimonialsContent = parseJson(value?.content);
-        const finalTestimonials =
-          testimonialsContent?.testimonials ||
-          value?.testimonials ||
-          value ||
-          [];
-        const finalTestiTitle = testimonialsContent?.title || value?.title;
-        const finalTestiSubtitle =
-          testimonialsContent?.subtitle || value?.subtitle;
+        const testimonialsData = resolveBlock(value);
+        const finalTestimonials = testimonialsData.testimonials || [];
+        const finalTestiTitle = testimonialsData.title;
+        const finalTestiSubtitle = testimonialsData.subtitle;
         return (
           <Testimonials
             title={finalTestiTitle}
             subtitle={finalTestiSubtitle}
-            titleTag={testimonialsContent?.titleTag}
+            titleTag={testimonialsData.titleTag}
             testimonials={
               Array.isArray(finalTestimonials)
                 ? finalTestimonials.map((t: any) => ({
@@ -362,8 +352,13 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         );
 
       case "cta":
-        const ctaContent = parseJson(value?.content);
-        const finalCta = ctaContent || value;
+        const finalCta = resolveBlock(value);
+        if (typeof finalCta.features === "string") {
+          finalCta.features = finalCta.features
+            .split("\n")
+            .map((f: string) => f.trim())
+            .filter(Boolean);
+        }
         return (
           <FinalCTA
             title={finalCta?.title}
@@ -484,26 +479,17 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         );
 
       case "pricing":
-        const pricingContent = parseJson(value?.content);
-        const pricingData = pricingContent
-          ? {
-              title: pricingContent.title,
-              subtitle: pricingContent.subtitle,
-              titleTag: pricingContent.titleTag,
-              note: pricingContent.note,
-              plans: pricingContent.plans?.map((p: any) => ({
-                ...p,
-                features: Array.isArray(p.features)
-                  ? p.features
-                  : typeof p.features === "string"
-                    ? p.features
-                        .split("\n")
-                        .map((f: string) => f.trim())
-                        .filter(Boolean)
-                    : [],
-              })),
-            }
-          : value;
+        const pricingData = resolveBlock(value);
+        if (Array.isArray(pricingData.plans)) {
+          pricingData.plans = pricingData.plans.map((p: any) => ({
+            ...p,
+            features: Array.isArray(p.features)
+              ? p.features
+              : typeof p.features === "string"
+                ? p.features.split("\n").map((f: string) => f.trim()).filter(Boolean)
+                : [],
+          }));
+        }
         return (
           <PricingBlock
             title={pricingData?.title}
@@ -516,15 +502,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
         );
 
       case "stats":
-        const statsContent = parseJson(value?.content);
-        const statsData = statsContent
-          ? {
-              title: statsContent.title,
-              subtitle: statsContent.subtitle,
-              titleTag: statsContent.titleTag,
-              stats: statsContent.stats,
-            }
-          : value;
+        const statsData = resolveBlock(value);
         return (
           <StatsBlock
             title={statsData?.title}
