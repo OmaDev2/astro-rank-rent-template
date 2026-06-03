@@ -10,7 +10,7 @@ import robotsTxt from 'astro-robots-txt';
 
 // ── Keystatic: solo en desarrollo ────────────────────────────
 // En producción no queremos el panel admin ni sus rutas /keystatic
-const isDev = import.meta.env?.DEV ?? process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production';
 let keystatic;
 if (isDev) {
   keystatic = (await import('@keystatic/astro')).default;
