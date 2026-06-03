@@ -1,5 +1,223 @@
 import { defineCollection, z } from 'astro:content';
 
+// ─── Schemas de bloques — Fase 1 ────────────────────────────────────────────
+// Cada schema acepta el formato nuevo (campos nativos) y el antiguo (content: string)
+// para retrocompatibilidad con servicios/zonas aún no migrados.
+
+const iconSchema = z.string().optional(); // nombre de icono Lucide en PascalCase
+
+const heroBlockSchema = z.object({
+  discriminant: z.literal('hero'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      heading: z.string().optional(),
+      headingHighlight: z.string().optional(),
+      subheading: z.string().optional(),
+      eyebrow: z.string().optional(),
+      ctaPrimaryText: z.string().optional(),
+      ctaPrimaryLink: z.string().optional(),
+      ctaSecondaryText: z.string().optional(),
+      ctaSecondaryLink: z.string().optional(),
+      features: z.array(z.string()).optional(),
+      titleTag: z.enum(['h1', 'h2']).optional().default('h1'),
+      bgColor: z.string().optional(),
+      backgroundImage: z.string().optional(),
+      backgroundImageAlt: z.string().optional(),
+      heroImage: z.string().optional(),
+      heroImageAlt: z.string().optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+      ctaPrimaryLink: z.string().optional(),
+      ctaSecondaryLink: z.string().optional(),
+      backgroundImage: z.string().optional(),
+      backgroundImageAlt: z.string().optional(),
+      heroImage: z.string().optional(),
+      heroImageAlt: z.string().optional(),
+    }),
+  ]),
+});
+
+const featuresBlockSchema = z.object({
+  discriminant: z.literal('features'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      variant: z.enum(['grid', 'list', 'cards']).optional().default('grid'),
+      features: z.array(z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        icon: iconSchema,
+      })).optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+      variant: z.enum(['grid', 'list', 'cards']).optional().default('grid'),
+    }),
+  ]),
+});
+
+const processBlockSchema = z.object({
+  discriminant: z.literal('process'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      variant: z.enum(['timeline', 'cards', 'numbered']).optional().default('timeline'),
+      steps: z.array(z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        icon: iconSchema,
+        duration: z.string().optional(),
+      })).optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+      variant: z.enum(['timeline', 'cards', 'numbered']).optional().default('timeline'),
+    }),
+  ]),
+});
+
+const statsBlockSchema = z.object({
+  discriminant: z.literal('stats'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      stats: z.array(z.object({
+        label: z.string(),
+        value: z.string(),
+        suffix: z.string().optional(),
+        icon: iconSchema,
+      })).optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+    }),
+  ]),
+});
+
+const ctaBlockSchema = z.object({
+  discriminant: z.literal('cta'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      buttonText: z.string().optional(),
+      buttonLink: z.string().optional(),
+      features: z.array(z.string()).optional(),
+      style: z.enum(['gradient', 'solid', 'outline', 'dark']).optional().default('gradient'),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+    }),
+  ]),
+});
+
+const aboutBlockSchema = z.object({
+  discriminant: z.literal('about'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      titleHighlight: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      description: z.string().optional(),
+      yearsExperience: z.string().optional(),
+      projectsCompleted: z.string().optional(),
+      image: z.string().nullable().optional(),
+      features: z.array(z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        icon: iconSchema,
+      })).optional(),
+      buttonText: z.string().optional(),
+      buttonLink: z.string().optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+    }),
+  ]),
+});
+
+const testimonialsBlockSchema = z.object({
+  discriminant: z.literal('testimonials'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      testimonials: z.array(z.object({
+        quote: z.string(),
+        author: z.string(),
+        initials: z.string().optional(),
+        location: z.string().optional(),
+        date: z.string().optional(),
+        rating: z.number().min(1).max(5).optional().default(5),
+        service: z.string().optional(),
+        size: z.string().optional(),
+        verified: z.boolean().optional().default(true),
+      })).optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+    }),
+  ]),
+});
+
+const pricingBlockSchema = z.object({
+  discriminant: z.literal('pricing'),
+  value: z.union([
+    // Formato nuevo
+    z.object({
+      content: z.undefined(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      titleTag: z.enum(['h2', 'h3']).optional().default('h2'),
+      note: z.string().optional(),
+      plans: z.array(z.object({
+        name: z.string(),
+        price: z.string().optional(),
+        description: z.string().optional(),
+        features: z.array(z.string()).optional(),
+        highlighted: z.boolean().optional().default(false),
+        ctaText: z.string().optional(),
+        ctaLink: z.string().optional(),
+      })).optional(),
+    }),
+    // Formato antiguo
+    z.object({
+      content: z.string(),
+    }),
+  ]),
+});
+// ─── Fin schemas de bloques ──────────────────────────────────────────────────
+
 const locations = defineCollection({
     schema: z.object({
         name: z.string(),
@@ -21,13 +239,13 @@ const locations = defineCollection({
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
-                z.object({ discriminant: z.literal('hero'), value: z.any().optional() }),
-                z.object({ discriminant: z.literal('features'), value: z.any().optional() }),
+                heroBlockSchema,
+                featuresBlockSchema,
                 z.object({ discriminant: z.literal('map'), value: z.any().optional() }),
                 z.object({ discriminant: z.literal('content'), value: z.any().optional() }),
-                z.object({ discriminant: z.literal('cta'), value: z.any().optional() }),
-                z.object({ discriminant: z.literal('pricing'), value: z.any() }),
-                z.object({ discriminant: z.literal('stats'), value: z.any() }),
+                ctaBlockSchema,
+                pricingBlockSchema,
+                statsBlockSchema,
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
                 z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
@@ -57,8 +275,8 @@ const services = defineCollection({
         // --- PAGE BUILDER: Define el orden de las secciones ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
-                z.object({ discriminant: z.literal('hero'), value: z.any() }),
-                z.object({ discriminant: z.literal('features'), value: z.any() }),
+                heroBlockSchema,
+                featuresBlockSchema,
                 z.object({ discriminant: z.literal('content'), value: z.any() }),
                 z.object({
                     discriminant: z.literal('faq'),
@@ -70,14 +288,14 @@ const services = defineCollection({
                         }))
                     })
                 }),
-                z.object({ discriminant: z.literal('cta'), value: z.any() }),
+                ctaBlockSchema,
                 z.object({ discriminant: z.literal('price_from'), value: z.any() }),
-                z.object({ discriminant: z.literal('pricing'), value: z.any() }),
-                z.object({ discriminant: z.literal('stats'), value: z.any() }),
+                pricingBlockSchema,
+                statsBlockSchema,
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
                 z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
-                z.object({ discriminant: z.literal('process'), value: z.any() }),
+                processBlockSchema,
                 z.object({ discriminant: z.literal('service_locations'), value: z.any() }),
                 z.object({ discriminant: z.literal('trust_strip'), value: z.any() }),
                 z.object({ discriminant: z.literal('problem_solution'), value: z.any() }),
@@ -227,16 +445,12 @@ const design = defineCollection({
 
 
 
-
-
-
-
 const pages = defineCollection({
     schema: z.object({
         // --- PAGE BUILDER: Nuevo Modelo de Datos ---
         blocks: z.array(
             z.discriminatedUnion('discriminant', [
-                z.object({ discriminant: z.literal('hero'), value: z.any() }),
+                heroBlockSchema,
                 z.object({ discriminant: z.literal('services_grid'), value: z.any() }),
                 z.object({
                     discriminant: z.literal('services_list'),
@@ -251,17 +465,17 @@ const pages = defineCollection({
                         })).optional()
                     })
                 }),
-                z.object({ discriminant: z.literal('about'), value: z.any() }),
-                z.object({ discriminant: z.literal('features'), value: z.any() }),
-                z.object({ discriminant: z.literal('process'), value: z.any() }),
+                aboutBlockSchema,
+                featuresBlockSchema,
+                processBlockSchema,
                 z.object({ discriminant: z.literal('contact'), value: z.any() }),
-                z.object({ discriminant: z.literal('testimonials'), value: z.any() }),
+                testimonialsBlockSchema,
                 z.object({ discriminant: z.literal('content'), value: z.any() }),
                 z.object({ discriminant: z.literal('faq'), value: z.any() }),
                 z.object({ discriminant: z.literal('locations'), value: z.any() }),
-                z.object({ discriminant: z.literal('cta'), value: z.any() }),
-                z.object({ discriminant: z.literal('pricing'), value: z.any() }),
-                z.object({ discriminant: z.literal('stats'), value: z.any() }),
+                ctaBlockSchema,
+                pricingBlockSchema,
+                statsBlockSchema,
                 z.object({ discriminant: z.literal('logos'), value: z.any() }),
                 z.object({ discriminant: z.literal('before_after'), value: z.any() }),
                 z.object({ discriminant: z.literal('service_areas'), value: z.any() }),
