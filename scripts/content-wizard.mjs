@@ -259,44 +259,34 @@ El FAQ debe tener exactamente 5 preguntas. Si hay preguntas PAA disponibles, ús
 function buildServiceMdx({ slug, content, keyword, city }) {
   const { seoTitle, seoDescription, shortDesc, hero, trustStrip, featuresSection, faq, cta } = content;
 
-  const heroJson = JSON.stringify({
-    heading: hero.heading,
-    headingHighlight: hero.headingHighlight,
-    subheading: hero.subheading,
-    ctaPrimaryText: hero.ctaPrimaryText,
-    ctaSecondaryText: 'WhatsApp',
-    features: hero.features.join('\n'),
-    bgColor: '#0a0a0a',
-    titleTag: 'h1',
-  });
-
-  const featuresJson = JSON.stringify({
-    title: featuresSection.title,
-    features: featuresSection.items,
-    titleTag: 'h2',
-  });
-
-  const ctaJson = JSON.stringify({
-    title: cta.title,
-    subtitle: cta.subtitle,
-    buttonText: cta.buttonText,
-    buttonLink: '/contacto/',
-    features: 'Visita gratuita\nPresupuesto cerrado\nGarantía incluida',
-    style: 'gradient',
-    titleTag: 'h2',
-  });
-
   const seoJson = JSON.stringify({ title: seoTitle, description: seoDescription });
+
+  const heroFeatures = Array.isArray(hero.features)
+    ? hero.features.map(f => `      - '${ys(f)}'`).join('\n')
+    : String(hero.features).split('\n').map(f => `      - '${ys(f.trim())}'`).join('\n');
+
+  const featureItems = featuresSection.items
+    .map(item => [
+      `      - title: '${ys(item.title)}'`,
+      `        description: '${ys(item.description)}'`,
+      `        icon: ${item.icon}`,
+    ].join('\n'))
+    .join('\n');
 
   const trustItems = trustStrip
     .map(item => `        - icon: ${item.icon}\n          label: '${ys(item.label)}'\n          description: ''`)
     .join('\n');
 
   const faqItems = faq.map(f => {
-    // Use block scalar for answer to avoid quote escaping headaches
     const answerLines = f.answer.split(/\n/).map(l => `            ${l}`).join('\n');
     return `        - question: '${ys(f.question)}'\n          answer: >-\n${answerLines}`;
   }).join('\n');
+
+  const ctaFeatures = [
+    `      - Visita gratuita`,
+    `      - Presupuesto cerrado`,
+    `      - Garantía incluida`,
+  ].join('\n');
 
   return `---
 title: '${ys(seoTitle)}'
@@ -307,8 +297,16 @@ seo: '${ys(seoJson)}'
 blocks:
   - discriminant: hero
     value:
-      content: >-
-        ${heroJson}
+      heading: '${ys(hero.heading)}'
+      headingHighlight: '${ys(hero.headingHighlight)}'
+      subheading: '${ys(hero.subheading)}'
+      ctaPrimaryText: '${ys(hero.ctaPrimaryText)}'
+      ctaSecondaryText: WhatsApp
+      ctaPrimaryLink: '#contacto'
+      ctaSecondaryLink: ''
+      titleTag: h1
+      features:
+${heroFeatures}
 
   - discriminant: trust_strip
     value:
@@ -321,9 +319,11 @@ ${trustItems}
 
   - discriminant: features
     value:
-      content: >-
-        ${featuresJson}
+      title: '${ys(featuresSection.title)}'
+      titleTag: h2
       variant: grid
+      features:
+${featureItems}
 
   - discriminant: faq
     value:
@@ -334,8 +334,14 @@ ${faqItems}
 
   - discriminant: cta
     value:
-      content: >-
-        ${ctaJson}
+      title: '${ys(cta.title)}'
+      subtitle: '${ys(cta.subtitle)}'
+      titleTag: h2
+      buttonText: '${ys(cta.buttonText)}'
+      buttonLink: /contacto/
+      style: gradient
+      features:
+${ctaFeatures}
 ---
 `;
 }
