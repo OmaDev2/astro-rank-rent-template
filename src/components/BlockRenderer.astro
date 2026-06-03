@@ -334,7 +334,7 @@ const blockBgClasses = (blocks as any[]).map((b) => {
                     text: t.quote || t.text,
                     location: t.location,
                     initials: t.initials,
-                    rating: t.rating || 5,
+                    rating: Number(t.rating) || 5,
                   }))
                 : []
             }

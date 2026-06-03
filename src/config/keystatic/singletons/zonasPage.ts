@@ -1,10 +1,6 @@
 import { singleton, fields } from '@keystatic/core';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
-import { heroPreview } from '../../../components/keystatic/HeroPreview';
-import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
-import { statsPreview } from '../../../components/keystatic/StatsPreview';
-import { ctaPreview } from '../../../components/keystatic/CtaPreview';
-import { processPreview } from '../../../components/keystatic/ProcessPreview';
+import { heroBlock, featuresBlock, statsBlock, ctaBlock, processBlock } from '../nativeBlocks';
 import { noticeField } from '../../../components/keystatic/NoticeField';
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 
@@ -24,12 +20,7 @@ export const zonasPage = singleton({
         }),
 
         blocks: fields.blocks({
-            hero: {
-                label: '🖼️ Hero (Portada)',
-                schema: fields.object({
-                    content: heroPreview(),
-                }),
-            },
+            hero: heroBlock('public/images/pages/zonas'),
             trust_strip: {
                 label: '✅ Franja de Confianza (Trust Strip)',
                 schema: fields.object({
@@ -62,44 +53,9 @@ export const zonasPage = singleton({
                     ),
                 }),
             },
-            features: {
-                label: '⭐ Ventajas / Características',
-                schema: fields.object({
-                    content: featuresPreview(),
-                    variant: fields.select({
-                        label: 'Variante Visual',
-                        options: [
-                            { label: '▦ Cuadrícula con icono (grid)', value: 'grid' },
-                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
-                            { label: '☰ Lista horizontal (horizontal)', value: 'horizontal' },
-                            { label: '⊙ Solo iconos y título (icons_only)', value: 'icons_only' },
-                        ],
-                        defaultValue: 'grid',
-                    }),
-                }),
-            },
-            process: {
-                label: '👷 Método de Trabajo (Proceso)',
-                schema: fields.object({
-                    content: processPreview(),
-                    variant: fields.select({
-                        label: 'Variante Visual',
-                        options: [
-                            { label: '↔ Línea de tiempo alternada (timeline)', value: 'timeline' },
-                            { label: '▦ Tarjetas numeradas (cards)', value: 'cards' },
-                            { label: '☰ Lista compacta (compact)', value: 'compact' },
-                            { label: '◧ Título izquierda / Pasos derecha (split)', value: 'split' },
-                        ],
-                        defaultValue: 'timeline',
-                    }),
-                }),
-            },
-            stats: {
-                label: '📊 Números / Estadísticas',
-                schema: fields.object({
-                    content: statsPreview(),
-                }),
-            },
+            features: featuresBlock(),
+            process: processBlock(),
+            stats: statsBlock(),
             problem_solution: {
                 label: '⚡ Problema / Solución',
                 schema: fields.object({
@@ -308,12 +264,7 @@ export const zonasPage = singleton({
                     ),
                 }),
             },
-            cta: {
-                label: '🎯 Llamada a la Acción (CTA Final)',
-                schema: fields.object({
-                    content: ctaPreview(),
-                }),
-            },
+            cta: ctaBlock(),
         }, {
             label: 'Bloques de la Página',
             description: 'Se renderizan antes del listado automático de zonas.',

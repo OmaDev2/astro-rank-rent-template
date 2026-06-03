@@ -22,15 +22,17 @@ const serviceCheckboxFields = Object.fromEntries(
 );
 import { IconPicker } from '../../../components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
-import { heroPreview } from '../../../components/keystatic/HeroPreview';
-import { statsPreview } from '../../../components/keystatic/StatsPreview';
-import { ctaPreview } from '../../../components/keystatic/CtaPreview';
-import { featuresPreview } from '../../../components/keystatic/FeaturesPreview';
-import { testimonialsPreview } from '../../../components/keystatic/TestimonialsPreview';
-import { processPreview } from '../../../components/keystatic/ProcessPreview';
-import { aboutPreview } from '../../../components/keystatic/AboutPreview';
-import { pricingPreview } from '../../../components/keystatic/PricingPreview';
 import { SeoPreview } from '../../../components/keystatic/SeoPreview';
+import {
+    heroBlock,
+    featuresBlock,
+    statsBlock,
+    processBlock,
+    aboutBlock,
+    testimonialsBlock,
+    ctaBlock,
+    pricingBlock,
+} from '../nativeBlocks';
 
 export const homepage = singleton({
     label: '🏠 Página de Inicio',
@@ -51,26 +53,7 @@ export const homepage = singleton({
 
         // --- CONSTRUCTOR DE BLOQUES (UNIFICADO Y COLAPSABLE) ---
         blocks: fields.blocks({
-            hero: {
-                label: '🖼️ Hero — Cabecera Principal',
-                schema: fields.object({
-                    content: heroPreview(),
-                    backgroundImage: fields.image({
-                        label: 'Imagen de Fondo del Hero',
-                        directory: 'public/images/home',
-                        publicPath: '/images/home',
-                    }),
-                    backgroundImageAlt: fields.text({ label: 'Texto Alt de Fondo Hero (Opcional)', description: 'Deja vacío si es meramente decorativo.' }),
-                    ctaPrimaryLink: fields.text({
-                        label: '🔗 Enlace Botón Principal',
-                        defaultValue: '#presupuesto',
-                    }),
-                    ctaSecondaryLink: fields.text({
-                        label: '🔗 Enlace Botón Secundario (WhatsApp)',
-                        defaultValue: '',
-                    }),
-                })
-            },
+            hero: heroBlock('public/images/home'),
             services_grid: {
                 label: 'Grilla de Servicios (Links)',
                 schema: fields.object({
@@ -110,50 +93,10 @@ export const homepage = singleton({
                     )
                 })
             },
-            about: {
-                label: '🏢 Sobre Nosotros (Historia)',
-                schema: fields.object({
-                    content: aboutPreview(),
-                })
-            },
-            features: {
-                label: '💎 Por Qué Elegirnos (Ventajas)',
-                schema: fields.object({
-                    content: featuresPreview(),
-                    variant: fields.select({
-                        label: 'Variante Visual',
-                        options: [
-                            { label: '▦ Cuadrícula con icono (grid)', value: 'grid' },
-                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
-                            { label: '☰ Lista horizontal (horizontal)', value: 'horizontal' },
-                            { label: '⊙ Solo iconos y título (icons_only)', value: 'icons_only' },
-                        ],
-                        defaultValue: 'grid',
-                    }),
-                })
-            },
-            testimonials: {
-                label: '⭐ Opiniones de Clientes (Testimonios)',
-                schema: fields.object({
-                    content: testimonialsPreview(),
-                })
-            },
-            process: {
-                label: '👷 Método Paso a Paso (Proceso)',
-                schema: fields.object({
-                    content: processPreview(),
-                    variant: fields.select({
-                        label: 'Variante Visual',
-                        options: [
-                            { label: '↔ Línea de tiempo alternada (timeline)', value: 'timeline' },
-                            { label: '▦ Tarjetas numeradas (cards)', value: 'cards' },
-                            { label: '☰ Lista compacta (compact)', value: 'compact' },
-                            { label: '◧ Título izquierda / Pasos derecha (split)', value: 'split' },
-                        ],
-                        defaultValue: 'timeline',
-                    }),
-                })
-            },
+            about: aboutBlock('public/images/home'),
+            features: featuresBlock(),
+            testimonials: testimonialsBlock(),
+            process: processBlock(),
             faq: {
                 label: 'Preguntas Frecuentes (FAQ)',
                 schema: fields.object({
@@ -186,12 +129,7 @@ export const homepage = singleton({
                     subtitle: fields.text({ label: 'Descripción' }),
                 })
             },
-            cta: {
-                label: '🎯 Llamada a la Acción (CTA)',
-                schema: fields.object({
-                    content: ctaPreview(),
-                })
-            },
+            cta: ctaBlock(),
             contact: {
                 label: 'Sección de Contacto (SEO)',
                 schema: fields.object({
@@ -267,18 +205,8 @@ export const homepage = singleton({
                     }),
                 })
             },
-            pricing: {
-                label: '💰 Tabla de Precios (Planes)',
-                schema: fields.object({
-                    content: pricingPreview(),
-                })
-            },
-            stats: {
-                label: '📊 Contador de Estadísticas',
-                schema: fields.object({
-                    content: statsPreview(),
-                })
-            },
+            pricing: pricingBlock(),
+            stats: statsBlock(),
             logos: {
                 label: 'Logos de Confianza / Partners',
                 schema: fields.object({
