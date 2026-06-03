@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import fs from 'node:fs';
+import { execSync } from 'node:child_process';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
@@ -29,6 +30,39 @@ function getSiteUrl() {
 }
 
 const siteUrl = getSiteUrl();
+
+function getLastmod(filePath) {
+  try {
+    const result = execSync(
+      `git log -1 --format="%ci" -- "${filePath}"`,
+      { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'ignore'] }
+    ).trim();
+    if (!result) return null;
+    return new Date(result).toISOString().split('T')[0];
+  } catch {
+    return null;
+  }
+}
+
+function resolveContentFile(url, base) {
+  const path = url.replace(base, '').replace(/^\/|\/$/g, '');
+  if (path === '' || path === '/') return 'src/content/pages/home.mdx';
+  const serviceMatch = path.match(/^servicios\/([^/]+)/);
+  if (serviceMatch) return `src/content/services/${serviceMatch[1]}.yaml`;
+  if (path === 'servicios') return 'src/content/pages/servicios.mdx';
+  const zonaMatch = path.match(/^zona\/([^/]+)/);
+  if (zonaMatch) return `src/content/locations/${zonaMatch[1]}.yaml`;
+  if (path === 'zonas') return 'src/content/pages/zonas.mdx';
+  const blogMatch = path.match(/^blog\/([^/]+)/);
+  if (blogMatch) {
+    const mdx = `src/content/blog/${blogMatch[1]}.mdx`;
+    return fs.existsSync(mdx) ? mdx : `src/content/blog/${blogMatch[1]}.md`;
+  }
+  if (path === 'blog') return 'src/content/pages/home.mdx';
+  if (path === 'nosotros') return 'src/content/about/global.yaml';
+  if (path === 'contacto') return 'src/content/business/global.yaml';
+  return 'src/content/business/global.yaml';
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -61,7 +95,8 @@ export default defineConfig({
         !page.includes('/api') &&
         !page.includes('/generar'),
       serialize(item) {
-        const lastmod = new Date().toISOString().split('T')[0];
+        const contentFile = resolveContentFile(item.url, siteUrl);
+        const lastmod = getLastmod(contentFile) || new Date().toISOString().split('T')[0];
         // Home — máxima prioridad
         if (item.url === siteUrl + '/' || item.url === siteUrl) {
           return { ...item, changefreq: 'weekly', priority: 1.0, lastmod };
