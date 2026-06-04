@@ -15,7 +15,8 @@
         "export": "node scripts/utils/export_client.js",
         "images:optimize": "node scripts/optimize-images.mjs",
         "init-niche": "node scripts/init-niche.mjs",
-        "content-wizard": "node scripts/content-wizard.mjs"
+        "content-wizard": "node scripts/content-wizard.mjs",
+        "strategy-wizard": "node scripts/strategy-wizard.mjs"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.0.3",

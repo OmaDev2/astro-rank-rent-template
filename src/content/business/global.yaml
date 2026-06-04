@@ -1,22 +1,9 @@
 _spintax: ''
-siteName: ''
-niche: ''
+siteName: test
 businessType: LocalBusiness
-siteUrl: ''
 ctaText: Pedir Presupuesto
-phone: ''
-whatsapp: ''
-email: ''
-city: ''
-coordinates:
-  lat: ''
-  lng: ''
-schedule: ''
-nif: ''
-ownerName: ''
+coordinates: {}
 seo: '{"title":"","description":""}'
-slogan: ''
-foundingDate: ''
 areaServed: []
 serviceRadius: 0
 priceRange: €€

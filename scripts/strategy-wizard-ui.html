@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategy Wizard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#273548;--border:#334155;
+  --text:#e2e8f0;--muted:#94a3b8;--blue:#3b82f6;--blue-dark:#2563eb;
+  --green:#10b981;--yellow:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+  --radius:10px;--gap:16px;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+button{cursor:pointer;border:none;font-size:14px;font-family:inherit}
+input,textarea,select{font-family:inherit;font-size:14px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 10px;width:100%;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--blue)}
+textarea{resize:vertical;min-height:80px}
+label{font-size:13px;color:var(--muted);margin-bottom:4px;display:block}
+
+/* Layout */
+.app{display:flex;flex-direction:column;min-height:100vh;max-width:1000px;margin:0 auto;padding:0 16px}
+header{padding:20px 0 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{font-size:17px;font-weight:700;color:var(--text)}
+.logo span{color:var(--blue)}
+
+/* Steps nav */
+.steps{display:flex;gap:6px;align-items:center}
+.step-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:600;transition:all .2s}
+.step-btn.active{border-color:var(--blue);background:var(--blue);color:#fff}
+.step-btn.done{border-color:var(--green);background:var(--green);color:#fff}
+.step-btn.clickable{cursor:pointer}
+.step-label{font-size:13px;color:var(--muted)}
+
+/* Main */
+main{flex:1;padding:24px 0}
+.step-panel{display:none}.step-panel.active{display:block}
+h2{font-size:20px;font-weight:700;margin-bottom:6px}
+.step-desc{color:var(--muted);margin-bottom:24px;font-size:14px}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card+.card{margin-top:12px}
+.card-title{font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* Info field */
+.info-field{background:var(--surface2);border-radius:6px;padding:10px 12px}
+.info-label{font-size:12px;color:var(--muted);margin-bottom:2px}
+.info-value{font-size:14px;color:var(--text);word-break:break-all}
+.info-value.empty{color:var(--border);font-style:italic}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:7px;font-weight:600;font-size:14px;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue-dark)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}.btn-secondary:hover{border-color:var(--blue);color:var(--blue)}
+.btn-success{background:var(--green);color:#fff}
+.btn-danger{background:var(--red);color:#fff}
+.btn-sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-green{background:#064e3b;color:#6ee7b7}
+.badge-yellow{background:#451a03;color:#fcd34d}
+.badge-gray{background:#1e293b;color:#94a3b8}
+.badge-blue{background:#1e3a5f;color:#93c5fd}
+.badge-red{background:#450a0a;color:#fca5a5}
+.badge-purple{background:#2e1065;color:#c4b5fd}
+
+/* Tags */
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:13px}
+.tag-remove{cursor:pointer;color:var(--muted);font-size:16px;line-height:1}.tag-remove:hover{color:var(--red)}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.tab-btn{padding:8px 16px;background:transparent;color:var(--muted);border-radius:6px 6px 0 0;font-size:14px;font-weight:500;border-bottom:2px solid transparent;transition:all .2s}
+.tab-btn.active{color:var(--text);border-bottom-color:var(--blue)}
+.tab-btn:hover{color:var(--text)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Table */
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+td{padding:8px 12px;border-top:1px solid var(--border);vertical-align:middle}
+tr:hover td{background:var(--surface2)}
+
+/* Keyword type colors */
+td .kw-type{display:inline-block}
+
+/* Architecture tree */
+.arch-group{margin-bottom:16px}
+.arch-group-title{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.arch-page{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-radius:6px;margin-bottom:6px}
+.arch-page-title{flex:1;font-size:13px}
+.arch-page-kw{color:var(--muted);font-size:12px}
+
+/* Generation log */
+.gen-log{background:#0a0f1a;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;max-height:120px;overflow-y:auto;color:#64748b}
+.gen-log .log-line{margin-bottom:2px}
+.gen-log .log-line.done{color:var(--green)}
+.gen-log .log-line.error{color:var(--red)}
+
+/* Preview card */
+.preview-box{background:var(--surface2);border-radius:8px;padding:16px;margin-top:12px}
+.preview-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.preview-desc{font-size:13px;color:var(--muted);margin-bottom:12px}
+.preview-features{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Page gen item */
+.page-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.page-item-header{display:flex;align-items:center;gap:10px;margin-bottom:0}
+.page-item.expanded .page-item-header{margin-bottom:12px}
+.page-item-title{flex:1;font-size:14px;font-weight:600}
+.page-item-status{font-size:12px}
+
+/* Footer nav */
+footer{padding:16px 0 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+/* Spinner */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+/* Drop zone */
+.drop-zone{border:2px dashed var(--border);border-radius:8px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;color:var(--muted)}
+.drop-zone.drag-over{border-color:var(--blue);background:rgba(59,130,246,.05)}
+.drop-zone:hover{border-color:var(--blue);color:var(--text)}
+
+/* Summary */
+.file-list{list-style:none}
+.file-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.file-item:last-child{border:none}
+.file-icon{font-size:16px}
+
+/* Toggle */
+.toggle-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px}
+.toggle-label input[type=checkbox]{width:auto;accent-color:var(--blue)}
+
+/* Alerts */
+.alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px}
+.alert-info{background:#1e3a5f;color:#93c5fd;border:1px solid #2563eb}
+.alert-warn{background:#451a03;color:#fcd34d;border:1px solid #f59e0b}
+.alert-error{background:#450a0a;color:#fca5a5;border:1px solid var(--red)}
+.alert-success{background:#064e3b;color:#6ee7b7;border:1px solid var(--green)}
+
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}
+.flex{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.spacer{flex:1}
+.text-muted{color:var(--muted)}
+.text-sm{font-size:13px}
+.text-center{text-align:center}
+.w100{width:100%}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <div class="logo">Strategy <span>Wizard</span></div>
+  <div class="steps" id="stepsNav"></div>
+  <div class="step-label" id="stepLabel">Paso 1 de 6</div>
+</header>
+
+<main id="main">
+
+<!-- PASO 1 — Contexto del negocio -->
+<div class="step-panel active" id="step-1">
+  <h2>Contexto del negocio</h2>
+  <p class="step-desc">Datos actuales de <code>business/global.yaml</code>. Edita en Keystatic si necesitas cambiarlos.</p>
+  <div id="businessGrid" class="grid2">
+    <div class="info-field"><div class="info-label">Cargando...</div></div>
+  </div>
+  <div class="mt16 btn-group">
+    <a class="btn btn-secondary" href="/_keystatic" target="_blank">Editar en Keystatic ↗</a>
+  </div>
+</div>
+
+<!-- PASO 2 — Avatar -->
+<div class="step-panel" id="step-2">
+  <h2>Avatar del cliente ideal</h2>
+  <p class="step-desc">Define a quién le hablas para que el copy generado use su vocabulario y responda a sus miedos.</p>
+  <div id="avatarContent"></div>
+</div>
+
+<!-- PASO 3 — Keywords -->
+<div class="step-panel" id="step-3">
+  <h2>Keywords</h2>
+  <p class="step-desc">Reúne las keywords de tu cliente. Genera con IA, importa un CSV o añádelas manualmente.</p>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('kw','ai')">Generar con IA</button>
+    <button class="tab-btn" onclick="switchTab('kw','csv')">Importar CSV</button>
+    <button class="tab-btn" onclick="switchTab('kw','manual')">Manual</button>
+  </div>
+  <div class="tab-content active" id="kw-ai">
+    <div class="btn-group">
+      <button class="btn btn-primary" id="btnGenKw" onclick="generateKeywords()">✦ Generar 35+ keywords</button>
+    </div>
+  </div>
+  <div class="tab-content" id="kw-csv">
+    <p class="text-sm text-muted" style="margin-bottom:12px">Acepta exports de Google Keyword Planner, DataForSEO, Ahrefs o Semrush. Necesita columnas: <em>keyword</em> y (opcional) <em>volume/avg</em>.</p>
+    <div class="drop-zone" id="csvDrop" onclick="document.getElementById('csvFile').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleCsvDrop(event)">
+      <div>📂 Arrastra el CSV aquí o haz clic para seleccionar</div>
+      <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="handleCsvFile(this.files[0])">
+    </div>
+    <div id="csvPreview" style="margin-top:12px"></div>
+  </div>
+  <div class="tab-content" id="kw-manual">
+    <div class="flex" style="margin-bottom:12px">
+      <input type="text" id="manualKw" placeholder="fontanero urgente barcelona" style="flex:1" onkeydown="if(event.key==='Enter')addManualKeyword()">
+      <select id="manualType" style="width:150px">
+        <option value="transaccional">Transaccional</option>
+        <option value="consideracion">Consideración</option>
+        <option value="informativa">Informativa</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="addManualKeyword()">+ Añadir</button>
+    </div>
+  </div>
+  <div id="kwTable" style="margin-top:20px"></div>
+</div>
+
+<!-- PASO 4 — Arquitectura -->
+<div class="step-panel" id="step-4">
+  <h2>Arquitectura web</h2>
+  <p class="step-desc">Agrupa las keywords en páginas y define la estructura del sitio.</p>
+  <div class="btn-group" style="margin-bottom:16px">
+    <button class="btn btn-primary" id="btnGenArch" onclick="generateArchitecture()">✦ Generar arquitectura</button>
+    <button class="btn btn-secondary btn-sm" onclick="showAddPageModal()">+ Añadir página manualmente</button>
+  </div>
+  <div id="archContent"></div>
+  <!-- Add page form -->
+  <div id="addPageForm" style="display:none" class="card mt16">
+    <div class="card-title">Añadir página manualmente</div>
+    <div class="grid2" style="margin-bottom:12px">
+      <div><label>Keyword</label><input type="text" id="mpKeyword" placeholder="fontanero urgente"></div>
+      <div><label>Ciudad</label><input type="text" id="mpCity" placeholder="Barcelona"></div>
+    </div>
+    <div class="grid2" style="margin-bottom:12px">
+      <div>
+        <label>Tipo</label>
+        <select id="mpType"><option value="service">Servicio</option><option value="location">Zona</option></select>
+      </div>
+      <div><label>Prioridad</label>
+        <select id="mpPriority"><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary btn-sm" onclick="addManualPage()">Añadir página</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('addPageForm').style.display='none'">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASO 5 — Generación -->
+<div class="step-panel" id="step-5">
+  <h2>Generación de contenido</h2>
+  <p class="step-desc">Genera el MDX de cada página con Claude. Puedes generar todas en secuencia o una a una.</p>
+  <div class="flex" style="margin-bottom:16px">
+    <button class="btn btn-primary" id="btnGenAll" onclick="generateAll()">▶ Generar todas</button>
+    <label class="toggle-label">
+      <input type="checkbox" id="analyzeSerp">
+      Analizar competidores (más lento)
+    </label>
+    <span class="spacer"></span>
+    <span class="text-sm text-muted" id="genProgress"></span>
+  </div>
+  <div id="pagesList"></div>
+</div>
+
+<!-- PASO 6 — Resumen -->
+<div class="step-panel" id="step-6">
+  <h2>¡Listo! 🎉</h2>
+  <p class="step-desc">Resumen de lo generado y próximos pasos.</p>
+  <div class="grid2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">Archivos creados</div>
+      <ul class="file-list" id="fileList"></ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Próximos pasos</div>
+      <div class="text-sm" style="line-height:2">
+        <div>1. <code>npm run dev</code> — ver el sitio</div>
+        <div>2. Abrir Keystatic para revisar el contenido</div>
+        <div>3. <code>npm run check:site</code> antes del deploy</div>
+        <div>4. <code>npm run build</code> para producción</div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="goToStep(3)">+ Generar más páginas</button>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <button class="btn btn-secondary" id="btnPrev" onclick="prevStep()">← Anterior</button>
+  <div id="footerInfo" class="text-sm text-muted"></div>
+  <button class="btn btn-primary" id="btnNext" onclick="nextStep()">Siguiente →</button>
+</footer>
+
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const state = {
+  step: 1,
+  business: null,
+  avatar: null,
+  keywords: [],
+  pages: [],
+  generatedFiles: [],
+  existingPages: { services: [], locations: [] },
+};
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+async function init() {
+  renderStepNav();
+  renderFooter();
+  await loadBusiness();
+  await loadAvatar();
+  await loadExistingPages();
+}
+
+async function loadBusiness() {
+  try {
+    const r = await fetch('/api/business');
+    state.business = await r.json();
+    renderBusinessStep();
+  } catch(e) { console.error(e); }
+}
+
+async function loadAvatar() {
+  try {
+    const r = await fetch('/api/avatar');
+    state.avatar = await r.json();
+    renderAvatarStep();
+  } catch(e) {}
+}
+
+async function loadExistingPages() {
+  try {
+    const r = await fetch('/api/existing-pages');
+    state.existingPages = await r.json();
+  } catch(e) {}
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function renderStepNav() {
+  const nav = document.getElementById('stepsNav');
+  const labels = ['Contexto','Avatar','Keywords','Arquitectura','Generación','Resumen'];
+  nav.innerHTML = labels.map((l,i) => {
+    const n = i+1;
+    const cls = n < state.step ? 'done' : n === state.step ? 'active' : '';
+    const click = n < state.step ? `onclick="goToStep(${n})"` : '';
+    const title = `Paso ${n}: ${l}`;
+    return `<button class="step-btn ${cls} ${n<state.step?'clickable':''}" ${click} title="${title}">${n < state.step ? '✓' : n}</button>`;
+  }).join('');
+  document.getElementById('stepLabel').textContent = `Paso ${state.step} de 6`;
+}
+
+function renderFooter() {
+  document.getElementById('btnPrev').disabled = state.step === 1;
+  document.getElementById('btnNext').textContent = state.step === 6 ? 'Finalizar' : 'Siguiente →';
+  document.getElementById('btnNext').disabled = false;
+  document.getElementById('footerInfo').textContent = '';
+
+  if (state.step === 3) {
+    const sel = state.keywords.filter(k=>k.selected).length;
+    document.getElementById('footerInfo').textContent = `${state.keywords.length} keywords · ${sel} seleccionadas`;
+  }
+  if (state.step === 4) {
+    document.getElementById('footerInfo').textContent = `${state.pages.length} páginas planificadas`;
+  }
+  if (state.step === 5) {
+    const saved = state.generatedFiles.length;
+    document.getElementById('footerInfo').textContent = saved ? `${saved} archivos guardados` : '';
+  }
+}
+
+function canGoNext() {
+  if (state.step === 3 && state.keywords.filter(k=>k.selected).length === 0) {
+    alert('Selecciona al menos una keyword antes de continuar.');
+    return false;
+  }
+  if (state.step === 4 && state.pages.length === 0) {
+    alert('Añade al menos una página antes de continuar.');
+    return false;
+  }
+  if (state.step === 5 && state.generatedFiles.length === 0) {
+    if (!confirm('No has guardado ningún archivo todavía. ¿Continuar de todas formas?')) return false;
+  }
+  return true;
+}
+
+function goToStep(n) {
+  document.querySelector(`#step-${state.step}`).classList.remove('active');
+  state.step = n;
+  document.querySelector(`#step-${state.step}`).classList.add('active');
+  renderStepNav();
+  renderFooter();
+  if (n === 5) renderPagesList();
+  if (n === 6) renderSummary();
+  window.scrollTo(0,0);
+}
+
+function nextStep() { if (state.step < 6 && canGoNext()) goToStep(state.step + 1); }
+function prevStep() { if (state.step > 1) goToStep(state.step - 1); }
+
+// ── Step 1: Business ──────────────────────────────────────────────────────────
+function renderBusinessStep() {
+  const b = state.business || {};
+  const fields = [
+    ['Nombre del negocio', b.siteName],
+    ['Servicio / Nicho', b.niche],
+    ['Ciudad principal', b.city],
+    ['Teléfono', b.phone],
+    ['Email', b.email],
+    ['URL del sitio', b.siteUrl],
+    ['Slogan', b.slogan],
+    ['Rango de precio', b.priceRange],
+  ];
+  document.getElementById('businessGrid').innerHTML = fields.map(([label, val]) => `
+    <div class="info-field">
+      <div class="info-label">${label}</div>
+      <div class="info-value ${!val?'empty':''}">${val || 'Sin configurar'}</div>
+    </div>
+  `).join('');
+
+  if (!b.siteName || !b.niche || !b.city) {
+    document.getElementById('businessGrid').insertAdjacentHTML('afterend',
+      '<div class="alert alert-warn mt16">⚠ Falta siteName, niche o city en business/global.yaml. Configúralos para mejores resultados.</div>'
+    );
+  }
+}
+
+// ── Step 2: Avatar ────────────────────────────────────────────────────────────
+function renderAvatarStep() {
+  const el = document.getElementById('avatarContent');
+  if (!state.avatar) {
+    el.innerHTML = `
+      <div class="card text-center" style="padding:40px">
+        <p class="text-muted" style="margin-bottom:20px">No existe avatar.yaml todavía.</p>
+        <button class="btn btn-primary" id="btnGenAvatar" onclick="generateAvatarUI()">
+          ✦ Generar Avatar con IA
+        </button>
+      </div>`;
+  } else {
+    renderAvatarForm(state.avatar);
+  }
+}
+
+function renderAvatarForm(avatar) {
+  const el = document.getElementById('avatarContent');
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-title">Perfil del cliente ideal</div>
+      <div style="margin-bottom:12px">
+        <label>Descripción (summary)</label>
+        <textarea id="avSummary" rows="4">${esc(avatar.summary||'')}</textarea>
+      </div>
+      <div style="margin-bottom:12px">
+        <label>Demografía</label>
+        <input type="text" id="avDemo" value="${esc(avatar.demographics||'')}">
+      </div>
+      <div class="grid2">
+        ${renderTagList('avDesires','Deseos',avatar.desires||[])}
+        ${renderTagList('avFears','Miedos / Objeciones',avatar.fears||[])}
+      </div>
+      <div class="grid2 mt16">
+        ${renderTagList('avVocab','Cómo busca en Google',avatar.searchVocabulary||[])}
+        ${renderTagList('avDecision','Factores de decisión',avatar.decisionFactors||[])}
+      </div>
+      <div class="btn-group mt16">
+        <button class="btn btn-success" onclick="saveAvatarUI()">💾 Guardar avatar</button>
+        <button class="btn btn-secondary btn-sm" onclick="generateAvatarUI()">↺ Regenerar</button>
+      </div>
+    </div>`;
+}
+
+function renderTagList(id, label, items) {
+  const tags = items.map((item,i) =>
+    `<span class="tag">${esc(item)}<span class="tag-remove" onclick="removeTag('${id}',${i})">×</span></span>`
+  ).join('');
+  return `<div>
+    <label>${label}</label>
+    <div id="${id}-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;min-height:28px">${tags}</div>
+    <div class="flex">
+      <input type="text" id="${id}-input" placeholder="Añadir..." onkeydown="if(event.key==='Enter'){addTag('${id}');event.preventDefault()}">
+      <button class="btn btn-secondary btn-sm" onclick="addTag('${id}')">+</button>
+    </div>
+  </div>`;
+}
+
+function getTagItems(id) {
+  const container = document.getElementById(`${id}-tags`);
+  return Array.from(container.querySelectorAll('.tag')).map(t => t.childNodes[0].textContent.trim());
+}
+
+function removeTag(id, idx) {
+  const items = getTagItems(id);
+  items.splice(idx,1);
+  const container = document.getElementById(`${id}-tags`);
+  container.innerHTML = items.map((item,i) =>
+    `<span class="tag">${esc(item)}<span class="tag-remove" onclick="removeTag('${id}',${i})">×</span></span>`
+  ).join('');
+}
+
+function addTag(id) {
+  const input = document.getElementById(`${id}-input`);
+  const val = input.value.trim();
+  if (!val) return;
+  const items = getTagItems(id);
+  items.push(val);
+  const container = document.getElementById(`${id}-tags`);
+  container.innerHTML = items.map((item,i) =>
+    `<span class="tag">${esc(item)}<span class="tag-remove" onclick="removeTag('${id}',${i})">×</span></span>`
+  ).join('');
+  input.value = '';
+}
+
+async function generateAvatarUI() {
+  const btn = document.getElementById('btnGenAvatar') || document.querySelector('[onclick="generateAvatarUI()"]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generando...'; }
+  try {
+    const r = await fetch('/api/avatar/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+    const data = await r.json();
+    if (data.error) { alert('Error: ' + data.error); return; }
+    state.avatar = data;
+    renderAvatarForm(data);
+  } catch(e) { alert('Error: ' + e.message); }
+  finally { if (btn) { btn.disabled=false; btn.innerHTML='✦ Regenerar'; } }
+}
+
+async function saveAvatarUI() {
+  const avatar = {
+    summary: document.getElementById('avSummary')?.value || '',
+    demographics: document.getElementById('avDemo')?.value || '',
+    desires: getTagItems('avDesires'),
+    fears: getTagItems('avFears'),
+    searchVocabulary: getTagItems('avVocab'),
+    decisionFactors: getTagItems('avDecision'),
+  };
+  try {
+    const r = await fetch('/api/save-avatar', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(avatar) });
+    const data = await r.json();
+    if (data.ok) {
+      state.avatar = avatar;
+      showToast('Avatar guardado ✓');
+    }
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+// ── Step 3: Keywords ──────────────────────────────────────────────────────────
+function switchTab(group, tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`${group}-${tab}`).classList.add('active');
+}
+
+async function generateKeywords() {
+  const btn = document.getElementById('btnGenKw');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generando...';
+  try {
+    const r = await fetch('/api/keywords/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ avatar: state.avatar })
+    });
+    const data = await r.json();
+    if (data.error) { alert(data.error); return; }
+    mergeKeywords(data.keywords.map(k => ({ ...k, selected: k.type === 'transaccional', source:'ai' })));
+    renderKeywordTable();
+  } catch(e) { alert(e.message); }
+  finally { btn.disabled=false; btn.innerHTML='✦ Generar más keywords'; }
+}
+
+function mergeKeywords(newKws) {
+  const existing = new Set(state.keywords.map(k => k.keyword.toLowerCase()));
+  for (const k of newKws) {
+    if (!existing.has(k.keyword.toLowerCase())) {
+      state.keywords.push(k);
+      existing.add(k.keyword.toLowerCase());
+    }
+  }
+  renderFooter();
+}
+
+function addManualKeyword() {
+  const kw = document.getElementById('manualKw').value.trim();
+  const type = document.getElementById('manualType').value;
+  if (!kw) return;
+  mergeKeywords([{ keyword: kw, type, notes:'', selected: type==='transaccional', source:'manual' }]);
+  document.getElementById('manualKw').value = '';
+  renderKeywordTable();
+}
+
+function renderKeywordTable() {
+  const container = document.getElementById('kwTable');
+  if (!state.keywords.length) { container.innerHTML = ''; return; }
+
+  const allSel = state.keywords.filter(k=>k.type==='transaccional').every(k=>k.selected);
+  const typeBadge = (t) => {
+    if (t==='transaccional') return '<span class="badge badge-green">transaccional</span>';
+    if (t==='consideracion') return '<span class="badge badge-yellow">consideración</span>';
+    if (t==='importada') return '<span class="badge badge-blue">importada</span>';
+    return '<span class="badge badge-gray">informativa</span>';
+  };
+
+  container.innerHTML = `
+    <div class="flex" style="margin-bottom:8px">
+      <label class="toggle-label">
+        <input type="checkbox" ${allSel?'checked':''} onchange="selectAllTransactional(this.checked)">
+        Seleccionar todas las transaccionales
+      </label>
+      <span class="spacer"></span>
+      <button class="btn btn-secondary btn-sm" onclick="state.keywords=[];renderKeywordTable()">Limpiar todo</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th><input type="checkbox" onchange="selectAll(this.checked)"></th>
+          <th>Keyword</th><th>Tipo</th><th>Volumen</th><th>Notas</th><th></th>
+        </tr></thead>
+        <tbody>
+          ${state.keywords.map((k,i) => `<tr>
+            <td><input type="checkbox" ${k.selected?'checked':''} onchange="toggleKw(${i},this.checked)"></td>
+            <td><strong>${esc(k.keyword)}</strong></td>
+            <td>${typeBadge(k.type)}</td>
+            <td>${k.volume ? k.volume.toLocaleString() : '<span class="text-muted">—</span>'}</td>
+            <td><span class="text-muted text-sm">${esc(k.notes||'')}</span></td>
+            <td><button class="btn btn-secondary btn-sm" onclick="removeKw(${i})">✕</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  renderFooter();
+}
+
+function toggleKw(i, val) { state.keywords[i].selected = val; renderFooter(); }
+function removeKw(i) { state.keywords.splice(i,1); renderKeywordTable(); }
+function selectAll(val) { state.keywords.forEach(k=>k.selected=val); renderKeywordTable(); }
+function selectAllTransactional(val) {
+  state.keywords.forEach(k=>{ if(k.type==='transaccional'||k.type==='importada') k.selected=val; });
+  renderKeywordTable();
+}
+
+async function handleCsvFile(file) {
+  if (!file) return;
+  const text = await file.text();
+  const preview = text.split('\n').slice(0,6).join('\n');
+  document.getElementById('csvPreview').innerHTML = `
+    <div class="card">
+      <pre style="font-size:11px;overflow:auto;max-height:100px;color:var(--muted)">${esc(preview)}</pre>
+      <button class="btn btn-primary btn-sm mt8" onclick="importCsv()">Importar este CSV</button>
+    </div>`;
+  window._csvContent = text;
+}
+
+async function handleCsvDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) handleCsvFile(file);
+}
+
+async function importCsv() {
+  if (!window._csvContent) return;
+  try {
+    const r = await fetch('/api/keywords/import-csv', { method:'POST', body: window._csvContent });
+    const data = await r.json();
+    if (data.error) { alert(data.error); return; }
+    mergeKeywords(data.keywords.map(k=>({...k,selected:true})));
+    renderKeywordTable();
+    showToast(`${data.keywords.length} keywords importadas ✓`);
+  } catch(e) { alert(e.message); }
+}
+
+// ── Step 4: Architecture ──────────────────────────────────────────────────────
+async function generateArchitecture() {
+  const btn = document.getElementById('btnGenArch');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Analizando...';
+  try {
+    const selected = state.keywords.filter(k=>k.selected);
+    const r = await fetch('/api/architecture/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ keywords: selected, avatar: state.avatar })
+    });
+    const data = await r.json();
+    if (data.error) { alert(data.error); return; }
+    state.pages = (data.pages||[]).map(p => ({ ...p, status:'pending', mdx:null }));
+    renderArchitecture();
+  } catch(e) { alert(e.message); }
+  finally { btn.disabled=false; btn.innerHTML='↺ Regenerar arquitectura'; renderFooter(); }
+}
+
+function renderArchitecture() {
+  const el = document.getElementById('archContent');
+  if (!state.pages.length) { el.innerHTML = '<p class="text-muted">Sin páginas generadas todavía.</p>'; return; }
+  const services = state.pages.filter(p=>p.type==='service');
+  const locations = state.pages.filter(p=>p.type==='location');
+
+  const renderGroup = (title, icon, pages) => {
+    if (!pages.length) return '';
+    return `<div class="arch-group">
+      <div class="arch-group-title">${icon} ${title} (${pages.length})</div>
+      ${pages.map((p,i) => {
+        const idx = state.pages.indexOf(p);
+        const existing = state.existingPages[p.type==='service'?'services':'locations'].includes(p.slug);
+        const priCls = p.priority==='alta'?'badge-green':p.priority==='media'?'badge-yellow':'badge-gray';
+        return `<div class="arch-page">
+          <span class="badge ${priCls}">${p.priority}</span>
+          <div style="flex:1">
+            <div class="arch-page-title">${esc(p.title||p.keyword)}</div>
+            <div class="arch-page-kw">${esc(p.slug)} ${existing?'<span class="badge badge-gray">ya existe</span>':''}</div>
+          </div>
+          <span class="badge badge-blue">${p.type}</span>
+          <button class="btn btn-secondary btn-sm" onclick="removePage(${idx})">✕</button>
+        </div>`;
+      }).join('')}
+    </div>`;
+  };
+
+  el.innerHTML = renderGroup('Servicios','📁',services) + renderGroup('Zonas','📍',locations);
+  renderFooter();
+}
+
+function removePage(i) { state.pages.splice(i,1); renderArchitecture(); }
+function showAddPageModal() { document.getElementById('addPageForm').style.display='block'; }
+
+function addManualPage() {
+  const kw = document.getElementById('mpKeyword').value.trim();
+  const city = document.getElementById('mpCity').value.trim() || state.business?.city || '';
+  const type = document.getElementById('mpType').value;
+  const priority = document.getElementById('mpPriority').value;
+  if (!kw) { alert('Introduce una keyword'); return; }
+  const slug = toSlug(`${kw}-${city}`);
+  state.pages.push({ keyword:kw, type, slug, title:`${capitalize(kw)} en ${city}`, priority, status:'pending', mdx:null, city });
+  document.getElementById('addPageForm').style.display='none';
+  renderArchitecture();
+}
+
+// ── Step 5: Generation ────────────────────────────────────────────────────────
+function renderPagesList() {
+  const el = document.getElementById('pagesList');
+  if (!state.pages.length) { el.innerHTML='<p class="text-muted">Sin páginas planificadas.</p>'; return; }
+  el.innerHTML = state.pages.map((p,i) => `
+    <div class="page-item" id="pitem-${i}">
+      <div class="page-item-header">
+        <div class="page-item-title">${esc(p.title||p.keyword)}</div>
+        <span class="badge badge-blue text-sm">${p.type}</span>
+        <span class="page-item-status" id="pstatus-${i}">
+          ${statusBadge(p.status)}
+        </span>
+        <button class="btn btn-primary btn-sm" id="pbtn-${i}" onclick="generateSinglePage(${i})"
+          ${p.status==='saved'?'disabled':''}>
+          ${p.status==='saved'?'✓ Guardado':'▶ Generar'}
+        </button>
+      </div>
+      <div id="plog-${i}" style="display:none;margin-top:10px">
+        <div class="gen-log" id="plogbox-${i}"></div>
+        <div id="ppreview-${i}"></div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('genProgress').textContent = '';
+}
+
+function statusBadge(status) {
+  const map = {pending:'<span class="badge badge-gray">pendiente</span>',generating:'<span class="badge badge-blue">generando...</span>',done:'<span class="badge badge-yellow">listo</span>',saved:'<span class="badge badge-green">guardado</span>',error:'<span class="badge badge-red">error</span>'};
+  return map[status] || '';
+}
+
+async function generateAll() {
+  const btn = document.getElementById('btnGenAll');
+  btn.disabled=true;
+  const pending = state.pages.filter(p=>p.status!=='saved');
+  for (let i=0; i<state.pages.length; i++) {
+    if (state.pages[i].status==='saved') continue;
+    document.getElementById('genProgress').textContent = `${state.generatedFiles.length}/${pending.length} guardados`;
+    await generateSinglePage(i);
+  }
+  document.getElementById('genProgress').textContent = `${state.generatedFiles.length} archivos guardados`;
+  btn.disabled=false;
+}
+
+async function generateSinglePage(i) {
+  const page = state.pages[i];
+  const btn = document.getElementById(`pbtn-${i}`);
+  const logBox = document.getElementById(`plogbox-${i}`);
+  const plog = document.getElementById(`plog-${i}`);
+  const ppreview = document.getElementById(`ppreview-${i}`);
+
+  page.status='generating';
+  document.getElementById(`pstatus-${i}`).innerHTML = statusBadge('generating');
+  if (btn) btn.disabled=true;
+  plog.style.display='block';
+  logBox.innerHTML='';
+  ppreview.innerHTML='';
+
+  const analyzeSerp = document.getElementById('analyzeSerp')?.checked || false;
+  const city = page.city || state.business?.city || '';
+  const niche = page.keyword?.split(' ')[0] || state.business?.niche || '';
+
+  try {
+    const r = await fetch('/api/generate-page', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ keyword: page.keyword, city, type: page.type, niche, analyzeSerp })
+    });
+
+    const reader = r.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const events = buffer.split('\n\n');
+      buffer = events.pop();
+
+      for (const ev of events) {
+        if (!ev.trim()) continue;
+        const lines = ev.split('\n');
+        const eventName = lines.find(l=>l.startsWith('event:'))?.replace('event:','').trim();
+        const dataLine = lines.find(l=>l.startsWith('data:'))?.replace('data:','').trim();
+        if (!dataLine) continue;
+        try {
+          const data = JSON.parse(dataLine);
+          if (eventName === 'status') {
+            appendLog(logBox, data.message);
+          } else if (eventName === 'content') {
+            page.mdx = data.mdx;
+            page.slug = data.slug;
+            renderPagePreview(ppreview, data, i);
+          } else if (eventName === 'done') {
+            page.status = 'done';
+            document.getElementById(`pstatus-${i}`).innerHTML = statusBadge('done');
+            if (btn) { btn.disabled=false; btn.textContent='💾 Guardar'; btn.onclick=()=>saveSinglePage(i); }
+          } else if (eventName === 'error') {
+            throw new Error(data.message);
+          }
+        } catch {}
+      }
+    }
+
+  } catch(e) {
+    page.status='error';
+    document.getElementById(`pstatus-${i}`).innerHTML = statusBadge('error');
+    appendLog(logBox, '✗ Error: ' + e.message, 'error');
+    if (btn) { btn.disabled=false; btn.textContent='↺ Reintentar'; btn.onclick=()=>generateSinglePage(i); }
+  }
+}
+
+function appendLog(box, msg, cls='') {
+  const line = document.createElement('div');
+  line.className = `log-line ${cls}`;
+  line.textContent = '› ' + msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function renderPagePreview(container, data, i) {
+  container.innerHTML = `
+    <div class="preview-box">
+      <div class="text-sm text-muted" style="margin-bottom:4px">SEO: ${esc(data.seoTitle||'')}</div>
+      <div class="preview-title">${esc(data.h1||data.seoTitle||'')}</div>
+      <div class="preview-desc">${esc(data.seoDescription||'')}</div>
+      <div class="preview-features">
+        ${(data.features||[]).map(f=>`<span class="badge badge-blue">${esc(f)}</span>`).join('')}
+      </div>
+      <div class="text-sm text-muted mt8">
+        FAQ: ${data.faqSeoCount||0} SEO + ${data.faqGeoCount||0} GEO = ${(data.faqSeoCount||0)+(data.faqGeoCount||0)} preguntas
+      </div>
+    </div>`;
+}
+
+async function saveSinglePage(i) {
+  const page = state.pages[i];
+  if (!page.mdx) return;
+  const btn = document.getElementById(`pbtn-${i}`);
+  if (btn) { btn.disabled=true; btn.innerHTML='<span class="spinner"></span>'; }
+  try {
+    const r = await fetch('/api/save-page', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ slug: page.slug, mdx: page.mdx, type: page.type })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      page.status='saved';
+      document.getElementById(`pstatus-${i}`).innerHTML = statusBadge('saved');
+      if (btn) { btn.disabled=true; btn.textContent='✓ Guardado'; }
+      if (!state.generatedFiles.includes(data.path)) state.generatedFiles.push(data.path);
+      renderFooter();
+    }
+  } catch(e) {
+    alert('Error guardando: ' + e.message);
+    if (btn) { btn.disabled=false; btn.textContent='💾 Guardar'; }
+  }
+}
+
+// ── Step 6: Summary ───────────────────────────────────────────────────────────
+function renderSummary() {
+  const list = document.getElementById('fileList');
+  if (!state.generatedFiles.length) {
+    list.innerHTML = '<li class="file-item text-muted">No se guardaron archivos en esta sesión.</li>';
+    return;
+  }
+  list.innerHTML = state.generatedFiles.map(f => `
+    <li class="file-item">
+      <span class="file-icon">📄</span>
+      <code style="font-size:12px">${esc(f)}</code>
+    </li>`).join('');
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toSlug(str) {
+  return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ñ/g,'n')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className='alert alert-success';
+  t.style.cssText='position:fixed;bottom:20px;right:20px;z-index:9999;padding:10px 18px;border-radius:8px';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2500);
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
