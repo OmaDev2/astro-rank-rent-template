@@ -177,7 +177,7 @@ footer{padding:16px 0 20px;border-top:1px solid var(--border);display:flex;justi
     <div class="info-field"><div class="info-label">Cargando...</div></div>
   </div>
   <div class="mt16 btn-group">
-    <a class="btn btn-secondary" href="/_keystatic" target="_blank">Editar en Keystatic ↗</a>
+    <a class="btn btn-secondary" id="btnKeystatic" href="http://localhost:4321/keystatic" target="_blank">Editar en Keystatic ↗</a>
   </div>
 </div>
 
@@ -269,6 +269,7 @@ footer{padding:16px 0 20px;border-top:1px solid var(--border);display:flex;justi
     <span class="spacer"></span>
     <span class="text-sm text-muted" id="genProgress"></span>
   </div>
+  <div id="homeCard" style="margin-bottom:16px"></div>
   <div id="pagesList"></div>
 </div>
 
@@ -285,7 +286,7 @@ footer{padding:16px 0 20px;border-top:1px solid var(--border);display:flex;justi
       <div class="card-title">Próximos pasos</div>
       <div class="text-sm" style="line-height:2">
         <div>1. <code>npm run dev</code> — ver el sitio</div>
-        <div>2. Abrir Keystatic para revisar el contenido</div>
+        <div>2. Abrir <a id="btnKeystaticResumen" href="http://localhost:4321/keystatic" target="_blank" style="text-decoration: underline;">Keystatic</a> para revisar el contenido</div>
         <div>3. <code>npm run check:site</code> antes del deploy</div>
         <div>4. <code>npm run build</code> para producción</div>
       </div>
@@ -316,6 +317,15 @@ const state = {
   pages: [],
   generatedFiles: [],
   existingPages: { services: [], locations: [] },
+  home: {
+    status: 'unknown',
+    mdx: null,
+    seoTitle: null,
+    heroHeading: null,
+    servicesCount: 0,
+    locationsCount: 0,
+    faqCount: 0,
+  },
 };
 
 // ── Init ──────────────────────────────────────────────────────────────────────
@@ -325,6 +335,7 @@ async function init() {
   await loadBusiness();
   await loadAvatar();
   await loadExistingPages();
+  await loadHomeStatus();
 }
 
 async function loadBusiness() {
@@ -436,6 +447,15 @@ function renderBusinessStep() {
     document.getElementById('businessGrid').insertAdjacentHTML('afterend',
       '<div class="alert alert-warn mt16">⚠ Falta siteName, niche o city en business/global.yaml. Configúralos para mejores resultados.</div>'
     );
+  }
+
+  const keystaticLink = document.getElementById('btnKeystatic');
+  if (keystaticLink && b.keystaticUrl) {
+    keystaticLink.href = b.keystaticUrl;
+  }
+  const keystaticLinkResumen = document.getElementById('btnKeystaticResumen');
+  if (keystaticLinkResumen && b.keystaticUrl) {
+    keystaticLinkResumen.href = b.keystaticUrl;
   }
 }
 
@@ -747,6 +767,7 @@ function addManualPage() {
 
 // ── Step 5: Generation ────────────────────────────────────────────────────────
 function renderPagesList() {
+  renderHomeCard();
   const el = document.getElementById('pagesList');
   if (!state.pages.length) { el.innerHTML='<p class="text-muted">Sin páginas planificadas.</p>'; return; }
   el.innerHTML = state.pages.map((p,i) => `
@@ -939,6 +960,184 @@ function showToast(msg) {
   t.textContent=msg;
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),2500);
+}
+
+// ── Home (Step 5) ─────────────────────────────────────────────────────────────
+async function loadHomeStatus() {
+  try {
+    const r = await fetch('/api/home-status');
+    const data = await r.json();
+    state.home.status = data.status;
+    renderHomeCard();
+  } catch(e) {}
+}
+
+function renderHomeCard() {
+  const el = document.getElementById('homeCard');
+  if (!el) return;
+
+  const statusMap = {
+    unknown:      '<span class="badge badge-gray">Cargando...</span>',
+    missing:      '<span class="badge badge-red">Archivo no encontrado</span>',
+    placeholder:  '<span class="badge badge-yellow">⚠ Sin generar (placeholders)</span>',
+    'old-format': '<span class="badge badge-yellow">⚠ Formato antiguo</span>',
+    generated:    '<span class="badge badge-green">✓ Generada</span>',
+    ready:        '<span class="badge badge-green">Lista para guardar ✓</span>',
+    saved:        '<span class="badge badge-green">✓ Guardada</span>',
+  };
+
+  const needsGeneration = ['unknown', 'missing', 'placeholder', 'old-format', 'generated'].includes(state.home.status);
+  const isReady = state.home.status === 'ready';
+  const isSaved = state.home.status === 'saved';
+
+  const defaultKeyword = state.business ? `${state.business.niche || ''} ${state.business.city || ''}`.trim() : '';
+  const defaultCity = state.business?.city || '';
+
+  el.innerHTML = `
+    <div class="page-item">
+      <div class="page-item-header">
+        <div class="page-item-title">🏠 Home — Página principal</div>
+        <span class="badge badge-purple">home</span>
+        <span>${statusMap[state.home.status] || ''}</span>
+        ${needsGeneration ? `<button class="btn btn-primary btn-sm" id="homeBtnGenerate" onclick="generateHome()">✦ Generar home</button>` : ''}
+        ${isSaved ? `<button class="btn btn-secondary btn-sm" disabled>✓ Guardada</button>` : ''}
+      </div>
+      <div style="margin-top:10px">
+        <p class="text-sm text-muted" style="margin-bottom:10px">La más importante para SEO. Genera H1, intro, about, proceso, testimonios y FAQ del negocio.</p>
+        ${!isSaved ? `
+        <div class="grid2" style="margin-bottom:10px">
+          <div><label>Keyword principal</label><input type="text" id="home-keyword" value="${esc(defaultKeyword)}" placeholder="fontanero barcelona"></div>
+          <div><label>Ciudad</label><input type="text" id="home-city" value="${esc(defaultCity)}" placeholder="Barcelona"></div>
+        </div>
+        <label class="toggle-label" style="margin-bottom:10px">
+          <input type="checkbox" id="home-analyze-serp">
+          Analizar competidores (más lento)
+        </label>` : ''}
+        <div id="homeLog" style="display:none;margin-top:8px"><div class="gen-log" id="homeLogBox"></div></div>
+        ${isReady ? renderHomePreview() : ''}
+      </div>
+    </div>`;
+}
+
+function renderHomePreview() {
+  const h = state.home;
+  return `
+    <div class="preview-box" style="margin-top:12px">
+      <div class="text-sm text-muted">SEO title: ${esc(h.seoTitle || '')}</div>
+      <div class="preview-title">${esc(h.heroHeading || '')}</div>
+      <div class="text-sm text-muted mt8">
+        Servicios: ${h.servicesCount} · Zonas: ${h.locationsCount} · FAQ: ${h.faqCount} preguntas
+      </div>
+      <div class="btn-group mt16">
+        <button class="btn btn-secondary btn-sm" onclick="toggleHomeMdx()">Ver YAML ▼</button>
+        <button class="btn btn-success" onclick="saveHome()">💾 Guardar home.mdx</button>
+      </div>
+      <div id="homeMdxPreview" style="display:none;margin-top:8px">
+        <textarea style="font-family:monospace;font-size:11px;min-height:200px;width:100%" readonly>${esc(h.mdx || '')}</textarea>
+      </div>
+    </div>`;
+}
+
+function toggleHomeMdx() {
+  const el = document.getElementById('homeMdxPreview');
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function generateHome() {
+  const keyword = document.getElementById('home-keyword')?.value.trim()
+    || `${state.business?.niche || ''} ${state.business?.city || ''}`.trim();
+  const city = document.getElementById('home-city')?.value.trim() || state.business?.city || '';
+  const analyzeSerp = document.getElementById('home-analyze-serp')?.checked || false;
+
+  const services = state.pages
+    .filter(p => p.type === 'service' && p.status === 'saved')
+    .map(p => ({ slug: p.slug, title: p.title }));
+  const locations = state.pages
+    .filter(p => p.type === 'location' && p.status === 'saved')
+    .map(p => ({ slug: p.slug, name: p.keyword }));
+
+  const btn = document.getElementById('homeBtnGenerate');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generando...'; }
+
+  const logDiv = document.getElementById('homeLog');
+  const logBox = document.getElementById('homeLogBox');
+  if (logDiv) logDiv.style.display = 'block';
+  if (logBox) logBox.innerHTML = '';
+
+  try {
+    const r = await fetch('/api/generate-home', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keyword, city, niche: state.business?.niche || '', services, locations, analyzeSerp }),
+    });
+
+    const reader = r.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const events = buffer.split('\n\n');
+      buffer = events.pop();
+
+      for (const ev of events) {
+        if (!ev.trim()) continue;
+        const lines = ev.split('\n');
+        const eventName = lines.find(l => l.startsWith('event:'))?.replace('event:', '').trim();
+        const dataLine = lines.find(l => l.startsWith('data:'))?.replace('data:', '').trim();
+        if (!dataLine) continue;
+        try {
+          const data = JSON.parse(dataLine);
+          if (eventName === 'status') {
+            if (logBox) appendLog(logBox, data.message);
+          } else if (eventName === 'content') {
+            state.home.mdx = data.mdx;
+            state.home.seoTitle = data.seoTitle;
+            state.home.heroHeading = data.heroHeading;
+            state.home.servicesCount = data.servicesCount || 0;
+            state.home.locationsCount = data.locationsCount || 0;
+            state.home.faqCount = data.faqCount || 0;
+          } else if (eventName === 'done') {
+            state.home.status = 'ready';
+            renderHomeCard();
+          } else if (eventName === 'error') {
+            throw new Error(data.message);
+          }
+        } catch(parseErr) {}
+      }
+    }
+  } catch(e) {
+    if (logBox) appendLog(logBox, '✗ Error: ' + e.message, 'error');
+    if (btn) { btn.disabled = false; btn.textContent = '↺ Reintentar'; }
+  }
+}
+
+async function saveHome() {
+  if (!state.home.mdx) return;
+  try {
+    const r = await fetch('/api/save-page', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        slug: 'home',
+        mdx: state.home.mdx,
+        type: 'page',
+        customPath: 'src/content/pages/home.mdx',
+      }),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      state.home.status = 'saved';
+      renderHomeCard();
+      if (!state.generatedFiles.includes(data.path)) state.generatedFiles.push(data.path);
+      renderFooter();
+      showToast('home.mdx guardado ✓');
+    }
+  } catch(e) {
+    alert('Error guardando home.mdx: ' + e.message);
+  }
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
