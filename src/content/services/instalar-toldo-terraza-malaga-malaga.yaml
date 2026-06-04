@@ -1,0 +1,105 @@
+title: "Instalar Toldo Terraza Málaga | Toldos Málaga"
+icon: Wrench
+shortDesc: "Instalación de toldos en Málaga para terrazas, balcones y locales. Asesoramiento y montaje profesional."
+featured: true
+seo: '{"title":"Instalar Toldo Terraza Málaga | Toldos Málaga","description":"Instala tu toldo en Málaga con garantía y montaje profesional. Asesoramiento personalizado, modelos para terraza, balcón y fachada. Pide presupuesto sin compromiso."}'
+blocks:
+  - discriminant: hero
+    value:
+      heading: "Instala tu toldo en terraza"
+      headingHighlight: "Málaga"
+      subheading: "Recupera tu terraza este verano con una instalación profesional, rápida y con garantía. Te asesoramos sin complicarte con tecnicismos."
+      ctaPrimaryText: "Pide presupuesto gratis"
+      ctaPrimaryLink: "#contacto"
+      ctaSecondaryText: WhatsApp
+      ctaSecondaryLink: ""
+      titleTag: h1
+      features:
+        - "Montaje en 24–48 h"
+        - "Garantía de 2 años"
+        - "Asesoramiento personalizado sin coste"
+
+  - discriminant: trust_strip
+    value:
+      title: ""
+      subtitle: ""
+      titleTag: h2
+      variant: bar
+      items:
+        - icon: ShieldCheck
+          label: "Garantía 2 años en materiales y mano de obra"
+          description: ""
+        - icon: Clock
+          label: "Instalación en 24–48 horas"
+          description: ""
+        - icon: Users
+          label: "Más de 500 instalaciones en Málaga"
+          description: ""
+        - icon: Gift
+          label: "Presupuesto sin compromiso"
+          description: ""
+
+  - discriminant: features
+    value:
+      title: "Por qué instalamos tu toldo en Málaga así"
+      titleTag: h2
+      variant: grid
+      features:
+        - title: "Instaladores certificados"
+          description: "Nuestro equipo trabaja con anclajes homologados y respeta la normativa de comunidades y ayuntamiento. Sin sorpresas después."
+          icon: BadgeCheck
+        - title: "Telas de calidad solar europea"
+          description: "Usamos lonas con tratamiento UV certificado que aguantan el sol malagueño sin desteñirse ni deformarse en pocos veranos."
+          icon: Star
+        - title: "Asesoramiento en tu espacio real"
+          description: "Venimos a medir y te explicamos qué modelo encaja mejor en tu terraza, balcón o fachada según la orientación y el uso que le quieras dar."
+          icon: Home
+
+  - discriminant: faq
+    value:
+      title: "Preguntas frecuentes sobre instalar toldo terraza Málaga en Málaga"
+      variant: accordion
+      faqs:
+        - question: "¿Cuánto cuesta instalar un toldo en una terraza en Málaga?"
+          answer: >-
+            El precio de instalar un toldo en terraza en Málaga parte desde unos 350–500 € para modelos de brazo articulado estándar, subiendo según tamaño, motorización y calidad de la lona. El presupuesto exacto depende de la medida y la complejidad del anclaje, por lo que siempre hacemos visita gratuita antes de confirmar precio.
+        - question: "¿En cuánto tiempo instalan un toldo en Málaga?"
+          answer: >-
+            Normalmente instalamos en 24 a 48 horas una vez confirmado el pedido y recibido el toldo. En pedidos estándar con stock disponible el plazo es mínimo; si hay motorización o tela especial puede alargarse hasta 5–7 días laborables.
+        - question: "¿Necesito permiso de la comunidad para instalar un toldo en mi terraza?"
+          answer: >-
+            En la mayoría de comunidades de propietarios en Málaga sí se necesita autorización previa, especialmente en fachadas visibles. Te acompañamos en el proceso: te indicamos qué documentación presentar y trabajamos con modelos y colores que suelen ser aprobados sin problemas.
+        - question: "¿Qué tipo de toldo es mejor para una terraza en Málaga?"
+          answer: >-
+            Para las condiciones de sol y viento de Málaga recomendamos toldos de brazo articulado cofre con lona de tejido acrílico de alta densidad. En zonas con viento frecuente (frente al mar o zonas altas) añadimos sistema de tensores o optamos por modelos con guía lateral para mayor estabilidad.
+        - question: "¿Qué garantía tienen los toldos que instaláis?"
+          answer: >-
+            Ofrecemos garantía de 2 años en materiales y mano de obra. Las lonas de nuestros proveedores principales cuentan además con garantía de fabricante de hasta 5 años frente a decoloración y pérdida de resistencia por radiación UV.
+        - question: "¿Cuál es la mejor época para instalar un toldo en Málaga?"
+          answer: >-
+            En Toldos Málaga recomendamos instalarlo entre febrero y abril, antes de que llegue el calor fuerte. Es cuando hay mejor disponibilidad de agenda y tienes el toldo listo para el primer día de sol intenso. Dicho esto, instalamos todo el año y en temporada alta solemos gestionar urgencias en 48–72 h.
+        - question: "¿Podéis instalar toldos en balcones pequeños de pisos en el centro de Málaga?"
+          answer: >-
+            Sí, es uno de los trabajos más habituales que hacemos en Toldos Málaga. Tenemos modelos compactos de brazo articulado para huecos desde 1,5 m de ancho que caben perfectamente en balcones de pisos del centro histórico y barrios como El Soho o La Malagueta, respetando siempre la normativa de la comunidad.
+        - question: "¿Asesoráis sobre el modelo y el color del toldo sin que me sienta presionado a comprar?"
+          answer: >-
+            Así trabajamos en Toldos Málaga: venimos a medir, te explicamos las opciones que encajan con tu terraza y te dejamos el presupuesto por escrito sin ninguna prisa. Si tardas unas semanas en decidirte, el precio se mantiene. Queremos que te quedes tranquilo con la decisión, no que firmes el mismo día.
+        - question: "¿Qué pasa si el toldo se estropea por el viento después de instalarlo?"
+          answer: >-
+            Con nuestra garantía de 2 años, cualquier problema con la instalación o los materiales lo resolvemos sin coste. Además, al entregar el toldo te explicamos cómo recogarlo correctamente cuando hay viento fuerte, que es la mejor prevención. Si hay una avería fuera de garantía, también hacemos reparaciones y cambios de lona.
+        - question: "¿Instaláis toldos en locales o negocios en Málaga, no solo en viviendas?"
+          answer: >-
+            Sí, en Toldos Málaga trabajamos tanto con particulares como con bares, restaurantes, tiendas y oficinas de toda la Costa del Sol. Para negocios solemos recomendar modelos con mayor resistencia al uso continuado y opciones de serigrafía o personalización con el nombre del local. Pedimos permiso municipal cuando es necesario.
+
+  - discriminant: cta
+    value:
+      title: "¿Listo para instalar tu toldo en Málaga?"
+      subtitle: "Pídenos presupuesto sin compromiso. Venimos a medir, te asesoramos y te damos precio cerrado en el mismo día."
+      titleTag: h2
+      buttonText: "Solicitar presupuesto gratis"
+      buttonLink: /contacto/
+      style: gradient
+      features:
+        - Visita gratuita
+        - Presupuesto cerrado
+        - Garantía incluida

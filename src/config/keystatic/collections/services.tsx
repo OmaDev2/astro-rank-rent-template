@@ -2,13 +2,14 @@ import { collection, fields } from '@keystatic/core';
 import { citySlug } from '@/config/citySlug';
 import { SeoPreview } from '@/components/keystatic/SeoPreview';
 import { IconPicker } from '@/components/keystatic/IconPicker';
-import { mdxComponentsConfig } from '../mdx-components';
 import { noticeField } from '@/components/keystatic/NoticeField';
 import {
     heroBlock,
     featuresBlock,
     statsBlock,
     processBlock,
+    aboutBlock,
+    testimonialsBlock,
     ctaBlock,
     pricingBlock,
 } from '../nativeBlocks';
@@ -18,8 +19,7 @@ export const services = collection({
     slugField: 'title',
     path: 'src/content/services/*',
     previewUrl: '/servicios/{slug}',
-    format: { contentField: 'content' },
-    entryLayout: 'content',
+    format: 'yaml',
     schema: {
         title: fields.slug({
             name: {
@@ -83,8 +83,48 @@ export const services = collection({
             features: featuresBlock(),
             process: processBlock(),
             stats: statsBlock(),
+            about: aboutBlock('public/images/services'),
+            testimonials: testimonialsBlock(),
             cta: ctaBlock(),
             pricing: pricingBlock(),
+            logos: {
+                label: '🤝 Logos de Confianza / Partners',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título (Opcional)' }),
+                    logos: fields.array(
+                        fields.object({
+                            alt: fields.text({ label: 'Nombre Empresa' }),
+                            image: fields.image({
+                                label: 'Logo',
+                                directory: 'public/images/logos',
+                                publicPath: '/images/logos',
+                            }),
+                        }),
+                        { label: 'Logos', itemLabel: p => p.fields.alt.value || 'Logo' }
+                    ),
+                })
+            },
+            before_after: {
+                label: '🔄 Antes y Después',
+                schema: fields.object({
+                    title: fields.text({ label: 'Título' }),
+                    subtitle: fields.text({ label: 'Subtítulo', multiline: true }),
+                    beforeImage: fields.image({
+                        label: 'Imagen Antes',
+                        directory: 'public/images/services',
+                        publicPath: '/images/services',
+                    }),
+                    beforeAlt: fields.text({ label: 'Texto Alt Antes (Opcional)' }),
+                    afterImage: fields.image({
+                        label: 'Imagen Después',
+                        directory: 'public/images/services',
+                        publicPath: '/images/services',
+                    }),
+                    afterAlt: fields.text({ label: 'Texto Alt Después (Opcional)' }),
+                    beforeLabel: fields.text({ label: 'Etiqueta Antes', defaultValue: 'Antes' }),
+                    afterLabel: fields.text({ label: 'Etiqueta Después', defaultValue: 'Después' }),
+                })
+            },
             content: {
                 label: '📝 Bloque de Texto y MDX',
                 schema: fields.object({
@@ -377,16 +417,6 @@ export const services = collection({
             description: 'Opcional. Si este listado tiene bloques, se ignorará el preset seleccionado.'
         }),
 
-        content: fields.mdx({
-            label: 'Cuerpo del Texto (MDX)',
-            description: 'Utilizado por el bloque "Contenido y MDX"',
-            options: {
-                image: {
-                    directory: 'public/images/services',
-                    publicPath: '/images/services',
-                }
-            },
-            components: mdxComponentsConfig
-        }),
+
     },
 });

@@ -1,9 +1,21 @@
 _spintax: ''
-siteName: test
-businessType: LocalBusiness
+siteName: 'Toldos Málaga '
+niche: 'Instalación de toldos  para particulares y negocios '
+businessType: HomeAndConstructionBusiness
+siteUrl: https://toldosmalaga.com
 ctaText: Pedir Presupuesto
-coordinates: {}
+phone: '644371602'
+email: info@toldosmalaga
+city: 'Málaga '
+coordinates:
+  lat: '36.7213'
+  lng: '-4.4214'
+schedule: Lun-Vie 9:00-20:00, Sáb 10:00-14:00
+nif: 43675068T
+ownerName: 'Olga Millán '
 seo: '{"title":"","description":""}'
+slogan: Tu sol, tu sombra, tu espacio.
+foundingDate: '2018'
 areaServed: []
 serviceRadius: 0
 priceRange: €€
