@@ -19,7 +19,7 @@ export const services = collection({
     slugField: 'title',
     path: 'src/content/services/*',
     previewUrl: '/servicios/{slug}',
-    format: 'yaml',
+    format: { contentField: 'empty' },
     schema: {
         title: fields.slug({
             name: {
@@ -417,6 +417,7 @@ export const services = collection({
             description: 'Opcional. Si este listado tiene bloques, se ignorará el preset seleccionado.'
         }),
 
+        empty: fields.emptyContent({ extension: 'mdx' }),
 
     },
 });

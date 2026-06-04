@@ -656,7 +656,8 @@ async function generateHome(req, res) {
 
     const serviceTitles = [];
     for (const s of (services || [])) {
-      const p = path.join(ROOT, `src/content/services/${s.slug}.mdx`);
+      let p = path.join(ROOT, `src/content/services/${s.slug}.mdx`);
+      if (!fs.existsSync(p)) p = path.join(ROOT, `src/content/services/${s.slug}.yaml`);
       if (fs.existsSync(p)) {
         const raw = fs.readFileSync(p, 'utf-8');
         const m = raw.match(/^title:\s*['"]?(.+?)['"]?\s*$/m);

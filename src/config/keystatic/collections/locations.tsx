@@ -18,7 +18,7 @@ export const locations = collection({
     slugField: 'name',
     path: 'src/content/locations/*',
     previewUrl: '/zona/{slug}',
-    format: 'yaml',
+    format: { contentField: 'empty' },
     schema: {
         name: fields.slug({
             name: { label: 'Nombre de la Zona' },
@@ -280,6 +280,7 @@ export const locations = collection({
             description: 'Opcional. Si este listado tiene bloques, se ignorará el preset seleccionado.'
         }),
 
+        empty: fields.emptyContent({ extension: 'mdx' }),
 
     },
 });
