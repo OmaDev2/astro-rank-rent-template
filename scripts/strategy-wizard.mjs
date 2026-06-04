@@ -119,6 +119,70 @@ function callClaude(prompt, timeoutMs = 180_000) {
   return result.stdout ?? '';
 }
 
+async function fetchUrlText(url) {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      },
+      signal: AbortSignal.timeout(15000)
+    });
+    if (!res.ok) return '';
+    let html = await res.text();
+    html = html
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<!--[\s\S]*?-->/g, '');
+    const matches = html.match(/<h[1-4][^>]*>[\s\S]*?<\/h[1-4]>/gi) || [];
+    const headings = matches.map(m => m.replace(/\s+/g, ' ').trim()).join('\n');
+    return headings || html.replace(/<\/?[^>]+(>|$)/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 5000);
+  } catch (e) {
+    console.error(`Error al descargar ${url}:`, e.message);
+    return '';
+  }
+}
+
+async function callGemini(prompt, timeoutMs = 180_000) {
+  const env = loadEnv();
+  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_API_KEY no configurada');
+  const model = process.env.GEMINI_MODEL || env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const body = {
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { responseMimeType: 'application/json' }
+  };
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(timeoutMs)
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Gemini API error (${response.status}): ${errorText}`);
+    }
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Gemini no retornó contenido');
+    return text;
+  } catch (e) {
+    if (e.name === 'TimeoutError') throw new Error('Timeout al llamar a Gemini');
+    throw e;
+  }
+}
+
+async function callLLM(prompt, timeoutMs = 180_000) {
+  const env = loadEnv();
+  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
+  if (apiKey) {
+    return await callGemini(prompt, timeoutMs);
+  } else {
+    return callClaude(prompt, timeoutMs);
+  }
+}
+
 // ── Handlers ──────────────────────────────────────────────────────────────────
 
 async function serveUI(req, res) {
@@ -192,9 +256,9 @@ Define el avatar del cliente ideal. Devuelve SOLO JSON válido (sin markdown):
 }`;
 
   try {
-    const text = callClaude(prompt);
+    const text = await callLLM(prompt);
     const match = text.match(/\{[\s\S]+\}/);
-    if (!match) return json(res, { error: 'Claude no devolvió JSON válido' }, 500);
+    if (!match) return json(res, { error: 'LLM no devolvió JSON válido' }, 500);
     json(res, JSON.parse(match[0]));
   } catch (e) { json(res, { error: e.message }, 500); }
 }
@@ -251,7 +315,7 @@ Devuelve SOLO JSON válido (sin markdown):
 Tipos válidos: "transaccional", "consideracion", "informativa"`;
 
   try {
-    const text = callClaude(prompt);
+    const text = await callLLM(prompt);
     const match = text.match(/\{[\s\S]+\}/);
     if (!match) return json(res, { error: 'Sin JSON válido' }, 500);
     json(res, JSON.parse(match[0]));
@@ -319,7 +383,7 @@ Devuelve SOLO JSON válido:
 Tipos: "service" o "location". Prioridad: "alta", "media" o "baja".`;
 
   try {
-    const text = callClaude(prompt);
+    const text = await callLLM(prompt);
     const match = text.match(/\{[\s\S]+\}/);
     if (!match) return json(res, { error: 'Sin JSON válido' }, 500);
     json(res, JSON.parse(match[0]));
@@ -400,13 +464,23 @@ async function generatePageHandler(req, res) {
 
     // Análisis competidores
     let competitorContext = '';
+    const isGemini = !!(process.env.GEMINI_API_KEY || env.GEMINI_API_KEY);
     if (analyzeSerp && kw.topResults.length) {
       send('status', { message: 'Analizando competidores...' });
       for (const result of kw.topResults.filter(r => r.url).slice(0, 3)) {
         try {
-          const text = callClaude(
-            `Usa web_fetch para obtener ${result.url} y extrae solo H1, H2s relevantes. Devuelve JSON: {"h1":"","h2s":[]}`
-          );
+          let text = '';
+          if (isGemini) {
+            const pageHeadings = await fetchUrlText(result.url);
+            if (pageHeadings) {
+              const parsePrompt = `A partir de los siguientes encabezados de la página ${result.url}, extrae el H1 principal y las H2s más relevantes. Devuelve exclusivamente JSON: {"h1":"","h2s":[]}\n\nCONTENIDO:\n${pageHeadings}`;
+              text = await callGemini(parsePrompt);
+            }
+          } else {
+            text = callClaude(
+              `Usa web_fetch para obtener ${result.url} y extrae solo H1, H2s relevantes. Devuelve JSON: {"h1":"","h2s":[]}`
+            );
+          }
           const m = text.match(/\{[\s\S]+\}/);
           if (m) {
             const d = JSON.parse(m[0]);
@@ -417,7 +491,7 @@ async function generatePageHandler(req, res) {
       if (competitorContext) send('status', { message: 'Competidores analizados ✓' });
     }
 
-    send('status', { message: 'Claude generando contenido...' });
+    send('status', { message: `${isGemini ? 'Gemini' : 'Claude'} generando contenido...` });
 
     const isService = type !== 'location';
     const paaStr = kw.paaQuestions.length
@@ -490,14 +564,17 @@ Devuelve SOLO JSON válido (sin markdown):
 }
 Iconos Lucide válidos: ShieldCheck, Clock, Users, Gift, FileCheck, Star, MapPin, Wrench, CheckCircle, Phone, Zap, Award, Hammer, Paintbrush, Home, Building, Key, Truck, Drill, BadgeCheck.`;
 
-    const text = callClaude(prompt, 180_000);
+    const text = await callLLM(prompt, 180_000);
     const match = text.match(/\{[\s\S]+\}/);
-    if (!match) throw new Error('Claude no devolvió JSON válido');
+    if (!match) throw new Error(`${isGemini ? 'Gemini' : 'Claude'} no devolvió JSON válido`);
     const content = JSON.parse(match[0]);
 
     send('status', { message: 'Construyendo YAML...' });
 
-    const slug = toSlug(`${keyword}-${city}`);
+    const keywordSlug = toSlug(keyword);
+    const slug = isService 
+      ? (keywordSlug.endsWith(toSlug(city)) ? keywordSlug : `${keywordSlug}-${toSlug(city)}`)
+      : keywordSlug;
     const allFaq = [...(content.faqSeo || []), ...(content.faqGeo || [])];
     const seoJson = JSON.stringify({ title: content.seoTitle, description: content.seoDescription });
 
@@ -512,8 +589,9 @@ Iconos Lucide válidos: ShieldCheck, Clock, Users, Gift, FileCheck, Star, MapPin
       return `        - question: '${ys(f.question)}'\n          answer: >-\n${lines}`;
     }).join('\n');
 
+    const extraFrontmatter = isService ? '' : `name: '${ys(city)}'\ntype: residencial\nzipCodes: []\n`;
     const mdx = `---
-title: '${ys(content.seoTitle)}'
+${extraFrontmatter}title: '${ys(content.seoTitle)}'
 icon: Wrench
 shortDesc: '${ys(content.shortDesc)}'
 featured: true
@@ -669,28 +747,70 @@ async function generateHome(req, res) {
     send('status', { message: `${serviceTitles.length} servicios · ${locationNames.length} zonas` });
 
     let competitorContext = '';
+    const isGemini = !!(process.env.GEMINI_API_KEY || env.GEMINI_API_KEY);
     if (analyzeSerp) {
       send('status', { message: 'Analizando competidores para la home...' });
       try {
-        const serpText = callClaude(
-          `Busca en Google "${keyword} ${city}" y analiza las 3 primeras webs que aparezcan.
+        if (isGemini) {
+          const dfLogin = process.env.DATAFORSEO_LOGIN || env.DATAFORSEO_LOGIN;
+          const dfPassword = process.env.DATAFORSEO_PASSWORD || env.DATAFORSEO_PASSWORD;
+          if (dfLogin && dfPassword) {
+            const auth = Buffer.from(`${dfLogin}:${dfPassword}`).toString('base64');
+            const r = await fetch('https://api.dataforseo.com/v3/serp/google/organic/live/advanced', {
+              method: 'POST',
+              headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify([{
+                keyword: `${keyword} ${city}`, location_code: 2724, language_code: 'es',
+                device: 'desktop', depth: 10,
+              }]),
+            });
+            const serpRes = await r.json();
+            const items = serpRes?.tasks?.[0]?.result?.[0]?.items ?? [];
+            const topResults = items.filter(i => i.type === 'organic').slice(0, 3)
+              .map(i => ({ title: i.title, url: i.url, domain: i.domain }));
+            
+            let competitors = [];
+            for (const result of topResults) {
+              if (result.url) {
+                const pageText = await fetchUrlText(result.url);
+                if (pageText) {
+                  const parsePrompt = `A partir del siguiente texto/encabezados de la página ${result.url}, extrae el H1 principal, las H2s más relevantes y las secciones que tiene. Devuelve exclusivamente JSON: {"h1":"","h2s":[],"sections":[]}\n\nCONTENIDO:\n${pageText}`;
+                  const parseText = await callGemini(parsePrompt);
+                  const m = parseText.match(/\{[\s\S]+\}/);
+                  if (m) {
+                    const d = JSON.parse(m[0]);
+                    competitors.push({ url: result.url, h1: d.h1, h2s: d.h2s, sections: d.sections });
+                  }
+                }
+              }
+            }
+            competitorContext = competitors.map((c, i) =>
+              `Competidor ${i+1} (${c.url}): H1="${c.h1}" · Secciones: ${c.sections?.join(', ')}`
+            ).join('\n') || '';
+          } else {
+            send('status', { message: 'DataForSEO no configurado para Gemini — omitiendo competidores' });
+          }
+        } else {
+          const serpText = callClaude(
+            `Busca en Google "${keyword} ${city}" y analiza las 3 primeras webs que aparezcan.
 Para cada una, usa web_fetch y extrae: H1, H2s principales, qué secciones tiene.
 Devuelve JSON: {"competitors": [{"url":"","h1":"","h2s":[],"sections":[]}]}`
-        );
-        const m = serpText.match(/\{[\s\S]+\}/);
-        if (m) {
-          const data = JSON.parse(m[0]);
-          competitorContext = data.competitors?.map((c, i) =>
-            `Competidor ${i+1} (${c.url}): H1="${c.h1}" · Secciones: ${c.sections?.join(', ')}`
-          ).join('\n') || '';
-          if (competitorContext) send('status', { message: 'Competidores analizados ✓' });
+          );
+          const m = serpText.match(/\{[\s\S]+\}/);
+          if (m) {
+            const data = JSON.parse(m[0]);
+            competitorContext = data.competitors?.map((c, i) =>
+              `Competidor ${i+1} (${c.url}): H1="${c.h1}" · Secciones: ${c.sections?.join(', ')}`
+            ).join('\n') || '';
+          }
         }
+        if (competitorContext) send('status', { message: 'Competidores analizados ✓' });
       } catch (e) {
         send('status', { message: 'Análisis competidores falló — continuando sin datos' });
       }
     }
 
-    send('status', { message: 'Claude generando contenido de la home...' });
+    send('status', { message: `${isGemini ? 'Gemini' : 'Claude'} generando contenido de la home...` });
 
     const cityVal = city || business.city;
     const nicheVal = niche || business.niche;
@@ -830,9 +950,9 @@ Devuelve SOLO JSON válido (sin markdown, sin explicaciones):
 Iconos válidos: Award, ShieldCheck, Users, FileCheck, Star, MapPin, Wrench, CheckCircle,
 Phone, Zap, Hammer, Paintbrush, Home, Building, Key, BadgeCheck, ClipboardCheck, FileText.`;
 
-    const text = callClaude(prompt, 180_000);
+    const text = await callLLM(prompt, 180_000);
     const match = text.match(/\{[\s\S]+\}/);
-    if (!match) throw new Error('Claude no devolvió JSON válido para la home');
+    if (!match) throw new Error(`${isGemini ? 'Gemini' : 'Claude'} no devolvió JSON válido para la home`);
     const c = JSON.parse(match[0]);
 
     send('status', { message: 'Contenido generado ✓ — construyendo MDX...' });
