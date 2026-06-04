@@ -448,7 +448,8 @@ async function resetProject() {
         { path: 'optimized-images', type: 'dir' },
         { path: 'incoming-images', type: 'dir' },
         { path: 'project_plan.json', type: 'file' },
-        { path: 'clustering_analysis.md', type: 'file' }
+        { path: 'clustering_analysis.md', type: 'file' },
+        { path: 'src/content/business/avatar.yaml', type: 'file' },
     ];
 
     for (const item of pathsToClear) {

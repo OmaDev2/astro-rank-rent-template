@@ -3,13 +3,15 @@ import { citySlug } from '@/config/citySlug';
 import { SeoPreview } from '@/components/keystatic/SeoPreview';
 import { IconPicker } from '@/components/keystatic/IconPicker';
 import { mdxComponentsConfig } from '../mdx-components';
-import { heroPreview } from '@/components/keystatic/HeroPreview';
-import { featuresPreview } from '@/components/keystatic/FeaturesPreview';
-import { statsPreview } from '@/components/keystatic/StatsPreview';
-import { ctaPreview } from '@/components/keystatic/CtaPreview';
-import { pricingPreview } from '@/components/keystatic/PricingPreview';
-import { processPreview } from '@/components/keystatic/ProcessPreview';
 import { noticeField } from '@/components/keystatic/NoticeField';
+import {
+    heroBlock,
+    featuresBlock,
+    statsBlock,
+    processBlock,
+    ctaBlock,
+    pricingBlock,
+} from '../nativeBlocks';
 
 export const services = collection({
     label: '🛠️ Servicios',
@@ -77,74 +79,12 @@ export const services = collection({
 
         // CONSTRUCTOR DE BLOQUES MEJORADO
         blocks: fields.blocks({
-            hero: {
-                label: '🖼️ Hero (Portada)',
-                schema: fields.object({
-                    content: heroPreview(),
-                    backgroundImage: fields.text({
-                        label: 'URL Imagen de Fondo',
-                        description: 'URL completa (https://...) o ruta local (/images/...)',
-                    }),
-                    ctaPrimaryLink: fields.text({
-                        label: 'Enlace Botón Principal',
-                        description: 'Ej: /contacto/',
-                    }),
-                    ctaSecondaryLink: fields.text({
-                        label: 'Enlace Botón Secundario',
-                        description: 'Ej: /proyectos/',
-                    }),
-                })
-            },
-            features: {
-                label: '💎 Características (Beneficios)',
-                schema: fields.object({
-                    content: featuresPreview(),
-                    variant: fields.select({
-                        label: 'Variante Visual',
-                        options: [
-                            { label: '▦ Cuadrícula con icono (grid)', value: 'grid' },
-                            { label: '◧ Título izquierda / Items derecha (split)', value: 'split' },
-                            { label: '☰ Lista horizontal (horizontal)', value: 'horizontal' },
-                            { label: '⊙ Solo iconos y título (icons_only)', value: 'icons_only' },
-                        ],
-                        defaultValue: 'grid',
-                    }),
-                })
-            },
-            process: {
-                label: '👷 Método de Trabajo (Proceso)',
-                schema: fields.object({
-                    content: processPreview(),
-                    variant: fields.select({
-                        label: 'Variante Visual',
-                        options: [
-                            { label: '↔ Línea de tiempo alternada (timeline)', value: 'timeline' },
-                            { label: '▦ Tarjetas numeradas (cards)', value: 'cards' },
-                            { label: '☰ Lista compacta (compact)', value: 'compact' },
-                            { label: '◧ Título izquierda / Pasos derecha (split)', value: 'split' },
-                        ],
-                        defaultValue: 'timeline',
-                    }),
-                })
-            },
-            stats: {
-                label: '📊 Números / Estadísticas',
-                schema: fields.object({
-                    content: statsPreview(),
-                })
-            },
-            cta: {
-                label: '🎯 Llamada a la Acción (CTA)',
-                schema: fields.object({
-                    content: ctaPreview(),
-                })
-            },
-            pricing: {
-                label: '💰 Tabla de Precios',
-                schema: fields.object({
-                    content: pricingPreview(),
-                })
-            },
+            hero: heroBlock('public/images/services'),
+            features: featuresBlock(),
+            process: processBlock(),
+            stats: statsBlock(),
+            cta: ctaBlock(),
+            pricing: pricingBlock(),
             content: {
                 label: '📝 Bloque de Texto y MDX',
                 schema: fields.object({
