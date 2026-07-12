@@ -83,19 +83,11 @@ const [first, ...rest] = resolved;
                 <div class="h-px w-12 bg-primary" />
             </div>
             <h2 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-6">
-                {servicesSection?.title ? (
-                    <>
-                        {servicesSection.title}
-                        {servicesSection.titleHighlight && (
-                            <>
-                                <br />
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                                    {servicesSection.titleHighlight}
-                                </span>
-                            </>
-                        )}
-                    </>
-                ) : "⚠️ Configura el Título en CMS"}
+                {servicesSection?.title ? (<>
+                    {servicesSection.title}{servicesSection.titleHighlight && (<>
+                        <br /><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{servicesSection.titleHighlight}</span>
+                    </>)}
+                </>) : "⚠️ Configura el Título en CMS"}
             </h2>
             <p class="text-body max-w-2xl mx-auto text-lg">
                 {servicesSection?.subtitle || "⚠️ Configura el Subtítulo en CMS"}

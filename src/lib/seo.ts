@@ -85,6 +85,7 @@ export function buildBusinessEntity(settings: SiteSettings, siteUrl: string): Re
         entity.logo  = { "@type": "ImageObject", url: logoUrl, inLanguage: "es-ES" };
         entity.image = logoUrl;
     }
+    if (settings.email) entity.email = settings.email;
     if (settings.slogan) entity.slogan = settings.slogan;
     if (settings.foundingDate) entity.foundingDate = settings.foundingDate;
     if (settings.ownerName) {

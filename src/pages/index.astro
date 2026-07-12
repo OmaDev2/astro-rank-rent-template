@@ -46,26 +46,6 @@ const finalBlocks =
 		? homeData.blocks
 		: defaultBlocks;
 
-// 4. Schema SEO
-import { buildHomeGraph } from "@/lib/seo";
-
-const homepageFaqs =
-	homeData.faq ||
-	homeData.blocks?.find((b: any) => b.discriminant === "faq")?.value?.questions ||
-	[];
-
-const schema = buildHomeGraph({
-	settings: config,
-	siteUrl: config.siteUrl,
-	pageUrl: Astro.url.href,
-	title: config.seoTitle || `${config.niche} en ${config.city}`,
-	description: config.seoDescription,
-	image: config.logo,
-	testimonials: testimonialsCollection,
-	faqs: homepageFaqs,
-	serviceNames: featuredServices.map((s) => s.data.title),
-});
-
 // Parse visual editor overrides if set
 const parsePreview = (json: string) => {
     try { return json ? JSON.parse(json) : null; }
@@ -90,6 +70,26 @@ const finalTitle = seoTitle ||
     `${config.niche} en ${config.city}`;
 
 const displayTitle = `${finalTitle} | ${config.siteName}`;
+
+// 4. Schema SEO — title unificado con el <title> real de la página (displayTitle)
+import { buildHomeGraph } from "@/lib/seo";
+
+const homepageFaqs =
+	homeData.faq ||
+	homeData.blocks?.find((b: any) => b.discriminant === "faq")?.value?.questions ||
+	[];
+
+const schema = buildHomeGraph({
+	settings: config,
+	siteUrl: config.siteUrl,
+	pageUrl: Astro.url.href,
+	title: displayTitle,
+	description: seoDescription,
+	image: config.logo,
+	testimonials: testimonialsCollection,
+	faqs: homepageFaqs,
+	serviceNames: featuredServices.map((s) => s.data.title),
+});
 ---
 
 <Layout

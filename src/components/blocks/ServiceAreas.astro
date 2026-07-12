@@ -10,6 +10,7 @@ import {
     TreePine,
     MapPin,
 } from "lucide-react";
+import { slugify } from "@/utils/slugify";
 
 interface Props {
     title: string;
@@ -157,10 +158,13 @@ const iconMap: Record<string, any> = {
                         <div class="bg-surface/50 rounded-3xl p-6 border border-heading/5">
                             <div data-stagger class="grid sm:grid-cols-2 gap-2">
                                 {group2.items?.map((item) => (
-                                    <div class="flex items-center justify-between p-3 rounded-xl hover:bg-surface transition-colors group">
+                                    <a
+                                        href={`/zona/${slugify(item.name)}/`}
+                                        class="flex items-center justify-between p-3 rounded-xl hover:bg-surface transition-colors group no-underline"
+                                    >
                                         <div class="flex items-center gap-3">
                                             <MapPin className="w-4 h-4 text-primary opacity-40 group-hover:opacity-100" />
-                                            <span class="text-sm font-medium text-heading">
+                                            <span class="text-sm font-medium text-heading group-hover:text-primary transition-colors">
                                                 {item.name}
                                             </span>
                                         </div>
@@ -169,7 +173,7 @@ const iconMap: Record<string, any> = {
                                         >
                                             {item.supplement}
                                         </span>
-                                    </div>
+                                    </a>
                                 ))}
                             </div>
                             {group2.note && (

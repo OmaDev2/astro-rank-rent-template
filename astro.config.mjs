@@ -143,13 +143,8 @@ export default defineConfig({
             '/generar/',
           ],
         },
-        // Bloquear bots de IA (protección de contenido)
-        { userAgent: 'GPTBot',        disallow: '/' },
-        { userAgent: 'ChatGPT-User',  disallow: '/' },
-        { userAgent: 'CCBot',         disallow: '/' },
-        { userAgent: 'anthropic-ai',  disallow: '/' },
-        { userAgent: 'Claude-Web',    disallow: '/' },
-        { userAgent: 'Bytespider',    disallow: '/' },
+        // Crawlers de IA permitidos (visibilidad en ChatGPT, Perplexity, AI Overviews, etc.)
+        // Se dejan indexar deliberadamente: la citación en LLMs es el beneficio del FAQPage.
       ],
       sitemap: true,
     }),

@@ -29,16 +29,21 @@ const canonicalURL = rawCanonical.endsWith('/') ? rawCanonical : `${rawCanonical
 const _niche = settings.niche?.toLowerCase().replace(/\s/g, "-") || "default";
 const _path = Astro.url.pathname.replace(/\/$/, '');
 
-let ogImage = image;
+// OG image debe ser URL absoluta (Facebook/WhatsApp no resuelven rutas relativas).
+const siteOrigin = Astro.site ? Astro.site.origin : (settings.siteUrl || "");
+const toAbsolute = (path: string) =>
+    path.startsWith("http") ? path : `${siteOrigin}${path}`;
+
+let ogImage = image ? toAbsolute(image) : null;
 if (!ogImage) {
     const zonaMatch = _path.match(/^\/zona\/([^/]+)$/);
     const servicioMatch = _path.match(/^\/servicios\/([^/]+)$/);
     if (zonaMatch) {
-        ogImage = `/og/zona/${zonaMatch[1]}.png`;
+        ogImage = `${siteOrigin}/og/zona/${zonaMatch[1]}.png`;
     } else if (servicioMatch) {
-        ogImage = `/og/servicio/${servicioMatch[1]}.png`;
+        ogImage = `${siteOrigin}/og/servicio/${servicioMatch[1]}.png`;
     } else {
-        ogImage = `/images/og-${_niche}.png`;
+        ogImage = `${siteOrigin}/images/og-${_niche}.webp`;
     }
 }
 ---
@@ -64,6 +69,7 @@ if (!ogImage) {
     card: "summary_large_image",
     title: twitterTitle || ogTitle || title,
     description: twitterDescription || ogDescription || description,
+    image: ogImage,
   }}
   noindex={noindex}
   nofollow={noindex}

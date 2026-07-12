@@ -50,6 +50,9 @@ if (!webhookUrl) return;
     } else if (href.indexOf("https://wa.me") === 0 || href.indexOf("http://wa.me") === 0) {
       tipo = "whatsapp";
       destino = href;
+    } else if (href.indexOf("mailto:") === 0) {
+      tipo = "email";
+      destino = href.replace("mailto:", "").split("?")[0];
     }
 
     if (!tipo) return;
