@@ -444,7 +444,7 @@ async function resetProject() {
         { path: 'src/content/blog', type: 'dir' },
         { path: 'src/content/projects', type: 'dir' },
         { path: 'src/content/testimonials', type: 'dir' },
-        { path: 'src/assets/images', type: 'dir', keep: ['hero-home.webp', 'logo.svg', 'favicon.svg'] },
+        { path: 'src/assets/images', type: 'dir', keep: ['hero-home.webp', 'logo.svg', 'favicon.svg', 'about-hero.webp', 'about-main.webp', 'about-us.webp', 'alisado.webp', 'pintura.webp', 'service-default.webp'] },
         { path: 'optimized-images', type: 'dir' },
         { path: 'incoming-images', type: 'dir' },
         { path: 'project_plan.json', type: 'file' },

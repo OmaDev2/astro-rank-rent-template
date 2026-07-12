@@ -12,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync, spawn } from 'node:child_process';
 import net from 'node:net';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -44,6 +45,79 @@ async function findAstroPort() {
     }
   }
   return 4321;
+}
+
+function extractMainText(html) {
+  let text = html
+    .replace(/<head[\s\S]*?<\/head>/gi, '')
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<header[\s\S]*?<\/header>/gi, '')
+    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+    .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '');
+
+  text = text.replace(/<[^>]*>/g, ' ');
+  text = text.replace(/\s+/g, ' ').trim();
+  return text.slice(0, 15000);
+}
+
+async function scrapeUrlContent(url) {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' },
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    
+    const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/gi) || [];
+    const h2Match = html.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
+    
+    const cleanText = (str) => str.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    
+    const h1s = h1Match.map(cleanText).filter(Boolean);
+    const h2s = h2Match.map(cleanText).filter(Boolean).slice(0, 8);
+    
+    const bodyText = extractMainText(html);
+    
+    return {
+      h1: h1s[0] || '',
+      h2s: h2s,
+      bodyText: bodyText
+    };
+  } catch (err) {
+    console.error(`Scraping error for ${url}:`, err.message);
+    return null;
+  }
+}
+
+async function callLLM(prompt, modelName, useJson = false) {
+  const env = loadEnv();
+  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
+
+  if (modelName !== 'claude-cli' && apiKey) {
+    let geminiModel = 'gemini-1.5-pro';
+    if (modelName === 'gemini-1.5-flash') geminiModel = 'gemini-1.5-flash';
+    if (modelName === 'gemini-2.5-flash') geminiModel = 'gemini-2.5-flash';
+    if (modelName.startsWith('gemini-')) geminiModel = modelName;
+    
+    try {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const model = genAI.getGenerativeModel({ 
+        model: geminiModel,
+        generationConfig: useJson ? { responseMimeType: 'application/json' } : undefined
+      });
+      const result = await model.generateContent(prompt);
+      return result.response.text();
+    } catch (err) {
+      console.error(`Gemini API Error (${modelName}), falling back to Claude CLI:`, err.message);
+      return callClaude(prompt);
+    }
+  }
+
+  return callClaude(prompt);
 }
 
 function readBody(req) {
@@ -119,69 +193,7 @@ function callClaude(prompt, timeoutMs = 180_000) {
   return result.stdout ?? '';
 }
 
-async function fetchUrlText(url) {
-  try {
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      },
-      signal: AbortSignal.timeout(15000)
-    });
-    if (!res.ok) return '';
-    let html = await res.text();
-    html = html
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-      .replace(/<!--[\s\S]*?-->/g, '');
-    const matches = html.match(/<h[1-4][^>]*>[\s\S]*?<\/h[1-4]>/gi) || [];
-    const headings = matches.map(m => m.replace(/\s+/g, ' ').trim()).join('\n');
-    return headings || html.replace(/<\/?[^>]+(>|$)/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 5000);
-  } catch (e) {
-    console.error(`Error al descargar ${url}:`, e.message);
-    return '';
-  }
-}
-
-async function callGemini(prompt, timeoutMs = 180_000) {
-  const env = loadEnv();
-  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY no configurada');
-  const model = process.env.GEMINI_MODEL || env.GEMINI_MODEL || 'gemini-1.5-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-  const body = {
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: { responseMimeType: 'application/json' }
-  };
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(timeoutMs)
-    });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Gemini API error (${response.status}): ${errorText}`);
-    }
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) throw new Error('Gemini no retornó contenido');
-    return text;
-  } catch (e) {
-    if (e.name === 'TimeoutError') throw new Error('Timeout al llamar a Gemini');
-    throw e;
-  }
-}
-
-async function callLLM(prompt, timeoutMs = 180_000) {
-  const env = loadEnv();
-  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
-  if (apiKey) {
-    return await callGemini(prompt, timeoutMs);
-  } else {
-    return callClaude(prompt, timeoutMs);
-  }
-}
+// Helpers cleaned up to avoid duplication
 
 // ── Handlers ──────────────────────────────────────────────────────────────────
 
@@ -236,6 +248,13 @@ async function getAvatar(req, res) {
 }
 
 async function generateAvatarHandler(req, res) {
+  let body = {};
+  try {
+    body = await readBody(req) || {};
+  } catch (_) {}
+  const { llmModel } = body;
+  const modelName = llmModel || 'gemini-1.5-flash';
+
   const business = loadGlobalYaml();
   const prompt = `Eres un especialista en marketing para negocios de servicios locales en España.
 
@@ -245,7 +264,7 @@ NEGOCIO:
 - Ciudad: ${business.city}
 ${business.slogan ? `- Slogan: ${business.slogan}` : ''}
 
-Define el avatar del cliente ideal. Devuelve SOLO JSON válido (sin markdown):
+Define el avatar del cliente ideal. Devuelve SOLO JSON válido que se ajuste al siguiente formato:
 {
   "summary": "3-4 frases describiendo quién es, qué situación le lleva a buscar el servicio y qué espera encontrar. Tercera persona, específico.",
   "demographics": "edad, situación (propietario/inquilino/empresa), poder adquisitivo en una frase",
@@ -256,7 +275,7 @@ Define el avatar del cliente ideal. Devuelve SOLO JSON válido (sin markdown):
 }`;
 
   try {
-    const text = await callLLM(prompt);
+    const text = await callLLM(prompt, modelName, true);
     const match = text.match(/\{[\s\S]+\}/);
     if (!match) return json(res, { error: 'LLM no devolvió JSON válido' }, 500);
     json(res, JSON.parse(match[0]));
@@ -293,7 +312,8 @@ ${(avatar.decisionFactors || []).map(d => `  - '${ys(d)}'`).join('\n')}
 }
 
 async function generateKeywordsHandler(req, res) {
-  const { avatar } = await readBody(req);
+  const { avatar, llmModel } = await readBody(req);
+  const modelName = llmModel || 'gemini-1.5-flash';
   const business = loadGlobalYaml();
   const prompt = `Eres un especialista en SEO local para negocios de servicios en España.
 
@@ -304,7 +324,7 @@ ${avatar?.searchVocabulary?.length ? `VOCABULARIO DEL CLIENTE: ${avatar.searchVo
 Genera al menos 35 keywords que usa la gente para buscar este servicio en Google.
 Prioriza keywords transaccionales (intención de contratar) y long tail (3+ palabras).
 
-Devuelve SOLO JSON válido (sin markdown):
+Devuelve SOLO un objeto JSON válido con el siguiente formato:
 {
   "keywords": [
     { "keyword": "ejemplo keyword transaccional", "type": "transaccional", "notes": "alta intención" },
@@ -315,7 +335,7 @@ Devuelve SOLO JSON válido (sin markdown):
 Tipos válidos: "transaccional", "consideracion", "informativa"`;
 
   try {
-    const text = await callLLM(prompt);
+    const text = await callLLM(prompt, modelName, true);
     const match = text.match(/\{[\s\S]+\}/);
     if (!match) return json(res, { error: 'Sin JSON válido' }, 500);
     json(res, JSON.parse(match[0]));
@@ -346,7 +366,8 @@ async function importCsvHandler(req, res) {
 }
 
 async function generateArchitectureHandler(req, res) {
-  const { keywords, avatar } = await readBody(req);
+  const { keywords, avatar, llmModel } = await readBody(req);
+  const modelName = llmModel || 'gemini-1.5-flash';
   const business = loadGlobalYaml();
   const transactional = (keywords || [])
     .filter(k => k.type === 'transaccional' || k.selected)
@@ -361,7 +382,7 @@ ${transactional.map(k => `  - "${k}"`).join('\n')}
 
 Agrupa keywords por intención, elige la principal de cada grupo, evita canibalización.
 
-Devuelve SOLO JSON válido:
+Devuelve SOLO un objeto JSON válido con el siguiente formato:
 {
   "pages": [
     {
@@ -383,7 +404,7 @@ Devuelve SOLO JSON válido:
 Tipos: "service" o "location". Prioridad: "alta", "media" o "baja".`;
 
   try {
-    const text = await callLLM(prompt);
+    const text = await callLLM(prompt, modelName, true);
     const match = text.match(/\{[\s\S]+\}/);
     if (!match) return json(res, { error: 'Sin JSON válido' }, 500);
     json(res, JSON.parse(match[0]));
@@ -403,7 +424,8 @@ async function getExistingPagesHandler(req, res) {
 }
 
 async function generatePageHandler(req, res) {
-  const { keyword, city, type, niche, analyzeSerp } = await readBody(req);
+  const { keyword, city, type, niche, analyzeSerp, llmModel } = await readBody(req);
+  const modelName = llmModel || 'gemini-1.5-flash';
   const business = loadGlobalYaml();
   const env = loadEnv();
 
@@ -420,7 +442,6 @@ async function generatePageHandler(req, res) {
   try {
     send('status', { message: 'Iniciando generación...' });
 
-    // Avatar
     const avatarPath = path.join(ROOT, 'src/content/business/avatar.yaml');
     let avatarText = '';
     if (fs.existsSync(avatarPath)) {
@@ -430,7 +451,20 @@ async function generatePageHandler(req, res) {
       send('status', { message: 'Avatar cargado ✓' });
     }
 
-    // DataForSEO
+    const sDir = path.join(ROOT, 'src/content/services');
+    const lDir = path.join(ROOT, 'src/content/locations');
+    const existingServices = fs.existsSync(sDir)
+      ? fs.readdirSync(sDir).filter(f => /\.(mdx?|yaml)$/.test(f) && f !== '.gitkeep').map(f => f.replace(/\.(mdx?|yaml)$/, ''))
+      : [];
+    const existingLocations = fs.existsSync(lDir)
+      ? fs.readdirSync(lDir).filter(f => /\.(mdx?|yaml)$/.test(f) && f !== '.gitkeep').map(f => f.replace(/\.(mdx?|yaml)$/, ''))
+      : [];
+
+    const existingPagesList = [
+      ...existingServices.map(s => `- Servicio: ${s} (URL: /servicios/${s})`),
+      ...existingLocations.map(l => `- Localidad: ${l} (URL: /zona/${l})`),
+    ].join('\n');
+
     let kw = { paaQuestions: [], topResults: [] };
     const dfLogin = process.env.DATAFORSEO_LOGIN || env.DATAFORSEO_LOGIN;
     const dfPassword = process.env.DATAFORSEO_PASSWORD || env.DATAFORSEO_PASSWORD;
@@ -462,114 +496,143 @@ async function generatePageHandler(req, res) {
       }
     }
 
-    // Análisis competidores
     let competitorContext = '';
-    const isGemini = !!(process.env.GEMINI_API_KEY || env.GEMINI_API_KEY);
     if (analyzeSerp && kw.topResults.length) {
-      send('status', { message: 'Analizando competidores...' });
+      send('status', { message: 'Scrapeando contenido de competidores...' });
       for (const result of kw.topResults.filter(r => r.url).slice(0, 3)) {
         try {
-          let text = '';
-          if (isGemini) {
-            const pageHeadings = await fetchUrlText(result.url);
-            if (pageHeadings) {
-              const parsePrompt = `A partir de los siguientes encabezados de la página ${result.url}, extrae el H1 principal y las H2s más relevantes. Devuelve exclusivamente JSON: {"h1":"","h2s":[]}\n\nCONTENIDO:\n${pageHeadings}`;
-              text = await callGemini(parsePrompt);
-            }
-          } else {
-            text = callClaude(
-              `Usa web_fetch para obtener ${result.url} y extrae solo H1, H2s relevantes. Devuelve JSON: {"h1":"","h2s":[]}`
-            );
+          const scrapData = await scrapeUrlContent(result.url);
+          if (scrapData && scrapData.bodyText) {
+            competitorContext += `\n--- COMPETIDOR: ${result.domain} (${result.url}) ---\n`;
+            competitorContext += `H1: ${scrapData.h1}\n`;
+            competitorContext += `H2s: ${scrapData.h2s.join(', ')}\n`;
+            competitorContext += `TEXTO PRINCIPAL EXTRAÍDO:\n${scrapData.bodyText.slice(0, 8000)}\n`;
           }
-          const m = text.match(/\{[\s\S]+\}/);
-          if (m) {
-            const d = JSON.parse(m[0]);
-            competitorContext += `\n${result.domain}: H1="${d.h1}" H2s=${JSON.stringify((d.h2s || []).slice(0, 4))}`;
-          }
-        } catch {}
+        } catch (e) {
+          console.error(`Error scraping ${result.url}:`, e.message);
+        }
       }
-      if (competitorContext) send('status', { message: 'Competidores analizados ✓' });
+      if (competitorContext) send('status', { message: 'Competidores analizados con scraping nativo ✓' });
     }
 
-    send('status', { message: `${isGemini ? 'Gemini' : 'Claude'} generando contenido...` });
+    send('status', { message: `${modelName} generando contenido rico...` });
 
     const isService = type !== 'location';
     const paaStr = kw.paaQuestions.length
       ? `PAA Google:\n${kw.paaQuestions.map(q => `  - ${q}`).join('\n')}` : '';
 
     const prompt = `Eres un especialista en SEO local para negocios de servicios en España.
-Genera contenido para una página ${isService ? 'de servicio' : 'de zona geográfica'}.
+Genera el contenido rico y optimizado para una página ${isService ? 'de servicio' : 'de zona/localidad'}.
 
-NEGOCIO: ${business.siteName || niche} — ${business.niche || niche} en ${business.city || city}
-${business.slogan ? `Slogan: ${business.slogan}` : ''}
-${avatarText ? `\nCLIENTE IDEAL: ${avatarText}` : ''}
+DATOS DEL SITIO:
+- Nombre negocio: ${business.siteName || niche}
+- Nicho: ${niche || business.niche}
+- Ciudad base: ${business.city || city}
+${business.slogan ? `- Slogan: ${business.slogan}` : ''}
+${avatarText ? `\nAVATAR CLIENTE IDEAL:\n${avatarText}` : ''}
 ${paaStr ? '\n' + paaStr : ''}
-${competitorContext ? '\nCOMPETIDORES:' + competitorContext : ''}
 
-DATOS: Keyword="${keyword}" Ciudad="${city}" Nicho="${niche || business.niche}"
+INFORMACIÓN LOCAL A GENERAR:
+- Palabra Clave Principal: "${keyword}"
+- Localidad/Ciudad: "${city}"
 
-REGLAS:
-1. Tono profesional y cercano, NO corporativo
-2. Integra la keyword de forma natural
-3. FAQ "answer-first" — respuesta directa en la primera frase
-4. Textos específicos y verificables
-5. Usa el vocabulario del cliente ideal
-6. faqSeo: 5 transaccionales para Google — faqGeo: 5 conversacionales para LLMs
+${competitorContext ? `\nCONTENIDO REAL DE COMPETIDORES EN GOOGLE:\n${competitorContext}\nAnaliza el contenido anterior de la competencia y redacta un texto superador: más específico, más útil para el usuario, que cubra todos sus puntos pero totalmente original y redactado para la ciudad de ${city}.\n` : ''}
 
-Devuelve SOLO JSON válido (sin markdown):
+${existingPagesList ? `\nENLAZADO INTERNO (SILOING):
+Aquí tienes enlaces existentes en el sitio. Si es natural, incluye enlaces markdown en los textos hacia ellos (máximo 2-3 enlaces por página):
+${existingPagesList}\n` : ''}
+
+REGLAS DE COPYWRITING:
+1. Tono cercano, profesional, directo (evita palabras vacías como "líderes en el sector" o "calidad inigualable").
+2. Integra la keyword y variantes locales de forma fluida.
+3. FAQ en formato "answer-first" (la primera oración responde directamente la duda).
+4. Usa el vocabulario del cliente ideal, no términos técnicos que no entienda.
+
+Devuelve SOLO JSON válido conforme al siguiente esquema estricto:
 {
-  "seoTitle": "máx 60 chars",
-  "seoDescription": "máx 155 chars con CTA",
-  "shortDesc": "máx 115 chars para tarjeta",
+  "seoTitle": "Título SEO (máx 60 caracteres, incluye keyword + ciudad)",
+  "seoDescription": "Descripción SEO (máx 155 caracteres con llamada a la acción y ciudad)",
+  "shortDesc": "Descripción corta (máx 115 caracteres para tarjetas de servicio)",
   "hero": {
-    "heading": "keyword o variante",
-    "headingHighlight": "ciudad o beneficio clave",
-    "subheading": "1-2 frases del servicio",
+    "heading": "H1 - variante corta o keyword principal",
+    "headingHighlight": "beneficio principal o ciudad",
+    "subheading": "1-2 frases descriptivas",
     "features": ["beneficio 1", "beneficio 2", "beneficio 3"],
-    "ctaPrimaryText": "texto botón"
+    "ctaPrimaryText": "texto del botón de presupuesto"
   },
   "trustStrip": [
-    {"icon":"ShieldCheck","label":"texto"},
-    {"icon":"Clock","label":"texto"},
-    {"icon":"Users","label":"texto"},
-    {"icon":"Gift","label":"texto"}
+    {"icon":"ShieldCheck","label":"texto rápido"},
+    {"icon":"Clock","label":"texto rápido"},
+    {"icon":"Users","label":"texto rápido"},
+    {"icon":"Gift","label":"texto rápido"}
   ],
   "featuresSection": {
-    "title": "título con keyword",
+    "title": "Título con keyword",
     "items": [
-      {"title":"string","description":"1-2 frases","icon":"Award"},
-      {"title":"string","description":"1-2 frases","icon":"FileCheck"},
-      {"title":"string","description":"1-2 frases","icon":"Star"}
+      {"title":"característica 1","description":"frase específica","icon":"Award"},
+      {"title":"característica 2","description":"frase específica","icon":"FileCheck"},
+      {"title":"característica 3","description":"frase específica","icon":"Star"}
+    ]
+  },
+  ${isService ? `
+  "process": {
+    "title": "Cómo trabajamos",
+    "subtitle": "Un proceso sencillo y garantizado",
+    "steps": [
+      {"title": "1. Contacto o Llamada", "description": "Nos cuentas qué necesitas y agendamos una visita.", "icon": "Phone", "duration": "Inmediato"},
+      {"title": "2. Presupuesto Cerrado", "description": "Te damos el precio final por escrito tras la visita.", "icon": "FileText", "duration": "24 horas"},
+      {"title": "3. Ejecución Profesional", "description": "Realizamos el servicio de forma limpia y eficiente.", "icon": "Hammer", "duration": "Según trabajo"}
+    ]
+  },
+  "priceFrom": {
+    "title": "Precio Competitivo",
+    "subtitle": "Tarifas adaptadas y transparentes",
+    "price": "49",
+    "unit": "/servicio"
+  },
+  ` : ''}
+  "contentSection": {
+    "title": "Servicio experto en ${city}",
+    "sections": [
+      {
+        "heading": "Profesionales a tu servicio en ${city}",
+        "content": "Redacta un texto extenso (2-3 párrafos) en Markdown sobre el servicio, la seriedad de los operarios, y la garantía. Utiliza **negritas** y listas con guiones si es apropiado. Aprovecha para incluir enlaces de siloing si corresponde de forma natural."
+      },
+      {
+        "heading": "Atención rápida y eficaz",
+        "content": "Otro bloque de texto rico (2 párrafos) en Markdown detallando el soporte, la disponibilidad en los barrios de ${city} y la honestidad en el presupuesto."
+      }
     ]
   },
   "faqSeo": [
-    {"question":"pregunta transaccional Google","answer":"answer-first 2-3 frases"},
+    {"question":"pregunta transaccional de Google","answer":"respuesta directa 2-3 frases"},
     {"question":"...","answer":"..."},
     {"question":"...","answer":"..."},
     {"question":"...","answer":"..."},
     {"question":"...","answer":"..."}
   ],
   "faqGeo": [
-    {"question":"pregunta conversacional LLM","answer":"respuesta cercana mencionando el negocio"},
+    {"question":"pregunta de LLMs/conversacional","answer":"respuesta conversacional mencionando el negocio"},
     {"question":"...","answer":"..."},
     {"question":"...","answer":"..."},
     {"question":"...","answer":"..."},
     {"question":"...","answer":"..."}
   ],
   "cta": {
-    "title": "pregunta/CTA con keyword",
-    "subtitle": "propuesta de valor",
-    "buttonText": "texto botón"
+    "title": "Pregunta de acción con la keyword",
+    "subtitle": "Mensaje de urgencia o propuesta de valor",
+    "buttonText": "texto del botón"
   }
 }
-Iconos Lucide válidos: ShieldCheck, Clock, Users, Gift, FileCheck, Star, MapPin, Wrench, CheckCircle, Phone, Zap, Award, Hammer, Paintbrush, Home, Building, Key, Truck, Drill, BadgeCheck.`;
 
-    const text = await callLLM(prompt, 180_000);
+Para iconos usa SOLO: ShieldCheck, Clock, Users, Gift, FileCheck, Star, MapPin, Wrench, CheckCircle, Phone, Zap, Award, Hammer, Paintbrush, Home, Building, Key, Truck, Drill, BadgeCheck.`;
+
+    const text = await callLLM(prompt, modelName, true);
     const match = text.match(/\{[\s\S]+\}/);
-    if (!match) throw new Error(`${isGemini ? 'Gemini' : 'Claude'} no devolvió JSON válido`);
+    if (!match) throw new Error('El modelo de IA no devolvió un JSON válido.');
     const content = JSON.parse(match[0]);
 
-    send('status', { message: 'Construyendo YAML...' });
+    send('status', { message: 'Construyendo YAML y bloques...' });
 
     const keywordSlug = toSlug(keyword);
     const slug = isService 
@@ -580,24 +643,25 @@ Iconos Lucide válidos: ShieldCheck, Clock, Users, Gift, FileCheck, Star, MapPin
 
     const trustItems = (content.trustStrip || [])
       .map(i => `        - icon: ${i.icon}\n          label: '${ys(i.label)}'\n          description: ''`).join('\n');
+    
     const featureItems = (content.featuresSection?.items || [])
       .map(i => `      - title: '${ys(i.title)}'\n        description: '${ys(i.description)}'\n        icon: ${i.icon}`).join('\n');
+    
     const heroFeatures = (content.hero?.features || [])
       .map(f => `      - '${ys(f)}'`).join('\n');
+    
     const faqItems = allFaq.map(f => {
       const lines = String(f.answer || '').split('\n').map(l => `            ${l}`).join('\n');
       return `        - question: '${ys(f.question)}'\n          answer: >-\n${lines}`;
     }).join('\n');
 
-    const extraFrontmatter = isService ? '' : `name: '${ys(city)}'\ntype: residencial\nzipCodes: []\n`;
-    const mdx = `---
-${extraFrontmatter}title: '${ys(content.seoTitle)}'
-icon: Wrench
-shortDesc: '${ys(content.shortDesc)}'
-featured: true
-seo: '${ys(seoJson)}'
-blocks:
-  - discriminant: hero
+    const contentSections = (content.contentSection?.sections || [])
+      .map(s => `        - heading: '${ys(s.heading)}'\n          content: >-\n            ${String(s.content || '').split('\n').join('\n            ')}`)
+      .join('\n');
+
+    let pageBlocks = '';
+
+    pageBlocks += `  - discriminant: hero
     value:
       heading: '${ys(content.hero?.heading || '')}'
       headingHighlight: '${ys(content.hero?.headingHighlight || '')}'
@@ -609,7 +673,9 @@ blocks:
       titleTag: h1
       features:
 ${heroFeatures}
+`;
 
+    pageBlocks += `
   - discriminant: trust_strip
     value:
       title: ''
@@ -618,7 +684,9 @@ ${heroFeatures}
       variant: bar
       items:
 ${trustItems}
+`;
 
+    pageBlocks += `
   - discriminant: features
     value:
       title: '${ys(content.featuresSection?.title || '')}'
@@ -626,14 +694,68 @@ ${trustItems}
       variant: grid
       features:
 ${featureItems}
+`;
 
+    if (isService) {
+      const processSteps = (content.process?.steps || [])
+        .map(st => `        - title: '${ys(st.title)}'\n          description: '${ys(st.description)}'\n          icon: ${st.icon}\n          duration: '${ys(st.duration)}'`).join('\n');
+      pageBlocks += `
+  - discriminant: process
+    value:
+      title: '${ys(content.process?.title || 'Cómo trabajamos')}'
+      subtitle: '${ys(content.process?.subtitle || '')}'
+      titleTag: h2
+      variant: timeline
+      steps:
+${processSteps}
+`;
+
+      pageBlocks += `
+  - discriminant: price_from
+    value:
+      title: '${ys(content.priceFrom?.title || 'Precio Cerrado')}'
+      subtitle: '${ys(content.priceFrom?.subtitle || 'Consulte nuestras tarifas')}'
+      price: '${ys(content.priceFrom?.price || '49')}'
+      unit: '${ys(content.priceFrom?.unit || '/servicio')}'
+      buttonText: 'Pedir Presupuesto'
+      buttonLink: '/contacto/'
+      isOffer: true
+      bgClass: 'bg-surface'
+`;
+    } else {
+      pageBlocks += `
+  - discriminant: map
+    value:
+      title: 'Zona de Cobertura en ${ys(city)}'
+      zoom: 13
+`;
+
+      pageBlocks += `
+  - discriminant: location_services
+    value:
+      title: 'Servicios de ${ys(niche || business.niche || '')} en ${ys(city)}'
+      subtitle: 'Atendemos urgencias y servicios concertados'
+`;
+    }
+
+    pageBlocks += `
+  - discriminant: content
+    value:
+      title: '${ys(content.contentSection?.title || '')}'
+      sections:
+${contentSections}
+`;
+
+    pageBlocks += `
   - discriminant: faq
     value:
       title: 'Preguntas frecuentes sobre ${ys(keyword)} en ${ys(city)}'
       variant: accordion
       faqs:
 ${faqItems}
+`;
 
+    pageBlocks += `
   - discriminant: cta
     value:
       title: '${ys(content.cta?.title || '')}'
@@ -648,6 +770,26 @@ ${faqItems}
         - Garantía incluida
 ---
 `;
+
+    let mdx = '';
+    if (isService) {
+      mdx = `---
+title: '${ys(content.hero?.heading || keyword)} en ${ys(city)}: ¡Pide Presupuesto!'
+icon: ${content.featuresSection?.items?.[0]?.icon || 'Wrench'}
+shortDesc: '${ys(content.shortDesc || '')}'
+featured: true
+seo: '${seoJson}'
+blocks:
+${pageBlocks}`;
+    } else {
+      mdx = `---
+name: '${ys(city)}'
+type: residencial
+zipCodes: []
+seo: '${seoJson}'
+blocks:
+${pageBlocks}`;
+    }
 
     send('content', {
       mdx,
@@ -706,9 +848,12 @@ async function generateHome(req, res) {
     services,
     locations,
     analyzeSerp,
+    llmModel,
   } = await readBody(req);
+  const modelName = llmModel || 'gemini-1.5-flash';
 
   const business = loadGlobalYaml();
+  const env = loadEnv();
 
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
@@ -747,70 +892,60 @@ async function generateHome(req, res) {
     send('status', { message: `${serviceTitles.length} servicios · ${locationNames.length} zonas` });
 
     let competitorContext = '';
-    const isGemini = !!(process.env.GEMINI_API_KEY || env.GEMINI_API_KEY);
+    const dfLogin = process.env.DATAFORSEO_LOGIN || env.DATAFORSEO_LOGIN;
+    const dfPassword = process.env.DATAFORSEO_PASSWORD || env.DATAFORSEO_PASSWORD;
+
     if (analyzeSerp) {
       send('status', { message: 'Analizando competidores para la home...' });
       try {
-        if (isGemini) {
-          const dfLogin = process.env.DATAFORSEO_LOGIN || env.DATAFORSEO_LOGIN;
-          const dfPassword = process.env.DATAFORSEO_PASSWORD || env.DATAFORSEO_PASSWORD;
-          if (dfLogin && dfPassword) {
-            const auth = Buffer.from(`${dfLogin}:${dfPassword}`).toString('base64');
-            const r = await fetch('https://api.dataforseo.com/v3/serp/google/organic/live/advanced', {
-              method: 'POST',
-              headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
-              body: JSON.stringify([{
-                keyword: `${keyword} ${city}`, location_code: 2724, language_code: 'es',
-                device: 'desktop', depth: 10,
-              }]),
-            });
-            const serpRes = await r.json();
-            const items = serpRes?.tasks?.[0]?.result?.[0]?.items ?? [];
-            const topResults = items.filter(i => i.type === 'organic').slice(0, 3)
-              .map(i => ({ title: i.title, url: i.url, domain: i.domain }));
-            
-            let competitors = [];
-            for (const result of topResults) {
-              if (result.url) {
-                const pageText = await fetchUrlText(result.url);
-                if (pageText) {
-                  const parsePrompt = `A partir del siguiente texto/encabezados de la página ${result.url}, extrae el H1 principal, las H2s más relevantes y las secciones que tiene. Devuelve exclusivamente JSON: {"h1":"","h2s":[],"sections":[]}\n\nCONTENIDO:\n${pageText}`;
-                  const parseText = await callGemini(parsePrompt);
-                  const m = parseText.match(/\{[\s\S]+\}/);
-                  if (m) {
-                    const d = JSON.parse(m[0]);
-                    competitors.push({ url: result.url, h1: d.h1, h2s: d.h2s, sections: d.sections });
-                  }
-                }
+        if (dfLogin && dfPassword) {
+          const auth = Buffer.from(`${dfLogin}:${dfPassword}`).toString('base64');
+          const r = await fetch('https://api.dataforseo.com/v3/serp/google/organic/live/advanced', {
+            method: 'POST',
+            headers: { 'Authorization': `Basic ${auth}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify([{
+              keyword: `${keyword} ${city}`, location_code: 2724, language_code: 'es',
+              device: 'desktop', depth: 10,
+            }]),
+          });
+          const serpRes = await r.json();
+          const items = serpRes?.tasks?.[0]?.result?.[0]?.items ?? [];
+          const topResults = items.filter(i => i.type === 'organic').slice(0, 3)
+            .map(i => ({ title: i.title, url: i.url, domain: i.domain }));
+          
+          let competitors = [];
+          for (const result of topResults) {
+            if (result.url) {
+              const scrapData = await scrapeUrlContent(result.url);
+              if (scrapData && scrapData.bodyText) {
+                competitors.push({ url: result.url, h1: scrapData.h1, h2s: scrapData.h2s, bodyText: scrapData.bodyText });
               }
             }
-            competitorContext = competitors.map((c, i) =>
-              `Competidor ${i+1} (${c.url}): H1="${c.h1}" · Secciones: ${c.sections?.join(', ')}`
-            ).join('\n') || '';
-          } else {
-            send('status', { message: 'DataForSEO no configurado para Gemini — omitiendo competidores' });
           }
-        } else {
+          competitorContext = competitors.map((c, i) =>
+            `Competidor ${i+1} (${c.url}): H1="${c.h1}" · H2s: ${c.h2s.join(', ')}\nTexto:\n${c.bodyText.slice(0, 5000)}`
+          ).join('\n\n') || '';
+        } else if (modelName === 'claude-cli') {
           const serpText = callClaude(
             `Busca en Google "${keyword} ${city}" y analiza las 3 primeras webs que aparezcan.
-Para cada una, usa web_fetch y extrae: H1, H2s principales, qué secciones tiene.
-Devuelve JSON: {"competitors": [{"url":"","h1":"","h2s":[],"sections":[]}]}`
+Para cada una, usa web_fetch y extrae: H1, H2s principales, y texto de la página.
+Devuelve JSON: {"competitors": [{"url":"","h1":"","h2s":[],"bodyText":""}]}`
           );
           const m = serpText.match(/\{[\s\S]+\}/);
           if (m) {
             const data = JSON.parse(m[0]);
             competitorContext = data.competitors?.map((c, i) =>
-              `Competidor ${i+1} (${c.url}): H1="${c.h1}" · Secciones: ${c.sections?.join(', ')}`
-            ).join('\n') || '';
+              `Competidor ${i+1} (${c.url}): H1="${c.h1}" · H2s: ${c.h2s?.join(', ')}\nTexto:\n${c.bodyText?.slice(0, 5000)}`
+            ).join('\n\n') || '';
           }
         }
-        if (competitorContext) send('status', { message: 'Competidores analizados ✓' });
+        if (competitorContext) send('status', { message: 'Competidores analizados con scraping nativo ✓' });
       } catch (e) {
         send('status', { message: 'Análisis competidores falló — continuando sin datos' });
       }
     }
 
-    send('status', { message: `${isGemini ? 'Gemini' : 'Claude'} generando contenido de la home...` });
+    send('status', { message: `${modelName} generando contenido de la home...` });
 
     const cityVal = city || business.city;
     const nicheVal = niche || business.niche;
@@ -950,9 +1085,9 @@ Devuelve SOLO JSON válido (sin markdown, sin explicaciones):
 Iconos válidos: Award, ShieldCheck, Users, FileCheck, Star, MapPin, Wrench, CheckCircle,
 Phone, Zap, Hammer, Paintbrush, Home, Building, Key, BadgeCheck, ClipboardCheck, FileText.`;
 
-    const text = await callLLM(prompt, 180_000);
+    const text = await callLLM(prompt, modelName, true);
     const match = text.match(/\{[\s\S]+\}/);
-    if (!match) throw new Error(`${isGemini ? 'Gemini' : 'Claude'} no devolvió JSON válido para la home`);
+    if (!match) throw new Error(`${modelName} no devolvió JSON válido para la home`);
     const c = JSON.parse(match[0]);
 
     send('status', { message: 'Contenido generado ✓ — construyendo MDX...' });

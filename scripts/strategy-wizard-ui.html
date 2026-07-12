@@ -149,6 +149,38 @@ footer{padding:16px 0 20px;border-top:1px solid var(--border);display:flex;justi
 .alert-error{background:#450a0a;color:#fca5a5;border:1px solid var(--red)}
 .alert-success{background:#064e3b;color:#6ee7b7;border:1px solid var(--green)}
 
+.llm-select-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+.llm-select-container label {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+.llm-select-container select {
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+.llm-select-container select:focus {
+  border: none;
+  outline: none;
+}
+
 .mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}
 .flex{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .spacer{flex:1}
@@ -164,7 +196,18 @@ footer{padding:16px 0 20px;border-top:1px solid var(--border);display:flex;justi
 <header>
   <div class="logo">Strategy <span>Wizard</span></div>
   <div class="steps" id="stepsNav"></div>
-  <div class="step-label" id="stepLabel">Paso 1 de 6</div>
+  <div class="flex" style="gap:12px; align-items:center;">
+    <div class="llm-select-container">
+      <label for="llmSelector">LLM:</label>
+      <select id="llmSelector">
+        <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recomendado)</option>
+        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+        <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+        <option value="claude-cli">Claude CLI</option>
+      </select>
+    </div>
+    <div class="step-label" id="stepLabel">Paso 1 de 6</div>
+  </div>
 </header>
 
 <main id="main">
@@ -329,7 +372,19 @@ const state = {
 };
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+function getSelectedModel() {
+  return document.getElementById('llmSelector')?.value || 'gemini-1.5-flash';
+}
+
 async function init() {
+  const savedModel = localStorage.getItem('active_llm');
+  if (savedModel && document.getElementById('llmSelector')) {
+    document.getElementById('llmSelector').value = savedModel;
+  }
+  document.getElementById('llmSelector')?.addEventListener('change', (e) => {
+    localStorage.setItem('active_llm', e.target.value);
+  });
+
   renderStepNav();
   renderFooter();
   await loadBusiness();
@@ -548,7 +603,11 @@ async function generateAvatarUI() {
   const btn = document.getElementById('btnGenAvatar') || document.querySelector('[onclick="generateAvatarUI()"]');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generando...'; }
   try {
-    const r = await fetch('/api/avatar/generate', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+    const r = await fetch('/api/avatar/generate', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ llmModel: getSelectedModel() })
+    });
     const data = await r.json();
     if (data.error) { alert('Error: ' + data.error); return; }
     state.avatar = data;
@@ -590,7 +649,7 @@ async function generateKeywords() {
   try {
     const r = await fetch('/api/keywords/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ avatar: state.avatar })
+      body: JSON.stringify({ avatar: state.avatar, llmModel: getSelectedModel() })
     });
     const data = await r.json();
     if (data.error) { alert(data.error); return; }
@@ -709,7 +768,7 @@ async function generateArchitecture() {
     const selected = state.keywords.filter(k=>k.selected);
     const r = await fetch('/api/architecture/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ keywords: selected, avatar: state.avatar })
+      body: JSON.stringify({ keywords: selected, avatar: state.avatar, llmModel: getSelectedModel() })
     });
     const data = await r.json();
     if (data.error) { alert(data.error); return; }
@@ -831,7 +890,7 @@ async function generateSinglePage(i) {
   try {
     const r = await fetch('/api/generate-page', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ keyword: page.keyword, city, type: page.type, niche, analyzeSerp })
+      body: JSON.stringify({ keyword: page.keyword, city, type: page.type, niche, analyzeSerp, llmModel: getSelectedModel() })
     });
 
     const reader = r.body.getReader();
@@ -1068,7 +1127,7 @@ async function generateHome() {
     const r = await fetch('/api/generate-home', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keyword, city, niche: state.business?.niche || '', services, locations, analyzeSerp }),
+      body: JSON.stringify({ keyword, city, niche: state.business?.niche || '', services, locations, analyzeSerp, llmModel: getSelectedModel() }),
     });
 
     const reader = r.body.getReader();
