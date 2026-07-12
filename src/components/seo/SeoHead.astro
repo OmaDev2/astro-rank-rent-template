@@ -43,7 +43,9 @@ if (!ogImage) {
     } else if (servicioMatch) {
         ogImage = `${siteOrigin}/og/servicio/${servicioMatch[1]}.png`;
     } else {
-        ogImage = `${siteOrigin}/images/og-${_niche}.webp`;
+        // OG de la home autogenerada con satori (mismo pipeline que zona/servicio).
+        // Cada clon obtiene su OG desde los settings sin subir ninguna imagen a mano.
+        ogImage = `${siteOrigin}/og/home.png`;
     }
 }
 ---

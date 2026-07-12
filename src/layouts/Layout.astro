@@ -18,6 +18,9 @@ import { getSettings } from "../lib/settings";
 import { themes } from "../config/themes";
 import { fontPairs } from "../config/fonts"; // Importante: Debes haber creado este archivo
 import { getThemeColors, hexToRgb } from "../utils/theme";
+// Fuentes self-hosted (GDPR + LCP). Vacío por defecto = no-op; `npm run setup-fonts`
+// lo rellena y activa selfHostFonts para dejar de cargar Google Fonts.
+import "../styles/fonts-local.css";
 
 // 2. Recuperar TODA la configuración unificada
 const settings = (await getSettings()) as any;
@@ -261,15 +264,16 @@ const heroProcessed = isHome
         <meta name="theme-color" content={settings.themeColor || `rgb(${colors.primary})`} />
         {settings.customCss && <style set:html={settings.customCss}></style>}
 
-        {/* --- CARGA DINÁMICA DE FUENTES DE GOOGLE --- */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        <link
-            href={`${activeFont.googleFontsUrl}&display=swap`}
-            rel="stylesheet"
-        />
+        {/* --- FUENTES --- Google Fonts solo si NO se han self-hosteado (npm run setup-fonts) */}
+        {!settings.selfHostFonts && (
+          <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+            <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+            <link href={`${activeFont.googleFontsUrl}&display=swap`} rel="stylesheet" />
+          </>
+        )}
         <link rel="dns-prefetch" href="https://wa.me" />
         {(settings.googleAnalyticsId || settings.gtmId) && (
           <>

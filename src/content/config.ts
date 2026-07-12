@@ -329,6 +329,23 @@ const projects = defineCollection({
     }).passthrough(),
 });
 
+// serviceAreas — páginas CURADAS servicio×zona (long-tail local: "servicio en municipio").
+// Cada archivo MDX define UN combo con contenido único. Colección vacía = 0 páginas = 0
+// riesgo de contenido fino / index bloat. Solo se generan combos definidos explícitamente.
+const serviceAreas = defineCollection({
+    schema: z.object({
+        service: z.string(),   // slug de un servicio existente (colección services)
+        zona: z.string(),      // slug de una zona existente (colección locations)
+        title: z.string().optional(),
+        description: z.string().optional(),
+        heroImage: z.string().optional(),
+        faq: z.array(z.object({
+            question: z.string(),
+            answer: z.string(),
+        })).optional(),
+    }),
+});
+
 // Business — configuración completa del negocio (único punto de verdad)
 const business = defineCollection({
     type: 'data',
@@ -660,6 +677,7 @@ const about = defineCollection({
 export const collections = {
     locations,
     services,
+    serviceAreas,
     projects,
     business,
     design,

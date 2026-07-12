@@ -125,6 +125,52 @@ const defaultFavicon = resolve(ROOT, 'public/favicon.svg');
 check(existsSync(defaultFavicon) || biz.favicon,
     'No hay favicon (ni public/favicon.svg ni configurado en design)', 'warn');
 
+// ── 7. Robots: no bloquear crawlers de IA (visibilidad GEO/LLM) ──
+// Lección de auditoría: bloquear GPTBot/Claude-Web/etc anula el beneficio del FAQPage.
+const astroConfigPath = resolve(ROOT, 'astro.config.mjs');
+if (existsSync(astroConfigPath)) {
+    const cfg = readFileSync(astroConfigPath, 'utf-8');
+    const aiBots = ['GPTBot', 'ChatGPT-User', 'anthropic-ai', 'Claude-Web', 'PerplexityBot', 'Google-Extended'];
+    const blocked = aiBots.filter(bot => {
+        // userAgent: 'GPTBot' ... disallow: '/'  en la misma entrada
+        const re = new RegExp(`userAgent:\\s*['"]${bot}['"][^}]*disallow:\\s*['"]/['"]`, 'i');
+        return re.test(cfg);
+    });
+    check(blocked.length === 0,
+        `robots.txt bloquea crawlers de IA (${blocked.join(', ')}) — reduce visibilidad en ChatGPT/Perplexity/AI Overviews`, 'warn');
+}
+
+// ── 8. Imagen OG estática: peso < 300 KB (WhatsApp/Facebook) ──
+// La OG de la home se autogenera en /og/home.png; esto solo vigila imágenes OG subidas a mano.
+const imagesDir = resolve(ROOT, 'public/images');
+if (existsSync(imagesDir)) {
+    const { readdirSync, statSync } = await import('fs');
+    const ogFiles = readdirSync(imagesDir).filter(f => /^og[-.].*\.(png|jpe?g|webp)$/i.test(f));
+    for (const f of ogFiles) {
+        const kb = statSync(resolve(imagesDir, f)).size / 1024;
+        check(kb <= 300,
+            `public/images/${f} pesa ${kb.toFixed(0)} KB (>300 KB) — WhatsApp/Facebook pueden no mostrar la vista previa`, 'warn');
+    }
+}
+
+// ── 9. areaServed con municipios (páginas /zona y schema local) ──
+check(Array.isArray(biz.areaServed) && biz.areaServed.length > 0,
+    'areaServed vacío — sin municipios no se generan páginas de zona ni areaServed en el schema', 'warn');
+
+// ── 10. Combos servicio×zona: contenido único, no fino (evita index bloat) ──
+const serviceAreasDir = resolve(ROOT, 'src/content/serviceAreas');
+if (existsSync(serviceAreasDir)) {
+    const { readdirSync } = await import('fs');
+    const combos = readdirSync(serviceAreasDir).filter(f => /\.mdx?$/.test(f) && !f.startsWith('_'));
+    for (const file of combos) {
+        const raw = readFileSync(resolve(serviceAreasDir, file), 'utf-8');
+        const body = raw.replace(/^---[\s\S]*?---/, '');           // quita frontmatter
+        const words = (body.match(/\b[\wáéíóúüñ]+\b/gi) || []).length;
+        check(words >= 250,
+            `serviceAreas/${file} — solo ${words} palabras: contenido fino, riesgo de bloat (mín. 250 únicas)`, 'warn');
+    }
+}
+
 // ── RESULTADO ────────────────────────────────────────────────
 console.log('\n🔍 PREFLIGHT CHECK — Validación pre-build\n');
 console.log('─'.repeat(50));

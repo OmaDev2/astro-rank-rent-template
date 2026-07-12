@@ -1,0 +1,169 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Footer from "../../../components/layout/Footer.astro";
+import { getCollection } from "astro:content";
+import { getSettings } from "@/lib/settings";
+import { buildServiceGraph } from "@/lib/seo";
+
+import CtaBlock from "../../../components/mdx/CtaBlock.astro";
+import AlertBlock from "../../../components/mdx/AlertBlock.astro";
+import PhoneBlock from "../../../components/mdx/PhoneBlock.astro";
+import BusinessNameBlock from "../../../components/mdx/BusinessNameBlock.astro";
+import CustomImageBlock from "../../../components/mdx/CustomImageBlock.astro";
+import ContentImage from "../../../components/mdx/ContentImage.astro";
+import H1AsH2 from "../../../components/mdx/H1AsH2.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const [combos, services, locations] = await Promise.all([
+        getCollection("serviceAreas"),
+        getCollection("services"),
+        getCollection("locations"),
+    ]);
+    const svcBySlug = new Map(services.map((s) => [s.slug, s]));
+    const locBySlug = new Map(locations.map((l) => [l.slug, l]));
+
+    // Solo combos cuyo servicio Y zona existen realmente (evita rutas rotas).
+    return combos
+        .filter((c) => svcBySlug.has(c.data.service) && locBySlug.has(c.data.zona))
+        .map((entry) => ({
+            params: { service: entry.data.service, zona: entry.data.zona },
+            props: {
+                entry,
+                service: svcBySlug.get(entry.data.service),
+                zona: locBySlug.get(entry.data.zona),
+                combos,
+            },
+        }));
+}
+
+const { entry, service, zona, combos } = Astro.props;
+const { Content } = await entry.render();
+const settings = await getSettings();
+const testimonials = await getCollection("testimonials", ({ data }) => data.featured === true);
+
+const serviceName = service.data.title;
+const zonaName = zona.data.name;
+
+const pageTitle = entry.data.title || `${serviceName} en ${zonaName} | ${settings.siteName}`;
+const pageDescription =
+    entry.data.description ||
+    `${serviceName} en ${zonaName}. ${settings.siteName}: fabricación e instalación profesional, presupuesto gratis y sin compromiso.`;
+
+const faqs = entry.data.faq || [];
+
+const schema = buildServiceGraph({
+    settings,
+    siteUrl: settings.siteUrl,
+    pageUrl: Astro.url.href,
+    title: pageTitle,
+    serviceName: `${serviceName} en ${zonaName}`,
+    serviceType: serviceName,
+    description: pageDescription,
+    image: entry.data.heroImage || service.data.heroImage,
+    testimonials,
+    faqs,
+    locationNames: [zonaName],
+    breadcrumbs: [
+        { name: "Inicio", item: new URL("/", Astro.site).href },
+        { name: "Servicios", item: new URL("/servicios/", Astro.site).href },
+        { name: serviceName, item: new URL(`/servicios/${service.slug}/`, Astro.site).href },
+        { name: zonaName, item: Astro.url.href },
+    ],
+});
+
+const mdxComponents = { h1: H1AsH2, CtaBlock, AlertBlock, PhoneBlock, BusinessNameBlock, CustomImageBlock, ContentImage };
+
+// Interlinking lateral entre combos (mesh sin tocar los layouts de servicio/zona):
+// el mismo servicio en otras zonas, y otros servicios en esta misma zona.
+const sameServiceOtherZonas = combos.filter(
+    (c) => c.data.service === entry.data.service && c.data.zona !== entry.data.zona,
+);
+const sameZonaOtherServices = combos.filter(
+    (c) => c.data.zona === entry.data.zona && c.data.service !== entry.data.service,
+);
+---
+
+<Layout title={pageTitle} description={pageDescription} schema={schema}>
+    <main class="py-16 lg:py-20">
+        <div class="container mx-auto px-4 max-w-4xl">
+            {/* Breadcrumb */}
+            <nav aria-label="Ruta de navegación" class="text-sm text-body opacity-70 mb-6">
+                <a href="/" class="hover:text-primary">Inicio</a>
+                <span class="mx-2">/</span>
+                <a href="/servicios/" class="hover:text-primary">Servicios</a>
+                <span class="mx-2">/</span>
+                <a href={`/servicios/${service.slug}/`} class="hover:text-primary">{serviceName}</a>
+                <span class="mx-2">/</span>
+                <span class="text-heading font-medium">{zonaName}</span>
+            </nav>
+
+            <h1 class="text-4xl lg:text-5xl font-heading font-bold text-heading mb-8">
+                {serviceName} en {zonaName}
+            </h1>
+
+            {/* Contenido único del combo (MDX) */}
+            <article class="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-heading prose-a:text-primary">
+                <Content components={mdxComponents} />
+            </article>
+
+            {/* Enlaces al servicio y a la zona padre */}
+            <div class="mt-12 flex flex-wrap gap-4">
+                <a
+                    href={`/servicios/${service.slug}/`}
+                    class="inline-flex items-center px-5 py-3 rounded-xl bg-primary text-white font-semibold no-underline hover:opacity-90 transition"
+                >
+                    Ver todo sobre {serviceName}
+                </a>
+                <a
+                    href={`/zona/${zona.slug}/`}
+                    class="inline-flex items-center px-5 py-3 rounded-xl bg-secondary text-heading font-semibold no-underline hover:opacity-90 transition"
+                >
+                    Servicios en {zonaName}
+                </a>
+            </div>
+
+            {/* Interlinking lateral entre combos */}
+            {(sameServiceOtherZonas.length > 0 || sameZonaOtherServices.length > 0) && (
+                <div class="mt-16 grid sm:grid-cols-2 gap-10 border-t border-heading/10 pt-10">
+                    {sameServiceOtherZonas.length > 0 && (
+                        <div>
+                            <h2 class="text-lg font-bold text-heading mb-4">{serviceName} en otras zonas</h2>
+                            <ul class="space-y-2">
+                                {sameServiceOtherZonas.map((c) => (
+                                    <li>
+                                        <a
+                                            href={`/servicios/${c.data.service}/${c.data.zona}/`}
+                                            class="text-primary hover:underline"
+                                        >
+                                            {c.data.title || `${serviceName} en ${c.data.zona}`}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    {sameZonaOtherServices.length > 0 && (
+                        <div>
+                            <h2 class="text-lg font-bold text-heading mb-4">Otros servicios en {zonaName}</h2>
+                            <ul class="space-y-2">
+                                {sameZonaOtherServices.map((c) => (
+                                    <li>
+                                        <a
+                                            href={`/servicios/${c.data.service}/${c.data.zona}/`}
+                                            class="text-primary hover:underline"
+                                        >
+                                            {c.data.title || `${c.data.service} en ${zonaName}`}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    </main>
+    <Footer />
+</Layout>

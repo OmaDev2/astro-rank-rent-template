@@ -14,6 +14,7 @@ import { serviciosPage } from './src/config/keystatic/singletons/serviciosPage';
 // Collections
 import { services } from './src/config/keystatic/collections/services';
 import { locations } from './src/config/keystatic/collections/locations';
+import { serviceAreas } from './src/config/keystatic/collections/serviceAreas';
 import { projects } from './src/config/keystatic/collections/projects';
 import { testimonials } from './src/config/keystatic/collections/testimonials';
 import { blog } from './src/config/keystatic/collections/blog';
@@ -30,7 +31,7 @@ export default config({
         navigation: {
             '⚙️ Configuración': ['business', 'design'],
             '---': [],
-            '📝 Contenido': ['homepage', 'about', 'serviciosPage', 'zonasPage', 'services', 'locations', 'projects', 'testimonials', 'blog'],
+            '📝 Contenido': ['homepage', 'about', 'serviciosPage', 'zonasPage', 'services', 'locations', 'serviceAreas', 'projects', 'testimonials', 'blog'],
             '----': [],
             '📄 Páginas Legales': ['navigation', 'footer', 'legalNotice', 'privacyPolicy', 'cookiesPolicy'],
         },
@@ -53,6 +54,7 @@ export default config({
     collections: {
         services,
         locations,
+        serviceAreas,
         projects,
         testimonials,
         blog,

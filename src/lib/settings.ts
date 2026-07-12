@@ -71,6 +71,8 @@ export async function getSettings() {
         // ── Diseño (Mapeado de grupos anidados de design.ts) ────────────────
         themeSettings:      d?.identity?.themeSettings || d?.themeSettings,
         fontPair:           d?.identity?.fontPair      || d?.fontPair           || 'modern',
+        // Activado por `npm run setup-fonts`: deja de cargar Google Fonts (usa fonts-local.css)
+        selfHostFonts:      d?.identity?.selfHostFonts ?? d?.selfHostFonts       ?? false,
         typographyScale:    d?.identity?.typographyScale || d?.typographyScale  || '',
 
         navbarStyle:        d?.layout?.navbarStyle     || d?.navbarStyle        || 'glass',
