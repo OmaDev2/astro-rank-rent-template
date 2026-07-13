@@ -12,6 +12,7 @@ import readline from 'node:readline';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { proposeDnaInteractive } from './utils/design-dna.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -268,6 +269,10 @@ async function main() {
   const siteUrl   = await ask(rl, 'URL del sitio (opcional)');
   const slogan    = await ask(rl, 'Slogan corto (opcional)');
 
+  // ADN de diseño: cada clon nace con una combinación visual distinta
+  // (tema + fuentes + hero + efectos) para que las webs de la red no se parezcan.
+  const dna = await proposeDnaInteractive(rl, ROOT);
+
   rl.close();
 
   const citySlug    = toSlug(city);
@@ -315,9 +320,11 @@ async function main() {
   console.log('  ✅  Proyecto inicializado');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('');
+  if (dna) console.log(`  🎨 Diseño aplicado: ${dna.nombre}\n`);
   console.log('  Próximos pasos:');
   console.log(`  1. Añadir coordenadas en business/global.yaml (lat/lng de ${city})`);
   console.log('  2. Subir logo a public/ y referenciarlo en design/global.yaml');
+  if (!dna) console.log('  2b. Elegir diseño: node scripts/utils/design-dna.mjs (o desde Keystatic → Diseño)');
   console.log('  3. Subir imagen hero a src/assets/ y configurarla');
   console.log(`  4. npm run content-wizard para generar más servicios con SEO`);
   console.log('  5. npm run dev → abrir Keystatic para revisar el contenido');

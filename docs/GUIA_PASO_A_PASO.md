@@ -116,7 +116,20 @@ Te preguntará, una a una (pulsa Enter tras cada respuesta):
   Slogan corto (opcional):               Fontaneros de confianza en Málaga
 ```
 
-Cuando termine, habrá creado los datos del negocio, un servicio y una zona de ejemplo. ✅
+**Al final te propondrá un diseño** (colores + fuentes + estilo) elegido para que tu web
+no se parezca a otras hechas con el mismo template:
+
+```text
+  🎨 Tierra cálida (terracota, mediterráneo)
+  ¿Aplicar? (Enter = sí · r = otra propuesta · s = saltar):
+```
+
+- **Enter** → lo acepta (podrás retocarlo después en el panel).
+- **r** → te enseña otra propuesta distinta.
+- **s** → lo salta (elegirás el diseño a mano en la FASE 6).
+
+Cuando termine, habrá creado los datos del negocio, el diseño, un servicio y una zona de
+ejemplo. ✅
 
 ---
 
@@ -160,6 +173,9 @@ Pulsa **Save** (arriba). Los cambios se guardan en tu carpeta al instante.
 
 ## FASE 6 — Elegir el diseño (colores y fuentes)
 
+Si aceptaste la propuesta de diseño del asistente (FASE 3), esta fase es solo un repaso.
+Si la saltaste, elige aquí tu diseño.
+
 Menú → **⚙️ Configuración → Diseño y Tema**:
 
 - **Colores:** elige un tema o pon los colores de tu marca.
@@ -167,6 +183,9 @@ Menú → **⚙️ Configuración → Diseño y Tema**:
 - **Layout y efectos:** estilo de cabecera, botones, bordes redondeados, etc.
 
 Guarda y mira la vista previa. Juega hasta que te guste.
+
+> 💡 También puedes pedir propuestas de diseño completas desde la Terminal:
+> `npm run design-dna` (Enter para aceptar, `r` para ver otra).
 
 ---
 

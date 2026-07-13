@@ -7,13 +7,17 @@ Template de sitio web para negocios de servicios locales (Rank & Rent / lead gen
 ## Características principales
 
 - **Page Builder visual** — 15+ bloques de contenido configurables vía CMS sin tocar código
-- **SEO local avanzado** — Schema.org Knowledge Graph (@graph) en todas las páginas, sitemap priorizado, robots.txt configurado
-- **OG images dinámicas** — Generadas en build time para cada servicio y zona
-- **Multi-tema** — 15 temas de color predefinidos + 8 pares de fuentes, cambiables desde el CMS
-- **Interlinking SEO** — Bloques automáticos de servicios-por-zona y zonas-por-servicio
-- **Blog con paginación** — Schema `BlogPosting` y canonicals correctos
+- **SEO local avanzado** — Schema.org Knowledge Graph (@graph) en todas las páginas, sitemap priorizado, robots.txt configurado (crawlers de IA permitidos)
+- **OG images dinámicas** — Generadas en build time para la home, cada servicio y cada zona, con 3 layouts que varían por sitio (nunca hay que subir una OG a mano)
+- **ADN de diseño** — 10 recetas curadas (tema + fuentes + hero + efectos) propuestas por `init-niche` para que cada clon nazca visualmente distinto (`npm run design-dna`)
+- **Multi-tema** — 21 temas de color predefinidos + 9 pares de fuentes, cambiables desde el CMS; self-hosting de fuentes con `npm run setup-fonts`
+- **Interlinking SEO** — Bloques automáticos de servicios-por-zona y zonas-por-servicio, más páginas curadas Servicio × Zona para long-tail local
+- **Blog con paginación** — Schema `BlogPosting`, canonicals correctos y feed RSS en `/rss.xml`
 - **Botones flotantes globales** — WhatsApp y teléfono configurables por dispositivo desde el CMS
+- **Tracking de leads sin footprint** — proxy same-domain `/api/track` hacia n8n (el webhook no aparece en el HTML)
 - **Google Tag Manager** vía Partytown (sin impacto en Core Web Vitals)
+- **Preflight de calidad** — `npm run check:site` valida datos, SEO, peso de OG, robots e índice antes de cada build
+- **IndexNow** — notificación de URLs a Bing/buscadores de IA tras el deploy (`npm run indexnow`)
 
 ---
 
@@ -54,8 +58,14 @@ npm run dev
 | Comando | Acción |
 |---|---|
 | `npm run dev` | Servidor de desarrollo en `localhost:4321` |
-| `npm run build` | Build de producción en `./dist/` |
+| `npm run build` | Build de producción en `./dist/` (incluye preflight) |
 | `npm run preview` | Preview del build en local |
+| `npm run init-niche` | Asistente de nuevo nicho (datos + ADN de diseño) |
+| `npm run design-dna` | Proponer/aplicar recetas de diseño (`--list`, `--apply <key>`) |
+| `npm run setup-fonts` | Self-hostear el par de fuentes elegido (GDPR + LCP) |
+| `npm run check:site` | Preflight de calidad sin hacer build |
+| `npm run content-wizard` | Generar servicios/zonas con IA |
+| `npm run indexnow` | Notificar URLs a IndexNow tras el deploy (necesita `INDEXNOW_KEY`) |
 
 ---
 

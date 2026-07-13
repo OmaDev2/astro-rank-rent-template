@@ -260,7 +260,6 @@ const heroProcessed = isHome
             ? <link rel="icon" href={settings.favicon} />
             : <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         }
-        <meta name="generator" content={Astro.generator} />
         <meta name="theme-color" content={settings.themeColor || `rgb(${colors.primary})`} />
         {settings.customCss && <style set:html={settings.customCss}></style>}
 

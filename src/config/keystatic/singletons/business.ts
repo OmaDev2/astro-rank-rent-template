@@ -67,6 +67,12 @@ export const business = singleton({
         siteUrl: fields.text({
             label: 'URL del Sitio *',
             description: 'Dominio final con https://. Ej: https://fontanerosmadridpro.com',
+            validation: {
+                pattern: {
+                    regex: /^$|^https:\/\/[^\s/]+\.[a-z]{2,}$/i,
+                    message: 'Debe empezar por https:// y no terminar en / (ej: https://minegocio.com)',
+                },
+            },
         }),
 
         ctaText: fields.text({
@@ -79,16 +85,34 @@ export const business = singleton({
         phone: fields.text({
             label: 'Teléfono *',
             description: 'Número de contacto principal. Ej: 600 123 456',
+            validation: {
+                pattern: {
+                    regex: /^$|^\+?[\d\s().-]{9,17}$/,
+                    message: 'Teléfono no válido: usa solo dígitos y espacios (9-15 dígitos). Ej: 600 123 456',
+                },
+            },
         }),
 
         whatsapp: fields.text({
             label: 'WhatsApp *',
             description: 'Con código de país, sin espacios ni "+". Ej: 34600123456',
+            validation: {
+                pattern: {
+                    regex: /^$|^\d{10,15}$/,
+                    message: 'Solo dígitos, con código de país y sin espacios ni "+". Ej: 34600123456',
+                },
+            },
         }),
 
         email: fields.text({
             label: 'Email de Contacto',
             description: 'Email para recibir los formularios. Ej: hola@minegocio.com',
+            validation: {
+                pattern: {
+                    regex: /^$|^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Email no válido. Ej: hola@minegocio.com',
+                },
+            },
         }),
 
         city: fields.text({

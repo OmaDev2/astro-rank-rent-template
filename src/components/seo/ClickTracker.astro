@@ -2,9 +2,13 @@
 import { getSettings } from "@/lib/settings";
 
 const settings = await getSettings();
-const webhookUrl = settings.n8nWebhookUrl;
 
-if (!webhookUrl) return;
+// Sin webhook configurado no se emite el script.
+// El navegador postea a /api/track (same-domain); el proxy reenvía al webhook n8n
+// en el servidor, así el host del webhook no aparece en el HTML (sin footprint).
+if (!settings.n8nWebhookUrl) return;
+
+const webhookUrl = "/api/track";
 ---
 
 <script is:inline define:vars={{ webhookUrl }}>

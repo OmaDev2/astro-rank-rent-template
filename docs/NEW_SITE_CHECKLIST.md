@@ -21,10 +21,12 @@ Este documento detalla el proceso paso a paso para configurar y lanzar un nuevo 
 
 ## 2. Identidad visual
 
+- Aplicar un "ADN de diseño" (lo propone `npm run init-niche`, o a posteriori con
+  `npm run design-dna`) — evita que el clon se parezca a las demás webs de la red.
 - Cambiar logo (ajustes de diseño).
 - Cambiar favicon.
 - Revisar colores (colores de marca y acento).
-- Revisar tipografías.
+- Revisar tipografías (y ejecutar `npm run setup-fonts` para self-hostearlas: mejora LCP).
 - Revisar estilo de botones (redondeados, cuadrados, etc.).
 - Revisar radius/sombras de las tarjetas.
 - Revisar imágenes base.
@@ -201,6 +203,7 @@ Si se quieren publicar artículos:
 - Configurar hosting (Netlify, Vercel, etc.).
 - Revisar variables de entorno (API keys, webhooks).
 - Enviar Sitemap a Google Search Console.
+- (Opcional) Configurar IndexNow: `INDEXNOW_KEY` en `.env` + `npm run indexnow` tras cada deploy.
 - Configurar Google Analytics / Tag Manager.
 - Revisar/Crear ficha en Google Business Profile.
 - Añadir el enlace de la web en la ficha de Google.
@@ -219,6 +222,8 @@ Si se quieren publicar artículos:
 - [ ] El Build es limpio y sin errores.
 - [ ] `sitemap-index.xml` se genera correctamente.
 - [ ] La web carga rápido y se ve bien en móvil.
+- [ ] La vista previa al compartir por WhatsApp muestra la imagen OG (se genera sola en `/og/home.png`).
+- [ ] Si hay páginas Servicio × Zona: cada una tiene 250+ palabras de contenido único.
 
 ---
 

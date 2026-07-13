@@ -41,7 +41,7 @@ npm --version    # debe ser v9 o superior
 
 ```bash
 # 1. Clonar o descargar el template
-git clone <url-del-repo> mi-nuevo-nicho
+git clone https://github.com/OmaDev2/astro-rank-rent-template mi-nuevo-nicho
 cd mi-nuevo-nicho
 
 # 2. Instalar dependencias
@@ -70,6 +70,14 @@ Ejemplo de sesión:
   URL del sitio (opcional):              https://fontaneria-malaga.com
   Slogan corto (opcional):               Fontaneros de confianza en Málaga
 
+  Propuesta de diseño para este clon:
+
+  🎨 Tierra cálida (terracota, mediterráneo)
+     tema: sand_terra · fuentes: artisan_natural · hero: split_photo
+     ...
+  ¿Aplicar? (Enter = sí · r = otra propuesta · s = saltar):
+
+  ✓  Diseño "Tierra cálida" aplicado a src/content/design/global.yaml
   ✓  src/content/business/global.yaml actualizado
   ✓  src/content/services/fontaneria-malaga.mdx creado
   ✓  src/content/locations/malaga.mdx creado
@@ -80,6 +88,17 @@ El script genera:
 - `business/global.yaml` — rellena nombre, servicio, ciudad, teléfono, email y URL
 - Un servicio starter con slug `[servicio]-[ciudad].mdx`
 - Una zona starter con el nombre de la ciudad
+- **El "ADN de diseño"** — propone una combinación curada de tema + fuentes + hero + efectos
+  para que cada clon nazca visualmente distinto. Pulsa `r` para ver otra propuesta o `s`
+  para saltarlo (podrás aplicarlo después o configurarlo a mano en el CMS)
+
+También puedes aplicar o cambiar el diseño en cualquier momento sin re-ejecutar init-niche:
+
+```bash
+npm run design-dna -- --list                # ver las 10 recetas disponibles
+npm run design-dna -- --apply forja_oscura  # aplicar una concreta
+npm run design-dna                          # modo interactivo (propone al azar)
+```
 
 > A partir de aquí, todo se gestiona desde el CMS.
 
@@ -172,6 +191,11 @@ Todo el aspecto visual se controla desde aquí, sin tocar código.
 
 - Selecciona la pareja de fuentes: `modern`, `classic`, `sans`, etc.
 - La previsualización muestra el aspecto real en el CMS
+
+> **Recomendado en producción:** una vez elegido el par de fuentes, ejecuta
+> `npm run setup-fonts` una sola vez. Descarga las fuentes al propio sitio
+> (self-hosting) y deja de cargarlas desde Google: mejora la velocidad (LCP) y es
+> GDPR-friendly. Si cambias de par después, vuelve a ejecutarlo.
 
 #### Escala tipográfica
 
@@ -315,6 +339,19 @@ Campos:
 
 Artículos de blog en `/blog/`. Útil para SEO de cola larga.
 
+### 8.6 Servicio × Zona (`📝 Contenido > 📍 Servicio × Zona`)
+
+Páginas curadas de long-tail local: **"[servicio] en [municipio]"** (ej:
+`/servicios/rejas-de-seguridad/utebo/`). Cada entrada elige un **servicio** y una **zona**
+existentes (desplegables) y lleva su propio contenido.
+
+- **Solo se generan las que crees tú** — no es un producto cartesiano automático.
+- **Regla de oro:** contenido único de mínimo 250 palabras por combo (el preflight avisa
+  si es más corto). Mejor 2-3 servicios estrella × 3-4 zonas buenas que 80 páginas plantilla:
+  el contenido fino perjudica al SEO de todo el dominio.
+- Las páginas se interlinkan solas: mismo servicio en otras zonas, otros servicios en la
+  misma zona, y hacia el servicio y la zona padre. Entran automáticamente al sitemap.
+
 ---
 
 ## 9. Imágenes
@@ -410,7 +447,13 @@ El template genera automáticamente sin que hagas nada:
 - **Schema.org FAQPage** — Desde los bloques de preguntas frecuentes
 - **Sitemap XML** — Se regenera en cada build
 - **Open Graph** — Para compartir en redes sociales
-- **Imágenes OG dinámicas** — Por servicio y zona
+- **Imágenes OG dinámicas** — Por servicio, zona **y la home** (`/og/home.png`, generada
+  desde los datos del negocio con un diseño propio por sitio — no hay que subir ninguna
+  imagen OG a mano)
+- **Feed RSS** — `/rss.xml` con los posts del blog (vacío pero válido si el blog está
+  desactivado)
+- **Tracking sin footprint** — si configuras el webhook n8n en `Mi Negocio`, los clics se
+  envían vía `/api/track` (mismo dominio); la URL del webhook nunca aparece en el HTML
 
 ### Personalizar SEO por página
 
@@ -455,6 +498,18 @@ git push
 ```
 
 Netlify detecta el push y re-deploya automáticamente en 1-2 minutos.
+
+### Después del deploy (opcional): IndexNow
+
+Para notificar a Bing, Yandex y buscadores de IA que hay URLs nuevas o actualizadas
+(indexación casi instantánea):
+
+1. Genera una clave: `openssl rand -hex 16`
+2. Añádela a `.env`: `INDEXNOW_KEY=tu_clave`
+3. `npm run build` y despliega (incluye el archivo de verificación `public/<clave>.txt`)
+4. Tras cada deploy: `npm run indexnow`
+
+Sin `INDEXNOW_KEY` el comando no hace nada (no rompe ningún flujo).
 
 ---
 

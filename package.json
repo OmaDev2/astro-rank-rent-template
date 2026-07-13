@@ -16,6 +16,7 @@
         "images:optimize": "node scripts/optimize-images.mjs",
         "init-niche": "node scripts/init-niche.mjs",
         "setup-fonts": "node scripts/setup-fonts.mjs",
+        "design-dna": "node scripts/utils/design-dna.mjs",
         "indexnow": "node scripts/indexnow.mjs",
         "content-wizard": "node scripts/content-wizard.mjs",
         "strategy-wizard": "node scripts/strategy-wizard.mjs"
