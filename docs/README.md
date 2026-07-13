@@ -64,7 +64,7 @@ npm run dev
 | `npm run design-dna` | Proponer/aplicar recetas de diseño (`--list`, `--apply <key>`) |
 | `npm run setup-fonts` | Self-hostear el par de fuentes elegido (GDPR + LCP) |
 | `npm run check:site` | Preflight de calidad sin hacer build |
-| `npm run content-wizard` | Generar servicios/zonas con IA |
+| `npm run seo-wizard` | ⭐ Pipeline SEO por fases: contexto → plan → home → servicios/zonas |
 | `npm run indexnow` | Notificar URLs a IndexNow tras el deploy (necesita `INDEXNOW_KEY`) |
 
 ---

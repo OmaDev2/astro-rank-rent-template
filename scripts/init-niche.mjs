@@ -326,7 +326,7 @@ async function main() {
   console.log('  2. Subir logo a public/ y referenciarlo en design/global.yaml');
   if (!dna) console.log('  2b. Elegir diseño: node scripts/utils/design-dna.mjs (o desde Keystatic → Diseño)');
   console.log('  3. Subir imagen hero a src/assets/ y configurarla');
-  console.log(`  4. npm run content-wizard para generar más servicios con SEO`);
+  console.log(`  4. npm run seo-wizard contexto → plan → home para generar el contenido con IA`);
   console.log('  5. npm run dev → abrir Keystatic para revisar el contenido');
   console.log('');
   console.log(`  npm run check:site   → verificar configuración antes del deploy`);
