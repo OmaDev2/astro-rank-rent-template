@@ -9,8 +9,9 @@
 |---|---|---|---|
 | `npm run init-niche` | `init-niche.mjs` | Crear un nicho nuevo (datos + ADN de diseño) | Al empezar un clon |
 | `npm run design-dna` | `utils/design-dna.mjs` | Proponer/aplicar recetas de diseño | Al empezar o rediseñar |
-| `npm run strategy-wizard` | `strategy-wizard.mjs` | Planificación SEO completa con IA (UI web) | Antes de crear contenido |
-| `npm run content-wizard` | `content-wizard.mjs` | Generar servicios/zonas MDX con IA | Al crear contenido |
+| `npm run seo-wizard` | `seo-wizard.mjs` | ⭐ Pipeline SEO por fases: contexto → plan → home → servicios/zonas | Todo el contenido |
+| `npm run strategy-wizard` | `strategy-wizard.mjs` | (legacy) Planificación SEO con Gemini (UI web) | Sustituido por seo-wizard |
+| `npm run content-wizard` | `content-wizard.mjs` | (legacy) Página suelta de servicio/zona | Sustituido por seo-wizard |
 | `npm run images:prepare` | `optimize-to-folder.mjs` | Optimizar fotos nuevas antes de subirlas | Al preparar imágenes |
 | `npm run optimize-images` | `optimize-images.mjs` | Convertir a WebP lo ya subido en `public/images/` | Mantenimiento |
 | `npm run setup-fonts` | `setup-fonts.mjs` | Self-hostear el par de fuentes elegido | Una vez por clon |
@@ -59,7 +60,46 @@ Si cambias de par de fuentes en el CMS, vuelve a ejecutarlo.
 
 ## Ciclo de vida: contenido con IA
 
-### `npm run strategy-wizard` — planificación SEO (UI web)
+### `npm run seo-wizard` — ⭐ el pipeline recomendado (Claude CLI)
+
+Flujo completo por fases donde **cada fase alimenta a la siguiente** (adaptación del
+playbook Rank Masters). El estado vive en archivos del proyecto: el contexto en
+`src/content/business/contexto.md` y el plan en `seo_plan.json`.
+
+```bash
+npm run seo-wizard contexto                        # Fase 0: contexto real + buyer personas
+npm run seo-wizard contexto -- --transcript t.txt  #   (desde transcripción de audios/reunión)
+npm run seo-wizard plan                            # Fase 1: arquitectura + keywords validadas
+npm run seo-wizard plan -- --csv carpeta-csvs/     #   (con CSVs de Google Keyword Planner)
+npm run seo-wizard home                            # Fase 2: generar la HOME
+npm run seo-wizard service <slug>                  # Fase 3: cada servicio del plan
+npm run seo-wizard zona <slug>                     #   y cada zona
+npm run seo-wizard status                          # progreso del plan
+```
+
+Qué hace cada fase:
+
+- **contexto** — convierte una transcripción de audios/reunión del cliente (o una
+  entrevista interactiva) en un documento de contexto estructurado con la regla
+  "no inventes nada", + buyer personas con sus frases de búsqueda. **Revísalo a mano.**
+- **plan** — brainstorm de arquitectura (solo keywords transaccionales), validación con
+  volúmenes reales (DataForSEO o CSVs del Keyword Planner), clustering por intención y
+  variantes exhaustivas. Detecta canibalizaciones y añade las zonas de `areaServed`.
+  **Revisa/edita `seo_plan.json` antes de generar.**
+- **home / service / zona** — análisis de los 3 primeros competidores de Google
+  (DataForSEO SERP + claude WebFetch, o pásalos con `--competitors u1,u2,u3`),
+  generación con la voz real del dueño, **checklist automático de cobertura de
+  keywords** (reintegra las que falten), FAQ transaccional + FAQ GEO para LLMs,
+  y escritura del MDX con backup del archivo anterior.
+
+Flags: `--dry-run` (muestra el JSON sin escribir), `--competitors url1,url2,url3`.
+
+Pendiente manual tras generar: imágenes hero y **testimonios reales** (nunca se
+generan testimonios inventados).
+
+**Requiere:** `claude` CLI con sesión. Opcional: DataForSEO en `.env`.
+
+### `npm run strategy-wizard` — planificación SEO (UI web) · legacy
 Abre una interfaz en `http://localhost:3333` para planificar la estrategia completa
 del nicho: análisis de competencia (scrapea URLs), clustering de keywords y plan de
 contenidos. Genera `src/content/business/avatar.yaml` (el "avatar" del negocio que
@@ -67,7 +107,7 @@ usan los prompts) y páginas MDX.
 
 **Requiere:** `GEMINI_API_KEY` en `.env`.
 
-### `npm run content-wizard` — generador de servicios/zonas
+### `npm run content-wizard` — generador de servicios/zonas · legacy
 Genera páginas MDX de servicio o zona con bloques y SEO listos, usando el CLI de
 Claude (necesita sesión activa) y opcionalmente datos reales de keywords vía
 DataForSEO.
@@ -155,6 +195,7 @@ estrategia, y resetea `business/global.yaml` y las páginas a plantilla.
 
 | Script | Necesita |
 |---|---|
+| seo-wizard | `claude` CLI con sesión activa; opcional DataForSEO en `.env` |
 | content-wizard | `claude` CLI con sesión activa; opcional DataForSEO en `.env` |
 | strategy-wizard | `GEMINI_API_KEY` en `.env` |
 | indexnow | `INDEXNOW_KEY` en `.env` |

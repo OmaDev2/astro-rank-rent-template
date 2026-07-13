@@ -18,6 +18,7 @@
         "setup-fonts": "node scripts/setup-fonts.mjs",
         "design-dna": "node scripts/utils/design-dna.mjs",
         "indexnow": "node scripts/indexnow.mjs",
+        "seo-wizard": "node scripts/seo-wizard.mjs",
         "content-wizard": "node scripts/content-wizard.mjs",
         "strategy-wizard": "node scripts/strategy-wizard.mjs"
     },
