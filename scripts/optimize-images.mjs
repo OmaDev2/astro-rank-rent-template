@@ -8,7 +8,8 @@ const TARGET_DIRS = [
     'public/images/blog',
     'public/images/projects',
     'public/images/testimonials',
-    'public/images/uploads'
+    'public/images/uploads',
+    'public/images/serviceAreas'
 ];
 
 const MAX_WIDTH = 1200;

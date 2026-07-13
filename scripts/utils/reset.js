@@ -435,7 +435,31 @@ blocks:
 ---
 `;
 
+async function confirmReset() {
+    // Guarda de seguridad: este script BORRA todo el contenido (servicios, zonas,
+    // blog, proyectos, testimonios). Solo debe ejecutarse en el repo del template,
+    // nunca en la web de un cliente. --yes lo salta (para automatización).
+    if (process.argv.includes('--yes')) return true;
+
+    const readline = await import('node:readline');
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    console.log('\n⚠️  ATENCIÓN: esto BORRA servicios, zonas, blog, proyectos, testimonios');
+    console.log(`   y resetea la configuración a placeholders.`);
+    console.log(`   Carpeta actual: ${process.cwd()}\n`);
+    const answer = await new Promise((res) =>
+        rl.question('   Escribe SI (en mayúsculas) para continuar: ', (a) => res(a.trim()))
+    );
+    rl.close();
+    return answer === 'SI';
+}
+
 async function resetProject() {
+    const ok = await confirmReset();
+    if (!ok) {
+        console.log('\n✋ Cancelado. No se ha borrado nada.');
+        process.exit(0);
+    }
+
     console.log('🗑️  INICIANDO LIMPIEZA COMPLETA (FRESH START)...');
 
     const pathsToClear = [
