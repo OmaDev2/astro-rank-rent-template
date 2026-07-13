@@ -4,6 +4,9 @@ Este documento detalla el proceso paso a paso para configurar y lanzar un nuevo 
 
 ## 1. Configuración inicial del negocio
 
+- Crear `.env` (no viaja con el clon: copiar `.env.example` y rellenar).
+  Para el seo-wizard con datos reales: `DATAFORSEO_LOGIN` y `DATAFORSEO_PASSWORD`.
+
 - Revisar `src/content/business/global.yaml` desde Keystatic.
 - Cambiar:
   - Nombre del negocio.
