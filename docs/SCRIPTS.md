@@ -62,6 +62,8 @@ Si cambias de par de fuentes en el CMS, vuelve a ejecutarlo.
 
 ### `npm run seo-wizard` — ⭐ el pipeline recomendado (Claude CLI)
 
+> 📘 **Guía completa con ejemplos reales:** [SEO-WIZARD.md](./SEO-WIZARD.md)
+
 Flujo completo por fases donde **cada fase alimenta a la siguiente** (adaptación del
 playbook Rank Masters). El estado vive en archivos del proyecto: el contexto en
 `src/content/business/contexto.md` y el plan en `seo_plan.json`.

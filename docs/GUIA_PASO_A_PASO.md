@@ -360,4 +360,6 @@ Netlify vuelve a publicar solo en 1-2 minutos. ✨
 
 - **[Guía Completa](./GUIA_COMPLETA.md)** — cada opción del CMS al detalle.
 - **[Checklist de nueva web](./NEW_SITE_CHECKLIST.md)** — lista para no olvidar nada.
+- **[SEO-Wizard](./SEO-WIZARD.md)** — generar todo el contenido con IA a partir de los
+  audios del cliente (avanzado, requiere Claude CLI).
 - **[README técnico](./README.md)** — stack y arquitectura.
