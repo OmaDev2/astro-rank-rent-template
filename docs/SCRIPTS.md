@@ -64,40 +64,44 @@ Si cambias de par de fuentes en el CMS, vuelve a ejecutarlo.
 
 > 📘 **Guía completa con ejemplos reales:** [SEO-WIZARD.md](./SEO-WIZARD.md)
 
-Flujo completo por fases donde **cada fase alimenta a la siguiente** (adaptación del
-playbook Rank Masters). El estado vive en archivos del proyecto: el contexto en
-`src/content/business/contexto.md` y el plan en `seo_plan.json`.
+Flujo completo por fases donde **cada fase alimenta a la siguiente** (sigue el playbook
+Rank Masters al pie de la letra: el contexto se extrae del cliente sin inventar, los
+buyer personas los genera la IA desde ese contexto). Todo se guarda numerado en
+`seo-proyecto/` para revisar en orden.
 
 ```bash
-npm run seo-wizard contexto                        # Fase 0: contexto real + buyer personas
-npm run seo-wizard contexto -- --transcript t.txt  #   (desde transcripción de audios/reunión)
-npm run seo-wizard plan                            # Fase 1: arquitectura + keywords validadas
-npm run seo-wizard plan -- --csv carpeta-csvs/     #   (con CSVs de Google Keyword Planner)
-npm run seo-wizard home                            # Fase 2: generar la HOME
-npm run seo-wizard service <slug>                  # Fase 3: cada servicio del plan
-npm run seo-wizard zona <slug>                     #   y cada zona
-npm run seo-wizard status                          # progreso del plan
+npm run seo-wizard preguntas                       # cuestionario de discovery para el cliente
+npm run seo-wizard contexto -- --transcript t.txt  # 01: estructura su transcripción (Prompt 01, no inventa)
+npm run seo-wizard personas                        # 02: genera buyer personas desde el contexto
+npm run seo-wizard plan                            # 03: arquitectura + keywords validadas
+npm run seo-wizard plan -- --csv carpeta-csvs/     #     (con CSVs de Google Keyword Planner)
+npm run seo-wizard home                            # genera la HOME
+npm run seo-wizard service <slug>                  # cada servicio del plan
+npm run seo-wizard zona <slug>                     # cada zona
+npm run seo-wizard status                          # progreso
 ```
 
 Qué hace cada fase:
 
-- **contexto** — convierte una transcripción de audios/reunión del cliente (o una
-  entrevista interactiva) en un documento de contexto estructurado con la regla
-  "no inventes nada", + buyer personas con sus frases de búsqueda. **Revísalo a mano.**
+- **preguntas** — genera el cuestionario para mandarle al cliente por WhatsApp.
+- **contexto** — SOLO estructura lo que aporta el cliente (transcripción o pegado), nunca
+  inventa: lo que falta queda como `(sin datos — completar)`. **Revísalo a mano.**
+- **personas** — la IA sí genera aquí los buyer personas, a partir del contexto ya
+  revisado, con sus frases de búsqueda en Google (alimentan el keyword research).
 - **plan** — brainstorm de arquitectura (solo keywords transaccionales), validación con
   volúmenes reales (DataForSEO o CSVs del Keyword Planner), clustering por intención y
   variantes exhaustivas. Detecta canibalizaciones y añade las zonas de `areaServed`.
-  **Revisa/edita `seo_plan.json` antes de generar.**
+  **Revisa/edita `seo-proyecto/plan.json` antes de generar.**
 - **home / service / zona** — análisis de los 3 primeros competidores de Google
   (DataForSEO SERP + claude WebFetch, o pásalos con `--competitors u1,u2,u3`),
-  generación con la voz real del dueño, **checklist automático de cobertura de
-  keywords** (reintegra las que falten), FAQ transaccional + FAQ GEO para LLMs,
-  y escritura del MDX con backup del archivo anterior.
+  generación con la voz real del dueño, **prohibido afirmar nada no confirmado en el
+  contexto** (taller propio, garantías, plazos...), checklist automático de cobertura de
+  keywords, FAQ transaccional + FAQ GEO para LLMs, y MDX con backup del anterior.
 
 Flags: `--dry-run` (muestra el JSON sin escribir), `--competitors url1,url2,url3`.
 
 Pendiente manual tras generar: imágenes hero y **testimonios reales** (nunca se
-generan testimonios inventados).
+generan testimonios inventados). Guía completa: [SEO-WIZARD.md](./SEO-WIZARD.md).
 
 **Requiere:** `claude` CLI con sesión. Opcional: DataForSEO en `.env`.
 

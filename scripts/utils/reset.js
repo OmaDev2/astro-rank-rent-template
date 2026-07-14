@@ -474,6 +474,7 @@ async function resetProject() {
         { path: 'project_plan.json', type: 'file' },
         { path: 'clustering_analysis.md', type: 'file' },
         { path: 'seo_plan.json', type: 'file' },
+        { path: 'seo-proyecto', type: 'dir' },
         { path: 'src/content/business/avatar.yaml', type: 'file' },
         { path: 'src/content/business/contexto.md', type: 'file' },
     ];

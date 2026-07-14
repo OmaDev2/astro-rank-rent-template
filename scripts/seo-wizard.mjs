@@ -3,8 +3,9 @@
  * seo-wizard — Pipeline SEO por fases (adaptación del playbook Rank Masters al template).
  *
  * Cada fase alimenta a la siguiente. El estado vive en archivos del proyecto:
- *   - src/content/business/contexto.md  → contexto REAL del negocio + buyer personas
- *   - seo_plan.json                     → arquitectura + clusters de keywords + estado
+ *   Todos los documentos se guardan numerados en seo-proyecto/ para revisarlos en orden:
+ *   00-material-cliente.txt · 01-contexto.md · 02-buyer-personas.md · 03-plan.md (+plan.json)
+ *   · 04+-<pagina>.md (revisión de cada página; el .mdx real va a src/content/).
  *
  * FASES:
  *   npm run seo-wizard contexto [-- --transcript audios.txt]   Fase 0: transcripción o entrevista → contexto
@@ -29,10 +30,22 @@ import { parse as parseYaml } from 'yaml';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const CONTEXTO_PATH = path.join(ROOT, 'src/content/business/contexto.md');
-const PLAN_PATH = path.join(ROOT, 'seo_plan.json');
+// Carpeta de trabajo: todos los artefactos numerados y revisables en orden.
+const WORKSPACE = path.join(ROOT, 'seo-proyecto');
+const PREGUNTAS_PATH = path.join(WORKSPACE, '00-preguntas-cliente.md');
+const CONTEXTO_PATH = path.join(WORKSPACE, '01-contexto.md');
+const PERSONAS_PATH = path.join(WORKSPACE, '02-buyer-personas.md');
+const PLAN_MD_PATH = path.join(WORKSPACE, '03-plan.md');
+const PLAN_PATH = path.join(WORKSPACE, 'plan.json'); // estado máquina que lee el wizard
 const GLOBAL_PATH = path.join(ROOT, 'src/content/business/global.yaml');
 const HOME_PATH = path.join(ROOT, 'src/content/pages/home.mdx');
+
+function ensureWorkspace() {
+  if (!fs.existsSync(WORKSPACE)) fs.mkdirSync(WORKSPACE, { recursive: true });
+}
+function pageReviewPath(n, slug) {
+  return path.join(WORKSPACE, `${String(n).padStart(2, '0')}-${slug}.md`);
+}
 
 // ── Helpers básicos ───────────────────────────────────────────────────────────
 
@@ -90,6 +103,11 @@ function loadContexto() {
   return fs.readFileSync(CONTEXTO_PATH, 'utf-8');
 }
 
+function loadPersonas() {
+  if (!fs.existsSync(PERSONAS_PATH)) return null;
+  return fs.readFileSync(PERSONAS_PATH, 'utf-8');
+}
+
 function loadPlan() {
   if (!fs.existsSync(PLAN_PATH)) return null;
   try { return JSON.parse(fs.readFileSync(PLAN_PATH, 'utf-8')); } catch { return null; }
@@ -101,11 +119,21 @@ function savePlan(plan) {
 
 // ── Claude CLI ────────────────────────────────────────────────────────────────
 
-function callClaude(prompt, { timeoutMs = 240_000, tools = null, retries = 1 } = {}) {
-  // tools: array de herramientas a permitir en modo no interactivo (ej: ['WebFetch']).
-  // Sin --allowedTools, claude --print bloquea las herramientas al pedir permiso.
-  const cliArgs = ['--print'];
-  if (tools?.length) cliArgs.push('--allowedTools', tools.join(','));
+// Corre dentro de un repo de Claude Code: sin esto, el modelo se comporta como agente de
+// código y, ante prompts largos tipo "documento", intenta escribir el archivo él mismo y
+// devuelve un mensaje pidiendo permiso en vez del contenido. Con esto responde como una
+// API de texto pura. --allowedTools "" es la segunda barrera (bloquea la escritura aunque
+// lo intente); esta es la que evita que lo intente y contamine la salida.
+const PURE_TEXT_SYSTEM_PROMPT = 'Eres una API de generación de texto puro, no un asistente ' +
+  'de código. NUNCA intentes escribir, crear, editar o guardar archivos, ni menciones que ' +
+  'no tienes permiso de escritura, ni uses ninguna herramienta. Simplemente devuelve el ' +
+  'texto o JSON solicitado directamente como tu respuesta, sin explicaciones sobre tus ' +
+  'capacidades ni peticiones de aprobación.';
+
+function callClaude(prompt, { timeoutMs = 240_000, tools = [], retries = 1 } = {}) {
+  // tools: herramientas permitidas. Por defecto [] → `--allowedTools ""` DESACTIVA todas.
+  // Las llamadas que analizan competidores pasan tools: ['WebFetch'].
+  const cliArgs = ['--print', '--allowedTools', tools.join(','), '--append-system-prompt', PURE_TEXT_SYSTEM_PROMPT];
 
   for (let attempt = 0; ; attempt++) {
     const result = spawnSync('claude', cliArgs, {
@@ -316,62 +344,71 @@ function reportCoverage(label, covered, missing) {
   missing.forEach((k) => console.log(`    ✗ ${k}`));
 }
 
-// ── FASE 0: contexto ──────────────────────────────────────────────────────────
+// ── FASE 0a: preguntas (cuestionario de discovery para el CLIENTE) ────────────
+// Playbook Paso 01: "pídele al cliente que te mande notas de voz contándote sus
+// servicios, diferenciadores, clientes y cómo trabaja". Esto genera ese cuestionario.
 
-const INTERVIEW_QUESTIONS = [
-  ['servicios', '¿Qué servicios ofrece exactamente el negocio? (describe cada uno como se lo contarías a un cliente)'],
-  ['diferenciadores', '¿Por qué es mejor que la competencia? Dame ejemplos concretos, no generalidades'],
-  ['rentables', '¿Qué servicios dan más margen o interesan más? ¿Por qué?'],
-  ['clienteTipico', '¿Quién suele contratar? Describe 2-3 casos reales de clientes típicos'],
-  ['zona', '¿Qué zona cubre? (ciudad, barrios, municipios donde se desplaza)'],
-  ['proceso', '¿Cómo trabaja desde que le llaman hasta que entrega? ¿Plazos habituales?'],
-  ['precios', '¿Rangos de precio orientativos que se puedan decir en la web? (o "no publicar")'],
-  ['voz', 'Escribe 2-3 frases TEXTUALES de cómo habla el dueño (ej: "yo lo que hago es...")'],
-];
+async function cmdPreguntas() {
+  ensureWorkspace();
+  const business = loadGlobal();
+  const negocio = [business.siteName, business.niche, business.city].filter(Boolean).join(' · ') || 'el negocio';
 
-async function interview(rl) {
-  console.log('\n  MODO ENTREVISTA — responde como si fueras el dueño (o pegando lo que te contó).');
-  console.log('  Cuanto más concreto, mejor saldrá el contenido. Enter en blanco para saltar.\n');
-  const parts = [];
-  for (const [, q] of INTERVIEW_QUESTIONS) {
-    const answer = await ask(rl, q);
-    if (answer) parts.push(`P: ${q}\nR: ${answer}`);
-  }
-  return parts.join('\n\n');
+  console.log('  → Claude: generando el cuestionario de discovery para el cliente...');
+  const doc = callClaude(`Genera un cuestionario de discovery para enviarle al DUEÑO de un negocio local
+(${negocio}) para que responda por audios de WhatsApp o por escrito. El objetivo es
+recoger la materia prima real con la que luego se escribirá su web. Preséntalo como un
+mensaje amable y directo que el dueño pueda contestar hablando suelto.
+
+Cubre, con preguntas concretas y con ejemplos que le ayuden a explayarse:
+1. Servicios exactos que ofrece (que describa cada uno con sus palabras)
+2. Diferenciadores REALES con ejemplos concretos (qué hace distinto a otros de su gremio)
+3. Qué servicios le dan más margen o le interesan más
+4. Clientes típicos: 2-3 casos reales de trabajos que haya hecho
+5. Zona que cubre de verdad
+6. Cómo trabaja de principio a fin y plazos habituales
+7. Si tiene taller propio, garantía, si atiende urgencias, certificaciones
+8. Precios orientativos que se puedan publicar (o si prefiere no publicarlos)
+
+Termínalo recordándole que hable con naturalidad, como se lo contaría a un amigo, y que
+no se preocupe por el orden. Devuelve solo el cuestionario en markdown, listo para copiar.`);
+
+  fs.writeFileSync(PREGUNTAS_PATH, doc.trim() + '\n', 'utf-8');
+  console.log(`\n  ✓ Cuestionario guardado en seo-proyecto/00-preguntas-cliente.md`);
+  console.log('  Envíaselo al cliente, recoge sus audios, transcríbelos (NotebookLM) y luego:');
+  console.log('  npm run seo-wizard contexto -- --transcript transcripcion.txt');
 }
 
-async function pasteTranscript(rl) {
-  console.log('\n  Pega la transcripción (puede ser larga). Cuando termines, escribe FIN en una línea sola:\n');
+// ── FASE 0b: contexto (Prompt 01 — SOLO estructurar, NO inventar) ─────────────
+
+async function readInput(args) {
+  if (args.transcript) {
+    const p = path.resolve(String(args.transcript));
+    if (!fs.existsSync(p)) { console.error(`✗ No existe el archivo: ${p}`); process.exit(1); }
+    const t = fs.readFileSync(p, 'utf-8');
+    console.log(`  ✓ Cargado: ${p} (${t.split(/\s+/).length} palabras)`);
+    return t;
+  }
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  console.log('\n  Pega la transcripción de los audios del cliente, o TODOS los datos del negocio');
+  console.log('  que tengas (lo que él te haya contado). Al terminar, escribe FIN en una línea sola:\n');
   const lines = [];
   for (;;) {
     const line = await new Promise((res) => rl.question('', res));
     if (line.trim() === 'FIN') break;
     lines.push(line);
   }
+  rl.close();
   return lines.join('\n');
 }
 
 async function cmdContexto(args) {
+  ensureWorkspace();
   const business = loadGlobal();
-  let transcript = '';
+  const material = await readInput(args);
 
-  if (args.transcript) {
-    const p = path.resolve(String(args.transcript));
-    if (!fs.existsSync(p)) { console.error(`✗ No existe el archivo: ${p}`); process.exit(1); }
-    transcript = fs.readFileSync(p, 'utf-8');
-    console.log(`  ✓ Transcripción cargada: ${p} (${transcript.split(/\s+/).length} palabras)`);
-  } else {
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    console.log('\n  ¿De dónde sacamos el contexto del negocio?');
-    console.log('    1. Pegar transcripción de audios/reunión del cliente');
-    console.log('    2. Entrevista (te hago las preguntas y respondes tú)');
-    const mode = await ask(rl, 'Elige 1 o 2', '2');
-    transcript = mode === '1' ? await pasteTranscript(rl) : await interview(rl);
-    rl.close();
-  }
-
-  if (transcript.trim().split(/\s+/).length < 30) {
-    console.error('\n✗ Muy poco material (mínimo ~30 palabras). El contexto saldría inventado — y eso está prohibido.');
+  if (material.trim().split(/\s+/).length < 25) {
+    console.error('\n✗ Muy poco material. El contexto se extrae de lo que aporta el cliente — no se inventa.');
+    console.error('  Consigue sus audios/datos, o genera el cuestionario:  npm run seo-wizard preguntas');
     process.exit(1);
   }
 
@@ -384,13 +421,10 @@ async function cmdContexto(args) {
     Array.isArray(business.areaServed) && business.areaServed.length && `Zona (config): ${business.areaServed.join(', ')}`,
   ].filter(Boolean).join('\n');
 
-  console.log('\n  → Claude: estructurando contexto + buyer personas (esto tarda ~1 min)...');
-  const prompt = `Te paso la transcripción de los audios / entrevista del dueño de un negocio local en España.
-
-DATOS YA CONFIRMADOS DEL NEGOCIO (de la configuración de su web):
-${knownData || '(ninguno)'}
-
-PARTE 1 — Genera un documento de contexto estructurado en markdown con este formato exacto:
+  // Prompt 01 del playbook, literal: solo estructura, no inventa.
+  console.log('\n  → Claude: estructurando el contexto (Prompt 01, sin inventar nada)...');
+  const doc = callClaude(`Te paso la transcripción de los audios / datos del dueño de un negocio local en España.
+A partir de esto, genera un documento de contexto estructurado con este formato exacto:
 
 ## DATOS DEL NEGOCIO
 Nombre, actividad, ubicación, web, teléfono
@@ -399,10 +433,10 @@ Nombre, actividad, ubicación, web, teléfono
 Lista de servicios reales con descripción breve
 
 ## DIFERENCIADORES REALES
-Por qué es mejor que la competencia, con ejemplos concretos de la transcripción
+Por qué es mejor que la competencia, con ejemplos concretos de lo que cuenta el cliente
 
 ## SERVICIOS MÁS RENTABLES
-Cuáles generan más margen o interés y por qué
+Cuáles generan más margen y por qué
 
 ## CLIENTE IDEAL
 A quién le vende, casos típicos que menciona
@@ -411,38 +445,67 @@ A quién le vende, casos típicos que menciona
 Cobertura geográfica real
 
 ## VOZ Y TONO
-Cómo habla el dueño. Incluye frases textuales de la transcripción que capturen su forma de expresarse.
+Cómo habla el dueño. Incluye frases textuales que capturen su forma de expresarse.
 
 REGLA CRÍTICA: No inventes NADA. Solo extrae y estructura lo que dice el propio cliente.
-Si falta información para una sección, escribe "(sin datos — completar)".
+Si para una sección no hay información en el material, escribe exactamente
+"(sin datos — completar)" y NO la rellenes con suposiciones plausibles. Es preferible
+un documento con huecos honestos que uno completo pero inventado.
 
-PARTE 2 — Después, añade una sección:
+DATOS YA CONFIRMADOS (de la configuración de su web, puedes usarlos en DATOS DEL NEGOCIO):
+${knownData || '(ninguno)'}
 
-## BUYER PERSONAS
-Define el buyer persona principal (y secundarios si detectas más de un perfil de cliente
-en la transcripción, máximo 3). Para cada uno:
+MATERIAL DEL CLIENTE:
+${material}`);
 
-### PERFIL [nombre descriptivo]
-**Quién es:** edad aproximada, situación, contexto en el que surge la necesidad
-**Qué quiere conseguir:** el resultado real (no el servicio técnico)
-**Qué le frena o preocupa:** miedos, objeciones, malas experiencias previas
-**Cómo busca en Google:** 10-12 frases textuales que escribiría este cliente
-(mezcla búsquedas de urgencia y reflexivas, con y sin ciudad)
-**Qué le haría elegirnos:** los 3-4 argumentos que más pesan
-
-Para los personas sí puedes extrapolar del contexto, pero ancla cada perfil en lo que
-dice la transcripción. Usa el vocabulario real del cliente, no jerga técnica.
-
-TRANSCRIPCIÓN:
-${transcript}`;
-
-  const doc = callClaude(prompt);
-  const header = `<!-- Generado por seo-wizard (fase contexto) el ${new Date().toISOString().split('T')[0]}.
-     Fuente: ${args.transcript ? 'transcripción' : 'entrevista'}. REVÍSALO: es la base de todo el contenido. -->\n\n`;
+  const header = `<!-- 01 · CONTEXTO — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+     Extraído de lo que aporta el cliente (Prompt 01). REVÍSALO y completa los "(sin datos)". -->\n\n`;
   fs.writeFileSync(CONTEXTO_PATH, header + doc.trim() + '\n', 'utf-8');
+  // Guardar también el material original para trazabilidad
+  fs.writeFileSync(path.join(WORKSPACE, '00-material-cliente.txt'), material.trim() + '\n', 'utf-8');
 
-  console.log(`\n  ✓ Contexto guardado en src/content/business/contexto.md`);
-  console.log('\n  ⚠ REVISA el documento antes de seguir (corrige lo que Claude haya entendido mal).');
+  console.log(`\n  ✓ Contexto guardado en seo-proyecto/01-contexto.md`);
+  console.log('\n  ⚠ REVÍSALO y completa los "(sin datos — completar)" con lo que sepas del cliente.');
+  console.log('  Siguiente paso:  npm run seo-wizard personas');
+}
+
+// ── FASE 0c: personas (Paso 02 — la IA los GENERA desde el contexto) ──────────
+
+async function cmdPersonas() {
+  ensureWorkspace();
+  const contexto = loadContexto();
+  if (!contexto) {
+    console.error('✗ Falta 01-contexto.md — ejecuta antes: npm run seo-wizard contexto');
+    process.exit(1);
+  }
+
+  console.log('  → Claude: generando buyer personas (Paso 02) desde el contexto...');
+  const doc = callClaude(`Teniendo en cuenta este contexto de negocio, define el buyer persona principal
+(y los secundarios si hay más de un perfil de cliente con intención de búsqueda distinta,
+máximo 3). Para cada perfil, este formato:
+
+## PERFIL [nombre descriptivo]
+**Quién es:** edad, situación vital, contexto en el que surge la necesidad
+**Qué quiere conseguir:** el resultado real que busca (no el servicio técnico, sino lo que
+significa para su vida o negocio)
+**Qué le frena o le preocupa:** miedos, objeciones habituales, malas experiencias previas
+**Cómo busca en Google:** 10-12 frases textuales que este cliente escribiría en Google
+cuando tiene el problema (mezcla urgencia y búsquedas reflexivas, con y sin ciudad)
+**Qué le haría elegirnos:** los 3-4 argumentos que más pesan en su decisión
+
+Sé específico. Usa el vocabulario real del cliente, no jerga técnica del sector.
+Ancla cada perfil en lo que dice el contexto; si extrapolas edades o miedos, márcalo con
+"(a validar)".
+
+CONTEXTO DE NEGOCIO:
+${contexto}`);
+
+  const header = `<!-- 02 · BUYER PERSONAS — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+     Generados desde 01-contexto.md (Paso 02). Las frases "Cómo busca en Google" alimentan
+     el keyword research de la fase plan. REVÍSALOS. -->\n\n`;
+  fs.writeFileSync(PERSONAS_PATH, header + doc.trim() + '\n', 'utf-8');
+
+  console.log(`\n  ✓ Buyer personas guardados en seo-proyecto/02-buyer-personas.md`);
   console.log('  Siguiente paso:  npm run seo-wizard plan');
 }
 
@@ -464,9 +527,15 @@ function readCsvDir(dir) {
 }
 
 async function cmdPlan(args) {
+  ensureWorkspace();
   const contexto = loadContexto();
+  const personas = loadPersonas();
   if (!contexto) {
-    console.error('✗ Falta src/content/business/contexto.md — ejecuta antes: npm run seo-wizard contexto');
+    console.error('✗ Falta seo-proyecto/01-contexto.md — ejecuta antes: npm run seo-wizard contexto');
+    process.exit(1);
+  }
+  if (!personas) {
+    console.error('✗ Falta seo-proyecto/02-buyer-personas.md — ejecuta antes: npm run seo-wizard personas');
     process.exit(1);
   }
   const business = loadGlobal();
@@ -480,6 +549,8 @@ async function cmdPlan(args) {
   const brainstorm = extractJson(callClaude(`Basándote en este contexto de negocio y sus buyer personas:
 
 ${contexto}
+
+${personas}
 
 PARTE 1 — Dame hasta 10 ideas de servicios que podrían tener página propia en la web.
 Condiciones:
@@ -594,12 +665,33 @@ Usa volumen null si no hay dato. Ordena services por potencial de negocio.`));
     ],
   };
   savePlan(plan);
+  writePlanMd(plan);
 
-  console.log(`\n  ✓ Plan guardado en seo_plan.json ${validated ? '(validado con datos reales)' : '(⚠ SIN validar)'}`);
+  console.log(`\n  ✓ Plan guardado: seo-proyecto/plan.json + 03-plan.md ${validated ? '(validado con datos reales)' : '(⚠ SIN validar)'}`);
   if (plan.notas) console.log(`\n  Notas: ${plan.notas}`);
   printPlan(plan);
-  console.log('\n  ⚠ Revisa seo_plan.json (borra/edita páginas que no encajen) antes de generar.');
+  console.log('\n  ⚠ Revisa seo-proyecto/03-plan.md (borra/edita páginas que no encajen) antes de generar.');
   console.log('  Siguiente paso:  npm run seo-wizard home');
+}
+
+function writePlanMd(plan) {
+  const rows = plan.pages.map((p) => {
+    const vol = p.volumen != null ? `${p.volumen}/mes` : '—';
+    const vars = (p.variantes || []).map((v) => `\`${v.kw}\`${v.vol ? ` (${v.vol})` : ''}`).join(', ') || '—';
+    return `### [${p.type}] ${p.slug}\n- **Keyword:** ${p.keyword} · **Volumen:** ${vol} · **Prioridad:** ${p.prioridad}\n${p.razon ? `- **Por qué:** ${p.razon}\n` : ''}- **Variantes:** ${vars}\n`;
+  }).join('\n');
+  const md = `<!-- 03 · PLAN — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+     Arquitectura + keywords ${plan.validated ? 'validadas con datos reales' : '(SIN VALIDAR — hipótesis)'}.
+     REVÍSALO: borra páginas que no encajen editando plan.json (este .md es solo lectura). -->
+
+# Plan de contenidos — ${plan.niche || ''} en ${plan.city || ''}
+
+## Notas estratégicas
+${plan.notas || '(sin notas)'}
+
+## Páginas
+${rows}`;
+  fs.writeFileSync(PLAN_MD_PATH, md, 'utf-8');
 }
 
 function printPlan(plan) {
@@ -614,19 +706,31 @@ function printPlan(plan) {
 
 // ── Reglas de redacción compartidas (playbook 08 + 09) ────────────────────────
 
-const WRITING_RULES = `REGLAS DE REDACCIÓN (obligatorias):
+const WRITING_RULES = `REGLA DE HONESTIDAD (la más importante — E-E-A-T):
+- SOLO puedes afirmar como hechos los datos que estén EXPLÍCITOS en el contexto del cliente.
+- PROHIBIDO inventar o dar por supuesto: "taller propio", "maquinaria moderna", garantías,
+  años de experiencia, "precio cerrado", tiempos de respuesta ("te llamamos en 1h"),
+  certificaciones, número de trabajos, atención de urgencias 24h.
+- Si el contexto marca algo como "(sin datos — completar)" o "(a validar)", NO lo escribas
+  como si fuera cierto. Es preferible una página más corta y verdadera que una convincente
+  pero falsa: si el cliente no lo dijo, no va en la web.
+- Trabaja los beneficios desde lo que SÍ consta (servicios reales, a medida, zona, tipos de
+  producto que menciona) y desde los miedos del buyer persona — sin atribuir al negocio
+  capacidades no confirmadas.
+
+REGLAS DE REDACCIÓN (obligatorias):
 1. Español natural, como habla el dueño del negocio — consulta VOZ Y TONO del contexto
    y úsala: el texto debe sonar a él, no a una agencia
 2. PROHIBIDAS las frases genéricas: "somos líderes", "amplia experiencia", "máxima calidad",
    "equipo altamente cualificado", "soluciones integrales", "a la vanguardia"
-3. Usa los DIFERENCIADORES REALES del contexto, con sus ejemplos concretos
+3. Usa los DIFERENCIADORES REALES del contexto, con sus ejemplos concretos (solo los que consten)
 4. La intro engancha en las 2 primeras frases (problema del cliente, no descripción de empresa)
-5. CTAs específicos con urgencia o beneficio ("Te llamamos en 1h", "Visita gratis esta semana")
-   — nunca "contáctanos" a secas
+5. CTAs específicos pero HONESTOS: si no consta el tiempo de respuesta, no lo prometas.
+   Nunca "contáctanos" a secas; sí "Pídenos presupuesto sin compromiso"
 6. Cada título de sección (H2/H3) integra una variante REAL del cluster — no keyword
    principal repetida, no títulos sin búsqueda detrás tipo "Nuestros servicios"
 7. El orden del contenido sigue la progresión del usuario: llega → entiende → confía → decide
-8. Responde a los miedos del buyer persona en features y FAQ (los tienes en el contexto)`;
+8. Responde a los miedos del buyer persona en features y FAQ (los tienes en las personas)`;
 
 const FAQ_RULES = `INSTRUCCIONES FAQ:
 faqSeo — 5 preguntas transaccionales que se escriben en Google:
@@ -643,10 +747,13 @@ faqGeo — 5 preguntas conversacionales para LLMs (ChatGPT, Perplexity):
 // ── FASE 2: home ──────────────────────────────────────────────────────────────
 
 async function cmdHome(args) {
+  ensureWorkspace();
   const contexto = loadContexto();
+  const personas = loadPersonas();
   const plan = loadPlan();
-  if (!contexto) { console.error('✗ Falta contexto.md — ejecuta: npm run seo-wizard contexto'); process.exit(1); }
-  if (!plan) { console.error('✗ Falta seo_plan.json — ejecuta: npm run seo-wizard plan'); process.exit(1); }
+  if (!contexto) { console.error('✗ Falta 01-contexto.md — ejecuta: npm run seo-wizard contexto'); process.exit(1); }
+  if (!personas) { console.error('✗ Falta 02-buyer-personas.md — ejecuta: npm run seo-wizard personas'); process.exit(1); }
+  if (!plan) { console.error('✗ Falta el plan — ejecuta: npm run seo-wizard plan'); process.exit(1); }
 
   const page = plan.pages.find((p) => p.type === 'home');
   const business = loadGlobal();
@@ -665,8 +772,11 @@ async function cmdHome(args) {
   let content = extractJson(callClaude(`Eres un especialista en SEO local y copywriting para negocios de servicios en España.
 Vas a escribir la PÁGINA DE INICIO completa de este negocio.
 
-CONTEXTO REAL DEL NEGOCIO Y BUYER PERSONAS:
+CONTEXTO REAL DEL NEGOCIO:
 ${contexto}
+
+BUYER PERSONAS:
+${personas}
 
 KEYWORD PRINCIPAL: "${page.keyword}"
 VARIANTES DEL CLUSTER QUE DEBEN APARECER EN EL TEXTO (todas las que encajen):
@@ -756,10 +866,12 @@ Iconos Lucide válidos: ShieldCheck, Clock, Users, FileCheck, Star, MapPin, Wren
     console.log(`\n  ✓ Backup de la home anterior: ${path.relative(ROOT, bak)}`);
   }
   fs.writeFileSync(HOME_PATH, buildHomeMdx(content, business), 'utf-8');
+  writePageReview(plan, page, content, { covered, missing, analyses });
   page.status = 'generada';
   savePlan(plan);
 
   console.log('  ✓ src/content/pages/home.mdx generada');
+  console.log(`  ✓ Revisión legible: seo-proyecto/${reviewFilename(plan, page)}`);
   console.log('\n  ⚠ PENDIENTE MANUAL: imagen del hero, y testimonios REALES desde Keystatic');
   console.log('    (no se generan testimonios inventados — política del template).');
   console.log('  Revisa en local:  npm run dev → http://localhost:4321');
@@ -883,14 +995,14 @@ ${faqItems}
 
   - discriminant: contact
     value:
-      title: ${yamlStr(c.contact?.title || 'Pide tu presupuesto gratuito')}
+      title: ${yamlStr(c.contact?.title || 'Contacta con nosotros')}
       subtitle: ${yamlStr(c.contact?.subtitle || '')}
       description: ''
       phone: ''
       whatsapp: ''
       email: ''
       schedule: ''
-      responseTime: menos de 24 horas
+      responseTime: ''
 
   - discriminant: cta
     value:
@@ -902,9 +1014,7 @@ ${faqItems}
       buttonLink: /contacto/
       style: gradient
       features:
-        - Visita gratuita
-        - Presupuesto cerrado
-        - Garantía incluida
+${li(c.hero.features || [], '        ')}
 
 seoContentTitle: ''
 stickyPhone: true
@@ -915,10 +1025,12 @@ stickyPhone: true
 // ── FASE 3: service / zona ────────────────────────────────────────────────────
 
 async function cmdPage(type, args) {
+  ensureWorkspace();
   const contexto = loadContexto();
+  const personas = loadPersonas();
   const plan = loadPlan();
-  if (!contexto || !plan) {
-    console.error('✗ Faltan contexto.md o seo_plan.json — ejecuta las fases contexto y plan primero.');
+  if (!contexto || !personas || !plan) {
+    console.error('✗ Faltan pasos previos — ejecuta contexto → personas → plan primero.');
     process.exit(1);
   }
   const slug = args._[1];
@@ -928,7 +1040,7 @@ async function cmdPage(type, args) {
     process.exit(1);
   }
   const page = plan.pages.find((p) => p.type === type && p.slug === slug);
-  if (!page) { console.error(`✗ No existe "${slug}" (tipo ${type}) en seo_plan.json`); process.exit(1); }
+  if (!page) { console.error(`✗ No existe "${slug}" (tipo ${type}) en el plan`); process.exit(1); }
 
   const business = loadGlobal();
   const env = loadEnv();
@@ -947,8 +1059,11 @@ async function cmdPage(type, args) {
   let content = extractJson(callClaude(`Eres un especialista en SEO local y copywriting para negocios de servicios en España.
 Genera el contenido de una página de ${isService ? `servicio: "${page.title}"` : `zona geográfica: "${page.title}"`}.
 
-CONTEXTO REAL DEL NEGOCIO Y BUYER PERSONAS:
+CONTEXTO REAL DEL NEGOCIO:
 ${contexto}
+
+BUYER PERSONAS:
+${personas}
 
 KEYWORD PRINCIPAL: "${page.keyword}"
 VARIANTES DEL CLUSTER QUE DEBEN APARECER (todas las que encajen):
@@ -1007,11 +1122,51 @@ Iconos Lucide válidos: ShieldCheck, Clock, Users, FileCheck, Star, MapPin, Wren
   fs.writeFileSync(outPath, isService
     ? buildServiceMdx(content, page)
     : buildZonaMdx(content, page), 'utf-8');
+  writePageReview(plan, page, content, { covered, missing, analyses });
   page.status = 'generada';
   savePlan(plan);
 
   console.log(`  ✓ ${path.relative(ROOT, outPath)} generada`);
+  console.log(`  ✓ Revisión legible: seo-proyecto/${reviewFilename(plan, page)}`);
   console.log(`  ⚠ Pendiente manual: imagen hero del ${isService ? 'servicio' : 'municipio'} desde Keystatic`);
+}
+
+// ── Doc de revisión legible por página (en seo-proyecto/) ─────────────────────
+
+function reviewFilename(plan, page) {
+  const idx = plan.pages.findIndex((p) => p.slug === page.slug && p.type === page.type);
+  return `${String(4 + Math.max(0, idx)).padStart(2, '0')}-${page.type}-${page.slug}.md`;
+}
+
+function writePageReview(plan, page, content, { covered, missing, analyses }) {
+  const faqs = [...(content.faqSeo || []), ...(content.faqGeo || [])].filter((f) => f.question);
+  const comp = analyses?.length
+    ? analyses.map((a, i) => `- **${a.url}** — ${a.queLesFalta || a.queHacenBien || 'analizado'}`).join('\n')
+    : '- (sin análisis de competencia)';
+  const md = `<!-- ${reviewFilename(plan, page)} — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+     Versión legible de lo generado. El archivo real es el .mdx en src/content/. -->
+
+# ${page.title} — "${page.keyword}"
+
+## Cobertura de keywords
+${covered.map((k) => `- ✓ ${k}`).join('\n')}
+${missing.map((k) => `- ✗ ${k} (no encajó de forma natural)`).join('\n')}
+
+## Competencia analizada
+${comp}
+
+## SEO
+- **Title:** ${content.seoTitle || '—'}
+- **Description:** ${content.seoDescription || '—'}
+
+## Hero
+**${content.hero?.heading || ''} ${content.hero?.headingHighlight || ''}**
+${content.hero?.subheading || ''}
+
+## FAQ (${faqs.length})
+${faqs.map((f) => `**${f.question}**\n${f.answer}\n`).join('\n')}
+`;
+  fs.writeFileSync(path.join(WORKSPACE, reviewFilename(plan, page)), md, 'utf-8');
 }
 
 function buildServiceMdx(c, page) {
@@ -1078,9 +1233,7 @@ ${faqItems}
       buttonLink: /contacto/
       style: gradient
       features:
-        - Visita gratuita
-        - Presupuesto cerrado
-        - Garantía incluida
+${(c.hero.features || []).map((f) => `        - ${yamlStr(f)}`).join('\n')}
 ---
 `;
 }
@@ -1128,8 +1281,11 @@ ${(c.featuresSection?.items || []).map((it) => `        - title: ${yamlStr(it.ti
 function cmdStatus() {
   const plan = loadPlan();
   const contexto = loadContexto();
-  console.log(`\n  Fase 0 contexto:  ${contexto ? '✓ src/content/business/contexto.md' : '○ pendiente — npm run seo-wizard contexto'}`);
-  console.log(`  Fase 1 plan:      ${plan ? `✓ seo_plan.json (${plan.validated ? 'validado' : '⚠ sin validar'})` : '○ pendiente — npm run seo-wizard plan'}`);
+  const personas = loadPersonas();
+  console.log(`\n  Carpeta de trabajo: seo-proyecto/`);
+  console.log(`  01 contexto:  ${contexto ? '✓ 01-contexto.md' : '○ pendiente — npm run seo-wizard contexto'}`);
+  console.log(`  02 personas:  ${personas ? '✓ 02-buyer-personas.md' : '○ pendiente — npm run seo-wizard personas'}`);
+  console.log(`  03 plan:      ${plan ? `✓ plan.json (${plan.validated ? 'validado' : '⚠ sin validar'})` : '○ pendiente — npm run seo-wizard plan'}`);
   if (plan) {
     printPlan(plan);
     const done = plan.pages.filter((p) => p.status === 'generada').length;
@@ -1141,16 +1297,19 @@ function cmdStatus() {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const HELP = `
-seo-wizard — pipeline SEO por fases (contexto → plan → home → servicios/zonas)
+seo-wizard — pipeline SEO por fases. Cada documento se guarda numerado en seo-proyecto/.
 
-  npm run seo-wizard contexto [-- --transcript audios.txt]  Fase 0: contexto real + buyer personas
-  npm run seo-wizard plan     [-- --csv carpeta-csvs/]      Fase 1: arquitectura + keywords validadas
-  npm run seo-wizard home     [-- --competitors u1,u2]      Fase 2: generar la home
-  npm run seo-wizard service <slug>                         Fase 3: generar servicio del plan
-  npm run seo-wizard zona <slug>                            Fase 3: generar zona del plan
-  npm run seo-wizard status                                 Progreso del plan
+  npm run seo-wizard preguntas                              Cuestionario de discovery para el cliente
+  npm run seo-wizard contexto [-- --transcript audios.txt]  01 · estructura el material del cliente (Prompt 01)
+  npm run seo-wizard personas                               02 · genera los buyer personas (Paso 02)
+  npm run seo-wizard plan     [-- --csv carpeta-csvs/]      03 · arquitectura + keywords validadas
+  npm run seo-wizard home     [-- --competitors u1,u2]      genera la home
+  npm run seo-wizard service <slug>                         genera un servicio del plan
+  npm run seo-wizard zona <slug>                            genera una zona del plan
+  npm run seo-wizard status                                 progreso del proyecto
 
-Flags comunes: --dry-run (no escribe archivos), --competitors url1,url2,url3
+Flags: --dry-run (no escribe archivos), --competitors url1,url2,url3
+Flujo:  preguntas → (audios del cliente) → contexto → personas → plan → home → service/zona
 `;
 
 async function main() {
@@ -1158,7 +1317,9 @@ async function main() {
   const cmd = args._[0];
 
   switch (cmd) {
+    case 'preguntas': await cmdPreguntas(); break;
     case 'contexto': await cmdContexto(args); break;
+    case 'personas': await cmdPersonas(); break;
     case 'plan': await cmdPlan(args); break;
     case 'home': await cmdHome(args); break;
     case 'service': await cmdPage('service', args); break;

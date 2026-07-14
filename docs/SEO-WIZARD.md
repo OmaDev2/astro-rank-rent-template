@@ -3,26 +3,67 @@
 > Pipeline SEO por fases con Claude CLI. De los audios del cliente a la web con contenido
 > que posiciona — cada fase alimenta a la siguiente, y tú revisas entre fase y fase.
 >
-> Basado en el playbook "SEO con Claude" de Rank Masters, adaptado a este template
-> (aquí el schema, la maquetación y el interlinking ya son automáticos).
+> Sigue el playbook "SEO con Claude" de Rank Masters **al pie de la letra**: el contexto
+> se extrae de lo que dice el cliente (nunca se inventa), los buyer personas los genera
+> la IA a partir de ese contexto (Paso 02), y todo queda numerado en una carpeta
+> `seo-proyecto/` para revisar en orden, como las capturas del playbook.
 
 ---
 
 ## La idea en 30 segundos
 
 La diferencia entre pedirle a una IA "escríbeme una página de fontanero" y usar bien la IA
-es **la secuencia**: primero contexto real del negocio, luego estrategia validada con
-datos, y solo al final el texto. Así el contenido no suena a IA — porque no lo es del todo:
-**parte de lo que el propio dueño cuenta**.
+es **la secuencia** y **quién aporta cada cosa**:
 
 ```
-🎙️ Audios/entrevista → 📄 contexto.md → 🗺️ seo_plan.json → 🏠 home → 🔧 servicios → 📍 zonas
-      (Fase 0)            (revisas tú)      (revisas tú)     (Fase 2)     (Fase 3)
+👤 CLIENTE           🤖 IA                🤖 IA              🤖 IA
+   aporta datos  →   ESTRUCTURA      →   GENERA          →  ESCRIBE
+   (audios/texto)     (no inventa)        buyer personas      páginas
+                                                                (solo hechos
+                                                                confirmados)
 ```
 
-**Regla de oro del pipeline: entre fase y fase, revisas tú.** El wizard hace el 90% del
-trabajo, pero las dos revisiones manuales (contexto y plan) son las que garantizan que
-todo lo demás salga bien.
+```
+00-preguntas → 00-material-cliente → 01-contexto → 02-buyer-personas → 03-plan → páginas
+  (para el          (lo que el          (Prompt 01)      (Paso 02)      (03+04)
+   cliente)           cliente da)
+```
+
+**Regla de oro nº1: el contexto no se inventa.** Solo se estructura lo que el cliente
+cuenta. Si algo falta, el documento dice `(sin datos — completar)`.
+
+**Regla de oro nº2: la página tampoco inventa.** Ninguna página puede afirmar
+"taller propio", "garantía", "atendemos urgencias 24h" o cualquier otro diferenciador
+que no conste explícitamente en el contexto. Mejor una página más corta y verdadera
+que una convincente pero falsa (esto es E-E-A-T: Google penaliza el contenido genérico
+y premia la experiencia real).
+
+**Regla de oro nº3: entre fase y fase, revisas tú.** El wizard hace el 90% del trabajo,
+pero cada documento se guarda para que lo repases antes de dar el siguiente paso.
+
+---
+
+## La carpeta de trabajo: `seo-proyecto/`
+
+Todo lo que genera el wizard se guarda **numerado, en orden**, para que puedas ir
+abriendo cada archivo y revisándolo como en el playbook:
+
+```
+seo-proyecto/
+├── 00-preguntas-cliente.md     ← cuestionario para enviarle al cliente (opcional)
+├── 00-material-cliente.txt     ← lo que aportó el cliente, tal cual (trazabilidad)
+├── 01-contexto.md              ← Prompt 01: contexto estructurado, sin inventar
+├── 02-buyer-personas.md        ← Paso 02: personas generados desde el contexto
+├── 03-plan.md                  ← arquitectura + keywords (legible)
+├── plan.json                   ← el mismo plan, en formato que lee el wizard
+├── 04-home-home.md             ← revisión de lo generado para la home
+├── 05-service-<slug>.md        ← revisión de cada servicio generado
+└── 06-zona-<slug>.md           ← revisión de cada zona generada
+```
+
+> El `.mdx` real que usa la web vive en `src/content/`. Los archivos de `seo-proyecto/`
+> son la versión **legible para revisar** — título, hero, FAQ, checklist de keywords y
+> competencia analizada, sin YAML de por medio.
 
 ---
 
@@ -34,195 +75,156 @@ todo lo demás salga bien.
 | `npm run init-niche` ejecutado | ✅ | El wizard lee ciudad/nicho/zonas de `business/global.yaml` |
 | `DATAFORSEO_LOGIN/PASSWORD` en `.env` | Recomendado | Volúmenes de búsqueda reales + top 3 de Google automático |
 | CSVs de Google Keyword Planner | Alternativa | Validación de keywords si no tienes DataForSEO |
-| Audios/transcripción del cliente | Recomendado | La materia prima del contexto (si no, modo entrevista) |
-
-Sin DataForSEO ni CSVs el wizard funciona igual, pero el plan queda marcado como
-**"sin validar"** (hipótesis) — sirve para arrancar, no para decidir arquitectura.
+| Audios/transcripción del cliente | **Muy recomendado** | Es la materia prima real — sin esto, el contexto sale con huecos honestos, no inventado |
 
 ---
 
-## FASE 0 — `contexto`: la base de todo
+## FASE 0a — `preguntas`: el cuestionario para el cliente
 
 ```bash
-npm run seo-wizard contexto                          # interactivo (pegar o entrevista)
-npm run seo-wizard contexto -- --transcript notas.txt  # desde archivo
+npm run seo-wizard preguntas
 ```
 
-**Qué hace:** convierte lo que el cliente cuenta en un documento estructurado:
-datos del negocio, servicios concretos, diferenciadores reales (con citas textuales),
-servicios más rentables, cliente ideal, zona de servicio, **voz y tono del dueño**,
-y 1-3 **buyer personas** con sus frases de búsqueda en Google.
+Genera `seo-proyecto/00-preguntas-cliente.md`: un cuestionario de discovery listo para
+mandarle al cliente por WhatsApp, para que responda por notas de voz o por escrito.
+Cubre servicios, diferenciadores reales, rentabilidad, clientes típicos, zona, proceso
+de trabajo, y precios. Es la forma de conseguir la materia prima cuando no la tienes
+todavía.
 
-**De dónde sale la materia prima** (3 opciones):
-
-1. **Transcripción de audios de WhatsApp** — pídele al cliente que te mande notas de voz
-   contando: qué hace, por qué es mejor que otros, quién le contrata, qué zona cubre y
-   cómo trabaja. Transcríbelas (NotebookLM gratis) y pásale el .txt.
-2. **Reunión grabada** (Meet/Zoom) — transcripción igual.
-3. **Modo entrevista** — el wizard te hace 8 preguntas y respondes tú con lo que sepas
-   del negocio. Funciona, pero cuanto más real sea la fuente, menos "a IA" sonará el texto.
-
-**La regla que lo cambia todo:** el prompt lleva la instrucción *"No inventes NADA.
-Solo extrae y estructura lo que dice el propio cliente"*. Lo que falte queda marcado
-como `(sin datos — completar)` en vez de rellenarse con humo.
-
-**Salida:** `src/content/business/contexto.md`
-
-**✋ REVISA ANTES DE SEGUIR:** lee el documento entero. Corrige lo malentendido, completa
-los `(sin datos)` que sepas, borra lo que el cliente no quiera publicar (precios, etc.).
-Este documento es la fuente de TODO el contenido posterior.
-
-> 💡 Ejemplo real de lo que captura (de una prueba con una cerrajería):
-> el wizard extrajo como diferenciador *"Otros van y te revientan el bombín aunque no
-> haga falta, para cobrarte el bombín nuevo. Nosotros no"* — cita textual del dueño.
-> Ese tipo de frase es la que luego hace que la web no suene a agencia.
+Una vez tengas su respuesta, transcríbela (audios → texto con
+[NotebookLM](https://notebooklm.google.com), gratis) y pasa a la Fase 0b.
 
 ---
 
-## FASE 1 — `plan`: estrategia validada con datos
+## FASE 0b — `contexto`: estructurar, no inventar (Prompt 01)
+
+```bash
+npm run seo-wizard contexto -- --transcript audios-cliente.txt   # desde archivo
+npm run seo-wizard contexto                                       # pegar en la terminal
+```
+
+**Qué hace:** toma el material que aportas (transcripción de audios, notas del cliente,
+lo que sea) y lo **estructura** en 6 secciones — nunca añade nada que no esté ahí:
+
+```
+## DATOS DEL NEGOCIO
+## QUÉ HACE (servicios concretos)
+## DIFERENCIADORES REALES
+## SERVICIOS MÁS RENTABLES
+## CLIENTE IDEAL
+## ZONA DE SERVICIO
+## VOZ Y TONO
+```
+
+Si el material no cubre una sección, el documento dice honestamente
+`(sin datos — completar)`. **Esto es intencional**: es mejor saber qué preguntarle al
+cliente en una segunda vuelta que rellenar el hueco con una suposición plausible.
+
+**Al ejecutarlo sin `--transcript`**, te pide pegar el texto en la terminal (útil si
+copias directamente una transcripción o notas). No hay "modo entrevista" que te pida
+inventar datos que no tienes — si no tienes material real, ejecuta primero `preguntas`.
+
+**Salida:** `seo-proyecto/01-contexto.md` + `00-material-cliente.txt` (el original,
+para trazabilidad).
+
+**✋ REVISA ANTES DE SEGUIR:** completa a mano los `(sin datos)` que sepas, corrige lo
+mal entendido, borra lo que el cliente no quiera publicar.
+
+> 💡 Ejemplo real (herrero de Almería, de una transcripción corta): el wizard detectó
+> que el cliente nunca mencionó taller propio, garantía ni precios, y marcó esas
+> secciones como pendientes en vez de inventarlas — incluso avisando exactamente qué
+> preguntarle en una segunda ronda ("¿motoriza las cancelas o no? Nunca lo confirma").
+
+---
+
+## FASE 0c — `personas`: buyer personas (Paso 02, los genera la IA)
+
+```bash
+npm run seo-wizard personas
+```
+
+A diferencia del contexto, **aquí sí es la IA la que construye** — a partir de lo que
+consta en `01-contexto.md`, define 1-3 buyer personas (quién es, qué quiere conseguir,
+qué le frena, cómo busca en Google, qué le haría elegir el negocio). Si algo lo
+extrapola (edad, un miedo no confirmado), lo marca `(a validar)`.
+
+Las frases de "Cómo busca en Google" de cada persona son las semillas del keyword
+research de la fase siguiente.
+
+**Salida:** `seo-proyecto/02-buyer-personas.md`
+
+---
+
+## FASE 1 — `plan`: arquitectura + keywords validadas
 
 ```bash
 npm run seo-wizard plan                       # con DataForSEO si hay credenciales
 npm run seo-wizard plan -- --csv mis-csvs/    # con CSVs de Keyword Planner
 ```
 
-**Qué hace, en 3 pasos:**
+3 pasos: brainstorm de páginas (solo transaccional, solo lo que el negocio ofrece de
+verdad), validación con volúmenes reales, y clustering con variantes exhaustivas +
+detección de canibalizaciones. Añade automáticamente una zona por cada municipio de
+`areaServed`.
 
-1. **Brainstorm de arquitectura** — a partir del contexto, propone hasta 10 páginas de
-   servicio. Solo servicios que el negocio ofrece de verdad y solo **intención
-   transaccional** (quien busca "qué es una acometida" investiga; quien busca
-   "acometida eléctrica Sabadell" contrata).
-2. **Validación con datos reales** — volúmenes de búsqueda por keyword:
-   - Con **DataForSEO**: automático (volúmenes + keywords relacionadas por semilla).
-   - Con **CSVs**: exporta de [Google Keyword Planner](https://ads.google.com/aw/keywordplanner)
-     cada semilla como CSV, mételos todos en una carpeta y pásala con `--csv`.
-     (Soporta el formato UTF-16 con tabuladores que exporta Google.)
-3. **Limpieza + clustering** — descarta marcas de competidores y términos informativos,
-   agrupa por intención real, asigna cada cluster a una página y saca la **lista
-   exhaustiva de variantes semánticas** de cada una (esto es lo que luego garantiza
-   que el texto no se deje keywords fuera).
+**Salida:** `seo-proyecto/03-plan.md` (legible) + `plan.json` (el que lee el wizard).
 
-Además añade automáticamente una página de **zona** por cada municipio de `areaServed`.
-
-**Salida:** `seo_plan.json` + un bloque de **notas estratégicas** en consola.
-
-**✋ REVISA ANTES DE SEGUIR:** abre `seo_plan.json` y borra/edita páginas que no encajen.
-Lee las notas: avisan de canibalizaciones entre páginas, keywords trampa y oportunidades.
-
-> 💡 En la prueba real, las notas del plan incluyeron cosas como: descartar "cerrajeros
-> baratos" (90 búsquedas/mes) por ser tráfico caza-gangas que no convierte con un
-> posicionamiento de precio cerrado; la regla exacta para que "cambio de cerradura" y
-> "cerradura antibumping" no se canibalicen; y que el Google Business Profile iba a mover
-> más facturación que cualquier página ("trátalo como la novena página"). No es una
-> lista de keywords: es estrategia.
+**✋ REVISA ANTES DE SEGUIR:** lee las notas estratégicas y borra/edita páginas
+editando `plan.json`.
 
 ---
 
-## FASE 2 — `home`: la página más importante
+## FASE 2/3 — `home`, `service`, `zona`: escribir las páginas
 
 ```bash
-npm run seo-wizard home                                    # top 3 de Google automático
-npm run seo-wizard home -- --competitors url1,url2,url3    # o pásale los competidores tú
-npm run seo-wizard home -- --dry-run                       # ver el JSON sin escribir nada
-```
-
-**Qué hace:**
-
-1. **Análisis de la competencia real** — busca el top 3 de Google para tu keyword
-   (vía DataForSEO) o usa las URLs que le pases, y las analiza con WebFetch:
-   qué estructura tienen, qué hacen bien, qué les falta. El contenido se genera
-   para **superarlos**, no para imitarlos.
-2. **Generación completa** — hero, intro, diferenciadores, "cómo trabajamos", zonas,
-   FAQ y CTAs, escritos con la **voz del dueño** (del contexto) y con las reglas duras:
-   - Prohibidas las frases genéricas ("somos líderes", "amplia experiencia"…)
-   - Cada H2/H3 integra una variante real del cluster (nada de "Nuestros servicios")
-   - La intro engancha en 2 frases; los CTAs son específicos, no "contáctanos"
-3. **Checklist de cobertura de keywords** ✓/✗ — comprueba programáticamente que TODAS
-   las variantes del cluster están en el texto. Las que faltan se reintegran
-   automáticamente en una segunda pasada y se re-verifica:
-
-   ```
-   CHECKLIST DE KEYWORDS (home):
-     ✓ cerrajero en Granada
-     ✓ cerrajero 24 horas Granada
-     ✓ cerrajero urgente Granada
-     ...
-   ```
-4. **Doble FAQ:**
-   - `faqSeo` — 5 preguntas transaccionales de Google, formato answer-first
-   - `faqGeo` — 5 preguntas conversacionales para ChatGPT/Perplexity: respuestas
-     autocontenidas de 60-100 palabras, mencionan la zona y el negocio (es lo que
-     hace que un LLM te cite cuando alguien pregunta "¿buen cerrajero en Granada?")
-
-**Salida:** `src/content/pages/home.mdx` (con **backup automático** de la anterior:
-`home.bak-<timestamp>.mdx`). El schema JSON-LD (LocalBusiness, FAQPage…) lo emite el
-template solo — no hay que hacer nada.
-
-**✋ Pendiente manual tras generar:** imagen del hero y **testimonios reales** desde
-Keystatic. El wizard no inventa testimonios, nunca (política del template).
-
----
-
-## FASE 3 — `service` y `zona`: el resto del plan
-
-```bash
-npm run seo-wizard status                    # ver qué queda pendiente
-npm run seo-wizard service apertura-de-puertas-granada
-npm run seo-wizard zona armilla
-```
-
-Mismo pipeline que la home (competencia + voz + checklist + doble FAQ), una página del
-plan cada vez. Los slugs son los de `seo_plan.json` — si escribes uno que no existe,
-te lista los disponibles. Cada página generada se marca en el plan (`npm run seo-wizard
-status` te dice el progreso).
-
-**Consejo de orden:** genera primero los 2-3 servicios con más potencial de negocio
-(el plan viene ordenado así), revisa cómo quedan en el navegador, y sigue.
-
----
-
-## Flags de referencia
-
-| Flag | Fases | Qué hace |
-|---|---|---|
-| `--transcript <archivo>` | contexto | Cargar transcripción desde archivo en vez de pegar/entrevista |
-| `--csv <carpeta>` | plan | Validar con CSVs de Google Keyword Planner |
-| `--competitors u1,u2,u3` | home, service, zona | URLs de competidores a mano (si no, top 3 vía DataForSEO) |
-| `--dry-run` | home, service, zona | Muestra el JSON generado sin escribir archivos |
-
-> Recuerda la sintaxis de npm: los flags van tras `--` →
-> `npm run seo-wizard plan -- --csv carpeta/`
-
----
-
-## El flujo completo de un proyecto nuevo, de cero a publicado
-
-```bash
-# 1. Clonar template + datos básicos + diseño
-npm install
-npm run init-niche            # 8 preguntas + ADN de diseño
-
-# 2. Pipeline de contenido
-npm run seo-wizard contexto -- --transcript audios-cliente.txt
-#    → revisar src/content/business/contexto.md
-npm run seo-wizard plan
-#    → revisar seo_plan.json y las notas estratégicas
 npm run seo-wizard home
-npm run seo-wizard service <slug>     # los del plan, por orden de prioridad
+npm run seo-wizard service <slug>
+npm run seo-wizard zona <slug>
+npm run seo-wizard status                    # ver qué queda del plan
+```
+
+Cada página: análisis de los 3 primeros competidores de Google, texto con la voz real
+del dueño (contexto) dirigido a sus buyer personas, checklist automático de cobertura
+de keywords (reintegra las que falten), y doble FAQ (transaccional + citable por LLMs).
+
+**La regla de honestidad se aplica aquí con más fuerza que en ningún otro paso**: el
+prompt prohíbe explícitamente afirmar diferenciadores, garantías, plazos de respuesta o
+capacidades ("taller propio", "atendemos urgencias") que no estén confirmados en el
+contexto. Si el cliente no lo dijo, la página no lo dice.
+
+**Salida:** el `.mdx` real en `src/content/` (con backup automático) + un doc de
+revisión en `seo-proyecto/0N-<tipo>-<slug>.md`.
+
+**✋ Pendiente manual siempre:** imagen del hero y **testimonios reales** desde
+Keystatic. El wizard nunca inventa testimonios.
+
+---
+
+## El flujo completo, de cero a publicado
+
+```bash
+# 1. Datos básicos + diseño
+npm install && npm run init-niche
+
+# 2. Conseguir contexto real (si no lo tienes ya)
+npm run seo-wizard preguntas
+#    → enviar a WhatsApp del cliente, recoger audios, transcribir (NotebookLM)
+
+# 3. Pipeline de contenido
+npm run seo-wizard contexto -- --transcript transcripcion.txt
+#    → revisar seo-proyecto/01-contexto.md
+npm run seo-wizard personas
+#    → revisar seo-proyecto/02-buyer-personas.md
+npm run seo-wizard plan
+#    → revisar seo-proyecto/03-plan.md
+npm run seo-wizard home
+npm run seo-wizard service <slug>     # los del plan, por prioridad
 npm run seo-wizard zona <slug>
 
-# 3. Lo que la IA no hace
-#    → imágenes reales (npm run images:prepare) y testimonios reales (Keystatic)
-#    → repasar todo en npm run dev
-
-# 4. Publicar
-npm run build                 # el preflight avisa si algo quedó flojo
-git add . && git commit && git push   # Netlify despliega
-npm run indexnow              # (opcional) avisar a Bing/IA
+# 4. Lo que la IA no hace: imágenes reales + testimonios reales (Keystatic)
+# 5. Publicar
+npm run build && git push   # + npm run indexnow (opcional)
 ```
-
-Tiempo realista: **30-45 min de máquina + tus dos revisiones**. Cada generación de
-página tarda 1-3 minutos (varias llamadas a Claude + análisis de competidores).
 
 ---
 
@@ -231,32 +233,30 @@ página tarda 1-3 minutos (varias llamadas a Claude + análisis de competidores)
 | Síntoma | Causa y solución |
 |---|---|
 | `claude CLI error: exit 1` | Sin sesión activa → ejecuta `claude` una vez e inicia sesión |
-| `terminado por señal SIGTERM (¿timeout?)` | Generación muy larga o red lenta. El wizard reintenta solo 1 vez; si persiste, relanza el comando |
-| Competidores "✗ (saltado)" | La web bloquea el fetch o falló la extracción. No es crítico (se genera sin ese análisis) — o pásalos con `--competitors` |
-| "Muy poco material (mínimo ~30 palabras)" | La transcripción/entrevista es demasiado corta. Con tan poco, el contexto saldría inventado |
-| El plan queda "⚠ SIN validar" | No hay DataForSEO ni CSVs. Puedes seguir (hipótesis) o validar después re-ejecutando `plan -- --csv` |
-| Keywords ✗ en el checklist tras la reintegración | Esa variante no encajaba de forma natural en ningún sitio. Decisión correcta del sistema: mejor fuera que forzada. Puedes meterla a mano en Keystatic |
-| Quiero regenerar una página | Vuelve a lanzar el comando: hace backup `.bak-<timestamp>.mdx` del anterior automáticamente |
+| La respuesta dice "no tengo permiso de escritura" o pide aprobar antes de darte el documento | Bug conocido de `claude --print` en repos de Claude Code con prompts largos tipo "documento" — el wizard ya lo neutraliza con `--append-system-prompt`. Si lo ves, tu copia del script está desactualizada: sincroniza `scripts/seo-wizard.mjs` desde el template |
+| `contexto.md` con muchos `(sin datos)` | Correcto si el material era escaso — no es un bug. Complétalo a mano o consigue más material del cliente |
+| Competidores "✗ (saltado)" | La web bloquea el fetch. No es crítico, o pásalos con `--competitors` |
+| El plan queda "⚠ SIN validar" | No hay DataForSEO ni CSVs. Puedes seguir (hipótesis) o validar después con `plan -- --csv` |
+| Quiero regenerar una página | Vuelve a lanzar el comando: hace backup `.bak-<timestamp>.mdx` automático |
+| Quiero empezar de cero | Borra la carpeta `seo-proyecto/` (o `npm run reset` en el repo del template) |
 
 ---
 
-## Qué hace el wizard que un prompt suelto no hace
+## Por qué este flujo y no un prompt suelto
 
-1. **Contexto real persistente** — todo parte de lo que dijo el cliente, no de lo que
-   la IA supone de un "fontanero en Madrid" genérico.
-2. **Arquitectura antes que texto** — no se escribe ni una página sin saber qué páginas
-   existen, qué keyword ataca cada una y con qué variantes (adiós canibalizaciones).
-3. **Datos reales** — volúmenes de Google, no intuición.
-4. **Checklist de cobertura verificado por código** — la IA promete integrar keywords;
-   aquí se comprueba con regex y se corrige. Es el paso que un prompt manual siempre se salta.
-5. **GEO integrado** — cada página sale con FAQ citables por LLMs, no solo para Google.
-6. **Lo que no se puede automatizar, no se automatiza** — testimonios e imágenes son
-   reales o no son. El wizard te lo recuerda en cada generación.
+1. **El contexto es del cliente, no de la IA.** Ni tú ni el modelo os inventáis
+   diferenciadores — si el cliente no lo dijo, no está.
+2. **Arquitectura antes que texto.** No se escribe ni una página sin saber qué páginas
+   existen y qué keyword ataca cada una.
+3. **Datos reales de volumen**, no intuición.
+4. **Checklist de cobertura verificado por código**, no solo prometido por la IA.
+5. **GEO integrado** — FAQ citables por LLMs en cada página.
+6. **Honestidad verificable**: cada afirmación de la web remonta a una línea del
+   contexto. Lo que no se puede automatizar (testimonios, fotos), no se automatiza.
 
 ---
 
 ## Relación con los scripts legacy
 
 `content-wizard` (página suelta) y `strategy-wizard` (planificación con Gemini) quedan
-**sustituidos** por este pipeline. Siguen en el repo temporalmente; no los uses para
-proyectos nuevos.
+**sustituidos** por este pipeline. No los uses para proyectos nuevos.
