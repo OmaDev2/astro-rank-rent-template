@@ -1,5 +1,7 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 // ── Color helpers ────────────────────────────────────────────────────────────
 
@@ -28,16 +30,16 @@ let _fontCache: ArrayBuffer | null = null;
 
 async function getFont(): Promise<ArrayBuffer> {
     if (_fontCache) return _fontCache;
-    try {
-        // Inter Bold — fuente limpia y universal, GDPR-friendly desde bunny.net
-        const res = await fetch('https://fonts.bunny.net/inter/files/inter-latin-700-normal.woff');
-        if (!res.ok) throw new Error('font fetch failed');
-        _fontCache = await res.arrayBuffer();
-    } catch {
-        // Fallback: usar la fuente de respaldo de forma segura
-        const res = await fetch('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2');
-        _fontCache = await res.arrayBuffer();
-    }
+    // Las OG se prerenderizan durante el build: la fuente debe vivir en el repo
+    // para que la compilación sea reproducible y no dependa de una red externa.
+    const font = await readFile(join(
+        process.cwd(),
+        'public/fonts/inter-latin-700-normal.woff',
+    ));
+    _fontCache = font.buffer.slice(
+        font.byteOffset,
+        font.byteOffset + font.byteLength,
+    ) as ArrayBuffer;
     return _fontCache;
 }
 
