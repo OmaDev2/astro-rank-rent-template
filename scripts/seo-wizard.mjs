@@ -556,7 +556,16 @@ PARTE 1 — Dame hasta 10 ideas de servicios que podrían tener página propia e
 Condiciones:
 - Solo servicios que el negocio realmente ofrece según el contexto
 - Solo intención transaccional (el usuario quiere contratar, no informarse)
-- Evita solapamientos que canibalizen la misma intención de búsqueda
+- Para cada idea, escribe primero su INTENCIÓN CANÓNICA: el resultado final que busca el
+  cliente, en una frase corta, SIN vocabulario técnico de producto (ej: "cubrir/cerrar el
+  porche para ganar una estancia" — no "pérgola de hierro y cristal").
+- ANTES de añadir una idea nueva a la lista, compárala con las que ya llevas: si dos ideas
+  comparten la misma intención canónica aunque usen nombres de producto distintos (ejemplo
+  real de este mismo tipo de negocio: "pérgola de hierro y cristal para porche" y
+  "cerramiento de porche con hierro y cristal" son LA MISMA intención — cerrar el porche —
+  aunque suenen a productos distintos), NO las propongas como dos servicios. Fusiónalas en
+  una sola idea que cubra ambas variantes de producto.
+- Evita cualquier otro solapamiento que canibalice la misma intención de búsqueda
 
 PARTE 2 — Para la home, define la keyword principal del negocio ("actividad + ${city}").
 
@@ -566,7 +575,9 @@ Devuelve SOLO JSON:
 {
   "home": { "keyword": "actividad en ${city}", "seeds": ["variante 1", "variante 2", "variante 3"] },
   "services": [
-    { "title": "Nombre del servicio", "keyword": "keyword transaccional con ciudad", "seeds": ["variante"], "razon": "por qué merece página propia", "prioridad": 1 }
+    { "title": "Nombre del servicio", "intencion": "intención canónica en una frase corta",
+      "keyword": "keyword transaccional con ciudad", "seeds": ["variante"],
+      "razon": "por qué merece página propia", "prioridad": 1 }
   ]
 }
 Ordena services de mayor a menor potencial de negocio (no de volumen).`));
@@ -615,7 +626,7 @@ ${relatedLines.join('\n')}`;
 
 HOME → keyword principal: "${brainstorm.home.keyword}"
 SERVICIOS:
-${brainstorm.services.map((s, i) => `${i + 1}. ${s.title} → "${s.keyword}" (${s.razon})`).join('\n')}
+${brainstorm.services.map((s, i) => `${i + 1}. ${s.title} → "${s.keyword}" (intención: ${s.intencion || 'no definida'}) — ${s.razon}`).join('\n')}
 
 Y estos datos de keywords:
 ${volumeData}
@@ -624,21 +635,32 @@ TAREA:
 1. LIMPIEZA — descarta keywords irrelevantes: marcas de competidores, términos puramente
    informativos (qué es, cómo funciona...), y cualquier intención no transaccional.
 2. AGRUPACIÓN — agrupa las keywords válidas por intención de búsqueda real.
-3. ASIGNACIÓN — asigna cada grupo a la página correspondiente (home o servicio).
-   Si dos páginas propuestas atacan la misma intención, fusiónalas y dilo en "notas".
-4. VARIANTES EXHAUSTIVAS — para cada página, lista TODAS las variantes semánticas reales.
+3. AUDITORÍA DE CANIBALIZACIÓN (obligatoria, sistemática) — antes de asignar nada, escribe
+   la intención canónica de cada página propuesta (qué resultado final busca el cliente,
+   sin vocabulario técnico de producto). Después compara TODAS las páginas entre sí, par a
+   par (no solo las que parezcan obviamente parecidas): si dos páginas comparten sustantivos
+   o verbos clave en sus variantes (ej. ambas hablan de "porche", "terraza", "cerrar",
+   "cubrir"), o si un usuario que busca una de las dos aterrizaría razonablemente en la otra,
+   son la MISMA intención aunque el nombre de producto sea distinto — FUSIÓNALAS en una sola
+   página con un título que cubra ambos productos/variantes, y explica la fusión en "notas"
+   con las dos páginas afectadas y el motivo. No asumas que el brainstorm ya vino sin
+   solapamientos: repite esta auditoría desde cero con las keywords reales.
+4. ASIGNACIÓN — asigna cada grupo ya depurado a su página final (home o servicio).
+5. VARIANTES EXHAUSTIVAS — para cada página, lista TODAS las variantes semánticas reales.
    Solo variantes con diferencia semántica real (nada de singular/plural o cambio de orden).
 
 Devuelve SOLO JSON:
 {
-  "notas": "observaciones importantes (fusiones, keywords dudosas, oportunidades)",
+  "notas": "observaciones importantes (fusiones con las páginas afectadas y motivo, keywords dudosas, oportunidades)",
   "home": { "keyword": "...", "volumen": 320, "variantes": [{"kw": "...", "vol": 90}] },
   "services": [
-    { "title": "...", "slug": "sugerencia-slug-con-ciudad", "keyword": "...", "volumen": 210,
-      "variantes": [{"kw": "...", "vol": 50}], "prioridad": 1, "razon": "..." }
+    { "title": "...", "intencion": "intención canónica en una frase corta", "slug": "sugerencia-slug-con-ciudad",
+      "keyword": "...", "volumen": 210, "variantes": [{"kw": "...", "vol": 50}], "prioridad": 1, "razon": "..." }
   ]
 }
-Usa volumen null si no hay dato. Ordena services por potencial de negocio.`));
+Usa volumen null si no hay dato. Ordena services por potencial de negocio.
+Si fusionaste páginas, el array "services" debe reflejar el resultado YA fusionado
+(menos páginas que la propuesta original), nunca ambas por separado.`));
 
   // ── Montar el plan (+ zonas desde areaServed) ──
   const zonas = (business.areaServed || [])
@@ -659,7 +681,7 @@ Usa volumen null si no hay dato. Ordena services por potencial de negocio.`));
       ...clusters.services.map((s) => ({
         type: 'service', slug: s.slug || toSlug(s.title), title: s.title, keyword: s.keyword,
         volumen: s.volumen ?? null, variantes: s.variantes || [], prioridad: s.prioridad ?? 5,
-        razon: s.razon || '', status: 'pendiente',
+        razon: s.razon || '', intencion: s.intencion || '', status: 'pendiente',
       })),
       ...zonas,
     ],
@@ -678,11 +700,14 @@ function writePlanMd(plan) {
   const rows = plan.pages.map((p) => {
     const vol = p.volumen != null ? `${p.volumen}/mes` : '—';
     const vars = (p.variantes || []).map((v) => `\`${v.kw}\`${v.vol ? ` (${v.vol})` : ''}`).join(', ') || '—';
-    return `### [${p.type}] ${p.slug}\n- **Keyword:** ${p.keyword} · **Volumen:** ${vol} · **Prioridad:** ${p.prioridad}\n${p.razon ? `- **Por qué:** ${p.razon}\n` : ''}- **Variantes:** ${vars}\n`;
+    return `### [${p.type}] ${p.slug}\n- **Keyword:** ${p.keyword} · **Volumen:** ${vol} · **Prioridad:** ${p.prioridad}\n${p.intencion ? `- **Intención canónica:** ${p.intencion}\n` : ''}${p.razon ? `- **Por qué:** ${p.razon}\n` : ''}- **Variantes:** ${vars}\n`;
   }).join('\n');
   const md = `<!-- 03 · PLAN — seo-wizard, ${new Date().toISOString().split('T')[0]}.
      Arquitectura + keywords ${plan.validated ? 'validadas con datos reales' : '(SIN VALIDAR — hipótesis)'}.
-     REVÍSALO: borra páginas que no encajen editando plan.json (este .md es solo lectura). -->
+     REVÍSALO: borra páginas que no encajen editando plan.json (este .md es solo lectura).
+     Compara la "Intención canónica" de cada página con las demás: si dos suenan al mismo
+     resultado final para el cliente aunque el producto tenga nombre distinto, sospecha
+     canibalización y fusiónalas editando plan.json antes de generar contenido. -->
 
 # Plan de contenidos — ${plan.niche || ''} en ${plan.city || ''}
 
