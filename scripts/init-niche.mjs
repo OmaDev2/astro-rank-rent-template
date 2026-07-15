@@ -29,6 +29,17 @@ function toSlug(str) {
     .replace(/^-+|-+$/g, '');
 }
 
+// El botón de WhatsApp construye el link como https://wa.me/<whatsapp> sin anteponer
+// prefijo de país. Un número nacional español de 9 dígitos (formato habitual al
+// escribir el teléfono) produce un enlace roto. Aquí se normaliza a formato
+// internacional (dígitos, sin +) para que el link funcione siempre.
+function toWhatsappFormat(raw) {
+  const digits = String(raw ?? '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (digits.length === 9) return `34${digits}`; // nacional España → anteponer 34
+  return digits; // ya trae prefijo de país (u otro país) — se deja tal cual
+}
+
 // Escape for single-quoted YAML scalar
 function ys(str) {
   return String(str ?? '').replace(/'/g, "''");
@@ -263,8 +274,9 @@ async function main() {
   const siteName  = await ask(rl, 'Nombre del negocio');
   const niche     = await ask(rl, 'Servicio principal (ej: fontanería, pintura)');
   const city      = await ask(rl, 'Ciudad principal');
-  const phone     = await ask(rl, 'Teléfono');
-  const whatsapp  = await ask(rl, 'WhatsApp', phone);
+  const phone       = await ask(rl, 'Teléfono');
+  const whatsappRaw = await ask(rl, 'WhatsApp (con o sin prefijo 34, enter = mismo que el teléfono)', phone);
+  const whatsapp    = toWhatsappFormat(whatsappRaw);
   const email     = await ask(rl, 'Email');
   const siteUrl   = await ask(rl, 'URL del sitio (opcional)');
   const slogan    = await ask(rl, 'Slogan corto (opcional)');

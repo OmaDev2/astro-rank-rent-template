@@ -1,5 +1,17 @@
 import { getEntry } from 'astro:content';
 
+// Los enlaces wa.me necesitan formato internacional (dígitos, sin '+'). Si en
+// Keystatic se guarda un número nacional español de 9 dígitos (p. ej. copiado
+// directamente del teléfono), el enlace de WhatsApp queda roto en toda la web.
+// Se normaliza aquí, en el único punto de lectura, para proteger a todos los
+// componentes que consumen settings.whatsapp sin tener que tocar cada uno.
+function normalizeWhatsapp(raw: string): string {
+    const digits = String(raw ?? '').replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.length === 9) return `34${digits}`;
+    return digits;
+}
+
 /**
  * Obtiene la configuración completa del sitio.
  * Fuente única: business (todo) + design (tema y fuentes).
@@ -38,7 +50,7 @@ export async function getSettings() {
             lng: b?.coordinates?.lng || '-3.7038',
         },
         phone:    b?.phone    || '',
-        whatsapp: b?.whatsapp || '',
+        whatsapp: normalizeWhatsapp(b?.whatsapp || b?.phone || ''),
         email:    b?.email    || '',
         schedule: b?.schedule || 'Lunes a Viernes: 9:00 - 18:00',
         nif:      b?.nif      || '',
