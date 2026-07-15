@@ -174,26 +174,82 @@ editando `plan.json`.
 
 ---
 
-## FASE 2/3 — `home`, `service`, `zona`: escribir las páginas
+## FASE 2 — `home`: pipeline dedicado
 
 ```bash
-npm run seo-wizard home
-npm run seo-wizard service <slug>
-npm run seo-wizard zona <slug>
-npm run seo-wizard status                    # ver qué queda del plan
+npm run seo-wizard home [-- --competitors u1,u2]
 ```
 
-Cada página: análisis de los 3 primeros competidores de Google, texto con la voz real
-del dueño (contexto) dirigido a sus buyer personas, checklist automático de cobertura
-de keywords (reintegra las que falten), y doble FAQ (transaccional + citable por LLMs).
+La home usa componentes propios (HomeIntro, HomeServices con datos reales de la
+colección `services`, ServiceAreas con `areaServed`) que no tienen equivalente 1:1 en
+el catálogo de bloques genérico — se genera en un único paso (texto + copy + FAQ GEO
+ya combinados), fiel al resto de reglas (honestidad, checklist de keywords).
 
-**La regla de honestidad se aplica aquí con más fuerza que en ningún otro paso**: el
-prompt prohíbe explícitamente afirmar diferenciadores, garantías, plazos de respuesta o
-capacidades ("taller propio", "atendemos urgencias") que no estén confirmados en el
-contexto. Si el cliente no lo dijo, la página no lo dice.
+**Salida:** `src/content/pages/home.mdx` (con backup automático) + `seo-proyecto/content-home.md`.
 
-**Salida:** el `.mdx` real en `src/content/` (con backup automático) + un doc de
-revisión en `seo-proyecto/0N-<tipo>-<slug>.md`.
+---
+
+## FASE 3 — `service`/`zona`: outline → write (pasos 05+06+07 → 08+09+10)
+
+A diferencia de la home, cada servicio y cada zona pasan por **dos comandos con una
+revisión humana en medio** — así es como lo diseña el playbook ("Tú eres el que decide.
+Hay que iterar") y es lo que evita que dos páginas acaben compitiendo por la misma
+búsqueda (canibalización).
+
+```bash
+npm run seo-wizard outline service <slug> [-- --competitors u1,u2]   # pasos 05+06+07
+#    → seo-proyecto/outline-service-<slug>.json (+ .md legible)
+#    ✋ REVISA: jerarquía de encabezados y qué bloques eligió, y por qué
+
+npm run seo-wizard write service <slug>                              # pasos 08+09+10
+#    → src/content/services/<slug>.mdx + seo-proyecto/content-service-<slug>.md
+
+npm run seo-wizard outline zona <slug>
+npm run seo-wizard write zona <slug>
+
+npm run seo-wizard status                    # ver qué queda del plan (○ / ◐ outline / ✓)
+```
+
+### `outline` (05+06+07) — competencia, jerarquía y maquetación
+
+1. **Competencia** — analiza los 3 primeros resultados de Google para la keyword
+   (DataForSEO SERP + Claude WebFetch, o pásalos con `--competitors`).
+2. **Jerarquía H1/H2/H3** — cada H2/H3 usa una variante real del cluster; nunca un
+   título sin búsqueda detrás como "Nuestros servicios".
+3. **Maquetación** — elige, de un catálogo de bloques del template (`trust_strip`,
+   `problem_solution`, `materials`, `comparison`, `process`, `price_factors`, `stats`,
+   `content`, + `faq`/`cta` siempre), cuáles usar y en qué orden, con el motivo de por
+   qué cada uno responde a la intención en ese punto del scroll. Nunca propone bloques
+   que necesiten datos no confirmados (p. ej. `stats` sin cifras reales en el contexto).
+
+**Los bloques `materials` y `comparison` son la pieza clave contra la canibalización**:
+cuando un servicio tiene variantes de producto (tipos, opción A vs B), se cubren
+*dentro* de la misma página en vez de partirse en dos páginas que acaban compitiendo
+por la misma búsqueda (el caso real que motivó este rediseño: "pérgola de hierro" y
+"cerramiento de porche" competían por lo mismo — ahora es una sola página con un
+bloque `comparison` tipo "¿pérgola abierta o cerramiento acristalado? Cómo elegir").
+
+**Salida:** `seo-proyecto/outline-<tipo>-<slug>.json` (fuente de verdad, editable) +
+`.md` legible. **No escribe ningún `.mdx` todavía.**
+
+**✋ REVISA ANTES DE SEGUIR:** añade/quita bloques o encabezados editando el `.json`
+si algo no encaja.
+
+### `write` (08+09+10) — texto, copy y FAQ GEO
+
+1. **Texto** siguiendo exactamente la estructura del outline aprobado (no la cambia).
+2. **Capa de copy — llamada SEPARADA**, como manda el playbook: mejora intro, CTAs y
+   cierre sin tocar la lista de bloques ni perder keywords.
+3. **FAQ GEO** integrado en el bloque `faq` (5 transaccionales + 5 citables por LLMs).
+4. **Checklist de cobertura** verificado tras ambas pasadas, con reintegración
+   automática de las keywords que falten.
+5. **Red de seguridad anti-duplicados**: si el modelo repite un mismo bloque para
+   cubrir un encabezado que no tenía asignado (a veces pasa), el wizard se queda solo
+   con la primera aparición — nunca dos bloques `materials` compitiendo dentro de la
+   misma página.
+
+**Salida:** el `.mdx` real en `src/content/` (con backup automático) + doc de revisión
+en `seo-proyecto/content-<tipo>-<slug>.md`.
 
 **✋ Pendiente manual siempre:** imagen del hero y **testimonios reales** desde
 Keystatic. El wizard nunca inventa testimonios.
@@ -216,13 +272,17 @@ npm run seo-wizard contexto -- --transcript transcripcion.txt
 npm run seo-wizard personas
 #    → revisar seo-proyecto/02-buyer-personas.md
 npm run seo-wizard plan
-#    → revisar seo-proyecto/03-plan.md
+#    → revisar seo-proyecto/03-plan.md (¿alguna fusión de canibalización pendiente?)
 npm run seo-wizard home
-npm run seo-wizard service <slug>     # los del plan, por prioridad
-npm run seo-wizard zona <slug>
 
-# 4. Lo que la IA no hace: imágenes reales + testimonios reales (Keystatic)
-# 5. Publicar
+# 4. Por cada servicio/zona del plan (por prioridad):
+npm run seo-wizard outline service <slug>
+#    → revisar seo-proyecto/outline-service-<slug>.json
+npm run seo-wizard write service <slug>
+# ...repite con zona <slug>
+
+# 5. Lo que la IA no hace: imágenes reales + testimonios reales (Keystatic)
+# 6. Publicar
 npm run build && git push   # + npm run indexnow (opcional)
 ```
 
@@ -237,6 +297,9 @@ npm run build && git push   # + npm run indexnow (opcional)
 | `contexto.md` con muchos `(sin datos)` | Correcto si el material era escaso — no es un bug. Complétalo a mano o consigue más material del cliente |
 | Competidores "✗ (saltado)" | La web bloquea el fetch. No es crítico, o pásalos con `--competitors` |
 | El plan queda "⚠ SIN validar" | No hay DataForSEO ni CSVs. Puedes seguir (hipótesis) o validar después con `plan -- --csv` |
+| `write` dice "Falta el outline" | Ejecuta primero `outline service/zona <slug>` — `write` no genera nada sin un outline aprobado |
+| El mismo bloque aparece dos veces en la página | El wizard ya lo detecta y avisa ("El modelo repitió N bloque(s)...") quedándose con la primera aparición — no debería llegar al `.mdx`, pero si lo ves, vuelve a lanzar `write` |
+| Quiero cambiar la estructura de una página ya escrita | Edita `seo-proyecto/outline-<tipo>-<slug>.json` y vuelve a lanzar `write` |
 | Quiero regenerar una página | Vuelve a lanzar el comando: hace backup `.bak-<timestamp>.mdx` automático |
 | Quiero empezar de cero | Borra la carpeta `seo-proyecto/` (o `npm run reset` en el repo del template) |
 
@@ -246,12 +309,16 @@ npm run build && git push   # + npm run indexnow (opcional)
 
 1. **El contexto es del cliente, no de la IA.** Ni tú ni el modelo os inventáis
    diferenciadores — si el cliente no lo dijo, no está.
-2. **Arquitectura antes que texto.** No se escribe ni una página sin saber qué páginas
-   existen y qué keyword ataca cada una.
+2. **Arquitectura antes que texto**, y **estructura antes que texto**: dos puertas de
+   revisión (`plan` y `outline`) antes de escribir una sola línea, tal como pide el
+   playbook ("Tú eres el que decide").
 3. **Datos reales de volumen**, no intuición.
-4. **Checklist de cobertura verificado por código**, no solo prometido por la IA.
-5. **GEO integrado** — FAQ citables por LLMs en cada página.
-6. **Honestidad verificable**: cada afirmación de la web remonta a una línea del
+4. **Anti-canibalización en dos capas**: auditoría par-a-par de intenciones en `plan`
+   (fusiona páginas que compiten por lo mismo) + bloques `materials`/`comparison` en
+   `outline` (cubren variantes de producto dentro de una página en vez de partirlas).
+5. **Checklist de cobertura verificado por código**, no solo prometido por la IA.
+6. **GEO integrado** — FAQ citables por LLMs en cada página.
+7. **Honestidad verificable**: cada afirmación de la web remonta a una línea del
    contexto. Lo que no se puede automatizar (testimonios, fotos), no se automatiza.
 
 ---

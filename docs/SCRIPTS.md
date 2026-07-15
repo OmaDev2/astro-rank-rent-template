@@ -9,7 +9,7 @@
 |---|---|---|---|
 | `npm run init-niche` | `init-niche.mjs` | Crear un nicho nuevo (datos + ADN de diseño) | Al empezar un clon |
 | `npm run design-dna` | `utils/design-dna.mjs` | Proponer/aplicar recetas de diseño | Al empezar o rediseñar |
-| `npm run seo-wizard` | `seo-wizard.mjs` | ⭐ Pipeline SEO por fases: contexto → plan → home → servicios/zonas | Todo el contenido |
+| `npm run seo-wizard` | `seo-wizard.mjs` | ⭐ Pipeline SEO por fases: contexto → plan → home → outline/write por página | Todo el contenido |
 | `npm run strategy-wizard` | `strategy-wizard.mjs` | (legacy) Planificación SEO con Gemini (UI web) | Sustituido por seo-wizard |
 | `npm run content-wizard` | `content-wizard.mjs` | (legacy) Página suelta de servicio/zona | Sustituido por seo-wizard |
 | `npm run images:prepare` | `optimize-to-folder.mjs` | Optimizar fotos nuevas antes de subirlas | Al preparar imágenes |
@@ -75,10 +75,12 @@ npm run seo-wizard contexto -- --transcript t.txt  # 01: estructura su transcrip
 npm run seo-wizard personas                        # 02: genera buyer personas desde el contexto
 npm run seo-wizard plan                            # 03: arquitectura + keywords validadas
 npm run seo-wizard plan -- --csv carpeta-csvs/     #     (con CSVs de Google Keyword Planner)
-npm run seo-wizard home                            # genera la HOME
-npm run seo-wizard service <slug>                  # cada servicio del plan
-npm run seo-wizard zona <slug>                     # cada zona
-npm run seo-wizard status                          # progreso
+npm run seo-wizard home                            # genera la HOME (pipeline dedicado)
+npm run seo-wizard outline service <slug>          # 05+06+07: competencia + jerarquía + maquetación
+npm run seo-wizard write service <slug>            # 08+09+10: texto + copy + FAQ GEO, desde el outline aprobado
+npm run seo-wizard outline zona <slug>             # igual para zonas
+npm run seo-wizard write zona <slug>
+npm run seo-wizard status                          # progreso (○ pendiente · ◐ outline · ✓ generada)
 ```
 
 Qué hace cada fase:
@@ -90,15 +92,27 @@ Qué hace cada fase:
   revisado, con sus frases de búsqueda en Google (alimentan el keyword research).
 - **plan** — brainstorm de arquitectura (solo keywords transaccionales), validación con
   volúmenes reales (DataForSEO o CSVs del Keyword Planner), clustering por intención y
-  variantes exhaustivas. Detecta canibalizaciones y añade las zonas de `areaServed`.
-  **Revisa/edita `seo-proyecto/plan.json` antes de generar.**
-- **home / service / zona** — análisis de los 3 primeros competidores de Google
-  (DataForSEO SERP + claude WebFetch, o pásalos con `--competitors u1,u2,u3`),
-  generación con la voz real del dueño, **prohibido afirmar nada no confirmado en el
-  contexto** (taller propio, garantías, plazos...), checklist automático de cobertura de
-  keywords, FAQ transaccional + FAQ GEO para LLMs, y MDX con backup del anterior.
+  variantes exhaustivas, con **auditoría de canibalización par-a-par** (fusiona páginas
+  que compiten por la misma intención, ej. "pérgola" y "cerramiento de porche"), y añade
+  las zonas de `areaServed`. Muestra la hipótesis y pide confirmación antes de gastar en
+  validación. **Revisa/edita `seo-proyecto/plan.json` antes de continuar.**
+- **home** — pipeline dedicado en un solo paso (usa componentes propios de la home).
+- **outline** (service/zona) — analiza los 3 primeros competidores de Google (DataForSEO
+  SERP + claude WebFetch, o `--competitors u1,u2,u3`), define la jerarquía H1/H2/H3, y
+  elige qué bloques usar de un catálogo (`trust_strip`, `problem_solution`, `materials`,
+  `comparison`, `process`, `price_factors`, `stats`, `content`, + `faq`/`cta` siempre).
+  Los bloques `materials`/`comparison` son la pieza clave contra la canibalización: cubren
+  variantes de producto (tipos, opción A vs B) *dentro* de una página en vez de partirlas
+  en dos. Guarda `seo-proyecto/outline-<tipo>-<slug>.json` — **no escribe ningún .mdx
+  todavía. Revísalo y edítalo antes de continuar.**
+- **write** (service/zona) — escribe el texto siguiendo el outline aprobado, aplica una
+  **capa de copy en llamada separada** (paso 09 del playbook), genera el FAQ GEO,
+  verifica cobertura de keywords (reintegra las que falten) y descarta bloques repetidos
+  si el modelo se excede. **Prohibido afirmar nada no confirmado en el contexto** (taller
+  propio, garantías, plazos...). Escribe el MDX final con backup del anterior.
 
-Flags: `--dry-run` (muestra el JSON sin escribir), `--competitors url1,url2,url3`.
+Flags: `--dry-run` (muestra el JSON sin escribir), `--competitors url1,url2,url3`,
+`--yes` (plan: no pedir confirmación de la arquitectura).
 
 Pendiente manual tras generar: imágenes hero y **testimonios reales** (nunca se
 generan testimonios inventados). Guía completa: [SEO-WIZARD.md](./SEO-WIZARD.md).

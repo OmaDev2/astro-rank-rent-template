@@ -25,7 +25,7 @@ import readline from 'node:readline';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse as parseYaml } from 'yaml';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -43,9 +43,12 @@ const HOME_PATH = path.join(ROOT, 'src/content/pages/home.mdx');
 function ensureWorkspace() {
   if (!fs.existsSync(WORKSPACE)) fs.mkdirSync(WORKSPACE, { recursive: true });
 }
-function pageReviewPath(n, slug) {
-  return path.join(WORKSPACE, `${String(n).padStart(2, '0')}-${slug}.md`);
-}
+// Artefactos por página: outline (pasos 05+06+07, se revisa y edita ANTES de escribir)
+// y content (revisión legible de lo ya escrito, pasos 08+09+10).
+const pageKey = (type, slug) => (type === 'home' ? 'home' : `${type}-${slug}`);
+function outlineJsonPath(type, slug) { return path.join(WORKSPACE, `outline-${pageKey(type, slug)}.json`); }
+function outlineMdPath(type, slug) { return path.join(WORKSPACE, `outline-${pageKey(type, slug)}.md`); }
+function contentMdPath(type, slug) { return path.join(WORKSPACE, `content-${pageKey(type, slug)}.md`); }
 
 // ── Helpers básicos ───────────────────────────────────────────────────────────
 
@@ -582,6 +585,27 @@ Devuelve SOLO JSON:
 }
 Ordena services de mayor a menor potencial de negocio (no de volumen).`));
 
+  // ── Puerta de revisión (playbook 03: "Tú eres el que decide. Hay que iterar") ──
+  // Antes de gastar en validación (DataForSEO/CSVs), el operador ve las hipótesis
+  // y puede frenar aquí si la arquitectura no encaja, sin haber pagado ninguna
+  // llamada de datos todavía.
+  console.log('\n  HIPÓTESIS DE ARQUITECTURA (sin validar todavía):');
+  console.log(`    [home] "${brainstorm.home.keyword}"`);
+  brainstorm.services.forEach((s, i) => {
+    console.log(`    ${i + 1}. ${s.title} — "${s.keyword}"`);
+    if (s.intencion) console.log(`       intención: ${s.intencion}`);
+  });
+  if (!args.yes) {
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const answer = await ask(rl, '\n  ¿Seguimos con esta arquitectura? (Enter = sí · n = parar aquí)', 's');
+    rl.close();
+    if (/^n/i.test(answer)) {
+      console.log('\n  ✋ Parado. Ajusta el contexto/personas si la arquitectura no encaja y vuelve a lanzar:');
+      console.log('     npm run seo-wizard plan');
+      return;
+    }
+  }
+
   // ── Paso B: validación con datos reales (playbook 04) ──
   let volumeData = '';
   let validated = false;
@@ -724,7 +748,7 @@ function printPlan(plan) {
   for (const p of plan.pages) {
     const vol = p.volumen ? ` · ${p.volumen}/mes` : '';
     const vars = p.variantes?.length ? ` · ${p.variantes.length} variantes` : '';
-    const mark = p.status === 'generada' ? '✓' : '○';
+    const mark = p.status === 'generada' ? '✓' : p.status === 'outline' ? '◐' : '○';
     console.log(`    ${mark} [${p.type}] ${p.slug} — "${p.keyword}"${vol}${vars}`);
   }
 }
@@ -769,7 +793,11 @@ faqGeo — 5 preguntas conversacionales para LLMs (ChatGPT, Perplexity):
 - Basadas en el contexto real — no inventes datos ni precios
 - NO repitas preguntas de faqSeo`;
 
-// ── FASE 2: home ──────────────────────────────────────────────────────────────
+// ── FASE 2: home (pipeline dedicado — ver docs/SEO-WIZARD.md) ─────────────────
+// La home usa componentes propios (HomeIntro, HomeServices con datos reales de la
+// colección services, ServiceAreas con areaServed) que no tienen equivalente 1:1 en
+// BLOCK_CATALOG. Se mantiene en un generador dedicado para no arriesgar su calidad;
+// service/zona sí pasan por el pipeline outline→write de abajo (playbook pasos 05-10).
 
 async function cmdHome(args) {
   ensureWorkspace();
@@ -891,16 +919,16 @@ Iconos Lucide válidos: ShieldCheck, Clock, Users, FileCheck, Star, MapPin, Wren
     console.log(`\n  ✓ Backup de la home anterior: ${path.relative(ROOT, bak)}`);
   }
   fs.writeFileSync(HOME_PATH, buildHomeMdx(content, business), 'utf-8');
-  writePageReview(plan, page, content, { covered, missing, analyses });
+  writeLegacyReview('home', page, content, { covered, missing, analyses });
   page.status = 'generada';
   savePlan(plan);
 
   console.log('  ✓ src/content/pages/home.mdx generada');
-  console.log(`  ✓ Revisión legible: seo-proyecto/${reviewFilename(plan, page)}`);
+  console.log(`  ✓ Revisión legible: seo-proyecto/content-home.md`);
   console.log('\n  ⚠ PENDIENTE MANUAL: imagen del hero, y testimonios REALES desde Keystatic');
   console.log('    (no se generan testimonios inventados — política del template).');
   console.log('  Revisa en local:  npm run dev → http://localhost:4321');
-  console.log('  Siguiente paso:   npm run seo-wizard service <slug>  (mira: npm run seo-wizard status)');
+  console.log('  Siguiente paso:   npm run seo-wizard outline service <slug>  (mira: npm run seo-wizard status)');
 }
 
 function yamlStr(s) { return `'${ys(s ?? '')}'`; }
@@ -1047,128 +1075,12 @@ stickyPhone: true
 `;
 }
 
-// ── FASE 3: service / zona ────────────────────────────────────────────────────
-
-async function cmdPage(type, args) {
-  ensureWorkspace();
-  const contexto = loadContexto();
-  const personas = loadPersonas();
-  const plan = loadPlan();
-  if (!contexto || !personas || !plan) {
-    console.error('✗ Faltan pasos previos — ejecuta contexto → personas → plan primero.');
-    process.exit(1);
-  }
-  const slug = args._[1];
-  if (!slug) {
-    console.error(`✗ Falta el slug. Páginas ${type} del plan:`);
-    plan.pages.filter((p) => p.type === type).forEach((p) => console.error(`    ${p.status === 'generada' ? '✓' : '○'} ${p.slug} — "${p.keyword}"`));
-    process.exit(1);
-  }
-  const page = plan.pages.find((p) => p.type === type && p.slug === slug);
-  if (!page) { console.error(`✗ No existe "${slug}" (tipo ${type}) en el plan`); process.exit(1); }
-
-  const business = loadGlobal();
-  const env = loadEnv();
-  const dfLogin = process.env.DATAFORSEO_LOGIN || env.DATAFORSEO_LOGIN;
-  const dfPassword = process.env.DATAFORSEO_PASSWORD || env.DATAFORSEO_PASSWORD;
-  const competitorUrls = args.competitors ? String(args.competitors).split(',').map((u) => u.trim()) : null;
-  const { analyses, paa } = await analyzeCompetitors({ keyword: page.keyword, competitorUrls, dfLogin, dfPassword });
-
-  const variantesStr = page.variantes.length
-    ? page.variantes.map((v) => `  - "${v.kw}"${v.vol ? ` (${v.vol}/mes)` : ''}`).join('\n')
-    : '  (sin variantes — integra la keyword principal y derivados naturales)';
-
-  const isService = type === 'service';
-  console.log(`  → Claude: generando página de ${isService ? 'servicio' : 'zona'} "${page.title}"...`);
-
-  let content = extractJson(callClaude(`Eres un especialista en SEO local y copywriting para negocios de servicios en España.
-Genera el contenido de una página de ${isService ? `servicio: "${page.title}"` : `zona geográfica: "${page.title}"`}.
-
-CONTEXTO REAL DEL NEGOCIO:
-${contexto}
-
-BUYER PERSONAS:
-${personas}
-
-KEYWORD PRINCIPAL: "${page.keyword}"
-VARIANTES DEL CLUSTER QUE DEBEN APARECER (todas las que encajen):
-${variantesStr}
-${isService ? '' : `\nESTA PÁGINA es para clientes de ${page.title}: adapta ejemplos, desplazamiento y cercanía a ese municipio. NO dupliques el contenido de la home — enfócalo 100% local.`}
-
-${analyses ? competitorContext(analyses) : ''}
-${paa?.length ? `PREGUNTAS "PEOPLE ALSO ASK":\n${paa.map((q) => `  - ${q}`).join('\n')}` : ''}
-
-${WRITING_RULES}
-
-${FAQ_RULES}
-
-Devuelve SOLO un objeto JSON válido:
-{
-  "seoTitle": "máx 60 chars: keyword + ${isService ? 'ciudad' : 'municipio'} + ' | ' + nombre del negocio",
-  "seoDescription": "máx 155 chars con CTA",
-  "shortDesc": "máx 115 chars para tarjeta",
-  "hero": {
-    "heading": "H1 sin parte destacada", "headingHighlight": "parte destacada",
-    "subheading": "2 frases que enganchan", "features": ["b1", "b2", "b3"],
-    "ctaPrimaryText": "CTA específico"
-  },
-  "trustStrip": [ { "icon": "IconoLucide", "label": "corto" }, {}, {}, {} ],
-  "featuresSection": { "title": "H2 con variante", "items": [ { "title": "...", "description": "...", "icon": "..." }, {}, {} ] },
-  "faqSeo": [ { "question": "...", "answer": "..." }, {}, {}, {}, {} ],
-  "faqGeo": [ { "question": "...", "answer": "..." }, {}, {}, {}, {} ],
-  "cta": { "title": "...", "subtitle": "...", "buttonText": "..." }
-}
-
-Iconos Lucide válidos: ShieldCheck, Clock, Users, FileCheck, Star, MapPin, Wrench, CheckCircle, Phone, Zap, Award, Hammer, Home, Building, Key, Truck, Ruler.`,
-  { timeoutMs: 300_000 }));
-
-  const allVariants = [page.keyword, ...page.variantes.map((v) => v.kw)];
-  let { covered, missing } = checkCoverage(content, allVariants);
-  if (missing.length) {
-    content = fixCoverage(content, missing);
-    ({ covered, missing } = checkCoverage(content, allVariants));
-  }
-  reportCoverage(page.slug, covered, missing);
-
-  if (args['dry-run'] || args.dry) {
-    console.log('\n  [DRY RUN] JSON generado:\n');
-    console.log(JSON.stringify(content, null, 2).slice(0, 3000));
-    return;
-  }
-
-  const outDir = path.join(ROOT, isService ? 'src/content/services' : 'src/content/locations');
-  fs.mkdirSync(outDir, { recursive: true });
-  const outPath = path.join(outDir, `${page.slug}.mdx`);
-  if (fs.existsSync(outPath)) {
-    const bak = outPath.replace(/\.mdx$/, `.bak-${Date.now()}.mdx`);
-    fs.copyFileSync(outPath, bak);
-    console.log(`  ✓ Backup: ${path.relative(ROOT, bak)}`);
-  }
-  fs.writeFileSync(outPath, isService
-    ? buildServiceMdx(content, page)
-    : buildZonaMdx(content, page), 'utf-8');
-  writePageReview(plan, page, content, { covered, missing, analyses });
-  page.status = 'generada';
-  savePlan(plan);
-
-  console.log(`  ✓ ${path.relative(ROOT, outPath)} generada`);
-  console.log(`  ✓ Revisión legible: seo-proyecto/${reviewFilename(plan, page)}`);
-  console.log(`  ⚠ Pendiente manual: imagen hero del ${isService ? 'servicio' : 'municipio'} desde Keystatic`);
-}
-
-// ── Doc de revisión legible por página (en seo-proyecto/) ─────────────────────
-
-function reviewFilename(plan, page) {
-  const idx = plan.pages.findIndex((p) => p.slug === page.slug && p.type === page.type);
-  return `${String(4 + Math.max(0, idx)).padStart(2, '0')}-${page.type}-${page.slug}.md`;
-}
-
-function writePageReview(plan, page, content, { covered, missing, analyses }) {
+function writeLegacyReview(key, page, content, { covered, missing, analyses }) {
   const faqs = [...(content.faqSeo || []), ...(content.faqGeo || [])].filter((f) => f.question);
   const comp = analyses?.length
-    ? analyses.map((a, i) => `- **${a.url}** — ${a.queLesFalta || a.queHacenBien || 'analizado'}`).join('\n')
+    ? analyses.map((a) => `- **${a.url}** — ${a.queLesFalta || a.queHacenBien || 'analizado'}`).join('\n')
     : '- (sin análisis de competencia)';
-  const md = `<!-- ${reviewFilename(plan, page)} — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+  const md = `<!-- content-${key}.md — seo-wizard, ${new Date().toISOString().split('T')[0]}.
      Versión legible de lo generado. El archivo real es el .mdx en src/content/. -->
 
 # ${page.title} — "${page.keyword}"
@@ -1191,114 +1103,495 @@ ${content.hero?.subheading || ''}
 ## FAQ (${faqs.length})
 ${faqs.map((f) => `**${f.question}**\n${f.answer}\n`).join('\n')}
 `;
-  fs.writeFileSync(path.join(WORKSPACE, reviewFilename(plan, page)), md, 'utf-8');
+  fs.writeFileSync(path.join(WORKSPACE, `content-${key}.md`), md, 'utf-8');
 }
 
-function buildServiceMdx(c, page) {
-  const seoJson = JSON.stringify({ title: c.seoTitle, description: c.seoDescription });
-  const heroFeatures = (c.hero.features || []).map((f) => `        - ${yamlStr(f)}`).join('\n');
-  const trustItems = (c.trustStrip || []).filter((t) => t.label).map((t) =>
-    `        - icon: ${t.icon || 'CheckCircle'}\n          label: ${yamlStr(t.label)}\n          description: ''`).join('\n');
-  const featureItems = (c.featuresSection?.items || []).map((it) =>
-    `        - title: ${yamlStr(it.title)}\n          description: ${yamlStr(it.description)}\n          icon: ${it.icon || 'CheckCircle'}`).join('\n');
-  const allFaq = [...(c.faqSeo || []), ...(c.faqGeo || [])].filter((f) => f.question);
-  const faqItems = allFaq.map((f) =>
-    `          - question: ${yamlStr(f.question)}\n            answer: >-\n${String(f.answer).split('\n').map((l) => `              ${l}`).join('\n')}`).join('\n');
+// ── Catálogo de bloques (playbook paso 07, adaptado a los bloques Astro reales) ─
+// Cada entrada: appliesTo (tipos de página donde el schema de content/config.ts
+// permite este discriminant), when (para qué momento del scroll sirve — esto es
+// lo que el modelo usa en `outline` para decidir la maquetación), skeleton (forma
+// exacta del `value` que `write` debe rellenar).
+//
+// "comparison" y "materials" son la pieza clave para evitar canibalización: cubren
+// variantes de un mismo servicio (tipos de producto, opción A vs B) DENTRO de una
+// página en vez de partirlas en dos páginas que compitan por la misma intención.
 
-  return `---
-title: ${yamlStr(page.title)}
-icon: Wrench
-shortDesc: ${yamlStr(c.shortDesc)}
-featured: true
-seo: '${ys(seoJson)}'
-blocks:
-  - discriminant: hero
-    value:
-      heading: ${yamlStr(c.hero.heading)}
-      headingHighlight: ${yamlStr(c.hero.headingHighlight)}
-      subheading: ${yamlStr(c.hero.subheading)}
-      ctaPrimaryText: ${yamlStr(c.hero.ctaPrimaryText)}
-      ctaSecondaryText: WhatsApp
-      ctaPrimaryLink: '#contacto'
-      ctaSecondaryLink: ''
-      titleTag: h1
-      features:
-${heroFeatures}
+const BLOCK_CATALOG = {
+  trust_strip: {
+    appliesTo: ['service', 'zona'],
+    when: 'Justo bajo el hero. Confirma confianza al instante con 3-4 señales cortas (icono+label). Úsalo si el contexto da señales concretas (años, garantía, zona, tipo de trabajo) — nunca inventadas.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', variant: 'bar', items: [{ icon: 'IconoLucide', label: 'máx 4 palabras, solo si consta en el contexto' }] },
+  },
+  problem_solution: {
+    appliesTo: ['service', 'zona'],
+    when: 'Tras el hero/trust_strip cuando la intención es de miedo/urgencia (ej. "se me rompió", "tengo goteras"). Enfrenta el problema del cliente con la solución concreta del negocio.',
+    skeleton: { title: '', subtitle: '', problemTitle: '', problemText: '1-2 frases del dolor real del buyer persona', solutionTitle: '', solutionText: '1-2 frases de cómo lo resuelve ESTE negocio', variant: 'split', titleTag: 'h2' },
+  },
+  materials: {
+    appliesTo: ['service', 'zona'],
+    when: 'Cuando el servicio tiene varios TIPOS o VARIANTES de producto que el cliente no sabe nombrar (ej. rejas fija/abatible/ballesta, cerraduras KABA/Tesa/DOM). Cubre en un solo bloque lo que si no acabaría canibalizando en páginas separadas.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', variant: 'grid', items: [{ title: 'nombre del tipo/material', description: '1 frase: para qué sirve o cuándo se elige', icon: 'IconoLucide' }], note: '' },
+  },
+  comparison: {
+    appliesTo: ['service', 'zona'],
+    when: 'Cuando hay una decisión real entre DOS opciones dentro del mismo servicio (ej. corredera vs abatible, inox vs hierro pintado). Resuelve la duda sin crear una página aparte para cada opción.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', leftTitle: 'Opción A', rightTitle: 'Opción B', rows: [{ label: 'criterio de comparación', left: 'cómo queda la opción A', right: 'cómo queda la opción B' }], conclusion: '1 frase de cuándo elegir cada una', variant: 'table' },
+  },
+  process: {
+    appliesTo: ['service', 'zona'],
+    when: 'Cuando el negocio tiene un proceso de trabajo real descrito en el contexto (visita→presupuesto→ejecución...). Quita la incertidumbre de "qué pasa si les llamo". NO lo uses si el contexto no describe ningún proceso.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', variant: 'timeline', steps: [{ title: '1. ...', description: 'paso real según el contexto', icon: 'IconoLucide', duration: 'plazo real o vacío' }] },
+  },
+  price_factors: {
+    appliesTo: ['service', 'zona'],
+    when: 'Responde "¿cuánto cuesta?" SIN dar un precio cerrado que no conste en el contexto — enumera qué factores influyen (tamaño, material, dificultad). Ideal cuando el negocio no publica tarifas fijas.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', intro: '', factors: [{ title: 'factor que afecta al precio', description: '1 frase', icon: 'IconoLucide' }], footerText: 'CTA a pedir presupuesto real, no a dar cifra' },
+  },
+  stats: {
+    appliesTo: ['service', 'zona'],
+    when: 'SOLO si el contexto confirma cifras reales (años, nº de trabajos, valoración). Si no hay ninguna cifra confirmada, NO propongas este bloque — nunca rellenar con números inventados.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', stats: [{ label: '', value: '', suffix: '', icon: 'IconoLucide' }] },
+  },
+  content: {
+    appliesTo: ['service', 'zona'],
+    when: 'Para responder la intención informacional del cluster sin salir de la página (ej. "qué es X", cómo funciona) cuando no encaja en ningún otro bloque. Úsalo con moderación.',
+    skeleton: { title: '', sections: [{ heading: 'H3', title: '', content: '2-3 frases' }] },
+  },
+  faq: {
+    appliesTo: ['service', 'zona'],
+    when: 'Casi siempre, justo antes del CTA final. Cola larga + GEO — citable por LLMs.',
+    skeleton: { title: '', variant: 'accordion', faqs: [{ question: '', answer: '' }] },
+    fixedPosition: 'end-1',
+  },
+  cta: {
+    appliesTo: ['service', 'zona'],
+    when: 'SIEMPRE el último bloque. Cierre con fricción mínima.',
+    skeleton: { title: '', subtitle: '', titleTag: 'h2', buttonText: '', buttonLink: '/contacto/', style: 'gradient', features: ['beneficio 1', 'beneficio 2'] },
+    fixedPosition: 'end',
+  },
+};
 
-  - discriminant: trust_strip
-    value:
-      title: ''
-      subtitle: ''
-      titleTag: h2
-      variant: bar
-      items:
-${trustItems}
+const BLOCK_NAMES = Object.keys(BLOCK_CATALOG);
 
-  - discriminant: features
-    value:
-      title: ${yamlStr(c.featuresSection?.title || '')}
-      titleTag: h2
-      variant: grid
-      features:
-${featureItems}
-
-  - discriminant: faq
-    value:
-      title: ${yamlStr(`Preguntas frecuentes sobre ${page.keyword}`)}
-      variant: accordion
-      faqs:
-${faqItems}
-
-  - discriminant: cta
-    value:
-      title: ${yamlStr(c.cta.title)}
-      subtitle: ${yamlStr(c.cta.subtitle)}
-      titleTag: h2
-      buttonText: ${yamlStr(c.cta.buttonText)}
-      buttonLink: /contacto/
-      style: gradient
-      features:
-${(c.hero.features || []).map((f) => `        - ${yamlStr(f)}`).join('\n')}
----
-`;
+function catalogForType(type) {
+  return Object.fromEntries(Object.entries(BLOCK_CATALOG).filter(([, b]) => b.appliesTo.includes(type)));
 }
 
-function buildZonaMdx(c, page) {
-  const seoJson = JSON.stringify({ title: c.seoTitle, description: c.seoDescription });
-  const allFaq = [...(c.faqSeo || []), ...(c.faqGeo || [])].filter((f) => f.question);
-  const faqItems = allFaq.map((f) =>
-    `  - question: ${yamlStr(f.question)}\n    answer: >-\n${String(f.answer).split('\n').map((l) => `      ${l}`).join('\n')}`).join('\n');
+function catalogPromptBlock(type) {
+  const entries = Object.entries(catalogForType(type)).filter(([k]) => !BLOCK_CATALOG[k].fixedPosition);
+  return entries.map(([k, b]) => `- "${k}": ${b.when}`).join('\n');
+}
 
-  return `---
-name: ${yamlStr(page.title)}
-type: residencial
-zipCodes: []
-seo: '${ys(seoJson)}'
-faq:
-${faqItems}
-blocks:
-  - discriminant: hero
-    value:
-      heading: ${yamlStr(c.hero.heading)}
-      headingHighlight: ${yamlStr(c.hero.headingHighlight)}
-      subheading: ${yamlStr(c.hero.subheading)}
-      ctaPrimaryText: ${yamlStr(c.hero.ctaPrimaryText)}
-      ctaSecondaryText: WhatsApp
-      ctaPrimaryLink: '#contacto'
-      ctaSecondaryLink: ''
-      titleTag: h1
-      features:
-${(c.hero.features || []).map((f) => `        - ${yamlStr(f)}`).join('\n')}
+// ── FASE: outline (playbook pasos 05 + 06 + 07) ────────────────────────────────
+// Analiza competencia, define la jerarquía H1/H2/H3 y elige la maquetación (qué
+// bloques, en qué orden y por qué en ese punto del scroll). Se guarda como
+// outline-<tipo>-<slug>.json (fuente de verdad, editable) + un .md legible.
+// NO escribe ningún .mdx todavía — eso lo hace `write` a partir del outline aprobado.
 
-  - discriminant: features
-    value:
-      title: ${yamlStr(c.featuresSection?.title || '')}
-      titleTag: h2
-      variant: grid
-      features:
-${(c.featuresSection?.items || []).map((it) => `        - title: ${yamlStr(it.title)}\n          description: ${yamlStr(it.description)}\n          icon: ${it.icon || 'CheckCircle'}`).join('\n')}
----
+function loadPageAndPlan(type, slugArg) {
+  const plan = loadPlan();
+  const contexto = loadContexto();
+  const personas = loadPersonas();
+  if (!contexto || !personas || !plan) {
+    console.error('✗ Faltan pasos previos — ejecuta contexto → personas → plan primero.');
+    process.exit(1);
+  }
+  const slug = type === 'home' ? 'home' : slugArg;
+  if (type !== 'home' && !slug) {
+    console.error(`✗ Falta el slug. Páginas ${type} del plan:`);
+    plan.pages.filter((p) => p.type === type).forEach((p) => console.error(`    ${p.status === 'generada' ? '✓' : p.status === 'outline' ? '◐' : '○'} ${p.slug} — "${p.keyword}"`));
+    process.exit(1);
+  }
+  const page = plan.pages.find((p) => p.type === type && p.slug === slug);
+  if (!page) { console.error(`✗ No existe "${slug}" (tipo ${type}) en el plan`); process.exit(1); }
+  return { plan, page, contexto, personas };
+}
+
+async function cmdOutline(type, args) {
+  ensureWorkspace();
+  if (type !== 'service' && type !== 'zona') {
+    console.error(`✗ outline solo aplica a service/zona. La home usa: npm run seo-wizard home`);
+    process.exit(1);
+  }
+  const slugArg = args._[2];
+  const { plan, page, contexto, personas } = loadPageAndPlan(type, slugArg);
+
+  const env = loadEnv();
+  const dfLogin = process.env.DATAFORSEO_LOGIN || env.DATAFORSEO_LOGIN;
+  const dfPassword = process.env.DATAFORSEO_PASSWORD || env.DATAFORSEO_PASSWORD;
+  const competitorUrls = args.competitors ? String(args.competitors).split(',').map((u) => u.trim()) : null;
+
+  // Paso 05 — análisis de competencia (top 3 de Google)
+  const { analyses, paa } = await analyzeCompetitors({ keyword: page.keyword, competitorUrls, dfLogin, dfPassword });
+
+  const variantesStr = page.variantes?.length
+    ? page.variantes.map((v) => `  - "${v.kw}"${v.vol ? ` (${v.vol}/mes)` : ''}`).join('\n')
+    : '  (sin variantes — usa la keyword principal y derivados naturales)';
+
+  console.log('  → Claude: jerarquía de encabezados + propuesta de maquetación (pasos 06+07)...');
+  const outline = extractJson(callClaude(`Eres un SEO experto en negocios locales. Vas a diseñar la ESTRUCTURA (todavía sin
+texto definitivo) de una página de ${type === 'service' ? `servicio: "${page.title}"` : `zona: "${page.title}"`}.
+
+CONTEXTO REAL DEL NEGOCIO:
+${contexto}
+
+BUYER PERSONAS:
+${personas}
+
+KEYWORD PRINCIPAL: "${page.keyword}"
+VARIANTES DEL CLUSTER (usa cada una en el H2/H3 donde encaje su intención):
+${variantesStr}
+
+${analyses ? competitorContext(analyses) : ''}
+${paa?.length ? `PREGUNTAS "PEOPLE ALSO ASK":\n${paa.map((q) => `  - ${q}`).join('\n')}` : ''}
+
+PASO 06 — JERARQUÍA H1/H2/H3:
+- El H1 incluye la keyword exacta o una variación natural muy próxima
+- Los H2 usan variantes semánticas reales del cluster (NO la keyword principal repetida)
+- Los H3 complementan a su H2 padre, también con variantes reales
+- No pongas H2 ni H3 sin búsqueda real detrás. Ejemplo de lo que NO hacer: "Nuestros
+  servicios" (sin keyword, no responde nada). Ejemplo de lo que SÍ: un H2 con una variante
+  real del cluster que responde una duda específica.
+- El orden responde a cómo progresa el usuario: llega → entiende → confía → decide
+
+PASO 07 — MAQUETACIÓN (elige SOLO entre estos bloques disponibles, además de hero/faq/cta
+que van siempre):
+${catalogPromptBlock(type)}
+
+Para cada bloque que elijas, indica: qué H2/H3 de la jerarquía cubre, y POR QUÉ en ese
+punto del scroll responde a la intención del usuario. No elijas un bloque solo por
+rellenar — cada uno debe tener un motivo real. Entre 4 y 7 bloques en total (sin contar
+hero/faq/cta) suele bastar; más que eso diluye.
+
+REGLA DE HONESTIDAD: NO propongas bloques que necesiten datos no confirmados en el
+contexto (stats sin cifras reales, process sin un proceso descrito). Mejor una página
+más corta y verdadera.
+
+Devuelve SOLO JSON:
+{
+  "h1": "...",
+  "headings": [
+    { "level": "h2", "text": "...", "why": "qué responde y en qué momento del recorrido", "variantes": ["kw usada aquí"] },
+    { "level": "h3", "text": "...", "why": "...", "variantes": ["..."] }
+  ],
+  "blocks": [
+    { "discriminant": "trust_strip", "coversHeading": "texto del H2/H3 que cubre o null", "purpose": "por qué aquí" }
+  ]
+}
+El array "blocks" NO debe incluir hero/faq/cta (esos se añaden siempre automáticamente).`,
+  { timeoutMs: 240_000 }));
+
+  // Filtra bloques a los del catálogo válido para este tipo (por si el modelo propone algo fuera de catálogo)
+  const validNames = new Set(Object.keys(catalogForType(type)).filter((k) => !BLOCK_CATALOG[k].fixedPosition));
+  const chosenBlocks = (outline.blocks || []).filter((b) => validNames.has(b.discriminant));
+  const dropped = (outline.blocks || []).filter((b) => !validNames.has(b.discriminant));
+  if (dropped.length) {
+    console.log(`  ⚠ Descartados ${dropped.length} bloque(s) fuera de catálogo: ${dropped.map((b) => b.discriminant).join(', ')}`);
+  }
+
+  const outlineData = {
+    type, slug: page.slug, title: page.title, keyword: page.keyword,
+    generatedAt: new Date().toISOString(),
+    h1: outline.h1 || page.keyword,
+    headings: outline.headings || [],
+    blocks: [...chosenBlocks, { discriminant: 'faq' }, { discriminant: 'cta' }],
+    competitorAnalyses: analyses || null,
+  };
+  fs.writeFileSync(outlineJsonPath(type, page.slug), JSON.stringify(outlineData, null, 2), 'utf-8');
+  writeOutlineMd(outlineData);
+
+  page.status = 'outline';
+  savePlan(plan);
+
+  console.log(`\n  ✓ Outline guardado: seo-proyecto/outline-${pageKey(type, page.slug)}.json (+ .md legible)`);
+  console.log('\n  ESTRUCTURA PROPUESTA:');
+  console.log(`    H1: ${outlineData.h1}`);
+  for (const h of outlineData.headings) console.log(`    ${h.level.toUpperCase()}: ${h.text}`);
+  console.log(`    Bloques: ${outlineData.blocks.map((b) => b.discriminant).join(' → ')}`);
+  console.log('\n  ⚠ REVISA y edita el outline si algo no encaja (añade/quita bloques o headings).');
+  console.log(`     Una vez aprobado: npm run seo-wizard write ${type} ${page.slug}`);
+}
+
+function writeOutlineMd(o) {
+  const headingsMd = (o.headings || []).map((h) =>
+    `- **${h.level.toUpperCase()}:** ${h.text}\n  - *Por qué:* ${h.why || '—'}${h.variantes?.length ? `\n  - *Variantes:* ${h.variantes.join(', ')}` : ''}`).join('\n');
+  const blocksMd = (o.blocks || []).map((b, i) =>
+    `${i + 1}. **${b.discriminant}**${b.coversHeading ? ` — cubre "${b.coversHeading}"` : ''}${b.purpose ? `\n   *${b.purpose}*` : ''}`).join('\n');
+  const md = `<!-- outline-${pageKey(o.type, o.slug)}.md — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+     Pasos 05+06+07. Revisa y edita el .json (fuente de verdad); este .md es solo lectura.
+     Cuando lo apruebes: npm run seo-wizard write ${o.type} ${o.slug} -->
+
+# Outline — ${o.title} ("${o.keyword}")
+
+## H1
+${o.h1}
+
+## Jerarquía de encabezados
+${headingsMd || '(sin encabezados propuestos)'}
+
+## Maquetación (orden de bloques)
+${blocksMd}
 `;
+  fs.writeFileSync(outlineMdPath(o.type, o.slug), md, 'utf-8');
+}
+
+// ── FASE: write (playbook pasos 08 + 09 + 10) ──────────────────────────────────
+// Lee el outline aprobado y escribe el texto de cada bloque (08), le aplica una
+// segunda pasada de copywriting SEPARADA (09), genera el FAQ GEO (10), verifica
+// cobertura de keywords, y serializa el .mdx con el serializador YAML genérico
+// (más robusto que interpolar strings: no se rompe con comillas o dos-puntos en
+// el texto generado).
+
+// Red de seguridad: el modelo a veces "expande" para cubrir un encabezado extra
+// repitiendo un discriminant que el outline solo pedía una vez (ej. dos bloques
+// "materials" para dos H2 distintos). Eso reintroduce, DENTRO de una sola página,
+// el mismo problema de fondo que el outline existe para evitar entre páginas.
+// Se queda solo la primera aparición de cada discriminant.
+function dedupeBlocks(content) {
+  if (!content.blocks?.length) return;
+  const seen = new Set();
+  const deduped = [];
+  const dropped = [];
+  for (const b of content.blocks) {
+    if (seen.has(b.discriminant)) { dropped.push(b.discriminant); continue; }
+    seen.add(b.discriminant);
+    deduped.push(b);
+  }
+  if (dropped.length) {
+    console.log(`  ⚠ El modelo repitió ${dropped.length} bloque(s) (${dropped.join(', ')}) — me quedo con la primera aparición de cada uno.`);
+    content.blocks = deduped;
+  }
+}
+
+async function cmdWrite(type, args) {
+  ensureWorkspace();
+  if (type !== 'service' && type !== 'zona') {
+    console.error(`✗ write solo aplica a service/zona. La home usa: npm run seo-wizard home`);
+    process.exit(1);
+  }
+  const slugArg = args._[2];
+  const { plan, page, contexto, personas } = loadPageAndPlan(type, slugArg);
+
+  const outlinePath = outlineJsonPath(type, page.slug);
+  if (!fs.existsSync(outlinePath)) {
+    console.error(`✗ Falta el outline — ejecuta primero: npm run seo-wizard outline ${type} ${page.slug}`);
+    process.exit(1);
+  }
+  const outline = JSON.parse(fs.readFileSync(outlinePath, 'utf-8'));
+
+  const variantesStr = page.variantes?.length
+    ? page.variantes.map((v) => `  - "${v.kw}"${v.vol ? ` (${v.vol}/mes)` : ''}`).join('\n')
+    : '  (sin variantes — usa la keyword principal y derivados naturales)';
+
+  const blockSkeletons = outline.blocks.map((b) => {
+    const cat = BLOCK_CATALOG[b.discriminant];
+    return `- discriminant "${b.discriminant}"${b.purpose ? ` (${b.purpose})` : ''}${b.coversHeading ? ` — cubre el encabezado "${b.coversHeading}"` : ''}:\n  forma esperada del "value": ${JSON.stringify(cat?.skeleton ?? {})}`;
+  }).join('\n');
+
+  // Paso 08 — texto sección a sección, ajustado al outline aprobado
+  console.log('  → Claude: escribiendo el texto ajustado al outline (paso 08)...');
+  let draft = extractJson(callClaude(`Eres un especialista en SEO local para negocios de servicios en España.
+Escribe el TEXTO COMPLETO de esta página de ${type === 'service' ? 'servicio' : 'zona'}, siguiendo
+EXACTAMENTE la estructura ya aprobada (no la cambies, no añadas ni quites bloques).
+
+CONTEXTO REAL DEL NEGOCIO:
+${contexto}
+
+BUYER PERSONAS:
+${personas}
+
+KEYWORD PRINCIPAL: "${page.keyword}"
+H1 APROBADO: "${outline.h1}"
+JERARQUÍA DE ENCABEZADOS APROBADA:
+${(outline.headings || []).map((h) => `${h.level.toUpperCase()}: ${h.text}`).join('\n')}
+
+VARIANTES DEL CLUSTER QUE DEBEN APARECER (todas las que encajen):
+${variantesStr}
+${type === 'zona' ? `\nESTA PÁGINA es para clientes de ${page.title}: adapta ejemplos, desplazamiento y cercanía a ese municipio. NO dupliques el contenido de la home — enfócalo 100% local.` : ''}
+
+${outline.competitorAnalyses ? competitorContext(outline.competitorAnalyses) : ''}
+
+${WRITING_RULES}
+
+BLOQUES A ESCRIBIR — hay EXACTAMENTE ${outline.blocks.length} bloques en esta lista. Tu
+array "blocks" de salida debe tener EXACTAMENTE ${outline.blocks.length} elementos, en
+este mismo orden, un "discriminant" por línea, SIN repetir ninguno y SIN añadir bloques
+que no estén aquí. Si un encabezado necesita más desarrollo, amplía los "items"/"rows"/
+"steps"/"factors" del bloque que ya lo cubre — nunca crees un bloque nuevo con el mismo
+discriminant para cubrir otro encabezado:
+${blockSkeletons}
+
+También necesito, fuera del array de bloques:
+- seoTitle: máx 60 chars, keyword + ${type === 'service' ? 'ciudad' : 'municipio'} + " | " + nombre del negocio
+- seoDescription: máx 155 chars con CTA
+- shortDesc: máx 115 chars (solo si type=service, para la tarjeta de listado)
+- hero: { "heading": "H1 sin la parte final", "headingHighlight": "parte final (normalmente ciudad/municipio)", "subheading": "2 frases que enganchan", "features": ["b1","b2","b3"], "ctaPrimaryText": "CTA específico" }
+
+Para el bloque "faq" en concreto:
+${FAQ_RULES}
+El "value.faqs" debe combinar 5 preguntas transaccionales (faqSeo) + 5 conversacionales
+GEO (faqGeo) en una sola lista de 10 preguntas.
+
+Devuelve SOLO JSON:
+{
+  "seoTitle": "...", "seoDescription": "...", "shortDesc": "...",
+  "hero": { "heading": "...", "headingHighlight": "...", "subheading": "...", "features": ["..."], "ctaPrimaryText": "..." },
+  "blocks": [ { "discriminant": "trust_strip", "value": { ... según la forma indicada ... } }, ... ]
+}
+Iconos Lucide válidos: ShieldCheck, Clock, Users, FileCheck, Star, MapPin, Wrench, CheckCircle, Phone, Zap, Award, Hammer, Home, Building, Key, Truck, Ruler, ClipboardCheck, FileText, BadgeCheck.`,
+  { timeoutMs: 300_000 }));
+
+  dedupeBlocks(draft);
+
+  // Paso 09 — capa de copy SEPARADA (posicionar → convertir)
+  console.log('  → Claude: capa de copywriting (paso 09, pasada separada)...');
+  const COPY_RULES = `Tienes el borrador SEO de una página ya escrito. Añádele una capa de copywriting
+para que convierta mejor, SIN perder ninguna keyword ni cambiar la estructura de bloques.
+
+QUÉ MEJORAR:
+1. hero.subheading: que enganche en las 2 primeras frases (problema del cliente, no la empresa)
+2. CTAs (ctaPrimaryText, buttonText de cta): urgencia o especificidad concreta y HONESTA
+   (si no consta un plazo real, no lo inventes) — nunca "contáctanos" a secas
+3. Las descripciones de diferenciadores: que suenen a razones reales, no a marketing vacío
+4. El cierre (bloque cta): que genere confianza y facilite la acción
+
+NO toques: la lista de bloques, sus discriminants, ni ningún dato objetivo (nombres de
+tipos de producto, factores de precio, pasos del proceso). Solo mejora cómo está escrito.
+Respeta la REGLA DE HONESTIDAD: nada de diferenciadores o garantías no confirmados.
+Tono: directo, sin humo, como habla el dueño (VOZ Y TONO del contexto).
+
+Devuelve el MISMO JSON completo, mismas claves y misma estructura, con el texto mejorado:
+
+${JSON.stringify(draft)}`;
+  try {
+    draft = extractJson(callClaude(COPY_RULES, { timeoutMs: 240_000 }));
+    dedupeBlocks(draft);
+  } catch {
+    console.log('    ⚠ la capa de copy falló — sigo con el texto del paso 08 sin esa segunda pasada');
+  }
+
+  // Checklist de cobertura (playbook 08, verificado tras ambas pasadas) + reintegración
+  const allVariants = [page.keyword, ...(page.variantes || []).map((v) => v.kw)];
+  let { covered, missing } = checkCoverage(draft, allVariants);
+  if (missing.length) {
+    draft = fixCoverage(draft, missing);
+    ({ covered, missing } = checkCoverage(draft, allVariants));
+  }
+  reportCoverage(page.slug, covered, missing);
+
+  if (args['dry-run'] || args.dry) {
+    console.log('\n  [DRY RUN] JSON generado (no se escribe el .mdx):\n');
+    console.log(JSON.stringify(draft, null, 2).slice(0, 4000));
+    return;
+  }
+
+  const outDir = path.join(ROOT, type === 'service' ? 'src/content/services' : 'src/content/locations');
+  fs.mkdirSync(outDir, { recursive: true });
+  const outPath = path.join(outDir, `${page.slug}.mdx`);
+  if (fs.existsSync(outPath)) {
+    const bak = outPath.replace(/\.mdx$/, `.bak-${Date.now()}.mdx`);
+    fs.copyFileSync(outPath, bak);
+    console.log(`  ✓ Backup: ${path.relative(ROOT, bak)}`);
+  }
+  fs.writeFileSync(outPath, buildPageMdx(type, page, draft), 'utf-8');
+  writeContentReview(type, page, draft, { covered, missing, analyses: outline.competitorAnalyses });
+  page.status = 'generada';
+  savePlan(plan);
+
+  console.log(`  ✓ ${path.relative(ROOT, outPath)} generada`);
+  console.log(`  ✓ Revisión legible: seo-proyecto/content-${pageKey(type, page.slug)}.md`);
+  console.log(`  ⚠ Pendiente manual: imagen hero del ${type === 'service' ? 'servicio' : 'municipio'} desde Keystatic`);
+}
+
+function writeContentReview(type, page, content, { covered, missing, analyses }) {
+  const blocksSummary = (content.blocks || []).map((b) => `- **${b.discriminant}**`).join('\n');
+  const faq = content.blocks?.find((b) => b.discriminant === 'faq')?.value?.faqs || [];
+  const comp = analyses?.length
+    ? analyses.map((a) => `- **${a.url}** — ${a.queLesFalta || a.queHacenBien || 'analizado'}`).join('\n')
+    : '- (sin análisis de competencia)';
+  const md = `<!-- content-${pageKey(type, page.slug)}.md — seo-wizard, ${new Date().toISOString().split('T')[0]}.
+     Versión legible de lo generado. El archivo real es el .mdx en src/content/. -->
+
+# ${page.title} — "${page.keyword}"
+
+## Cobertura de keywords
+${covered.map((k) => `- ✓ ${k}`).join('\n')}
+${missing.map((k) => `- ✗ ${k} (no encajó de forma natural)`).join('\n')}
+
+## Competencia analizada
+${comp}
+
+## SEO
+- **Title:** ${content.seoTitle || '—'}
+- **Description:** ${content.seoDescription || '—'}
+
+## Hero
+**${content.hero?.heading || ''} ${content.hero?.headingHighlight || ''}**
+${content.hero?.subheading || ''}
+
+## Bloques generados
+${blocksSummary}
+
+## FAQ (${faq.length})
+${faq.map((f) => `**${f.question}**\n${f.answer}\n`).join('\n')}
+`;
+  fs.writeFileSync(contentMdPath(type, page.slug), md, 'utf-8');
+}
+
+// ── Serializador MDX genérico (service/zona) — usa yaml.stringify, no interpolación ─
+// Más robusto que construir el YAML a mano: no se rompe si el texto generado trae
+// comillas, dos puntos o caracteres especiales.
+
+function buildPageMdx(type, page, content) {
+  const seoJson = JSON.stringify({ title: content.seoTitle || '', description: content.seoDescription || '' });
+
+  const heroBlock = {
+    discriminant: 'hero',
+    value: {
+      heading: content.hero?.heading || '',
+      headingHighlight: content.hero?.headingHighlight || '',
+      subheading: content.hero?.subheading || '',
+      ctaPrimaryText: content.hero?.ctaPrimaryText || '',
+      ctaSecondaryText: 'WhatsApp',
+      ctaPrimaryLink: '#contacto',
+      ctaSecondaryLink: '',
+      titleTag: 'h1',
+      features: content.hero?.features || [],
+    },
+  };
+
+  // Normaliza cada bloque generado a la forma que espera BlockRenderer, rellenando
+  // defaults razonables (icon, titleTag) sin inventar contenido.
+  const middleBlocks = (content.blocks || []).map((b) => {
+    const value = { ...(b.value || {}) };
+    if (value.titleTag === undefined && b.discriminant !== 'faq') value.titleTag = 'h2';
+    if (Array.isArray(value.items)) value.items = value.items.map((it) => ({ icon: 'CheckCircle', ...it }));
+    if (Array.isArray(value.factors)) value.factors = value.factors.map((f) => ({ icon: 'CheckCircle', ...f }));
+    if (Array.isArray(value.steps)) value.steps = value.steps.map((s) => ({ icon: 'CheckCircle', duration: '', ...s }));
+    if (Array.isArray(value.stats)) value.stats = value.stats.map((s) => ({ icon: 'Star', suffix: '', ...s }));
+    return { discriminant: b.discriminant, value };
+  });
+
+  const blocks = [heroBlock, ...middleBlocks];
+
+  const frontmatter = type === 'service'
+    ? {
+        title: page.title,
+        icon: 'Wrench',
+        shortDesc: content.shortDesc || '',
+        featured: true,
+        seo: seoJson,
+        blocks,
+      }
+    : {
+        name: page.title,
+        type: 'residencial',
+        zipCodes: [],
+        seo: seoJson,
+        blocks,
+      };
+
+  return `---\n${stringifyYaml(frontmatter, { lineWidth: 0 })}---\n`;
 }
 
 // ── status ────────────────────────────────────────────────────────────────────
@@ -1314,7 +1607,9 @@ function cmdStatus() {
   if (plan) {
     printPlan(plan);
     const done = plan.pages.filter((p) => p.status === 'generada').length;
-    console.log(`\n  Progreso: ${done}/${plan.pages.length} páginas generadas`);
+    const outlined = plan.pages.filter((p) => p.status === 'outline').length;
+    console.log(`\n  Progreso: ${done}/${plan.pages.length} generadas, ${outlined} con outline pendiente de escribir`);
+    console.log('  ○ pendiente · ◐ outline creado (revisar y luego "write") · ✓ generada');
   }
   console.log('');
 }
@@ -1322,19 +1617,22 @@ function cmdStatus() {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const HELP = `
-seo-wizard — pipeline SEO por fases. Cada documento se guarda numerado en seo-proyecto/.
+seo-wizard — pipeline SEO por fases. Cada documento se guarda en seo-proyecto/.
 
-  npm run seo-wizard preguntas                              Cuestionario de discovery para el cliente
-  npm run seo-wizard contexto [-- --transcript audios.txt]  01 · estructura el material del cliente (Prompt 01)
-  npm run seo-wizard personas                               02 · genera los buyer personas (Paso 02)
-  npm run seo-wizard plan     [-- --csv carpeta-csvs/]      03 · arquitectura + keywords validadas
-  npm run seo-wizard home     [-- --competitors u1,u2]      genera la home
-  npm run seo-wizard service <slug>                         genera un servicio del plan
-  npm run seo-wizard zona <slug>                            genera una zona del plan
-  npm run seo-wizard status                                 progreso del proyecto
+  npm run seo-wizard preguntas                                  Cuestionario de discovery para el cliente
+  npm run seo-wizard contexto [-- --transcript audios.txt]      01 · estructura el material del cliente (Prompt 01)
+  npm run seo-wizard personas                                   02 · genera los buyer personas (Paso 02)
+  npm run seo-wizard plan     [-- --csv carpeta-csvs/]          03 · arquitectura + keywords validadas
+  npm run seo-wizard home     [-- --competitors u1,u2]          genera la home (pipeline dedicado)
+  npm run seo-wizard outline service|zona <slug> [--competitors u1,u2]
+                                                                 05+06+07 · competencia + jerarquía + maquetación
+                                                                 → seo-proyecto/outline-*.json (REVISA antes de escribir)
+  npm run seo-wizard write service|zona <slug>                  08+09+10 · texto + copy + FAQ GEO, desde el outline aprobado
+  npm run seo-wizard status                                     progreso del proyecto
 
-Flags: --dry-run (no escribe archivos), --competitors url1,url2,url3
-Flujo:  preguntas → (audios del cliente) → contexto → personas → plan → home → service/zona
+Flags: --dry-run (no escribe archivos), --competitors url1,url2,url3, --yes (plan: no pedir confirmación de la arquitectura)
+Flujo:  preguntas → (audios del cliente) → contexto → personas → plan → home
+        → por cada servicio/zona: outline (revisar) → write
 `;
 
 async function main() {
@@ -1347,8 +1645,8 @@ async function main() {
     case 'personas': await cmdPersonas(); break;
     case 'plan': await cmdPlan(args); break;
     case 'home': await cmdHome(args); break;
-    case 'service': await cmdPage('service', args); break;
-    case 'zona': await cmdPage('zona', args); break;
+    case 'outline': await cmdOutline(args._[1], args); break;
+    case 'write': await cmdWrite(args._[1], args); break;
     case 'status': cmdStatus(); break;
     default:
       console.log(HELP);
