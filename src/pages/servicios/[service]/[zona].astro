@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import Footer from "../../../components/layout/Footer.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { getSettings } from "@/lib/settings";
 import { buildServiceGraph } from "@/lib/seo";
 
@@ -25,20 +25,30 @@ export async function getStaticPaths() {
     const locBySlug = new Map(locations.map((l) => [l.slug, l]));
 
     // Solo combos cuyo servicio Y zona existen realmente (evita rutas rotas).
-    return combos
-        .filter((c) => svcBySlug.has(c.data.service) && locBySlug.has(c.data.zona))
-        .map((entry) => ({
+    return combos.flatMap((entry) => {
+        const service = svcBySlug.get(entry.data.service);
+        const zona = locBySlug.get(entry.data.zona);
+
+        if (!service || !zona) return [];
+
+        return [{
             params: { service: entry.data.service, zona: entry.data.zona },
             props: {
                 entry,
-                service: svcBySlug.get(entry.data.service),
-                zona: locBySlug.get(entry.data.zona),
+                service,
+                zona,
                 combos,
             },
-        }));
+        }];
+    });
 }
 
-const { entry, service, zona, combos } = Astro.props;
+const { entry, service, zona, combos } = Astro.props as {
+    entry: CollectionEntry<"serviceAreas">;
+    service: CollectionEntry<"services">;
+    zona: CollectionEntry<"locations">;
+    combos: CollectionEntry<"serviceAreas">[];
+};
 const { Content } = await entry.render();
 const settings = await getSettings();
 const testimonials = await getCollection("testimonials", ({ data }) => data.featured === true);

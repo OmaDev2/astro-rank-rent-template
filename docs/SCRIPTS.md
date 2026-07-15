@@ -16,7 +16,7 @@
 | `npm run optimize-images` | `optimize-images.mjs` | Convertir a WebP lo ya subido en `public/images/` | Mantenimiento |
 | `npm run setup-fonts` | `setup-fonts.mjs` | Self-hostear el par de fuentes elegido | Una vez por clon |
 | `npm run check:site` | `preflight.mjs` | Validar calidad/SEO sin build | Antes de publicar |
-| `npm run build` | `preflight.mjs` + astro | Preflight + build de producción | Al publicar |
+| `npm run build` | `preflight.mjs` + `astro check` + astro | Preflight, tipos y build de producción | Al publicar |
 | `npm run indexnow` | `indexnow.mjs` | Notificar URLs a Bing/IA | Después de publicar |
 | `npm run export -- <carpeta>` | `utils/export_client.js` | Copia limpia para entregar (sin scripts de IA) | Al entregar a cliente |
 | `npm run reset` (= `fresh`) | `utils/reset.js` | ⚠️ Resetear el template a placeholders | Solo en el repo template |
