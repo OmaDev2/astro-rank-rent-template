@@ -19,6 +19,8 @@
         "design-dna": "node scripts/utils/design-dna.mjs",
         "indexnow": "node scripts/indexnow.mjs",
         "seo-wizard": "node scripts/seo-wizard.mjs",
+        "rank-rent-wizard": "node scripts/rank-rent-wizard.mjs",
+        "rank-rent-ui": "node scripts/rank-rent-wizard-ui.mjs",
         "content-wizard": "node scripts/content-wizard.mjs",
         "strategy-wizard": "node scripts/strategy-wizard.mjs"
     },

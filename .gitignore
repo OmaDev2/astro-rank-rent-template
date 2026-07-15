@@ -28,6 +28,7 @@ pnpm-debug.log*
 .playwright-mcp/
 incoming-images/
 optimized-images/
+rank-rent-proyecto/
 
 # Personal docs (Claude rules / Obsidian)
 mis docs para claude/

@@ -10,6 +10,8 @@
 | `npm run init-niche` | `init-niche.mjs` | Crear un nicho nuevo (datos + ADN de diseño) | Al empezar un clon |
 | `npm run design-dna` | `utils/design-dna.mjs` | Proponer/aplicar recetas de diseño | Al empezar o rediseñar |
 | `npm run seo-wizard` | `seo-wizard.mjs` | ⭐ Pipeline SEO por fases: contexto → plan → home → outline/write por página | Todo el contenido |
+| `npm run rank-rent-wizard` | `rank-rent-wizard.mjs` | Pipeline v2 para rank & rent: mercado → aprobación → contenido → profesional | Nuevos sites rank & rent |
+| `npm run rank-rent-ui` | `rank-rent-wizard-ui.mjs` | Interfaz local del wizard v2: brief, CSV, plan, revisiones y publicación | Trabajar sin comandos |
 | `npm run strategy-wizard` | `strategy-wizard.mjs` | (legacy) Planificación SEO con Gemini (UI web) | Sustituido por seo-wizard |
 | `npm run content-wizard` | `content-wizard.mjs` | (legacy) Página suelta de servicio/zona | Sustituido por seo-wizard |
 | `npm run images:prepare` | `optimize-to-folder.mjs` | Optimizar fotos nuevas antes de subirlas | Al preparar imágenes |
